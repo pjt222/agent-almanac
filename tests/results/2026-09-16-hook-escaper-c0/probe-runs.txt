@@ -1,0 +1,119 @@
+### escaper-agreement.sh (repaired escaper) — run 2026-09-16T11:37:22Z
+== gawk (GNU Awk 5.2.1, API 3.2, PMA Avon 8-g1, (GNU MPFR)
+  CASE                   AWK       JQ        AGREE
+  plain                  VALID     VALID     YES
+  quote                  VALID     VALID     YES
+  backslash              VALID     VALID     YES
+  tab                    VALID     VALID     YES
+  twolines               VALID     VALID     YES
+  literal-backslash-n    VALID     VALID     YES
+  crlf                   VALID     VALID     YES
+  cr-midline             VALID     VALID     YES
+  esc-ansi               VALID     VALID     YES
+  bs-vt-ff               VALID     VALID     YES
+  soh                    VALID     VALID     YES
+  utf8                   VALID     VALID     YES
+  empty                  VALID     VALID     YES
+  backslash-then-quote   VALID     VALID     YES
+  all-controls           VALID     VALID     YES
+  --> gawk: 15/15 agree with jq
+
+== mawk (mawk 1.3.4 20240123)
+  CASE                   AWK       JQ        AGREE
+  plain                  VALID     VALID     YES
+  quote                  VALID     VALID     YES
+  backslash              VALID     VALID     YES
+  tab                    VALID     VALID     YES
+  twolines               VALID     VALID     YES
+  literal-backslash-n    VALID     VALID     YES
+  crlf                   VALID     VALID     YES
+  cr-midline             VALID     VALID     YES
+  esc-ansi               VALID     VALID     YES
+  bs-vt-ff               VALID     VALID     YES
+  soh                    VALID     VALID     YES
+  utf8                   VALID     VALID     YES
+  empty                  VALID     VALID     YES
+  backslash-then-quote   VALID     VALID     YES
+  all-controls           VALID     VALID     YES
+  --> mawk: 15/15 agree with jq
+
+== awk (GNU Awk 5.2.1, API 3.2, PMA Avon 8-g1, (GNU MPFR)
+  CASE                   AWK       JQ        AGREE
+  plain                  VALID     VALID     YES
+  quote                  VALID     VALID     YES
+  backslash              VALID     VALID     YES
+  tab                    VALID     VALID     YES
+  twolines               VALID     VALID     YES
+  literal-backslash-n    VALID     VALID     YES
+  crlf                   VALID     VALID     YES
+  cr-midline             VALID     VALID     YES
+  esc-ansi               VALID     VALID     YES
+  bs-vt-ff               VALID     VALID     YES
+  soh                    VALID     VALID     YES
+  utf8                   VALID     VALID     YES
+  empty                  VALID     VALID     YES
+  backslash-then-quote   VALID     VALID     YES
+  all-controls           VALID     VALID     YES
+  --> awk: 15/15 agree with jq
+
+
+EXIT=0
+
+### escaper-agreement-NEGATIVE.sh (the shipped escaper, substituted) 
+== gawk (GNU Awk 5.2.1, API 3.2, PMA Avon 8-g1, (GNU MPFR)
+  CASE                   AWK       JQ        AGREE
+  plain                  VALID     VALID     YES
+  quote                  VALID     VALID     YES
+  backslash              VALID     VALID     YES
+  tab                    VALID     VALID     YES
+  twolines               VALID     VALID     YES
+  literal-backslash-n    VALID     VALID     YES
+  crlf                   INVALID   VALID     NO
+  cr-midline             INVALID   VALID     NO
+  esc-ansi               INVALID   VALID     NO
+  bs-vt-ff               INVALID   VALID     NO
+  soh                    INVALID   VALID     NO
+  utf8                   VALID     VALID     YES
+  empty                  VALID     VALID     YES
+  backslash-then-quote   VALID     VALID     YES
+  all-controls           INVALID   VALID     NO
+  --> gawk: 9/15 agree with jq
+
+== mawk (mawk 1.3.4 20240123)
+  CASE                   AWK       JQ        AGREE
+  plain                  VALID     VALID     YES
+  quote                  VALID     VALID     YES
+  backslash              VALID     VALID     YES
+  tab                    VALID     VALID     YES
+  twolines               VALID     VALID     YES
+  literal-backslash-n    VALID     VALID     YES
+  crlf                   INVALID   VALID     NO
+  cr-midline             INVALID   VALID     NO
+  esc-ansi               INVALID   VALID     NO
+  bs-vt-ff               INVALID   VALID     NO
+  soh                    INVALID   VALID     NO
+  utf8                   VALID     VALID     YES
+  empty                  VALID     VALID     YES
+  backslash-then-quote   VALID     VALID     YES
+  all-controls           INVALID   VALID     NO
+  --> mawk: 9/15 agree with jq
+
+== awk (GNU Awk 5.2.1, API 3.2, PMA Avon 8-g1, (GNU MPFR)
+  CASE                   AWK       JQ        AGREE
+  plain                  VALID     VALID     YES
+  quote                  VALID     VALID     YES
+  backslash              VALID     VALID     YES
+  tab                    VALID     VALID     YES
+  twolines               VALID     VALID     YES
+  literal-backslash-n    VALID     VALID     YES
+  crlf                   INVALID   VALID     NO
+  cr-midline             INVALID   VALID     NO
+  esc-ansi               INVALID   VALID     NO
+  bs-vt-ff               INVALID   VALID     NO
+  soh                    INVALID   VALID     NO
+  utf8                   VALID     VALID     YES
+  empty                  VALID     VALID     YES
+  backslash-then-quote   VALID     VALID     YES
+  all-controls           INVALID   VALID     NO
+  --> awk: 9/15 agree with jq
+

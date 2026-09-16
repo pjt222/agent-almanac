@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: basic
   language: multi
@@ -55,9 +55,37 @@ Record every measurement you will cite in a **facts file** (`handoff-facts.md`, 
 
 **On failure:** If not in a git repository, skip git commands. The continuation file can still capture conversational context and task state.
 
-### Step 2: Write the Draft
+### Step 2: Resolve the Location, Then Write the Draft
 
-Write the file as `CONTINUE_HERE.draft.md` at the project root — it becomes `CONTINUE_HERE.md` only after Step 3 — using the structure below. Every section must contain actionable content, not placeholders. Where a claim is not measured, tag it in place as `inferred`, `not re-measured`, `by-construction`, or `the operator's call`; a tag is allowed only where the facts file records why the measurement was not taken, and never on a sha, count, or status line a reader would act on.
+A project does not necessarily keep its handoff at the repository root, and the draft belongs beside wherever the installed file goes. Resolve that first. This is the **shared resolver**: `read-continue-here` Step 1 carries the same block byte-for-byte, and `scripts/test/continue-here-blocks.test.js` fails if the two ever diverge.
+
+```bash
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
+CONTINUE_FILE=
+for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
+  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
+done
+if [ -n "$CONTINUE_FILE" ]; then
+  echo "handoff: $CONTINUE_FILE"
+else
+  ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
+    -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
+  if [ -n "$ELSEWHERE" ]; then
+    echo "no handoff at a resolved path, but one exists elsewhere:"
+    echo "$ELSEWHERE"
+  else
+    echo "no handoff"
+  fi
+fi
+```
+
+Write the draft according to what it reports:
+
+- **A resolved path** — the project already keeps its handoff there. Put the draft beside it, as `<dir>/CONTINUE_HERE.draft.md`; Step 3 installs over the existing file and refuses to clobber an unconsumed one.
+- **A handoff at an unresolved path** — the project keeps it somewhere this skill does not look for it. Put the draft beside *that* file rather than at the root, so the next session is not handed two handoffs in two places.
+- **No handoff at all** — this is the first one. Put the draft at the repository root, which the resolver checks first and which the SessionStart hook finds with no configuration.
+
+Then write it — it becomes `CONTINUE_HERE.md` only after Step 3 — using the structure below. Every section must contain actionable content, not placeholders. Where a claim is not measured, tag it in place as `inferred`, `not re-measured`, `by-construction`, or `the operator's call`; a tag is allowed only where the facts file records why the measurement was not taken, and never on a sha, count, or status line a reader would act on.
 
 ```markdown
 # Continue Here
@@ -94,9 +122,9 @@ Guidelines:
 - **Next Steps**: Number by priority. Prefix user-dependent items with `**[USER]**`
 - **Context**: Record negative space — what was tried and rejected, and why
 
-**Expected:** A `CONTINUE_HERE.draft.md` at the project root with all 5 sections populated with real content from the current session, every claim backed by the facts file or tagged. The timestamp and branch are accurate.
+**Expected:** A `CONTINUE_HERE.draft.md` at the location Step 2 resolved, with all 5 sections populated with real content from the current session, every claim backed by the facts file or tagged. The timestamp and branch are accurate.
 
-**On failure:** If Write fails, check file permissions. The draft belongs in the project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE*.md` — the pattern must cover the draft as well as the installed file — and if not, add it.
+**On failure:** If Write fails, check file permissions. The draft belongs beside the installed handoff, at whichever of the three resolved locations Step 2 reported — not at the project root by assumption. Verify `.gitignore` contains `CONTINUE_HERE*.md` — the pattern must cover the draft as well as the installed file — and if not, add it.
 
 ### Step 3: Verify the Draft, Then Install It
 
@@ -119,7 +147,7 @@ Workflow({ name: 'verify-handoff', args: { drafts: [{
 }], round: 1 } })
 ```
 
-Write the run's findings to a file beside the facts file (e.g. `handoff-findings-r1.md`), apply them, pass that file among `sources`, and re-run with the next `round`. The gate is the run's return value, not its log: **`blocking` is 0 and `coverage.complete` is true** — no dead or unusable lens, no dropped draft, and the completeness lens actually ran. Re-stamp the header immediately before installing, then install without clobbering an unconsumed prior handoff: `mv -n CONTINUE_HERE.draft.md CONTINUE_HERE.md` (if a prior file still exists, read and archive it first). If the workflow is not available, record `Verified: not run (workflow unavailable)` in the header rather than skipping the step silently.
+Write the run's findings to a file beside the facts file (e.g. `handoff-findings-r1.md`), apply them, pass that file among `sources`, and re-run with the next `round`. The gate is the run's return value, not its log: **`blocking` is 0 and `coverage.complete` is true** — no dead or unusable lens, no dropped draft, and the completeness lens actually ran. Re-stamp the header immediately before installing, then install without clobbering an unconsumed prior handoff, in the directory Step 2 resolved: `mv -n <dir>/CONTINUE_HERE.draft.md <dir>/CONTINUE_HERE.md` (if a prior file still exists, read and archive it first). If the workflow is not available, record `Verified: not run (workflow unavailable)` in the header rather than skipping the step silently.
 
 **Expected:** The installed file reads as a clear, actionable handoff that a fresh session could use to immediately resume work, and every claim in it survived a verifier that could see the facts file.
 
@@ -127,7 +155,7 @@ Write the run's findings to a file beside the facts file (e.g. `handoff-findings
 
 ## Validation
 
-- [ ] CONTINUE_HERE.md exists at the project root
+- [ ] The installed CONTINUE_HERE.md is at the location Step 2 resolved, and there is not a second one elsewhere
 - [ ] File contains all 5 sections with real content (not placeholders)
 - [ ] Timestamp and branch are accurate
 - [ ] `.gitignore` includes `CONTINUE_HERE*.md` (the draft and the installed file)
