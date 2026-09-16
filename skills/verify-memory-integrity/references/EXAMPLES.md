@@ -302,6 +302,64 @@ Boundaries: one platform, one version, `-p` only, and ```text is the only fence 
 tagged fence (```bash, ```yaml) is untested, though nothing in the observed behavior suggests the
 tag matters.
 
+### What the state machine does not model, and which way each one errs
+
+One collision was repaired (#734 finding 1): a ``` delimiter inside an open block comment used to
+toggle the fence, carry `cmt` across the fenced region, and then strip **real index lines** once
+the fence closed. The comment branch now runs first, and `scripts/test/memory-blocks.test.js`
+pins it.
+
+The rest are recorded rather than repaired, because the correct target is the loader's behaviour
+and nobody has captured it — a "fix" toward CommonMark could widen the divergence it is meant to
+close. Each is listed with the direction it errs, since only one direction is dangerous:
+
+| Case | The block | CommonMark | Risk if they differ |
+|---|---|---|---|
+| A ``` run indented four or more spaces | toggles the fence | an indented code block, not a fence | either direction, depending on what follows |
+| An info string (```yaml) *inside* an open fence | toggles the fence closed | fence content | **under-reports** the remainder |
+| A ``` run shorter than the opener (``` inside a ```` block) | closes the fence | not a close | **under-reports** the remainder |
+| A `~~~` fence | not a fence at all | a fence | **under-reports** its contents |
+| An unclosed `<!--` | strips to EOF | an HTML block to EOF | agrees, but it is the one unbounded strip |
+| A tag with attributes | not handled | — | unmeasured |
+
+Three of those four rows were wrong when this table was first written, and an adversarial round
+caught them. They are corrected here because a table whose contract is "each is listed with the
+direction it errs" fails at its own job the moment a row says `unmeasured` about something one
+fixture settles. Measured with the shipped stripper, lifted out of `SKILL.md` rather than retyped,
+against the pre-#734 loop lifted out of the diff hunk
+(`tests/results/2026-09-16-divergence-table-recheck/`):
+
+| fixture | raw | CommonMark | this block | pre-#734 |
+|---|---:|---:|---:|---:|
+| `~~~text` wrapping a comment, then three entries | 9 | 9 | **6** | 6 |
+| unclosed ```` ```text ````, then three entries | 5 | 5 | 5 | 5 |
+| unclosed ```` ```text ````, a comment, three entries | 8 | 8 | 8 | 8 |
+| `<!--` with no `-->`, containing ```` ``` ```` | 6 | 1 | **1** | **5** |
+
+- **`~~~` is not unmeasured — it under-reports**, which is the direction this document calls the
+  dangerous one. `ln.lstrip().startswith('```')` never matches a tilde fence, so the `<!--` inside
+  one is treated as a real comment and the fence's contents are stripped.
+- **An unclosed fence is handled, and handled correctly.** After it, `fence` stays `True` to EOF and
+  nothing is stripped, which is what CommonMark says: the rest of the document is code. Listing a
+  correct behaviour as an unmodelled risk is a claim about what was checked, and it was wrong — in
+  the safe direction, which is exactly how it survived being written down.
+- **The unclosed comment was missing, and this repair changed it.** It is the only unbounded strip
+  path left, and #734 finding 1 widened the inputs reaching it. Under CommonMark the new answer is
+  right; under a loader implemented as a non-greedy `<!--.*?-->` the old one was closer. The only
+  signal a reader gets either way is the `not loaded, so not counted: N unit(s)` line, and nothing
+  flags a large N as anomalous.
+
+**On why finding 1 was repaired and these are not**, since "repairing toward CommonMark cannot make
+things worse" is not the reason and does not hold — a `~~~` fence containing an unterminated comment
+also strips to EOF. The distinction is *what kind of line* gets stripped. Finding 1 stripped ordinary
+index lines sitting outside any comment and outside any fence, which no plausible loader grammar
+drops; that is why repairing it never required knowing the loader. Every divergence left strips a
+region that begins on a `<!--` line, i.e. comment-shaped content a loader might legitimately drop.
+
+The arm that would settle any of them is `tools/wirecap.py` plus the generator in
+`tests/results/2026-08-25-fence-strip-replication/`: capture what the loader does with the same
+fixture, rather than reasoning about what it ought to do.
+
 ## Nothing here is enforced at write time
 
 These skills run as out-of-band maintenance inside an ordinary session. The path that actually
@@ -312,6 +370,19 @@ The consequence for how the report should be read: every line in it is *verified
 ran*. A store that passed this morning can be over both caps and half-orphaned by this evening, and
 the report will not know. That is why the trigger list puts a run before and after every index
 compaction rather than on a schedule: the mutating operation is the event, not the clock.
+
+## What the size cap counts
+
+The size cap is applied to **UTF-16 code units** — JavaScript `String.length` — rather than UTF-8
+bytes or Unicode code points. For any text inside the Basic Multilingual Plane — ASCII, Latin-1
+accents, CJK — the character count *is* the unit count, so a character count is exact for most real
+indexes. It diverges in two places: a byte count over-reports on any non-ASCII content (up to 3x on
+CJK, which is why a `wc -c` check can demand a prune the loader does not need), and a character
+count *under*-reports on astral characters such as emoji, where one character costs two units.
+
+Measured on Claude Code v2.1.238 (Windows) and 2.1.237 (Linux), and reported in
+`anthropics/claude-code#82056`, August 2026. Treat as version-volatile: the two documented numbers
+are the contract, and this is how the current implementation counts them.
 
 ## What is documented and what is derived
 

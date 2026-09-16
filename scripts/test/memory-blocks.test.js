@@ -113,6 +113,15 @@ test('python3 is available — this suite may not pass by skipping', () => {
 
 test('every carrier holds the canonical block byte-for-byte', () => {
   for (const kind of Object.keys(CARRIERS)) {
+    // The loop skips SOURCE_OF_TRUTH, so a single-entry list makes the body run zero times and
+    // this test passes having compared nothing. That is not hypothetical: extractBlock's own
+    // failure message tells the reader to remove a file from CARRIERS when the block is gone on
+    // purpose, and following it for the other carrier disarms the drift check while staying green.
+    assert.ok(
+      CARRIERS[kind].length > 1,
+      `CARRIERS.${kind} has no carrier to compare against ${SOURCE_OF_TRUTH}; the byte-identity ` +
+        `check would pass by comparing nothing. Removing the last peer means removing this kind.`,
+    );
     const canonical = extractBlock(SOURCE_OF_TRUTH, kind);
     for (const rel of CARRIERS[kind]) {
       if (rel === SOURCE_OF_TRUTH) continue;
@@ -422,4 +431,37 @@ test('no carrier reverts to a bare wc -l budget check', () => {
       `${rel} measures the index with wc -l, the line-only check #407 removed`,
     );
   }
+});
+
+// #734 finding 1: the fence rule and the comment rule collided. Testing `startswith('```')`
+// FIRST let a fence delimiter inside an open block comment toggle `fence`, which carried `cmt`
+// across the fenced region; when the fence closed, the still-set `cmt` resumed stripping real
+// index lines until a later `-->` — which may never come. The estimator then UNDER-reports, the
+// direction that hides a truncation already happening.
+//
+// The fixture puts the comment's `-->` inside the fenced region, which is what leaves `cmt` set.
+// Ordinal counts, not prose: the repaired block keeps 12 lines, the colliding one keeps 5.
+test('budget block: a comment containing a fence does not strip the index after it', () => {
+  const omegas = Array.from({ length: 10 }, (_, i) => `- [omega${i}](omega${i}.md) — real entry`);
+  const dir = fixture({
+    'MEMORY.md': [
+      '- [alpha](alpha.md) — real entry',
+      '<!--',
+      '```yaml',
+      'x: 1',
+      '-->',
+      '```',
+      ...omegas,
+      '',
+    ].join('\n'),
+  });
+  const out = runBlock(extractBlock(SOURCE_OF_TRUTH, 'budget'), dir);
+  const m = /lines (\d+)\/200/.exec(out);
+  assert.ok(m, `the budget block must report a line count:\n${out}`);
+  assert.equal(
+    Number(m[1]),
+    12,
+    'the ten index entries after the commented-out fence were dropped: the comment rule must ' +
+      `win over the fence rule, or the estimator under-reports.\n${out}`,
+  );
 });

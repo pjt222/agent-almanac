@@ -124,7 +124,7 @@ inline.
 
 ## Skill Validation
 
-- SKILL.md files must stay under 500 lines; extract extended examples to `references/EXAMPLES.md` using the progressive disclosure pattern
+- SKILL.md files must stay under 500 lines; extract extended examples to `references/EXAMPLES.md` using the progressive disclosure pattern. **The gate walks the mirrors too, so 500 is not the ceiling that binds an English file.** A refreshed stub is English's body plus six provenance frontmatter fields (`locale`, `source_locale`, `source_commit`, `fence_basis_commit`, `translator`, `translation_date`), so English at exactly 500 puts every stub at 506 and reddens `skills` — a required context — plus `translations`. For a skill with scaffolded mirrors the English ceiling is **494**. `validate-skills.yml` names the remedy in its own comment and keeps `OVERRUN_ALLOWLIST` empty: extract, do not allowlist (#843)
 - The `references/` subdirectory pattern follows [agentskills.io progressive disclosure](https://agentskills.io/specification) — large code blocks (>15 lines), full configs, and multi-variant examples go in `references/EXAMPLES.md` with cross-references from the main SKILL.md
 - CI enforces validation on every PR (`.github/workflows/validate-skills.yml`): frontmatter fields, required sections, line counts, and registry sync. It ran only on PRs touching `skills/` until #641 removed the path filter so the job could become a required status check — a required check that does not report never goes green, it waits forever
 - CI also runs a repo-wide line-endings gate (`.github/workflows/validate-line-endings.yml`) that fails any PR whose committed blobs contain CRLF. Check locally with `npm run validate:line-endings` (reads the index, non-mutating). Repair: `git add --renormalize .` — and if a new file type is flagged, declare it in `.gitattributes` as `text eol=lf`
@@ -138,16 +138,52 @@ inline.
 - A suite tears its fixture down with `rmTree(dir)` from `scripts/test/_tmp.js`, never a bare `rmSync(dir, { recursive: true, force: true })` — `tmp-helper.test.js` fails naming any site that does; its scanner counts parentheses, so nesting of any depth inside the call is seen, and a call whose parentheses never close is reported under its own name. A concurrent writer under the fixture makes the bare call throw `ENOTEMPTY`, which reddened the required `scripts-test` context with 818 of 819 passing (#791), and `node:fs`'s `maxRetries` is not the fix: measured on Node 22.16 it fails 20 of 20 with `maxRetries: 3` and, as a control, with `maxRetries: 10` at over a second of delay, while re-invoking `rmSync` — which re-walks the tree — succeeds; so the difference is what is re-attempted, not for how long, and why 22's option re-attempts less was not read from Node's source. `rmTree` re-invokes the whole removal (`tests/results/2026-09-07-rmsync-enotempty-probe/`)
 - To validate locally before committing:
   ```bash
-  # Check a single skill
-  lines=$(wc -l < skills/<skill-name>/SKILL.md)
-  [ "$lines" -le 500 ] && echo "OK ($lines lines)" || echo "FAIL ($lines lines > 500)"
+  # One skill AND its mirrors. Checking the English file alone is what let a
+  # 500-line file pass locally and fail CI on four mirrors at 506 (#843).
+  ID="<skill-name>"
+  LIST=$(find skills i18n -type f -name SKILL.md -path "*/$ID/SKILL.md")
+  if [ -z "$LIST" ]; then
+    echo "REFUSED: no SKILL.md matches $ID — a typo scans nothing and looks clean"
+  else
+    echo "$LIST" | while IFS= read -r f; do
+      n=$(wc -l < "$f")
+      case "$n" in ''|*[!0-9]*) echo "UNREADABLE: $f ($n)"; continue ;; esac
+      [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
+    done
+    echo "checked $ID: $(echo "$LIST" | wc -l) file(s), English plus every mirror"
+  fi
 
-  # Check all skills
-  for f in skills/*/SKILL.md; do
-    lines=$(wc -l < "$f")
-    [ "$lines" -gt 500 ] && echo "OVER: $f ($lines lines)"
-  done
+  # Whole corpus, same predicate, same two guards.
+  ALL=$(find skills i18n -type f -name SKILL.md 2>/dev/null)
+  if [ -z "$ALL" ]; then
+    echo "REFUSED: no SKILL.md found — run this from the repository root"
+  else
+    echo "$ALL" | while IFS= read -r f; do
+      n=$(wc -l < "$f")
+      case "$n" in ''|*[!0-9]*) echo "UNREADABLE: $f ($n)"; continue ;; esac
+      [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
+    done
+    echo "cap scan complete: $(echo "$ALL" | wc -l) file(s), no OVER line above means nothing is over"
+  fi
   ```
+
+  Two guards **in each half**, because the reassuring line is the dangerous part
+  of a scan like this — and the corpus half shipped without either until an
+  adversarial round measured it printing `cap scan complete` at exit 0 having
+  scanned nothing, and again while skipping `i18n/` entirely with an `OVER` line
+  already on screen. `find` writes its complaint to stderr, so a reader following
+  the instruction to read the last line sees a pass. That is why the count is now
+  *inside* the reassuring line: a scan that reports `0 file(s)` refutes itself,
+  and one that reports a plausible number has earned the sentence.
+  `[ "$n" -gt 500 ] && echo` is **fail-open**: a non-numeric `$n` makes `[`
+  exit 2 (measured on bash 5.2.21 and zsh 5.9), `&&` short-circuits, and the file
+  passes in silence — so the `case` runs first and reports `UNREADABLE` instead.
+  Note this is the opposite of #842's `if [ … -le … ]` shape, where exit 2 reads
+  as false and *skips* the fail arm; which way a bad operand falls depends on the
+  construct, not on the operator, so re-derive it at each site. The `REFUSED`
+  branch exists because `find` with a mistyped `$ID` prints nothing and the loop
+  runs zero times — the unknown-scope trap `check-i18n-fence-parity.js` closed in
+  #634, in a place with no tool to enforce it.
 
 ## Proving a Gate Can Fail
 

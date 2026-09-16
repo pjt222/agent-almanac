@@ -106,18 +106,13 @@ separator is counted, since 200 lines carry 199 separators. At the ~150-characte
 targets — a derivation here, not a documented recommendation — the real budget is ~166 lines, not
 200. Never report a line count alone, and always name which cap binds.
 
-**Before quoting the paragraph above**, read what in it is documented and what is derived: [references/EXAMPLES.md](references/EXAMPLES.md#what-is-documented-and-what-is-derived).
+**Before quoting any figure above**, read [what is documented and what is
+derived](references/EXAMPLES.md#what-is-documented-and-what-is-derived) and [what the size cap counts, and on which versions](references/EXAMPLES.md#what-the-size-cap-counts).
 
-**What the size cap counts (measured, not documented).** The cap is applied to UTF-16 code units —
-JavaScript `String.length` — rather than UTF-8 bytes or Unicode code points. For any text inside
-the Basic Multilingual Plane — ASCII, Latin-1 accents, CJK — the character count *is* the unit
-count, so a character count is exact for most real indexes. It diverges in two places: a byte
-count over-reports on any non-ASCII content (up to 3x on CJK, which is why a `wc -c` check can
-demand a prune the loader does not need), and a character count *under*-reports on astral
-characters such as emoji, where one character costs two units. Measured on Claude Code v2.1.238
-(Windows) and 2.1.237 (Linux) and reported in `anthropics/claude-code#82056`, August 2026. Treat
-as version-volatile: the two documented numbers are the contract, this is how the current
-implementation counts.
+**What the size cap counts (measured, not documented).** UTF-16 code units — JavaScript
+`String.length` — not UTF-8 bytes and not code points. Inside the BMP a character count is exact; a
+byte count over-reports (up to 3x on CJK) and a character count *under*-reports on astral
+characters, where one character costs two units.
 
 ```python
 size = sum(2 if ord(c) > 0xFFFF else 1 for c in text)   # UTF-16 code units
@@ -148,9 +143,14 @@ full = raw.decode('utf-8', 'replace')
 text = re.sub(r'\A---\r?\n.*?\r?\n---[ \t]*\r?\n', '', full, flags=re.S)
 kept, fence, cmt = [], False, False
 for ln in text.split('\n'):
+    # An OPEN comment wins over the fence rule (#734): ``` inside one is content,
+    # not a delimiter, and fence-first let `cmt` outlive it and strip real lines.
+    if cmt:
+        cmt = '-->' not in ln
+        continue
     if ln.lstrip().startswith('```'):
         fence = not fence
-    elif not fence and (cmt or ln.lstrip().startswith('<!--')):
+    elif not fence and ln.lstrip().startswith('<!--'):
         cmt = '-->' not in ln
         continue
     kept.append(ln)
@@ -184,13 +184,11 @@ print(f"astral chars {sum(1 for c in text if ord(c) > 0xFFFF)}")
 PY
 ```
 
-**Measurement-basis note.** The block measures what LOADS: frontmatter and block-level HTML
-comments are stripped, because the loader strips them before applying the limits. A comment inside
-a fenced code block is **not** stripped — measured, and it counts against the cap like any other
-content ([how](references/EXAMPLES.md#what-the-strip-does-and-does-not-remove)). Getting either
-half wrong is a silent misread in a different direction: measuring raw over-reports, and one store
-of four measured here read 70.4% of cap raw against 68.7% loaded; stripping fenced comments
-under-reports, and hides a truncation already happening.
+**Measurement-basis note.** The block measures what LOADS: frontmatter and block-level HTML comments
+are stripped, a comment inside a fenced code block is **not**. Getting either half wrong misreads in
+a different direction — raw over-reports (one store of four here read 70.4% of cap raw against 68.7%
+loaded), stripping fenced comments under-reports and hides a truncation already happening. Both,
+plus four CommonMark divergences each labelled with the direction it errs: [references/EXAMPLES.md](references/EXAMPLES.md#what-the-strip-does-and-does-not-remove).
 
 **Expected:** Both fractions with both denominators, a `binds:` verdict naming which cap would cut
 first (`neither` while both still have headroom), the mean units per line against the crossover,

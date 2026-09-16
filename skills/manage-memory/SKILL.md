@@ -73,9 +73,14 @@ full = raw.decode('utf-8', 'replace')
 text = re.sub(r'\A---\r?\n.*?\r?\n---[ \t]*\r?\n', '', full, flags=re.S)
 kept, fence, cmt = [], False, False
 for ln in text.split('\n'):
+    # An OPEN comment wins over the fence rule (#734): ``` inside one is content,
+    # not a delimiter, and fence-first let `cmt` outlive it and strip real lines.
+    if cmt:
+        cmt = '-->' not in ln
+        continue
     if ln.lstrip().startswith('```'):
         fence = not fence
-    elif not fence and (cmt or ln.lstrip().startswith('<!--')):
+    elif not fence and ln.lstrip().startswith('<!--'):
         cmt = '-->' not in ln
         continue
     kept.append(ln)

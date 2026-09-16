@@ -1,0 +1,27 @@
+### table-check.py — run 2026-09-16T11:53:04Z
+fixture                                   raw  commonmark  new  old  verdict
+tilde fence around a comment                9           9    6    6  UNDER-reports by 3
+unclosed fence                              5           5    5    5  matches CommonMark
+unclosed fence then a comment               8           8    8    8  matches CommonMark
+unclosed comment containing a fence         6           1    1    5  matches CommonMark  [PR changed it: 5 -> 1]
+unclosed comment, no fence                  4           1    1    1  matches CommonMark
+
+### cap-snippet-probe.sh
+### F6: the per-skill snippet, first line, as printed
+  bash  exit=2  bash: line 1: syntax error near unexpected token `newline'
+  zsh   exit=1  zsh: parse error near `\n'
+  --- with the one-character fix, ID="<skill-name>" ---
+  bash  exit=0  (no output, assignment succeeded)
+  zsh   exit=0  (no output, assignment succeeded)
+
+### F2: the corpus half, run where its trees are absent or partial
+  --- A: neither skills/ nor i18n/ present (wrong cwd)
+      find: ‘skills’: No such file or directory
+      find: ‘i18n’: No such file or directory
+      cap scan complete — no OVER line above means nothing is over
+      exit=0
+  --- B: skills/ present with an OVER file, i18n/ missing — the tree that binds is skipped
+      find: ‘i18n’: No such file or directory
+      OVER: skills/demo/SKILL.md (501 lines)
+      cap scan complete — no OVER line above means nothing is over
+      exit=0
