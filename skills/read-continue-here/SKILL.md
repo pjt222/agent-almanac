@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "2.0"
+  version: "2.1"
   domain: general
   complexity: basic
   language: multi
@@ -140,7 +140,7 @@ Begin working from Next Steps item 1 (or wherever the user directed):
 
 After the handoff is consumed and work is underway, delete the file **you actually read** — not a hardcoded root path, which in a `docs/` layout either fails or deletes an unrelated file that happens to sit at the root.
 
-Whether the project tracks its handoff decides how it is deleted, and both lifecycles are legitimate (`write-continue-here` Step 2 states the trade-off; this step only has to honour whichever one the project chose):
+Whether the project tracks its handoff decides how it is deleted, and both lifecycles are legitimate (`write-continue-here` Step 4 states the trade-off; this step only has to honour whichever one the project chose):
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"

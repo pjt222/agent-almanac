@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.3"
   domain: general
   complexity: basic
   language: multi
@@ -124,7 +124,7 @@ Guidelines:
 
 **Expected:** A `CONTINUE_HERE.draft.md` at the location Step 2 resolved, with all 5 sections populated with real content from the current session, every claim backed by the facts file or tagged. The timestamp and branch are accurate.
 
-**On failure:** If Write fails, check file permissions. The draft belongs beside the installed handoff, at whichever of the three resolved locations Step 2 reported — not at the project root by assumption. Verify `.gitignore` contains `CONTINUE_HERE*.md` — the pattern must cover the draft as well as the installed file — and if not, add it.
+**On failure:** If Write fails, check file permissions. The draft belongs beside the installed handoff, at whichever of the three resolved locations Step 2 reported — not at the project root by assumption.
 
 ### Step 3: Verify the Draft, Then Install It
 
@@ -153,12 +153,44 @@ Write the run's findings to a file beside the facts file (e.g. `handoff-findings
 
 **On failure:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?" A verifier finding you disagree with is answered in the file (tag the claim, cite the fact), never by deleting the finding.
 
+### Step 4: Decide the Handoff's Lifecycle — Once Per Project, and Do Not Enforce It
+
+A handoff can be **tracked** or **ignored**, and both are legitimate. This step states the trade-off so the project can choose; it prescribes nothing, and this skill must not change a project's `.gitignore` to make the choice for it (#775). Earlier editions did: Step 2's On-failure told you to add `CONTINUE_HERE*.md` to `.gitignore` "if not", and Validation listed it as a box to tick. That silently ruled out half the design space, and it contradicted this skill's own complement — `read-continue-here` Step 5 branches on tracked-vs-untracked and treats both as normal.
+
+Find out which one the project has already chosen, rather than assuming:
+
+```bash
+: "${CONTINUE_FILE:?resolve it with the Step 2 block in this shell first}"
+if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
+  echo "lifecycle: TRACKED — deletions are recoverable; every edition is in git log"
+elif git check-ignore -q "$CONTINUE_FILE" 2>/dev/null; then
+  echo "lifecycle: IGNORED — deletions are final; archive before consuming"
+else
+  echo "lifecycle: UNDECIDED — untracked and not ignored, the state most likely to be swept into an unrelated commit"
+fi
+```
+
+| | Tracked | Ignored |
+|---|---|---|
+| Consuming it | `git rm` plus a commit; `git log -p -- <path>` recovers every edition | `rm`; the content is gone unless it was archived first |
+| A stray `git add -A` | harmless, it belongs in the repository | sweeps nothing, the ignore rule covers it |
+| Cost | handoffs and their churn live in the project's history forever | no history, so an unconsumed edition can be destroyed by the next session |
+| Suits | a repository whose handoffs are part of its record | a repository where the handoff is scratch between two sessions |
+
+**UNDECIDED is the one state worth acting on.** An untracked, un-ignored handoff is visible to `git add -A` and belongs to neither lifecycle. Say so and let the project choose; do not choose for it.
+
+Where the project has chosen *ignored*, the pattern must be a glob, not the bare name — Step 2 writes `CONTINUE_HERE.draft.md` first and renames only after verification, so `CONTINUE_HERE.md` alone leaves every draft untracked-but-visible, which is the edition most likely to be swept up. That is a note about what a correct ignore rule looks like, not an instruction to add one.
+
+**Expected:** the lifecycle is named, and whoever consumes the handoff knows whether deleting it is recoverable.
+
+**On failure:** outside a git repository the question does not arise — the handoff is an ordinary file and deleting it is final. If the project has no stated preference, report `UNDECIDED` and leave it; a handoff written under the wrong lifecycle is recoverable, a `.gitignore` edited by a tool nobody asked is not obviously so.
+
 ## Validation
 
 - [ ] The installed CONTINUE_HERE.md is at the location Step 2 resolved, and there is not a second one elsewhere
 - [ ] File contains all 5 sections with real content (not placeholders)
 - [ ] Timestamp and branch are accurate
-- [ ] `.gitignore` includes `CONTINUE_HERE*.md` (the draft and the installed file)
+- [ ] The handoff's lifecycle is named — TRACKED, IGNORED, or UNDECIDED — and not changed by this skill
 - [ ] Next Steps are numbered and actionable
 - [ ] In Progress items specify enough detail to resume without questions
 - [ ] Every number, sha, quoted output and status claim traces to a line of the facts file from Step 1 that names the command which produced it, or is tagged in place as `inferred`, `not re-measured`, `by-construction`, or `the operator's call` where the facts file records why the measurement was not taken — and no sha, count, or status line a reader would act on carries a tag
