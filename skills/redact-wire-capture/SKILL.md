@@ -98,9 +98,10 @@ Not everything that looks like an identifier is a secret. Public marketplace nam
 
 Re-run a verification pass that greps each secret shape and fails on any non-`REDACTED` hit, then hand the directory to `enforce-redaction-gate` for the structure-aware tier (a token nested in a JSON body that a flat grep skipped).
 
-`enforce-redaction-gate` names the gate's required shape; this repository does not ship `tools/enforce-redaction-gate.sh` as a runnable file — build it per that skill's Steps 1-4 before wiring the call below.
-
 ```bash
+# tools/enforce-redaction-gate.sh does not exist in this repository or any other yet
+# (#751, #853); tools/check-redaction.sh (the shape-tier half, see redact-for-public-disclosure)
+# does. This is enforce-redaction-gate's required call shape once the two-tier gate is built.
 bash tools/enforce-redaction-gate.sh "$CAP" || {
   echo "capture still leaks; extend the secret-class list"; exit 1; }
 ```

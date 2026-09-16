@@ -61,7 +61,7 @@ Each row becomes one deny-list entry: a human-readable **label** plus a **regex*
 
 **On failure:** If a shape resists a clean regex (entangled with legitimate content), defer it to the structure-aware tier (Step 3) rather than writing a broad regex that floods false positives.
 
-### Step 2: Build the Shape-Tier Scanner (exit code = leak count)
+### Step 2: Build the Shape-Tier Scanner
 
 Maintain the patterns in one executable that lives in the private repo and runs against the target. The output names only the **label** — never the regex — so the gate's own logs do not become a finding catalog.
 
@@ -69,6 +69,7 @@ Maintain the patterns in one executable that lives in the private repo and runs 
 #!/usr/bin/env bash
 set -uo pipefail
 TARGET="${1:?target path required}"
+[ -r "$TARGET" ] || { echo "cannot read: $TARGET" >&2; exit 2; }   # FAIL CLOSED, never read as a pass
 SEARCH=$(command -v rg >/dev/null && echo rg || echo grep)
 LEAKS=0
 
@@ -89,12 +90,13 @@ for entry in "${PATTERNS[@]}"; do
   fi
   if [ -n "$hit" ]; then echo "  LEAK: $label"; LEAKS=$((LEAKS+1)); fi
 done
-exit "$LEAKS"
+[ "$LEAKS" -gt 0 ] && exit 1
+exit 0
 ```
 
-The exit code equals the number of leaking shapes; a clean run exits 0. That contract is what makes it composable — a transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero.
+The exit code is 0 clean / 1 any findings (the count is in the printed `LEAK:` lines, never the exit status) / 2 could not run — the fail-closed check at the top, not a raw leak count, is what makes this composable. Binding the exit code directly to a count collides with the reserved could-not-run state the moment exactly two shapes leak, and gives a genuinely crashed scanner nowhere to signal from but "zero", which a `scanner && ok || echo CLEAN`-shaped wrapper reads as clean. A transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero. `tools/check-redaction.sh` in this repository ships exactly this contract as a working reference implementation of Steps 1-3 — more patterns, a `--verify` self-test that seeds every one of them, `--labels` — read its own header before building a second one from scratch.
 
-**Expected:** Running the scanner on a known-clean tree exits 0; seeding a deliberate test token makes it exit non-zero and print the matching label only.
+**Expected:** Running the scanner on a known-clean tree exits 0; seeding a deliberate test token makes it exit 1 and print the matching label only; pointing it at an unreadable or missing target exits 2.
 
 **On failure:** If `rg` is unavailable, the `grep -rE` fallback above runs (slower). If a pattern floods every run, it is too broad — narrow it in Step 5, do not suppress.
 
@@ -131,10 +133,10 @@ The structure tier also validates *redaction's own output* — the redacted arti
 
 The gate must be safe to run repeatedly and trivial to call from anything. Re-running on a clean tree is a no-op that exits 0. Transform skills call it as their final verification step; CI calls the identical script.
 
-This repository ships no `tools/enforce-redaction-gate.sh` — build it from Steps 1-3 above and give it a home in your own tooling tree. The block below shows the call site's required shape and composability contract (non-zero on any leak), not a command this repo can run as written.
-
 ```bash
-# In a transform skill, after writing redacted output:
+# In a transform skill, after writing redacted output. tools/enforce-redaction-gate.sh does not
+# exist in this repository or any other yet (#751, #853) — this is the call site's required
+# shape once you have built one from Steps 1-3 above.
 bash tools/enforce-redaction-gate.sh "$OUT_DIR" || {
   echo "redaction gate FAILED — output still leaks; extend patterns"; exit 1; }
 ```
@@ -146,8 +148,6 @@ bash tools/enforce-redaction-gate.sh "$OUT_DIR" || {
 ### Step 5: Wire CI to Block, Not Warn
 
 A gate that warns is ignored. Run it on every push to the publish branch with the scanner pulled from the private repo so the patterns never live in public.
-
-The workflow below is a template too, keyed to the same not-yet-built script. As written, the `gh api .../tools/enforce-redaction-gate.sh` path does not exist in any repo this skill ships with and will 404 — point `Fetch private scanner` at wherever you land the gate from Step 4.
 
 ```yaml
 # .github/workflows/redaction-gate.yml (public mirror)
@@ -161,6 +161,8 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ripgrep jq
       - name: Fetch private scanner
         env: { GH_TOKEN: "${{ secrets.PRIVATE_REPO_TOKEN }}" }
+        # tools/enforce-redaction-gate.sh does not exist in this repository or any other yet
+        # (#751, #853) — this path is the shape a real one takes once built from Steps 1-3.
         run: gh api repos/<org>/<private>/contents/tools/enforce-redaction-gate.sh --jq .content | base64 -d > gate.sh
       - run: bash gate.sh .
 ```

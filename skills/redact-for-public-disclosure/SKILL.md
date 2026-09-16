@@ -230,12 +230,12 @@ jobs:
         run: ./check-redaction.sh .
 ```
 
-`tools/check-redaction.sh`'s actual, shipped exit contract (read from the script itself, not from this doc): **0 clean / 1 any findings, with the count in the printed output — never the exit status — / 2 could not run**. Step 3's sketch above exiting with the raw leak count is illustrative only; the real script deliberately does not do that, because a process exit status is one byte and a count of exactly 256 would wrap to 0 and print as "clean" — the worst outcome a redaction gate can produce. **2 must never be read as a pass**: a consumer wiring `run: ./check-redaction.sh .` above should fail the job on any non-zero exit, never special-case 2 as a soft failure.
+`tools/check-redaction.sh`'s actual, shipped exit contract (read from the script itself, not from this doc): **0 clean / 1 any findings, with the count in the printed output — never the exit status — / 2 could not run**. Step 3's sketch above exiting with the raw leak count is illustrative only; the real script deliberately does not do that. Two reasons, both true of a sketch this size — three patterns, so the exit code is bounded 0-3: a draft with exactly two leaking shapes exits 2, the code this repository reserves for "could not run", swallowing both findings as an apparent tool failure (measured: three patterns, two seeded leaks, `exit=2`); and binding the exit code to a raw count leaves no state for a genuinely crashed scanner to signal from but "zero" — a `scanner && ok || echo CLEAN`-shaped wrapper then reads a tool error as clean, the exact trap `enforce-redaction-gate` names. **2 must never be read as a pass**: a consumer wiring `run: ./check-redaction.sh .` above should fail the job on any non-zero exit, never special-case 2 as a soft failure.
 
 Two design choices here:
 
 - The scanner is pulled from the private repo at CI time so the deny-list itself never lives in the public repo (the patterns are themselves sensitive — publishing them would tell a reader exactly what to look for).
-- The job exits with the scanner's exit code; any non-zero (1 or 2) blocks the workflow.
+- The job exits with the scanner's exit code; non-zero blocks the workflow.
 
 **Expected:** Pushes that introduce a deny-listed pattern fail CI; the publish does not land. Maintainers see the failing label (e.g., `LEAK: vendor-prefixed flag`) without seeing the regex itself.
 

@@ -93,9 +93,10 @@ Two non-obvious rules baked in above: **whole-word boundaries** for minified ide
 
 Run the mapping over the source text and write the redacted artifact to the public-mirror path. Never edit the public copy by hand — it must be a pure function of the private source so re-runs are deterministic.
 
-This repository ships no `tools/redact-visualization.py` — Step 2's mapping function above is the logic; wrap it in a CLI of your own naming. The line below shows the expected invocation shape (source path in, public path out), not a command this repo can run as written.
-
 ```bash
+# tools/redact-visualization.py does not exist in this repository or any other yet (#751,
+# #853) — Step 2's mapping function above is the logic; this is the expected CLI shape
+# (source path in, public path out) once it is wrapped and given a home of your own naming.
 python3 tools/redact-visualization.py docs/flow.mmd publish/docs/flow.mmd
 ```
 
@@ -121,9 +122,10 @@ mmdc -i publish/docs/flow.mmd -o publish/docs/flow.svg
 
 Run `enforce-redaction-gate` over the redacted artifact *and* its rendered image. The transform is not done until the gate exits 0 — including the structure-aware tier, which catches a sensitive token hiding in an SVG `<text>` node that a label-position rewrite missed.
 
-As in `redact-wire-capture`, this repository does not ship `tools/enforce-redaction-gate.sh` — build it from `enforce-redaction-gate`'s own Steps 1-4. The invocation below shows the required call shape.
-
 ```bash
+# tools/enforce-redaction-gate.sh does not exist in this repository or any other yet
+# (#751, #853); tools/check-redaction.sh (the shape-tier half, see redact-for-public-disclosure)
+# does. This is enforce-redaction-gate's required call shape once the two-tier gate is built.
 bash tools/enforce-redaction-gate.sh publish/docs/ || {
   echo "visualization still leaks; extend the mapping table"; exit 1; }
 ```
