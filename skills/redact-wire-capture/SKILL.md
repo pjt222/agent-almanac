@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -99,11 +99,14 @@ Not everything that looks like an identifier is a secret. Public marketplace nam
 Re-run a verification pass that greps each secret shape and fails on any non-`REDACTED` hit, then hand the directory to `enforce-redaction-gate` for the structure-aware tier (a token nested in a JSON body that a flat grep skipped).
 
 ```bash
+# tools/enforce-redaction-gate.sh does not exist in this repository (#751); tools/check-redaction.sh
+# (the shape-tier half, see redact-for-public-disclosure) does. This is enforce-redaction-gate's
+# required call shape once the two-tier gate is built.
 bash tools/enforce-redaction-gate.sh "$CAP" || {
   echo "capture still leaks; extend the secret-class list"; exit 1; }
 ```
 
-**Expected:** Both the inline verification and `enforce-redaction-gate` exit 0 on the scrubbed directory.
+**Expected:** Both the inline verification and `enforce-redaction-gate` exit 0 on the scrubbed directory. Not yet checkable here: `tools/enforce-redaction-gate.sh` does not exist in this repository (#853 decides whether it will).
 
 **On failure:** A surviving hit means a secret class is unhandled — add it to Step 1/Step 2, re-run the scrub from the private source, and re-verify. Never delete the offending line by hand; the next capture will reproduce it.
 

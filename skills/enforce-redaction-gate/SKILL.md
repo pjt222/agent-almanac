@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -61,7 +61,7 @@ Each row becomes one deny-list entry: a human-readable **label** plus a **regex*
 
 **On failure:** If a shape resists a clean regex (entangled with legitimate content), defer it to the structure-aware tier (Step 3) rather than writing a broad regex that floods false positives.
 
-### Step 2: Build the Shape-Tier Scanner (exit code = leak count)
+### Step 2: Build the Shape-Tier Scanner
 
 Maintain the patterns in one executable that lives in the private repo and runs against the target. The output names only the **label** — never the regex — so the gate's own logs do not become a finding catalog.
 
@@ -69,7 +69,9 @@ Maintain the patterns in one executable that lives in the private repo and runs 
 #!/usr/bin/env bash
 set -uo pipefail
 TARGET="${1:?target path required}"
+[ -r "$TARGET" ] || { echo "cannot read: $TARGET" >&2; exit 2; }   # FAIL CLOSED, never read as a pass
 SEARCH=$(command -v rg >/dev/null && echo rg || echo grep)
+command -v "$SEARCH" >/dev/null || { echo "cannot find $SEARCH" >&2; exit 2; }   # FAIL CLOSED
 LEAKS=0
 
 # "label|regex" — one entry per SHAPE. Patterns stay private; only labels print.
@@ -83,18 +85,20 @@ PATTERNS=(
 for entry in "${PATTERNS[@]}"; do
   label="${entry%%|*}"; pat="${entry##*|}"
   if [ "$SEARCH" = rg ]; then
-    hit=$(rg -l "$pat" --glob '!.git' --glob '!node_modules' "$TARGET" 2>/dev/null | head -1)
+    hit=$(rg -l "$pat" --glob '!.git' --glob '!node_modules' "$TARGET" 2>/dev/null | head -1); rc=$?
   else
-    hit=$(grep -rlE "$pat" --exclude-dir=.git --exclude-dir=node_modules "$TARGET" 2>/dev/null | head -1)
+    hit=$(grep -rlE "$pat" --exclude-dir=.git --exclude-dir=node_modules "$TARGET" 2>/dev/null | head -1); rc=$?
   fi
+  [ "$rc" -le 1 ] || { echo "cannot scan: $TARGET (tool error)" >&2; exit 2; }   # FAIL CLOSED — pipefail carries $SEARCH's real status through `| head -1`
   if [ -n "$hit" ]; then echo "  LEAK: $label"; LEAKS=$((LEAKS+1)); fi
 done
-exit "$LEAKS"
+[ "$LEAKS" -gt 0 ] && exit 1
+exit 0
 ```
 
-The exit code equals the number of leaking shapes; a clean run exits 0. That contract is what makes it composable — a transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero.
+The exit code is 0 clean / 1 any findings (the count is in the printed `LEAK:` lines, never the exit status) / 2 could not run — two fail-closed checks make this composable, not a raw leak count: the `TARGET` readability check at the top, and the per-pattern check that the search tool's own exit status — surfaced through `| head -1` by `pipefail`, then captured immediately as `rc=$?` — never exceeds 1, so a scanner that errors mid-scan reports could-not-run rather than a false clean. Binding the exit code directly to a count collides with the reserved could-not-run state the moment exactly two shapes leak, and gives a genuinely crashed scanner nowhere to signal from but "zero", which a `scanner && ok || echo CLEAN`-shaped wrapper reads as clean — the trap these two checks close. A transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero. `tools/check-redaction.sh` in this repository ships exactly this contract as a working reference implementation of Steps 1-3 — more patterns, a `--verify` self-test that seeds every one of them, `--labels` — read its own header before building a second one from scratch.
 
-**Expected:** Running the scanner on a known-clean tree exits 0; seeding a deliberate test token makes it exit non-zero and print the matching label only.
+**Expected:** Running the scanner on a known-clean tree exits 0; seeding a deliberate test token makes it exit 1 and print the matching label only; pointing it at an unreadable or missing target, or at a tree the search tool errors on mid-scan (a permission-denied file, say — even one sitting beside genuinely leaking content), exits 2 either way, never a false clean.
 
 **On failure:** If `rg` is unavailable, the `grep -rE` fallback above runs (slower). If a pattern floods every run, it is too broad — narrow it in Step 5, do not suppress.
 
@@ -132,12 +136,14 @@ The structure tier also validates *redaction's own output* — the redacted arti
 The gate must be safe to run repeatedly and trivial to call from anything. Re-running on a clean tree is a no-op that exits 0. Transform skills call it as their final verification step; CI calls the identical script.
 
 ```bash
-# In a transform skill, after writing redacted output:
+# In a transform skill, after writing redacted output. tools/enforce-redaction-gate.sh does not
+# exist in this repository (#751) — this is the call site's required shape once you have
+# built one from Steps 1-3 above.
 bash tools/enforce-redaction-gate.sh "$OUT_DIR" || {
   echo "redaction gate FAILED — output still leaks; extend patterns"; exit 1; }
 ```
 
-**Expected:** The same gate invocation succeeds locally and in CI with no environment-specific branches. Two consecutive runs on a clean tree both exit 0.
+**Expected:** The same gate invocation succeeds locally and in CI with no environment-specific branches. Two consecutive runs on a clean tree both exit 0. Not yet checkable here: `tools/enforce-redaction-gate.sh` does not exist in this repository (#853 decides whether it will).
 
 **On failure:** If the gate behaves differently in CI, the divergence is almost always a missing tool (`rg`, `jq`) — pin them in the CI image rather than weakening the gate.
 
@@ -157,6 +163,8 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ripgrep jq
       - name: Fetch private scanner
         env: { GH_TOKEN: "${{ secrets.PRIVATE_REPO_TOKEN }}" }
+        # tools/enforce-redaction-gate.sh does not exist in this repository (#751) — this
+        # path is the shape a real one takes once built from Steps 1-3.
         run: gh api repos/<org>/<private>/contents/tools/enforce-redaction-gate.sh --jq .content | base64 -d > gate.sh
       - run: bash gate.sh .
 ```
@@ -181,7 +189,7 @@ A token allowlist may be *derived from vendor documentation* — scan for anythi
 
 ## Validation
 
-- [ ] The gate exits 0 on a clean tree and non-zero on a tree seeded with a deliberate test token
+- [ ] The gate exits 0 on a clean tree, exits **1 specifically** (not merely non-zero — 2 is could-not-run, not a finding) on a tree seeded with a deliberate test token, and exits 2 on an unreadable/missing target or a search-tool error mid-scan
 - [ ] Output prints only labels, never the regexes or the sensitive values
 - [ ] The structure tier catches at least one leak class the shape tier misses (documented)
 - [ ] The redacted artifact re-parses cleanly with its own parser, and self-references (lookups, edges) still resolve with structural counts matching the source
