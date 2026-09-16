@@ -25,7 +25,9 @@ Thumbs.db
 # edition told every consumer to add this line, which ruled out the tracked lifecycle its own
 # complement supports. We ignore because handoffs here are scratch between two sessions and we
 # do not want their churn in the history — the cost being that consuming one is final, so an
-# edition worth keeping goes to misc/handoff-archive/<date>/ BEFORE it is deleted.
+# edition worth keeping goes to the PARENT-level archive at ../misc/handoff-archive/<date>/
+# BEFORE it is deleted — that path is outside this repository, and read repo-relative it
+# resolves to nothing.
 #
 # The glob, not the bare name: the skill drafts to CONTINUE_HERE.draft.md and renames it only
 # after the verification round, so the bare name left every draft untracked-but-visible — and a

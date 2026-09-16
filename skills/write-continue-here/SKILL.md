@@ -157,18 +157,28 @@ Write the run's findings to a file beside the facts file (e.g. `handoff-findings
 
 A handoff can be **tracked** or **ignored**, and both are legitimate. This step states the trade-off so the project can choose; it prescribes nothing, and this skill must not change a project's `.gitignore` to make the choice for it (#775). Earlier editions did: Step 2's On-failure told you to add `CONTINUE_HERE*.md` to `.gitignore` "if not", and Validation listed it as a box to tick. That silently ruled out half the design space, and it contradicted this skill's own complement — `read-continue-here` Step 5 branches on tracked-vs-untracked and treats both as normal.
 
-Find out which one the project has already chosen, rather than assuming:
+Find out which one the project has already chosen, rather than assuming. **Shell state does not survive between steps**, and Step 2's resolver assigns `CONTINUE_FILE` only when a handoff already *exists* — so for a first handoff it is empty until Step 3 has installed the file. Run this after Step 3, with `CONTINUE_FILE` set to the path Step 3 installed, or re-run Step 2's resolver in this shell now that the file is there.
 
 ```bash
-: "${CONTINUE_FILE:?resolve it with the Step 2 block in this shell first}"
-if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
+: "${CONTINUE_FILE:?set this to the path Step 3 installed, or re-run the Step 2 resolver now that the file exists}"
+HOME_DIR=$(dirname -- "$CONTINUE_FILE")
+if ! git -C "$HOME_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "lifecycle: NOT IN A REPOSITORY — an ordinary file; deleting it is final"
+elif git -C "$HOME_DIR" ls-files --error-unmatch -- "$CONTINUE_FILE" >/dev/null 2>&1; then
   echo "lifecycle: TRACKED — deletions are recoverable; every edition is in git log"
-elif git check-ignore -q "$CONTINUE_FILE" 2>/dev/null; then
+elif RULE=$(git -C "$HOME_DIR" check-ignore -v -- "$CONTINUE_FILE" 2>/dev/null); then
   echo "lifecycle: IGNORED — deletions are final; archive before consuming"
+  echo "  decided by: $(printf '%s' "$RULE" | cut -f1)"
 else
   echo "lifecycle: UNDECIDED — untracked and not ignored, the state most likely to be swept into an unrelated commit"
 fi
 ```
+
+Three details are load-bearing, and each was a wrong answer before an adversarial round measured it:
+
+- **It anchors on the directory holding the handoff** (`git -C "$HOME_DIR"`), not on the current directory. Asking `git` about a path in a repository you are not standing in makes both discriminators exit 128, which the old `else` reported as UNDECIDED — a confident classification produced by a command that could not see.
+- **"Could not tell" is reported separately from "not ignored."** Outside a repository, or with an unreadable `.git`, both commands exit 128; the old block printed *"untracked and not ignored, the state most likely to be swept into an unrelated commit"* when there was no repository, nothing tracked or untracked, and nothing that could sweep it. This step's whole claim is that it *detects* rather than assumes, so a detector that answers confidently when blind is the defect that matters most here.
+- **`-v` names the file that decided**, because IGNORED is not necessarily the *project's* choice. A user-level `core.excludesFile` produces the identical verdict, while a collaborator cloning the same repository without it gets UNDECIDED — so `decided by: .gitignore:1:…` and `decided by: /home/you/.config/git/ignore:3:…` are different facts wearing one label. The `--` before the pathspec is there because a path with a leading dash is otherwise parsed as options (measured: exit 129, `unknown switch`).
 
 | | Tracked | Ignored |
 |---|---|---|
@@ -179,7 +189,7 @@ fi
 
 **UNDECIDED is the one state worth acting on.** An untracked, un-ignored handoff is visible to `git add -A` and belongs to neither lifecycle. Say so and let the project choose; do not choose for it.
 
-Where the project has chosen *ignored*, the pattern must be a glob, not the bare name — Step 2 writes `CONTINUE_HERE.draft.md` first and renames only after verification, so `CONTINUE_HERE.md` alone leaves every draft untracked-but-visible, which is the edition most likely to be swept up. That is a note about what a correct ignore rule looks like, not an instruction to add one.
+Where the project has chosen *ignored*, the pattern must be a glob, not the bare name — Step 2 writes `CONTINUE_HERE.draft.md` and Step 3 renames it only after verification, so `CONTINUE_HERE.md` alone leaves every draft untracked-but-visible, which is the edition most likely to be swept up. That is a note about what a correct ignore rule looks like, not an instruction to add one.
 
 **Expected:** the lifecycle is named, and whoever consumes the handoff knows whether deleting it is recoverable.
 

@@ -57,6 +57,9 @@ const RESOLVER_MARKER =
 /** What the resolver fence opens with — the hook fence contains the marker but opens differently. */
 const RESOLVER_OPEN = 'ROOT=$(git rev-parse --show-toplevel';
 const CLEANUP_MARKER = 'git rm -q "$CONTINUE_FILE"';
+/** write-continue-here's lifecycle detector. Its `else` arm reported UNDECIDED for four states
+ *  that were not undecided until an adversarial round measured them, and nothing owned it. */
+const LIFECYCLE_MARKER = 'lifecycle: UNDECIDED';
 
 const HOOK_OPEN = "cat > ~/.claude/hooks/continue-here/read-continuation.sh << 'SCRIPT'";
 const HOOK_CLOSE = 'SCRIPT';
@@ -304,6 +307,58 @@ test('cleanup: refuses rather than falling back to a hardcoded name when the pat
     );
   } finally {
     rmTree(dir);
+  }
+});
+
+test('lifecycle: names each state, and refuses to classify one it cannot see', () => {
+  // The four verdicts are claims, and a claim needs an owner that fails. Every row below was a
+  // WRONG answer from the first shipped version of this block: it asked `git` about a path in a
+  // repository it was not standing in, so both discriminators exited 128, and the `else` reported
+  // "untracked and not ignored" — a confident classification produced by a command that could not
+  // see. Outside a repository there is nothing to track and nothing to sweep.
+  const block = extractBlock(WRITE, LIFECYCLE_MARKER);
+
+  // tracked wins over an ignore rule that also matches it — branch ordering, not luck
+  const tracked = fixture(
+    { 'CONTINUE_HERE.md': 'x', '.gitignore': 'CONTINUE_HERE*.md\n' },
+    { commit: ['CONTINUE_HERE.md', '.gitignore'] },
+  );
+  const ignored = fixture({ 'CONTINUE_HERE.md': 'x', '.gitignore': 'CONTINUE_HERE*.md\n' });
+  const undecided = fixture({ 'CONTINUE_HERE.md': 'x' });
+  const norepo = mkdtempSync(join(tmpdir(), 'continuehere-norepo-'));
+  writeFileSync(join(norepo, 'CONTINUE_HERE.md'), 'x');
+
+  try {
+    const verdict = (dir, cwd = dir) =>
+      runBash(block, { cwd, env: { CONTINUE_FILE: join(dir, 'CONTINUE_HERE.md') } });
+
+    const t = verdict(tracked);
+    assert.equal(t.status, 0, t.stderr);
+    assert.match(t.stdout, /lifecycle: TRACKED/, 'a tracked handoff that also matches an ignore rule must read TRACKED');
+
+    const i = verdict(ignored);
+    assert.match(i.stdout, /lifecycle: IGNORED/);
+    assert.match(i.stdout, /decided by: .*\.gitignore/, 'IGNORED must name the file that decided — a user-level core.excludesFile gives the same verdict for a different reason');
+
+    assert.match(verdict(undecided).stdout, /lifecycle: UNDECIDED/);
+
+    // The two that were wrong. Same handoff, asked from outside its repository, and from a
+    // directory that is not in any repository at all.
+    assert.match(
+      verdict(norepo).stdout,
+      /lifecycle: NOT IN A REPOSITORY/,
+      'with no repository the block must say it cannot classify, not report UNDECIDED',
+    );
+    assert.match(
+      verdict(ignored, norepo).stdout,
+      /lifecycle: IGNORED/,
+      "asked from outside the handoff's repository, the block must still read that repository's rule",
+    );
+  } finally {
+    rmTree(tracked);
+    rmTree(ignored);
+    rmTree(undecided);
+    rmTree(norepo);
   }
 });
 
