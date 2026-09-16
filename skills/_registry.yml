@@ -2072,22 +2072,22 @@ domains:
         path: redact-for-public-disclosure/SKILL.md
         complexity: intermediate
         language: multi
-        description: Redact reverse-engineering findings for public disclosure using deny-list scanners, orphan-commit publish patterns, and category-based calibration that preserves teaching value
+        description: Redact reverse-engineering findings for public disclosure using deny-list scanners, orphan-commit publish patterns, and category-based calibration that preserves teaching value; tools/check-redaction.sh ships here (0 clean / 1 findings / 2 could-not-run), REDACTION_POLICY.md is each consumer's own file
       - id: enforce-redaction-gate
         path: enforce-redaction-gate/SKILL.md
         complexity: intermediate
         language: multi
-        description: Statically enforce a privacy/redaction boundary with a two-tier gate — shape-based deny-list plus a structure-aware parser pass — under a strict exit-code contract with label-only output, the privacy analogue of an AST checker
+        description: Statically enforce a privacy/redaction boundary with a two-tier gate — shape-based deny-list plus a structure-aware parser pass — under a strict exit-code contract with label-only output, the privacy analogue of an AST checker; this repository ships no tools/enforce-redaction-gate.sh, the steps describe how to build one
       - id: redact-visualization-for-disclosure
         path: redact-visualization-for-disclosure/SKILL.md
         complexity: intermediate
         language: multi
-        description: Redact rendered visual artifacts (Mermaid, SVG, HTML dashboards) via an ordered longest-first mapping table that swaps internal identifiers for descriptive stand-ins, preserves node ids and structure, re-renders, and verifies through the redaction gate
+        description: Redact rendered visual artifacts (Mermaid, SVG, HTML dashboards) via an ordered longest-first mapping table that swaps internal identifiers for descriptive stand-ins, preserves node ids and structure, re-renders, and verifies through the redaction gate; tools/redact-visualization.py and tools/enforce-redaction-gate.sh are templates this repo does not ship
       - id: redact-wire-capture
         path: redact-wire-capture/SKILL.md
         complexity: intermediate
         language: multi
-        description: Redact a network/MITM capture directory in place with class-preserving, idempotent substitutions for tokens, ids, emails, paths, and device hashes, protecting public identifiers and verifying through the redaction gate
+        description: Redact a network/MITM capture directory in place with class-preserving, idempotent substitutions for tokens, ids, emails, paths, and device hashes, protecting public identifiers and verifying through the redaction gate (tools/enforce-redaction-gate.sh is a template this repo does not ship)
 
   memex:
     description: Ritual wrappers and umbrella skill for the memex agent-native shared-memory subsystem (markdown source-of-truth + Postgres/pgvector + MCP) — session init, observation logging, pre-commit verification, and milestone slice handoff

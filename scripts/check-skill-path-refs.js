@@ -61,6 +61,17 @@ export const ALLOWLIST = Object.freeze({
     'the target project\'s mirror script, same procedure',
   'create-workflow:workflows/_registry.yml':
     'deferred behind the #288 Phase-2 gate; the skill says so in the same sentence (#294)',
+  // #751: three skills name a gate script this repository has never shipped. The prose above
+  // each fence now says so explicitly ("this repository ships no ..."), which is what earns
+  // these entries — an allowlisted path here is a path a consumer builds, not a leak.
+  'enforce-redaction-gate:tools/enforce-redaction-gate.sh':
+    'the target project\'s own gate script, described so the reader can build one (#751)',
+  'redact-wire-capture:tools/enforce-redaction-gate.sh':
+    'the target project\'s gate script this skill verifies through; same relationship as enforce-redaction-gate\'s own entry (#751)',
+  'redact-visualization-for-disclosure:tools/enforce-redaction-gate.sh':
+    'the target project\'s gate script this skill verifies through; same relationship as enforce-redaction-gate\'s own entry (#751)',
+  'redact-visualization-for-disclosure:tools/redact-visualization.py':
+    'the target project\'s own transform script, described so the reader can build one (#751)',
 });
 
 export const PATH_PREFIXES = ['workflows', 'tools', 'scripts'];

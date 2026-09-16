@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -81,7 +81,7 @@ Owner: <name>. Reviewed quarterly.
 
 The "current" version must be empirical (read from the installed binary), not administrative. Tie the policy to the baseline scanner output rather than to a calendar.
 
-**Expected:** A committed `REDACTION_POLICY.md` in the private repo with an explicit cool-off and an owner.
+**Expected:** A committed policy file in the private repo — `REDACTION_POLICY.md` or equivalent, supplied by each consumer; this repository ships no such file — with an explicit cool-off and an owner.
 
 **On failure:** If stakeholders cannot agree on the cool-off, default to the most conservative proposal. Cool-offs can be shortened later; recalling a leak cannot.
 
@@ -111,7 +111,7 @@ done
 exit $LEAKS
 ```
 
-Each entry has a human-readable label and a regex. One entry per sensitive identifier *shape* (not per literal string — shapes survive version churn). The exit code equals the number of leaks; a clean run exits 0.
+Each entry has a human-readable label and a regex. One entry per sensitive identifier *shape* (not per literal string — shapes survive version churn). The sketch above exits with the leak count for illustration only — this repository's actual `tools/check-redaction.sh` uses a different, deliberately chosen exit contract; see Step 7.
 
 **Expected:** `tools/check-redaction.sh ./public-mirror` runs in under a second on a small repo and exits 0 when nothing matches.
 
@@ -230,10 +230,12 @@ jobs:
         run: ./check-redaction.sh .
 ```
 
+`tools/check-redaction.sh`'s actual, shipped exit contract (read from the script itself, not from this doc): **0 clean / 1 any findings, with the count in the printed output — never the exit status — / 2 could not run**. Step 3's sketch above exiting with the raw leak count is illustrative only; the real script deliberately does not do that, because a process exit status is one byte and a count of exactly 256 would wrap to 0 and print as "clean" — the worst outcome a redaction gate can produce. **2 must never be read as a pass**: a consumer wiring `run: ./check-redaction.sh .` above should fail the job on any non-zero exit, never special-case 2 as a soft failure.
+
 Two design choices here:
 
 - The scanner is pulled from the private repo at CI time so the deny-list itself never lives in the public repo (the patterns are themselves sensitive — publishing them would tell a reader exactly what to look for).
-- The job exits with the scanner's exit code; non-zero blocks the workflow.
+- The job exits with the scanner's exit code; any non-zero (1 or 2) blocks the workflow.
 
 **Expected:** Pushes that introduce a deny-listed pattern fail CI; the publish does not land. Maintainers see the failing label (e.g., `LEAK: vendor-prefixed flag`) without seeing the regex itself.
 
@@ -285,7 +287,7 @@ Sweep checklist:
 - [ ] Every file in the public mirror is on `tools/public-allowlist.txt`
 - [ ] `tools/check-redaction.sh ./public-mirror` exits 0
 - [ ] `git log --oneline` on the public mirror shows a single orphan commit per publish
-- [ ] `REDACTION_POLICY.md` exists in the private repo with an explicit version-lag cool-off
+- [ ] A policy file (each consumer's own `REDACTION_POLICY.md` or equivalent) exists in the private repo with an explicit version-lag cool-off
 - [ ] Every Phase 1-4 finding has a category label (methodology / generic pattern / version-specific / live internal)
 - [ ] Public CI runs the scanner on every push; a deliberate test pattern fails the build
 - [ ] The deny-list scanner itself does not live in the public repo

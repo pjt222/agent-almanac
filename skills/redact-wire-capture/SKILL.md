@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -97,6 +97,8 @@ Not everything that looks like an identifier is a secret. Public marketplace nam
 ### Step 4: Verify Through the Redaction Gate
 
 Re-run a verification pass that greps each secret shape and fails on any non-`REDACTED` hit, then hand the directory to `enforce-redaction-gate` for the structure-aware tier (a token nested in a JSON body that a flat grep skipped).
+
+`enforce-redaction-gate` names the gate's required shape; this repository does not ship `tools/enforce-redaction-gate.sh` as a runnable file — build it per that skill's Steps 1-4 before wiring the call below.
 
 ```bash
 bash tools/enforce-redaction-gate.sh "$CAP" || {

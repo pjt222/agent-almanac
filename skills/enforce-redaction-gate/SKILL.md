@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -131,6 +131,8 @@ The structure tier also validates *redaction's own output* — the redacted arti
 
 The gate must be safe to run repeatedly and trivial to call from anything. Re-running on a clean tree is a no-op that exits 0. Transform skills call it as their final verification step; CI calls the identical script.
 
+This repository ships no `tools/enforce-redaction-gate.sh` — build it from Steps 1-3 above and give it a home in your own tooling tree. The block below shows the call site's required shape and composability contract (non-zero on any leak), not a command this repo can run as written.
+
 ```bash
 # In a transform skill, after writing redacted output:
 bash tools/enforce-redaction-gate.sh "$OUT_DIR" || {
@@ -144,6 +146,8 @@ bash tools/enforce-redaction-gate.sh "$OUT_DIR" || {
 ### Step 5: Wire CI to Block, Not Warn
 
 A gate that warns is ignored. Run it on every push to the publish branch with the scanner pulled from the private repo so the patterns never live in public.
+
+The workflow below is a template too, keyed to the same not-yet-built script. As written, the `gh api .../tools/enforce-redaction-gate.sh` path does not exist in any repo this skill ships with and will 404 — point `Fetch private scanner` at wherever you land the gate from Step 4.
 
 ```yaml
 # .github/workflows/redaction-gate.yml (public mirror)
