@@ -20,7 +20,7 @@ Thumbs.db
 
 # Local continuation markers.
 #
-# THIS REPOSITORY'S CHOICE, not a rule the skill imposes. `write-continue-here` 1.3 Step 4
+# THIS REPOSITORY'S CHOICE, not a rule the skill imposes. `write-continue-here`'s lifecycle step
 # states the tracked-vs-ignored trade-off and deliberately enforces neither (#775); an earlier
 # edition told every consumer to add this line, which ruled out the tracked lifecycle its own
 # complement supports. We ignore because handoffs here are scratch between two sessions and we
