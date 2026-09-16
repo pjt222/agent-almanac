@@ -113,6 +113,15 @@ test('python3 is available — this suite may not pass by skipping', () => {
 
 test('every carrier holds the canonical block byte-for-byte', () => {
   for (const kind of Object.keys(CARRIERS)) {
+    // The loop skips SOURCE_OF_TRUTH, so a single-entry list makes the body run zero times and
+    // this test passes having compared nothing. That is not hypothetical: extractBlock's own
+    // failure message tells the reader to remove a file from CARRIERS when the block is gone on
+    // purpose, and following it for the other carrier disarms the drift check while staying green.
+    assert.ok(
+      CARRIERS[kind].length > 1,
+      `CARRIERS.${kind} has no carrier to compare against ${SOURCE_OF_TRUTH}; the byte-identity ` +
+        `check would pass by comparing nothing. Removing the last peer means removing this kind.`,
+    );
     const canonical = extractBlock(SOURCE_OF_TRUTH, kind);
     for (const rel of CARRIERS[kind]) {
       if (rel === SOURCE_OF_TRUTH) continue;

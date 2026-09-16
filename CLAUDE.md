@@ -140,7 +140,7 @@ inline.
   ```bash
   # One skill AND its mirrors. Checking the English file alone is what let a
   # 500-line file pass locally and fail CI on four mirrors at 506 (#843).
-  ID=<skill-name>
+  ID="<skill-name>"
   LIST=$(find skills i18n -type f -name SKILL.md -path "*/$ID/SKILL.md")
   if [ -z "$LIST" ]; then
     echo "REFUSED: no SKILL.md matches $ID — a typo scans nothing and looks clean"
@@ -153,17 +153,29 @@ inline.
     echo "checked $ID: $(echo "$LIST" | wc -l) file(s), English plus every mirror"
   fi
 
-  # Whole corpus, same predicate.
-  find skills i18n -type f -name SKILL.md | while IFS= read -r f; do
-    n=$(wc -l < "$f")
-    case "$n" in ''|*[!0-9]*) echo "UNREADABLE: $f ($n)"; continue ;; esac
-    [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
-  done
-  echo "cap scan complete — no OVER line above means nothing is over"
+  # Whole corpus, same predicate, same two guards.
+  ALL=$(find skills i18n -type f -name SKILL.md 2>/dev/null)
+  if [ -z "$ALL" ]; then
+    echo "REFUSED: no SKILL.md found — run this from the repository root"
+  else
+    echo "$ALL" | while IFS= read -r f; do
+      n=$(wc -l < "$f")
+      case "$n" in ''|*[!0-9]*) echo "UNREADABLE: $f ($n)"; continue ;; esac
+      [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
+    done
+    echo "cap scan complete: $(echo "$ALL" | wc -l) file(s), no OVER line above means nothing is over"
+  fi
   ```
 
-  Two guards, because the reassuring line is the dangerous part of a scan like
-  this. `[ "$n" -gt 500 ] && echo` is **fail-open**: a non-numeric `$n` makes `[`
+  Two guards **in each half**, because the reassuring line is the dangerous part
+  of a scan like this — and the corpus half shipped without either until an
+  adversarial round measured it printing `cap scan complete` at exit 0 having
+  scanned nothing, and again while skipping `i18n/` entirely with an `OVER` line
+  already on screen. `find` writes its complaint to stderr, so a reader following
+  the instruction to read the last line sees a pass. That is why the count is now
+  *inside* the reassuring line: a scan that reports `0 file(s)` refutes itself,
+  and one that reports a plausible number has earned the sentence.
+  `[ "$n" -gt 500 ] && echo` is **fail-open**: a non-numeric `$n` makes `[`
   exit 2 (measured on bash 5.2.21 and zsh 5.9), `&&` short-circuits, and the file
   passes in silence — so the `case` runs first and reports `UNREADABLE` instead.
   Note this is the opposite of #842's `if [ … -le … ]` shape, where exit 2 reads
