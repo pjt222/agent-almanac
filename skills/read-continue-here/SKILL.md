@@ -146,7 +146,11 @@ Whether the project tracks its handoff decides how it is deleted, and both lifec
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
   # Tracked: the deletion is recoverable, which is what makes it safe.
-  git rm -q "$CONTINUE_FILE" && git commit -qm 'chore: consume the session handoff'
+  # The pathspec is load-bearing: `git commit -m` with none commits the WHOLE
+  # index, so a peer session's staged work is swept into a commit titled for the
+  # handoff. This runs at session start, which is exactly when that is likely.
+  git rm -q "$CONTINUE_FILE" &&
+    git commit -qm 'chore: consume the session handoff' -- "$CONTINUE_FILE"
 else
   # Untracked, ignored, or no repository at all — all three land here, and for
   # all three an ordinary delete is the right and only option.
@@ -193,13 +197,33 @@ emit() {
     ESCAPED=$(printf '%s' "$1" | jq -Rsa .)
   else
     ESCAPED=$(printf '%s' "$1" | awk '
-      BEGIN { ORS=""; print "\"" }
+      BEGIN {
+        ORS = ""
+        # JSON forbids every raw byte below 0x20 inside a string, not only the
+        # three with short escapes. Handling \\ " and tab alone left CR, ESC and
+        # the rest to pass through raw, which made the object unparseable — and
+        # an unparseable object is discarded in exactly the silent way #844 was.
+        # A handoff quoting terminal output carries ESC; one written on NTFS
+        # carries CR. Both are ordinary here.
+        for (i = 1; i < 32; i++) esc[sprintf("%c", i)] = sprintf("\\u%04x", i)
+        esc["\t"] = "\\t"
+        print "\""
+      }
       {
-        gsub(/\\/, "\\\\")
-        gsub(/"/, "\\\"")
-        gsub(/\t/, "\\t")
+        line = $0
+        gsub(/\\/, "\\\\", line)
+        gsub(/"/, "\\\"", line)
+        if (line ~ /[\001-\037]/) {
+          out = ""
+          n = length(line)
+          for (i = 1; i <= n; i++) {
+            ch = substr(line, i, 1)
+            out = out (ch in esc ? esc[ch] : ch)
+          }
+          line = out
+        }
         if (NR > 1) print "\\n"
-        print
+        print line
       }
       END { print "\"" }
     ')

@@ -174,6 +174,10 @@ test('bash is available — this suite may not pass by skipping', () => {
 });
 
 test('both skills carry the resolver, byte-for-byte identical', () => {
+  // Pin the list itself. Reducing it to one entry makes the comparison below compare a file to
+  // nothing and pass vacuously — the drift this whole test exists to catch would then be
+  // undetectable, and the mutant that proves it is a one-word edit.
+  assert.equal(RESOLVER_CARRIERS.length, 2, 'the carrier list lost an entry; the comparison is vacuous with fewer than two');
   const canonical = extractBlock(READ, RESOLVER_MARKER, { startsWith: RESOLVER_OPEN });
   for (const rel of RESOLVER_CARRIERS) {
     if (rel === READ) continue;
@@ -231,14 +235,38 @@ test('resolver: anchors on the repository root, not the working directory', () =
 test('cleanup: a tracked handoff is removed through git, an untracked one is not', () => {
   const block = extractBlock(READ, CLEANUP_MARKER);
 
-  const tracked = fixture({ 'docs/CONTINUE_HERE.md': 'x' }, { commit: ['docs/CONTINUE_HERE.md'] });
+  const tracked = fixture(
+    { 'docs/CONTINUE_HERE.md': 'x', 'src.txt': 'before' },
+    { commit: ['docs/CONTINUE_HERE.md', 'src.txt'] },
+  );
   try {
     const path = join(tracked, 'docs', 'CONTINUE_HERE.md');
+    // Stage unrelated work first. This block runs at SESSION START, which is exactly when a prior
+    // session or a peer sharing the worktree may have left something in the index — and
+    // `git commit -m` with no pathspec commits the whole index, silently, at exit 0.
+    writeFileSync(join(tracked, 'src.txt'), 'staged by somebody else');
+    spawnSync('git', ['-C', tracked, 'add', 'src.txt'], { encoding: 'utf8' });
+
     const res = runBash(block, { cwd: tracked, env: { CONTINUE_FILE: path } });
     assert.equal(res.status, 0, `tracked arm exited ${res.status}\n${res.stderr}`);
     assert.equal(existsSync(path), false, 'tracked handoff was not deleted');
     const log = spawnSync('git', ['-C', tracked, 'log', '--oneline'], { encoding: 'utf8' }).stdout;
     assert.equal(log.trim().split('\n').length, 2, 'the tracked deletion was not committed');
+
+    // A commit COUNT cannot see the defect: sweeping two extra files in still produces exactly
+    // one commit. Assert what the commit contains, and that the unrelated work is still staged.
+    const named = spawnSync('git', ['-C', tracked, 'show', '--name-only', '--format=', 'HEAD'], {
+      encoding: 'utf8',
+    }).stdout;
+    assert.deepEqual(
+      named.trim().split('\n').filter(Boolean),
+      ['docs/CONTINUE_HERE.md'],
+      'the handoff commit swept in files nobody asked it to commit — `git commit -m` with no pathspec commits the entire index',
+    );
+    const stillStaged = spawnSync('git', ['-C', tracked, 'diff', '--cached', '--name-only'], {
+      encoding: 'utf8',
+    }).stdout;
+    assert.match(stillStaged, /src\.txt/, "a peer session's staged change was consumed by the handoff commit");
   } finally {
     rmTree(tracked);
   }
@@ -265,6 +293,15 @@ test('cleanup: refuses rather than falling back to a hardcoded name when the pat
     const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: '' } });
     assert.notEqual(res.status, 0, 'cleanup ran with no resolved path');
     assert.equal(existsSync(join(dir, 'CONTINUE_HERE.md')), true, 'cleanup deleted a file it never resolved');
+    // Assert the guard's own message, not merely a non-zero exit. With the `:?` line deleted the
+    // block still exits non-zero and still deletes nothing — `git ls-files --error-unmatch ""`
+    // exits 128 and `rm -- ""` then fails on its own — so status alone is satisfied by an accident
+    // of `rm` and the guard could be removed with the suite green.
+    assert.match(
+      res.stderr,
+      /resolve it with the Step 1 block/,
+      'the refusal did not come from the guard; a non-zero exit here can come from `rm ""` instead',
+    );
   } finally {
     rmTree(dir);
   }
@@ -316,7 +353,18 @@ test('hook: silent when there is no handoff, and reports one at an unresolved pa
 
 test('hook: content needing JSON escaping survives, with and without jq', () => {
   const hook = extractHook();
-  const nasty = '# Continue Here\nquote " backslash \\ tab\there\r\ndone';
+  // Every C0 control byte matters, not only the three with short JSON escapes. A handoff that
+  // quotes terminal output carries ESC (FORCE_COLOR is set on this machine, so piped output is
+  // coloured); one written on NTFS carries CR. Both are ordinary, both are below 0x20, and JSON
+  // forbids every raw byte in that range inside a string — so an escaper handling backslash,
+  // quote and tab alone emits an object that does not parse, which Claude Code discards in
+  // exactly the silent way #844 was about. The trailing \r on line 2 exercises the CRLF strip;
+  // the one mid-line on the "progress" line must SURVIVE it and be escaped instead.
+  const nasty =
+    '# Continue Here\nquote " backslash \\ tab\there\r\ndone\n' +
+    'progress: 50%\rprogress: 100%\n' +
+    '\x1b[32mPASS\x1b[0m 16/16 contexts\n' +
+    'bell \x07 backspace \x08 vtab \x0b formfeed \x0c';
   for (const withJq of [true, false]) {
     const dir = fixture({ 'CONTINUE_HERE.md': nasty });
     try {
@@ -325,9 +373,14 @@ test('hook: content needing JSON escaping survives, with and without jq', () => 
       const script = withJq ? hook : `jq() { return 127; }\ncommand() { return 1; }\n${hook}`;
       const res = runBash(script, { cwd: dir });
       assert.equal(res.status, 0, `jq=${withJq}: hook exited ${res.status}\n${res.stderr}`);
+      // injectedContext JSON.parses stdout, so an unescaped control byte fails here rather than
+      // reaching an assertion — which is the point: invalid JSON is the defect, not a detail of it.
       const ctx = injectedContext(res.stdout);
       assert.match(ctx, /quote " backslash \\ tab\there/, `jq=${withJq}: escaping mangled the content`);
-      assert.doesNotMatch(ctx, /\r/, `jq=${withJq}: CR survived the strip`);
+      assert.doesNotMatch(ctx, /\r\n/, `jq=${withJq}: a line-ending CR survived the strip`);
+      assert.match(ctx, /progress: 50%\rprogress: 100%/, `jq=${withJq}: a mid-line CR was lost; only a trailing one should be stripped`);
+      assert.match(ctx, /\x1b\[32mPASS\x1b\[0m/, `jq=${withJq}: an ESC byte did not survive escaping`);
+      assert.match(ctx, /bell \x07 backspace \x08 vtab \x0b formfeed \x0c/, `jq=${withJq}: a C0 control byte did not survive escaping`);
     } finally {
       rmTree(dir);
     }
