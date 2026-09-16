@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
@@ -22,7 +22,6 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: 98b8a8920
-  fence_basis_commit: 98b8a8920
   translator: "(untranslated stub)"
   translation_date: "2026-08-18"
 ---
@@ -108,8 +107,12 @@ Shared, ask before editing: CLAUDE.md, package.json, the registries
 Nobody runs: git stash, git checkout -- <path>, git reset --hard
 ```
 
-Record it where the other session can read it — a message to the human running both, a line
-in `CONTINUE_HERE.md`, or a comment on the issue.
+Record it where the other session can read it — a message to the human running both, a
+comment on the issue, or a message straight to the peer session. **Not in `CONTINUE_HERE.md`**
+(#660): a handoff is written for the *next* session and is consumed and deleted by the first
+one that reads it, so a scope declaration stored there is destroyed by the reader it was
+meant to bind, and the peer that still needs it finds nothing. The declaration must outlive
+the reading — an issue comment does, a chat message does, a handoff does not.
 
 **Expected:** a written division naming the branch, the directories and files each session
 owns, the contested files that belong to neither, and the whole-tree commands neither runs.
@@ -305,5 +308,5 @@ than an agreement, which is the difference this whole section is about.
 - `commit-changes` -- explicit-path staging, which this skill depends on
 - `create-pull-request` -- opens the PR whose branch Step 8 reviews
 - `resolve-git-conflicts` -- for a collision that reached the index rather than the working tree
-- `write-continue-here` -- one place a path-scope declaration can live across sessions
+- `write-continue-here` -- the handoff to the NEXT session, which is not where a peer-scope declaration belongs (#660): its reader deletes it
 - `unleash-the-agents` -- subagent fan-out, the case this skill is explicitly *not* about
