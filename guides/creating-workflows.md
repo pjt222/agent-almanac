@@ -332,8 +332,8 @@ Copying the template gets you this by default.
 | `isolation: 'worktree'` on any stage that might mutate | Everything below, structurally |
 | Per-agent scratch dirs (`mktemp -d`, never a shared fixed path) | Filename collisions between parallel agents |
 | `cd <dir> \|\| exit 1` in generated scripts | A failed `cd` silently redirecting relative paths at the repo |
-| An absolute path under the scratch dir in every destructive command (`rm -rf "$DIR/fixtures"`, never `rm -rf fixtures`) | The row above being the *only* thing between a relative `rm` and the repository — an absolute path does not depend on the working directory at all |
-| `git rev-parse --show-toplevel` assertion before `git add -A` / `git commit` / any write flag | A destructive step aimed at the wrong tree |
+| A braced absolute path under the scratch dir in every destructive command (`rm -rf "${DIR:?}/fixtures"`, never `rm -rf fixtures` and never a bare `"$DIR/fixtures"`) | The row above being the *only* thing between a relative `rm` and the repository. The brace is load-bearing: `cd ""` returns 0 without moving, so an unset `DIR` both leaves you in the repository and expands the unbraced form to `/fixtures` |
+| `git rev-parse --show-toplevel` assertion before `git add`, `git commit`, or a tool run with a write flag | A destructive step aimed at the wrong tree |
 | A named write location in every `Bash`-capable stage prompt | An agent that never meant to touch the repository and writes where it stands |
 
 **These controls are complements, not alternatives.** The prompt-level line

@@ -92,16 +92,22 @@ const items =
 // path, make the failed `cd` fatal, and assert the target before anything
 // destructive.
 //
-// The absolute-path rule was added 2026-09-16 after auditing a day's agent runs:
-// 122 `rm` command lines across 28 subagent transcripts, ZERO naming a risky
-// absolute path, but 55 naming a RELATIVE one — `rm -rf t`, `rm -f err.tmp` —
-// inside what the agent believed was its own directory. Every one was safe, and
-// every one was safe for the same single reason: `cd "$DIR" || exit 1` held. One
-// of them was `rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md`, run by a reviewer
-// exercising that skill's cleanup block; had its `cd` failed it would have taken
-// this repository's live handoff, and `docs/` exists here. Nothing was lost. The
-// point is that one control was carrying all of it, and an absolute path costs
-// nothing and does not depend on the working directory at all.
+// The absolute-path rule was added 2026-09-16 after auditing agent runs, and the
+// audit was re-derived 2026-09-17 because the first figure does not reproduce.
+// Over every subagent transcript retained on this machine — 106 transcripts, 704
+// Bash command strings — 31 lines invoke `rm`: ZERO name a risky absolute path,
+// 7 name a RELATIVE one (`rm -f err.tmp`, `rm -rf fixtures`) inside what the
+// agent believed was its own directory, 22 are absolute inside the sandbox and 2
+// are flag-only. Every relative one was safe, and safe for the same single
+// reason: `cd "$DIR" || exit 1` held. One was
+// `rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md`, run by a reviewer WHILE
+// exercising that skill's cleanup block — the shipped block is
+// `rm -- "$CONTINUE_FILE"`, already absolute and guarded, so the relative form
+// was the reviewer's own teardown and not the block. Had its `cd` failed it
+// would have taken this repository's live handoff, and `docs/` exists here.
+// Nothing was lost. The point is that one control was carrying all of it.
+// Method, buckets and the failure to reproduce the earlier 122/55:
+// tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md. Quote that file.
 // Bracket the whole run with `npm run guard:snapshot`, then
 // `npm run guard:verify` and `npm run guard:release` — the HEAD comparison is the
 // only check that catches a stray COMMIT, since `git status` reads clean once a
@@ -121,11 +127,16 @@ Start every shell block that touches files with exactly this:
 
 - The \`|| exit 1\` on \`cd\` is load-bearing: a bare \`cd\` that fails does NOT stop
   the script, and every relative path after it resolves against the repository.
-- Name an ABSOLUTE path under \`$DIR\` in every destructive command. Write
-  \`rm -rf "$DIR/fixtures"\`, never \`rm -rf fixtures\`. The \`cd\` above is one
-  control; a relative \`rm\` makes it the only one, so the single failure it
+- Name an ABSOLUTE path under \`$DIR\` in every destructive command, braced so an
+  unset variable refuses instead of expanding: \`rm -rf "\${DIR:?}/fixtures"\`,
+  never \`rm -rf fixtures\` and never a bare \`"$DIR/fixtures"\`. The \`cd\` above
+  is one control; a relative \`rm\` makes it the only one, so the single failure it
   guards against becomes repository damage instead of a wasted command. An
-  absolute path does not depend on the working directory at all.
+  absolute path trades the dependency on the working directory for a dependency on
+  \`$DIR\` being set, and that one bites: \`cd ""\` succeeds without moving, so an
+  unset \`DIR\` leaves you standing in the repository AND expands
+  \`"$DIR/fixtures"\` to \`/fixtures\`. The \`:?\` refuses both cases, unset and
+  empty alike, on bash 5.2 and zsh 5.9.
 - Before any \`git add\`, \`git commit\`, or a tool run with a write flag, assert:
     [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
 - Never run \`git commit\`, \`git update-index\`, or \`git checkout --\` against the

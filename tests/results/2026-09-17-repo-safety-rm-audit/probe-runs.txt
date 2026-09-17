@@ -1,0 +1,94 @@
+=== node rm-audit.mjs <all 18 subagent dirs> --rows ===
+DENOMINATORS
+  transcripts scanned      106
+  Bash command strings     704
+  lines MENTIONING rm      39   (broad: includes echo/comment text)
+  lines INVOKING rm        31   (strict: rm is the command word)
+
+CLASSIFICATION
+  risky-absolute            0
+  relative                  7
+  absolute-in-sandbox      22
+  flag-only                 2
+  sum                      31   (must equal lines INVOKING rm)
+
+--- risky-absolute (0) ---
+
+--- relative (7) ---
+  agent-ascout-skills-e337c49dadb42a59.jsonl  rm CONTINUE" /mnt/d/dev/p/agent-almanac/skills/read-continue-here/SKILL.md
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  git rm -q --dry-run -- "" 2>&1
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -- "" 2>&1
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md
+  agent-aadvocatus-854-727cce7ea3643bf3.jsonl  rm -f err.tmp
+  agent-aadvocatus-854-727cce7ea3643bf3.jsonl  rm -f err.tmp
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf fixtures
+
+--- absolute-in-sandbox (22) ---
+  agent-anumber-verifier-793ecc5106f9a734.jsonl  rm -rf "$SP/mutcheck"
+  agent-anumber-verifier-793ecc5106f9a734.jsonl  rm -rf $SP
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -f /tmp/be.$$ /tmp/ze.$$
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -f /tmp/wch.$$.mjs
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -f /tmp/b.$$ /tmp/z.$$
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$WORK/fixtures"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}/fixtures"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
+  agent-areview-842-fa445bafea28e015.jsonl  rm -f "$DIR/reviews.count"
+
+--- flag-only (2) ---
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf'
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf
+
+=== node rm-count-variants.mjs <all 18 subagent dirs> ===
+files                         106
+Bash command strings          704
+command strings containing rm 24
+newline-split lines with rm   34
+operator-split lines with rm  39
+raw 'rm' token occurrences    36
+
+=== node rm-audit.mjs <all> --since 2026-09-15 ===
+DENOMINATORS
+  transcripts scanned      14
+  Bash command strings     358
+  lines MENTIONING rm      36   (broad: includes echo/comment text)
+  lines INVOKING rm        28   (strict: rm is the command word)
+
+CLASSIFICATION
+  risky-absolute            0
+  relative                  6
+  absolute-in-sandbox      20
+  flag-only                 2
+  sum                      28   (must equal lines INVOKING rm)
+
+=== transcript mtime distribution ===
+      5 2026-08-18
+     15 2026-08-19
+      8 2026-08-20
+      1 2026-08-23
+      4 2026-08-25
+      3 2026-08-26
+      3 2026-08-27
+      5 2026-09-02
+      9 2026-09-03
+      4 2026-09-04
+      6 2026-09-07
+      4 2026-09-08
+     12 2026-09-09
+      9 2026-09-10
+      4 2026-09-14
+      9 2026-09-15
+      4 2026-09-16
+      1 2026-09-17

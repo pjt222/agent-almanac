@@ -237,8 +237,8 @@ It does **not** cover ignored paths; walking them would mean hashing
 commands — verifiers included, since a verifier reproducing a finding is the
 agent most likely to build a fixture. Copying the template gets this by default.
 Its rules, in the template's own order — deliberately uncounted, because a count
-here is a claim about a file this one does not own, and it was wrong by two
-before anyone noticed:
+here is a claim about a file this one does not own, and it had silently drifted
+by one before anyone noticed:
 
 1. **`mktemp -d`, never a shared fixed path.** Parallel agents told to build
    fixtures independently converge on the same obvious filename, and the second
@@ -246,11 +246,15 @@ before anyone noticed:
 2. **`cd "$DIR" || exit 1`.** A bare `cd` that fails does not reliably abort the
    surrounding script, and every following relative path then resolves against
    the repository.
-3. **An absolute path under `$DIR` in every destructive command** — write
-   `rm -rf "$DIR/fixtures"`, never `rm -rf fixtures`. The `cd` above is one
-   control; a relative `rm` makes it the only one, so the single failure it
-   guards against becomes repository damage instead of a wasted command. An
-   absolute path does not depend on the working directory at all.
+3. **An absolute path under `$DIR` in every destructive command, braced** — write
+   `rm -rf "${DIR:?}/fixtures"`, never `rm -rf fixtures` and never a bare
+   `"$DIR/fixtures"`. The `cd` above is one control; a relative `rm` makes it the
+   only one, so the single failure it guards against becomes repository damage
+   instead of a wasted command. The brace is not decoration: an absolute path
+   trades the dependency on the working directory for one on `$DIR` being set,
+   and `cd ""` succeeds without moving, so an unset `DIR` leaves the agent
+   standing in the repository *and* expands `"$DIR/fixtures"` to `/fixtures`.
+   `:?` refuses both, unset and empty alike, on bash 5.2 and zsh 5.9.
 4. **A cwd assertion before any destructive step** — `git add`, `git commit`, or
    a tool run with a write flag:
 
