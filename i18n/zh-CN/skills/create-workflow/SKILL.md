@@ -21,7 +21,6 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: "50a5f117bf47d679ec421e36e9ba75f930f50999"
-  fence_basis_commit: "50a5f117bf47d679ec421e36e9ba75f930f50999"
   translator: "(untranslated stub)"
   translation_date: "2026-06-16"
 ---
@@ -242,20 +241,37 @@ It does **not** cover ignored paths; walking them would mean hashing
 `workflows/_template.mjs` to the prompt of every agent that may run shell
 commands — verifiers included, since a verifier reproducing a finding is the
 agent most likely to build a fixture. Copying the template gets this by default.
-It carries three rules:
+Its rules, in the template's own order — deliberately uncounted, because a count
+here is a claim about a file this one does not own, and it had silently drifted
+by one before anyone noticed:
 
 1. **`mktemp -d`, never a shared fixed path.** Parallel agents told to build
    fixtures independently converge on the same obvious filename, and the second
    clobbers the first.
-2. **`cd "$DIR" || exit 1`.** A bare `cd` that fails does not reliably abort the
-   surrounding script, and every following relative path then resolves against
-   the repository.
-3. **A cwd assertion before any destructive step** — `git add`, `git commit`, or
-   a tool run with a write flag:
+2. **`cd "${DIR:?}" || exit 1`.** A bare `cd` that fails does not reliably abort
+   the surrounding script, and every following relative path then resolves
+   against the repository. Braced because `cd ""` returns 0 without moving, so an
+   unset `DIR` leaves the agent where it started and `|| exit 1` never fires.
+3. **An absolute path under `$DIR` in every destructive command, braced** — write
+   `rm -rf "${DIR:?}/fixtures"`, never `rm -rf fixtures` and never a bare
+   `"$DIR/fixtures"`. The `cd` above is one control; a relative `rm` makes it the
+   only one, so the single failure it guards against becomes repository damage
+   instead of a wasted command. The brace is not decoration: an absolute path
+   trades the dependency on the working directory for one on `$DIR` being set,
+   and `cd ""` succeeds without moving, so an unset `DIR` leaves the agent
+   standing in the repository *and* expands `"$DIR/fixtures"` to `/fixtures`.
+   `:?` refuses both, unset and empty alike, on bash 5.2 and zsh 5.9.
+4. **A cwd assertion before `git add`, `git commit`, or a tool run with a write
+   flag** — that is its scope, and it is narrower than "anything destructive",
+   which is why rule 3 exists: an `rm` falls outside it. Braced for rule 3's
+   reason too, since outside any repository `git rev-parse` prints nothing and an
+   unset `DIR` makes the unbraced form compare `""` to `""` and pass:
 
    ```bash
-   [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
+   [ "$(git rev-parse --show-toplevel)" = "${DIR:?}" ] || exit 1
    ```
+5. **Never `git commit`, `git update-index` or `git checkout --` against the
+   repository itself**, and never a repo tool with a write flag there.
 
 Prefer `isolation: 'worktree'` for any stage that might mutate — it is the
 structural control and stronger than either of the others. The gap it leaves is
