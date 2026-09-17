@@ -145,14 +145,26 @@ The structure tier also validates *redaction's own output* — the redacted arti
 The gate must be safe to run repeatedly and trivial to call from anything. Re-running on a clean tree is a no-op that exits 0. Transform skills call it as their final verification step; CI calls the identical script.
 
 ```bash
-# In a transform skill, after writing redacted output. tools/enforce-redaction-gate.sh does not
-# exist in this repository (#751) — this is the call site's required shape once you have
-# built one from Steps 1-3 above.
-bash tools/enforce-redaction-gate.sh "$OUT_DIR" || {
+# Your gate, built from Steps 1-3, called as a transform skill's final step.
+bash tools/your-redaction-gate.sh "$OUT_DIR" || {
   echo "redaction gate FAILED — output still leaks; extend patterns"; exit 1; }
 ```
 
-**Expected:** The same gate invocation succeeds locally and in CI with no environment-specific branches. Two consecutive runs on a clean tree both exit 0. Not yet checkable here: `tools/enforce-redaction-gate.sh` does not exist in this repository (#853 decides whether it will).
+**This repository ships the post-condition half rather than a tree gate, and #853 records why.**
+A scanner asking "is this whole tree clean?" needs a corpus of real internal identifiers to be
+right about, and such a corpus is private by definition — a 1507-line candidate built here fired
+49 findings on the repository's own tooling in one round and missed an 86-character token in the
+next. What ships instead is `tools/redact-artifact.py`, which asserts over output **it produced**,
+using terms **its caller supplied**:
+
+```bash
+python3 tools/redact-artifact.py --type md --mapping map.tsv IN.md -o OUT.md
+```
+
+Read it as the reference implementation of Steps 1-3 at the scope where they are decidable. Build
+a tree gate only if you hold the corpus that makes one meaningful.
+
+**Expected:** The same gate invocation succeeds locally and in CI with no environment-specific branches. Two consecutive runs on a clean tree both exit 0.
 
 **On failure:** If the gate behaves differently in CI, the divergence is almost always a missing tool (`rg`, `jq`) — pin them in the CI image rather than weakening the gate.
 
@@ -172,8 +184,10 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ripgrep jq
       - name: Fetch private scanner
         env: { GH_TOKEN: "${{ secrets.PRIVATE_REPO_TOKEN }}" }
-        # tools/enforce-redaction-gate.sh does not exist in this repository (#751) — this
-        # path is the shape a real one takes once built from Steps 1-3.
+        # The path names YOUR gate in YOUR private repository. This repository ships no tree
+        # gate (#853) — fetching one from a private repo is precisely how a gate gets the corpus
+        # that makes it meaningful, which is the argument for keeping it private rather than
+        # publishing it.
         # `shell: bash` is not decoration: GitHub's UNSPECIFIED default on Linux is `bash -e
         # {0}` with NO pipefail, so a failing `gh api` here (an expired token, a renamed path,
         # a rate limit) would let `base64 -d` succeed on empty stdin, write a 0-byte gate.sh,
@@ -182,7 +196,7 @@ jobs:
         # successful write.
         shell: bash
         run: |
-          gh api repos/<org>/<private>/contents/tools/enforce-redaction-gate.sh --jq .content | base64 -d > gate.sh
+          gh api repos/<org>/<private>/contents/tools/your-redaction-gate.sh --jq .content | base64 -d > gate.sh
           [ -s gate.sh ] || { echo "scanner fetch failed: gate.sh is empty" >&2; exit 2; }
       - run: bash gate.sh .
 ```

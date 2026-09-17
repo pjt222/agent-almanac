@@ -96,17 +96,25 @@ Not everything that looks like an identifier is a secret. Public marketplace nam
 
 ### Step 4: Verify Through the Redaction Gate
 
-Re-run a verification pass that greps each secret shape and fails on any non-`REDACTED` hit, then hand the directory to `enforce-redaction-gate` for the structure-aware tier (a token nested in a JSON body that a flat grep skipped).
+Re-run a verification pass over each scrubbed file. There is no tree-wide gate to hand the
+directory to, and #853 records why: a scanner asking "is this tree clean?" has no corpus to be
+right about, so the verification belongs inside the transform that produced the file. Redact each
+file through `redact-artifact`, which refuses to return output in which a listed term survives.
 
 ```bash
-# tools/enforce-redaction-gate.sh does not exist in this repository (#751); tools/check-redaction.sh
-# (the shape-tier half, see redact-for-public-disclosure) does. This is enforce-redaction-gate's
-# required call shape once the two-tier gate is built.
-bash tools/enforce-redaction-gate.sh "$CAP" || {
-  echo "capture still leaks; extend the secret-class list"; exit 1; }
+# One `source<TAB>replacement` pair per secret you are scrubbing, plus --also-deny for any
+# encoding of it your mapping does not spell. The tool exits 1 if a term survives and 2 if it
+# cannot run at all, so a `|| exit` is a real gate rather than a hopeful one.
+for f in "$CAP"/*.json; do
+  python3 tools/redact-artifact.py --type text --mapping "$CAP/../secrets.tsv" \
+    --also-deny "$BEARER_B64" "$f" --in-place || {
+      echo "capture still leaks at $f; extend the secret-class list"; exit 1; }
+done
 ```
 
-**Expected:** Both the inline verification and `enforce-redaction-gate` exit 0 on the scrubbed directory. Not yet checkable here: `tools/enforce-redaction-gate.sh` does not exist in this repository (#853 decides whether it will).
+**Expected:** Every file exits 0. A non-zero exit is the gate working: 1 means a listed term
+survived the mapping, 2 means the run refused (an empty mapping, an unreadable file) rather than
+reporting a clean pass over nothing.
 
 **On failure:** A surviving hit means a secret class is unhandled — add it to Step 1/Step 2, re-run the scrub from the private source, and re-verify. Never delete the offending line by hand; the next capture will reproduce it.
 

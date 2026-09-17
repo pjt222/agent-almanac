@@ -94,15 +94,27 @@ Two non-obvious rules baked in above: **whole-word boundaries** for minified ide
 Run the mapping over the source text and write the redacted artifact to the public-mirror path. Never edit the public copy by hand — it must be a pure function of the private source so re-runs are deterministic.
 
 ```bash
-# tools/redact-visualization.py does not exist in this repository (#751) — Step 2's mapping
-# function above is the logic; this is the expected CLI shape (source path in, public path
-# out) once it is wrapped and given a home of your own naming.
-python3 tools/redact-visualization.py docs/flow.mmd publish/docs/flow.mmd
+# Write Step 2's table to a mapping file — one `source<TAB>replacement` pair per line, or a
+# JSON object. Order does not matter in the file: the tool sorts longest-source-first, so a
+# namespace prefix can never eat a more specific name.
+cat > /tmp/viz-map.tsv <<'MAP'
+acme_widget_autoinstall_gate	[autoinstall-gate]
+acme_widget_	[widget-namespace]
+MAP
+
+python3 tools/redact-artifact.py --type mermaid --mapping /tmp/viz-map.tsv \
+  docs/flow.mmd -o publish/docs/flow.mmd
 ```
 
-For SVG/HTML, apply the same mapping but scope replacements to text-bearing nodes (parse the DOM rather than regexing the whole file) so you do not rewrite an attribute that happens to contain a matching substring.
+For SVG/HTML pass `--type html`: replacements still apply to the whole text, but the verification
+tier additionally parses the document and asserts that no source term survives in a text node or
+an attribute value, reporting the position (`text[2]`, `attr:data-id[0]`) and never the content.
 
-**Expected:** The redacted artifact has identical structure to the source and descriptive stand-ins in every label position. Not yet checkable as a real CLI: `tools/redact-visualization.py` does not exist in this repository (#852 tracks it).
+**Expected:** Exit 0, and the redacted artifact has identical structure to the source with
+descriptive stand-ins in every label position. A non-zero exit means the tool refused to hand back
+output it could not verify — exit 1 for a surviving term, 2 for a refusal to run at all (an empty
+mapping, an unreadable input). Terms that may appear in an encoding your mapping does not spell —
+base64, a different case — go in `--also-deny`, which asserts without substituting.
 
 **On failure:** If a diff shows a structural change (a dropped edge, a renamed id), the mapping over-matched — scope it to label positions and re-run.
 
@@ -120,17 +132,20 @@ mmdc -i publish/docs/flow.mmd -o publish/docs/flow.svg
 
 ### Step 5: Verify Through the Redaction Gate
 
-Run `enforce-redaction-gate` over the redacted artifact *and* its rendered image. The transform is not done until the gate exits 0 — including the structure-aware tier, which catches a sensitive token hiding in an SVG `<text>` node that a label-position rewrite missed.
+Step 3 already verified the redacted source: `redact-artifact` asserts its own output before
+returning it, so a clean exit there *is* the gate for the text artifact. What Step 3 cannot cover
+is the RENDERED image, which a different tool produced from the redacted source — re-assert over
+it, because a renderer can reintroduce a label from a cache or a theme file.
 
 ```bash
-# tools/enforce-redaction-gate.sh does not exist in this repository (#751); tools/check-redaction.sh
-# (the shape-tier half, see redact-for-public-disclosure) does. This is enforce-redaction-gate's
-# required call shape once the two-tier gate is built.
-bash tools/enforce-redaction-gate.sh publish/docs/ || {
-  echo "visualization still leaks; extend the mapping table"; exit 1; }
+# The rendered SVG is a structured document the mapping never ran over, so assert rather than
+# substitute: every source term from the mapping, plus any encoding of it you know about.
+python3 tools/redact-artifact.py --type html --mapping /tmp/viz-map.tsv \
+  publish/docs/flow.svg -o /dev/null || {
+  echo "rendered image still leaks; re-render from the redacted source"; exit 1; }
 ```
 
-**Expected:** The gate exits 0 on both the source and the rendered image. Not yet checkable: `tools/enforce-redaction-gate.sh` does not exist in this repository (#853 decides whether it will).
+**Expected:** Exit 0 on the rendered image, the redacted source having already been asserted in Step 3. A non-zero exit is the check working: 1 means a term survived into the render, 2 means it refused to run.
 
 **On failure:** A gate hit means the mapping table is incomplete — add the missing shape to the mapping (Step 2) and the deny-list, then re-run from Step 3. Do not hand-edit the public file to silence the gate.
 
@@ -140,7 +155,7 @@ bash tools/enforce-redaction-gate.sh publish/docs/ || {
 - [ ] Node ids/edges are preserved; only labels/text nodes are rewritten
 - [ ] The rendered image was regenerated from the redacted source, not carried over
 - [ ] The mapping is ordered longest-first; the catch-all only fires on genuinely unmapped tokens
-- [ ] `enforce-redaction-gate` exits 0 on both the source and the rendered image
+- [ ] `redact-artifact` exits 0 on the redacted source (Step 3) and on the rendered image (Step 5)
 - [ ] The public artifact is a pure function of the private source (re-running is deterministic)
 
 ## Common Pitfalls

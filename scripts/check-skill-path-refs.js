@@ -61,18 +61,13 @@ export const ALLOWLIST = Object.freeze({
     'the target project\'s mirror script, same procedure',
   'create-workflow:workflows/_registry.yml':
     'deferred behind the #288 Phase-2 gate; the skill says so in the same sentence (#294)',
-  // #751: three skills name a gate script (one also a transform script) that does not exist
-  // in this repository. Each Expected block that names the path now says so, backtick-quoted,
-  // which is what earns these entries and is also what keeps them alive: the day #853 decides
-  // to write the file, `present && waived` above fires and this list itself demands the edit.
-  'enforce-redaction-gate:tools/enforce-redaction-gate.sh':
-    'does not exist in this repository; named in Step 4\'s Expected block once #853 decides whether it will',
-  'redact-wire-capture:tools/enforce-redaction-gate.sh':
-    'does not exist in this repository; named in Step 4\'s Expected block, same relationship as enforce-redaction-gate\'s own entry — pending #853',
-  'redact-visualization-for-disclosure:tools/enforce-redaction-gate.sh':
-    'does not exist in this repository; named in Step 5\'s Expected block, same relationship as enforce-redaction-gate\'s own entry — pending #853',
-  'redact-visualization-for-disclosure:tools/redact-visualization.py':
-    'does not exist in this repository; named in Step 3\'s Expected block — tracked by #852, not #853 (which is scoped to enforce-redaction-gate.sh only)',
+  // #853/#852 removed four entries that used to live here. Three skills named
+  // `tools/enforce-redaction-gate.sh` and one also named `tools/redact-visualization.py`;
+  // neither ever existed. The decision was to ship the post-condition half instead —
+  // `tools/redaction-lib.py` and `tools/redact-artifact.py`, which assert over output they
+  // produced using terms their caller supplied — so the skills now name paths that exist and
+  // need no waiver. The comment stays as the record: an entry here is a promise that something
+  // absent is deliberately named, and `present && waived` is what collects on that promise.
 });
 
 export const PATH_PREFIXES = ['workflows', 'tools', 'scripts'];
