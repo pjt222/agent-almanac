@@ -67,17 +67,14 @@ jobs:
       - name: Check required sections
         run: node scripts/audit-skill-sections.js --missing
 
-      - name: Check line counts
-        run: |
-          failed=0
-          for f in skills/*/SKILL.md; do
-            lines=$(wc -l < "$f")
-            if [ "$lines" -gt 500 ]; then
-              echo "FAIL: $f ($lines lines > 500)"
-              failed=1
-            fi
-          done
-          exit $failed
+      # The English ceiling is not the flat 500 the mirror check below enforces: a scaffolded
+      # translation adds provenance frontmatter on top of English's body, so English needs
+      # headroom for mirrors that may not exist yet (#855). scripts/check-skill-line-ceiling.js
+      # derives that ceiling from scripts/lib/provenance.js's own field list rather than a
+      # hand-typed number, and runs on every English source regardless of whether it has been
+      # scaffolded — the case #843 had no protection for.
+      - name: Check line counts (derived English ceiling)
+        run: node scripts/check-skill-line-ceiling.js
 
       - name: Verify registry count
         run: |

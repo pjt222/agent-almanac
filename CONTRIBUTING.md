@@ -108,7 +108,10 @@ final** — and one of them is actively harmful if run earlier.
    - Related Skills
 
    The `skills` check enforces the six headings, at least one entry under Common Pitfalls, and a
-   500-line ceiling; the step shape is read in review. Extended examples go in
+   line ceiling — 500 for the mirrors, and a DERIVED, stricter number for the English source
+   itself (`scripts/check-skill-line-ceiling.js`, #855): a scaffolded translation adds
+   provenance frontmatter on top of English's body, so English needs headroom for mirrors that
+   may not exist yet. The step shape is read in review. Extended examples go in
    `references/EXAMPLES.md` rather than the main file. Every code fence carries a language tag
    (` ```bash `, ` ```yaml `, ` ```text `), never a bare ` ``` ` — the required `skills` check
    fails on any untagged fence in the English content trees, and `content-style` fails one on any
@@ -189,7 +192,7 @@ git fetch upstream main
 
 npm ci
 node scripts/audit-skill-sections.js --missing         # the six sections and a non-empty Common Pitfalls; "0 skill(s) reported" when clean
-lines=$(wc -l < skills/<skill-name>/SKILL.md); [ "${lines:?no such file - check the path}" -le 500 ] || { echo "FAIL: $lines lines > 500"; false; }   # the 500-line ceiling, counted the way CI counts it; silent when clean
+node scripts/check-skill-line-ceiling.js <skill-name>  # the DERIVED English ceiling (500 minus provenance overhead, #855), counted the way CI counts it; prints "OVER: ..." only past the ceiling
 node scripts/check-content-style.js --added <base>     # bare fences and table rules, on committed added lines
 npm run validate:line-endings                          # any CRLF in the index fails
 npm run validate:integrity                             # registry entry, symlink, cross-references

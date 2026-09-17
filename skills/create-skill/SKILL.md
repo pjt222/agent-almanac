@@ -312,7 +312,7 @@ head -20 skills/<skill-name>/SKILL.md | grep -q '^name:' && echo "name: OK"
 head -20 skills/<skill-name>/SKILL.md | grep -q '^description:' && echo "description: OK"
 ```
 
-**Expected:** Line count ≤500, all required fields present.
+**Expected:** Line count ≤500, all required fields present. That flat 500 is the ceiling this repository enforces on i18n mirrors; the English source itself is held to a DERIVED, stricter ceiling once mirrors exist or will exist (`node scripts/check-skill-line-ceiling.js <skill-name>`, `CONTRIBUTING.md` § local checks, #855) — a scaffolded translation adds provenance frontmatter on top of English's body, so an English file at exactly 500 lines puts a freshly-scaffolded mirror over its own 500-line limit. Run that script, not the flat check above, before treating an English file near 500 lines as safe.
 
 **On failure:** If over 500 lines, apply progressive disclosure — extract large code blocks (>15 lines) to `references/EXAMPLES.md`:
 
