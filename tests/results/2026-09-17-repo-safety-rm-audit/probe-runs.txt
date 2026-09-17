@@ -1,26 +1,27 @@
-=== disk denominator: what readdirSync saw vs what exists ===
+=== disk denominator: non-recursive vs recursive ===
 direct children of */subagents:  106
-recursive .jsonl beneath them:   739
+find(1), recursive:              739
+node readdirSync recursive:      739
 depth below subagents/ (0 = direct child):
     106 -1
     633 2
 
-=== v2 (recursive), full corpus, --rows ===
+=== v3 probe, full corpus, --rows ===
 DENOMINATORS
-  candidate .jsonl on disk 739   (recursive, before any date filter)
+  candidate .jsonl on disk 739   (walk(), cross-checked against node readdirSync({recursive:true}) = 739)
   removed by date filter   0
   transcripts scanned      739   (must be candidates - filtered)
-  Bash command strings     5955
-  lines MENTIONING rm      145   (broad: includes echo/comment text)
-  lines INVOKING rm        124   (strict: rm is the command word)
+  Bash command strings     5969
+  lines MENTIONING rm      152   (broad: includes echo/comment text)
+  lines INVOKING rm        130   (strict: rm is the command word)
 
 CLASSIFICATION
   risky-absolute            3
   relative                 48
-  absolute-in-sandbox      69
+  absolute-in-sandbox      75
   flag-only                 4
-  bucket sum              124
-  bucket sum equals the independently counted strict matches (124).
+  bucket sum              130
+  bucket sum equals the independently counted strict matches (130).
 
 --- risky-absolute (3) ---
   agent-aac3b36dc3f99318e.jsonl  rm -rf /mnt/d/dev/p/agent-almanac/.claude/worktrees/wf_662d4356-9c9-5/.review647
@@ -77,7 +78,7 @@ CLASSIFICATION
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf alsothis' 2>&1
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf alsothis' 2>&1
 
---- absolute-in-sandbox (69) ---
+--- absolute-in-sandbox (75) ---
   agent-a068ae533704946a7.jsonl  rm -rf "$SC/mem" "$SC/snap"
   agent-a65ee60ac9715b978.jsonl  rm -rf $SC/fixture
   agent-a65ee60ac9715b978.jsonl  rm -rf $SC/noindex
@@ -146,6 +147,12 @@ CLASSIFICATION
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-areview-842-fa445bafea28e015.jsonl  rm -f "$DIR/reviews.count"
 
 --- flag-only (4) ---
@@ -154,9 +161,9 @@ CLASSIFICATION
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf'
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf
 
-=== v2, the ORIGINAL claim's own window: 2026-09-16 only ===
+=== v3, the ORIGINAL claim's own window: 2026-09-16 only ===
 DENOMINATORS
-  candidate .jsonl on disk 739   (recursive, before any date filter)
+  candidate .jsonl on disk 739   (walk(), cross-checked against node readdirSync({recursive:true}) = 739)
   removed by date filter   718
   transcripts scanned      21   (must be candidates - filtered)
   Bash command strings     756
@@ -171,23 +178,6 @@ CLASSIFICATION
   bucket sum               73
   bucket sum equals the independently counted strict matches (73).
 
-=== v2, --since 2026-09-15 ===
-DENOMINATORS
-  candidate .jsonl on disk 739   (recursive, before any date filter)
-  removed by date filter   708
-  transcripts scanned      31   (must be candidates - filtered)
-  Bash command strings     952
-  lines MENTIONING rm      117   (broad: includes echo/comment text)
-  lines INVOKING rm        99   (strict: rm is the command word)
-
-CLASSIFICATION
-  risky-absolute            1
-  relative                 44
-  absolute-in-sandbox      52
-  flag-only                 2
-  bucket sum               99
-  bucket sum equals the independently counted strict matches (99).
-
-=== negative arm: roots that contain no .jsonl ===
-REFUSED: no .jsonl found beneath the roots — a scan over nothing reports clean
+=== negative arm: a root holding no .jsonl ===
+REFUSED: root(s) could not be read: /tmp
 exit=2

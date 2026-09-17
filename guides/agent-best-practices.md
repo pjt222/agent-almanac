@@ -295,12 +295,11 @@ uses. In the shared checkout, four things are not optional:
 
    The scope of that assertion is the reason the absolute-path rule is needed at all. It
    guards the `git` and write-flag steps, which is narrower than "anything destructive" — an
-   `rm` is outside it. So before this rule, `cd "$DIR" || exit 1` really was the sole control
-   standing between a sandbox and the repository for every `rm` an agent ran, and an audit of
-   every retained subagent transcript — 739 of them, 124 `rm` invocations — found 48 relative
-   calls, 45 of them real deletes resting on exactly that, plus three naming a risky absolute
-   path, one a bare `rm -rf *`
-   (`tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md`). The brace closes the
+   `rm` is outside it. So before this rule, `cd "${DIR:?}" || exit 1` really was the sole
+   control standing between a sandbox and the repository for every `rm` an agent ran — and
+   agents do write relative `rm`s there, sized and graded in
+   `tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md` (quote the counts from that file,
+   not from here). The brace closes the
    hole the fix would otherwise open: `cd ""` returns 0 without moving, so an unset `DIR`
    leaves the agent in the repository and expands the unbraced form to `/fixtures`.
 

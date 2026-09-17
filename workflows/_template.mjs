@@ -92,14 +92,17 @@ const items =
 // path, make the failed `cd` fatal, and assert the target before anything
 // destructive.
 //
-// The absolute-path rule was added 2026-09-16 after auditing agent runs, and
-// re-derived 2026-09-17 over every retained subagent transcript — 739
-// transcripts, 5,955 Bash command strings — where 124 lines invoke `rm`: 3 name
-// a risky absolute path (one a bare `rm -rf *`), 48 name a RELATIVE one
-// (`rm -rf t`, `rm -f err.tmp`, `rm -rf nobin`) inside what the agent believed
-// was its own directory, 69 are absolute inside the sandbox and 4 are flag-only.
-// Each of the 48 was safe for the same single reason: `cd "$DIR" || exit 1`
-// held. One was
+// The absolute-path rule was added 2026-09-16 after auditing agent runs. Its
+// reason is a mechanism, demonstrable in two arms and unchanged since:
+//
+//   after a cd that failed, in a shell that did not abort —
+//     rm -rf fixtures             -> resolved against the repo; repo/fixtures GONE
+//     rm -rf "$WORK/fixtures"     -> resolved against $WORK;    repo/fixtures SURVIVED
+//
+// Agents really do write the first form inside what they believe is their own
+// directory — `rm -rf t`, `rm -f err.tmp`, `rm -rf nobin`. The population is
+// sized, graded and re-derivable in the RESULT.md cited below; quote counts from
+// there, not from this comment, because they have moved twice already. One was
 // `rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md`, run by a reviewer WHILE
 // exercising that skill's cleanup block — the shipped block is
 // `rm -- "$CONTINUE_FILE"`, already absolute and guarded, so the relative form
@@ -127,10 +130,14 @@ because parallel agents pick the same obvious filename and clobber each other.
 Start every shell block that touches files with exactly this:
 
     DIR="$(mktemp -d)" || exit 1
-    cd "$DIR" || exit 1
+    cd "\${DIR:?}" || exit 1
 
 - The \`|| exit 1\` on \`cd\` is load-bearing: a bare \`cd\` that fails does NOT stop
   the script, and every relative path after it resolves against the repository.
+  The brace matters for the same reason it does below — \`cd ""\` returns 0 without
+  moving, so an unset \`DIR\` leaves you wherever you started and the \`|| exit 1\`
+  never fires. Every \`$DIR\` in this preamble is braced; do not copy one of these
+  lines on its own and drop it.
 - Name an ABSOLUTE path under \`$DIR\` in every destructive command, braced so an
   unset variable refuses instead of expanding: \`rm -rf "\${DIR:?}/fixtures"\`,
   never \`rm -rf fixtures\` and never a bare \`"$DIR/fixtures"\`. The \`cd\` above

@@ -243,9 +243,10 @@ by one before anyone noticed:
 1. **`mktemp -d`, never a shared fixed path.** Parallel agents told to build
    fixtures independently converge on the same obvious filename, and the second
    clobbers the first.
-2. **`cd "$DIR" || exit 1`.** A bare `cd` that fails does not reliably abort the
-   surrounding script, and every following relative path then resolves against
-   the repository.
+2. **`cd "${DIR:?}" || exit 1`.** A bare `cd` that fails does not reliably abort
+   the surrounding script, and every following relative path then resolves
+   against the repository. Braced because `cd ""` returns 0 without moving, so an
+   unset `DIR` leaves the agent where it started and `|| exit 1` never fires.
 3. **An absolute path under `$DIR` in every destructive command, braced** — write
    `rm -rf "${DIR:?}/fixtures"`, never `rm -rf fixtures` and never a bare
    `"$DIR/fixtures"`. The `cd` above is one control; a relative `rm` makes it the

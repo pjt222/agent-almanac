@@ -51,28 +51,119 @@ if (roots.length === 0) {
 }
 
 // Recursive walk. Returns every .jsonl beneath the root at any depth.
-function walk(dir, acc = []) {
+//
+// Two things it deliberately does NOT do quietly. A directory it cannot list is recorded in
+// `walkErrors` and makes the run refuse, rather than being swallowed by a bare catch — a
+// permission-denied subdirectory otherwise removes files from the corpus and reports clean. And
+// `Dirent.isDirectory()` has lstat semantics, so a symlinked session directory is neither
+// descended into nor reported; `statSync` (which follows) decides that here, and a symlink loop
+// is bounded by `seen`.
+const walkErrors = [];
+const nonJsonlSeen = [];
+function walk(dir, acc = [], seen = new Set()) {
+  let real;
+  try {
+    real = statSync(dir).isDirectory() ? dir : null;
+  } catch (err) {
+    walkErrors.push(`${dir}: ${err.code || err.message}`);
+    return acc;
+  }
+  if (real === null) return acc;
+  const key = String(statSync(dir).ino);
+  if (seen.has(key)) return acc;
+  seen.add(key);
+
   let entries;
   try {
     entries = readdirSync(dir, { withFileTypes: true });
-  } catch {
+  } catch (err) {
+    walkErrors.push(`${dir}: ${err.code || err.message}`);
     return acc;
   }
   for (const e of entries) {
     const full = join(dir, e.name);
-    if (e.isDirectory()) walk(full, acc);
-    else if (e.isFile() && e.name.endsWith('.jsonl')) acc.push(full);
+    let isDir;
+    try {
+      isDir = statSync(full).isDirectory();
+    } catch (err) {
+      walkErrors.push(`${full}: ${err.code || err.message}`);
+      continue;
+    }
+    if (isDir) walk(full, acc, seen);
+    else if (e.name.endsWith('.jsonl')) acc.push(full);
+    // A rotated or oddly-suffixed transcript would be skipped in silence otherwise. `.meta.json`
+    // is the known sidecar Claude Code writes beside every transcript and is not one.
+    else if (/\.jsonl[._\d]/.test(e.name) && !e.name.endsWith('.meta.json')) {
+      nonJsonlSeen.push(full);
+    }
   }
   return acc;
 }
 
-const candidates = [];
-for (const root of roots) candidates.push(...walk(root));
+// A SECOND, DIFFERENT TRAVERSAL — not the same one counted twice.
+//
+// Version 2 of this file printed `candidates` beside `scanned` and called it independent. It was
+// not: both came from `walk()`, so any blindness in `walk` was invisible to the check. Proven by
+// mutant — reintroducing version 1's exact defect (`if (e.isDirectory()) walk(...)` -> `continue`)
+// left every guard intact and printed `106 / 106 / 0 risky-absolute`, exit 0. A self-check that
+// compares a value with itself is not a check at all, at the level of a variable or of a function.
+//
+// `readdirSync(root, { recursive: true })` is Node's own implementation, available since 20.1 and
+// inside this package's `engines.node` of >=22.12.0. It agrees with `find(1)` at 739. Using it
+// here means the count and the scan share no code.
+function nodeRecursiveCount(root) {
+  try {
+    return readdirSync(root, { recursive: true, withFileTypes: true }).filter(
+      (e) => e.isFile() && e.name.endsWith('.jsonl')
+    ).length;
+  } catch {
+    return null;
+  }
+}
 
-// The independent denominator: how many candidate files exist beneath the roots, before any
-// date filter. `scanned` below must equal this minus whatever the date filter removes, and the
-// two are printed together so a silent scope loss cannot hide behind a plausible number.
+const candidates = [];
+let crossCount = 0;
+const unreadableRoots = [];
+const emptyRoots = [];
+for (const root of roots) {
+  const before = candidates.length;
+  walk(root, candidates);
+  const n = nodeRecursiveCount(root);
+  if (n === null) {
+    unreadableRoots.push(root);
+    continue;
+  }
+  crossCount += n;
+  if (candidates.length - before === 0) emptyRoots.push(root);
+}
 const candidateCount = candidates.length;
+
+// Every refusal below exists because a scan that reports a plausible number while missing files
+// is the failure this file documents. None of them can be satisfied by the scan agreeing with
+// itself.
+if (unreadableRoots.length > 0) {
+  console.error(`REFUSED: root(s) could not be read: ${unreadableRoots.join(', ')}`);
+  process.exit(2);
+}
+if (emptyRoots.length > 0) {
+  console.error(
+    `REFUSED: root(s) contributed no .jsonl — a mistyped root beside a good one reports clean: ${emptyRoots.join(', ')}`
+  );
+  process.exit(2);
+}
+if (walkErrors.length > 0) {
+  console.error(
+    `REFUSED: ${walkErrors.length} directory/ies could not be listed, so the corpus is unknown:\n  ${walkErrors.slice(0, 5).join('\n  ')}`
+  );
+  process.exit(2);
+}
+if (candidateCount !== crossCount) {
+  console.error(
+    `REFUSED: two independent traversals disagree — walk() found ${candidateCount}, ` +
+      `node readdirSync({recursive:true}) found ${crossCount}. One of them is blind.`
+  );
+  process.exit(2);
+}
 
 const transcripts = [];
 let filteredOut = 0;
@@ -223,7 +314,15 @@ for (const t of transcripts) {
 const bucketSum = Object.values(buckets).reduce((n, b) => n + b.length, 0);
 
 console.log('DENOMINATORS');
-console.log(`  candidate .jsonl on disk ${candidateCount}   (recursive, before any date filter)`);
+console.log(
+  `  candidate .jsonl on disk ${candidateCount}   (walk(), cross-checked against node readdirSync({recursive:true}) = ${crossCount})`
+);
+if (nonJsonlSeen.length > 0) {
+  console.log(
+    `  NOTE: ${nonJsonlSeen.length} file(s) beneath the roots look transcript-like but are not .jsonl and were NOT read:`
+  );
+  for (const p of nonJsonlSeen.slice(0, 5)) console.log(`    ${p}`);
+}
 console.log(`  removed by date filter   ${filteredOut}`);
 console.log(`  transcripts scanned      ${transcripts.length}   (must be candidates - filtered)`);
 console.log(`  Bash command strings     ${totalCommands}`);

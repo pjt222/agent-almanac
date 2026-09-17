@@ -43,11 +43,49 @@ read.** 106 was an honest count of the files opened and was never compared to wh
 `rm-count-variants.mjs` shared the identical blind spot, so the four "independent counting rules"
 cross-checked the splitting rule against itself and all four counted the same 14%.
 
-Version 2 therefore prints a **second number beside the first** — an independent recursive count
-of candidate files — and refuses when `scanned + filtered ≠ candidates`. The bucket sum is also
-now compared against a separately maintained counter of strict matches rather than against
-itself; version 1 printed the same expression twice and called it a check, and a mutant that
-returned a fifth bucket name crashed rather than producing the advertised mismatch.
+Version 2 printed a second number beside the first and called it independent. **It was not, and a
+third round proved it with a mutant.** Both numbers came from the same `walk()`, so any blindness
+in `walk` was invisible to the check: reintroducing version 1's exact defect — one site,
+`if (isDir) walk(...)` → `continue` — left every version-2 guard intact and printed
+`106 / 106 / 0 risky-absolute` at exit 0. The reassuring `(recursive, before any date filter)`
+in that output is a string literal asserting a property of the code, not a measurement of it.
+
+The rule that survives all three rounds is therefore stronger than "print a denominator":
+
+> A self-check must compare two values that were **produced by different code**. One value
+> printed twice is not a check, at the level of a variable or of a function.
+
+Version 3 counts candidates with `readdirSync(root, { recursive: true })` — Node's own
+implementation, sharing no code with `walk()`, and agreeing with `find(1)` at 739 — and refuses
+when the two traversals disagree. It also refuses on a root that contributes no files (a mistyped
+root beside a good one), on any directory it could not list (a permission-denied subdirectory
+otherwise removes files and reports clean), and it resolves directories with `statSync` rather
+than `Dirent.isDirectory()`, whose lstat semantics skip a symlinked session directory in silence.
+A transcript-like file that is not `.jsonl` is reported rather than passed over.
+
+The bucket sum is compared against a separately maintained counter of strict matches; version 1
+printed the same expression twice and called that a check, and a mutant returning a fifth bucket
+name crashed rather than producing the advertised mismatch.
+
+### Proof that the traversal guard fires
+
+A two-file fixture — one `.jsonl` at the root, one nested, the nested one holding the risky row —
+run against the shipped probe and against the same probe with version 1's defect reintroduced:
+
+```
+BASELINE   candidate .jsonl on disk 2  (walk(), cross-checked ... = 2)
+           lines INVOKING rm        2
+           risky-absolute           1          exit 0
+
+MUTANT     REFUSED: two independent traversals disagree — walk() found 1,
+           node readdirSync({recursive:true}) found 2. One of them is blind.
+                                              exit 2
+```
+
+The mutant is the bug this file documents, and the fixture reproduces its signature exactly: it
+would have reported **zero** risky rows. It now refuses instead. Against the real corpus the same
+mutant is caught one guard earlier, by the empty-root refusal, and a partial-blindness mutant that
+skips only `workflows/` is caught the same way.
 
 ## Method
 
@@ -73,20 +111,23 @@ The four buckets, stated **as the code applies them**, not as a paraphrase:
 
 ## Results — full corpus
 
+This is **one run**, the one captured verbatim in `probe-runs.txt`. The corpus grows while it is
+measured (see below), so a later run will differ.
+
 | Measure | Value |
 |---|---|
-| candidate `.jsonl` on disk (recursive) | **739** |
+| candidate `.jsonl` on disk | **739** — `walk()` and `readdirSync({recursive:true})` agree, and `find(1)` gives the same |
 | transcripts scanned | 739 |
-| Bash command strings | 5955 |
-| lines MENTIONING `rm` (broad) | 145 |
-| lines INVOKING `rm` (strict) | **124** |
+| Bash command strings | 5969 |
+| lines MENTIONING `rm` (broad) | 152 |
+| lines INVOKING `rm` (strict) | **130** |
 | — `risky-absolute` | **3** |
-| — `relative` | **48** |
-| — `absolute-in-sandbox` | 69 |
+| — `relative` | **48** (43 ordinary deletes; see below) |
+| — `absolute-in-sandbox` | 75 |
 | — `flag-only` | 4 |
 
-Compare version 1, same probe, non-recursive: 106 transcripts, 31 strict, **0** risky, 7
-relative.
+Compare version 1 of this probe, non-recursive, on the same machine: 106 transcripts, 31 strict,
+**0** risky, 7 relative.
 
 ## The original figures substantially reproduce — retraction
 
@@ -125,14 +166,36 @@ repository, and a worktree under `.claude/worktrees/` is under the repository. T
 the code being stricter than the prose. Their working directories were not read and no claim is
 made that any deletion went wrong.
 
-## The relative bucket
+## The relative bucket, row by row
 
-45 of the 48 are ordinary relative deletes inside what an agent believed was its own directory —
-`rm -rf t`, `rm -rf nobin`, `rm -f err.tmp`, `rm -rf fixtures`, `rm -rf f/T`, `rm -f lb/*`. Three
-are artefacts of splitting on operators without parsing quotes (`rm CONTINUE" /mnt/...`,
-`rm -rf alsothis' 2>&1`). So the population the rule is about is real and is the large majority of
-the bucket; publishing 48 as though every row were a real call would repeat the original's own
-defect, which is why the 45 is stated separately.
+48 rows split three ways, and the split is stated because publishing 48 as though every row were
+a real delete would repeat the original's own defect:
+
+| | count | examples |
+|---|---|---|
+| splitting artefacts (operators inside quotes) | 3 | `rm CONTINUE" /mnt/…`, `rm -rf alsothis' 2>&1` |
+| invocations that delete nothing by construction | 2 | `git rm -q --dry-run -- ""`, `rm -- ""` |
+| **ordinary relative deletes** | **43** | `rm -rf t`, `rm -rf nobin`, `rm -f err.tmp`, `rm -rf f/T`, `rm -f lb/*` |
+
+42 excluding round 1's own `rm -rf fixtures` demonstration. An earlier version of this file said
+"45 of the 48", which quietly promoted the two no-op invocations into real deletes — an error in
+the direction that flatters the count, found by re-deriving the split row by row rather than
+subtracting.
+
+## The near-miss
+
+`rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md`, relative, is present in the retained transcript of
+the #846 review round, in a block that also probes `rm -- ""` and `git rm -q --dry-run -- ""`.
+`docs/` exists in this repository, so had that block's `cd` failed it would have taken the live
+163 KB handoff. Its transcript shows `DIR="$(mktemp -d)" || exit 1; cd "$DIR" || exit 1`
+immediately above, so the control held and nothing was lost.
+
+One correction to how it has been described. The published narrative said it was run "by a
+reviewer exercising that skill's cleanup block", which points a reader at
+`skills/read-continue-here/SKILL.md` — where the shipped block is `rm -- "$CONTINUE_FILE"`,
+already absolute and already guarded by `: "${CONTINUE_FILE:?…}"`. The relative form was the
+reviewer's own teardown *while* exercising that block, not the block itself. A reader following
+the old pointer found a compliant block and could not reconstruct the near-miss.
 
 ## What this instrument cannot measure
 
@@ -150,14 +213,21 @@ is a different question from the one asked here and was not attempted.
 
 ## The corpus moves while it is being measured
 
-It contains the review rounds on this PR, and grows with each one: between two runs inside a
-single session the broad count moved 139 → 145 and the strict count 118 → 124, all of it the
-round's own probes. Three rows come from round 1 (`rm -rf fixtures` as its ARM A demonstration,
-`rm -rf "$WORK/fixtures"` as ARM B, and `rm -rf "${DIR:?}/fixtures"` as the fix). They are named
-rather than excluded, because a `--until` cut would have to justify its boundary.
+It contains the review rounds on this PR, and grows with each one. The strict count moved
+118 → 124 → 130 across three rounds of a single session, all of it the rounds' own probes, and
+**31 of the current 130 strict rows — 24% — come from this PR's own reviewer transcript**
+(0 risky-absolute, 3 relative, 26 absolute-in-sandbox, 2 flag-only). The rounds share one
+transcript file, because resuming an agent appends to its existing transcript, so each round
+accumulates there.
 
-`--list FILE` writes the exact set of files scanned, so a figure can be re-derived against a
-fixed set rather than a moving one.
+That share is large enough to state plainly rather than footnote: the `absolute-in-sandbox`
+bucket is now materially shaped by the review of the change it is evidence for. The rows are
+named rather than excluded, because a `--until` cut would have to justify its boundary — but a
+reader should size the bucket accordingly.
+
+**Any figure quoted from this file is a figure from one run**, and the run is identified by the
+scanned file set. `--list FILE` writes that set, so a number can be re-derived against a fixed
+corpus rather than a moving one. The table above is the run captured in `probe-runs.txt`.
 
 ## What this means for the rule
 
