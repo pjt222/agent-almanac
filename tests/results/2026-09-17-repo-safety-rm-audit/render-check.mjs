@@ -26,9 +26,8 @@
 // Usage: node render-check.mjs [path/to/_template.mjs]
 //        node render-check.mjs --self-test
 
-import { readFileSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -105,8 +104,11 @@ function wrapWorkflowDialect(src) {
 }
 
 function parsesInWorkflowDialect(src) {
+  // The wrapped text goes to `node --check` on stdin via `input:`, so no temp file is involved.
+  // An earlier version created and removed a temp directory it never wrote the wrapped source
+  // to — vestigial machinery left behind when the real parse was added, and the kind of thing
+  // that reads as evidence of work being done.
   const wrapped = wrapWorkflowDialect(src);
-  const dir = mkdtempSync(join(tmpdir(), 'render-check-'));
   try {
     execFileSync(process.execPath, ['--input-type=module', '--check'], {
       input: wrapped,
@@ -114,9 +116,10 @@ function parsesInWorkflowDialect(src) {
     });
     return { ok: true, bytes: wrapped.length };
   } catch (err) {
-    return { ok: false, message: String(err.stderr || err.message).split('\n').slice(0, 3).join(' ') };
-  } finally {
-    rmSync(dir, { recursive: true, force: true });
+    return {
+      ok: false,
+      message: String(err.stderr || err.message).split('\n').slice(0, 3).join(' '),
+    };
   }
 }
 

@@ -9,10 +9,17 @@ and resolved to 19 directory/ies.
 # Content-only, order-independent, and it publishes no path and no identifier.
 # A re-deriver whose digest differs has a different corpus and numbers that are not
 # comparable to these — which is the failure the drift across five review rounds shows.
+# COUNT FIRST, then hash. Over zero files this pipeline returns
+#   38acb15d02d5ac0f2a2789602e9df950c380d2799b4bdb59394e4eeabdd3a662
+# — the sha256 of an empty list of hashes, a universal constant. 64 confident hex
+# characters and no refusal is exactly the vacuous pass this whole result file is about,
+# so the count gates the digest rather than trailing it.
+$ n=$(find <roots> -name '*.jsonl' -type f | wc -l)
+$ [ "$n" -gt 0 ] || { echo 'REFUSED: no files' >&2; exit 2; }
 $ find <roots> -name '*.jsonl' -type f -print0 | sort -z | xargs -0 sha256sum \
     | awk '{print $1}' | sort | sha256sum
-  digest: 0c9485107417becf920b3eecff527e756b0387a039b95762d70378eb82b78781
   over 740 file(s)
+  digest: 603aa200b03c20c3692365be99f4ecc336e11d7ce59c8ef10c56fdc37a21468b
 
 === disk denominator: non-recursive vs recursive ===
 $ ls -1 ~/.claude/projects/-mnt-d-dev-p-agent-almanac/*/subagents/*.jsonl | wc -l
@@ -28,17 +35,17 @@ DENOMINATORS
   candidate .jsonl on disk 740   (walk(), cross-checked against node readdirSync({recursive:true}) = 740)
   removed by date filter   0
   transcripts scanned      740   (must be candidates - filtered)
-  Bash command strings     6016
-  lines MENTIONING rm      182   (broad: includes echo/comment text)
-  lines INVOKING rm        149   (strict: rm is the command word)
+  Bash command strings     6027
+  lines MENTIONING rm      197   (broad: includes echo/comment text)
+  lines INVOKING rm        156   (strict: rm is the command word)
 
 CLASSIFICATION
   risky-absolute            3
   relative                 51
-  absolute-in-sandbox      91
+  absolute-in-sandbox      98
   flag-only                 4
-  bucket sum              149
-  bucket sum equals the independently counted strict matches (149).
+  bucket sum              156
+  bucket sum equals the independently counted strict matches (156).
 
 --- risky-absolute (3) ---
   agent-aac3b36dc3f99318e.jsonl  rm -rf /mnt/d/dev/p/agent-almanac/.claude/worktrees/wf_662d4356-9c9-5/.review647
@@ -98,7 +105,7 @@ CLASSIFICATION
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf fixtures ) 2>/dev/null
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${WORK:?}/fixtures" ) 2>/dev/null
 
---- absolute-in-sandbox (91) ---
+--- absolute-in-sandbox (98) ---
   agent-a068ae533704946a7.jsonl  rm -rf "$SC/mem" "$SC/snap"
   agent-a65ee60ac9715b978.jsonl  rm -rf $SC/fixture
   agent-a65ee60ac9715b978.jsonl  rm -rf $SC/noindex
@@ -189,6 +196,13 @@ CLASSIFICATION
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${WORK:?}/fixtures"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-areview-842-fa445bafea28e015.jsonl  rm -f "$DIR/reviews.count"
 
 --- flag-only (4) ---
@@ -217,11 +231,11 @@ CLASSIFICATION
 
 === node rm-count-variants.mjs <roots> ===
 files (recursive)             740
-Bash command strings          6016
-command strings containing rm 120
-newline-split lines with rm   173
-operator-split lines with rm  182
-raw 'rm' token occurrences    175
+Bash command strings          6027
+command strings containing rm 127
+newline-split lines with rm   188
+operator-split lines with rm  197
+raw 'rm' token occurrences    190
 
 === node render-check.mjs --self-test ===
 PASS  baseline (the shipped template): 0 failure(s)

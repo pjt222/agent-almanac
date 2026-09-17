@@ -36,13 +36,25 @@ scrub() {
   echo "# Content-only, order-independent, and it publishes no path and no identifier."
   echo "# A re-deriver whose digest differs has a different corpus and numbers that are not"
   echo "# comparable to these — which is the failure the drift across five review rounds shows."
+  echo "# COUNT FIRST, then hash. Over zero files this pipeline returns"
+  echo "#   38acb15d02d5ac0f2a2789602e9df950c380d2799b4bdb59394e4eeabdd3a662"
+  echo "# — the sha256 of an empty list of hashes, a universal constant. 64 confident hex"
+  echo "# characters and no refusal is exactly the vacuous pass this whole result file is about,"
+  echo "# so the count gates the digest rather than trailing it."
+  echo "\$ n=\$(find <roots> -name '*.jsonl' -type f | wc -l)"
+  echo "\$ [ \"\$n\" -gt 0 ] || { echo 'REFUSED: no files' >&2; exit 2; }"
   echo "\$ find <roots> -name '*.jsonl' -type f -print0 | sort -z | xargs -0 sha256sum \\"
   echo "    | awk '{print \$1}' | sort | sha256sum"
   # shellcheck disable=SC2086
-  find $ROOTS -name '*.jsonl' -type f -print0 2>/dev/null | sort -z | xargs -0 sha256sum |
-    awk '{print $1}' | sort | sha256sum | awk '{print "  digest: " $1}'
-  # shellcheck disable=SC2086
-  echo "  over $(find $ROOTS -name '*.jsonl' -type f 2>/dev/null | wc -l) file(s)"
+  DIGEST_N=$(find $ROOTS -name '*.jsonl' -type f 2>/dev/null | wc -l)
+  if [ "$DIGEST_N" -eq 0 ]; then
+    echo "  REFUSED: the root expansion matched no .jsonl — a digest over nothing is a constant"
+  else
+    echo "  over $DIGEST_N file(s)"
+    # shellcheck disable=SC2086
+    find $ROOTS -name '*.jsonl' -type f -print0 2>/dev/null | sort -z | xargs -0 sha256sum |
+      awk '{print $1}' | sort | sha256sum | awk '{print "  digest: " $1}'
+  fi
   echo
 
   echo "=== disk denominator: non-recursive vs recursive ==="

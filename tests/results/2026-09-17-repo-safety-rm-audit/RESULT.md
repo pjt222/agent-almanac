@@ -116,15 +116,15 @@ measured (see below), so a later run will differ.
 
 | Measure | Value |
 |---|---|
-| corpus digest | `0c9485107417becf920b3eecff527e756b0387a039b95762d70378eb82b78781` |
+| corpus digest | `603aa200b03c20c3692365be99f4ecc336e11d7ce59c8ef10c56fdc37a21468b` |
 | candidate `.jsonl` on disk | **740** — `walk()` and `readdirSync({recursive:true})` agree, and `find(1)` gives the same |
 | transcripts scanned | 740 |
-| Bash command strings | 6016 |
-| lines MENTIONING `rm` (broad) | 182 |
-| lines INVOKING `rm` (strict) | **149** |
+| Bash command strings | 6027 |
+| lines MENTIONING `rm` (broad) | 197 |
+| lines INVOKING `rm` (strict) | **156** |
 | — `risky-absolute` | **3** |
 | — `relative` | **51** (46 ordinary deletes; see below) |
-| — `absolute-in-sandbox` | 91 |
+| — `absolute-in-sandbox` | 98 |
 | — `flag-only` | 4 |
 
 Compare version 1 of this probe, non-recursive, on the same machine: 106 transcripts, 31 strict,
@@ -216,11 +216,12 @@ is a different question from the one asked here and was not attempted.
 
 It contains the review rounds on this PR, and grows with each one. The strict count moved
 118 → 124 → 130 across three rounds of a single session, all of it the rounds' own probes, and
-**48 of the current 149 strict rows — 32% — come from this PR's own reviewer transcript.** The
+**55 of the current 156 strict rows — 35% — come from this PR's own reviewer transcript.** The
 rounds share one transcript file, because resuming an agent appends to its existing transcript,
 so each round accumulates there, and the share has risen at every round: 118 → 124 → 130 → 137 →
-149 strict, with the growth almost entirely the rounds' own probes and mutant fixtures. A third of
-the strict count is now the review of the change measuring the change.
+149 → 156 strict, with the growth almost entirely the rounds' own probes and mutant fixtures.
+Over a third of the strict count is now the review of the change measuring the change — which is
+itself the reason the sixth round recommended stopping rather than running a seventh.
 
 That share is large enough to state plainly rather than footnote: the `absolute-in-sandbox`
 bucket is now materially shaped by the review of the change it is evidence for. The rows are
@@ -255,6 +256,12 @@ It publishes no path and no identifier, and it gives the corpus a name. Anyone r
 different digest and knows immediately that their figures are not comparable to these — which is
 precisely what the drift across five review rounds demonstrates, and what a bare count cannot
 tell you.
+
+**A mismatch is the expected case, not an error.** Any session run in this project since capture
+adds or extends a transcript, so the digest moves — it moved between two review rounds at an
+unchanged file count of 740, because the act of reviewing this file rewrote the corpus it
+measures. The digest's purpose is letting two readers ask whether they are looking at the same
+corpus, never certifying these figures forever.
 
 One deliberate inconsistency, stated rather than left to be noticed: `probe-runs.txt` prints this
 repository's own project-store slug inside the copy-pasteable root-derivation command, and
