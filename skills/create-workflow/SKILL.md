@@ -255,11 +255,14 @@ by one before anyone noticed:
    and `cd ""` succeeds without moving, so an unset `DIR` leaves the agent
    standing in the repository *and* expands `"$DIR/fixtures"` to `/fixtures`.
    `:?` refuses both, unset and empty alike, on bash 5.2 and zsh 5.9.
-4. **A cwd assertion before any destructive step** — `git add`, `git commit`, or
-   a tool run with a write flag:
+4. **A cwd assertion before `git add`, `git commit`, or a tool run with a write
+   flag** — that is its scope, and it is narrower than "anything destructive",
+   which is why rule 3 exists: an `rm` falls outside it. Braced for rule 3's
+   reason too, since outside any repository `git rev-parse` prints nothing and an
+   unset `DIR` makes the unbraced form compare `""` to `""` and pass:
 
    ```bash
-   [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
+   [ "$(git rev-parse --show-toplevel)" = "${DIR:?}" ] || exit 1
    ```
 5. **Never `git commit`, `git update-index` or `git checkout --` against the
    repository itself**, and never a repo tool with a write flag there.

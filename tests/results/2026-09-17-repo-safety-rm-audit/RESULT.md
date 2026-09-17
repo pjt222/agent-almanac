@@ -1,139 +1,167 @@
-# The `rm` audit behind the REPO_SAFETY absolute-path rule — re-derived, and the published figure does not reproduce
+# The `rm` audit behind the REPO_SAFETY absolute-path rule — and an instrument that read 14% of its own corpus
 
 **Date:** 2026-09-17. **Machine:** WSL2 Ubuntu 24.04, kernel 6.18.33.2-microsoft-standard-WSL2.
 **Branch:** `chore/safety-scrub-and-absolute-paths`, PR #859.
 **Probes:** `rm-audit.mjs` and `rm-count-variants.mjs` beside this file; verbatim output in
 `probe-runs.txt`.
 
+> **This file's first version was wrong and its conclusion was inverted.** It reported that
+> commit `c6addaea3`'s audit figures "do not reproduce". They substantially do. The failure was
+> in this file's own instrument, described in full below, because it is the more useful finding.
+
 ## Question
 
 Commit `c6addaea3` added a rule to the `REPO_SAFETY` preamble — name an absolute path under the
-agent's scratch directory in every destructive command — and justified it with an audit stated in
-three published prose sites and in the commit body:
+agent's scratch directory in every destructive command — and justified it with an audit published
+in three prose sites:
 
 > 28 subagent transcripts, 122 `rm` command lines, **zero** naming a risky absolute path and
 > **55 naming a relative one**
 
-An adversarial round on #859 raised two objections: `122 − 0 − 55 = 67` lines fall in no named
-category, and the only durable record of any of it is a commit message over transcripts that are
-session-local and private. The measurement below was run to settle both. It settled a third thing
-instead.
+An adversarial round on #859 objected that `122 − 0 − 55 = 67` lines were in no named category
+and that the only record was a commit message. This file was written to re-derive the figures.
+Its first version did so with a non-recursive directory read, and a second adversarial round
+caught that.
+
+## The instrument failure
+
+`readdirSync(dir)` is not recursive. Under this project the transcripts sit at two depths:
+
+```
+<session>/subagents/agent-<name>.jsonl                      106 files
+<session>/subagents/workflows/wf_<id>/agent-<name>.jsonl     633 files
+```
+
+Version 1 read the first row and none of the second — **106 of 739, 14%** — and published that
+as "every subagent transcript retained on this machine". Every one of the 633 it skipped belonged
+to a **workflow-spawned** agent. So an audit written to justify the workflow template's safety
+preamble excluded precisely the population that preamble governs, and it did so while printing a
+denominator, which is the part worth keeping:
+
+**A printed denominator proves what the scan read. It never proves what the scan should have
+read.** 106 was an honest count of the files opened and was never compared to what was on disk.
+`rm-count-variants.mjs` shared the identical blind spot, so the four "independent counting rules"
+cross-checked the splitting rule against itself and all four counted the same 14%.
+
+Version 2 therefore prints a **second number beside the first** — an independent recursive count
+of candidate files — and refuses when `scanned + filtered ≠ candidates`. The bucket sum is also
+now compared against a separately maintained counter of strict matches rather than against
+itself; version 1 printed the same expression twice and called it a check, and a mutant that
+returned a fifth bucket name crashed rather than producing the advertised mismatch.
 
 ## Method
 
-`rm-audit.mjs` reads Claude Code subagent transcripts (`*.jsonl`), extracts every `tool_use` block
-whose tool is `Bash`, takes its `command` string, splits it into command lines on newlines and the
-operators that begin a new command (`&&`, `||`, `;`, `|`), and classifies each line that invokes
-`rm`.
+`rm-audit.mjs` walks the given roots recursively for `*.jsonl`, extracts every `tool_use` block
+whose tool is `Bash`, takes its `command` string, splits it into command lines on newlines and
+the operators that begin a new command (`&&`, `||`, `;`, `|`), and classifies each line that
+invokes `rm`.
 
-Two deliberate properties:
+Two denominators are reported for the match itself. *Broad*: the token `rm` appears as a word
+anywhere on the line — this includes `echo "rm -rf ..."` text, so it over-counts. *Strict*: `rm`
+is the command word. The gap between them is the instrument's noise, and it was measured rather
+than assumed: dumping every broad-but-not-strict line over the full corpus shows all of them to
+be `echo`/`printf`/comment text, with no real invocation dropped.
 
-- **It reports two denominators, not one.** A *broad* count (the token `rm` appears as a word
-  anywhere on the line) and a *strict* count (`rm` is the command word, optionally behind
-  `sudo`/`command`/`time`/`git`). The gap between them is the instrument's own noise: a line like
-  `echo "rm -rf \"$DIR/fixtures\" -> ..."` mentions `rm` and invokes nothing. The first version of
-  this probe reported only the broad number and put 15 lines in the relative bucket, 8 of which
-  were `echo` text. Hiding that gap is the exact failure this audit was convened to correct, so
-  both numbers are printed and the strict one is the finding.
-- **It refuses rather than reporting clean.** A directory set that matches no transcript exits 2
-  with `REFUSED: no transcripts matched — a scan over nothing reports clean`.
+The four buckets, stated **as the code applies them**, not as a paraphrase:
 
-The classifier's four buckets are exhaustive and their sum is printed against the strict count on
-every run, so a line falling in no bucket would be visible as a mismatch.
-
-| Bucket | Rule |
+| Bucket | Rule as implemented |
 |---|---|
-| `risky-absolute` | An operand naming `/`, the repository root, a home directory, or a top-level system directory; or a bare `.`, `..`, `*` |
-| `relative` | Any operand that is not rooted at `/`, `~` or a variable |
-| `absolute-in-sandbox` | Every operand rooted at `/`, `~` or `$VAR`, and none of them risky |
-| `flag-only` | No operands at all after flags are removed |
+| `risky-absolute` | An operand naming `/`, **any path under the repository** (`bare.startsWith(REPO)`, not merely its root), a home directory, or a top-level system directory; or a bare `.`, `..`, `*` |
+| `relative` | Any operand not rooted at `/`, `~` or a variable |
+| `absolute-in-sandbox` | Every operand rooted at `/`, `~` or `$VAR`, none risky |
+| `flag-only` | No operands after flags are removed |
 
-`rm-count-variants.mjs` is the cross-check: it counts the same corpus four different ways
-(command strings containing `rm`; newline-split lines; operator-split lines; raw token
-occurrences) so that a disagreement with the published figure cannot be blamed on one splitting
-choice.
-
-## Results
-
-Corpus: every subagent transcript retained on this machine for this project — **106 files across
-18 session directories**, **704** Bash command strings.
+## Results — full corpus
 
 | Measure | Value |
 |---|---|
-| lines MENTIONING `rm` (broad) | 39 |
-| lines INVOKING `rm` (strict) | **31** |
-| — `risky-absolute` | **0** |
-| — `relative` | **7** |
-| — `absolute-in-sandbox` | **22** |
-| — `flag-only` | **2** |
+| candidate `.jsonl` on disk (recursive) | **739** |
+| transcripts scanned | 739 |
+| Bash command strings | 5955 |
+| lines MENTIONING `rm` (broad) | 145 |
+| lines INVOKING `rm` (strict) | **124** |
+| — `risky-absolute` | **3** |
+| — `relative` | **48** |
+| — `absolute-in-sandbox` | 69 |
+| — `flag-only` | 4 |
 
-The four counting rules in `rm-count-variants.mjs`, same corpus:
+Compare version 1, same probe, non-recursive: 106 transcripts, 31 strict, **0** risky, 7
+relative.
 
-| Rule | Count |
-|---|---|
-| command strings containing `rm` | 24 |
-| newline-split lines with `rm` | 34 |
-| operator-split lines with `rm` | 39 |
-| raw `rm` token occurrences | 36 |
+## The original figures substantially reproduce — retraction
 
-## The published figure does not reproduce
+Tested on the original claim's own terms, restricted to 2026-09-16:
 
-**No counting rule over the retained corpus approaches 122.** The maximum is 39, and that is the
-broad count over **all 106 transcripts**, not over one day: restricted to 2026-09-15 and later —
-the two days the rule was written across — the corpus is 14 transcripts, 36 broad, and the
-published claim was 28 transcripts.
+| | `c6addaea3` published | measured here |
+|---|---|---|
+| transcripts | 28 | 21 |
+| `rm` lines | 122 | 73 strict / 77 broad |
+| risky absolute | **0** | **1** |
+| relative | 55 | 41 |
 
-This is a failure to reproduce, not a refutation. Transcripts are session-local and this set may
-not be the set that existed on 2026-09-16; the mtime distribution in `probe-runs.txt` shows 4
-files dated 2026-09-16 and 9 dated 2026-09-15, which is already inconsistent with "28 subagent
-transcripts" measured that day, but retention behaviour was not investigated. What can be said is
-narrow and sufficient: **a reader following the published numbers today cannot arrive at them**,
-which is what § "a prose count needs an owner that fails" exists to prevent.
+Same order of magnitude on every row, over a corpus that has since changed (transcripts are
+session-local and some have rotated). **The claim that the figures "do not reproduce" is
+withdrawn.** It was an artefact of reading 14% of the corpus, and version 1 of this file stated
+it in the title.
 
-## What survives, and it is the part the rule rests on
+**The one number the original got wrong is the zero.** There is a `risky-absolute` row inside the
+original's own window, on disk when it was written.
 
-Both measurements agree on the two things the rule was written for:
+## The three risky rows, graded
 
-1. **Zero `rm` calls named a risky absolute path.** 0 of 31 here, 0 of 122 there.
-2. **A real population of relative `rm` calls runs inside an agent's sandbox**, each safe only
-   because `cd "$DIR" || exit 1` held — 7 of 31 here, 55 of 122 there. The proportion differs; the
-   existence does not, and the rule is about the existence.
+```
+agent-aac3b36dc3f99318e.jsonl  rm -rf /mnt/d/dev/p/agent-almanac/.claude/worktrees/wf_662d4356-9c9-5/.review647
+agent-ae2726c8ae0fca381.jsonl  rm -rf /mnt/d/dev/p/agent-almanac/.claude/worktrees/wf_662d4356-9c9-18/.probe-scratch
+agent-a6ae7416e184753b2.jsonl  rm -rf *
+```
 
-The near-miss is also corroborated. `rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md`, relative, is
-present in the retained transcript of the #846 review round, in a block that also probes
-`rm -- ""` and `git rm -q --dry-run -- ""`. Two notes on it. First, `docs/` exists in this
-repository, so had that block's `cd` failed it would have taken the live handoff. Second, the
-published narrative describes it as run "by a reviewer exercising that skill's cleanup block",
-which points a reader at `skills/read-continue-here/SKILL.md` — where the shipped block is
-`rm -- "$CONTINUE_FILE"`, already absolute and already guarded by `: "${CONTINUE_FILE:?…}"`. The
-relative form was the reviewer's own teardown *while* exercising that block, not the block itself.
+**One is unambiguous.** `rm -rf *` is a bare glob: risky under the documented rule whatever the
+working directory is, and the exact shape the preamble exists to prevent. It is dated 2026-09-16
+— inside the original audit's window.
 
-## Consequence for the prose
+The other two are a workflow deleting its own scratch directory inside its own worktree. The
+*documented* rule rules out the repository root; the *implemented* rule flags anything under the
+repository, and a worktree under `.claude/worktrees/` is under the repository. Those two rows are
+the code being stricter than the prose. Their working directories were not read and no claim is
+made that any deletion went wrong.
 
-The three published sites are changed to cite this file and this measurement. The rule is
-unchanged; only its evidence is. The original figures are not deleted from history — commit
-`c6addaea3` carries them, and this file says why they are not repeated.
+## The relative bucket
 
-## The corpus contains this PR's own review round
+45 of the 48 are ordinary relative deletes inside what an agent believed was its own directory —
+`rm -rf t`, `rm -rf nobin`, `rm -f err.tmp`, `rm -rf fixtures`, `rm -rf f/T`, `rm -f lb/*`. Three
+are artefacts of splitting on operators without parsing quotes (`rm CONTINUE" /mnt/...`,
+`rm -rf alsothis' 2>&1`). So the population the rule is about is real and is the large majority of
+the bucket; publishing 48 as though every row were a real call would repeat the original's own
+defect, which is why the 45 is stated separately.
 
-`agent-aadvocatus-859-*` is the adversarial round on the PR that this audit supports, and it
-contributes three of the 31 rows: `rm -rf fixtures` (its ARM A, a deliberate demonstration of the
-unguarded shape), `rm -rf "$WORK/fixtures"` (its ARM B, the guarded shape) and
-`rm -rf "${DIR:?}/fixtures"` (the fix being proposed). Evidence for a rule should not contain the
-rule under test, so they are named rather than left to be discovered.
+## What this instrument cannot measure
 
-Removing that transcript does not change any conclusion: `risky-absolute` stays 0, and the
-relative bucket loses one row — the ARM A demonstration — leaving six, of which the near-miss and
-the two `rm -f err.tmp` calls are the genuinely incidental ones. The corpus was left whole because
-a `--until` cut would also have to justify its boundary, and naming three rows is the smaller
-claim.
+`absolute-in-sandbox` is the largest bucket — 69 of 124 — and most of its rows are `$VAR`-rooted.
+The classifier does not know a variable's value, so:
 
-## Limitation
+- It **cannot distinguish `rm -rf "$DIR/x"` from `rm -rf "${DIR:?}/x"`.** Both land in the same
+  bucket. The instrument therefore cannot measure compliance with the very rule this audit
+  supports, and would score a future unbraced regression as safe.
+- "Zero risky" over the literal-path rows is a statement about the minority whose operands the
+  classifier can actually evaluate.
 
-The classifier splits on shell operators without parsing quotes, so an operator inside a quoted
-string over-splits a line. That inflates the denominator rather than hiding a finding, which is
-the safe direction, but it means the strict count of 31 is an upper bound on distinct invocations
-and three of the seven `relative` rows are probe artefacts (`rm -- ""`, `git rm --dry-run -- ""`,
-and one line split mid-quote). The genuinely relative destructive calls in the retained corpus
-number four. The `risky-absolute` count of zero is unaffected by this, since over-splitting can
-only create more rows to classify, never fewer.
+Anyone extending this should count braced versus unbraced `$VAR` forms as separate buckets. That
+is a different question from the one asked here and was not attempted.
+
+## The corpus moves while it is being measured
+
+It contains the review rounds on this PR, and grows with each one: between two runs inside a
+single session the broad count moved 139 → 145 and the strict count 118 → 124, all of it the
+round's own probes. Three rows come from round 1 (`rm -rf fixtures` as its ARM A demonstration,
+`rm -rf "$WORK/fixtures"` as ARM B, and `rm -rf "${DIR:?}/fixtures"` as the fix). They are named
+rather than excluded, because a `--until` cut would have to justify its boundary.
+
+`--list FILE` writes the exact set of files scanned, so a figure can be re-derived against a
+fixed set rather than a moving one.
+
+## What this means for the rule
+
+The rule is unaffected and the corrected numbers make its case stronger, not weaker: 48 relative
+`rm` calls rather than 7, and a real `rm -rf *`. What changed is the evidence, twice, and the
+transferable lesson is the instrument one — print a second number beside the denominator, and
+make the self-check compare two independently derived values rather than one value with itself.

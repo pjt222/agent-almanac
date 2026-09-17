@@ -1,29 +1,98 @@
-=== node rm-audit.mjs <all 18 subagent dirs> --rows ===
+=== disk denominator: what readdirSync saw vs what exists ===
+direct children of */subagents:  106
+recursive .jsonl beneath them:   739
+depth below subagents/ (0 = direct child):
+    106 -1
+    633 2
+
+=== v2 (recursive), full corpus, --rows ===
 DENOMINATORS
-  transcripts scanned      106
-  Bash command strings     704
-  lines MENTIONING rm      39   (broad: includes echo/comment text)
-  lines INVOKING rm        31   (strict: rm is the command word)
+  candidate .jsonl on disk 739   (recursive, before any date filter)
+  removed by date filter   0
+  transcripts scanned      739   (must be candidates - filtered)
+  Bash command strings     5955
+  lines MENTIONING rm      145   (broad: includes echo/comment text)
+  lines INVOKING rm        124   (strict: rm is the command word)
 
 CLASSIFICATION
-  risky-absolute            0
-  relative                  7
-  absolute-in-sandbox      22
-  flag-only                 2
-  sum                      31   (must equal lines INVOKING rm)
+  risky-absolute            3
+  relative                 48
+  absolute-in-sandbox      69
+  flag-only                 4
+  bucket sum              124
+  bucket sum equals the independently counted strict matches (124).
 
---- risky-absolute (0) ---
+--- risky-absolute (3) ---
+  agent-aac3b36dc3f99318e.jsonl  rm -rf /mnt/d/dev/p/agent-almanac/.claude/worktrees/wf_662d4356-9c9-5/.review647
+  agent-ae2726c8ae0fca381.jsonl  rm -rf /mnt/d/dev/p/agent-almanac/.claude/worktrees/wf_662d4356-9c9-18/.probe-scratch
+  agent-a6ae7416e184753b2.jsonl  rm -rf *
 
---- relative (7) ---
+--- relative (48) ---
+  agent-af496e5e01145d26b.jsonl  rm -rf aa-clone
+  agent-aac9e1a8aa2f2e9cb.jsonl  rm -f agents/reviewer.md
   agent-ascout-skills-e337c49dadb42a59.jsonl  rm CONTINUE" /mnt/d/dev/p/agent-almanac/skills/read-continue-here/SKILL.md
+  agent-a108ff44a6753671d.jsonl  rm -rf probe
   agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  git rm -q --dry-run -- "" 2>&1
   agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -- "" 2>&1
   agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md
   agent-aadvocatus-854-727cce7ea3643bf3.jsonl  rm -f err.tmp
   agent-aadvocatus-854-727cce7ea3643bf3.jsonl  rm -f err.tmp
+  agent-a0058446b850658ff.jsonl  rm -f lb/*
+  agent-a0058446b850658ff.jsonl  rm -f lb/*
+  agent-a0058446b850658ff.jsonl  rm -rf lb
+  agent-a0058446b850658ff.jsonl  rm -rf pg
+  agent-a0058446b850658ff.jsonl  rm -rf ug
+  agent-a0058446b850658ff.jsonl  rm -rf pth
+  agent-a14fc994ed886f93e.jsonl  rm -rf f
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/A2
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/A3
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/B
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/B2
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/K
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/K1
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/S
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/S3
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/P
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/P2
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/U
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/U2
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/E
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/G
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/M
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/KK
+  agent-a14fc994ed886f93e.jsonl  rm -rf f/T
+  agent-a5ea785dd0ab8c692.jsonl  rm -rf "\$WORK"
+  agent-a5ea785dd0ab8c692.jsonl  rm -rf t
+  agent-a5ea785dd0ab8c692.jsonl  rm -rf t
+  agent-a6ae7416e184753b2.jsonl  rm -rf a b c d e
+  agent-a6ae7416e184753b2.jsonl  rm -rf md txt svg json yml
+  agent-a876c50c970be292a.jsonl  rm -rf nobin
+  agent-a940e460d119d3e4c.jsonl  rm -rf h2
+  agent-ab31bac02ccf2d3bb.jsonl  rm -f FINAL-TRANSCRIPT.txt
+  agent-ab31bac02ccf2d3bb.jsonl  rm -f FINAL-TRANSCRIPT.txt
+  agent-ad8095e753970463b.jsonl  rm -rf t
+  agent-ad8095e753970463b.jsonl  rm -rf u
+  agent-ad8095e753970463b.jsonl  rm -rf v
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf fixtures
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf alsothis' 2>&1
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf alsothis' 2>&1
 
---- absolute-in-sandbox (22) ---
+--- absolute-in-sandbox (69) ---
+  agent-a068ae533704946a7.jsonl  rm -rf "$SC/mem" "$SC/snap"
+  agent-a65ee60ac9715b978.jsonl  rm -rf $SC/fixture
+  agent-a65ee60ac9715b978.jsonl  rm -rf $SC/noindex
+  agent-a89e94f0977d42a0e.jsonl  rm -rf "$S"
+  agent-ab656a1d74ce2e07f.jsonl  rm -rf "$SNAP"
+  agent-ab656a1d74ce2e07f.jsonl  rm -rf "$SNAP"
+  agent-ab656a1d74ce2e07f.jsonl  rm -rf "$SB"
+  agent-ab656a1d74ce2e07f.jsonl  rm -rf "$SB"
+  agent-af496e5e01145d26b.jsonl  rm -f /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/483f1edd-e6bd-46f8-9b35-7b3a3193b7a0/scratchpad/aa-clone/node_modules
+  agent-a5293d642dcdd5f49.jsonl  rm -rf "$D"
+  agent-a5ae085ce9c0d8813.jsonl  rm -f /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/483f1edd-e6bd-46f8-9b35-7b3a3193b7a0/scratchpad/probe/scripts/case*.sh
+  agent-a5ae085ce9c0d8813.jsonl  rm -f "$P/check.js" "$P/scripts/bulk-scaffold-caveman.sh" "$P/scripts/sync-discovery-symlinks.sh" "$P/scripts/translate-content.sh" "$P/scripts/validate-integri
+  agent-a7287eef52379bbec.jsonl  rm -rf "$D"
+  agent-aac3b36dc3f99318e.jsonl  rm -rf "$SCRATCH/branch647"
+  agent-aac3b36dc3f99318e.jsonl  rm -rf "$SCRATCH/b647"
   agent-anumber-verifier-793ecc5106f9a734.jsonl  rm -rf "$SP/mutcheck"
   agent-anumber-verifier-793ecc5106f9a734.jsonl  rm -rf $SP
   agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -f /tmp/be.$$ /tmp/ze.$$
@@ -37,6 +106,26 @@ CLASSIFICATION
   agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -f /tmp/b.$$ /tmp/z.$$
   agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
   agent-aadvocatus-846-c1570bb8a6ae72fa.jsonl  rm -rf "$DIR"
+  agent-a5ea785dd0ab8c692.jsonl  rm -f /tmp/$$-all.txt
+  agent-a5ea785dd0ab8c692.jsonl  rm -rf "$NEG"
+  agent-a5ea785dd0ab8c692.jsonl  rm -f "$WORK/recovered"
+  agent-a5ea785dd0ab8c692.jsonl  rm -f "$WORK/runs"
+  agent-a5ea785dd0ab8c692.jsonl  rm -f "$WORK/runs"
+  agent-a5ea785dd0ab8c692.jsonl  rm -f "$WORK/runs"
+  agent-a5ea785dd0ab8c692.jsonl  rm -rf "$NEG"
+  agent-a5ea785dd0ab8c692.jsonl  rm -rf "$CLEAN"
+  agent-a6fc6732786ae9eeb.jsonl  rm -rf "$T"
+  agent-a6fc6732786ae9eeb.jsonl  rm -f "$f"
+  agent-a6fc6732786ae9eeb.jsonl  rm -rf "$T"
+  agent-a6fc6732786ae9eeb.jsonl  rm -rf "$T/e"
+  agent-a6fc6732786ae9eeb.jsonl  rm -f "$f"
+  agent-a6fc6732786ae9eeb.jsonl  rm -f "$D/FINAL.txt" "$D/MUTANTS.txt"
+  agent-a41b435d8cc79bdbe.jsonl  rm -rf "$D"
+  agent-ab31bac02ccf2d3bb.jsonl  rm -f "$WORK/mmd.svg"
+  agent-ab31bac02ccf2d3bb.jsonl  rm -rf "$tmp/perm_gap"
+  agent-ab31bac02ccf2d3bb.jsonl  rm -rf "$tmp/mmd" "$tmp/mmdbin"
+  agent-ab31bac02ccf2d3bb.jsonl  rm -rf "$tmp/har"
+  agent-ab31bac02ccf2d3bb.jsonl  rm -rf "$tmp/one"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$WORK/fixtures"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}/fixtures"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
@@ -45,50 +134,60 @@ CLASSIFICATION
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "$DIR"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${D:?}/fx"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-areview-842-fa445bafea28e015.jsonl  rm -f "$DIR/reviews.count"
 
---- flag-only (2) ---
+--- flag-only (4) ---
+  agent-ab2e9992a625a2404.jsonl  rm
+  agent-a0656f87f0195a504.jsonl  git rm --cached
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf'
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf
 
-=== node rm-count-variants.mjs <all 18 subagent dirs> ===
-files                         106
-Bash command strings          704
-command strings containing rm 24
-newline-split lines with rm   34
-operator-split lines with rm  39
-raw 'rm' token occurrences    36
-
-=== node rm-audit.mjs <all> --since 2026-09-15 ===
+=== v2, the ORIGINAL claim's own window: 2026-09-16 only ===
 DENOMINATORS
-  transcripts scanned      14
-  Bash command strings     358
-  lines MENTIONING rm      36   (broad: includes echo/comment text)
-  lines INVOKING rm        28   (strict: rm is the command word)
+  candidate .jsonl on disk 739   (recursive, before any date filter)
+  removed by date filter   718
+  transcripts scanned      21   (must be candidates - filtered)
+  Bash command strings     756
+  lines MENTIONING rm      77   (broad: includes echo/comment text)
+  lines INVOKING rm        73   (strict: rm is the command word)
 
 CLASSIFICATION
-  risky-absolute            0
-  relative                  6
-  absolute-in-sandbox      20
-  flag-only                 2
-  sum                      28   (must equal lines INVOKING rm)
+  risky-absolute            1
+  relative                 41
+  absolute-in-sandbox      31
+  flag-only                 0
+  bucket sum               73
+  bucket sum equals the independently counted strict matches (73).
 
-=== transcript mtime distribution ===
-      5 2026-08-18
-     15 2026-08-19
-      8 2026-08-20
-      1 2026-08-23
-      4 2026-08-25
-      3 2026-08-26
-      3 2026-08-27
-      5 2026-09-02
-      9 2026-09-03
-      4 2026-09-04
-      6 2026-09-07
-      4 2026-09-08
-     12 2026-09-09
-      9 2026-09-10
-      4 2026-09-14
-      9 2026-09-15
-      4 2026-09-16
-      1 2026-09-17
+=== v2, --since 2026-09-15 ===
+DENOMINATORS
+  candidate .jsonl on disk 739   (recursive, before any date filter)
+  removed by date filter   708
+  transcripts scanned      31   (must be candidates - filtered)
+  Bash command strings     952
+  lines MENTIONING rm      117   (broad: includes echo/comment text)
+  lines INVOKING rm        99   (strict: rm is the command word)
+
+CLASSIFICATION
+  risky-absolute            1
+  relative                 44
+  absolute-in-sandbox      52
+  flag-only                 2
+  bucket sum               99
+  bucket sum equals the independently counted strict matches (99).
+
+=== negative arm: roots that contain no .jsonl ===
+REFUSED: no .jsonl found beneath the roots — a scan over nothing reports clean
+exit=2

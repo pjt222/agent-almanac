@@ -287,16 +287,19 @@ uses. In the shared checkout, four things are not optional:
 4. **Carry the `REPO_SAFETY` preamble** from `workflows/_template.mjs`, all of it: `mktemp -d`
    rather than a shared path; `cd "$DIR" || exit 1`; a braced absolute path under that
    directory in every destructive command (`rm -rf "${DIR:?}/fixtures"`, never
-   `rm -rf fixtures` and never a bare `"$DIR/fixtures"`); a `git rev-parse --show-toplevel`
-   assertion before `git add`, `git commit`, or a tool run with a write flag; and never
+   `rm -rf fixtures` and never a bare `"$DIR/fixtures"`); a braced `git rev-parse
+   --show-toplevel` assertion (`= "${DIR:?}"`, because outside any repository the unbraced form
+   compares `""` to `""` and passes) before `git add`, `git commit`, or a tool run with a write
+   flag; and never
    `git commit`, `git update-index` or `git checkout --` against the repository itself.
 
    The scope of that assertion is the reason the absolute-path rule is needed at all. It
    guards the `git` and write-flag steps, which is narrower than "anything destructive" — an
    `rm` is outside it. So before this rule, `cd "$DIR" || exit 1` really was the sole control
    standing between a sandbox and the repository for every `rm` an agent ran, and an audit of
-   every retained subagent transcript — 106 of them, 31 `rm` invocations — found 7 relative
-   calls resting on exactly that, and zero naming a risky absolute path
+   every retained subagent transcript — 739 of them, 124 `rm` invocations — found 48 relative
+   calls, 45 of them real deletes resting on exactly that, plus three naming a risky absolute
+   path, one a bare `rm -rf *`
    (`tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md`). The brace closes the
    hole the fix would otherwise open: `cd ""` returns 0 without moving, so an unset `DIR`
    leaves the agent in the repository and expands the unbraced form to `/fixtures`.

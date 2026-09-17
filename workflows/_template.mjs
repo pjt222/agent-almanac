@@ -92,22 +92,26 @@ const items =
 // path, make the failed `cd` fatal, and assert the target before anything
 // destructive.
 //
-// The absolute-path rule was added 2026-09-16 after auditing agent runs, and the
-// audit was re-derived 2026-09-17 because the first figure does not reproduce.
-// Over every subagent transcript retained on this machine — 106 transcripts, 704
-// Bash command strings — 31 lines invoke `rm`: ZERO name a risky absolute path,
-// 7 name a RELATIVE one (`rm -f err.tmp`, `rm -rf fixtures`) inside what the
-// agent believed was its own directory, 22 are absolute inside the sandbox and 2
-// are flag-only. Every relative one was safe, and safe for the same single
-// reason: `cd "$DIR" || exit 1` held. One was
+// The absolute-path rule was added 2026-09-16 after auditing agent runs, and
+// re-derived 2026-09-17 over every retained subagent transcript — 739
+// transcripts, 5,955 Bash command strings — where 124 lines invoke `rm`: 3 name
+// a risky absolute path (one a bare `rm -rf *`), 48 name a RELATIVE one
+// (`rm -rf t`, `rm -f err.tmp`, `rm -rf nobin`) inside what the agent believed
+// was its own directory, 69 are absolute inside the sandbox and 4 are flag-only.
+// Each of the 48 was safe for the same single reason: `cd "$DIR" || exit 1`
+// held. One was
 // `rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md`, run by a reviewer WHILE
 // exercising that skill's cleanup block — the shipped block is
 // `rm -- "$CONTINUE_FILE"`, already absolute and guarded, so the relative form
 // was the reviewer's own teardown and not the block. Had its `cd` failed it
 // would have taken this repository's live handoff, and `docs/` exists here.
 // Nothing was lost. The point is that one control was carrying all of it.
-// Method, buckets and the failure to reproduce the earlier 122/55:
-// tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md. Quote that file.
+// Method, the graded risky rows, and what the classifier CANNOT measure — it
+// cannot tell `"$DIR/x"` from `"${DIR:?}/x"`, so it cannot score compliance with
+// the rule it supports: tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md.
+// Quote that file, and read its instrument-failure section before quoting any
+// `rm` figure: the first re-derivation read 14% of its corpus and published
+// "zero risky absolute paths" off the remainder.
 // Bracket the whole run with `npm run guard:snapshot`, then
 // `npm run guard:verify` and `npm run guard:release` — the HEAD comparison is the
 // only check that catches a stray COMMIT, since `git status` reads clean once a
@@ -136,9 +140,16 @@ Start every shell block that touches files with exactly this:
   \`$DIR\` being set, and that one bites: \`cd ""\` succeeds without moving, so an
   unset \`DIR\` leaves you standing in the repository AND expands
   \`"$DIR/fixtures"\` to \`/fixtures\`. The \`:?\` refuses both cases, unset and
-  empty alike, on bash 5.2 and zsh 5.9.
-- Before any \`git add\`, \`git commit\`, or a tool run with a write flag, assert:
-    [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
+  empty alike, on bash 5.2 and zsh 5.9. It aborts the enclosing shell at top
+  level; inside \`( )\` or \`$( )\` it aborts only that subshell, so keep
+  destructive commands at top level. It checks non-emptiness, not absoluteness —
+  a relative \`TMPDIR\` makes \`mktemp -d\` return a relative path, which is no
+  worse than the unbraced form but is not protected by it either.
+- Before any \`git add\`, \`git commit\`, or a tool run with a write flag, assert —
+  braced for the same reason as the rule above, since OUTSIDE any repository
+  \`git rev-parse\` prints nothing and an unset \`DIR\` makes this compare "" to ""
+  and PASS:
+    [ "$(git rev-parse --show-toplevel)" = "\${DIR:?}" ] || exit 1
 - Never run \`git commit\`, \`git update-index\`, or \`git checkout --\` against the
   repository itself, and never invoke a repo tool with a write flag there.`
 
