@@ -116,14 +116,14 @@ measured (see below), so a later run will differ.
 
 | Measure | Value |
 |---|---|
-| candidate `.jsonl` on disk | **739** — `walk()` and `readdirSync({recursive:true})` agree, and `find(1)` gives the same |
-| transcripts scanned | 739 |
-| Bash command strings | 5969 |
-| lines MENTIONING `rm` (broad) | 152 |
-| lines INVOKING `rm` (strict) | **130** |
+| candidate `.jsonl` on disk | **740** — `walk()` and `readdirSync({recursive:true})` agree, and `find(1)` gives the same |
+| transcripts scanned | 740 |
+| Bash command strings | 5994 |
+| lines MENTIONING `rm` (broad) | 161 |
+| lines INVOKING `rm` (strict) | **137** |
 | — `risky-absolute` | **3** |
-| — `relative` | **48** (43 ordinary deletes; see below) |
-| — `absolute-in-sandbox` | 75 |
+| — `relative` | **49** (44 ordinary deletes; see below) |
+| — `absolute-in-sandbox` | 81 |
 | — `flag-only` | 4 |
 
 Compare version 1 of this probe, non-recursive, on the same machine: 106 transcripts, 31 strict,
@@ -175,9 +175,9 @@ a real delete would repeat the original's own defect:
 |---|---|---|
 | splitting artefacts (operators inside quotes) | 3 | `rm CONTINUE" /mnt/…`, `rm -rf alsothis' 2>&1` |
 | invocations that delete nothing by construction | 2 | `git rm -q --dry-run -- ""`, `rm -- ""` |
-| **ordinary relative deletes** | **43** | `rm -rf t`, `rm -rf nobin`, `rm -f err.tmp`, `rm -rf f/T`, `rm -f lb/*` |
+| **ordinary relative deletes** | **44** | `rm -rf t`, `rm -rf nobin`, `rm -f err.tmp`, `rm -rf f/T`, `rm -f lb/*` |
 
-42 excluding round 1's own `rm -rf fixtures` demonstration. An earlier version of this file said
+An earlier version of this file said
 "45 of the 48", which quietly promoted the two no-op invocations into real deletes — an error in
 the direction that flatters the count, found by re-deriving the split row by row rather than
 subtracting.
@@ -215,19 +215,31 @@ is a different question from the one asked here and was not attempted.
 
 It contains the review rounds on this PR, and grows with each one. The strict count moved
 118 → 124 → 130 across three rounds of a single session, all of it the rounds' own probes, and
-**31 of the current 130 strict rows — 24% — come from this PR's own reviewer transcript**
-(0 risky-absolute, 3 relative, 26 absolute-in-sandbox, 2 flag-only). The rounds share one
-transcript file, because resuming an agent appends to its existing transcript, so each round
-accumulates there.
+**36 of the current 137 strict rows — 26% — come from this PR's own reviewer transcript.** The
+rounds share one transcript file, because resuming an agent appends to its existing transcript,
+so each round accumulates there, and the share has risen at every round: 118 → 124 → 130 → 137
+strict, with the growth almost entirely the rounds' own probes and mutant fixtures.
 
 That share is large enough to state plainly rather than footnote: the `absolute-in-sandbox`
 bucket is now materially shaped by the review of the change it is evidence for. The rows are
 named rather than excluded, because a `--until` cut would have to justify its boundary — but a
 reader should size the bucket accordingly.
 
-**Any figure quoted from this file is a figure from one run**, and the run is identified by the
-scanned file set. `--list FILE` writes that set, so a number can be re-derived against a fixed
-corpus rather than a moving one. The table above is the run captured in `probe-runs.txt`.
+**Any figure quoted from this file is a figure from one run.** The table above is the run captured
+in `probe-runs.txt`, and `probe-runs.txt` now prints the **literal command line** for every
+section — including how the root list is derived — so a re-deriver runs what was run instead of
+guessing. That matters more than it sounds: the roots can legitimately be given three ways
+(`*/subagents`, the project directory, or a single session) and they produce different corpora,
+so a figure without its invocation is not re-derivable at all.
+
+`--list FILE` writes the exact set of files scanned. **Its output is deliberately not committed**:
+every path contains a session id, and committing 740 of them would reintroduce the class this
+PR's first commit removed from `tools/fixtures/review-r2-input.json` — for a list that is
+machine-local and useless to a reader on another machine. Run it locally when you need to pin a
+figure to a fixed set.
+
+`capture.sh` beside this file regenerates `probe-runs.txt`, and placeholders home paths, uids and
+session ids on the way out.
 
 ## What this means for the rule
 

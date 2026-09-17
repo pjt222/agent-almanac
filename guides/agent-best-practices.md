@@ -285,7 +285,7 @@ uses. In the shared checkout, four things are not optional:
    report, never through `merge`, `review --approve`, `comment` or `close` — the reviewer is
    the actor that decides "reviewed", so it must not also be the actor that acts on it.
 4. **Carry the `REPO_SAFETY` preamble** from `workflows/_template.mjs`, all of it: `mktemp -d`
-   rather than a shared path; `cd "$DIR" || exit 1`; a braced absolute path under that
+   rather than a shared path; `cd "${DIR:?}" || exit 1`; a braced absolute path under that
    directory in every destructive command (`rm -rf "${DIR:?}/fixtures"`, never
    `rm -rf fixtures` and never a bare `"$DIR/fixtures"`); a braced `git rev-parse
    --show-toplevel` assertion (`= "${DIR:?}"`, because outside any repository the unbraced form
@@ -295,8 +295,9 @@ uses. In the shared checkout, four things are not optional:
 
    The scope of that assertion is the reason the absolute-path rule is needed at all. It
    guards the `git` and write-flag steps, which is narrower than "anything destructive" — an
-   `rm` is outside it. So before this rule, `cd "${DIR:?}" || exit 1` really was the sole
-   control standing between a sandbox and the repository for every `rm` an agent ran — and
+   `rm` is outside it. So before this rule, `cd "$DIR" || exit 1` — unbraced, as it then was —
+   really was the sole control standing between a sandbox and the repository for every `rm` an
+   agent ran, and it is weaker than it looks, since `cd ""` returns 0 without moving. And
    agents do write relative `rm`s there, sized and graded in
    `tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md` (quote the counts from that file,
    not from here). The brace closes the

@@ -96,8 +96,11 @@ const items =
 // reason is a mechanism, demonstrable in two arms and unchanged since:
 //
 //   after a cd that failed, in a shell that did not abort —
-//     rm -rf fixtures             -> resolved against the repo; repo/fixtures GONE
-//     rm -rf "$WORK/fixtures"     -> resolved against $WORK;    repo/fixtures SURVIVED
+//     rm -rf fixtures                -> resolved against the repo; repo/fixtures GONE
+//     rm -rf "${WORK:?}/fixtures"    -> resolved against $WORK;    repo/fixtures SURVIVED
+//   and with WORK itself unset, which is what the brace is for —
+//     rm -rf "$WORK/fixtures"        -> expands to /fixtures
+//     rm -rf "${WORK:?}/fixtures"    -> refused; the block aborts
 //
 // Agents really do write the first form inside what they believe is their own
 // directory — `rm -rf t`, `rm -f err.tmp`, `rm -rf nobin`. The population is

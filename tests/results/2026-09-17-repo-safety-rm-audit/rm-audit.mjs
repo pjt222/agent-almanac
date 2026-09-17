@@ -24,8 +24,8 @@
 // Usage: node rm-audit.mjs <transcript-root>... [--since YYYY-MM-DD] [--until YYYY-MM-DD]
 //                          [--rows] [--list FILE]
 
-import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readFileSync, readdirSync, realpathSync, statSync, writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 
 const argv = process.argv.slice(2);
 function flagValue(name) {
@@ -69,7 +69,9 @@ function walk(dir, acc = [], seen = new Set()) {
     return acc;
   }
   if (real === null) return acc;
-  const key = String(statSync(dir).ino);
+  const st = statSync(dir);
+  const key = `${st.dev}:${st.ino}`; // dev too: a cross-mount inode collision would otherwise
+                                        // make walk skip a directory the cross-check counts
   if (seen.has(key)) return acc;
   seen.add(key);
 
@@ -93,7 +95,7 @@ function walk(dir, acc = [], seen = new Set()) {
     else if (e.name.endsWith('.jsonl')) acc.push(full);
     // A rotated or oddly-suffixed transcript would be skipped in silence otherwise. `.meta.json`
     // is the known sidecar Claude Code writes beside every transcript and is not one.
-    else if (/\.jsonl[._\d]/.test(e.name) && !e.name.endsWith('.meta.json')) {
+    else if (/\.jsonl[._\d]|\.json$/.test(e.name) && !e.name.endsWith('.meta.json')) {
       nonJsonlSeen.push(full);
     }
   }
@@ -121,13 +123,43 @@ function nodeRecursiveCount(root) {
   }
 }
 
+// Roots are resolved and checked for containment BEFORE anything is counted. Two roots where one
+// contains the other — or the same root given twice — make both traversals count the overlap
+// twice, identically, so the cross-check stays silent while every figure doubles. Inflation is
+// the direction that looks safe and is not: a duplicated risky-absolute row would make "3 risky"
+// an artefact of a root list, and a re-deriver with a different list gets a different answer with
+// no signal telling them which is right. Measured before this guard: the same root twice gave
+// candidates 2 / scanned 2 / relative 2, exit 0.
+const realRoots = roots.map((r) => {
+  try {
+    return realpathSync(r);
+  } catch {
+    return resolve(r);
+  }
+});
+for (let a = 0; a < realRoots.length; a++) {
+  for (let b = 0; b < realRoots.length; b++) {
+    if (a === b) continue;
+    const x = realRoots[a];
+    const y = realRoots[b];
+    if (x === y || y.startsWith(x.endsWith('/') ? x : x + '/')) {
+      console.error(
+        `REFUSED: roots overlap, which double-counts silently in BOTH traversals:\n  ${roots[a]}\n  ${roots[b]}`
+      );
+      process.exit(2);
+    }
+  }
+}
+
 const candidates = [];
+// One `seen` set spanning every root, so deduplication is global rather than per-root.
+const seenGlobal = new Set();
 let crossCount = 0;
 const unreadableRoots = [];
 const emptyRoots = [];
-for (const root of roots) {
+for (const root of realRoots) {
   const before = candidates.length;
-  walk(root, candidates);
+  walk(root, candidates, seenGlobal);
   const n = nodeRecursiveCount(root);
   if (n === null) {
     unreadableRoots.push(root);
