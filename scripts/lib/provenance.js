@@ -1,5 +1,6 @@
 /**
- * provenance.js — the two provenance fields a translation carries, and why there are two (#552).
+ * provenance.js — the six provenance frontmatter fields a translation carries, and why two of
+ * them are not one field (#552).
  *
  * ## The field that meant two things
  *
@@ -53,6 +54,24 @@ export const SOURCE_COMMIT_FIELD = 'source_commit';
 
 /** The revision this file's frozen fences were last verified against. Absent = unverified. */
 export const FENCE_BASIS_FIELD = 'fence_basis_commit';
+
+/**
+ * All six frontmatter fields a scaffolded translation carries, in the order `translate-content.sh`
+ * writes them. This is the single source of truth `check-skill-line-ceiling.js` reads to derive
+ * the English line ceiling (500 - PROVENANCE_FIELDS.length, #855) — a 7th field added here moves
+ * that ceiling with it, rather than requiring someone to also update a number written down
+ * elsewhere. `scripts/lib/translation-status.js`'s `FRONTMATTER_KEYS` regex names the same six
+ * fields for a different purpose (masking them out of a translated-vs-English body comparison);
+ * its own comment already points here as the owner.
+ */
+export const PROVENANCE_FIELDS = [
+  'locale',
+  'source_locale',
+  SOURCE_COMMIT_FIELD,
+  FENCE_BASIS_FIELD,
+  'translator',
+  'translation_date',
+];
 
 const FRONTMATTER = /^---\n([\s\S]*?)\n---(\n|$)/;
 
