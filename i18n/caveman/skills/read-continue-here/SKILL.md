@@ -3,7 +3,7 @@ name: read-continue-here
 locale: caveman
 source_locale: en
 source_commit: 82c77053
-fence_basis_commit: a2c36f4e6
+fence_basis_commit: 8a7a25238d7abf66582f1cc190af1470c619d15f
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-26"
 description: >
