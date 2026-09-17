@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.4"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -83,20 +83,29 @@ PATTERNS=(
 )
 
 for entry in "${PATTERNS[@]}"; do
-  label="${entry%%|*}"; pat="${entry##*|}"
+  # Split on the FIRST pipe only: label is everything before it, pattern is everything after —
+  # so a regex MAY contain its own alternation ('a|b'), which Step 1's own table and the pitfall
+  # below both use as the worked example. Splitting on the LAST pipe instead silently drops every
+  # alternative but the final one and still prints a correct-looking label (measured, #860 review).
+  label="${entry%%|*}"; pat="${entry#*|}"
   if [ "$SEARCH" = rg ]; then
-    hit=$(rg -l "$pat" --glob '!.git' --glob '!node_modules' "$TARGET" 2>/dev/null | head -1); rc=$?
+    # -uuu (--no-ignore --hidden --binary): the plain `rg -l` this replaced does not scan
+    # dotfiles, .gitignore'd paths, or files it detects as binary, so it silently missed 3 of 4
+    # seeded leaks (a .env, a NUL-containing bundle, a gitignored dist/) that the grep fallback
+    # below caught — the verdict depended on which tool happened to be on PATH (measured, #860
+    # review). --glob still excludes .git/ and node_modules/ explicitly under -uuu.
+    hit=$(rg -uuu -l "$pat" --glob '!.git' --glob '!node_modules' "$TARGET" 2>/dev/null); rc=$?
   else
-    hit=$(grep -rlE "$pat" --exclude-dir=.git --exclude-dir=node_modules "$TARGET" 2>/dev/null | head -1); rc=$?
+    hit=$(grep -rlE "$pat" --exclude-dir=.git --exclude-dir=node_modules "$TARGET" 2>/dev/null); rc=$?
   fi
-  [ "$rc" -le 1 ] || { echo "cannot scan: $TARGET (tool error)" >&2; exit 2; }   # FAIL CLOSED — pipefail carries $SEARCH's real status through `| head -1`
+  [ "$rc" -le 1 ] || { echo "cannot scan: $TARGET (tool error)" >&2; exit 2; }   # FAIL CLOSED — $SEARCH's own exit status, captured immediately as $?
   if [ -n "$hit" ]; then echo "  LEAK: $label"; LEAKS=$((LEAKS+1)); fi
 done
 [ "$LEAKS" -gt 0 ] && exit 1
 exit 0
 ```
 
-The exit code is 0 clean / 1 any findings (the count is in the printed `LEAK:` lines, never the exit status) / 2 could not run — two fail-closed checks make this composable, not a raw leak count: the `TARGET` readability check at the top, and the per-pattern check that the search tool's own exit status — surfaced through `| head -1` by `pipefail`, then captured immediately as `rc=$?` — never exceeds 1, so a scanner that errors mid-scan reports could-not-run rather than a false clean. Binding the exit code directly to a count collides with the reserved could-not-run state the moment exactly two shapes leak, and gives a genuinely crashed scanner nowhere to signal from but "zero", which a `scanner && ok || echo CLEAN`-shaped wrapper reads as clean — the trap these two checks close. A transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero. `tools/check-redaction.sh` in this repository ships exactly this contract as a working reference implementation of Steps 1-3 — more patterns, a `--verify` self-test that seeds every one of them, `--labels` — read its own header before building a second one from scratch.
+The exit code is 0 clean / 1 any findings (the count is in the printed `LEAK:` lines, never the exit status) / 2 could not run — two fail-closed checks make this composable, not a raw leak count: the `TARGET` readability check at the top, and the per-pattern check that the search tool's own exit status — captured immediately as `rc=$?`, with no pipeline in the way to obscure it — never exceeds 1, so a scanner that errors mid-scan reports could-not-run rather than a false clean. Binding the exit code directly to a count collides with the reserved could-not-run state the moment exactly two shapes leak, and gives a genuinely crashed scanner nowhere to signal from but "zero", which a `scanner && ok || echo CLEAN`-shaped wrapper reads as clean — the trap these two checks close. `hit` collects every matching file, never just the first: the check only asks *whether* a pattern matched, and an earlier `| head -1` here took a SIGPIPE (141, misread by the guard above as a scan failure) the moment `head` exited before the search tool's next stdout flush — which needs only a few kilobytes of output, intermittently from about 27 matching files here on this machine and reliably above roughly 30, far below the 64 KiB pipe capacity a reader might otherwise assume is the threshold — fixed by dropping the pipe rather than bounding the read, since nothing downstream uses more than `[ -n "$hit" ]` (#858). `grep -q`/`rg -q` would also drop the pipe and terminate faster, but both change the exit-code contract this gate depends on: GNU grep's `-q` returns 0 whenever a line was selected, even if an error occurred elsewhere in the same scan (ordering is irrelevant — measured both ways, #860 review), so a permission-denied file sitting beside a real leak would report LEAK (1) instead of the honest could-not-run (2). The full-scan `-l` form costs little in practice (under 0.1s over 5,000 files on this machine) and keeps the contract exact. A transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero. `tools/check-redaction.sh` in this repository ships exactly this contract as a working reference implementation of Steps 1-3 — more patterns, a `--verify` self-test that seeds every one of them, `--labels` — read its own header before building a second one from scratch.
 
 **Expected:** Running the scanner on a known-clean tree exits 0; seeding a deliberate test token makes it exit 1 and print the matching label only; pointing it at an unreadable or missing target, or at a tree the search tool errors on mid-scan (a permission-denied file, say — even one sitting beside genuinely leaking content), exits 2 either way, never a false clean.
 
@@ -165,7 +174,16 @@ jobs:
         env: { GH_TOKEN: "${{ secrets.PRIVATE_REPO_TOKEN }}" }
         # tools/enforce-redaction-gate.sh does not exist in this repository (#751) — this
         # path is the shape a real one takes once built from Steps 1-3.
-        run: gh api repos/<org>/<private>/contents/tools/enforce-redaction-gate.sh --jq .content | base64 -d > gate.sh
+        # `shell: bash` is not decoration: GitHub's UNSPECIFIED default on Linux is `bash -e
+        # {0}` with NO pipefail, so a failing `gh api` here (an expired token, a renamed path,
+        # a rate limit) would let `base64 -d` succeed on empty stdin, write a 0-byte gate.sh,
+        # and exit 0 — the step reports success having fetched nothing (measured, #860 review).
+        # `[ -s gate.sh ]` catches that even under the safer shell: an empty file is still a
+        # successful write.
+        shell: bash
+        run: |
+          gh api repos/<org>/<private>/contents/tools/enforce-redaction-gate.sh --jq .content | base64 -d > gate.sh
+          [ -s gate.sh ] || { echo "scanner fetch failed: gate.sh is empty" >&2; exit 2; }
       - run: bash gate.sh .
 ```
 
