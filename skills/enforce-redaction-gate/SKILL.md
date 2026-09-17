@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.3"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -85,18 +85,18 @@ PATTERNS=(
 for entry in "${PATTERNS[@]}"; do
   label="${entry%%|*}"; pat="${entry##*|}"
   if [ "$SEARCH" = rg ]; then
-    hit=$(rg -l "$pat" --glob '!.git' --glob '!node_modules' "$TARGET" 2>/dev/null | head -1); rc=$?
+    hit=$(rg -l "$pat" --glob '!.git' --glob '!node_modules' "$TARGET" 2>/dev/null); rc=$?
   else
-    hit=$(grep -rlE "$pat" --exclude-dir=.git --exclude-dir=node_modules "$TARGET" 2>/dev/null | head -1); rc=$?
+    hit=$(grep -rlE "$pat" --exclude-dir=.git --exclude-dir=node_modules "$TARGET" 2>/dev/null); rc=$?
   fi
-  [ "$rc" -le 1 ] || { echo "cannot scan: $TARGET (tool error)" >&2; exit 2; }   # FAIL CLOSED — pipefail carries $SEARCH's real status through `| head -1`
+  [ "$rc" -le 1 ] || { echo "cannot scan: $TARGET (tool error)" >&2; exit 2; }   # FAIL CLOSED — $SEARCH's own exit status, captured immediately as $?
   if [ -n "$hit" ]; then echo "  LEAK: $label"; LEAKS=$((LEAKS+1)); fi
 done
 [ "$LEAKS" -gt 0 ] && exit 1
 exit 0
 ```
 
-The exit code is 0 clean / 1 any findings (the count is in the printed `LEAK:` lines, never the exit status) / 2 could not run — two fail-closed checks make this composable, not a raw leak count: the `TARGET` readability check at the top, and the per-pattern check that the search tool's own exit status — surfaced through `| head -1` by `pipefail`, then captured immediately as `rc=$?` — never exceeds 1, so a scanner that errors mid-scan reports could-not-run rather than a false clean. Binding the exit code directly to a count collides with the reserved could-not-run state the moment exactly two shapes leak, and gives a genuinely crashed scanner nowhere to signal from but "zero", which a `scanner && ok || echo CLEAN`-shaped wrapper reads as clean — the trap these two checks close. A transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero. `tools/check-redaction.sh` in this repository ships exactly this contract as a working reference implementation of Steps 1-3 — more patterns, a `--verify` self-test that seeds every one of them, `--labels` — read its own header before building a second one from scratch.
+The exit code is 0 clean / 1 any findings (the count is in the printed `LEAK:` lines, never the exit status) / 2 could not run — two fail-closed checks make this composable, not a raw leak count: the `TARGET` readability check at the top, and the per-pattern check that the search tool's own exit status — captured immediately as `rc=$?`, with no pipeline in the way to obscure it — never exceeds 1, so a scanner that errors mid-scan reports could-not-run rather than a false clean. Binding the exit code directly to a count collides with the reserved could-not-run state the moment exactly two shapes leak, and gives a genuinely crashed scanner nowhere to signal from but "zero", which a `scanner && ok || echo CLEAN`-shaped wrapper reads as clean — the trap these two checks close. `hit` collects every matching file, never just the first: the check only asks *whether* a pattern matched, and an earlier `| head -1` here took a SIGPIPE (141, misread by the guard above as a scan failure) the moment a pattern had enough matches to fill the pipe before `head` stopped reading — fixed by dropping the pipe rather than bounding the read, since nothing downstream uses more than `[ -n "$hit" ]` (#858). A transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero. `tools/check-redaction.sh` in this repository ships exactly this contract as a working reference implementation of Steps 1-3 — more patterns, a `--verify` self-test that seeds every one of them, `--labels` — read its own header before building a second one from scratch.
 
 **Expected:** Running the scanner on a known-clean tree exits 0; seeding a deliberate test token makes it exit 1 and print the matching label only; pointing it at an unreadable or missing target, or at a tree the search tool errors on mid-scan (a permission-denied file, say — even one sitting beside genuinely leaking content), exits 2 either way, never a false clean.
 
