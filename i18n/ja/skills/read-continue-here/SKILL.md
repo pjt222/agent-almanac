@@ -20,7 +20,7 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: 025eea68
-  fence_basis_commit: a2c36f4e6
+  fence_basis_commit: afb148e637f7987255890aa34c1fd08c70caa121
   translator: "Claude + human review"
   translation_date: "2026-05-03"
 ---
@@ -138,6 +138,22 @@ Next Steps item 1（またはユーザーが指示した場所）から作業を
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+# A handoff that carries `coordinate-peer-sessions` Step 3's scope declaration is about to lose
+# its only durable copy — this is the one point in the lifecycle where anyone could still act on
+# it. A shell loop, not `grep`/`rg`: a session may run this in an environment that has neither on
+# PATH, or that blocks a bare `grep` outright (this repository's own Bash hook does exactly that,
+# which would otherwise make this warning never fire where it matters most). Anchored on the
+# LINE START, not `*Nobody runs:*`: a handoff can quote or discuss the mechanism in prose (as this
+# skill's own commit history has), and an unanchored match warns on that too — a real declaration
+# always starts the line, by construction of the fence that emits it.
+SCOPE_LINE=$(while IFS= read -r l; do
+  case "$l" in "Nobody runs:"*) printf '%s' "$l"; break ;; esac
+done < "$CONTINUE_FILE")
+if [ -n "$SCOPE_LINE" ]; then
+  echo "WARNING: $CONTINUE_FILE carries a peer-session scope declaration about to be lost:" >&2
+  echo "  $SCOPE_LINE" >&2
+  echo "Copy it somewhere durable (an issue comment, a message to the peer) before it is gone." >&2
+fi
 if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
   # Tracked: the deletion is recoverable, which is what makes it safe.
   # The pathspec is load-bearing: `git commit -m` with none commits the WHOLE
