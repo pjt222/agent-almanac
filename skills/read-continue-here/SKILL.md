@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "2.1"
+  version: "2.2"
   domain: general
   complexity: basic
   language: multi
@@ -144,6 +144,15 @@ Whether the project tracks its handoff decides how it is deleted, and both lifec
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+# A handoff that carries `coordinate-peer-sessions` Step 3's scope declaration is about to lose
+# its only durable copy — this is the one point in the lifecycle where anyone could still act on
+# it. `-m 1`, never `| head -1`: piping a match into head can take a SIGPIPE on a handoff with
+# many hits and misread that as "not found" (#858 measured this on a different scanner).
+SCOPE_LINE=$(grep -m 1 -F 'Nobody runs:' "$CONTINUE_FILE" 2>/dev/null) && {
+  echo "WARNING: $CONTINUE_FILE carries a peer-session scope declaration about to be lost:" >&2
+  echo "  $SCOPE_LINE" >&2
+  echo "Copy it somewhere durable (an issue comment, a message to the peer) before it is gone." >&2
+}
 if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
   # Tracked: the deletion is recoverable, which is what makes it safe.
   # The pathspec is load-bearing: `git commit -m` with none commits the WHOLE
@@ -162,7 +171,7 @@ fi
 
 Stale continuation files cause confusion in future sessions.
 
-**Expected:** The resolved file is gone. If it was tracked, `git log -p -- <path>` still recovers every version ever written; if it was not, the deletion is final.
+**Expected:** The resolved file is gone. If it was tracked, `git log -p -- <path>` still recovers every version ever written; if it was not, the deletion is final. If the handoff carried a peer-session scope declaration (#857), a warning naming the line prints to stderr before the delete — the delete still runs either way.
 
 **On failure:** If the user wants to keep the file (e.g., as a reference during the session), leave it but note that it should be deleted before session end to prevent the next session from re-consuming it. If `git rm` fails because the file has staged changes, read them before forcing anything — an unconsumed edit from another session is the case that rule exists for.
 
