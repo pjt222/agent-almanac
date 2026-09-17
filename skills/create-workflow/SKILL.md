@@ -236,7 +236,9 @@ It does **not** cover ignored paths; walking them would mean hashing
 `workflows/_template.mjs` to the prompt of every agent that may run shell
 commands — verifiers included, since a verifier reproducing a finding is the
 agent most likely to build a fixture. Copying the template gets this by default.
-It carries three rules:
+Its rules, in the template's own order — deliberately uncounted, because a count
+here is a claim about a file this one does not own, and it was wrong by two
+before anyone noticed:
 
 1. **`mktemp -d`, never a shared fixed path.** Parallel agents told to build
    fixtures independently converge on the same obvious filename, and the second
@@ -244,12 +246,19 @@ It carries three rules:
 2. **`cd "$DIR" || exit 1`.** A bare `cd` that fails does not reliably abort the
    surrounding script, and every following relative path then resolves against
    the repository.
-3. **A cwd assertion before any destructive step** — `git add`, `git commit`, or
+3. **An absolute path under `$DIR` in every destructive command** — write
+   `rm -rf "$DIR/fixtures"`, never `rm -rf fixtures`. The `cd` above is one
+   control; a relative `rm` makes it the only one, so the single failure it
+   guards against becomes repository damage instead of a wasted command. An
+   absolute path does not depend on the working directory at all.
+4. **A cwd assertion before any destructive step** — `git add`, `git commit`, or
    a tool run with a write flag:
 
    ```bash
    [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
    ```
+5. **Never `git commit`, `git update-index` or `git checkout --` against the
+   repository itself**, and never a repo tool with a write flag there.
 
 Prefer `isolation: 'worktree'` for any stage that might mutate — it is the
 structural control and stronger than either of the others. The gap it leaves is
