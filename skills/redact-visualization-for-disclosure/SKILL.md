@@ -23,7 +23,7 @@ metadata:
 
 # Redact Visualization for Disclosure
 
-A diagram leaks differently than prose: the sensitive names sit in node labels, tooltip text, and embedded `<text>` nodes, while the *shape* of the graph is exactly the generalizable insight worth publishing. This skill redacts the labels and keeps the structure — replacing each internal identifier with a descriptive stand-in through an ordered mapping table, re-rendering the image from the redacted source, and then verifying the output through `enforce-redaction-gate` so nothing slips through.
+A diagram leaks differently than prose: the sensitive names sit in node labels, tooltip text, and embedded `<text>` nodes, while the *shape* of the graph is exactly the generalizable insight worth publishing. This skill redacts the labels and keeps the structure — replacing each internal identifier with a descriptive stand-in through an ordered mapping table, re-rendering the image from the redacted source, and then asserting over both that no mapped identifier survives.
 
 ## When to Use
 
@@ -35,7 +35,7 @@ A diagram leaks differently than prose: the sensitive names sit in node labels, 
 ## Inputs
 
 - **Required**: The source visual artifact (`.mmd`, `.svg`, `.html`) in the private repo
-- **Required**: A mapping table — sensitive identifier → descriptive stand-in — derived from the deny-list shapes (see `enforce-redaction-gate` Step 1)
+- **Required**: A mapping table — sensitive identifier → descriptive stand-in. `enforce-redaction-gate` Step 1 covers how to derive the shapes it should cover
 - **Optional**: The render toolchain (e.g. a Mermaid CLI) to regenerate the image from the redacted source
 - **Optional**: A target path in the public mirror for the redacted output
 
@@ -138,10 +138,12 @@ is the RENDERED image, which a different tool produced from the redacted source 
 it, because a renderer can reintroduce a label from a cache or a theme file.
 
 ```bash
-# The rendered SVG is a structured document the mapping never ran over, so assert rather than
-# substitute: every source term from the mapping, plus any encoding of it you know about.
-python3 tools/redact-artifact.py --type html --mapping /tmp/viz-map.tsv \
-  publish/docs/flow.svg -o /dev/null || {
+# --assert-only is load-bearing. Without it the mapping SUBSTITUTES first, so a label the
+# renderer reintroduced is rewritten before the assertion looks and this check cannot fail for
+# the one case it exists to catch (measured: rc=0, "0 survivor(s)", over an SVG containing the
+# private label). With it, the mapping's keys become deny terms and nothing is rewritten.
+python3 tools/redact-artifact.py --type html --assert-only --mapping /tmp/viz-map.tsv \
+  publish/docs/flow.svg || {
   echo "rendered image still leaks; re-render from the redacted source"; exit 1; }
 ```
 
@@ -169,7 +171,7 @@ python3 tools/redact-artifact.py --type html --mapping /tmp/viz-map.tsv \
 
 ## Related Skills
 
-- `enforce-redaction-gate` — the verification step every redaction transform ends on; also defines the shape deny-list the mapping table derives from
+- `enforce-redaction-gate` — how to build a redaction boundary for artifacts you hold the deny-list for; defines the shape vocabulary the mapping table draws on. Note it teaches building one rather than shipping one: this repository ships the post-condition half (`tools/redact-artifact.py`), and #853 records why a public tree gate is not possible
 - `redact-for-public-disclosure` — the methodology umbrella that decides *what* is publishable before this skill decides *how* to scrub the diagram
 - `redact-wire-capture` — the sibling transform for network/MITM captures rather than rendered artifacts
 - `generate-workflow-diagram` — produces the kind of Mermaid diagram this skill redacts for publication

@@ -23,7 +23,7 @@ metadata:
 
 # Redact Wire Capture
 
-A wire capture is the highest-density leak surface in any investigation: a single `.jsonl` from a proxied session can carry the bearer token, the account email, the device hash, and the home path all in one request frame. This skill scrubs those in place with class-preserving substitutions — keeping enough of each secret's *shape* to stay analytically useful (`Bearer sk-vendor-oat01-<REDACTED>` still reads as "an OAuth bearer") — runs idempotently so re-redaction is a no-op, and finishes by verifying the directory through `enforce-redaction-gate`.
+A wire capture is the highest-density leak surface in any investigation: a single `.jsonl` from a proxied session can carry the bearer token, the account email, the device hash, and the home path all in one request frame. This skill scrubs those in place with class-preserving substitutions — keeping enough of each secret's *shape* to stay analytically useful (`Bearer sk-vendor-oat01-<REDACTED>` still reads as "an OAuth bearer") — runs idempotently so re-redaction is a no-op, and finishes by asserting per file that no secret survived.
 
 ## When to Use
 
@@ -37,7 +37,7 @@ A wire capture is the highest-density leak surface in any investigation: a singl
 - **Required**: A capture directory containing text-mode artifacts
 - **Required**: The secret-class list (token prefixes, id formats, the personal identifiers to scrub) — kept private
 - **Optional**: An allow-list of public identifiers (marketplace/skill names, public usernames) that must be left intact
-- **Optional**: The redaction gate (`enforce-redaction-gate`) for the verification step
+- **Required**: `tools/redact-artifact.py` for the per-file scrub-and-assert step (there is no directory-wide gate; #853 records why)
 
 ## Procedure
 
@@ -124,7 +124,7 @@ reporting a clean pass over nothing.
 - [ ] The scrub is idempotent — a second run changes nothing
 - [ ] Public allow-list identifiers are intact
 - [ ] No UUID, token, email, home path, or device hash survives outside a `<REDACTED-…>` form
-- [ ] `enforce-redaction-gate` exits 0 on the scrubbed directory, including the structure-aware tier
+- [ ] `tools/redact-artifact.py` exits 0 on every scrubbed file, with the summary line showing a non-zero matched count rather than `OUTPUT UNCHANGED`
 - [ ] The redacted capture is reproducible from the private source (re-running yields the same result)
 
 ## Common Pitfalls
@@ -138,7 +138,7 @@ reporting a clean pass over nothing.
 
 ## Related Skills
 
-- `enforce-redaction-gate` — the verification step this skill ends on; supplies the structure-aware tier for tokens nested in request/response bodies
+- `enforce-redaction-gate` — how to build a redaction boundary when you hold the deny-list; it teaches the two-tier design this skill's per-file assertion implements the decidable half of
 - `conduct-empirical-wire-capture` — produces the captures this skill scrubs; redaction is the mandatory step between capture and any public reference
 - `redact-for-public-disclosure` — the methodology umbrella governing what may be referenced publicly at all
 - `redact-visualization-for-disclosure` — the sibling transform for rendered diagrams rather than wire dumps

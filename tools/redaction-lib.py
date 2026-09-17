@@ -12,9 +12,21 @@ repository's own public tooling; its second round fixed that and introduced a fa
 an 86-character vendor token. Round one too noisy, round two too quiet — and the oscillation was
 the result, not a tuning problem.
 
-The reason is that a tree scanner has nothing to be right about. A deny-list's power is the
-corpus of terms it denies, and a corpus of real internal identifiers is by definition private. A
-public repository cannot hold one, so a public tree-scanner is guessing at shapes forever.
+The reason is narrower than "a public repository cannot ship a scanner", and the narrow version
+is the true one. A deny-list for INTERNAL IDENTIFIERS has no public corpus: its power is the list
+of names it denies, and such a list is private by definition, so a public scanner for that class
+is guessing forever.
+
+The CREDENTIAL-SHAPE class is different and IS decidable without a corpus — `ghp_…`, `AKIA…`,
+`-----BEGIN … PRIVATE KEY-----`, checksummed vendor tokens. That is why gitleaks, trufflehog and
+GitHub secret scanning work on repositories they have never seen, and it is why this repository
+already ships `tools/check-redaction.sh` for exactly that class. The candidate's round-two miss —
+an 86-character vendor token — was mis-tuning inside a decidable class, not evidence the class is
+undecidable.
+
+So: the credential-shape class belongs to `check-redaction.sh` and to an external scanner. The
+internal-identifier class belongs to the caller, who is the only party holding the list — which
+is what this library is for.
 
 A working disclosure pipeline solves it the other way round, and this library is that pattern:
 
@@ -85,6 +97,12 @@ def load_mapping(path: str | Path) -> dict[str, str]:
         src, _, dst = line.partition("\t")
         if not src:
             raise RedactionError(f"{p}:{lineno}: empty source")
+        if src in table and table[src] != dst:
+            # Silently keeping the last one loses a table author's entry without a word.
+            raise RedactionError(
+                f"{p}:{lineno}: duplicate source with a different replacement; "
+                f"already mapped to {table[src]!r}"
+            )
         table[src] = dst
     return table
 
@@ -115,7 +133,29 @@ def assert_clean(text: str, terms, label: str = "output") -> None:
     The message names the term, which is safe: the caller already holds these strings, and a gate
     that will not say what leaked cannot be acted on. It never quotes the surrounding text, which
     would widen the disclosure from a term the caller knows to a passage they may not.
+
+    WHAT IT DOES NOT MATCH, measured and disclosed because each renders identically to a leak:
+    this is EXACT SUBSTRING containment, so a term is NOT found when it differs in case, when it
+    is base64 or otherwise encoded, when Unicode normalisation differs (an NFC term against NFD
+    text), when a zero-width character sits inside it, or when a soft line break splits it
+    (`acme_\nsecret`). Pass every form you know about; `redact-artifact.py --also-deny` exists
+    for exactly that.
     """
+    if isinstance(terms, (str, bytes)):
+        # `"abc" in "xyzabc"` is True per character, so a bare string is fail-CLOSED but reports
+        # nonsense: assert_clean(text, "acme_secret") once produced "11 term(s) survived: _, a, c,
+        # c, e, e, e, m, r, s, t". Refuse rather than answer in fiction.
+        raise RedactionError(
+            f"{label}: `terms` must be an iterable of strings, not a bare "
+            f"{type(terms).__name__} — wrap it in a list"
+        )
+    terms = list(terms)
+    non_str = [t for t in terms if not isinstance(t, str)]
+    if non_str:
+        # Otherwise `t in text` raises TypeError, which callers' `except RedactionError` misses.
+        raise RedactionError(
+            f"{label}: every term must be a string; got {[type(t).__name__ for t in non_str][:3]}"
+        )
     survivors = [t for t in terms if t and t in text]
     if survivors:
         raise RedactionError(
@@ -131,8 +171,14 @@ def _verify() -> int:
     import tempfile
 
     failures: list[str] = []
+    ran: list[str] = []
 
     def check(name: str, cond: bool, detail: str = "") -> None:
+        # `ran` is what makes the printed denominator a MEASUREMENT. An earlier version printed
+        # `total = 14`, a literal: three arms could be deleted and the output stayed byte-identical
+        # at `14/14`, still naming a property that no longer ran. A count nobody derives is the
+        # only thing a reader has for noticing missing coverage, and it did not move.
+        ran.append(name)
         if not cond:
             failures.append(f"{name}{': ' + detail if detail else ''}")
 
@@ -185,6 +231,22 @@ def _verify() -> int:
         empty_ok = False
     check("an empty term does not match everything", empty_ok)
 
+    for bad_terms, why in ((("acme_secret"), "a bare string"), ((["a", 3]), "a non-string term")):
+        try:
+            assert_clean("anything", bad_terms)
+            check(f"{why} as `terms` is REFUSED", False, "no exception raised")
+        except RedactionError as exc:
+            check(f"{why} as `terms` is REFUSED", "must be" in str(exc), str(exc))
+
+    # The exact-substring limits, asserted so they cannot regress into a silent surprise.
+    soft = "acme_\nsecret"
+    try:
+        assert_clean(soft, ["acme_secret"])
+        check("a term split by a real newline is NOT detected (documented limit)", True)
+    except RedactionError:
+        check("a term split by a real newline is NOT detected (documented limit)", False,
+              "it now detects it — update the header, this limit is disclosed")
+
     # The end-to-end property the whole library exists for.
     table = {"acme_widget_autoinstall": "[autoinstall]", "acme_widget_": "[widget-ns]"}
     out = apply_mapping("acme_widget_autoinstall and acme_widget_other", table)
@@ -225,17 +287,20 @@ def _verify() -> int:
         except RedactionError:
             check("JSON: a non-object is refused", True)
 
-    total = 14
+    total = len(ran)
+    if len(set(ran)) != total:
+        dupes = sorted({n for n in ran if ran.count(n) > 1})
+        print(f"redaction-lib --verify: REFUSED, duplicate arm name(s): {dupes}", file=sys.stderr)
+        return 1
     print(f"redaction-lib --verify: {total - len(failures)}/{total} arm(s) passed")
     for f in failures:
         print(f"  FAILED: {f}", file=sys.stderr)
     if failures:
         print(f"redaction-lib --verify: {len(failures)} arm(s) FAILED", file=sys.stderr)
         return 1
-    print("  proved: longest-first ordering, order-independence, every-occurrence replacement,")
-    print("  assert_clean passing clean text, raising on a survivor and naming it, reporting ALL")
-    print("  survivors, not matching on an empty term, the redact-then-assert end-to-end")
-    print("  property, and both mapping formats including their two refusals.")
+    print("  proved, by name — this list is the arms that RAN, not prose about them:")
+    for name in ran:
+        print(f"    - {name}")
     return 0
 
 
