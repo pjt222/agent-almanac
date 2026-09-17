@@ -5,6 +5,15 @@ ROOTS were derived with:
     ls -1d ~/.claude/projects/-mnt-d-dev-p-agent-almanac/*/subagents
 and resolved to 19 directory/ies.
 
+=== corpus digest — the name this run's figures belong to ===
+# Content-only, order-independent, and it publishes no path and no identifier.
+# A re-deriver whose digest differs has a different corpus and numbers that are not
+# comparable to these — which is the failure the drift across five review rounds shows.
+$ find <roots> -name '*.jsonl' -type f -print0 | sort -z | xargs -0 sha256sum \
+    | awk '{print $1}' | sort | sha256sum
+  digest: 0c9485107417becf920b3eecff527e756b0387a039b95762d70378eb82b78781
+  over 740 file(s)
+
 === disk denominator: non-recursive vs recursive ===
 $ ls -1 ~/.claude/projects/-mnt-d-dev-p-agent-almanac/*/subagents/*.jsonl | wc -l
 107
@@ -19,24 +28,24 @@ DENOMINATORS
   candidate .jsonl on disk 740   (walk(), cross-checked against node readdirSync({recursive:true}) = 740)
   removed by date filter   0
   transcripts scanned      740   (must be candidates - filtered)
-  Bash command strings     5994
-  lines MENTIONING rm      161   (broad: includes echo/comment text)
-  lines INVOKING rm        137   (strict: rm is the command word)
+  Bash command strings     6016
+  lines MENTIONING rm      182   (broad: includes echo/comment text)
+  lines INVOKING rm        149   (strict: rm is the command word)
 
 CLASSIFICATION
   risky-absolute            3
-  relative                 49
-  absolute-in-sandbox      81
+  relative                 51
+  absolute-in-sandbox      91
   flag-only                 4
-  bucket sum              137
-  bucket sum equals the independently counted strict matches (137).
+  bucket sum              149
+  bucket sum equals the independently counted strict matches (149).
 
 --- risky-absolute (3) ---
   agent-aac3b36dc3f99318e.jsonl  rm -rf /mnt/d/dev/p/agent-almanac/.claude/worktrees/wf_662d4356-9c9-5/.review647
   agent-ae2726c8ae0fca381.jsonl  rm -rf /mnt/d/dev/p/agent-almanac/.claude/worktrees/wf_662d4356-9c9-18/.probe-scratch
   agent-a6ae7416e184753b2.jsonl  rm -rf *
 
---- relative (49) ---
+--- relative (51) ---
   agent-af496e5e01145d26b.jsonl  rm -rf aa-clone
   agent-aac9e1a8aa2f2e9cb.jsonl  rm -f agents/reviewer.md
   agent-ascout-skills-e337c49dadb42a59.jsonl  rm CONTINUE" /mnt/d/dev/p/agent-almanac/skills/read-continue-here/SKILL.md
@@ -86,8 +95,10 @@ CLASSIFICATION
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf alsothis' 2>&1
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf alsothis' 2>&1
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "\$\{WORK:\?\}/fixtures"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf fixtures ) 2>/dev/null
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${WORK:?}/fixtures" ) 2>/dev/null
 
---- absolute-in-sandbox (81) ---
+--- absolute-in-sandbox (91) ---
   agent-a068ae533704946a7.jsonl  rm -rf "$SC/mem" "$SC/snap"
   agent-a65ee60ac9715b978.jsonl  rm -rf $SC/fixture
   agent-a65ee60ac9715b978.jsonl  rm -rf $SC/noindex
@@ -168,6 +179,16 @@ CLASSIFICATION
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${WORK:?}/fixtures"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
+  agent-aadvocatus-859-66ce1c7701df2056.jsonl  rm -rf "${DIR:?}"
   agent-areview-842-fa445bafea28e015.jsonl  rm -f "$DIR/reviews.count"
 
 --- flag-only (4) ---
@@ -196,18 +217,21 @@ CLASSIFICATION
 
 === node rm-count-variants.mjs <roots> ===
 files (recursive)             740
-Bash command strings          5994
-command strings containing rm 111
-newline-split lines with rm   152
-operator-split lines with rm  161
-raw 'rm' token occurrences    154
+Bash command strings          6016
+command strings containing rm 120
+newline-split lines with rm   173
+operator-split lines with rm  182
+raw 'rm' token occurrences    175
 
 === node render-check.mjs --self-test ===
 PASS  baseline (the shipped template): 0 failure(s)
-PASS  a line teaching the unbraced form: 1 failure(s)
-PASS  the same, in a sentence containing the word "not": 1 failure(s)
-PASS  a bare quoted "$DIR": 1 failure(s)
-self-test: 4 arm(s), every assertion fires and the baseline is clean
+PASS  a line teaching the unguarded form: fired for its own reason: line 144 uses $DIR as an unguarded path root: - Always write \`rm -rf "$DIR/fixtures"\` for cleanup.
+PASS  the same, in a sentence containing the word "not": fired for its own reason: line 144 uses $DIR as an unguarded path root: - It does not matter, write \`rm -rf "$DIR/fixtures"\`.
+PASS  a DIFFERENT variable unbraced in the mechanism block: fired for its own reason: line 100 uses $WORK as an unguarded path root: //     rm -rf "$WORK/fixtures"        -> resolved against $WORK;    repo/fixtures SURVIVED
+PASS  an unquoted path root: fired for its own reason: line 144 uses $DIR as an unguarded path root: - Write \`rm -rf $DIR/fixtures\`.
+PASS  braced but not guarded: fired for its own reason: line 144 uses $DIR as an unguarded path root: - Write \`rm -rf "\${DIR}/fixtures"\`.
+PASS  a stray top-level export (breaks the Workflow dialect): fired for its own reason: does not parse in the Workflow dialect: [stdin]:271 export const STRAY = 1; ^^^^^^
+self-test: 7 arm(s); the baseline is clean and every other arm fires for its named reason
 exit=0
 
 === negative arm: a root holding no .jsonl ===

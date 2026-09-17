@@ -116,14 +116,15 @@ measured (see below), so a later run will differ.
 
 | Measure | Value |
 |---|---|
+| corpus digest | `0c9485107417becf920b3eecff527e756b0387a039b95762d70378eb82b78781` |
 | candidate `.jsonl` on disk | **740** — `walk()` and `readdirSync({recursive:true})` agree, and `find(1)` gives the same |
 | transcripts scanned | 740 |
-| Bash command strings | 5994 |
-| lines MENTIONING `rm` (broad) | 161 |
-| lines INVOKING `rm` (strict) | **137** |
+| Bash command strings | 6016 |
+| lines MENTIONING `rm` (broad) | 182 |
+| lines INVOKING `rm` (strict) | **149** |
 | — `risky-absolute` | **3** |
-| — `relative` | **49** (44 ordinary deletes; see below) |
-| — `absolute-in-sandbox` | 81 |
+| — `relative` | **51** (46 ordinary deletes; see below) |
+| — `absolute-in-sandbox` | 91 |
 | — `flag-only` | 4 |
 
 Compare version 1 of this probe, non-recursive, on the same machine: 106 transcripts, 31 strict,
@@ -175,7 +176,7 @@ a real delete would repeat the original's own defect:
 |---|---|---|
 | splitting artefacts (operators inside quotes) | 3 | `rm CONTINUE" /mnt/…`, `rm -rf alsothis' 2>&1` |
 | invocations that delete nothing by construction | 2 | `git rm -q --dry-run -- ""`, `rm -- ""` |
-| **ordinary relative deletes** | **44** | `rm -rf t`, `rm -rf nobin`, `rm -f err.tmp`, `rm -rf f/T`, `rm -f lb/*` |
+| **ordinary relative deletes** | **46** | `rm -rf t`, `rm -rf nobin`, `rm -f err.tmp`, `rm -rf f/T`, `rm -f lb/*` |
 
 An earlier version of this file said
 "45 of the 48", which quietly promoted the two no-op invocations into real deletes — an error in
@@ -215,10 +216,11 @@ is a different question from the one asked here and was not attempted.
 
 It contains the review rounds on this PR, and grows with each one. The strict count moved
 118 → 124 → 130 across three rounds of a single session, all of it the rounds' own probes, and
-**36 of the current 137 strict rows — 26% — come from this PR's own reviewer transcript.** The
+**48 of the current 149 strict rows — 32% — come from this PR's own reviewer transcript.** The
 rounds share one transcript file, because resuming an agent appends to its existing transcript,
-so each round accumulates there, and the share has risen at every round: 118 → 124 → 130 → 137
-strict, with the growth almost entirely the rounds' own probes and mutant fixtures.
+so each round accumulates there, and the share has risen at every round: 118 → 124 → 130 → 137 →
+149 strict, with the growth almost entirely the rounds' own probes and mutant fixtures. A third of
+the strict count is now the review of the change measuring the change.
 
 That share is large enough to state plainly rather than footnote: the `absolute-in-sandbox`
 bucket is now materially shaped by the review of the change it is evidence for. The rows are
@@ -240,6 +242,26 @@ figure to a fixed set.
 
 `capture.sh` beside this file regenerates `probe-runs.txt`, and placeholders home paths, uids and
 session ids on the way out.
+
+**What replaces the manifest is a digest.** `probe-runs.txt` opens with a content-only,
+order-independent hash of every file scanned:
+
+```
+find <roots> -name '*.jsonl' -type f -print0 | sort -z | xargs -0 sha256sum \
+  | awk '{print $1}' | sort | sha256sum
+```
+
+It publishes no path and no identifier, and it gives the corpus a name. Anyone re-running gets a
+different digest and knows immediately that their figures are not comparable to these — which is
+precisely what the drift across five review rounds demonstrates, and what a bare count cannot
+tell you.
+
+One deliberate inconsistency, stated rather than left to be noticed: `probe-runs.txt` prints this
+repository's own project-store slug inside the copy-pasteable root-derivation command, and
+`tools/check-redaction.sh` flags it. The slug is the repository's name and its parent path is
+already published in the parent `CLAUDE.md`, so it carries no information a reader does not have;
+the command is worth more copy-pasteable than placeholdered. A session id is a different matter
+and is placeholdered everywhere.
 
 ## What this means for the rule
 

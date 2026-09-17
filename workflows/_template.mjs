@@ -93,7 +93,7 @@ const items =
 // destructive.
 //
 // The absolute-path rule was added 2026-09-16 after auditing agent runs. Its
-// reason is a mechanism, demonstrable in two arms and unchanged since:
+// reason is a mechanism, demonstrable directly and unchanged since:
 //
 //   after a cd that failed, in a shell that did not abort —
 //     rm -rf fixtures                -> resolved against the repo; repo/fixtures GONE

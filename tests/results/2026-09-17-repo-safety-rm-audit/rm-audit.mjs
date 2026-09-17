@@ -24,7 +24,14 @@
 // Usage: node rm-audit.mjs <transcript-root>... [--since YYYY-MM-DD] [--until YYYY-MM-DD]
 //                          [--rows] [--list FILE]
 
-import { readFileSync, readdirSync, realpathSync, statSync, writeFileSync } from 'node:fs';
+import {
+  readFileSync,
+  readdirSync,
+  realpathSync,
+  lstatSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const argv = process.argv.slice(2);
@@ -55,11 +62,12 @@ if (roots.length === 0) {
 // Two things it deliberately does NOT do quietly. A directory it cannot list is recorded in
 // `walkErrors` and makes the run refuse, rather than being swallowed by a bare catch — a
 // permission-denied subdirectory otherwise removes files from the corpus and reports clean. And
-// `Dirent.isDirectory()` has lstat semantics, so a symlinked session directory is neither
-// descended into nor reported; `statSync` (which follows) decides that here, and a symlink loop
-// is bounded by `seen`.
+// a symlinked directory is neither descended into NOR passed over in silence: it is recorded in
+// `symlinkedDirs` and printed. `Dirent.isDirectory()` has lstat semantics and would have skipped
+// it without a word, which is the shape this file exists to stop.
 const walkErrors = [];
 const nonJsonlSeen = [];
+const symlinkedDirs = [];
 function walk(dir, acc = [], seen = new Set()) {
   let real;
   try {
@@ -89,6 +97,17 @@ function walk(dir, acc = [], seen = new Set()) {
       isDir = statSync(full).isDirectory();
     } catch (err) {
       walkErrors.push(`${full}: ${err.code || err.message}`);
+      continue;
+    }
+    // Do NOT descend a symlinked directory. The cross-check's whole value is that two
+    // traversals agree, and `readdirSync({recursive:true})`'s DOCUMENTED contract is not to
+    // follow — so a walk that follows is betting on observed behaviour that may differ on the
+    // `engines.node` floor of 22.12, where only a false refusal would result. Only Node 25.9 is
+    // installed here, so 22.12 remains inferred from documentation rather than measured; the
+    // dependence is removed instead of bet on. A symlinked directory is REPORTED rather than
+    // silently skipped, the same way a rotated transcript is.
+    if (isDir && lstatSync(full).isSymbolicLink()) {
+      symlinkedDirs.push(full);
       continue;
     }
     if (isDir) walk(full, acc, seen);
@@ -154,6 +173,7 @@ for (let a = 0; a < realRoots.length; a++) {
 const candidates = [];
 // One `seen` set spanning every root, so deduplication is global rather than per-root.
 const seenGlobal = new Set();
+const coveredElsewhere = new Set();
 let crossCount = 0;
 const unreadableRoots = [];
 const emptyRoots = [];
@@ -166,7 +186,10 @@ for (const root of realRoots) {
     continue;
   }
   crossCount += n;
-  if (candidates.length - before === 0) emptyRoots.push(root);
+  if (candidates.length - before === 0) {
+    if (n > 0) coveredElsewhere.add(root);
+    emptyRoots.push(root);
+  }
 }
 const candidateCount = candidates.length;
 
@@ -178,9 +201,21 @@ if (unreadableRoots.length > 0) {
   process.exit(2);
 }
 if (emptyRoots.length > 0) {
-  console.error(
-    `REFUSED: root(s) contributed no .jsonl — a mistyped root beside a good one reports clean: ${emptyRoots.join(', ')}`
-  );
+  // Two different causes, and naming the wrong one sent a reader hunting a typo that was not
+  // there. A root that contributed nothing BECAUSE another root already covered it is a
+  // different fault from a root that does not hold transcripts at all.
+  const covered = emptyRoots.filter((r) => coveredElsewhere.has(r));
+  const genuinelyEmpty = emptyRoots.filter((r) => !coveredElsewhere.has(r));
+  if (covered.length > 0) {
+    console.error(
+      `REFUSED: root(s) contributed nothing because another root already covered them: ${covered.join(', ')}`
+    );
+  }
+  if (genuinelyEmpty.length > 0) {
+    console.error(
+      `REFUSED: root(s) hold no .jsonl at all — a mistyped root beside a good one reports clean: ${genuinelyEmpty.join(', ')}`
+    );
+  }
   process.exit(2);
 }
 if (walkErrors.length > 0) {
@@ -349,6 +384,12 @@ console.log('DENOMINATORS');
 console.log(
   `  candidate .jsonl on disk ${candidateCount}   (walk(), cross-checked against node readdirSync({recursive:true}) = ${crossCount})`
 );
+if (symlinkedDirs.length > 0) {
+  console.log(
+    `  NOTE: ${symlinkedDirs.length} symlinked director(y/ies) beneath the roots were NOT descended:`
+  );
+  for (const p of symlinkedDirs.slice(0, 5)) console.log(`    ${p}`);
+}
 if (nonJsonlSeen.length > 0) {
   console.log(
     `  NOTE: ${nonJsonlSeen.length} file(s) beneath the roots look transcript-like but are not .jsonl and were NOT read:`

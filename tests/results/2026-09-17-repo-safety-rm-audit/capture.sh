@@ -32,6 +32,19 @@ scrub() {
   echo "and resolved to $(echo "$ROOTS" | wc -l) directory/ies."
   echo
 
+  echo "=== corpus digest — the name this run's figures belong to ==="
+  echo "# Content-only, order-independent, and it publishes no path and no identifier."
+  echo "# A re-deriver whose digest differs has a different corpus and numbers that are not"
+  echo "# comparable to these — which is the failure the drift across five review rounds shows."
+  echo "\$ find <roots> -name '*.jsonl' -type f -print0 | sort -z | xargs -0 sha256sum \\"
+  echo "    | awk '{print \$1}' | sort | sha256sum"
+  # shellcheck disable=SC2086
+  find $ROOTS -name '*.jsonl' -type f -print0 2>/dev/null | sort -z | xargs -0 sha256sum |
+    awk '{print $1}' | sort | sha256sum | awk '{print "  digest: " $1}'
+  # shellcheck disable=SC2086
+  echo "  over $(find $ROOTS -name '*.jsonl' -type f 2>/dev/null | wc -l) file(s)"
+  echo
+
   echo "=== disk denominator: non-recursive vs recursive ==="
   echo "\$ ls -1 ~/.claude/projects/-mnt-d-dev-p-agent-almanac/*/subagents/*.jsonl | wc -l"
   ls -1 ~/.claude/projects/-mnt-d-dev-p-agent-almanac/*/subagents/*.jsonl 2>/dev/null | wc -l
