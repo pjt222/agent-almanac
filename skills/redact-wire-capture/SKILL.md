@@ -124,7 +124,7 @@ reporting a clean pass over nothing.
 - [ ] The scrub is idempotent — a second run changes nothing
 - [ ] Public allow-list identifiers are intact
 - [ ] No UUID, token, email, home path, or device hash survives outside a `<REDACTED-…>` form
-- [ ] `tools/redact-artifact.py` exits 0 on every scrubbed file, with the summary line showing a non-zero matched count rather than `OUTPUT UNCHANGED`
+- [ ] `tools/redact-artifact.py` exits 0 on every file. On the FIRST run over an unscrubbed capture the summary shows a non-zero matched count; on a re-run it shows `OUTPUT UNCHANGED`, which is the idempotence above rather than a failure
 - [ ] The redacted capture is reproducible from the private source (re-running yields the same result)
 
 ## Common Pitfalls

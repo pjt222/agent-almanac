@@ -24,9 +24,16 @@ already ships `tools/check-redaction.sh` for exactly that class. The candidate's
 an 86-character vendor token — was mis-tuning inside a decidable class, not evidence the class is
 undecidable.
 
-So: the credential-shape class belongs to `check-redaction.sh` and to an external scanner. The
-internal-identifier class belongs to the caller, who is the only party holding the list — which
-is what this library is for.
+So the credential-shape class is decidable corpus-free and THIS LIBRARY DOES NOT IMPLEMENT IT.
+Be precise about where it goes, because an over-broad hand-off sends a reader to a tool that will
+not take their artifact: `check-redaction.sh`'s subject is a DRAFT leaving the machine, an
+external scanner (gitleaks, trufflehog) covers a repository, and for any other artifact — an SVG,
+a wire capture, a rendered dashboard — you must name the terms yourself. `redact-wire-capture` is
+the case that makes this concrete: bearer tokens are its entire subject and no shipped tool here
+will find them for it.
+
+The internal-identifier class belongs to the caller in every case, who is the only party holding
+the list — which is what this library is for.
 
 A working disclosure pipeline solves it the other way round, and this library is that pattern:
 
@@ -266,6 +273,15 @@ def _verify() -> int:
         t = load_mapping(tsv)
         check("TSV: comments and blank lines are skipped", len(t) == 2, f"got {t}")
         check("TSV: a source containing a space survives", t.get("beta with space") == "[B]")
+
+        dup = Path(td) / "dup.tsv"
+        dup.write_text("acme\t[FIRST]\nacme\t[SECOND]\n", encoding="utf-8")
+        try:
+            load_mapping(dup)
+            check("TSV: a duplicate source with a different replacement is REFUSED", False, "no raise")
+        except RedactionError as exc:
+            check("TSV: a duplicate source with a different replacement is REFUSED",
+                  "duplicate source" in str(exc), str(exc))
 
         js = Path(td) / "m.json"
         js.write_text('{"alpha": "[A]"}', encoding="utf-8")

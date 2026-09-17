@@ -55,9 +55,20 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 # `redaction-lib.py` carries a hyphen, so it is not importable by name; load it by path.
-# `dont_write_bytecode` first: importing by path otherwise creates tools/__pycache__, and
-# `check:tools-registry` refuses any non-plain-file under tools/ — so the tool would break a
-# gate merely by running.
+#
+# `dont_write_bytecode` first, because importing by path otherwise creates `tools/__pycache__`,
+# and `check:tools-registry` refuses any non-plain-file under `tools/` — so the tool would break
+# a gate merely by running. Measured, and the boundary is worth knowing:
+#
+#   run as a script (`python3 tools/redact-artifact.py …`)   no cache written — normal use is safe
+#   IMPORTED by path from another process                    cache IS written, gate then fails
+#   same import with PYTHONDONTWRITEBYTECODE=1               no cache
+#
+# The line below cannot prevent the second case: Python decides whether to cache THIS file before
+# this file's body runs. If you import this module rather than running it, set
+# PYTHONDONTWRITEBYTECODE=1 in the environment. (`tools/__pycache__` is gitignored, but
+# `check-tools-registry` walks the filesystem rather than asking git, so an ignored artefact
+# still reddens a required gate — filed separately.)
 sys.dont_write_bytecode = True
 import importlib.util as _ilu
 
@@ -81,19 +92,30 @@ DECODING_TYPES = ("html", "mermaid")
 class _Positions(HTMLParser):
     """Collect (position-label, decoded-value) for every place an HTML leak would matter.
 
-    Three things an earlier version missed, each a measured false CLEAN:
-      - a comment (`<!-- acme&#95;secret -->`) — no `handle_comment`, so it was never seen
-      - a term split by an empty tag (`acme&#95;sec<b></b>ret`) — adjacent data nodes were
-        searched separately and the term existed in neither
-      - two leaks in first attributes of different tags both labelled `attr:href[0]`, because
-        the ordinal enumerated one tag's attributes rather than the document's
+    THE RULE THIS CLASS FOLLOWS: a run of text is broken only by something a RENDERER breaks it
+    with. What a reader of the published artifact sees is the only thing that matters, so:
+
+      - an inline tag does not break a run: `acme_sec<b></b>ret` renders as one identifier
+      - a COMMENT does not break a run either: `acme_<!-- c -->secret` renders as `acme_secret`,
+        and an earlier version flushed on it, which re-opened the exact hole that joining runs
+        had just closed (measured CLEAN while the tag form raised)
+      - a BLOCK-level boundary DOES break it: `</td><td>` and `</p><p>` put the halves in
+        different boxes, and joining across them reports a leak an operator cannot act on
     """
+
+    # Block-level elements a renderer separates. Not exhaustive — it does not need to be, since
+    # erring toward joining is fail-closed (a false positive) while erring toward flushing is
+    # fail-open (a false CLEAN), and only the second loses a leak.
+    BLOCK = frozenset(
+        "address article aside blockquote br dd div dl dt fieldset figcaption figure footer "
+        "form h1 h2 h3 h4 h5 h6 header hr li main nav ol p pre section table tbody td tfoot th "
+        "thead tr ul".split()
+    )
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.found: list[tuple[str, str]] = []
-        self._text_n = 0
-        self._attr_n = 0
+        self._n = 0
         self._run: list[str] = []
         self._run_start = 0
 
@@ -105,38 +127,39 @@ class _Positions(HTMLParser):
             self._run = []
 
     def handle_data(self, data: str) -> None:
-        self._text_n += 1
+        self._n += 1
         if not self._run:
-            self._run_start = self._text_n
+            self._run_start = self._n
         self._run.append(data)
 
     def handle_comment(self, data: str) -> None:
-        # `convert_charrefs` does NOT reach inside a comment — the parser hands this back raw, so
-        # an entity-encoded term here arrived undecoded and the position read as clean. Measured.
-        self._flush()
-        self._text_n += 1
+        # No flush: a comment is invisible to a renderer, so the text around it is one run.
+        # `convert_charrefs` does not reach inside a comment, hence the explicit unescape.
+        self._n += 1
         if data.strip():
-            self.found.append((f"comment[{self._text_n}]", unescape(data)))
+            self.found.append((f"comment[{self._n}]", unescape(data)))
 
     def handle_decl(self, decl: str) -> None:
-        self._flush()
-        self._text_n += 1
-        self.found.append((f"decl[{self._text_n}]", decl))
+        self._n += 1
+        self.found.append((f"decl[{self._n}]", decl))
 
     def handle_pi(self, data: str) -> None:
-        self._flush()
-        self._text_n += 1
-        self.found.append((f"pi[{self._text_n}]", data))
+        self._n += 1
+        self.found.append((f"pi[{self._n}]", data))
 
     def handle_starttag(self, tag: str, attrs) -> None:
-        # A tag boundary does NOT end a text run: `acme_sec<b></b>ret` is one identifier to a
-        # reader and to a renderer, so the run is joined across it. The run is flushed only by a
-        # construct that genuinely interrupts text.
-        self.found.append((f"tag[{self._attr_n}]", tag))
+        if tag in self.BLOCK:
+            self._flush()
         for name, value in attrs:
-            self._attr_n += 1
+            self._n += 1
             if value:
-                self.found.append((f"attr:{name}[{self._attr_n}]", value))
+                # The ordinal is document-wide. A per-tag counter gave every first attribute
+                # `attr:href[0]`, so two leaks shared one label.
+                self.found.append((f"attr:{name}[{self._n}]", value))
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in self.BLOCK:
+            self._flush()
 
     handle_startendtag = handle_starttag
 
@@ -176,9 +199,10 @@ def positions(text: str, kind: str) -> list[tuple[str, str]]:
             decoded = _mermaid_decode(line)
             if decoded.strip():
                 out.append((f"line[{i}]", decoded))
-        # A label spanning a line break is invisible to every per-line position, so the whole
-        # decoded document is one more position. It reports a worse location than `line[N]` and
-        # it is the only thing that sees a soft-wrapped identifier at all.
+        # The whole decoded document as one more position. NOT for soft-wrapped identifiers — a
+        # term containing a newline is not found by any position including this one, which the
+        # exact-substring arm asserts. What it is for: a DENY TERM that itself spans lines, and a
+        # term straddling two lines' decoded boundary that no single line contains.
         out.append(("document", _mermaid_decode(text)))
         return out
     return []
@@ -207,6 +231,13 @@ def redact_text(text: str, table: dict[str, str], kind: str, also_deny=(), asser
     out = text if assert_only else apply_mapping(text, table)
     terms = list(table.keys()) + [t for t in also_deny if t]
     assert_clean(out, terms, "whole-text")
+    if kind in DECODING_TYPES and out.strip() and not positions(out, kind):
+        # Malformed markup (an unterminated attribute quote) makes HTMLParser consume the
+        # document and yield nothing; `0 decoded position(s), 0 survivor(s)` then reads as a pass.
+        raise RedactionError(
+            f"structure: --type {kind} yielded no positions over non-empty input — "
+            f"the document did not parse, so the structure tier examined nothing"
+        )
     survivors = structure_survivors(out, terms, kind)
     if survivors:
         raise RedactionError(f"structure: term(s) survive at {', '.join(survivors)}")
@@ -254,6 +285,11 @@ def main(argv: list[str]) -> int:
     if args.output and args.in_place:
         print("REFUSED: --output and --in-place are mutually exclusive", file=sys.stderr)
         return 2
+    if args.assert_only and (args.output or args.in_place):
+        # A flag documented as "do not substitute" writing a byte-verbatim copy of its input
+        # invites `--assert-only -o publish/x` as a publishing step. The exit code is the result.
+        print("REFUSED: --assert-only writes nothing; drop --output/--in-place", file=sys.stderr)
+        return 2
     if any(t == "" for t in args.also_deny):
         # `--also-deny "$VAR"` with VAR unset expands to an empty argument. Dropping it silently
         # meant the highest-value secret in a published recipe went unasserted while the run
@@ -267,7 +303,11 @@ def main(argv: list[str]) -> int:
 
     src = Path(args.input)
     try:
-        text = src.read_text(encoding="utf-8")
+        # `newline=""` keeps CRLF intact: read_text/write_text otherwise normalise line endings
+        # across the whole file and the summary attributes that byte change to the mapping.
+        # `Path.read_text(newline=)` is 3.13+, so use open() — this must work on older Pythons.
+        with open(src, encoding="utf-8", newline="") as fh:
+            text = fh.read()
     except (OSError, UnicodeDecodeError) as exc:
         # Exit 2, not 1. Callers branch on 1 meaning "a term survived"; a permission error or a
         # non-UTF-8 file reported as 1 tells an operator their capture leaks when it does not.
@@ -291,11 +331,16 @@ def main(argv: list[str]) -> int:
 
     try:
         if args.in_place:
-            src.write_text(out, encoding="utf-8")
+            with open(src, "w", encoding="utf-8", newline="") as fh:
+                fh.write(out)
             dest = str(src)
         elif args.output:
-            Path(args.output).write_text(out, encoding="utf-8")
+            with open(args.output, "w", encoding="utf-8", newline="") as fh:
+                fh.write(out)
             dest = args.output
+        elif args.assert_only:
+            # Nothing is written at all — in CI, dumping the artifact to stdout puts it in the log.
+            dest = "(nothing written; --assert-only)"
         else:
             sys.stdout.write(out)
             dest = "-"
@@ -303,6 +348,14 @@ def main(argv: list[str]) -> int:
         print(f"REFUSED: cannot write: {exc}", file=sys.stderr)
         return 2
 
+    if args.assert_only:
+        print(
+            f"redact-artifact: {src} — assert-only: "
+            f"{stats['mappings']} mapping key(s) + {len(args.also_deny)} --also-deny term(s) "
+            f"asserted, none present",
+            file=sys.stderr,
+        )
+        return 0
     tier = (
         f"{stats['positions']} decoded position(s)"
         if stats["structure_tier"]
@@ -346,21 +399,41 @@ def _verify() -> int:
         except RedactionError as exc:
             check(f"{kind}: redacts and passes its own assertion", False, str(exc))
 
-    # --- the structure tier must be ADDITIVE exactly where DECODING_TYPES says ------------------
+    # --- the structure tier must be ADDITIVE exactly where DECODING_TYPES says ----------------
+    # An earlier version of this arm computed `additive`, asserted `yields` instead, and then
+    # `del additive`d it — the trace of an assertion that was written and never wired. It passed
+    # a mutant that declared `md` additive while giving it round-1's substring-only positions,
+    # which is precisely the defect DECODING_TYPES exists to make impossible. Non-emptiness is
+    # what the DEAD tier already had; ADDITIVITY is the property.
+    #
+    # The fixtures must therefore contain something that decodes. `<p>x</p>` does not, which is
+    # why the old arm could not have demonstrated the property whatever it asserted.
+    DECODING_FIXTURES = {
+        "html": "<p>&#95;</p>",
+        "mermaid": "graph TD\n  a[#95;]\n",
+        "md": "# &#95;\n",
+        "text": "&#95;",
+    }
     for kind in TYPES:
-        sample = {"html": "<p>x</p>", "mermaid": "graph TD\n a[x]\n", "md": "# x\n", "text": "x"}[kind]
-        additive = any(v not in sample for _, v in positions(sample, kind))
-        yields = bool(positions(sample, kind))
+        sample = DECODING_FIXTURES[kind]
+        pos = positions(sample, kind)
+        # Additive = at least one position value is NOT a substring of the input. That is the only
+        # thing a structure tier can contribute that the whole-text tier has not already done.
+        additive = any(v not in sample for _, v in pos)
         if kind in DECODING_TYPES:
-            check(f"{kind}: DECODING_TYPES says additive, and positions() yields", yields)
+            check(
+                f"{kind}: in DECODING_TYPES, so positions() is ADDITIVE — some value is not a "
+                f"substring of the input",
+                additive,
+                f"positions={pos!r} over {sample!r}",
+            )
         else:
             check(
                 f"{kind}: not in DECODING_TYPES, so positions() yields nothing rather than "
                 f"substrings the whole-text tier already checked",
-                not yields,
-                f"yielded {positions(sample, kind)!r}",
+                not pos,
+                f"yielded {pos!r}",
             )
-        del additive
 
     # --- each decoding case, measured as a false CLEAN before it was fixed ---------------------
     for name, doc, kind in (
@@ -393,6 +466,40 @@ def _verify() -> int:
             False,
             f"it now detects it, so the header's disclosure is stale: {exc}",
         )
+
+    # --- a comment does NOT break a text run; a BLOCK boundary does ---------------------------
+    # The first is a regression arm: an earlier fix flushed the run on a comment, which re-opened
+    # the split-text hole it had just closed. A renderer drops the comment and shows one word.
+    for doc, must_raise, why in (
+        ("<p>acme_<!-- c -->secret</p>", True, "a COMMENT does not interrupt rendered text"),
+        ("<p>acme_<?php ?>secret</p>", True, "a processing instruction does not either"),
+        ("<p>acme_<b></b>secret</p>", True, "nor does an inline tag"),
+        ("<table><tr><td>acme_</td><td>secret</td></tr></table>", False,
+         "a BLOCK boundary DOES, so joining across it would be an unactionable false positive"),
+    ):
+        try:
+            redact_text(doc, {"never": "x"}, "html", also_deny=["acme_secret"])
+            raised = False
+        except RedactionError:
+            raised = True
+        check(f"text runs: {why}", raised == must_raise, f"raised={raised}, wanted {must_raise}")
+
+    # --- malformed markup cannot report a pass -------------------------------------------------
+    try:
+        redact_text('<text data-id="acme&#95;secret>x</text>', {"never": "x"}, "html")
+        check("malformed markup REFUSES rather than reporting 0 positions as clean", False, "no raise")
+    except RedactionError as exc:
+        check(
+            "malformed markup REFUSES rather than reporting 0 positions as clean",
+            "did not parse" in str(exc),
+            str(exc),
+        )
+
+    # --- the structure tier reports EVERY term at a position, not the first --------------------
+    # `redaction-lib` documents that promise; a `break` here silently broke it and nothing caught
+    # the restoration.
+    hits = structure_survivors("<p>alpha beta</p>", ["alpha", "beta"], "html")
+    check("structure_survivors reports every term at a position, not the first", len(hits) == 2, str(hits))
 
     # --- messages never carry the surrounding content ------------------------------------------
     try:
@@ -476,6 +583,25 @@ def _verify() -> int:
                                also_deny=[])
         check("a mistyped mapping key reports 0 matched, so the run cannot read as a redaction",
               stats["matched"] == 0 and not stats["changed"], str(stats))
+        # The positive half: without it, `matched` hardwired to 0 passes the arm above.
+        _, hit_stats = redact_text("the real secret is acme_secret", load_mapping(d / "m.tsv"), "md")
+        check("a mapping key that MATCHES reports 1 matched and a changed output",
+              hit_stats["matched"] == 1 and hit_stats["changed"], str(hit_stats))
+
+        check("--assert-only refuses --output (it writes nothing by design)",
+              main(["--type", "md", "--assert-only", "--mapping", str(d / "m.tsv"),
+                    str(d / "in.md"), "-o", str(d / "ao.md")]) == 2)
+        check("--assert-only refuses --in-place",
+              main(["--type", "md", "--assert-only", "--mapping", str(d / "m.tsv"),
+                    str(d / "in.md"), "--in-place"]) == 2)
+        check("--assert-only writes no file at all",
+              not (d / "ao.md").exists())
+
+        crlf = d / "crlf.md"
+        crlf.write_bytes(b"line one\r\nacme_secret\r\n")
+        main(["--type", "md", "--mapping", str(d / "m.tsv"), str(crlf), "--in-place"])
+        check("--in-place preserves CRLF rather than silently normalising the whole file",
+              crlf.read_bytes() == b"line one\r\n[redacted]\r\n", repr(crlf.read_bytes()))
 
         (d / "leak.md").write_text("acme_secret and other_secret\n", encoding="utf-8")
         rc = main(["--type", "md", "--mapping", str(d / "m.tsv"), str(d / "leak.md"),
