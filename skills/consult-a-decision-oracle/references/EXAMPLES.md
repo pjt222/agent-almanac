@@ -1,0 +1,211 @@
+# Examples — consult-a-decision-oracle
+
+Extended material for [SKILL.md](../SKILL.md). Three parts: where external graders
+hide, a runnable verdict fixture for the Validation section, and the worked
+threshold derivation including the mistake that makes it worth reading.
+
+**Provenance is marked per entry throughout.** One case here is a real shipped
+integration; the rest of the taxonomy is inference about where the same shape
+turns up elsewhere. Inference sitting next to a verified case tends to acquire
+the verified case's authority, so each entry says which it is:
+
+- **[shipped]** — observed in a system that ran in production
+- **[inference]** — a plausible instance of the same shape, not verified by the
+  author
+
+---
+
+## Where external graders hide
+
+You are looking for rows where **something other than your code** decided whether
+an answer was right. The grader must be unable to inherit your mistake. That
+rules out your own labels, your own heuristic's output, and any model you also
+consult.
+
+### The shape, from the one case that is not inference
+
+**[shipped]** A verification path posted an answer to a remote platform, and the
+platform replied `accepted`, `rejected` or `expired`. Those replies were appended
+to a log so that a circuit breaker could count consecutive failures and stop the
+account being suspended. That is the whole reason the log existed.
+
+Thirty-nine days later, during an unrelated incident, someone opened the log and
+realised it had been accumulating externally-graded rows the entire time: input,
+the path's answer, and a verdict from an authority that could not be influenced
+by the code under test. Nobody designed a corpus. Two unrelated commits, five
+weeks apart, produced one as a side effect.
+
+The transferable part is the *search*, not the platform: **the grading signal was
+already being written down for another purpose.**
+
+### Candidate hiding places
+
+| Where | The graded signal | Why the grader is external |
+|---|---|---|
+| CI history **[inference]** | a job that passed or failed after your tool's suggestion was applied | the test suite did not consult your classifier |
+| Payment/settlement logs **[inference]** | authorised vs declined | the processor decided |
+| Retry records **[inference]** | an operation that failed, then succeeded unchanged on retry | the first attempt's verdict was wrong and the system proved it |
+| Support/ticket routing **[inference]** | tickets reassigned after their first routing | the human who moved it disagreed |
+| Moderation queues **[inference]** | an automated decision later overturned on appeal | the appeal reviewer is independent |
+| Search and recommendation **[inference]** | the result the user actually clicked after being shown your ranking | the user is not your code — but see the caveat below |
+| Spam/fraud outcomes **[inference]** | a chargeback, a confirmed-fraud flag, an account later banned | the outcome arrived after and independent of the decision |
+| Compiler and type errors **[inference]** | a generated change that did or did not build | the compiler is indifferent to your reasoning |
+| Deployment outcomes **[inference]** | a release that was rolled back | the rollback decision came from elsewhere |
+
+### Three ways this goes wrong
+
+**A grader that saw your answer first.** If a human reviewer is shown your
+system's suggestion before deciding, their verdict is contaminated by it.
+Anchoring is strong and the resulting corpus overstates agreement. Prefer
+outcomes recorded before your decision existed, or recorded by someone who never
+saw it.
+
+**Survivorship in the log.** If only failures are logged, the corpus contains no
+agreements and no separation can be computed — the distribution you most need is
+the one that was never written down. Log every consult, including the ones where
+everything agreed.
+
+**Click-through as truth.** A click grades *what was shown*, not what was best.
+It is external, and it is biased by position and presentation. Usable with that
+stated; misleading when quoted as accuracy.
+
+---
+
+## A verdict fixture the Validation section can actually run
+
+The Validation checklist must run for a reader with no API key, which means it
+cannot depend on anyone's recorded production verdicts. Ship a small synthetic
+fixture instead.
+
+**This is legitimate in a way a synthetic *corpus* is not, and the distinction
+matters.** A synthetic corpus assigns the labels that grade the oracle, which is
+circular — it produces a test that cannot fail for its own defect. A synthetic
+verdict fixture grades nothing. It exercises *your* table-computation and
+fail-open code with inputs whose expected outputs you can state independently.
+You are testing your arithmetic, not the oracle's judgement.
+
+```json
+{
+  "note": "Synthetic. Grades no oracle. Exercises the separation table and the five fail-open modes.",
+  "rows": [
+    {"id": "r01", "path_answer": "A", "oracle_answer": "A", "scalar": 1.00, "external_verdict": "correct"},
+    {"id": "r02", "path_answer": "A", "oracle_answer": "A", "scalar": 0.98, "external_verdict": "correct"},
+    {"id": "r03", "path_answer": "B", "oracle_answer": "A", "scalar": 0.97, "external_verdict": "incorrect"},
+    {"id": "r04", "path_answer": "A", "oracle_answer": "B", "scalar": 0.42, "external_verdict": "correct"},
+    {"id": "r05", "path_answer": "A", "oracle_answer": "B", "scalar": 0.51, "external_verdict": "correct"},
+    {"id": "r06", "path_answer": "C", "oracle_answer": "C", "scalar": 0.95, "external_verdict": "correct"},
+    {"id": "r07", "path_answer": "A", "oracle_answer": "C", "scalar": 0.33, "external_verdict": "correct"},
+    {"id": "r08", "path_answer": "B", "oracle_answer": "B", "scalar": 0.99, "external_verdict": "correct"}
+  ],
+  "failure_modes": [
+    {"id": "f01", "mode": "throws",        "expect": "path answer unchanged"},
+    {"id": "f02", "mode": "timeout",       "expect": "path answer unchanged"},
+    {"id": "f03", "mode": "rate_limited",  "expect": "path answer unchanged"},
+    {"id": "f04", "mode": "unconfigured",  "expect": "path answer unchanged"},
+    {"id": "f05", "mode": "below_threshold","expect": "path answer unchanged"}
+  ]
+}
+```
+
+Rows `r03`–`r05` are the interesting ones. `r03` is an oracle override that was
+wrong at a high scalar; `r04` and `r05` are overrides that were right at low
+ones. Together they produce a corpus with **no clean gap**, which is deliberate:
+a fixture that always separates teaches a reader to expect separation. Running
+Step 4 over this fixture must reach the *no gap* branch and refuse to ship a
+threshold. That is the assertion — a fixture the procedure passes is not a test
+of the procedure.
+
+To exercise the positive branch as well, drop `r03` and the gap becomes
+`(0.51, 0.95]`. Keep both variants; the interesting one is the first.
+
+---
+
+## Worked derivation, and the mistake in it
+
+**[shipped]** — figures from a real integration, measured **2026-09-17** against
+resolved model `jev-1.13.0`, over 87 production rows of which 70 carried an
+external grade. They are quoted to show the shape of the reasoning. **They are
+not a property of any API, and a reader six months from now should assume they
+have moved.** Re-derive rather than reuse.
+
+### The grading table
+
+```text
+                   rows   oracle correct   baseline (always most-common)
+  overall            70         65 (92.9%)            54 (77.1%)
+  class +            54         52
+  class -             4          4      <- 4 rows; not validated, only unrefuted
+  class *            12          9
+```
+
+The baseline is doing real work here. On a corpus that is 54/12/4, always
+guessing the most common class scores 77.1%, so the headline 92.9% is a gain of
+15.8 points, not 92.9 points of skill. Report both or report neither.
+
+### The separation
+
+```text
+  oracle disagreed with the external verdict  ->  scalar at or below  0.54
+  oracle disagreed and was RIGHT              ->  scalar at           1.00
+  -------------------------------------------------------------------------
+  free interval: (0.54, 1.00]
+```
+
+Every point in that interval scores identically on these 70 rows.
+
+### The mistake
+
+The value chosen was **0.90**, and for two months it was documented — in a
+project guide and in a comment above the constant — as *"the interval's
+midpoint"*.
+
+```text
+  midpoint of (0.54, 1.00]  =  (0.54 + 1.00) / 2  =  0.77
+  documented value          =  0.90
+```
+
+The justification was arithmetically false, and a one-line check would have
+caught it at any point in those two months. Nobody ran it, because the sentence
+read like a measurement.
+
+The second-order problem is worse than the arithmetic. Once "midpoint" is
+removed, *nothing in the data selects 0.90* — the separation licenses the whole
+interval and is silent about which point to take. What was in the same file,
+cited approvingly as independent support, was a vendor example gating a
+high-stakes action at `> 0.9`. And that vendor's own documentation gates the
+*same* action at `> 0.85` on a different page, disclaiming both.
+
+So the most plausible history is the reverse of what was written down: **the
+borrowed number arrived first, and a measurement-flavoured justification was
+fitted to it afterwards.** Not by anyone careless — by people who had genuinely
+done the measurement, and who let its authority spread to a number it did not
+select.
+
+### The repair
+
+The value did not change; it is still inside the free interval and still costs
+nothing on the corpus. Only the reason changed, into a form arithmetic can check:
+
+> 0.90 sits **0.36 above the highest observed miss** and **0.10 below the lowest
+> correct override**, deliberately off-centre toward the override end so the
+> policy is biased against acting.
+
+Every number in that sentence can be recomputed from the separation table in
+about ten seconds. That is the property a justification needs — not that it
+sounds derived, but that it can be re-derived, and that its being wrong would be
+*visible*.
+
+---
+
+## Checklist for adapting this to your own service
+
+1. Name the layer and write the precondition before looking at any API.
+2. Find the grader before writing any integration code — if there is none, stop.
+3. Compute the baseline first. It is cheap and it sometimes ends the project.
+4. Derive the separation over the scalar you will actually gate on. If the
+   service returns several (a concentration measure, a per-option probability, a
+   margin between the top two), they are different quantities and may separate
+   differently. Measure the one you will use.
+5. Write the reason for your operating point as a calculation, then do it.
+6. Stub the oracle explicitly in every test, and confirm the gate reddens when
+   each contract is deliberately broken.

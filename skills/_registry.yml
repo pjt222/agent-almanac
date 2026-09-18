@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 372
+total_skills: 373
 
 domains:
   r-packages:
@@ -512,6 +512,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Pick a delaySeconds value for ScheduleWakeup using the three-tier cache-aware decision, the [60,3600] clamp, and minute-boundary rounding
+      - id: consult-a-decision-oracle
+        path: consult-a-decision-oracle/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Add an external probabilistic classifier to a decision path without letting it take over — find the externally-graded rows you already log, measure the confidence separation, choose an operating point the data licenses, fail open at the call site, and prove it offline with no API key
 
   citations:
     description: Academic and software citation management with R and BibTeX
