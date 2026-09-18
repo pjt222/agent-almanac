@@ -134,6 +134,14 @@ a test of the procedure.**
 Keep both. Variant A proves the refusal branch is reachable; Variant B proves the
 table computation produces the right interval when one exists.
 
+**Variant B's gap is deliberately thin, and a reader should notice.** Its width
+is 0.08, against 0.46 for the real case above. Both "have a gap" and they are not
+the same finding: a point in the middle of Variant B has ±0.04 of headroom, which
+a model version bump or ten more rows could erase entirely. The fixture is shaped
+this way so that working through it produces the right instinct — *a gap exists*
+is the first question and *how wide* is immediately the second. A fixture whose
+only positive variant separated cleanly would teach the first question alone.
+
 Check both with one command rather than trusting the prose — which is the habit
 this whole skill is about:
 

@@ -190,10 +190,26 @@ agreements below it.
 ```
 
 Every value inside the gap performs identically **on the rows you measured**.
-That is what the measurement licenses, and it is all it licenses. The choice of
-a specific point inside the gap is a judgement about which direction you would
-rather be wrong in — and it must be stated as a judgement, in terms arithmetic
-can check.
+That is what the measurement licenses, and it is all it licenses.
+
+**Report the gap's width, not only its bounds — the width is the finding.** A
+gap is evidence that the scalar separates right answers from wrong ones, and a
+narrow one is weak evidence. Compare:
+
+```text
+  (0.54, 1.00]   width 0.46   a point in the middle has +/- 0.23 of headroom
+  (0.44, 0.52]   width 0.08   a point in the middle has +/- 0.04 of headroom
+```
+
+Both "have a gap". Only the first survives a modest distribution shift, a model
+version bump, or ten more graded rows. Treat a narrow gap as a reason to doubt
+that a threshold exists at all rather than as a licence to pick the middle of
+it — and if you ship one anyway, say in the same sentence how many rows produced
+it, because a thin gap over few rows is two weaknesses compounding.
+
+The choice of a specific point inside the gap is then a judgement about which
+direction you would rather be wrong in — and it must be stated as a judgement,
+in terms arithmetic can check.
 
 Say, for example: *0.36 above the highest observed miss and 0.10 below the
 lowest correct override, deliberately off-centre toward the override end so the
@@ -224,9 +240,9 @@ option, and the margin between the top two options is a third thing again.
 Derive the separation over whichever scalar you intend to gate on; the procedure
 is identical and the answer may not be.
 
-**Expected:** A separation table, an explicitly named free interval, a chosen
-operating point, and a written reason for that point that is checkable by
-arithmetic.
+**Expected:** A separation table, an explicitly named free interval **with its
+width**, a chosen operating point, and a written reason for that point that is
+checkable by arithmetic.
 
 **On failure — and this is the important branch:**
 
