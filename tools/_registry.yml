@@ -35,7 +35,7 @@
 # PROCEDURE and has lost the NAME (a compaction summary does exactly that). An index keyed by
 # what you are trying to do recovers the name from that state; one keyed by name cannot.
 
-total_tools: 16
+total_tools: 18
 
 tools:
   - id: review-bundle
@@ -143,6 +143,38 @@ tools:
     deps: null
     promoted_from: "the memory-cap probe harness, commit 898189b82 (#722)"
     issue: "717, 722"
+  - id: redaction-lib
+    path: tools/redaction-lib.py
+    language: python
+    status: active
+    superseded_by: null
+    description: "The three primitives a redaction transform is built from — an ordered mapping, longest-first substitution, and assert_clean, the post-condition that IS the gate"
+    need: "Building a redaction transform, when the verification step must be a post-condition on your own output rather than a scanner over somebody's tree."
+    not_for: "scanning a draft you did not transform — that is check-redaction.sh; a corpus of terms to deny, which it deliberately does not ship"
+    tag: null
+    invoke: 'python3 tools/redaction-lib.py --verify  # a library: import it by path, see its header'
+    verify: "python3 tools/redaction-lib.py --verify"
+    verify_in_ci: true
+    deps: null
+    promoted_from: "#853, after a 1507-line universal tree-gate was built, measured and rejected"
+    issue: "853"
+
+  - id: redact-artifact
+    path: tools/redact-artifact.py
+    language: python
+    status: active
+    superseded_by: null
+    description: "Applies an ordered redaction mapping to one artifact and refuses to return output in which any source term survives, checking the whole text and, for a structured type, each meaningful position"
+    need: "Redacting one markdown, HTML, mermaid or text artifact for disclosure, with the verification inlined so unverified output cannot be handed back."
+    not_for: "auditing a tree nobody transformed (no tool here does that, by design); check-redaction.sh, whose subject is a draft it did not produce"
+    tag: null
+    invoke: "python3 tools/redact-artifact.py --type md --mapping map.tsv IN.md -o OUT.md"
+    verify: "python3 tools/redact-artifact.py --verify"
+    verify_in_ci: true
+    deps: "tools/redaction-lib.py"
+    promoted_from: "#853 and #852, replacing two scripts three skills named and neither shipped"
+    issue: "853"
+
   - id: check-redaction
     path: tools/check-redaction.sh
     language: bash
