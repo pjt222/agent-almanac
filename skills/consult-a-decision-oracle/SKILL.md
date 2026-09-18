@@ -7,9 +7,10 @@ description: >
   right and the ones it got wrong, choosing an operating point your data
   licenses,
   failing open at the call site, and proving the whole arrangement offline with
-  no API key. Applies to any service that returns a calibrated score — TypeSafe
-  AI's System One models (Jev) are the worked example, and the method is the
-  same for a hosted classifier, a small local model, or a second heuristic.
+  no API key. Applies to any service returning a score you can order — TypeSafe
+  AI's System One models (Jev) are the worked example. Most of the method
+  transfers to a local model or a second heuristic, with the parts that do not
+  called out where they arise.
   Use when a rule-based path is wrong often enough to hurt, when someone
   proposes replacing a heuristic with a model, when a confidence threshold
   needs a defensible value, or when an oracle already in production has never
@@ -22,7 +23,7 @@ metadata:
   domain: general
   complexity: advanced
   language: multi
-  tags: general, decision-oracle, calibrated-confidence, threshold, classifier, fail-open, typed-decision, measurement
+  tags: decision-oracle, confidence-scalar, threshold, classifier, fail-open, typed-decision, measurement, separation
 ---
 
 # Consult a Decision Oracle
@@ -34,20 +35,19 @@ decision path is easy. Adding one that you can still reason about after it has
 been wrong is the actual job.
 
 This skill is about the arrangement around the call, not the call. The failure
-it exists to prevent is not "the oracle was wrong" — an oracle is wrong on some
-fraction of inputs by construction, and you can measure that fraction. It is
-the arrangement where nobody can say what that fraction is, the threshold came
-from somewhere nobody remembers, and the oracle's absence looks exactly like a
-quiet week.
+it prevents is not "the oracle was wrong" — an oracle is wrong on some fraction
+of inputs by construction, and that fraction is measurable. It is the
+arrangement where nobody can say what the fraction is, the threshold came from
+somewhere nobody remembers, and the oracle's absence looks like a quiet week.
 
 **The vendor documentation is the source of truth for any API this skill
-touches, and this file deliberately contains none of it** — no field names, no
-status codes, no option caps, no token budgets, no recommended thresholds.
-Those change, and a stale copy of them is worse than no copy: a downstream file
-that pins a vendor's constants is a well-known cause of code written against
-fields that no longer exist. Fetch them live. What is written down here is
-method, which does not expire, and measurements that carry the date and the
-model they were taken from.
+touches, and this file pins none of it** — no field names, status codes, option
+caps, token budgets, or recommended thresholds. Those change, and a stale copy
+is worse than none: a downstream file pinning a vendor's constants is a known
+cause of code written against fields that no longer exist. Fetch them live.
+What is written here is method, which does not expire, and measurements that
+carry the date and model they came from. Where a vendor's number does appear it
+is dated and quoted as an anti-pattern, never as advice.
 
 ## When to Use
 
@@ -69,8 +69,9 @@ model they were taken from.
   can capture. If there is no working path to fall back to, this skill does not
   apply — you are building a classifier, not consulting one.
 - A source of **externally graded outcomes**: rows where something other than
-  you decided whether the answer was right. Step 2 is about finding these; most
-  systems already have them.
+  you decided whether the answer was right. Step 2 is about finding these; they
+  are more often already present than deliberately built, though whether yours
+  has any is what Step 2 establishes rather than assumes.
 - The ability to run the decision path offline against recorded inputs.
 
 **Optional**
@@ -88,11 +89,10 @@ Decompose the decision into layers and pick exactly one for the oracle. Write
 down, in a sentence, the **precondition** under which the oracle is consulted at
 all — and make it a correctness property, not a cost saving.
 
-A worked instance: a solver that reads an arithmetic word problem has a *number*
-layer (which quantities are in the text) and an *operator* layer (what to do
-with them). The oracle is asked only for the operator, and only when the
-tokenizer recovered exactly two operands. That precondition is not there to save
-money. An operator cannot rescue bad operands, so asking for one when the
+A worked instance: a solver reading an arithmetic word problem has a *number*
+layer and an *operator* layer. The oracle is asked only for the operator, and
+only when the tokenizer recovered exactly two operands — not to save money, but
+because an operator cannot rescue bad operands, so asking for one when the
 numbers are already wrong converts an honest abstention into a confident wrong
 answer.
 
@@ -118,7 +118,7 @@ Do not build this corpus. Look for it. In the shipped integration this skill
 draws on, the graded rows were **discovered, not built** — an append-only log
 written to feed a circuit breaker had been accumulating externally-graded
 outcomes for 39 days before anyone noticed it was a corpus. Nobody designed it;
-two unrelated incidents five weeks apart produced it as a side effect.
+two unrelated commits 39 days apart produced it as a side effect.
 
 Where external graders hide, with the provenance of each claim, is in
 [references/EXAMPLES.md](references/EXAMPLES.md#where-external-graders-hide).
@@ -166,130 +166,130 @@ model `jev-1.13.0`, measured 2026-09-17. Treat the numbers as an example of the
 table, not as a property of any API.)*
 
 **Expected:** A table carrying accuracy, baseline, and per-class counts, plus
-the resolved model identifier and the date.
+the resolved model identifier and the date. Read its verdict before moving on:
+if accuracy does not beat the baseline by a margin you would defend out loud,
+the oracle adds nothing here — publish that and stop, because one that ties the
+baseline still costs latency, money and a dependency.
 
-**On failure:** If accuracy does not beat the baseline by a margin you would
-defend out loud, the oracle adds nothing here. That is a result. Publish it and
-stop — an oracle that ties the baseline still costs latency, money and a
-dependency.
+**On failure:** The table cannot be produced, which differs from a table
+carrying a disappointing number. No resolvable model identifier means the
+measurement cannot be attributed to a version; missing per-class counts mean a
+validated class is indistinguishable from an unmeasured one; a single-class
+corpus has no baseline, so accuracy on it is meaningless rather than high. Each
+blocks Step 4 rather than informing it — fix the instrumentation first.
 
 ### Step 4: Measure the separation, then choose an operating point inside it
 
 This is the step the whole skill exists for, and the one most often skipped in
 favour of a number someone already had.
 
-Two different things get called "disagreement" here, and conflating them breaks
-the step. Keep them apart by name:
+Three words get used loosely here and the step breaks if they blur. Keep them
+apart:
 
-- an **override** is a row where the oracle's answer differs from the path's —
-  this is about the oracle versus your code
-- **right** / **wrong** is the external grader's verdict on the answer — this is
-  about the answer versus the world
+- an **override** is a row where the oracle's answer differs from the path's
+- **right** / **wrong** is the grader's verdict on an answer
+- **harm** is what acting *did*: whether firing the gate changed the emitted
+  answer from right to wrong, or from wrong to right
 
-**Use override rows only.** Take the rows where the oracle would change the
-answer, split those by the grader's verdict, and plot the gating scalar for each
-group. You are looking for a **gap** — a range with no wrong overrides above it
-and no right overrides below it.
+> **Step 3 counts the oracle's errors. Step 4 counts the gate's harm.**
 
-```text
-  override + WRONG:   all at or below  0.54
-  override + RIGHT:   all at           1.00
-  ------------------------------------------------------------
-  free interval: (0.54, 1.00]  — any point costs nothing on this corpus
-```
-
-**Why agreement rows are excluded, and it is not a simplification.** On a row
-where the oracle already agrees with the path, the emitted answer is the same at
-every threshold — applying the oracle and not applying it produce identical
-output. Those rows cannot distinguish one threshold from another, so including
-them adds scalars that carry no information about the choice, and they can only
-shrink or erase the gap.
-
-That is not hypothetical. A single agreeing row scoring low enough will make an
-all-rows split refuse an oracle that is correct at every threshold in the real
-interval:
+That distinction decides which rows belong in the table. A row belongs **only if
+acting on the oracle changes whether the emitted answer is right.** Two classes
+fail that test and must be excluded:
 
 ```text
-  overrides:  wrong at 0.54;  right at 1.00, 1.00
-  agreements: right at 0.50, 0.98, 0.99          <- the 0.50 is the poison
-
-  all rows        -> highest wrong 0.54, lowest right 0.50 -> NO GAP, refuse
-  overrides only  -> highest wrong 0.54, lowest right 1.00 -> (0.54, 1.00]
-
-  behaviour at every threshold in (0.54, 1.00]: the oracle is applied to both
-  correct overrides and to no incorrect one. The refusal was an artefact of
-  which rows were counted, not a property of the oracle.
+  agreement    oracle answer == path answer
+               -> threshold-invariant: the same answer is emitted either way
+  both-wrong   override where neither the oracle nor the path is right
+               -> outcome-invariant: a different wrong answer is still wrong
 ```
 
-An oracle that agrees *confidently and wrongly* is a real problem, and excluding
-those rows here does not hide it — it has nowhere to hide, because it lands in
-Step 3's accuracy figure. It is simply not a **threshold** problem: no operating
-point can fix an answer your own path was already producing.
-
-Every value inside the gap performs identically **on the rows you measured**.
-That is what the measurement licenses, and it is all it licenses.
-
-**Report the gap's width, not only its bounds — the width is the finding.** A
-gap is evidence that the scalar separates right answers from wrong ones, and a
-narrow one is weak evidence. Compare:
+What remains splits by harm, never by whether the oracle was right:
 
 ```text
-  (0.54, 1.00]   width 0.46   a point in the middle has +/- 0.23 of headroom
-  (0.44, 0.52]   width 0.08   a point in the middle has +/- 0.04 of headroom
+  harmful      override, oracle wrong, path right    acting made it worse
+  beneficial   override, oracle right, path wrong    acting made it better
+
+  free interval = (highest harmful, lowest beneficial]
 ```
 
-Both "have a gap". Only the first survives a modest distribution shift, a model
-version bump, or ten more graded rows. Treat a narrow gap as a reason to doubt
-that a threshold exists at all rather than as a licence to pick the middle of
-it — and if you ship one anyway, say in the same sentence how many rows produced
-it, because a thin gap over few rows is two weaknesses compounding.
+**Both exclusions are load-bearing.** A low-scoring agreement row or a
+high-scoring both-wrong row each lifts `max(harmful)` past `min(beneficial)` and
+collapses a gap that is real, on corpora where every threshold in the true
+interval emits strictly better answers. Three regression arms demonstrate it,
+including the control that stops the other two passing vacuously:
 
-The choice of a specific point inside the gap is then a judgement about which
-direction you would rather be wrong in — and it must be stated as a judgement,
-in terms arithmetic can check.
+```bash
+python3 references/separation.py          # 3 arms; exits non-zero if any fails
+```
 
-Say, for example: *0.36 above the highest wrong override and 0.10 below the
-lowest right override, deliberately off-centre toward the upper end so the
-policy is biased against acting.* That sentence can be verified with a
-calculator. "The midpoint" can also be verified with a calculator — which is the
-point of the next paragraph.
+**State the gate operator, because the interval's closed end depends on it.**
+The notation above assumes `scalar >= threshold`. Under a strict `>` the free
+endpoint is the *lower* one and the interval is `[highest harmful, lowest
+beneficial)`. This is not pedantry: on a corpus whose beneficial rows all score
+1.00, taking 1.00 as the threshold under `>` fires on nothing at all and
+silently disables the oracle — the endpoint you were told was free.
 
-**The trap that makes this step necessary.** In the integration behind this
-skill, a threshold of 0.90 was documented for two months as "the interval's
-midpoint" of (0.54, 1.00]. The midpoint of (0.54, 1.00] is **0.77**. The
-justification was arithmetically false and nobody had run the one-line check.
-Worse, once "midpoint" is removed, the measurement no longer selects 0.90 at
-all — and the number that *was* sitting in the same file, cited approvingly, was
-a vendor example's `> 0.9`. The most likely history is the reverse of what was
-written down: the borrowed number arrived first and the measurement-flavoured
-rationale was fitted to it afterwards.
+**Report the width and the row counts, not only the bounds.** A gap is evidence
+that the scalar orders right above wrong, and a narrow gap over few rows is weak
+evidence twice over:
+
+```text
+  (0.54, 1.00]   width 0.46   +/- 0.23 headroom      n harmful=5, n beneficial=2
+  (0.44, 0.52]   width 0.08   +/- 0.04 headroom      n harmful=2, n beneficial=3
+```
+
+The first row is real — model `jev-1.13.0`, measured 2026-09-17 — and the
+second is the synthetic fixture. Both are shapes to copy, not values to reuse.
+
+Width alone does not rescue this — 0.46 from two rows and 0.46 from two hundred
+are the same width and not the same finding, which is the argument for reporting
+width applied one level up. Both numbers, always.
+
+The choice of a point inside the gap is then a judgement about which direction
+you would rather be wrong in, stated in terms arithmetic can check — *0.36 above
+the highest harmful row and 0.10 below the lowest beneficial one, off-centre
+toward the upper end so the policy is biased against acting.* A reader can
+recompute every number in that sentence.
+
+The alternative is what actually happened: a threshold documented for two
+months as "the midpoint" of an interval whose midpoint it was not, with a
+vendor's number sitting unacknowledged in the same file
+([the full case](references/EXAMPLES.md#worked-derivation-and-the-mistake-in-it)).
 
 > **A borrowed number can enter through the justification even when you believe
-> you measured it.** The tell is that the stated reason does not survive
-> arithmetic.
+> you measured it.** The tell is that the reason does not survive arithmetic.
 
-So: write the reason as a calculation, and then do the calculation.
+The gating scalar is itself a *choice*, and the candidates are not
+interchangeable —
+[which scalar to gate on](references/EXAMPLES.md#choosing-the-gating-scalar).
 
-Note also that the gating scalar is a *choice*. Some services return both a
-confidence and a full probability distribution, and these are different
-quantities — a concentration measure is not the probability of the winning
-option, and the margin between the top two options is a third thing again.
-Derive the separation over whichever scalar you intend to gate on; the procedure
-is identical and the answer may not be.
+**Expected:** A separation table naming the excluded classes and their counts; a
+free interval with its **width**, its **row count on each side**, and the **gate
+operator** its bracket assumes; a chosen operating point; and a reason for that
+point that a reader can recompute.
 
-**Expected:** A separation table, an explicitly named free interval **with its
-width**, a chosen operating point, and a written reason for that point that is
-checkable by arithmetic.
+**On failure:** Three distinct exits, and only the first is a retry.
 
-**On failure — and this is the important branch:**
+*The log is censored.* On a discovered corpus from an already-live oracle, the
+log usually records only the overrides that fired; every suppressed one,
+including every harmful one the current gate blocked, is absent. `max(harmful)`
+is then computed on a set truncated at the threshold you already have, so you
+re-derive your own threshold and call it measured. Confirm the log records the
+oracle's answer *even when it was not applied* — if not, Step 4 cannot run here:
+instrument per Step 5 and wait.
+
+*One side is empty.* No harmful rows, or no beneficial ones, is not a gap of
+infinite width; it is a corpus that has not yet exercised what you are
+measuring.
+
+*No gap.* The classes overlap:
 
 > **No gap → the threshold does not exist → the oracle does not ship.**
 
-Overlapping distributions mean the scalar does not distinguish the oracle's
-right answers from its wrong ones, so no threshold can either. This is not a
-failed step to retry; it is the procedure returning its answer. Record the
-overlap and do not wire the oracle in. A procedure whose steps can only succeed
-is a testimonial, not a method.
+The scalar does not order harmful below beneficial, so no threshold can. This is
+not a failed step to retry; it is the procedure returning its answer. A
+procedure whose steps can only succeed is a testimonial, not a method.
 
 ### Step 5: Wire the consult so its absence is loud
 
@@ -322,28 +322,26 @@ path whenever the oracle fails; a log line per consult; an alert on the
 pin-retired error.
 
 **On failure:** If removing the oracle changes output when it should not, the
-fail-open path is not actually a fallback — it is a second code path with its own
+fail-open path is not a fallback — it is a second code path with its own
 behaviour. Fix that before measuring anything, because every number you have
-taken describes a system you are not running.
+taken describes a system you are not running. If the log line is missing on
+agreements, the corpus you are accumulating is censored in the way Step 4's
+first exit describes, and Step 4 will not be runnable on it later. If no alert
+exists for the pin-retired error, you have a dependency whose death is
+indistinguishable from a quiet week — which is the failure this step exists to
+prevent, so an unalerted pin is not a smaller version of the problem.
 
 ### Step 6: Guard every value that arrives from the environment
 
 The credential is not the only environment-sourced value that can arrive
-malformed. Configuration systems that interpolate variables commonly leave an
+malformed. Some configuration systems that interpolate variables leave an
 **unset** variable as its own literal placeholder text rather than as an absent
 value, and a model identifier, a threshold or a feature flag read straight from
 the environment will then carry that literal into a request.
 
-The guard tends to exist on the credential and nowhere else, because the
-credential is where the author was thinking about failure.
-
-```text
-  read a secret      -> guarded:   reject a value that looks like a placeholder
-  read a model id    -> unguarded: placeholder text is sent as the model id
-  read a number      -> unguarded: Number(placeholder) is NaN, comparisons are
-                        all false, and the feature turns itself off quietly
-  read a boolean     -> depends entirely on how it is compared (see below)
-```
+The guard tends to exist on the credential and nowhere else, because that is
+where the author was thinking about failure — what the other reads do instead is
+in [references/EXAMPLES.md](references/EXAMPLES.md#what-an-unguarded-environment-read-does).
 
 The positive case is the instructive one. A kill switch compared against a
 literal `"1"` is safe when its variable is unset, because placeholder text is not
@@ -357,8 +355,12 @@ written down, not assumed.
 
 **On failure:** If a malformed value produces the same observable state as a
 legitimate one — the feature off, the oracle absent, the path unchanged — you
-have a configuration error that reports itself as a benign condition. Give it a
-distinct log line before moving on.
+have a configuration error that reports itself as a benign condition, and the
+read is neither validated nor demonstrably safe. Add the accept rule, or change
+the comparison so the placeholder falls to the safe side, and then write the
+demonstration down. A distinct log line is worth adding and does not discharge
+this step: it tells you afterwards, whereas Expected asks that the value could
+not have been wrong in the first place.
 
 ### Step 7: Ship an offline gate that a stranger can run
 
@@ -382,18 +384,23 @@ billed run against a floating model.
 
 Watch for the live-by-default hazard in the wiring itself:
 
-```text
-  oracle = options.oracle ?? liveClient     # every un-stubbed caller goes live
-  oracle = options.oracle                   # a caller that forgets is a crash,
-                                            # which is the failure you want
+```javascript
+oracle = options.oracle ?? liveClient   // every un-stubbed caller goes live
+oracle = options.oracle                 // a caller that forgets crashes, which
+                                        // is the failure you want
 ```
 
 **Expected:** A test suite that passes with no credential present and no network
-access, and that fails when any one of the contracts above is broken.
+access — and, for each contract above, a record of having broken it on purpose
+once and watched the suite go red. The second half is what makes the first half
+evidence rather than a green light.
 
-**On failure:** If the suite passes with the fail-open logic deliberately
-removed, it is not testing fail-open. Break each contract on purpose and confirm
-the gate goes red before trusting any of them.
+**On failure:** A contract whose deliberate breakage leaves the suite green is
+not covered, whatever the file appears to assert about it. Two shapes recur: the
+assertion compares something the mutation does not reach, and the stub is not
+installed on the path under test so the real client answers instead. Repair the
+test, then break it again — a contract you could not make fail is a contract you
+have no evidence for.
 
 ## Validation
 
@@ -403,7 +410,12 @@ the gate goes red before trusting any of them.
       down
 - [ ] Accuracy reported together with the majority-class baseline and per-class
       row counts
-- [ ] Separation table produced; the free interval is stated explicitly
+- [ ] Separation table produced over harmful and beneficial rows only, with
+      agreement and both-wrong rows excluded and counted
+- [ ] The free interval states its width, its row count on each side, and the
+      gate operator its bracket assumes
+- [ ] The log was confirmed to record the oracle's answer even when it was not
+      applied, so the override set is not censored at the current threshold
 - [ ] The chosen operating point has a written reason, and that reason survives
       being checked with a calculator
 - [ ] Every measurement carries the resolved model identifier and the date it
@@ -417,16 +429,20 @@ the gate goes red before trusting any of them.
 - [ ] An alert exists for the error a retired model pin produces
 
 Run the whole list with no API key present. Any step that cannot be run that way
-belongs in the Procedure, not here.
+belongs in the Procedure, not here. `references/separation.py` exercises the
+three regression arms for the separation predicate and exits non-zero if any
+fails.
 
 ## Common Pitfalls
 
-- **Replacing the heuristic instead of consulting it**: The integration this
-  skill is drawn from changes 2 answers out of 87 (measured 2026-09-17 against
-  resolved model `jev-1.13.0`); the heuristic path is 43/43 on the cases it
-  attests. An oracle is a surgical second opinion on one layer. "Swap your rules
-  for a model" is a different project with a different risk profile, and it
-  needs its own ground truth.
+- **Replacing the heuristic instead of consulting it**: In the integration this
+  skill draws on, the gate changes 2 answers across 87 production rows, of which
+  70 carry an external grade (model `jev-1.13.0`, 2026-09-17). A separate
+  43-case regression suite — not a subset of those 87 — passes 43/43 on the
+  phrasings it attests, while a 20-case unattested set scores 17/20; those are
+  suite results, not graded production rows, and the three denominators do not
+  nest. An oracle is a surgical second opinion on one layer. "Swap your rules
+  for a model" is a different project needing its own ground truth.
 - **Inheriting a threshold**: A number from a vendor example, a blog post or
   another team's service describes their data, not yours. It is also the most
   likely thing to sneak in through a justification you believe you derived —
@@ -441,9 +457,10 @@ belongs in the Procedure, not here.
   the candidate set *you supplied*, the score can never tell you the candidate
   set itself was wrong — an input fitting none of your options still produces a
   confident-looking answer among them. Where the options may not cover every
-  input, give them an explicit escape option; measured on one such pair, adding
-  it changed nothing when unneeded and converted a wrong answer into the right
-  one when needed.
+  input, give them an explicit escape option. On the single pair measured here
+  (n=1, `jev-1.13.0`, 2026-09-18) adding one changed nothing when unneeded and
+  converted a wrong answer into the right one when needed — one observation, not
+  a rate.
 - **Quoting a measurement without its provenance**: Every number here belongs to
   a resolved model version on a date. A figure quoted six months later without
   those reads as a property of the service, and the reader has no way to know it

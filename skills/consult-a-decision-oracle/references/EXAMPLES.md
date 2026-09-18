@@ -44,7 +44,7 @@ already being written down for another purpose.**
 |---|---|---|
 | CI history **[inference]** | a job that passed or failed after your tool's suggestion was applied | the test suite did not consult your classifier |
 | Payment/settlement logs **[inference]** | authorised vs declined | the processor decided |
-| Retry records **[inference]** | an operation that failed, then succeeded unchanged on retry | the first attempt's verdict was wrong and the system proved it |
+| Retry records **[inference, weak]** | an operation that failed, then succeeded unchanged on retry | evidence of a *transient* failure only — it does not establish that a decision was wrong, so it grades a classifier poorly or not at all |
 | Support/ticket routing **[inference]** | tickets reassigned after their first routing | the human who moved it disagreed |
 | Moderation queues **[inference]** | an automated decision later overturned on appeal | the appeal reviewer is independent |
 | Search and recommendation **[inference]** | the result the user actually clicked after being shown your ranking | the user is not your code — but see the caveat below |
@@ -53,6 +53,9 @@ already being written down for another purpose.**
 | Deployment outcomes **[inference]** | a release that was rolled back | the rollback decision came from elsewhere |
 
 ### Three ways this goes wrong
+
+All three are **[inference]** — failure modes I expect from the shape of the data,
+not ones observed in the shipped case.
 
 **A grader that saw your answer first.** If a human reviewer is shown your
 system's suggestion before deciding, their verdict is contaminated by it.
@@ -73,104 +76,68 @@ stated; misleading when quoted as accuracy.
 
 ## A verdict fixture the Validation section can actually run
 
-The Validation checklist must run for a reader with no API key, which means it
-cannot depend on anyone's recorded production verdicts. Ship a small synthetic
-fixture instead.
+The Validation checklist must run for a reader with no API key, so it cannot depend
+on anyone's recorded production verdicts. `references/fixture.json` ships beside this
+file, and `references/separation.py` reads it:
 
-**This is legitimate in a way a synthetic *corpus* is not, and the distinction
-matters.** A synthetic corpus assigns the labels that grade the oracle, which is
-circular — it produces a test that cannot fail for its own defect. A synthetic
-verdict fixture grades nothing. It exercises *your* table-computation and
-fail-open code with inputs whose expected outputs you can state independently.
-You are testing your arithmetic, not the oracle's judgement.
-
-Every row here is an **override** — one where the oracle's answer differs from
-the path's, so the emitted answer depends on the threshold. Agreement rows are
-excluded for the reason Step 4 gives: they emit the same answer at every
-threshold, so they carry no information about choosing one. `oracle_was_right`
-is the external grader's verdict on the oracle's answer, and it is the only
-field the split reads, so the split cannot be ambiguous.
-
-```json
-{
-  "note": "Synthetic. Grades no oracle. Exercises the separation table and the five fail-open modes.",
-  "rows": [
-    {"id": "r01", "scalar": 0.38, "oracle_was_right": false},
-    {"id": "r02", "scalar": 0.44, "oracle_was_right": false},
-    {"id": "r03", "scalar": 0.97, "oracle_was_right": false},
-    {"id": "r04", "scalar": 0.52, "oracle_was_right": true},
-    {"id": "r05", "scalar": 0.93, "oracle_was_right": true},
-    {"id": "r06", "scalar": 0.99, "oracle_was_right": true}
-  ],
-  "failure_modes": [
-    {"id": "f01", "mode": "throws",         "expect": "path answer unchanged"},
-    {"id": "f02", "mode": "timeout",        "expect": "path answer unchanged"},
-    {"id": "f03", "mode": "rate_limited",   "expect": "path answer unchanged"},
-    {"id": "f04", "mode": "unconfigured",   "expect": "path answer unchanged"},
-    {"id": "f05", "mode": "below_threshold","expect": "path answer unchanged"}
-  ]
-}
+```bash
+python3 separation.py fixture.json    # the table for these rows, under both gate operators
+python3 separation.py                 # the three regression arms; non-zero if any fails
 ```
 
-**Variant A — all six rows. No gap, and that is the assertion.**
+**A synthetic *verdict* fixture is legitimate where a synthetic *corpus* is not.** A
+synthetic corpus assigns the labels that grade the oracle, which is circular. This
+grades nothing: it exercises *your* table computation and fail-open code against rows
+whose expected output you can state independently. You are testing your arithmetic.
+
+Each row carries the scalar, the path's answer, the oracle's answer and the grader's
+answer, because the harm predicate needs all four — `oracle_was_right` alone cannot
+tell a harmful override from a both-wrong one.
+
+**Variant A — all eight rows. No gap, and that is the assertion.**
 
 ```text
-  wrong: 0.38, 0.44, 0.97      highest wrong = 0.97
-  right: 0.52, 0.93, 0.99      lowest right  = 0.52
-  0.97 > 0.52  ->  the sets overlap  ->  no threshold separates them
+  harmful    0.38, 0.44, 0.97      highest harmful    = 0.97
+  beneficial 0.52, 0.93, 0.99      lowest beneficial  = 0.52
+  0.97 > 0.52  ->  classes overlap  ->  no threshold separates them
 ```
 
 Running Step 4 over Variant A must reach the *no gap → the oracle does not ship*
-branch. A fixture that always separates teaches a reader to expect separation, so
-the default variant here does not. **A fixture the procedure always passes is not
-a test of the procedure.**
+branch. A fixture that always separates teaches a reader to expect separation, so the
+default variant here does not. **A fixture the procedure always passes is not a test
+of the procedure.**
 
-**Variant B — drop `r03`. Now it separates, and the interval is checkable.**
+**Variant B — drop `f3`. It separates, and only under the right predicate.**
 
 ```text
-  wrong: 0.38, 0.44            highest wrong = 0.44
-  right: 0.52, 0.93, 0.99      lowest right  = 0.52
-  0.44 < 0.52  ->  free interval (0.44, 0.52]
+  harm predicate      highest harmful 0.44 < lowest beneficial 0.52  -> (0.44, 0.52]
+                      width 0.08, n harmful 2, n beneficial 3, gate >=
+  all rows            -> NO GAP        (f7, an agreement at 0.50, poisons it)
+  override+was_right  -> NO GAP        (f8, a both-wrong override at 0.96, poisons it)
+
+  emitted-correct:  t=0.45 -> 6/7   t=0.52 -> 6/7   t=0.60 -> 5/7
 ```
 
-Keep both. Variant A proves the refusal branch is reachable; Variant B proves the
-table computation produces the right interval when one exists.
+The emitted-correct row is what makes `(0.44, 0.52]` the honest answer rather than an
+artefact: every threshold inside it scores 6 of 7, and the first one outside scores 5.
+`f7` and `f8` exist precisely so the wrong predicates fail here — a fixture that
+passes under all three would not discriminate between them.
 
-**Variant B's gap is deliberately thin, and a reader should notice.** Its width
-is 0.08, against 0.46 for the real case above. Both "have a gap" and they are not
-the same finding: a point in the middle of Variant B has ±0.04 of headroom, which
-a model version bump or ten more rows could erase entirely. The fixture is shaped
-this way so that working through it produces the right instinct — *a gap exists*
-is the first question and *how wide* is immediately the second. A fixture whose
-only positive variant separated cleanly would teach the first question alone.
+**Variant B's gap is deliberately thin.** Width 0.08 against 0.46 for the real case
+below. Both "have a gap" and they are not the same finding: a point in the middle of
+Variant B has ±0.04 of headroom, which a model bump or ten more rows could erase.
+Working the fixture should produce *is there a gap?* followed immediately by *how
+wide, over how many rows?*
 
-Check both with one command rather than trusting the prose — which is the habit
-this whole skill is about:
-
-```bash
-python3 -c '
-import json,sys
-rows=json.load(open(sys.argv[1]))["rows"]
-for label,drop in (("A",set()),("B",{"r03"})):
-    rs=[r for r in rows if r["id"] not in drop]
-    w=[r["scalar"] for r in rs if not r["oracle_was_right"]]
-    g=[r["scalar"] for r in rs if r["oracle_was_right"]]
-    print(label, "highest wrong", max(w), "lowest right", min(g),
-          "-> gap (%s, %s]" % (max(w), min(g)) if max(w) < min(g) else "-> NO GAP")
-' fixture.json
-```
-
-A note on why the fields are shaped this way. An earlier draft of this fixture
-carried `path_answer`, `oracle_answer` and a verdict on the acted-upon answer,
-and its stated second interval was arithmetically impossible: dropping the
-high-scalar wrong row emptied the wrong set entirely, so there was no upper bound
-and no interval to state. The published numbers had been computed from a
-different split than the one Step 4 defines. It was caught by running the
-arithmetic, which is exactly what the skill tells you to do and exactly what its
-author had not done. The lesson is left here rather than quietly repaired,
-because a worked example of the failure is worth more than a clean file.
-
----
+A note on why the fields are shaped this way. An earlier draft carried only a scalar
+and a verdict on the acted-upon answer, and its stated second interval was
+arithmetically impossible: dropping the high-scalar wrong row emptied one side
+entirely, leaving no upper bound. The published numbers had come from a different
+split than the procedure defined. A later draft fixed the arithmetic and still graded
+by `oracle_was_right`, which an adversarial round showed produces a false refusal on
+any corpus containing a both-wrong override. Both mistakes are left described here
+rather than quietly repaired: the second one is the first one's class, surviving its
+own fix, which is the more useful lesson.
 
 ## Worked derivation, and the mistake in it
 
@@ -223,9 +190,13 @@ read like a measurement.
 The second-order problem is worse than the arithmetic. Once "midpoint" is
 removed, *nothing in the data selects 0.90* — the separation licenses the whole
 interval and is silent about which point to take. What was in the same file,
-cited approvingly as independent support, was a vendor example gating a
-high-stakes action at `> 0.9`. And that vendor's own documentation gates the
-*same* action at `> 0.85` on a different page, disclaiming both.
+cited approvingly as independent support, was a number lifted from the vendor's
+own documentation. Read **2026-09-17 and re-checked 2026-09-18**, that
+documentation gated the same high-stakes action at two different values on two
+different pages and disclaimed both, telling the reader to test against their own
+data. Those pages may since have been reconciled; the structural point does not
+depend on the values and is the part worth carrying — **a vendor's corpus can
+disagree with itself, so agreement with one page of it is not confirmation.**
 
 So the most plausible history is the reverse of what was written down: **the
 borrowed number arrived first, and a measurement-flavoured justification was
@@ -238,8 +209,8 @@ select.
 The value did not change; it is still inside the free interval and still costs
 nothing on the corpus. Only the reason changed, into a form arithmetic can check:
 
-> 0.90 sits **0.36 above the highest observed miss** and **0.10 below the lowest
-> right override**, deliberately off-centre toward the upper end so the
+> 0.90 sits **0.36 above the highest harmful override** and **0.10 below the
+> lowest beneficial one**, deliberately off-centre toward the upper end so the
 > policy is biased against acting.
 
 Every number in that sentence can be recomputed from the separation table in
@@ -261,3 +232,44 @@ sounds derived, but that it can be re-derived, and that its being wrong would be
 5. Write the reason for your operating point as a calculation, then do it.
 6. Stub the oracle explicitly in every test, and confirm the gate reddens when
    each contract is deliberately broken.
+
+---
+
+## What an unguarded environment read does
+
+Referenced from Step 6. Behaviour when a configuration system passes an **unset**
+variable through as its own literal placeholder text rather than as an absent value:
+
+```text
+  read a secret      -> guarded:   reject a value that looks like a placeholder
+  read a model id    -> unguarded: placeholder text is sent as the model id
+  read a number      -> unguarded: Number(placeholder) is NaN, comparisons are
+                        all false, and the feature turns itself off quietly
+  read a boolean     -> depends entirely on how it is compared
+```
+
+The boolean row is the instructive one. A kill switch compared against the literal
+`"1"` is safe when its variable is unset, because placeholder text is not `"1"`. The
+same switch written as a truthiness test treats the placeholder as *on*, disables the
+feature on every run, and looks exactly like a deliberate rollback. One line apart.
+
+The number row is the quietest: a `NaN` makes every comparison false, so a retry
+budget, a timeout or a threshold silently becomes "never" — and the feature reports
+itself as merely switched off.
+
+## Choosing the gating scalar
+
+Referenced from Step 4. A service may return several scalars and they are not
+interchangeable:
+
+- a **concentration measure** (often called confidence) says how peaked the answer
+  distribution is, not how likely the answer is to be right
+- the **winning option's probability** is a different quantity, and on at least one
+  measured call the two disagreed materially on the same answer
+- the **margin** between the top two options is a third, and it is the one that
+  distinguishes "0.95 against a 0.04 runner-up" from "0.95 against a 0.30 runner-up"
+
+Derive the separation over whichever you intend to gate on. The procedure is
+identical; the interval may not be. If a vendor tells you a concentration measure is
+not meant to carry a statistical decision, that is an argument for measuring which
+scalar separates on your rows, not for trusting the one that is easiest to read.

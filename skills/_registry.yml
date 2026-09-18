@@ -516,7 +516,7 @@ domains:
         path: consult-a-decision-oracle/SKILL.md
         complexity: advanced
         language: multi
-        description: Add an external probabilistic classifier to a decision path without letting it take over — find the externally-graded rows you already log, measure the confidence separation, choose an operating point the data licenses, fail open at the call site, and prove it offline with no API key
+        description: Add an external probabilistic classifier to a decision path without letting it take over — find the externally-graded rows you already log, measure the separation between the overrides that helped and the ones that harmed, choose an operating point the data licenses, fail open at the call site, and prove it offline with no API key
 
   citations:
     description: Academic and software citation management with R and BibTeX

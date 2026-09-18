@@ -1,0 +1,32 @@
+{
+  "note": "Synthetic. Grades no oracle. Exercises the separation predicate, its two exclusions, and the five fail-open modes. Run: python3 separation.py fixture.json",
+  "columns": {
+    "scalar": "the gating scalar the oracle returned",
+    "path": "the answer the existing path produced",
+    "oracle": "the answer the oracle proposed",
+    "truth": "the external grader's answer",
+    "class": "derived, shown here only so the file is readable without running anything"
+  },
+  "rows": [
+    {"id": "f1", "scalar": 0.38, "path": "+", "oracle": "-", "truth": "+", "class": "harmful"},
+    {"id": "f2", "scalar": 0.44, "path": "+", "oracle": "-", "truth": "+", "class": "harmful"},
+    {"id": "f3", "scalar": 0.97, "path": "+", "oracle": "-", "truth": "+", "class": "harmful"},
+    {"id": "f4", "scalar": 0.52, "path": "+", "oracle": "*", "truth": "*", "class": "beneficial"},
+    {"id": "f5", "scalar": 0.93, "path": "-", "oracle": "*", "truth": "*", "class": "beneficial"},
+    {"id": "f6", "scalar": 0.99, "path": "+", "oracle": "*", "truth": "*", "class": "beneficial"},
+    {"id": "f7", "scalar": 0.50, "path": "+", "oracle": "+", "truth": "+", "class": "agreement (excluded: threshold-invariant)"},
+    {"id": "f8", "scalar": 0.96, "path": "+", "oracle": "-", "truth": "*", "class": "both-wrong (excluded: outcome-invariant)"}
+  ],
+  "variants": {
+    "A": {"drop": [], "expect": "NO GAP - highest harmful 0.97 exceeds lowest beneficial 0.52"},
+    "B": {"drop": ["f3"], "expect": "gap (0.44, 0.52] under gate >=, width 0.08, n harmful 2, n beneficial 3"}
+  },
+  "why_f7_and_f8_are_here": "Variant B separates only under the harm predicate. An all-rows split puts f7 (0.50, oracle right) in the upper group and f8 (0.96, oracle wrong) in the lower one; an override-only split that grades by oracle_was_right still admits f8. Either produces a false refusal on a corpus where every threshold in (0.44, 0.52] emits strictly better answers.",
+  "failure_modes": [
+    {"id": "m1", "mode": "throws", "expect": "path answer unchanged"},
+    {"id": "m2", "mode": "timeout", "expect": "path answer unchanged"},
+    {"id": "m3", "mode": "rate_limited", "expect": "path answer unchanged"},
+    {"id": "m4", "mode": "unconfigured", "expect": "path answer unchanged"},
+    {"id": "m5", "mode": "below_threshold", "expect": "path answer unchanged"}
+  ]
+}
