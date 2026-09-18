@@ -84,39 +84,81 @@ verdict fixture grades nothing. It exercises *your* table-computation and
 fail-open code with inputs whose expected outputs you can state independently.
 You are testing your arithmetic, not the oracle's judgement.
 
+Every row is one where the oracle was consulted **and** an external grader later
+said whether the oracle's answer was right. `oracle_was_right` is that grader's
+verdict — it is the only field the split in Step 4 reads, so the split cannot be
+ambiguous.
+
 ```json
 {
   "note": "Synthetic. Grades no oracle. Exercises the separation table and the five fail-open modes.",
   "rows": [
-    {"id": "r01", "path_answer": "A", "oracle_answer": "A", "scalar": 1.00, "external_verdict": "correct"},
-    {"id": "r02", "path_answer": "A", "oracle_answer": "A", "scalar": 0.98, "external_verdict": "correct"},
-    {"id": "r03", "path_answer": "B", "oracle_answer": "A", "scalar": 0.97, "external_verdict": "incorrect"},
-    {"id": "r04", "path_answer": "A", "oracle_answer": "B", "scalar": 0.42, "external_verdict": "correct"},
-    {"id": "r05", "path_answer": "A", "oracle_answer": "B", "scalar": 0.51, "external_verdict": "correct"},
-    {"id": "r06", "path_answer": "C", "oracle_answer": "C", "scalar": 0.95, "external_verdict": "correct"},
-    {"id": "r07", "path_answer": "A", "oracle_answer": "C", "scalar": 0.33, "external_verdict": "correct"},
-    {"id": "r08", "path_answer": "B", "oracle_answer": "B", "scalar": 0.99, "external_verdict": "correct"}
+    {"id": "r01", "scalar": 0.38, "oracle_was_right": false},
+    {"id": "r02", "scalar": 0.44, "oracle_was_right": false},
+    {"id": "r03", "scalar": 0.97, "oracle_was_right": false},
+    {"id": "r04", "scalar": 0.52, "oracle_was_right": true},
+    {"id": "r05", "scalar": 0.93, "oracle_was_right": true},
+    {"id": "r06", "scalar": 0.99, "oracle_was_right": true}
   ],
   "failure_modes": [
-    {"id": "f01", "mode": "throws",        "expect": "path answer unchanged"},
-    {"id": "f02", "mode": "timeout",       "expect": "path answer unchanged"},
-    {"id": "f03", "mode": "rate_limited",  "expect": "path answer unchanged"},
-    {"id": "f04", "mode": "unconfigured",  "expect": "path answer unchanged"},
+    {"id": "f01", "mode": "throws",         "expect": "path answer unchanged"},
+    {"id": "f02", "mode": "timeout",        "expect": "path answer unchanged"},
+    {"id": "f03", "mode": "rate_limited",   "expect": "path answer unchanged"},
+    {"id": "f04", "mode": "unconfigured",   "expect": "path answer unchanged"},
     {"id": "f05", "mode": "below_threshold","expect": "path answer unchanged"}
   ]
 }
 ```
 
-Rows `r03`–`r05` are the interesting ones. `r03` is an oracle override that was
-wrong at a high scalar; `r04` and `r05` are overrides that were right at low
-ones. Together they produce a corpus with **no clean gap**, which is deliberate:
-a fixture that always separates teaches a reader to expect separation. Running
-Step 4 over this fixture must reach the *no gap* branch and refuse to ship a
-threshold. That is the assertion — a fixture the procedure passes is not a test
-of the procedure.
+**Variant A — all six rows. No gap, and that is the assertion.**
 
-To exercise the positive branch as well, drop `r03` and the gap becomes
-`(0.51, 0.95]`. Keep both variants; the interesting one is the first.
+```text
+  wrong: 0.38, 0.44, 0.97      highest wrong = 0.97
+  right: 0.52, 0.93, 0.99      lowest right  = 0.52
+  0.97 > 0.52  ->  the sets overlap  ->  no threshold separates them
+```
+
+Running Step 4 over Variant A must reach the *no gap → the oracle does not ship*
+branch. A fixture that always separates teaches a reader to expect separation, so
+the default variant here does not. **A fixture the procedure always passes is not
+a test of the procedure.**
+
+**Variant B — drop `r03`. Now it separates, and the interval is checkable.**
+
+```text
+  wrong: 0.38, 0.44            highest wrong = 0.44
+  right: 0.52, 0.93, 0.99      lowest right  = 0.52
+  0.44 < 0.52  ->  free interval (0.44, 0.52]
+```
+
+Keep both. Variant A proves the refusal branch is reachable; Variant B proves the
+table computation produces the right interval when one exists.
+
+Check both with one command rather than trusting the prose — which is the habit
+this whole skill is about:
+
+```bash
+python3 -c '
+import json,sys
+rows=json.load(open(sys.argv[1]))["rows"]
+for label,drop in (("A",set()),("B",{"r03"})):
+    rs=[r for r in rows if r["id"] not in drop]
+    w=[r["scalar"] for r in rs if not r["oracle_was_right"]]
+    g=[r["scalar"] for r in rs if r["oracle_was_right"]]
+    print(label, "highest wrong", max(w), "lowest right", min(g),
+          "-> gap (%s, %s]" % (max(w), min(g)) if max(w) < min(g) else "-> NO GAP")
+' fixture.json
+```
+
+A note on why the fields are shaped this way. An earlier draft of this fixture
+carried `path_answer`, `oracle_answer` and a verdict on the acted-upon answer,
+and its stated second interval was arithmetically impossible: dropping the
+high-scalar wrong row emptied the wrong set entirely, so there was no upper bound
+and no interval to state. The published numbers had been computed from a
+different split than the one Step 4 defines. It was caught by running the
+arithmetic, which is exactly what the skill tells you to do and exactly what its
+author had not done. The lesson is left here rather than quietly repaired,
+because a worked example of the failure is worth more than a clean file.
 
 ---
 
