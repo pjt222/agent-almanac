@@ -6,7 +6,7 @@ coverage:
     total: 373
     pct: 91.2
     stale: 173
-    stubs: 29
+    stubs: 30
     unjudged: 0
   agents:
     translated: 3
@@ -34,5 +34,5 @@ coverage:
     total: 506
     pct: 68.4
     stale: 178
-    stubs: 40
+    stubs: 41
     unjudged: 1
