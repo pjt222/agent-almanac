@@ -3,8 +3,9 @@ name: consult-a-decision-oracle
 description: >
   Add an external probabilistic classifier to a decision path without letting it
   take the path over. Covers finding the externally-graded rows you are already
-  logging, measuring the confidence separation between the oracle's agreements
-  and its disagreements, choosing an operating point your own data licenses,
+  logging, measuring the confidence separation between the overrides it got
+  right and the ones it got wrong, choosing an operating point your data
+  licenses,
   failing open at the call site, and proving the whole arrangement offline with
   no API key. Applies to any service that returns a calibrated score — TypeSafe
   AI's System One models (Jev) are the worked example, and the method is the
@@ -177,17 +178,53 @@ dependency.
 This is the step the whole skill exists for, and the one most often skipped in
 favour of a number someone already had.
 
-Split the graded rows in two: rows where the oracle **agreed** with the external
-verdict, and rows where it **disagreed**. Plot the gating scalar for each group.
-You are looking for a **gap** — a range with no disagreements above it and no
-agreements below it.
+Two different things get called "disagreement" here, and conflating them breaks
+the step. Keep them apart by name:
+
+- an **override** is a row where the oracle's answer differs from the path's —
+  this is about the oracle versus your code
+- **right** / **wrong** is the external grader's verdict on the answer — this is
+  about the answer versus the world
+
+**Use override rows only.** Take the rows where the oracle would change the
+answer, split those by the grader's verdict, and plot the gating scalar for each
+group. You are looking for a **gap** — a range with no wrong overrides above it
+and no right overrides below it.
 
 ```text
-  disagreements (oracle wrong):   all at or below  0.54
-  agreements    (oracle right):   all at           1.00
+  override + WRONG:   all at or below  0.54
+  override + RIGHT:   all at           1.00
   ------------------------------------------------------------
   free interval: (0.54, 1.00]  — any point costs nothing on this corpus
 ```
+
+**Why agreement rows are excluded, and it is not a simplification.** On a row
+where the oracle already agrees with the path, the emitted answer is the same at
+every threshold — applying the oracle and not applying it produce identical
+output. Those rows cannot distinguish one threshold from another, so including
+them adds scalars that carry no information about the choice, and they can only
+shrink or erase the gap.
+
+That is not hypothetical. A single agreeing row scoring low enough will make an
+all-rows split refuse an oracle that is correct at every threshold in the real
+interval:
+
+```text
+  overrides:  wrong at 0.54;  right at 1.00, 1.00
+  agreements: right at 0.50, 0.98, 0.99          <- the 0.50 is the poison
+
+  all rows        -> highest wrong 0.54, lowest right 0.50 -> NO GAP, refuse
+  overrides only  -> highest wrong 0.54, lowest right 1.00 -> (0.54, 1.00]
+
+  behaviour at every threshold in (0.54, 1.00]: the oracle is applied to both
+  correct overrides and to no incorrect one. The refusal was an artefact of
+  which rows were counted, not a property of the oracle.
+```
+
+An oracle that agrees *confidently and wrongly* is a real problem, and excluding
+those rows here does not hide it — it has nowhere to hide, because it lands in
+Step 3's accuracy figure. It is simply not a **threshold** problem: no operating
+point can fix an answer your own path was already producing.
 
 Every value inside the gap performs identically **on the rows you measured**.
 That is what the measurement licenses, and it is all it licenses.
@@ -211,8 +248,8 @@ The choice of a specific point inside the gap is then a judgement about which
 direction you would rather be wrong in — and it must be stated as a judgement,
 in terms arithmetic can check.
 
-Say, for example: *0.36 above the highest observed miss and 0.10 below the
-lowest correct override, deliberately off-centre toward the override end so the
+Say, for example: *0.36 above the highest wrong override and 0.10 below the
+lowest right override, deliberately off-centre toward the upper end so the
 policy is biased against acting.* That sentence can be verified with a
 calculator. "The midpoint" can also be verified with a calculator — which is the
 point of the next paragraph.

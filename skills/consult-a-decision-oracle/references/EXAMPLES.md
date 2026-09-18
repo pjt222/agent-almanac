@@ -84,10 +84,12 @@ verdict fixture grades nothing. It exercises *your* table-computation and
 fail-open code with inputs whose expected outputs you can state independently.
 You are testing your arithmetic, not the oracle's judgement.
 
-Every row is one where the oracle was consulted **and** an external grader later
-said whether the oracle's answer was right. `oracle_was_right` is that grader's
-verdict — it is the only field the split in Step 4 reads, so the split cannot be
-ambiguous.
+Every row here is an **override** — one where the oracle's answer differs from
+the path's, so the emitted answer depends on the threshold. Agreement rows are
+excluded for the reason Step 4 gives: they emit the same answer at every
+threshold, so they carry no information about choosing one. `oracle_was_right`
+is the external grader's verdict on the oracle's answer, and it is the only
+field the split reads, so the split cannot be ambiguous.
 
 ```json
 {
@@ -195,8 +197,8 @@ guessing the most common class scores 77.1%, so the headline 92.9% is a gain of
 ### The separation
 
 ```text
-  oracle disagreed with the external verdict  ->  scalar at or below  0.54
-  oracle disagreed and was RIGHT              ->  scalar at           1.00
+  override + WRONG (grader says the oracle's answer was not right)  ->  <= 0.54
+  override + RIGHT (grader says the oracle's answer was right)      ->     1.00
   -------------------------------------------------------------------------
   free interval: (0.54, 1.00]
 ```
@@ -237,7 +239,7 @@ The value did not change; it is still inside the free interval and still costs
 nothing on the corpus. Only the reason changed, into a form arithmetic can check:
 
 > 0.90 sits **0.36 above the highest observed miss** and **0.10 below the lowest
-> correct override**, deliberately off-centre toward the override end so the
+> right override**, deliberately off-centre toward the upper end so the
 > policy is biased against acting.
 
 Every number in that sentence can be recomputed from the separation table in
