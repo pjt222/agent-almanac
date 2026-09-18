@@ -384,45 +384,43 @@ belongs in the Procedure, not here.
 
 ## Common Pitfalls
 
-**Replacing the heuristic instead of consulting it.** The integration this skill
-is drawn from changes 2 answers out of 87 (measured 2026-09-17); the heuristic
-path is 43/43 on the cases it attests. An oracle is a surgical second opinion on
-one layer. "Swap your rules for a model" is a different project with a different
-risk profile, and it needs its own ground truth.
-
-**Inheriting a threshold.** A number from a vendor example, a blog post or
-another team's service describes their data. It is also the most likely thing to
-sneak in through a justification you believe you derived — check the arithmetic
-of your own stated reason.
-
-**Treating a confidence score as permission to act.** These scores generally
-measure how concentrated the answer distribution is, not whether the answer is
-right. A question with only one possible answer returns maximal confidence while
-carrying no information. And because the distribution is computed over the
-candidate set *you supplied*, the score can never tell you that the candidate set
-itself was wrong — an input that fits none of your options still produces a
-confident-looking answer among them. Where the option set may not cover every
-input, give it an explicit escape option; measured on one such pair, adding it
-changed nothing when unneeded and converted a wrong answer into the right one
-when needed.
-
-**Quoting a measurement without its provenance.** Every number here belongs to a
-resolved model version on a date. A figure quoted six months later without those
-reads as a property of the service, and the reader has no way to know it is
-stale.
-
-**Testing against the live service.** A gate that calls the oracle is measuring
-the oracle's availability and today's model version, not your code. It will also
-fail during an outage for reasons that have nothing to do with the change under
-review.
-
-**Writing the conclusion before running the arm that could refute it.** Both
-sessions that produced this skill did exactly that within one afternoon: one
-described a corpus as "built" until its own commit history showed it was
-discovered; the other wrote that a failure "is not signalled by low confidence"
-until the missing control arm showed confidence had in fact degraded. Neither was
-careless. The instrument that catches this is not care — it is running the arm
-whose result would make you delete your sentence.
+- **Replacing the heuristic instead of consulting it**: The integration this
+  skill is drawn from changes 2 answers out of 87 (measured 2026-09-17 against
+  resolved model `jev-1.13.0`); the heuristic path is 43/43 on the cases it
+  attests. An oracle is a surgical second opinion on one layer. "Swap your rules
+  for a model" is a different project with a different risk profile, and it
+  needs its own ground truth.
+- **Inheriting a threshold**: A number from a vendor example, a blog post or
+  another team's service describes their data, not yours. It is also the most
+  likely thing to sneak in through a justification you believe you derived —
+  check the arithmetic of your own stated reason.
+- **Reading a gap as binary**: "There is a gap" and "the gap is wide enough to
+  survive a model bump" are different findings. Report the width beside the
+  bounds.
+- **Treating a confidence score as permission to act**: These scores generally
+  measure how concentrated the answer distribution is, not whether the answer is
+  right. A question with only one possible answer returns maximal confidence
+  while carrying no information. And because the distribution is computed over
+  the candidate set *you supplied*, the score can never tell you the candidate
+  set itself was wrong — an input fitting none of your options still produces a
+  confident-looking answer among them. Where the options may not cover every
+  input, give them an explicit escape option; measured on one such pair, adding
+  it changed nothing when unneeded and converted a wrong answer into the right
+  one when needed.
+- **Quoting a measurement without its provenance**: Every number here belongs to
+  a resolved model version on a date. A figure quoted six months later without
+  those reads as a property of the service, and the reader has no way to know it
+  is stale.
+- **Testing against the live service**: A gate that calls the oracle measures the
+  oracle's availability and today's model version, not your code. It will also
+  fail during an outage for reasons unrelated to the change under review.
+- **Writing the conclusion before running the arm that could refute it**: Both
+  sessions that produced this skill did exactly that within one afternoon. One
+  described a corpus as "built" until its own commit history showed it was
+  discovered; the other wrote that a failure "is not signalled by low
+  confidence" until the missing control arm showed confidence had in fact
+  degraded. Neither was careless. The instrument that catches this is not care —
+  it is running the arm whose result would make you delete your sentence.
 
 ## Related Skills
 
