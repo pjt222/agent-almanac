@@ -112,7 +112,7 @@ an attribute value, reporting the position (`text[2]`, `attr:data-id[0]`) and ne
 
 **Expected:** Exit 0, and the redacted artifact has identical structure to the source with
 descriptive stand-ins in every label position. A non-zero exit means the tool refused to hand back
-output it could not verify — exit 1 for a surviving term, 2 for a refusal to run at all (an empty
+output it could not verify — exit 1 for a surviving term, 2 for could-not-measure (an empty
 mapping, an unreadable input). Terms that may appear in an encoding your mapping does not spell —
 base64, a different case — go in `--also-deny`, which asserts without substituting.
 

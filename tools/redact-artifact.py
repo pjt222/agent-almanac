@@ -79,6 +79,18 @@ _rl = _ilu.module_from_spec(_spec)
 _spec.loader.exec_module(_rl)
 
 RedactionError = _rl.RedactionError
+
+
+class UnmeasurableError(Exception):
+    """The tool declined to measure — NOT a finding, and never exit 1.
+
+    Every published Expected block in the skills that call this tool defines 1 as "a listed term
+    survived", and `redact-wire-capture` Step 4 branches on it with `capture still leaks at $f`.
+    So a document the structure tier could not examine, reported as 1, tells an operator their
+    capture leaks when nothing of the sort was established. This file already applies that
+    reasoning to an unreadable file and an unwritable target; the structure-tier refusal raised
+    `RedactionError` and inherited exit 1 with it.
+    """
 load_mapping = _rl.load_mapping
 apply_mapping = _rl.apply_mapping
 assert_clean = _rl.assert_clean
@@ -234,9 +246,9 @@ def redact_text(text: str, table: dict[str, str], kind: str, also_deny=(), asser
     if kind in DECODING_TYPES and out.strip() and not positions(out, kind):
         # Malformed markup (an unterminated attribute quote) makes HTMLParser consume the
         # document and yield nothing; `0 decoded position(s), 0 survivor(s)` then reads as a pass.
-        raise RedactionError(
-            f"structure: --type {kind} yielded no positions over non-empty input — "
-            f"the document did not parse, so the structure tier examined nothing"
+        raise UnmeasurableError(
+            f"--type {kind} yielded no positions over non-empty input, so the structure tier "
+            f"examined nothing. This is COULD-NOT-MEASURE (exit 2), not a finding (exit 1)."
         )
     survivors = structure_survivors(out, terms, kind)
     if survivors:
@@ -306,6 +318,9 @@ def main(argv: list[str]) -> int:
         # `newline=""` keeps CRLF intact: read_text/write_text otherwise normalise line endings
         # across the whole file and the summary attributes that byte change to the mapping.
         # `Path.read_text(newline=)` is 3.13+, so use open() — this must work on older Pythons.
+        # The READ side is pinned by an arm. The WRITE side cannot be: dropping `newline=""` there
+        # is a no-op on Linux (`os.linesep` is "\n") and corrupts `\r\n` into `\r\r\n` only on
+        # Windows, so a mutant survives here for platform reasons rather than missing coverage.
         with open(src, encoding="utf-8", newline="") as fh:
             text = fh.read()
     except (OSError, UnicodeDecodeError) as exc:
@@ -325,6 +340,11 @@ def main(argv: list[str]) -> int:
 
     try:
         out, stats = redact_text(text, table, args.type, args.also_deny, args.assert_only)
+    except UnmeasurableError as exc:
+        # Ordered before RedactionError deliberately: if UnmeasurableError ever subclasses it,
+        # this arm must still win. 2 is could-not-run, which is what the caller must branch on.
+        print(f"REFUSED: {exc}", file=sys.stderr)
+        return 2
     except RedactionError as exc:
         print(f"FAILED: {exc}", file=sys.stderr)
         return 1
@@ -487,13 +507,34 @@ def _verify() -> int:
     # --- malformed markup cannot report a pass -------------------------------------------------
     try:
         redact_text('<text data-id="acme&#95;secret>x</text>', {"never": "x"}, "html")
-        check("malformed markup REFUSES rather than reporting 0 positions as clean", False, "no raise")
-    except RedactionError as exc:
+        check("markup the tier cannot examine REFUSES rather than reporting 0 positions as clean",
+              False, "no raise")
+    except UnmeasurableError as exc:
         check(
-            "malformed markup REFUSES rather than reporting 0 positions as clean",
-            "did not parse" in str(exc),
+            "markup the tier cannot examine raises UnmeasurableError, NOT RedactionError — the "
+            "two map to different exit codes and callers branch on the difference",
+            "COULD-NOT-MEASURE" in str(exc),
             str(exc),
         )
+    except RedactionError as exc:
+        check(
+            "markup the tier cannot examine raises UnmeasurableError, NOT RedactionError — the "
+            "two map to different exit codes and callers branch on the difference",
+            False,
+            f"raised RedactionError, which main() maps to exit 1: {exc}",
+        )
+
+    # The mermaid `document` position, pinned. Round 2 refuted its first justification; the
+    # rewritten one is true and was unpinned — a mutant removing the position survived at 45/45.
+    # A deny term that itself spans lines is found by no `line[]` position and by no raw-text
+    # search, because the term only exists once `#95;` has been decoded.
+    spanning = "graph TD\n  a[#95;end]\n  b[start#95;]\n"
+    deny = "_end]\n  b[start_"
+    in_lines = any(deny in v for lab, v in positions(spanning, "mermaid") if lab.startswith("line["))
+    in_doc = any(deny in v for lab, v in positions(spanning, "mermaid") if lab == "document")
+    check("the mermaid `document` position finds a deny term no line[] position can",
+          in_doc and not in_lines and deny not in spanning,
+          f"in_doc={in_doc} in_lines={in_lines} in_raw={deny in spanning}")
 
     # --- the structure tier reports EVERY term at a position, not the first --------------------
     # `redaction-lib` documents that promise; a `break` here silently broke it and nothing caught

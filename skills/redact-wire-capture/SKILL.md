@@ -112,9 +112,11 @@ for f in "$CAP"/*.json; do
 done
 ```
 
-**Expected:** Every file exits 0. A non-zero exit is the gate working: 1 means a listed term
-survived the mapping, 2 means the run refused (an empty mapping, an unreadable file) rather than
-reporting a clean pass over nothing.
+**Expected:** Every file exits 0. A non-zero exit is the gate working, and the two codes mean
+different things: **1** is a finding — a listed term survived the mapping. **2** is
+could-not-measure — an empty mapping, an unreadable or non-UTF-8 file, or markup whose structure
+tier examined nothing — and it must never be reported to an operator as a leak. The `||` branch
+below says "still leaks", so treat it as covering 1 only; on 2, fix the input and re-run.
 
 **On failure:** A surviving hit means a secret class is unhandled — add it to Step 1/Step 2, re-run the scrub from the private source, and re-verify. Never delete the offending line by hand; the next capture will reproduce it.
 
