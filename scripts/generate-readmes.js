@@ -12,7 +12,11 @@
  *   node scripts/generate-readmes.js --check  # dry-run, exit 1 if stale
  */
 
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'fs';
+// No `readdirSync`/`statSync`: every directory this generator counts is enumerated through
+// `lib/git-files.js`, so that a gitignored artifact cannot be counted or named in SECURITY.md
+// (#872). `scripts/test/git-files.test.js` asserts the absence of that import, which is what
+// makes the wiring provable — a call site reverted to a disk walk needs it back.
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import * as yaml from 'js-yaml';
@@ -23,6 +27,7 @@ import { guideCategoryOrder, guideCategoryLabel, guideCategoryNames } from './li
 import { applySections, renderTranslationsTable, renderLocaleTable } from './lib/readme-sections.js';
 import { loadRegistry as loadToolsRegistry, renderClaudeBlock as renderToolsIndex, renderReadmeTable as renderToolsTable } from './lib/tools-registry.js';
 import { skillsDeclaringBash, nonDocumentationFiles, contentTrees, shippedEntries, extensionOf, executableFiles, assertInventoryClaims, REPO_ONLY } from './lib/skills-inventory.js';
+import { topLevelEntries } from './lib/git-files.js';
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -567,22 +572,24 @@ function generateTestsReadme() {
 // translation:status` must run BEFORE this generator, or the table renders
 // last cycle's numbers and the same commit overwrites the file it read.
 
-function countExistingTranslations(localeDir, contentTypes) {
+// `localeRel` is REPO-RELATIVE (`i18n/de`), not the absolute `localeDir` this took before, because
+// the enumeration now goes through git and a pathspec is relative to the repository (#872). The
+// record carries both; the absolute one is still what reads `translation_status.yml`.
+function countExistingTranslations(localeRel, contentTypes) {
   const counts = {};
   let total = 0;
   for (const ct of contentTypes) {
-    const typeDir = resolve(localeDir, ct);
-    let count = 0;
-    if (existsSync(typeDir)) {
-      for (const entry of readdirSync(typeDir)) {
-        const entryPath = resolve(typeDir, entry);
-        if (ct === 'skills') {
-          if (statSync(entryPath).isDirectory() && existsSync(resolve(entryPath, 'SKILL.md'))) count++;
-        } else if (entry.endsWith('.md')) {
-          count++;
-        }
-      }
-    }
+    const typeRel = `${localeRel}/${ct}`;
+    // No `existsSync` guard: an absent directory yields no paths, from git and from the disk
+    // fallback alike, so the guard would only restate what the enumerator already answers.
+    const { files, dirs } = topLevelEntries(ROOT, typeRel);
+    // A skill is a DIRECTORY carrying SKILL.md; every other type is a flat `.md` file. The
+    // `.md` arm tests `files` rather than every entry, which is a narrowing: the previous form
+    // ran `endsWith('.md')` against directories too, so `i18n/de/agents/notes.md/` would have
+    // counted as a translated agent.
+    const count = ct === 'skills'
+      ? dirs.filter((d) => existsSync(resolve(ROOT, typeRel, d, 'SKILL.md'))).length
+      : files.filter((f) => f.endsWith('.md')).length;
     counts[ct] = count;
     total += count;
   }
@@ -607,6 +614,7 @@ function loadLocaleCoverage() {
       code: locale.code,
       name: locale.name,
       localeDir,
+      localeRel: `i18n/${locale.code}`,
       coverage: existsSync(statusPath)
         ? (yaml.load(readFileSync(statusPath, 'utf8')) || {}).coverage
         : null,
@@ -654,7 +662,7 @@ function generateTranslationsSection() {
     // Computed for every locale, including measured ones. Cheap, and it keeps the
     // measured/fallback PREDICATE in one place rather than splitting it across the
     // caller and the renderer.
-    fallback: countExistingTranslations(record.localeDir, contentTypes),
+    fallback: countExistingTranslations(record.localeRel, contentTypes),
   }));
 
   return renderTranslationsTable(localeRecords, sourceCounts, contentTypes);
@@ -701,7 +709,13 @@ function generateSecuritySurface() {
   // non-declaring — see that module's header, and #700 for the upstream registry gap.
   const { ids, declaring } = skillsDeclaringBash(ROOT, domains);
   const share = Math.round((declaring / ids.length) * 100);
-  const scriptFiles = readdirSync(resolve(ROOT, 'scripts'))
+  // ENUMERATED BY GIT, not by `readdirSync` (#872). A gitignored file under a directory this
+  // generator counts is not part of the artifact any of these sentences describes, and counting
+  // it publishes a false number in a security document — measured on #871, where a `.pyc` left
+  // by importing a skill asset made the committed SECURITY.md claim 19 non-Markdown files where
+  // a clean checkout computed 18, and a gitignored `.py` would have been NAMED as a shipped
+  // executable script. `topLevelEntries` keeps the non-recursive scope the `readdirSync` had.
+  const scriptFiles = topLevelEntries(ROOT, 'scripts').files
     .filter((f) => f.endsWith('.js') || f.endsWith('.sh') || f.endsWith('.mjs')).length;
 
   // DERIVED from the adapter registry, not listed by hand (#686 review). The hand-written
@@ -730,7 +744,7 @@ function generateSecuritySurface() {
   // code tested the `_`-prefix convention, so a future `workflows/_draft.mjs` would have gone
   // uncounted under a sentence that describes scaffolding as the only exclusion. No-op today:
   // `_template.mjs` is the sole `_`-prefixed entry in `workflows/`.
-  const workflowFiles = readdirSync(resolve(ROOT, 'workflows'))
+  const workflowFiles = topLevelEntries(ROOT, 'workflows').files
     .filter((f) => f.endsWith('.mjs') && !isTemplateSegment(f)).length;
 
   const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8'));

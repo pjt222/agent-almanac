@@ -32,8 +32,9 @@
  * plus the top-level `total_tools`, the row count with deprecated rows included, checked.
  */
 
-import { existsSync, readFileSync, readdirSync, lstatSync } from 'node:fs';
+import { existsSync, readFileSync, lstatSync } from 'node:fs';
 import { join } from 'node:path';
+import { topLevelEntries } from './git-files.js';
 
 export const REGISTRY_PATH = 'tools/_registry.yml';
 export const TOOLS_DIR = 'tools';
@@ -183,16 +184,32 @@ export function schemaErrors(entries, declaredTotal = undefined) {
  * the direction the first two cannot see: a tool is one flat file under tools/, so a subdirectory
  * (`tools/hermes/validate.py`) or a symlink there is representable by no row and would otherwise
  * drop out of both lists silently. `lstatSync`, so a broken symlink is reported, not thrown on.
+ *
+ * ENUMERATED BY GIT, not by `readdirSync` (#868/#830). A gitignored `tools/__pycache__` — written
+ * by anyone who imports a Python tool by path rather than running it — used to land in
+ * `notPlainFile` and red `integrity`, one of the five REQUIRED contexts, while `git status` read
+ * clean. `topLevelEntries` applies git's own ignore rule and nothing else, so an UNTRACKED new
+ * tool file is still seen and still reported when it has no row: that is a defect this gate is
+ * for, and #830's acceptance criteria refuse a fix that trades it away.
  */
 export function checkParity(root, entries) {
+  const { files, dirs } = topLevelEntries(root, TOOLS_DIR);
   const onDisk = [];
   const notPlainFile = [];
-  for (const name of readdirSync(join(root, TOOLS_DIR)).sort()) {
+  for (const name of files) {
     if (NOT_TOOLS.has(name)) continue;
     const p = `${TOOLS_DIR}/${name}`;
+    // `files` classifies by path shape, so a symlink arrives here; `lstat` is what tells the
+    // two apart, and it is done here rather than in the enumerator because this is the only
+    // code that knows a tool must be one flat plain file.
     if (lstatSync(join(root, TOOLS_DIR, name)).isFile()) onDisk.push(p);
     else notPlainFile.push(p);
   }
+  for (const name of dirs) {
+    if (NOT_TOOLS.has(name)) continue;
+    notPlainFile.push(`${TOOLS_DIR}/${name}`);
+  }
+  notPlainFile.sort();
   const rows = entries.map((e) => e.path).filter(Boolean);
   const rowSet = new Set(rows);
   const diskSet = new Set(onDisk);
