@@ -19,6 +19,7 @@ import { tmpdir } from 'node:os';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { rmTree } from './_tmp.js';
+import { initRepo, commitAll, isolateGitEnv } from './_git-fixture.js';
 import {
   skillsDeclaringBash,
   nonDocumentationFiles,
@@ -32,6 +33,9 @@ import {
 } from '../lib/skills-inventory.js';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+// See git-files.test.js: the modules under test spawn git with `process.env` (#874 review, S4).
+isolateGitEnv();
 
 const BASH_SKILL = '---\nname: x\nallowed-tools: Read, Bash, Grep\n---\n\n# X\n';
 const QUIET_SKILL = '---\nname: y\nallowed-tools: Read, Grep\n---\n\n# Y\n';
@@ -47,10 +51,26 @@ function makeTree(t, skills, files = ['skills/', '!skills/_template/']) {
   }
   mkdirSync(join(dir, 'skills', '_template'), { recursive: true });
   writeFileSync(join(dir, 'skills', '_template', 'SKILL.md'), BASH_SKILL, 'utf8');
+  // A repository, because `lib/git-files.js` refuses to enumerate outside one: these fixtures
+  // used to exercise a disk fallback that production never took (#874 review, S2).
+  initRepo(dir);
   return dir;
 }
 
 const domainsOf = (...ids) => ({ d: { skills: ids.map((id) => ({ id })) } });
+
+/**
+ * The inventory of `dir`, after committing whatever the test just wrote.
+ *
+ * This consumer counts the COMMIT, because that is what a release is packed from (#874 review):
+ * a local `npm pack` packs the working tree and ships ignored and untracked files alike, so
+ * "skip what git ignores" would describe neither artifact. Fixtures therefore commit; the rule
+ * does not bend.
+ */
+const inventory = (dir, trees = ['skills']) => {
+  commitAll(dir);
+  return nonDocumentationFiles(dir, trees);
+};
 
 test('counts REGISTRY entries; a naive directory walk would report 2 of 3, not 1 of 2', (t) => {
   const dir = makeTree(t, { alpha: BASH_SKILL, beta: QUIET_SKILL });
@@ -98,7 +118,7 @@ test('non-documentation files are found by EXCLUSION, including extensions nobod
   writeFileSync(join(dir, 'skills', 'alpha', 'notes.yaml'), 'a: 1\n', 'utf8');
   writeFileSync(join(dir, 'skills', 'alpha', 'diagram.svg'), '<svg/>\n', 'utf8');
 
-  assert.deepEqual(nonDocumentationFiles(dir, ['skills']), [
+  assert.deepEqual(inventory(dir), [
     'skills/alpha/diagram.svg',
     'skills/alpha/references/CITATIONS.bib',
     'skills/alpha/scripts/run.py',
@@ -109,7 +129,7 @@ test('the walk excludes exactly what the package excludes, from files negations'
   const dir = makeTree(t, { alpha: BASH_SKILL });
   writeFileSync(join(dir, 'skills', '_template', 'scaffold.py'), 'pass\n', 'utf8');
 
-  assert.deepEqual(nonDocumentationFiles(dir, ['skills']), [],
+  assert.deepEqual(inventory(dir), [],
     '`!skills/_template/` excludes it from the package, so it must not be counted');
 });
 
@@ -123,7 +143,7 @@ test('a NESTED _template ships, and must be counted — npm negations are root-a
   mkdirSync(join(dir, 'skills', 'alpha', '_template'), { recursive: true });
   writeFileSync(join(dir, 'skills', 'alpha', '_template', 'helper.py'), 'pass\n', 'utf8');
 
-  assert.deepEqual(nonDocumentationFiles(dir, ['skills']), ['skills/alpha/_template/helper.py']);
+  assert.deepEqual(inventory(dir), ['skills/alpha/_template/helper.py']);
 });
 
 test('the negation is ANCHORED, not a substring — a mid-path match must not exclude', (t) => {
@@ -136,7 +156,7 @@ test('the negation is ANCHORED, not a substring — a mid-path match must not ex
   mkdirSync(join(dir, 'skills', 'alpha', '_template'), { recursive: true });
   writeFileSync(join(dir, 'skills', 'alpha', '_template', 'helper.py'), 'pass\n', 'utf8');
 
-  assert.deepEqual(nonDocumentationFiles(dir, ['skills']), ['skills/alpha/_template/helper.py'],
+  assert.deepEqual(inventory(dir), ['skills/alpha/_template/helper.py'],
     'the pattern does not match from the ROOT, so it excludes nothing');
 });
 
@@ -146,12 +166,12 @@ test('a non-negation exclusion rule is NOT invented — the files array is the o
   const dir = makeTree(t, { alpha: BASH_SKILL }, ['skills/']);
   writeFileSync(join(dir, 'skills', '_template', 'scaffold.py'), 'pass\n', 'utf8');
 
-  assert.deepEqual(nonDocumentationFiles(dir, ['skills']), ['skills/_template/scaffold.py']);
+  assert.deepEqual(inventory(dir), ['skills/_template/scaffold.py']);
 });
 
 test('a tree that does not exist is skipped rather than throwing', (t) => {
   const dir = makeTree(t, { alpha: BASH_SKILL });
-  assert.deepEqual(nonDocumentationFiles(dir, ['skills', 'nonexistent']), []);
+  assert.deepEqual(inventory(dir, ['skills', 'nonexistent']), []);
 });
 
 test('shippedEntries keeps FILES, not only directories — cli/index.js is the entry point', (t) => {
@@ -239,7 +259,7 @@ test('the EXACT-match negation arm is live — a negated non-doc FILE is exclude
   writeFileSync(join(dir, 'skills', 'alpha', 'data.py'), 'x = 1\n', 'utf8');
   writeFileSync(join(dir, 'skills', 'alpha', 'kept.py'), 'y = 2\n', 'utf8');
 
-  assert.deepEqual(nonDocumentationFiles(dir, ['skills']), ['skills/alpha/kept.py']);
+  assert.deepEqual(inventory(dir), ['skills/alpha/kept.py']);
 });
 
 test('a package.json with no files array yields nothing, rather than throwing', (t) => {
@@ -261,7 +281,7 @@ test('a shebanged EXTENSIONLESS file counts as executable', (t) => {
   writeFileSync(join(dir, 'skills', 'alpha', 'scripts', 'run'), '#!/bin/sh\necho hi\n', 'utf8');
   writeFileSync(join(dir, 'skills', 'alpha', 'scripts', 'data'), 'not a script\n', 'utf8');
 
-  const nonDoc = nonDocumentationFiles(dir, ['skills']);
+  const nonDoc = inventory(dir);
   assert.deepEqual(nonDoc, ['skills/alpha/scripts/data', 'skills/alpha/scripts/run']);
   assert.deepEqual(executableFiles(nonDoc, dir), ['skills/alpha/scripts/run']);
 });

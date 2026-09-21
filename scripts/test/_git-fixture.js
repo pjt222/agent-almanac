@@ -1,0 +1,121 @@
+/**
+ * _git-fixture.js — turn a temp directory into a throwaway git repository, safely.
+ *
+ * Three suites need one now that `lib/git-files.js` refuses to enumerate outside a checkout
+ * (#874 review, S2): before that, `skills-inventory.test.js` and `tools-registry.test.js` built
+ * bare `mkdtemp` trees and silently exercised a disk fallback that production never took — nine
+ * fixtures asserting the behaviour of a branch no consumer reached.
+ *
+ * `cleanEnv` is the load-bearing half and it is not optional. Neither `cwd` nor `-C` is
+ * isolation: git honours an absolute `GIT_DIR` over both, and `GIT_DIR` is exported into every
+ * hook, so a suite that runs `git init` under an inherited one writes its fixture into the
+ * CALLER's repository — silently, at exit 0. Every `GIT_*` key is dropped rather than the ones
+ * anyone thought of; a denylist has already missed `GIT_CONFIG_PARAMETERS` and
+ * `GIT_TEMPLATE_DIR` in this repository before. `HOME` and `XDG_CONFIG_HOME` move too, because
+ * `$XDG_CONFIG_HOME/git/ignore` is read through no variable at all and `GIT_CONFIG_GLOBAL` does
+ * not reach it.
+ *
+ * Named with a leading underscore by the convention `_tmp.js` set: what keeps it out of the run
+ * is the absent `.test.js` suffix, which is also what keeps it out of `tmp-helper.test.js`'s
+ * guard.
+ */
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { rmTree } from './_tmp.js';
+
+/** An environment git cannot escape. `extra` is merged last, for a test that needs one key back. */
+export function cleanEnv(home, extra = {}) {
+  const env = {};
+  for (const [key, value] of Object.entries(process.env)) {
+    if (!key.startsWith('GIT_')) env[key] = value;
+  }
+  env.HOME = home;
+  env.XDG_CONFIG_HOME = join(home, '.config');
+  env.GIT_CONFIG_NOSYSTEM = '1';
+  return { ...env, ...extra };
+}
+
+/**
+ * Make `dir` a git repository and return a `git(...args)` runner bound to it.
+ *
+ * The runner asserts exit 0 and returns stdout, so a fixture cannot be built on a failed `git
+ * init` and then assert something about the enumerator that is really about an absent
+ * repository. `commit: false` leaves the tree untracked — which is a state the enumerator must
+ * still handle, since an untracked-but-not-ignored file is deliberately in scope.
+ */
+export function initRepo(dir, { commit = true, message = 'fixture' } = {}) {
+  const git = (...args) => {
+    const result = spawnSync('git', ['-C', dir, ...args], { encoding: 'utf8', env: cleanEnv(dir) });
+    if (result.status !== 0) {
+      throw new Error(`git ${args.join(' ')} failed in ${dir} (exit ${result.status}): ${result.stderr}`);
+    }
+    return result.stdout;
+  };
+  git('init', '-q', '-b', 'main', '.');
+  git('config', 'user.email', 'test@example.invalid');
+  git('config', 'user.name', 'Fixture');
+  if (commit) {
+    git('add', '-A');
+    // An empty tree has nothing to commit and `git commit` exits 1 on it; the repository is
+    // still a repository, which is all the enumerator needs.
+    const result = spawnSync('git', ['-C', dir, 'commit', '-qm', message], { encoding: 'utf8', env: cleanEnv(dir) });
+    if (result.status !== 0 && !/nothing to commit/.test(result.stdout + result.stderr)) {
+      throw new Error(`git commit failed in ${dir} (exit ${result.status}): ${result.stderr}`);
+    }
+  }
+  return git;
+}
+
+/**
+ * Stage and commit everything under `dir`.
+ *
+ * Fixtures that write files AFTER `initRepo` leave them untracked, and a consumer that counts
+ * the COMMIT — `nonDocumentationFiles`, since the #874 review showed a release is packed from
+ * one — then reports nothing. That is the consumer working, so the fixtures commit rather than
+ * the rule bending.
+ */
+export function commitAll(dir, message = 'fixture update') {
+  const git = (...args) => spawnSync('git', ['-C', dir, ...args], { encoding: 'utf8', env: cleanEnv(dir) });
+  const add = git('add', '-A');
+  if (add.status !== 0) throw new Error(`git add failed in ${dir}: ${add.stderr}`);
+  const commit = git('commit', '-qm', message);
+  if (commit.status !== 0 && !/nothing to commit/.test(commit.stdout + commit.stderr)) {
+    throw new Error(`git commit failed in ${dir}: ${commit.stderr}`);
+  }
+}
+
+/**
+ * Isolate git for THIS PROCESS, not only for the fixture's own commands.
+ *
+ * `cleanEnv` covers the write side — the `git init`/`add`/`commit` this file runs. The module
+ * under test spawns its own git with `process.env`, which is the read side, and the #874 review
+ * measured the gap: one line in `$XDG_CONFIG_HOME/git/ignore` matching a fixture filename turned
+ * `the accept rule is git ignore and nothing else` red, with a control run proving the same suite
+ * green once the variable was unset. A developer would get a failure they cannot explain from the
+ * diff.
+ *
+ * Production must keep inheriting the environment — that is where `safe.directory` and an
+ * operator's excludes live — so this is per suite, called at module scope. `node --test` runs
+ * each file in its own process, which is what makes that safe.
+ */
+export function isolateGitEnv() {
+  const home = mkdtempSync(join(tmpdir(), 'git-env-'));
+  for (const key of Object.keys(process.env)) {
+    if (key.startsWith('GIT_')) delete process.env[key];
+  }
+  process.env.HOME = home;
+  process.env.XDG_CONFIG_HOME = join(home, '.config');
+  process.env.GIT_CONFIG_NOSYSTEM = '1';
+  process.on('exit', () => {
+    try {
+      // `rmTree`, never the bare recursive call: CLAUDE.md bans it in a suite and
+      // `tmp-helper.test.js` fails on sight of one — but its scanner cannot see THIS file, whose
+      // `_` prefix keeps it out of the walk. A rule enforced everywhere the check looks and
+      // broken where it does not is the shape that gets rediscovered as a defect (#874 review).
+      rmTree(home);
+    } catch { /* a leftover empty temp dir is not worth failing an exit over */ }
+  });
+  return home;
+}

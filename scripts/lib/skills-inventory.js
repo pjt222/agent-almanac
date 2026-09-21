@@ -17,6 +17,7 @@ import { readFileSync, readdirSync, existsSync, openSync, readSync, closeSync } 
 import { resolve, join, dirname, basename } from 'node:path';
 import { declaresBash } from './readme-sections.js';
 import { CONTENT_TYPES } from './content-types.js';
+import { listTracked } from './git-files.js';
 
 /** Extensions the inventory is entitled to call "documentation". */
 const DOCUMENTATION_EXTENSIONS = ['.md', '.yml', '.yaml'];
@@ -134,15 +135,41 @@ function isExcludedFromPackage(relPath, negations) {
     : relPath === pattern));
 }
 
-/** Every shipped file under `dir`, repo-relative, recursively. */
-function walk(root, dir, negations, out) {
-  for (const entry of readdirSync(resolve(root, dir), { withFileTypes: true })) {
-    const rel = `${dir}/${entry.name}`;
-    if (isExcludedFromPackage(entry.isDirectory() ? `${rel}/` : rel, negations)) continue;
-    if (entry.isDirectory()) walk(root, rel, negations, out);
-    else out.push(rel);
-  }
-  return out;
+/**
+ * Every shipped file under `tree`, repo-relative.
+ *
+ * ENUMERATED FROM THE INDEX, not by a recursive `readdirSync` (#872), and not by the ignore rule
+ * either (#874 review). What this inventory describes is the RELEASE, which CI packs from a
+ * commit — so the honest set is the index, which is what the next commit will contain. (Index,
+ * not HEAD, and the difference is measurable: with one file `git add`ed and another
+ * `rm --cached`ed, HEAD and `ls-files --cached` disagree. The index is the better local
+ * predictor of the next release, which is why it is the one read.) The tempting shortcut, "skip what git ignores",
+ * rests on a premise measured false: with a `files` array and no `.npmignore`, a LOCAL
+ * `npm pack` packs the working tree, shipping an ignored `.pyc`, an ignored `.py` and an
+ * untracked sibling alike. So that rule would describe neither artifact.
+ *
+ * The defect it fixes is unchanged: importing a skill asset with `importlib` left a
+ * `__pycache__/`, and the committed SECURITY.md went out claiming 19 non-Markdown files where a
+ * clean checkout computed 18 — a `.py` there would have been NAMED in the executable-scripts
+ * sentence, under a paragraph asserting "All of it ships". Only CI could see it, because
+ * `check-readmes` regenerates from the same contaminated tree it compares against.
+ *
+ * The npm-ships predicate is UNCHANGED and is still `isExcludedFromPackage`. The recursive walk
+ * tested each directory before descending, so every ancestor of a file was tested with its
+ * trailing slash; a flat list must test those prefixes explicitly or a directory negation like
+ * `!skills/_template/` stops excluding anything. The two rules are independent: git decides what
+ * is in the working artifact, npm's `files` decides what ships out of it, and neither is a proxy
+ * for the other (`CLAUDE.md` § Excluding a Template, a README, or a Non-Shipped File).
+ */
+function shippedFilesUnder(root, tree, negations) {
+  const treeDepth = tree.split('/').length;
+  return listTracked(root, tree).filter((rel) => {
+    const parts = rel.split('/');
+    for (let depth = treeDepth; depth < parts.length - 1; depth++) {
+      if (isExcludedFromPackage(`${parts.slice(0, depth + 1).join('/')}/`, negations)) return false;
+    }
+    return !isExcludedFromPackage(rel, negations);
+  });
 }
 
 /**
@@ -163,7 +190,7 @@ export function nonDocumentationFiles(root, trees = null) {
   const found = [];
   for (const tree of trees ?? contentTrees(root)) {
     if (!existsSync(resolve(root, tree))) continue;
-    walk(root, tree, negations, found);
+    found.push(...shippedFilesUnder(root, tree, negations));
   }
   return found
     .filter((path) => !DOCUMENTATION_EXTENSIONS.some((ext) => path.endsWith(ext)))

@@ -1,0 +1,24 @@
+# The PR #874 mutant table, re-runnable. One row per claim: <id>\t<file>\t<old>::<new>.
+#
+#   bash tools/mutation-envelope.sh --test 'npm run test:scripts' \
+#     --plan tests/results/2026-09-21-git-files-enumeration/mutation-plan.tsv
+#
+# Every count the PR body publishes was taken from this plan under that command. A count
+# taken under a single test file is a different number -- two rows of an earlier table were
+# wrong that way, and a --allow-broad waiver in its prose was an artefact of it.
+ignore-skip	scripts/lib/git-files.js	if (ignored.has(`${dir}/${entry.name}`)) continue;::if (ignored.has(`${dir}/${entry.name}`) && false) continue;
+any-failure	scripts/lib/git-files.js	if (error?.status === 1) return new Set();::if (error?.status === 1 || true) return new Set();
+exit-128	scripts/lib/git-files.js	if (error?.status === 1) return new Set();::if (error?.status === 1 || error?.status === 128) return new Set();
+eacces	scripts/lib/git-files.js	new Set(['ENOENT', 'ENOTDIR'])::new Set(['ENOENT', 'ENOTDIR', 'EACCES'])
+guard-off	scripts/lib/git-files.js	if (magic.length === 0) return;::if (magic.length >= 0) return;
+drop-star	scripts/lib/git-files.js	const magic = paths.filter((path) => /[\\*?[]/.test(path));::const magic = paths.filter((path) => /[\\?[]/.test(path));
+drop-question	scripts/lib/git-files.js	const magic = paths.filter((path) => /[\\*?[]/.test(path));::const magic = paths.filter((path) => /[\\*[]/.test(path));
+drop-bracket	scripts/lib/git-files.js	const magic = paths.filter((path) => /[\\*?[]/.test(path));::const magic = paths.filter((path) => /[\\*?]/.test(path));
+drop-backslash	scripts/lib/git-files.js	const magic = paths.filter((path) => /[\\*?[]/.test(path));::const magic = paths.filter((path) => /[*?[]/.test(path));
+over-broad-space	scripts/lib/git-files.js	const magic = paths.filter((path) => /[\\*?[]/.test(path));::const magic = paths.filter((path) => /[\\*?[ ]/.test(path));
+tracked-others	scripts/lib/git-files.js	['ls-files', '-z', '--cached', '--', dir]::['ls-files', '-z', '--cached', '--others', '--exclude-standard', '--', dir]
+tools-call-site	scripts/lib/tools-registry.js	topLevelEntries(root, TOOLS_DIR)::topLevelEntries(root, 'scripts')
+inventory-site	scripts/lib/skills-inventory.js	listTracked(root, tree)::listTracked(root, 'i18n')
+scripts-count	scripts/lib/tree-counts.js	topLevelEntries(root, 'scripts')::topLevelEntries(root, 'workflows')
+workflows-count	scripts/lib/tree-counts.js	topLevelEntries(root, 'workflows')::topLevelEntries(root, 'scripts')
+locale-counts	scripts/lib/tree-counts.js	topLevelEntries(root, typeRel)::topLevelEntries(root, localeRel)

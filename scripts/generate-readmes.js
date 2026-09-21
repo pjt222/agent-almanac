@@ -12,17 +12,23 @@
  *   node scripts/generate-readmes.js --check  # dry-run, exit 1 if stale
  */
 
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'fs';
+// This file walks no directory and stats no entry: every count it publishes comes from
+// `lib/tree-counts.js`, which enumerates through `lib/git-files.js`, so a gitignored artifact
+// cannot be counted or named in SECURITY.md (#872). The counts live in a lib because nothing
+// that calls `process.exit` at import time can be tested; `tree-counts.test.js` asserts the
+// published NUMBERS against a git fixture, and keeps a source tripwire over this file that is
+// deliberately not the coverage claim (#874 review, B1).
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import * as yaml from 'js-yaml';
 import { CONTENT_TYPES } from './lib/content-types.js';
-import { isTemplateSegment } from './lib/content-paths.js';
 import { listAdapters } from '../cli/adapters/index.js';
 import { guideCategoryOrder, guideCategoryLabel, guideCategoryNames } from './lib/guide-categories.js';
 import { applySections, renderTranslationsTable, renderLocaleTable } from './lib/readme-sections.js';
 import { loadRegistry as loadToolsRegistry, renderClaudeBlock as renderToolsIndex, renderReadmeTable as renderToolsTable } from './lib/tools-registry.js';
 import { skillsDeclaringBash, nonDocumentationFiles, contentTrees, shippedEntries, extensionOf, executableFiles, assertInventoryClaims, REPO_ONLY } from './lib/skills-inventory.js';
+import { scriptFileCount, workflowFileCount, localeTranslationCounts } from './lib/tree-counts.js';
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -567,27 +573,9 @@ function generateTestsReadme() {
 // translation:status` must run BEFORE this generator, or the table renders
 // last cycle's numbers and the same commit overwrites the file it read.
 
-function countExistingTranslations(localeDir, contentTypes) {
-  const counts = {};
-  let total = 0;
-  for (const ct of contentTypes) {
-    const typeDir = resolve(localeDir, ct);
-    let count = 0;
-    if (existsSync(typeDir)) {
-      for (const entry of readdirSync(typeDir)) {
-        const entryPath = resolve(typeDir, entry);
-        if (ct === 'skills') {
-          if (statSync(entryPath).isDirectory() && existsSync(resolve(entryPath, 'SKILL.md'))) count++;
-        } else if (entry.endsWith('.md')) {
-          count++;
-        }
-      }
-    }
-    counts[ct] = count;
-    total += count;
-  }
-  return { counts, total };
-}
+// The counts themselves live in `lib/tree-counts.js`, where a fixture can reach them. Nothing
+// that runs `process.exit` at import time can be imported, and a source scan standing in for a
+// test was measured green with the #872 defect restored (#874 review, B1).
 
 /**
  * Read `i18n/_config.yml` and each locale's `translation_status.yml`.
@@ -607,6 +595,7 @@ function loadLocaleCoverage() {
       code: locale.code,
       name: locale.name,
       localeDir,
+      localeRel: `i18n/${locale.code}`,
       coverage: existsSync(statusPath)
         ? (yaml.load(readFileSync(statusPath, 'utf8')) || {}).coverage
         : null,
@@ -654,7 +643,7 @@ function generateTranslationsSection() {
     // Computed for every locale, including measured ones. Cheap, and it keeps the
     // measured/fallback PREDICATE in one place rather than splitting it across the
     // caller and the renderer.
-    fallback: countExistingTranslations(record.localeDir, contentTypes),
+    fallback: localeTranslationCounts(ROOT, record.localeRel, contentTypes),
   }));
 
   return renderTranslationsTable(localeRecords, sourceCounts, contentTypes);
@@ -701,8 +690,12 @@ function generateSecuritySurface() {
   // non-declaring — see that module's header, and #700 for the upstream registry gap.
   const { ids, declaring } = skillsDeclaringBash(ROOT, domains);
   const share = Math.round((declaring / ids.length) * 100);
-  const scriptFiles = readdirSync(resolve(ROOT, 'scripts'))
-    .filter((f) => f.endsWith('.js') || f.endsWith('.sh') || f.endsWith('.mjs')).length;
+  // Both counts are ENUMERATED BY GIT and both live in `lib/tree-counts.js`, where a fixture can
+  // reach them: a gitignored file under a directory this paragraph counts is not part of the
+  // artifact it describes, and counting it publishes a false number in a security document
+  // (#872). They are functions rather than lines here because the source scan that stood in for
+  // their test was measured green with the defect restored (#874 review, B1).
+  const scriptFiles = scriptFileCount(ROOT);
 
   // DERIVED from the adapter registry, not listed by hand (#686 review). The hand-written
   // version named 5 of 13 adapters and described them all as symlinking into home directories:
@@ -730,8 +723,7 @@ function generateSecuritySurface() {
   // code tested the `_`-prefix convention, so a future `workflows/_draft.mjs` would have gone
   // uncounted under a sentence that describes scaffolding as the only exclusion. No-op today:
   // `_template.mjs` is the sole `_`-prefixed entry in `workflows/`.
-  const workflowFiles = readdirSync(resolve(ROOT, 'workflows'))
-    .filter((f) => f.endsWith('.mjs') && !isTemplateSegment(f)).length;
+  const workflowFiles = workflowFileCount(ROOT);
 
   const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8'));
   const shipped = pkg.files || [];
@@ -841,7 +833,7 @@ function generateSecuritySurface() {
   return [
     `**Which artifact this describes.** Everything below is derived from **the repository at this revision**, whose \`package.json\` declares version \`${pkg.version ?? '(unset)'}\`. That is not necessarily what \`npm install ${pkg.name ?? '(unnamed)'}\` installs — the published version can lag this tree, and has. Check with \`npm view ${pkg.name ?? '(unnamed)'} version\`. What ships, from \`package.json\`'s own \`files\`: ${shippedList.map((t) => `\`${t}\``).join(', ')}. \`package.json\` ships too — npm always includes it — and it declares no \`preinstall\`/\`install\`/\`postinstall\` hooks, so nothing here executes on install. Everything else described below (${REPO_ONLY.map((d) => `\`${d}/\``).join(', ')}) exists only in the repository. A vulnerability report against an npm-installed copy is in scope for the shipped list, and may be against older code than this document describes.`,
     '',
-    `- **${treeLabel}**: ${nonDoc.length === 0 ? 'Markdown and YAML only' : `mostly Markdown and YAML, plus **${nonDoc.length} files that are not** (${nonDocExtensions.join(', ')})${executable.length ? ` — ${executable.length === 1 ? 'one of them an executable script, ' : `${executable.length} of them executable scripts: `}${executable.map((f) => `\`${f}\``).join(', ')}` : ''}`}. All of it ships. ${declaring} of ${ids.length} skills (~${share}%) declare \`Bash\` in their \`allowed-tools\`, meaning they instruct AI agents to execute shell commands when followed. Review any skill before letting an agent execute it.`,
+    `- **${treeLabel}**: ${nonDoc.length === 0 ? 'Markdown and YAML only' : `mostly Markdown and YAML, plus **${nonDoc.length} files that are not** (${nonDocExtensions.join(', ')})${executable.length ? ` — ${executable.length === 1 ? 'one of them an executable script, ' : `${executable.length} of them executable scripts: `}${executable.map((f) => `\`${f}\``).join(', ')}` : ''}`}. All of it ships — counted from the index, which is what the next commit will contain and what a release is packed from; a local \`npm pack\` packs the working tree instead and can include files this count excludes. ${declaring} of ${ids.length} skills (~${share}%) declare \`Bash\` in their \`allowed-tools\`, meaning they instruct AI agents to execute shell commands when followed. Review any skill before letting an agent execute it.`,
     '- **Visualization pipeline** (`viz/`): A containerized R + Node.js + Vite build system with a Dockerfile, shell scripts, and an icon rendering pipeline. The Docker entrypoint serves content via a Python HTTP server.',
     `- **Scripts** (\`scripts/\`): ${scriptFiles} top-level Node.js and shell tools — registry validation, README and translation generation, i18n gates, and a small number that deliberately mutate the working tree or run repository commands (\`normalize-i18n-fences.js\`, \`mutation-check.js\`, \`gate-envelope.js\`). Maintainer-invoked; \`scripts/\` is not in \`package.json\`'s \`files\` array, so none of it ships in the published package.`,
     `- **CLI** (\`cli/\`): The entry point \`npx\` executes (\`bin\` -> \`cli/index.js\`), and the only component that writes outside this repository. ${adapters.length} adapters install content into other tools' configuration directories, at global (home) or PROJECT scope depending on the adapter and the \`--scope\` flag, using ${strategyPhrase}. Adapters: ${adapters.map((a) => a.id).sort().join(', ')}.`,

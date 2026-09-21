@@ -20,6 +20,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { rmTree } from './_tmp.js';
+import { initRepo, isolateGitEnv } from './_git-fixture.js';
 import {
   REGISTRY_PATH, TAGS, parseRegistry, schemaErrors, checkParity, loadRegistry, renderClaudeBlock, renderReadmeTable,
 } from '../lib/tools-registry.js';
@@ -58,11 +59,18 @@ test('the fixture writer refuses a value the registry format cannot carry, inste
   assert.throws(() => toYaml([ENTRY({ description: 'a\nb' })]), /cannot carry/);
 });
 
+// See git-files.test.js: the module under test spawns git with `process.env` (#874 review, S4).
+isolateGitEnv();
+
 function tree(entries, files = entries.map((e) => e.path)) {
   const root = mkdtempSync(join(tmpdir(), 'tools-registry-'));
   mkdirSync(join(root, 'tools'), { recursive: true });
   for (const f of files) writeFileSync(join(root, f), '#!/usr/bin/env bash\necho ok\n');
   writeFileSync(join(root, REGISTRY_PATH), toYaml(entries));
+  // A repository, because `checkParity` now enumerates through git and git-files refuses
+  // outside a checkout. Uncommitted on purpose: an untracked-but-not-ignored tool file is
+  // exactly what #830 requires the gate to keep seeing.
+  initRepo(root, { commit: false });
   return root;
 }
 
@@ -219,11 +227,18 @@ test('the CLI: exit 0 on a clean tree, 1 naming each defect, 2 when the registry
   assert.equal(okLines().length, 0, 'no OK: line on a failing run');
   assert.match(out.at(-1), /^FAIL: 3 row\(s\) \(3 active\) against 2 plain file\(s\) under tools\/, three directions \(1 not a plain file\)/, 'the plain-file count is measured, not reconstructed (round-3 N1)');
 
+  // A REPOSITORY, like every other fixture here. While it was not, this arm passed for two
+  // reasons: `check-tools-registry.js` returns 2 for any throw out of `loadRegistry`, and
+  // "not a checkout" is now also a throw — so `=== 2` could no longer tell which one it had
+  // proved (#874 review, S3). The captured message is what discriminates.
   const broken = mkdtempSync(join(tmpdir(), 'tools-registry-broken-'));
   t.after(() => rmTree(broken));
   mkdirSync(join(broken, 'tools'));
   writeFileSync(join(broken, REGISTRY_PATH), 'tools:\n  - id: a\n    need: >-\n      folded\n');
-  assert.equal(checkMain([], quiet, broken), 2, 'an unreadable registry is exit 2, never a pass');
+  initRepo(broken, { commit: false });
+  out.length = 0;
+  assert.equal(checkMain([], capture, broken), 2, 'an unreadable registry is exit 2, never a pass');
+  assert.match(out.join('\n'), /block scalar|folded|line 3/i, 'exit 2 must be the PARSE failure, not an unrelated refusal');
   assert.equal(checkMain(['--bogus'], quiet, good), 2);
 
   out.length = 0;
