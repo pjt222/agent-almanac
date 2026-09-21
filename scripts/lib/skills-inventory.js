@@ -129,7 +129,7 @@ export function skillsDeclaringBash(root, domains) {
  * opposite direction: its `_`-prefix rule would skip `skills/_experimental/tool.py`,
  * which ships. Neither hand-rolled rule is the package's rule. This one is.
  */
-function isExcludedFromPackage(relPath, negations) {
+export function isExcludedFromPackage(relPath, negations) {
   return negations.some((pattern) => (pattern.endsWith('/')
     ? relPath.startsWith(pattern)
     : relPath === pattern));

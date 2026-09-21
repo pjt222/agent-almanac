@@ -69,9 +69,26 @@
  * check:publishable-tree` — to ask the same question by hand. There is no `--check` flag: an
  * earlier version of this comment named one that was never implemented (#879 review, S5), and
  * the script takes no arguments at all.
+ *
+ * Three consequences of declaring the hook, all measured in that review and none of them
+ * reasons not to:
+ *
+ *   - `npm pack --ignore-scripts` bypasses it entirely, exit 0 with the contaminants listed.
+ *     Inherent to a script hook, and worth knowing because `--ignore-scripts` is the common
+ *     reflex when a hook fails.
+ *   - Hook ORDER on publish is `prepublishOnly` -> `prepack` -> `prepare` -> `postpack`. So an
+ *     artefact built by a future `prepare` would land AFTER this check and be neither seen nor
+ *     refused. There is no `prepare` here today.
+ *   - Declaring `prepack` at all changes CONSUMER-side behaviour for a git install, though the
+ *     script never runs there: pacote's `lib/git.js` treats `prepack` as one of the keys that
+ *     make a clone worth preparing, so `npm install pjt222/agent-almanac` now runs a nested
+ *     `npm install --force` inside the temp clone before packing. Measured across twelve install
+ *     shapes: the hook itself fired on `npm pack`, `npm publish` and `npm pack <dir>`, and on
+ *     none of the consumer installs.
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { isExcludedFromPackage } from './lib/skills-inventory.js';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -97,11 +114,36 @@ export function shippedPaths(root = ROOT) {
   };
 }
 
-/** Does a `files` negation carve this path back out, so npm never packs it? */
+/**
+ * Names npm excludes from every pack regardless of `files`, measured rather than listed from
+ * memory (#879 review, N2): with these present, `npm pack --dry-run --json` did not list them.
+ * Reporting one as "would be packed" is a false statement, and it blocks a publish over a
+ * macOS Finder dropping or a stray `.npmrc` that could never ship.
+ */
+// NOT `node_modules`: the same review measured `skills/real/node_modules/dep/index.js` present in
+// the pack listing, so a nested one under a shipped directory DOES ship and the guard's refusal
+// of it is real rather than redundant with npm's root exclusion (N1).
+const NPM_ALWAYS_EXCLUDES = new Set(['.npmrc', '.DS_Store', '.git', '.gitignore']);
+
+function npmAlwaysExcludes(path) {
+  return path.split('/').some((segment) => NPM_ALWAYS_EXCLUDES.has(segment))
+    || path.endsWith('.orig');
+}
+
+/**
+ * Does a `files` negation carve this path back out, so npm never packs it?
+ *
+ * The rule is IMPORTED, not re-typed: `skills-inventory.js` already encodes npm's negation
+ * semantics (trailing slash means prefix, otherwise exact path, root-anchored) and carries the
+ * measurements that justify them. Two copies of an accept rule is the drift this repository
+ * writes about in `CLAUDE.md` § Excluding a Template — and a re-typed copy is what the #879
+ * review asked to be replaced by the export.
+ *
+ * A `!!` directory line arrives as `skills/_template/__pycache__/`, so the prefix test catches
+ * content under a negated directory without the ancestors needing to be enumerated here.
+ */
 function carvedOut(path, negations) {
-  return negations.some((pattern) => (pattern.endsWith('/')
-    ? path.startsWith(pattern)
-    : path === pattern));
+  return isExcludedFromPackage(path, negations);
 }
 
 /**
@@ -114,12 +156,25 @@ function carvedOut(path, negations) {
  */
 export function divergentPaths(root = ROOT, shipped = shippedPaths(root)) {
   const { included, negations } = shipped;
-  if (included.length === 0) return { ignored: [], untracked: [], modified: [] };
+  // REFUSE rather than pass. An absent `files` array returned "OK … a pack here matches the
+  // commit" while npm packed three untracked files, measured in the #879 review (N7) — a second
+  // fail-open in the same file as B1, and in exactly the configuration where npm honours the
+  // root .gitignore for you and only this check could catch the UNTRACKED class.
+  if (included.length === 0) {
+    throw new Error(
+      `package.json in ${root} declares no \`files\` array, so this check cannot tell which paths `
+      + 'npm would pack. Add one, or scan the whole tree deliberately — do not let an empty '
+      + 'inclusion list read as a clean tree.',
+    );
+  }
   let out;
   try {
     out = execFileSync(
       'git',
-      ['status', '--porcelain', '--ignored=matching', '-uall', '--', ...included],
+      // -z, because porcelain QUOTES a path carrying a space or a non-ASCII byte, and that
+      // quoting reached the report verbatim before (#879 review, N5). NUL-separated output is
+      // unquoted, and the parse below splits on it.
+      ['status', '--porcelain', '-z', '--ignored=matching', '-uall', '--', ...included],
       { cwd: root, encoding: 'utf8', maxBuffer: 1 << 28, stdio: ['ignore', 'pipe', 'pipe'] },
     );
   } catch (error) {
@@ -134,11 +189,15 @@ export function divergentPaths(root = ROOT, shipped = shippedPaths(root)) {
   const ignored = [];
   const untracked = [];
   const modified = [];
-  for (const line of out.split('\n')) {
-    if (!line) continue;
-    const code = line.slice(0, 2);
-    const path = line.slice(3);
+  // NUL-separated because of -z. A rename entry emits its ORIGIN as a second record, which is
+  // not a path npm would pack; the code check below keeps only records that begin with a status
+  // pair, so an origin record falls through rather than being reported.
+  for (const record of out.split('\0')) {
+    if (record.length < 4 || record[2] !== ' ') continue;
+    const code = record.slice(0, 2);
+    const path = record.slice(3);
     if (carvedOut(path, negations)) continue;
+    if (npmAlwaysExcludes(path)) continue;
     if (code === '!!') ignored.push(path);
     else if (code === '??') untracked.push(path);
     // Every other porcelain code is a TRACKED path whose working-tree content differs from the

@@ -242,3 +242,49 @@ test('a negation without a trailing slash is an EXACT path, not a prefix', async
   assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/SKILL.md.bak'],
     'a `.bak` beside an exactly-negated file still ships, so it must still be refused');
 });
+
+test('an absent `files` array REFUSES — it is the configuration where only this check can see', async (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-nofiles-'));
+  t.after(() => rmTree(dir));
+  write(dir, {
+    'package.json': JSON.stringify({ name: 'fixture', version: '1.0.0' }),
+    '.gitignore': '__pycache__/\n',
+    'skills/real/SKILL.md': '# real\n',
+  });
+  initRepo(dir);
+  write(dir, { 'skills/real/scratch.md': 'x\n' });
+
+  // Measured in the #879 review (N7): with no `files` array npm honours the root .gitignore for
+  // the IGNORED class but still packs UNTRACKED files — three of them, while this check returned
+  // "OK … a pack here matches the commit". An empty inclusion list must not read as a clean tree.
+  assert.throws(() => divergentPaths(dir), /declares no .files. array/);
+});
+
+test('npm’s own default excludes are not reported as "would be packed"', async (t) => {
+  const dir = pkg(t);
+  // Measured: with these present, `npm pack --dry-run --json` does not list them, so refusing
+  // them is a false statement that blocks a publish over a Finder dropping (#879 review, N2).
+  write(dir, {
+    'skills/real/.DS_Store': 'x',
+    'skills/real/.npmrc': 'x',
+    'skills/real/notes.orig': 'x',
+  });
+
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [] });
+
+  // …but a nested node_modules under a shipped directory IS packed, so it must still refuse —
+  // the same review measured `skills/real/node_modules/dep/index.js` in the listing, which is
+  // why that name is deliberately NOT in the default-excludes set.
+  write(dir, { 'skills/real/node_modules/dep/index.js': 'x' });
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/node_modules/dep/index.js']);
+});
+
+test('a path carrying a space or a non-ASCII byte is reported unquoted', async (t) => {
+  const dir = pkg(t);
+  // Porcelain quotes both, and the quoting reached the report verbatim before `-z`
+  // (#879 review, N5): `"skills/real/umlaut-\303\244.md"`.
+  write(dir, { 'skills/real/has space.md': 'x\n', 'skills/real/umlaut-ä.md': 'x\n' });
+
+  assert.deepEqual(divergentPaths(dir).untracked,
+    ['skills/real/has space.md', 'skills/real/umlaut-ä.md']);
+});
