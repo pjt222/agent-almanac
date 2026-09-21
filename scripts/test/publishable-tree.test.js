@@ -221,3 +221,24 @@ test('the main-module guard fires at a path npm percent-encodes — the #879 fai
     assert.equal(run(), 1, `the guard must refuse at "${name}" — exit 0 there is the fail-open`);
   }
 });
+
+test('a negation without a trailing slash is an EXACT path, not a prefix', async (t) => {
+  // npm's negations are root-anchored and this module models them the way
+  // `skills-inventory.js` does: trailing slash means prefix, otherwise exact. A mutant that
+  // made every pattern a prefix survived the suite, which means nothing distinguished the two
+  // (#879 review, follow-up). Prefix-matching a file negation would carve out every sibling
+  // whose name merely STARTS with it, and those do pack.
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-neg-'));
+  t.after(() => rmTree(dir));
+  write(dir, {
+    'package.json': JSON.stringify({ name: 'fixture', files: ['skills/', '!skills/real/SKILL.md'] }),
+    '.gitignore': '__pycache__/\n',
+    'skills/real/SKILL.md': '# real\n',
+  });
+  initRepo(dir);
+  // Shares the negated path as a prefix, and npm packs it.
+  write(dir, { 'skills/real/SKILL.md.bak': 'x\n' });
+
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/SKILL.md.bak'],
+    'a `.bak` beside an exactly-negated file still ships, so it must still be refused');
+});
