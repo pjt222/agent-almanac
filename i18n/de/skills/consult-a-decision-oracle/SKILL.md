@@ -27,7 +27,6 @@ metadata:
   locale: de
   source_locale: en
   source_commit: 4db57475b
-  fence_basis_commit: 4db57475b
   translator: "(untranslated stub)"
   translation_date: "2026-09-18"
 ---
@@ -48,12 +47,11 @@ somewhere nobody remembers, and the oracle's absence looks like a quiet week.
 
 **The vendor documentation is the source of truth for any API this skill
 touches, and this file pins none of it** — no field names, status codes, option
-caps, token budgets, or recommended thresholds. Those change, and a stale copy
-is worse than none: a downstream file pinning a vendor's constants is a known
-cause of code written against fields that no longer exist. Fetch them live.
-What is written here is method, which does not expire, and measurements that
-carry the date and model they came from. Where a vendor's number does appear it
-is dated and quoted as an anti-pattern, never as advice.
+caps, token budgets or recommended thresholds. A stale copy is worse than none:
+a downstream file pinning a vendor's constants is a known cause of code written
+against fields that no longer exist, so fetch them live. What is here is method,
+which does not expire, plus measurements carrying the date and model they came
+from; a vendor's number appears only dated and as an anti-pattern.
 
 ## When to Use
 
@@ -319,23 +317,40 @@ uneventful week. Pinning is right — but **pin plus a tripwire** on the specifi
 error that a retired pin produces, or you have moved the failure rather than
 removed it.
 
+**Step 6 is a precondition of that pin, not a later refinement.** Where the model
+identifier is environment-sourced, pinning is the change that first puts a value
+in that variable, so an unguarded read is armed by the pin itself: a
+configuration layer that leaves an unset variable as literal placeholder text
+then fails every call with an unknown-model error, and fail-open swallows it.
+
+**And the logged identifier needs a reader.** That tripwire covers the PINNED
+direction only. The floating direction — the alias moves and the threshold
+quietly stops describing the model it was measured against — has no detector
+unless one is built, and the symmetric one is cheap: read the recorded identifier
+back out of the log and compare it against the one the operating point was
+measured on. It should not move an exit code; a floating model is not the same
+question as a service being down. Reported from production, the identifier was
+logged on every call exactly as this step says and nothing read it for days —
+detectable in principle, undetected in practice.
+
 Log the oracle's answer, the scalar, the resolved model identifier and the
 outcome on **every** call, including agreements. Logging only disagreements is
 how an incident becomes unattributable.
 
 **Expected:** A call site that produces byte-identical output to the pre-oracle
 path whenever the oracle fails; a log line per consult; an alert on the
-pin-retired error.
+pin-retired error; a reader that compares the logged identifier against the one
+the operating point was measured on; and Step 6 already done for any
+environment-sourced value the pin introduces.
 
 **On failure:** If removing the oracle changes output when it should not, the
-fail-open path is not a fallback — it is a second code path with its own
-behaviour. Fix that before measuring anything, because every number you have
-taken describes a system you are not running. If the log line is missing on
-agreements, the corpus you are accumulating is censored in the way Step 4's
-first exit describes, and Step 4 will not be runnable on it later. If no alert
-exists for the pin-retired error, you have a dependency whose death is
-indistinguishable from a quiet week — which is the failure this step exists to
-prevent, so an unalerted pin is not a smaller version of the problem.
+fail-open path is a second code path with its own behaviour, and every number you
+have taken describes a system you are not running — fix that before measuring
+anything. A missing log line on agreements censors the corpus in the way Step 4's
+first exit describes, and Step 4 will not be runnable on it later. A pin with no
+alert leaves a dependency whose death is indistinguishable from a quiet week; a
+logged identifier with no reader leaves the other direction the same way. Neither
+is a smaller version of the problem.
 
 ### Step 6: Guard every value that arrives from the environment
 
@@ -346,36 +361,29 @@ value, and a model identifier, a threshold or a feature flag read straight from
 the environment will then carry that literal into a request.
 
 The guard tends to exist on the credential and nowhere else, because that is
-where the author was thinking about failure — what the other reads do instead is
+where the author was thinking about failure. What each other read does instead —
+including the boolean case, where one line separates a safe comparison from one
+that disables the feature on every run and looks like a deliberate rollback — is
 in [references/EXAMPLES.md](references/EXAMPLES.md#what-an-unguarded-environment-read-does).
-
-The positive case is the instructive one. A kill switch compared against a
-literal `"1"` is safe when its variable is unset, because placeholder text is not
-`"1"`. The same switch written as a truthiness test would treat the placeholder
-as *on*, disable the feature on every run, and look exactly like a deliberate
-rollback. One line apart.
 
 **Expected:** Every environment read either validated against its own accept
 rule, or demonstrably safe under a placeholder value — with the demonstration
 written down, not assumed.
 
 **On failure:** If a malformed value produces the same observable state as a
-legitimate one — the feature off, the oracle absent, the path unchanged — you
-have a configuration error that reports itself as a benign condition, and the
-read is neither validated nor demonstrably safe. Add the accept rule, or change
-the comparison so the placeholder falls to the safe side, and then write the
-demonstration down. A distinct log line is worth adding and does not discharge
-this step: it tells you afterwards, whereas Expected asks that the value could
-not have been wrong in the first place.
+legitimate one — the feature off, the oracle absent, the path unchanged — the
+read is neither validated nor demonstrably safe, and you have a configuration
+error reporting itself as a benign condition. Add the accept rule, or move the
+comparison so the placeholder falls to the safe side, then write the
+demonstration down. A distinct log line does not discharge this step: it tells
+you afterwards, where Expected asks that the value could not have been wrong.
 
 ### Step 7: Ship an offline gate that a stranger can run
 
-The measurement in Steps 3 and 4 is authoring-time work. It needs credentials,
-it costs money, and no one will re-run it in CI. What ships instead is a gate
-over **recorded** oracle verdicts that makes no network call at all.
-
-Record the oracle's verdicts once, commit them as a fixture, and replay the
-decision path against the fixture. Then hold these contracts:
+The measurement in Steps 3 and 4 is authoring-time work: it needs credentials, it
+costs money, and no one will re-run it in CI. What ships instead is a gate over
+**recorded** verdicts that makes no network call — record them once, commit them
+as a fixture, replay the decision path against it, and hold these contracts:
 
 - Under a stubbed failing oracle — throwing, timing out, rate-limited,
   unconfigured, and below-threshold — the output is **byte-identical** to the
@@ -384,9 +392,9 @@ decision path against the fixture. Then hold these contracts:
 - Previously-correct answers do not change.
 
 Stub the oracle **explicitly** in every test. A client that reads its credential
-from the environment will happily make real calls in any environment where the
-credential happens to be set, which silently converts a build gate into a live,
-billed run against a floating model.
+from the environment makes real calls wherever that credential happens to be set,
+silently converting a build gate into a live, billed run against a floating
+model.
 
 Watch for the live-by-default hazard in the wiring itself:
 
@@ -432,23 +440,22 @@ have no evidence for.
 - [ ] The consult does not fire when the precondition is unmet
 - [ ] The offline gate passes with no credential in the environment
 - [ ] Each contract has been broken on purpose once, and the gate went red
-- [ ] An alert exists for the error a retired model pin produces
+- [ ] An alert exists for the pin-retired error, and something READS the logged
+      model identifier back — the alert covers only the pinned direction
+- [ ] Every environment-sourced value in the request was guarded BEFORE the pin
+      landed, since the pin is what first puts a value in that variable
 
-Run the whole list with no API key present. Any step that cannot be run that way
+Run the whole list with no API key present; any step that cannot be run that way
 belongs in the Procedure, not here. `references/separation.py` exercises the
-three regression arms for the separation predicate and exits non-zero if any
-fails.
+three regression arms for the separation predicate and exits non-zero on any.
 
 ## Common Pitfalls
 
-- **Replacing the heuristic instead of consulting it**: In the integration this
-  skill draws on, the gate changes 2 answers across 87 production rows, of which
-  70 carry an external grade (model `jev-1.13.0`, 2026-09-17). A separate
-  43-case regression suite — not a subset of those 87 — passes 43/43 on the
-  phrasings it attests, while a 20-case unattested set scores 17/20; those are
-  suite results, not graded production rows, and the three denominators do not
-  nest. An oracle is a surgical second opinion on one layer. "Swap your rules
-  for a model" is a different project needing its own ground truth.
+- **Replacing the heuristic instead of consulting it**: An oracle is a surgical
+  second opinion on one layer. "Swap your rules for a model" is a different
+  project needing its own ground truth — and the numbers from the integration
+  this skill draws on, whose three denominators do not nest, are in
+  [references/EXAMPLES.md](references/EXAMPLES.md#how-small-a-surgical-gate-is).
 - **Inheriting a threshold**: A number from a vendor example, a blog post or
   another team's service describes their data, not yours. It is also the most
   likely thing to sneak in through a justification you believe you derived —
@@ -458,15 +465,10 @@ fails.
   bounds.
 - **Treating a confidence score as permission to act**: These scores generally
   measure how concentrated the answer distribution is, not whether the answer is
-  right. A question with only one possible answer returns maximal confidence
-  while carrying no information. And because the distribution is computed over
-  the candidate set *you supplied*, the score can never tell you the candidate
-  set itself was wrong — an input fitting none of your options still produces a
-  confident-looking answer among them. Where the options may not cover every
-  input, give them an explicit escape option. On the single pair measured here
-  (n=1, `jev-1.13.0`, 2026-09-18) adding one changed nothing when unneeded and
-  converted a wrong answer into the right one when needed — one observation, not
-  a rate.
+  right, and the distribution is computed over the candidate set *you supplied* —
+  so the score can never tell you that set was wrong. Give the options an
+  explicit escape option where they may not cover every input:
+  [what that measured](references/EXAMPLES.md#what-a-confidence-score-cannot-tell-you).
 - **Quoting a measurement without its provenance**: Every number here belongs to
   a resolved model version on a date. A figure quoted six months later without
   those reads as a property of the service, and the reader has no way to know it
