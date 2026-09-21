@@ -67,17 +67,16 @@ from; a vendor's number appears only dated and as an anti-pattern.
 - A decision path that already works without the oracle, and whose output you
   can capture. If there is no working path to fall back to, this skill does not
   apply — you are building a classifier, not consulting one.
-- A source of **externally graded outcomes**: rows where something other than
-  you decided whether the answer was right. Step 2 is about finding these; they
-  are more often already present than deliberately built, though whether yours
-  has any is what Step 2 establishes rather than assumes.
+- A source of **externally graded outcomes**: rows where something other than you
+  decided whether the answer was right. More often already present than
+  deliberately built — but whether YOURS has any is what Step 2 establishes
+  rather than assumes.
 - The ability to run the decision path offline against recorded inputs.
 
 **Optional**
 
-- API credentials for the oracle. Needed to *measure*, not to follow the
-  procedure or to run the Validation section — both work with recorded verdicts
-  and no network.
+- API credentials for the oracle. Needed to *measure*, not to follow the procedure
+  or to run the Validation section — both work with recorded verdicts, offline.
 - A cost-per-call figure, if the oracle is billed.
 
 ## Procedure
@@ -89,11 +88,10 @@ down, in a sentence, the **precondition** under which the oracle is consulted at
 all — and make it a correctness property, not a cost saving.
 
 A worked instance: a solver reading an arithmetic word problem has a *number*
-layer and an *operator* layer. The oracle is asked only for the operator, and
+layer and an *operator* layer. The oracle is asked for the operator only, and
 only when the tokenizer recovered exactly two operands — not to save money, but
-because an operator cannot rescue bad operands, so asking for one when the
-numbers are already wrong converts an honest abstention into a confident wrong
-answer.
+because an operator cannot rescue bad operands: asking for one when the numbers
+are already wrong converts an honest abstention into a confident wrong answer.
 
 Resist "let the model handle the whole thing". A pipeline-wide oracle has no
 layer with ground truth, so nothing in the rest of this procedure can be run.
@@ -114,12 +112,10 @@ measurement while removing the only property that made it one, and the resulting
 test cannot fail for its own defect.
 
 Do not build this corpus. Look for it. In the shipped integration this skill
-draws on, the graded rows were **discovered, not built** — an append-only log
-written to feed a circuit breaker had been accumulating externally-graded
-outcomes for 39 days before anyone noticed it was a corpus. Nobody designed it;
-two unrelated commits 39 days apart produced it as a side effect.
-
-Where external graders hide, with the provenance of each claim, is in
+draws on the graded rows were **discovered, not built**: a log written to feed a
+circuit breaker had been accumulating externally-graded outcomes as a side effect
+of two unrelated commits. Where such graders hide, with the provenance of each
+claim and the measured span of that accident, is in
 [references/EXAMPLES.md](references/EXAMPLES.md#where-external-graders-hide).
 
 Then check the other direction, because it is the one nobody checks:
@@ -160,9 +156,9 @@ external verdict. Report three things together, never accuracy alone:
   class *          12           9
 ```
 
-*(Illustrative shape, from a real run: 87 production rows, 70 externally graded,
-model `jev-1.13.0`, measured 2026-09-17. Treat the numbers as an example of the
-table, not as a property of any API.)*
+*(Illustrative shape, from a real run whose three denominators are in
+[references/EXAMPLES.md](references/EXAMPLES.md#how-small-a-surgical-gate-is).
+Treat the numbers as an example of the table, not a property of any API.)*
 
 **Expected:** A table carrying accuracy, baseline, and per-class counts, plus
 the resolved model identifier and the date. Read its verdict before moving on:
@@ -170,12 +166,12 @@ if accuracy does not beat the baseline by a margin you would defend out loud,
 the oracle adds nothing here — publish that and stop, because one that ties the
 baseline still costs latency, money and a dependency.
 
-**On failure:** The table cannot be produced, which differs from a table
-carrying a disappointing number. No resolvable model identifier means the
-measurement cannot be attributed to a version; missing per-class counts mean a
-validated class is indistinguishable from an unmeasured one; a single-class
-corpus has no baseline, so accuracy on it is meaningless rather than high. Each
-blocks Step 4 rather than informing it — fix the instrumentation first.
+**On failure:** The table cannot be produced, which differs from a table carrying
+a disappointing number. No resolvable model identifier, missing per-class counts
+and a single-class corpus each block Step 4 rather than informing it — a version
+nothing can be attributed to, a validated class indistinguishable from an
+unmeasured one, and an accuracy that is meaningless rather than high. Fix the
+instrumentation first.
 
 ### Step 4: Measure the separation, then choose an operating point inside it
 
@@ -227,7 +223,9 @@ The notation above assumes `scalar >= threshold`. Under a strict `>` the free
 endpoint is the *lower* one and the interval is `[highest harmful, lowest
 beneficial)`. This is not pedantry: on a corpus whose beneficial rows all score
 1.00, taking 1.00 as the threshold under `>` fires on nothing at all and
-silently disables the oracle — the endpoint you were told was free.
+silently disables the oracle — the endpoint you were told was free. A missing
+scalar disables it the same way: `undefined >= X` is false and raises nothing, so
+assert the field is present before comparing it.
 
 **Report the width and the row counts, not only the bounds.** A gap is evidence
 that the scalar orders right above wrong, and a narrow gap over few rows is weak
@@ -251,10 +249,10 @@ the highest harmful row and 0.10 below the lowest beneficial one, off-centre
 toward the upper end so the policy is biased against acting.* A reader can
 recompute every number in that sentence.
 
-The alternative is what actually happened: a threshold documented for two
-months as "the midpoint" of an interval whose midpoint it was not, with a
-vendor's number sitting unacknowledged in the same file
-([the full case](references/EXAMPLES.md#worked-derivation-and-the-mistake-in-it)).
+The alternative is what actually happened: a threshold documented as "the
+midpoint" of an interval whose midpoint it was not, with a vendor's number
+unacknowledged in the same file ([the full
+case](references/EXAMPLES.md#worked-derivation-and-the-mistake-in-it)).
 
 > **A borrowed number can enter through the justification even when you believe
 > you measured it.** The tell is that the reason does not survive arithmetic.
@@ -314,23 +312,24 @@ removed it.
 
 **Step 6 is a precondition of that pin, not a later refinement.** Where the model
 identifier is environment-sourced, pinning is the change that first puts a value
-in that variable, so an unguarded read is armed by the pin itself: a
-configuration layer that leaves an unset variable as literal placeholder text
-then fails every call with an unknown-model error, and fail-open swallows it.
+in that variable, so an unguarded read is armed by the pin itself: placeholder
+text goes out as the model id on every call. A tripwire tells you afterwards, and
+only if that is the error it watches; the guard refuses the value beforehand.
+
+Log the oracle's answer, the scalar, the resolved model identifier and the
+outcome on **every** call, including agreements. Logging only disagreements is
+how an incident becomes unattributable.
 
 **And the logged identifier needs a reader.** That tripwire covers the PINNED
 direction only. The floating direction — the alias moves and the threshold
 quietly stops describing the model it was measured against — has no detector
 unless one is built, and the symmetric one is cheap: read the recorded identifier
 back out of the log and compare it against the one the operating point was
-measured on. It should not move an exit code; a floating model is not the same
-question as a service being down. Reported from production, the identifier was
-logged on every call exactly as this step says and nothing read it for days —
-detectable in principle, undetected in practice.
-
-Log the oracle's answer, the scalar, the resolved model identifier and the
-outcome on **every** call, including agreements. Logging only disagreements is
-how an incident becomes unattributable.
+measured on. It should not move an exit code — a floating model is not the same
+question as a service being down — but a mismatch must reach a person, or the
+reader is one more unread record. Reported from production, the identifier was
+logged on every call exactly as this step says and nothing read it — detectable
+in principle, undetected in practice.
 
 **Expected:** A call site that produces byte-identical output to the pre-oracle
 path whenever the oracle fails; a log line per consult; an alert on the
@@ -343,7 +342,8 @@ fail-open path is a second code path with its own behaviour, and every number yo
 have taken describes a system you are not running — fix that before measuring
 anything. A missing log line on agreements censors the corpus in the way Step 4's
 first exit describes, and Step 4 will not be runnable on it later. A pin with no
-alert leaves a dependency whose death is indistinguishable from a quiet week; a
+alert, or one that landed before its variable was guarded, leaves a dependency
+whose death is indistinguishable from a quiet week; a
 logged identifier with no reader leaves the other direction the same way. Neither
 is a smaller version of the problem.
 
@@ -368,10 +368,11 @@ written down, not assumed.
 **On failure:** If a malformed value produces the same observable state as a
 legitimate one — the feature off, the oracle absent, the path unchanged — the
 read is neither validated nor demonstrably safe, and you have a configuration
-error reporting itself as a benign condition. Add the accept rule, or move the
+error reporting itself as a benign condition. Add the accept rule, or change the
 comparison so the placeholder falls to the safe side, then write the
-demonstration down. A distinct log line does not discharge this step: it tells
-you afterwards, where Expected asks that the value could not have been wrong.
+demonstration down. A distinct log line is worth adding and does not discharge
+this step: it tells you afterwards, whereas Expected asks that the value could
+not have been wrong.
 
 ### Step 7: Ship an offline gate that a stranger can run
 
@@ -391,25 +392,21 @@ from the environment makes real calls wherever that credential happens to be set
 silently converting a build gate into a live, billed run against a floating
 model.
 
-Watch for the live-by-default hazard in the wiring itself:
-
-```javascript
-oracle = options.oracle ?? liveClient   // every un-stubbed caller goes live
-oracle = options.oracle                 // a caller that forgets crashes, which
-                                        // is the failure you want
-```
+Watch for the live-by-default hazard in the wiring itself — one `??` decides
+whether a forgetful caller crashes or quietly bills you:
+[the two lines](references/EXAMPLES.md#the-live-by-default-hazard).
 
 **Expected:** A test suite that passes with no credential present and no network
 access — and, for each contract above, a record of having broken it on purpose
 once and watched the suite go red. The second half is what makes the first half
 evidence rather than a green light.
 
-**On failure:** A contract whose deliberate breakage leaves the suite green is
-not covered, whatever the file appears to assert about it. Two shapes recur: the
-assertion compares something the mutation does not reach, and the stub is not
-installed on the path under test so the real client answers instead. Repair the
-test, then break it again — a contract you could not make fail is a contract you
-have no evidence for.
+**On failure:** A contract whose deliberate breakage leaves the suite green is not
+covered, whatever the file appears to assert. Two shapes recur: the assertion
+compares something the mutation does not reach, and the stub is not installed on
+the path under test, so the real client answers instead. Repair the test and
+break it again — a contract you could not make fail is one you have no evidence
+for.
 
 ## Validation
 
@@ -438,11 +435,12 @@ have no evidence for.
 - [ ] An alert exists for the pin-retired error, and something READS the logged
       model identifier back — the alert covers only the pinned direction
 - [ ] Every environment-sourced value in the request was guarded BEFORE the pin
-      landed, since the pin is what first puts a value in that variable
+      landed — for the model id specifically, the pin is what first puts a value
+      in its variable
 
 Run the whole list with no API key present; any step that cannot be run that way
 belongs in the Procedure, not here. `references/separation.py` exercises the
-three regression arms for the separation predicate and exits non-zero on any.
+three regression arms for the separation predicate, exiting non-zero if any fails.
 
 ## Common Pitfalls
 
@@ -471,13 +469,11 @@ three regression arms for the separation predicate and exits non-zero on any.
 - **Testing against the live service**: A gate that calls the oracle measures the
   oracle's availability and today's model version, not your code. It will also
   fail during an outage for reasons unrelated to the change under review.
-- **Writing the conclusion before running the arm that could refute it**: Both
-  sessions that produced this skill did exactly that within one afternoon. One
-  described a corpus as "built" until its own commit history showed it was
-  discovered; the other wrote that a failure "is not signalled by low
-  confidence" until the missing control arm showed confidence had in fact
-  degraded. Neither was careless. The instrument that catches this is not care —
-  it is running the arm whose result would make you delete your sentence.
+- **Writing the conclusion before running the arm that could refute it**: the
+  instrument that catches this is not care — it is running the arm whose result
+  would make you delete your sentence. Both sessions that produced this skill
+  failed it within one afternoon:
+  [how](references/EXAMPLES.md#writing-the-conclusion-first).
 
 ## Related Skills
 

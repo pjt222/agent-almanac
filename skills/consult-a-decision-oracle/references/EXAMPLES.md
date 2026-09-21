@@ -1,8 +1,11 @@
 # Examples — consult-a-decision-oracle
 
-Extended material for [SKILL.md](../SKILL.md). Three parts: where external graders
-hide, a runnable verdict fixture for the Validation section, and the worked
-threshold derivation including the mistake that makes it worth reading.
+Extended material for [SKILL.md](../SKILL.md): where external graders hide, a runnable
+verdict fixture for the Validation section, the worked threshold derivation including
+the mistake that makes it worth reading, what an unguarded environment read does, which
+scalar to gate on, and two pitfalls whose numbers live here rather than in the skill.
+The section list is deliberately not counted — it said "three parts" through two
+revisions that added sections.
 
 **Provenance is marked per entry throughout.** One case here is a real shipped
 integration; the rest of the taxonomy is inference about where the same shape
@@ -12,10 +15,19 @@ the verified case's authority, so each entry says which it is:
 - **[shipped]** — observed in a system that ran in production
 - **[inference]** — a plausible instance of the same shape, not verified by the
   author
+- **[reported]** — observed in a production system by someone else and relayed here.
+  Stronger than inference, weaker than shipped: the author could not inspect the
+  system, so the mechanism is carried and the measurements are not
 
 ---
 
 ## Where external graders hide
+
+**[shipped]** In the integration this skill draws on, the append-only log had been
+accumulating externally-graded outcomes for **39 days** before anyone noticed it was a
+corpus — two unrelated commits, 39 days apart, produced it between them. Nobody designed
+it, which is the point of the section below: the question is where such a thing already
+exists, not how to build one.
 
 You are looking for rows where **something other than your code** decided whether
 an answer was right. The grader must be unable to inherit your mistake. That
@@ -276,7 +288,8 @@ scalar separates on your rows, not for trusting the one that is easiest to read.
 
 ### Two preconditions before reaching for the margin
 
-Reported from a production integration that tried it.
+**[reported]** From a production integration that tried it; the mechanism is carried, its
+measurements are not.
 
 **The margin needs the full distribution, and your client may have thrown it away.**
 A client that parses only the winning option has already discarded the runner-up, so
@@ -291,13 +304,15 @@ service — so both shapes can exist in one integration.
 
 A related trap in the same place, and it fails **safe and silent**: a yes/no answer may
 carry no confidence field at all. A `confidence >= X` gate copied from a choice
-question then never fires, because `undefined >= X` is `false` in JavaScript and no
-error is raised. The gate is not off — it is absent, and it reports as a gate that
-simply never had cause to act. Assert the field is present before comparing it.
+question then never fires: a missing field that decodes to `undefined` or `NaN` compares
+false and raises nothing. The gate is not off — it is absent, and it reports as a gate
+that simply never had cause to act. Assert the field is present before comparing it. A
+language that RAISES on the comparison is failing the better way; measured, node gives
+`undefined >= 0.5 === false` where python3 gives `TypeError` on `None >= 0.5`.
 
 ## What a confidence score cannot tell you
 
-Referenced from Common Pitfalls. Two properties of these scores, and one measured
+**[shipped]** Referenced from Common Pitfalls. Two properties of these scores, and one measured
 observation about the escape option.
 
 A question with only one possible answer returns maximal confidence while carrying no
@@ -314,16 +329,58 @@ two calls establish anything.
 
 ## How small a surgical gate is
 
-Referenced from Common Pitfalls. From the integration this skill draws on, model
+**[shipped]** Referenced from Common Pitfalls. From the integration this skill draws on, model
 `jev-1.13.0`, 2026-09-17:
 
 - the gate changes **2 answers across 87 production rows**, of which 70 carry an
   external grade
 - a separate **43-case regression suite** — not a subset of those 87 — passes 43/43 on
   the phrasings it attests
-- a **20-case unattested set** scores 17/20
+- a **20-case unattested set** scores 17/20 — both of these are suite results, not graded
+  production rows
 
 Three denominators, and they do not nest. Quoting any one of them as "the accuracy"
 describes a population the other two are not drawn from, which is the shape a single
 headline number always hides. The first figure is the one that answers "how much does
 this gate actually do": two answers.
+
+## Writing the conclusion first
+
+**[shipped]** Referenced from Common Pitfalls. Both sessions that produced this skill
+wrote a conclusion before running the arm that could refute it, within one afternoon of
+each other.
+
+One described its corpus as "built" until its own commit history showed the rows had
+been *discovered* — they were already being logged, which is the good news the skill's
+Step 2 now leads with, but the write-up had claimed authorship of a construction that
+never happened.
+
+The other wrote that a particular failure "is not signalled by low confidence", which
+is the kind of sentence that sounds like a measurement. The control arm had not been
+run. When it was, confidence had in fact degraded on those rows, and the sentence had
+to go.
+
+Neither was carelessness, and that is the point: both authors were being careful about
+the claim they were making and not about the arm they had not run. Care does not catch
+this. Running the arm whose result would make you delete your sentence does.
+
+## The live-by-default hazard
+
+Referenced from Step 7. The whole difference is one defaulting operator:
+
+```javascript
+oracle = options.oracle ?? liveClient   // every un-stubbed caller goes live
+oracle = options.oracle                 // a caller that forgets crashes, which
+                                        // is the failure you want
+```
+
+The first line is the one people write, because it makes the constructor convenient
+and every existing caller keeps working. It also means a test that forgets to stub
+reaches the real service — billed, rate-limited, and measuring today's model rather
+than your code. The second is inconvenient exactly once per call site, at the moment
+somebody is in a position to notice.
+
+This is the same shape as fail-open at the call site (Step 5) pointing the other way:
+there you want the absent dependency to be invisible, here you want the absent stub to
+be loud. What distinguishes them is who is meant to be surprised — a user, never; an
+author writing a test, always.
