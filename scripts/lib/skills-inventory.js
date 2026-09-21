@@ -326,14 +326,55 @@ export function contentTrees(root) {
  * All three under-count silently, so all three are refused rather than guessed at — the same
  * contract `mutation-check` holds itself to.
  *
- * A FOURTH class was proposed and is REFUTED by the same instrument. The real `files` array
- * places `!agents/_template.md`, `!teams/_template.md` and `!guides/_template.md` BEFORE the
- * `agents/`, `teams/`, `guides/` entries they carve from, which under a last-match-wins
- * reading would make them dead. `npm pack --dry-run` packs 78 files under `agents/` and zero
- * templates: negations are honoured regardless of position. No reorder is needed, and a
- * refusal keyed on ordering would have refused a correct array.
+ * A FOURTH class was proposed, refuted, and then REFUTED ONLY IN PART — the correction matters
+ * because the original wording licensed two shapes that lose files silently (#879 round 2).
+ * The refutation holds for FILE negations: the real array places `!agents/_template.md`,
+ * `!teams/_template.md` and `!guides/_template.md` before the entries they carve from, and
+ * `npm pack --dry-run` honours them there — 78 files under `agents/`, zero templates. Position
+ * does not matter for those.
+ *
+ * It does NOT hold for a DIRECTORY negation, re-derived here rather than taken on report:
+ *
+ *   [skills/,!skills/_template/]                       packs skills/real only     (honoured)
+ *   [!skills/_template/,skills/]                       packs _template TOO        (DEAD)
+ *   [agents/,!agents/_template.md]                     packs agents/real.md only  (honoured)
+ *   [!agents/_template.md,agents/]                     packs agents/real.md only  (honoured)
+ *   [skills/,!skills/_template/,skills/_template/SKILL.md]   packs the re-included file
+ *
+ * So two shapes are refused below: a directory negation positioned before an inclusion it
+ * prefixes, which npm ignores while this matcher honours it; and an inclusion nested under a
+ * negated prefix, which npm packs while this matcher carves it out. Both make the matcher
+ * report FEWER files than ship — the silent direction, and the one a security document must
+ * never take. Today's array is neither shape; an alphabetised `files` would become the first
+ * one without a word from any gate.
  */
 function assertInterpretable(files, root) {
+  const negations = files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1));
+  for (const [index, entry] of files.entries()) {
+    if (entry.startsWith('!') && entry.endsWith('/')) {
+      // A DIRECTORY negation is dead unless it follows the inclusion it carves from — measured,
+      // npm packs the whole directory when the order is reversed, while this matcher goes on
+      // excluding it. Under-counting is the silent direction (#879 round 2).
+      const carved = entry.slice(1);
+      const inclusionAfter = files.slice(index + 1)
+        .some((later) => !later.startsWith('!') && carved.startsWith(later));
+      if (inclusionAfter) {
+        throw new Error(
+          `package.json \`files\` entry "${entry}" is a DIRECTORY negation placed before an `
+          + 'inclusion it carves from. Measured: npm ignores it in that position and packs the '
+          + 'directory, while this module keeps excluding it — so the published file count would '
+          + 'be lower than what ships. Move the negation after the inclusion.',
+        );
+      }
+    }
+    if (!entry.startsWith('!') && negations.some((pattern) => pattern.endsWith('/') && entry.startsWith(pattern))) {
+      throw new Error(
+        `package.json \`files\` entry "${entry}" re-includes a path under a negated directory. `
+        + 'Measured: npm packs it, while this module carves it out with the negation — again the '
+        + 'silent direction. Narrow the negation instead of re-including beneath it.',
+      );
+    }
+  }
   for (const entry of files) {
     if (/[*?[\]{}()|+@!]/.test(entry.slice(entry.startsWith('!') ? 1 : 0))) {
       throw new Error(
@@ -361,4 +402,26 @@ function assertInterpretable(files, root) {
       );
     }
   }
+}
+
+/**
+ * The sentence SECURITY.md carries about pack-time hooks, derived from a manifest.
+ *
+ * A pure function of `pkg` so it can be unit-tested, which is the point: the clause lived inline
+ * in `generate-readmes.js` and its only guard was `check-readmes`, a SNAPSHOT gate. A snapshot
+ * cannot tell a derivation from a literal that renders the same bytes — measured in the #879
+ * review, reverting the derivation to `['prepack']` regenerated SECURITY.md byte-identically and
+ * the mutant SURVIVED. Here a manifest without the hook is an argument, and the assertion is the
+ * returned string.
+ *
+ * `prepack` only, deliberately. A future `postpack` is a cleanup step, and describing it as
+ * refusing a pack would be false of it (#879 round 2, N9); it gets its own clause when it exists.
+ * The INSTALL_HOOKS above are the consumer-side ones this sentence disclaims — `prepack` is not
+ * among them, which is what keeps the disclaimer true.
+ */
+export function packHookSentence(pkg) {
+  if (!pkg?.scripts?.prepack) return '';
+  return ' It does declare `prepack`, which runs in the PUBLISHER\'s tree when the package is'
+    + ' packed and never in a consumer\'s; it refuses a pack carrying files the published commit'
+    + ' does not (#876).';
 }

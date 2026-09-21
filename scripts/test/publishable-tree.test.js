@@ -187,7 +187,7 @@ test('`prepack` is wired, and it is deliberately NOT an install hook', async () 
 
 test('the main-module guard fires at a path npm percent-encodes — the #879 fail-open', async (t) => {
   const { execFileSync } = await import('node:child_process');
-  const { copyFileSync } = await import('node:fs');
+  const { copyFileSync, cpSync } = await import('node:fs');
   const { resolve, dirname } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
 
@@ -206,19 +206,37 @@ test('the main-module guard fires at a path npm percent-encodes — the #879 fai
     writeFileSync(join(dir, '.gitignore'), '__pycache__/\n');
     writeFileSync(join(dir, 'skills/real/SKILL.md'), '# real\n');
     writeFileSync(join(dir, 'skills/real/references/__pycache__/contaminant.pyc'), 'x');
-    copyFileSync(join(root, 'scripts/check-publishable-tree.js'), join(dir, 'check.mjs'));
+    // `scripts/`, not the fixture root: the module resolves ROOT as its own parent directory, so
+    // a script at `<fixture>/check.mjs` makes ROOT the fixture's PARENT, which has no
+    // package.json — `readFileSync` throws ENOENT and the process exits 1 having checked
+    // nothing. Both arms then "pass" on a crash, and the plain arm passes with the OLD guard
+    // too (#879 round 2, S2). The assertion on stderr is what makes the exit code mean refusal.
+    mkdirSync(join(dir, 'scripts'), { recursive: true });
+    cpSync(join(root, 'scripts/lib'), join(dir, 'scripts/lib'), { recursive: true });
+    copyFileSync(join(root, 'scripts/check-publishable-tree.js'), join(dir, 'scripts/check.mjs'));
     initRepo(dir);
 
     const run = () => {
       try {
-        execFileSync(process.execPath, ['check.mjs'], { cwd: dir, encoding: 'utf8', stdio: 'pipe' });
-        return 0;
+        const stdout = execFileSync(process.execPath, ['scripts/check.mjs'], { cwd: dir, encoding: 'utf8', stdio: 'pipe' });
+        return { status: 0, stdout, stderr: '' };
       } catch (error) {
-        return error.status;
+        return { status: error.status, stdout: String(error.stdout ?? ''), stderr: String(error.stderr ?? '') };
       }
     };
 
-    assert.equal(run(), 1, `the guard must refuse at "${name}" — exit 0 there is the fail-open`);
+    const result = run();
+    assert.equal(result.status, 1, `the guard must refuse at "${name}" — exit 0 there is the fail-open`);
+    assert.match(result.stderr, /REFUSED: 1 IGNORED/,
+      `exit 1 must be a refusal at "${name}", not a crash: ${result.stderr.slice(0, 200)}`);
+
+    // The arm a crash can never produce: remove the contaminant and the same invocation must
+    // exit 0 with the OK line on stdout. Without it, "exit 1" is the only thing observed and a
+    // broken script satisfies the whole test.
+    rmTree(join(dir, 'skills/real/references/__pycache__'));
+    const clean = run();
+    assert.equal(clean.status, 0, `a clean tree must pass at "${name}": ${clean.stderr.slice(0, 200)}`);
+    assert.match(clean.stdout, /^OK: /);
   }
 });
 
@@ -324,4 +342,21 @@ test('the module can be IMPORTED where there is no script path', async () => {
   ], { encoding: 'utf8' });
 
   assert.match(out, /^OK: /);
+});
+
+test('the pack-hook sentence is DERIVED — a manifest without the hook yields nothing', async () => {
+  const { packHookSentence } = await import('../lib/skills-inventory.js');
+
+  // The point of extracting it. Its previous guard was `check-readmes`, a SNAPSHOT gate, and a
+  // snapshot cannot tell a derivation from a literal rendering the same bytes: reverting the
+  // derivation to a hardcoded `['prepack']` regenerated SECURITY.md byte-identically and the
+  // mutant SURVIVED (#879 round 2, S3). Here the absent-hook manifest is an argument.
+  assert.equal(packHookSentence({ scripts: {} }), '');
+  assert.equal(packHookSentence({}), '');
+  assert.equal(packHookSentence(undefined), '');
+  assert.match(packHookSentence({ scripts: { prepack: 'node x.js' } }), /It does declare `prepack`/);
+
+  // `postpack` alone is NOT described as refusing a pack — a cleanup step does not refuse
+  // anything, and the sentence would be false of it (N9).
+  assert.equal(packHookSentence({ scripts: { postpack: 'node x.js' } }), '');
 });

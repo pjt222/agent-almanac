@@ -88,7 +88,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { isExcludedFromPackage } from './lib/skills-inventory.js';
+import { isExcludedFromPackage, shippedEntries } from './lib/skills-inventory.js';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -107,11 +107,12 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
  * otherwise exact path — because npm's negations are root-anchored.
  */
 export function shippedPaths(root = ROOT) {
-  const files = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')).files ?? [];
-  return {
-    included: files.filter((entry) => !entry.startsWith('!')),
-    negations: files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1)),
-  };
+  // IMPORTED, not re-implemented. `shippedEntries` already returns exactly this shape and runs
+  // `assertInterpretable` on the way — which is the half that matters: a `files` array in one of
+  // the two shapes npm and this matcher disagree about now refuses HERE, at prepack, rather than
+  // only where check-readmes happens to run. A second copy of the split was what let the guard
+  // and the inventory hold different opinions about the same manifest (#879 round 2, S1).
+  return shippedEntries(root);
 }
 
 /**
