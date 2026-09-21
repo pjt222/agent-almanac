@@ -1,73 +1,44 @@
 /**
- * git-files.test.js — the git-backed enumerator, and proof that all three call sites use it
+ * git-files.test.js — the git-backed enumerator, and proof that its two library call sites use it
  * (#872 / #868 / #830).
  *
  * The component and the wiring are tested separately on purpose. One helper that asks git is
  * worth nothing if a consumer still walks disk, and "I extracted a helper" is exactly the claim
  * that reads as done while two of three call sites are unchanged (`CLAUDE.md` § Proving a Gate
- * Can Fail — prove the wiring, not the component).
+ * Can Fail — prove the wiring, not the component). The third call site — the three counts
+ * `generate-readmes.js` publishes — is covered behaviourally in `tree-counts.test.js`, because a
+ * scan of the generator's source was measured green with the defect restored (#874 review, B1).
  *
  * Every fixture is a REAL git repository, because the behaviour under test is git's own ignore
- * rule. A fixture that is merely a directory would take the disk fallback and assert nothing
- * about the thing that was fixed — the vacuous-arm failure mode this repository keeps finding in
- * its own review rounds.
+ * rule. A fixture that is merely a directory asserts nothing about what was fixed — and since
+ * the disk fallback was removed it cannot even run, which is the point of the refusal arm below.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, unlinkSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, unlinkSync, symlinkSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
+import { join, dirname } from 'node:path';
 import { rmTree } from './_tmp.js';
-import { listNonIgnored, topLevelEntries, insideWorkTree } from '../lib/git-files.js';
+import { initRepo } from './_git-fixture.js';
+import { listNonIgnored, topLevelEntries } from '../lib/git-files.js';
 import { checkParity } from '../lib/tools-registry.js';
 import { nonDocumentationFiles } from '../lib/skills-inventory.js';
-
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-
-/**
- * An environment git cannot escape, copied from `continue-here-blocks.test.js` and load-bearing
- * for the same reason: neither `cwd` nor `-C` is isolation, because git honours an absolute
- * `GIT_DIR` over both. A suite that runs `git init` without this writes its fixture into the
- * caller's repository, silently, at exit 0. Every `GIT_*` key is dropped rather than a denylist
- * of the ones anyone thought of, and `HOME`/`XDG_CONFIG_HOME` move because
- * `$XDG_CONFIG_HOME/git/ignore` is reached through no variable at all.
- */
-function cleanEnv(home) {
-  const env = {};
-  for (const [key, value] of Object.entries(process.env)) {
-    if (!key.startsWith('GIT_')) env[key] = value;
-  }
-  env.HOME = home;
-  env.XDG_CONFIG_HOME = join(home, '.config');
-  env.GIT_CONFIG_NOSYSTEM = '1';
-  return env;
-}
-
-/** A throwaway git repository. `files` maps repo-relative paths to contents; all are committed. */
-function repo(t, files) {
-  const dir = mkdtempSync(join(tmpdir(), 'git-files-'));
-  t.after(() => rmTree(dir));
-  const git = (...args) => {
-    const r = spawnSync('git', ['-C', dir, ...args], { encoding: 'utf8', env: cleanEnv(dir) });
-    assert.equal(r.status, 0, `git ${args.join(' ')} failed: ${r.stderr}`);
-    return r.stdout;
-  };
-  git('init', '-q', '-b', 'main', '.');
-  git('config', 'user.email', 'test@example.invalid');
-  git('config', 'user.name', 'Fixture');
-  write(dir, files);
-  git('add', '-A');
-  git('commit', '-qm', 'fixture');
-  return { dir, git };
-}
 
 function write(dir, files) {
   for (const [rel, content] of Object.entries(files)) {
     mkdirSync(dirname(join(dir, rel)), { recursive: true });
     writeFileSync(join(dir, rel), content);
   }
+}
+
+/** A throwaway git repository. `files` maps repo-relative paths to contents; all are committed. */
+function repo(t, files) {
+  const dir = mkdtempSync(join(tmpdir(), 'git-files-'));
+  t.after(() => rmTree(dir));
+  mkdirSync(join(dir, '.git-placeholder'), { recursive: true });
+  write(dir, files);
+  const git = initRepo(dir);
+  return { dir, git };
 }
 
 // ── the component ─────────────────────────────────────────────────────────────────────────────
@@ -87,10 +58,7 @@ test('the accept rule is git ignore and nothing else: ignored out, untracked IN'
     'tools/brand-new.sh': '#!/usr/bin/env bash\n',
   });
 
-  const { paths, source } = listNonIgnored(dir, 'tools');
-
-  assert.equal(source, 'git', 'a real repository must take the git path, or this test asserts nothing');
-  assert.deepEqual(paths, ['tools/brand-new.sh', 'tools/kept.py']);
+  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/brand-new.sh', 'tools/kept.py']);
 });
 
 test('a TRACKED file matching an ignore pattern stays in — it ships', async (t) => {
@@ -100,12 +68,10 @@ test('a TRACKED file matching an ignore pattern stays in — it ships', async (t
   git('commit', '-qm', 'forced');
   write(dir, { 'tools/loose.log': 'x\n' });
 
-  const { paths } = listNonIgnored(dir, 'tools');
-
   // Measured on git 2.43: `check-ignore` consults the index and does not call a tracked path
   // ignored (`--no-index` does). That is why this module carries no tracked-set union of its
   // own — and this arm is what would notice if that behaviour were ever relied on wrongly.
-  assert.deepEqual(paths, ['tools/forced.log', 'tools/plain.sh']);
+  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/forced.log', 'tools/plain.sh']);
 });
 
 test('a BROKEN symlink is an entry like any other', async (t) => {
@@ -116,7 +82,7 @@ test('a BROKEN symlink is an entry like any other', async (t) => {
 
   // `checkParity`'s third arm is written to report exactly this entry, so it must survive the
   // enumeration to reach the `lstat` that classifies it.
-  assert.deepEqual(listNonIgnored(dir, 'tools').paths, ['tools/dangling.sh', 'tools/real.sh']);
+  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/dangling.sh', 'tools/real.sh']);
   assert.deepEqual(topLevelEntries(dir, 'tools').files, ['dangling.sh', 'real.sh']);
 });
 
@@ -126,7 +92,7 @@ test('a file deleted but not staged is simply absent — the disk is the candida
 
   // The walk it replaced could not see it either, and `checkParity` reports the registry row
   // through its own `existsSync`, which is where that defect belongs.
-  assert.deepEqual(listNonIgnored(dir, 'tools').paths, ['tools/here.sh']);
+  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/here.sh']);
 });
 
 test('topLevelEntries: an EMPTY directory is still reported, an ignored one is not', async (t) => {
@@ -138,9 +104,8 @@ test('topLevelEntries: an EMPTY directory is still reported, an ignored one is n
     'tools/build/out.txt': 'x',
   });
 
-  const { files, dirs, source } = topLevelEntries(dir, 'tools');
+  const { files, dirs } = topLevelEntries(dir, 'tools');
 
-  assert.equal(source, 'git');
   assert.deepEqual(files, ['flat.sh']);
   // `empty` has no file under it and must survive anyway — it is representable by no registry
   // row, which is what `checkParity`'s third arm reports. `__pycache__` and `build` are ignored
@@ -162,29 +127,47 @@ test('nested .gitignore files, negations and info/exclude are honoured, because 
   });
   writeFileSync(join(dir, '.git/info/exclude'), 'excluded-here.sh\n');
 
-  const { paths } = listNonIgnored(dir, 'tools');
-
   // A hand-rolled matcher would have to implement all three. This module implements none of
   // them, which is the point: `scripts/check-generated-artifacts.js` — "git is the ruler".
-  assert.deepEqual(paths, ['tools/deep/.gitignore', 'tools/deep/keep.tmp', 'tools/stay.sh']);
+  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/deep/.gitignore', 'tools/deep/keep.tmp', 'tools/stay.sh']);
 });
 
-test('outside a checkout the plain listing answers, and SAYS so', async (t) => {
+// ── it refuses rather than answering without the rule ──────────────────────────────────────────
+
+test('outside a checkout it REFUSES — the fallback that hid a broken git is gone', async (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'git-files-bare-'));
   t.after(() => rmTree(dir));
   write(dir, { 'tools/a.sh': 'x\n', 'tools/sub/b.sh': 'y\n' });
 
-  assert.equal(insideWorkTree(dir), false, '/tmp must not be inside a repository, or this arm is vacuous');
-  const { paths, source } = listNonIgnored(dir, 'tools');
-
-  // The npm-shipped package has no `.git`, and `skills-inventory.js` is reachable from it, so
-  // "no repository" is an answer rather than a fault.
-  assert.equal(source, 'disk');
-  assert.deepEqual(paths, ['tools/a.sh', 'tools/sub/b.sh']);
-  assert.deepEqual(listNonIgnored(dir, 'absent').paths, [], 'a missing directory yields no paths');
+  // The fallback measured in the #874 review (S1/S2): a git that failed the way `safe.directory`
+  // does put `tools/__pycache__` back into `notPlainFile` and a gitignored `evil.py` back into
+  // the inventory, silently, behind a `source: 'disk'` marker no consumer read. An unfiltered
+  // listing is not a degraded answer to this question; it is the defect.
+  assert.throws(() => listNonIgnored(dir, 'tools'), /Outside a git checkout there is no ignore rule/);
+  assert.throws(() => topLevelEntries(dir, 'tools'), /check-ignore failed/);
 });
 
-// ── the wiring: one call site per test ────────────────────────────────────────────────────────
+test('a missing directory is empty; an UNREADABLE one throws', async (t) => {
+  const { dir } = repo(t, { 'tools/a.sh': 'x\n', 'skills/real/references/helper.py': 'x\n' });
+
+  assert.deepEqual(listNonIgnored(dir, 'absent'), [], 'absent means absent');
+
+  // EACCES rendering as "not there" is the direction `skills-inventory.js` argues against three
+  // functions away, and git exits 0 with only `warning: could not open directory`, so nothing
+  // downstream would refuse on its behalf (#874 review, S3).
+  if (process.getuid?.() === 0) return; // root reads anything; the arm would be vacuous
+  const locked = join(dir, 'skills/real/references');
+  chmodSync(locked, 0o000);
+  try {
+    assert.throws(() => listNonIgnored(dir, 'skills'), /EACCES|permission denied/i);
+  } finally {
+    // Restored HERE, not in a t.after: the fixture's own teardown hook was registered first and
+    // runs first, so an unreadable directory at that moment fails the removal with EACCES.
+    chmodSync(locked, 0o755);
+  }
+});
+
+// ── the wiring: one library call site per test ────────────────────────────────────────────────
 
 test('WIRING check-tools-registry: an ignored artefact is invisible, a real defect still fires', async (t) => {
   const row = {
@@ -230,21 +213,4 @@ test('WIRING skills-inventory: the SECURITY.md inventory counts the artifact, no
   // recursive walk tested each directory before descending, so a flat listing has to test the
   // ancestor prefixes or `!skills/_template/` silently stops excluding anything.
   assert.ok(!found.some((p) => p.startsWith('skills/_template/')), 'the package negation still prunes the directory');
-});
-
-test('WIRING generate-readmes: it enumerates through git at every site and cannot walk disk', () => {
-  const source = readFileSync(join(ROOT, 'scripts/generate-readmes.js'), 'utf8');
-
-  // The generator runs its whole pipeline plus `process.exit` at import time, so nothing can
-  // import it and call one of these functions. The honest wiring assertion available is over the
-  // source: a call site reverted to a disk walk needs the import back, and this goes red.
-  const fsImport = source.match(/import \{([^}]*)\} from 'fs';/);
-  assert.ok(fsImport, 'the fs import must still be findable, or this test is asserting nothing');
-  assert.ok(!/\breaddirSync\b/.test(fsImport[1]), 'generate-readmes.js must not import readdirSync (#872)');
-  assert.ok(!/\bstatSync\b/.test(fsImport[1]), 'generate-readmes.js must not import statSync (#872)');
-
-  // One assertion per enumeration site, so a single reverted site is one failing test.
-  assert.match(source, /topLevelEntries\(ROOT, 'scripts'\)/, 'the scripts/ count feeds SECURITY.md');
-  assert.match(source, /topLevelEntries\(ROOT, 'workflows'\)/, 'the workflows/ count feeds SECURITY.md');
-  assert.match(source, /topLevelEntries\(ROOT, typeRel\)/, 'the per-locale translation counts feed both README tables');
 });

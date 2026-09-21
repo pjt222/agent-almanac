@@ -155,7 +155,7 @@ function isExcludedFromPackage(relPath, negations) {
  */
 function shippedFilesUnder(root, tree, negations) {
   const treeDepth = tree.split('/').length;
-  return listNonIgnored(root, tree).paths.filter((rel) => {
+  return listNonIgnored(root, tree).filter((rel) => {
     const parts = rel.split('/');
     for (let depth = treeDepth; depth < parts.length - 1; depth++) {
       if (isExcludedFromPackage(`${parts.slice(0, depth + 1).join('/')}/`, negations)) return false;

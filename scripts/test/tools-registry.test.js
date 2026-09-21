@@ -20,6 +20,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { rmTree } from './_tmp.js';
+import { initRepo } from './_git-fixture.js';
 import {
   REGISTRY_PATH, TAGS, parseRegistry, schemaErrors, checkParity, loadRegistry, renderClaudeBlock, renderReadmeTable,
 } from '../lib/tools-registry.js';
@@ -63,6 +64,10 @@ function tree(entries, files = entries.map((e) => e.path)) {
   mkdirSync(join(root, 'tools'), { recursive: true });
   for (const f of files) writeFileSync(join(root, f), '#!/usr/bin/env bash\necho ok\n');
   writeFileSync(join(root, REGISTRY_PATH), toYaml(entries));
+  // A repository, because `checkParity` now enumerates through git and git-files refuses
+  // outside a checkout. Uncommitted on purpose: an untracked-but-not-ignored tool file is
+  // exactly what #830 requires the gate to keep seeing.
+  initRepo(root, { commit: false });
   return root;
 }
 

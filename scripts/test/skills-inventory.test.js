@@ -19,6 +19,7 @@ import { tmpdir } from 'node:os';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { rmTree } from './_tmp.js';
+import { initRepo } from './_git-fixture.js';
 import {
   skillsDeclaringBash,
   nonDocumentationFiles,
@@ -47,6 +48,9 @@ function makeTree(t, skills, files = ['skills/', '!skills/_template/']) {
   }
   mkdirSync(join(dir, 'skills', '_template'), { recursive: true });
   writeFileSync(join(dir, 'skills', '_template', 'SKILL.md'), BASH_SKILL, 'utf8');
+  // A repository, because `lib/git-files.js` refuses to enumerate outside one: these fixtures
+  // used to exercise a disk fallback that production never took (#874 review, S2).
+  initRepo(dir);
   return dir;
 }
 

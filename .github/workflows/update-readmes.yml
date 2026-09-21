@@ -62,6 +62,10 @@ on:
       # because `check:generator-inputs` refused the commit that added it without this line —
       # the guard working as #691 intended, rather than a list maintained by memory.
       - 'scripts/lib/git-files.js'
+      # The three directory counts SECURITY.md and the translation tables publish. Extracted
+      # from the generator in #874 so a fixture can assert the NUMBERS: a source scan standing
+      # in for that test was measured green with the #872 defect restored.
+      - 'scripts/lib/tree-counts.js'
       # The middle of the chain, and it was skipped while BOTH endpoints were listed:
       #   generate-translation-status.js -> lib/translation-status.js -> lib/fences.js
       # fences.js is not a passive re-exporter — extractFences, isGated, contentKey,

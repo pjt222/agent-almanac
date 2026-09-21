@@ -29,15 +29,16 @@
  * listing (`git ls-files` alone) would have turned a defect the gate exists to report into one
  * it cannot see — a silent narrowing, traded for the noisy one being fixed.
  *
- * Measured rather than assumed, on git 2.43 (`check-ignore-probe.sh`, 2026-09-21):
+ * Measured rather than assumed, on git 2.43 (`check-ignore-probe.sh`, 2026-09-21), and
+ * independently re-derived by the #874 review over nine ignore mechanisms in one fixture:
  *
  *   - a TRACKED file matching an ignore pattern (`git add -f`) is NOT reported as ignored, so
  *     it stays in the listing without this module needing its own tracked-set union. `--no-index`
  *     reports it; the default consults the index, which is the behaviour wanted here.
  *   - a directory matching a `build/` pattern IS reported when asked about as `build`, with no
- *     trailing slash — which is how `topLevelEntries` asks.
- *   - nested `.gitignore` files, `!negations` and `.git/info/exclude` are all honoured, because
- *     git is answering.
+ *     trailing slash — which is how `topLevelEntries` asks. So are `cache-noslash`, a nested
+ *     `.gitignore`, `.git/info/exclude` and a `tools/gen-*` glob; a root-anchored `/build` is
+ *     correctly NOT matched at `tools/build`, and a `!negation` correctly keeps its directory.
  *   - exit 1 means "no path matched" and exit 128 means a fatal error, so the two are told apart
  *     by status rather than by parsing a message.
  *
@@ -64,66 +65,47 @@
  * spawn costs on this mount. Batching is correct as well as faster: git reports a path inside an
  * ignored directory as ignored, so pruning the walk is an optimisation, not a requirement.
  *
- * ## A git failure REFUSES; it never reports an empty or unfiltered tree
+ * ## It REFUSES rather than answering without the rule
  *
- * Borrowed from `scripts/check-generated-artifacts.js`, whose comment states the argument:
- * returning `[]` renders a transient git error — `index.lock` contention is real in a repository
- * where sessions share a checkout — as a confident "this tree contains nothing", a wrong answer
- * stated with certainty. Returning the unfiltered listing would be worse still, since it
- * silently restores the defect this module exists to fix. Inside a work tree, a `check-ignore`
- * failure that is not "nothing matched" throws.
+ * There is no disk fallback. An earlier revision fell back to the unfiltered listing whenever
+ * git could not be asked, and the #874 review measured what that bought: a `git` that fails the
+ * way `safe.directory` does (exit 128, "detected dubious ownership") produced
+ * `notPlainFile: ["tools/__pycache__"]` and an inventory naming a gitignored `evil.py` — both
+ * defects back, silently, behind a `source: 'disk'` marker no consumer read. The fallback's one
+ * named beneficiary did not exist either: `scripts/` is in `REPO_ONLY` and nothing shipped
+ * imports this, and a package installed under a consumer's `node_modules/` sits INSIDE their
+ * work tree, where `node_modules` is ignored — so the fallback would have answered `[]` with
+ * certainty rather than not answering.
  *
- * Outside a work tree the plain listing IS the answer rather than an error: the npm-shipped
- * package has no `.git`, and `skills-inventory.js` is reachable from it. `source` names which
- * of the two answered, so a caller — or a test — can refuse to grade a fixture that quietly
- * took the fallback.
+ * So every failure that is not git's documented "no path matched" throws, with git's own stderr
+ * in the message. Outside a checkout that means a refusal: there is no ignore rule to apply, and
+ * `scripts/check-generated-artifacts.js` makes the same choice for the same reason — returning
+ * `[]` renders a transient error as a confident "this tree contains nothing", a wrong answer
+ * stated with certainty.
+ *
+ * Errors from the WALK are treated the same way. Only `ENOENT`/`ENOTDIR` — the directory is not
+ * there — yield an empty listing; `EACCES` and friends throw. `skills-inventory.js` argues three
+ * functions away that an unreadable file rendering as "not there" is the wrong direction in a
+ * security document, and git exits 0 with only a `warning: could not open directory` when it
+ * hits one, so nothing downstream would refuse on its behalf.
  */
 import { execFileSync } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-/** Big enough for a whole-corpus batch: 13,492 paths is well under a MiB. */
+/** Big enough that a whole-corpus batch cannot truncate; the real corpus needs well under 1 MiB. */
 const GIT_BUFFER = 1 << 28;
 
-/** root -> boolean. A directory does not stop being a repository during one process. */
-const workTreeCache = new Map();
-
-/** Forget what `insideWorkTree` memoised. For tests that `git init` a directory they already asked about. */
-export function clearWorkTreeCache() {
-  workTreeCache.clear();
-}
-
-/**
- * Is `root` inside a git working tree?
- *
- * Asked once per root and memoised, and asked as its own question rather than inferred from a
- * failed `check-ignore`: "there is no repository here" (fall back to the plain listing) and
- * "git broke" (refuse) must not be told apart by matching an error message. False when git is
- * not installed at all, which is the same situation for our purposes — something other than git
- * has to answer.
- */
-export function insideWorkTree(root) {
-  if (!workTreeCache.has(root)) {
-    let inside = false;
-    try {
-      inside = execFileSync('git', ['rev-parse', '--is-inside-work-tree'], {
-        cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
-      }).trim() === 'true';
-    } catch {
-      inside = false;
-    }
-    workTreeCache.set(root, inside);
-  }
-  return workTreeCache.get(root);
-}
+/** The walk reports "nothing here" for these, and only these. Anything else is a real failure. */
+const ABSENT = new Set(['ENOENT', 'ENOTDIR']);
 
 /**
  * Which of `paths` does git ignore? One batch, repo-relative paths, files and directories alike.
  *
  * Exit 1 is git's documented "no path matched" and is the ordinary case here, so it is read off
- * the error's `status` rather than treated as a failure. Any other failure throws: reporting an
- * empty set would mean "nothing is ignored", which is exactly the unfiltered listing this module
- * exists to prevent.
+ * the error's `status`. Everything else throws with git's stderr included — the review found the
+ * one exit-128 case reachable from a content tree (`fatal: pathspec 'tools/empty' is beyond a
+ * symbolic link`) and found the reason discarded, leaving only "Command failed".
  */
 function ignoredAmong(root, paths) {
   if (paths.length === 0) return new Set();
@@ -133,27 +115,34 @@ function ignoredAmong(root, paths) {
       input: `${paths.join('\0')}\0`,
       encoding: 'utf8',
       maxBuffer: GIT_BUFFER,
-      stdio: ['pipe', 'pipe', 'ignore'],
+      stdio: ['pipe', 'pipe', 'pipe'],
     });
     return new Set(out.split('\0').filter(Boolean));
   } catch (error) {
     if (error?.status === 1) return new Set();
+    const stderr = String(error?.stderr ?? '').trim();
     throw new Error(
-      `git check-ignore failed in ${root}: ${error.message}. Refusing to report every candidate ` +
-      'as non-ignored, which would silently restore the gitignored-artefact defect (#872).',
+      `git check-ignore failed in ${root}${stderr ? `: ${stderr}` : `: ${error.message}`}. `
+      + 'Refusing to report every candidate as non-ignored, which would silently restore the '
+      + 'gitignored-artefact defect (#872). Outside a git checkout there is no ignore rule to '
+      + 'apply and this enumeration cannot be performed at all.',
     );
   }
 }
 
-/** Every file under `dir`, repo-relative, recursively; a missing or unreadable directory yields none. */
-function walk(root, dir, out = []) {
-  let entries;
+/** The immediate children of `dir`; absent means absent, unreadable is a failure. */
+function children(root, dir) {
   try {
-    entries = readdirSync(resolve(root, dir), { withFileTypes: true });
-  } catch {
-    return out;
+    return readdirSync(resolve(root, dir), { withFileTypes: true });
+  } catch (error) {
+    if (ABSENT.has(error?.code)) return [];
+    throw error;
   }
-  for (const entry of entries) {
+}
+
+/** Every file under `dir`, repo-relative, recursively. */
+function walk(root, dir, out = []) {
+  for (const entry of children(root, dir)) {
     const rel = `${dir}/${entry.name}`;
     if (entry.isDirectory()) walk(root, rel, out);
     else out.push(rel);
@@ -166,15 +155,14 @@ function walk(root, dir, out = []) {
  *
  * Recursive, and the whole subtree goes through one `check-ignore` batch.
  *
- * @param {string} root repository root, or any directory when there is no repository
+ * @param {string} root repository root; outside a checkout this throws rather than guessing
  * @param {string} dir repo-relative directory; a missing one yields no paths
- * @returns {{paths: string[], source: 'git'|'disk'}}
+ * @returns {string[]}
  */
 export function listNonIgnored(root, dir) {
   const found = walk(root, dir);
-  if (!insideWorkTree(root)) return { paths: found.sort(), source: 'disk' };
   const ignored = ignoredAmong(root, found);
-  return { paths: found.filter((rel) => !ignored.has(rel)).sort(), source: 'git' };
+  return found.filter((rel) => !ignored.has(rel)).sort();
 }
 
 /**
@@ -191,19 +179,16 @@ export function listNonIgnored(root, dir) {
  * `lstat` it anyway to tell a symlink from a plain file, and pre-judging it here would take that
  * distinction away from the only code equipped to make it.
  *
- * @returns {{files: string[], dirs: string[], source: 'git'|'disk'}}
+ * One behaviour change worth knowing, found by the #874 review: if `dir` ITSELF is ignored — a
+ * `tools/` excluded wholesale with its files force-added — an empty subdirectory under it is no
+ * longer reported, where the `readdirSync` this replaced reported it. That is git's rule applied
+ * consistently, and it does not arise here.
+ *
+ * @returns {{files: string[], dirs: string[]}}
  */
 export function topLevelEntries(root, dir) {
-  let entries;
-  try {
-    entries = readdirSync(resolve(root, dir), { withFileTypes: true });
-  } catch {
-    entries = [];
-  }
-  const source = insideWorkTree(root) ? 'git' : 'disk';
-  const ignored = source === 'git'
-    ? ignoredAmong(root, entries.map((entry) => `${dir}/${entry.name}`))
-    : new Set();
+  const entries = children(root, dir);
+  const ignored = ignoredAmong(root, entries.map((entry) => `${dir}/${entry.name}`));
 
   const files = [];
   const dirs = [];
@@ -211,5 +196,5 @@ export function topLevelEntries(root, dir) {
     if (ignored.has(`${dir}/${entry.name}`)) continue;
     (entry.isDirectory() ? dirs : files).push(entry.name);
   }
-  return { files: files.sort(), dirs: dirs.sort(), source };
+  return { files: files.sort(), dirs: dirs.sort() };
 }
