@@ -56,6 +56,12 @@ on:
       # by hand — which is why `check:generator-inputs` exists, and why it caught this one on
       # the PR that added it (#691).
       - 'scripts/lib/skills-inventory.js'
+      # The enumerator all three walkers now ask instead of the filesystem (#872/#868/#830). It
+      # decides which files exist as far as every generated count is concerned, so a change to
+      # its accept rule moves SECURITY.md's figures and both translation tables at once. Listed
+      # because `check:generator-inputs` refused the commit that added it without this line —
+      # the guard working as #691 intended, rather than a list maintained by memory.
+      - 'scripts/lib/git-files.js'
       # The middle of the chain, and it was skipped while BOTH endpoints were listed:
       #   generate-translation-status.js -> lib/translation-status.js -> lib/fences.js
       # fences.js is not a passive re-exporter — extractFences, isGated, contentKey,
