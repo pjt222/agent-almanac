@@ -68,16 +68,21 @@ test('an IGNORED artefact under a shipped directory is refused — the #876 case
   assert.ok(lines.some((l) => l.includes('does not honour .gitignore')), 'the message must say WHY');
 });
 
-test('an ignored file inside a NON-ignored directory is listed on its own line', async (t) => {
-  // This is what `--ignored=matching` buys over plain `--ignored`, and it is asserted rather
-  // than assumed: a wholly-ignored directory collapses under both, so a fixture built only that
-  // way cannot tell the flags apart.
+test('the reported path is the FILE, not a directory an operator would search in vain', async (t) => {
+  // `-uall` is what buys this, and it is asserted rather than assumed — a surviving mutant
+  // showed that swapping `--ignored=matching` for plain `--ignored` changed no test, because
+  // with `-uall` the two agree. Without `-uall` an untracked file collapses to its directory,
+  // which still refuses while naming the wrong thing to delete.
   const dir = pkg(t);
-  write(dir, { 'skills/real/debug.log': 'noise\n' });
+  write(dir, {
+    'skills/real/debug.log': 'noise\n',
+    'skills/fresh/new.md': 'x\n',
+  });
 
   const found = divergentPaths(dir);
 
-  assert.deepEqual(found.ignored, ['skills/real/debug.log']);
+  assert.deepEqual(found.ignored, ['skills/real/debug.log'], 'an ignored file in a tracked directory');
+  assert.deepEqual(found.untracked, ['skills/fresh/new.md'], 'the FILE, not `skills/fresh/`');
 });
 
 test('an UNTRACKED file under a shipped directory is refused, and named as its own class', async (t) => {

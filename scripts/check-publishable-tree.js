@@ -38,12 +38,23 @@
  *              it. Same mechanism — npm packs the disk — and the same divergence from the
  *              release, so refusing one without the other would leave half the hole open.
  *
- * `--ignored=matching -uall` is not decoration, and what it buys is measured rather than assumed:
- * it lists a file ignored INSIDE a non-ignored directory on its own line, where plain `--ignored`
- * can report only the containing directory. A wholly-ignored directory still reports as
- * `!! dir/` under both — enough to refuse, and what the fixture asserts. That same collapsing
- * made a #874 probe report every path as clean, and it was believed for a round, so the flags
- * carry their reason here.
+ * `-uall` is the load-bearing flag, and `--ignored=matching` is a precision choice. Measured on
+ * git 2.43 over the three shapes this check meets (an ignored file in a tracked directory, a
+ * wholly-ignored directory, an untracked file in an untracked one):
+ *
+ *     with -uall      matching and traditional agree on the VERDICT; they differ only in
+ *                     whether a wholly-ignored directory prints as `__pycache__/` or as the
+ *                     `.pyc` inside it. Both name something real, so either would refuse.
+ *     without -uall   an untracked file collapses to its DIRECTORY (`skills/fresh/`), and
+ *                     traditional prints `skills/real/references/` — a path that is not itself
+ *                     ignored — for the `__pycache__` case. Still refuses; names the wrong
+ *                     thing to delete.
+ *
+ * So the fixture pins the reported PATH, not just the refusal: an operator who is told a
+ * directory when a single file is the problem goes looking in the wrong place. An earlier
+ * version of this comment claimed `matching` was what listed a nested ignored file
+ * individually; a surviving mutant showed no test could tell the two apart, and the measurement
+ * showed the claim was false with `-uall` set.
  *
  * ## Where it runs
  *
