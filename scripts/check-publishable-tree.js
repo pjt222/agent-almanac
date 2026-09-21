@@ -248,9 +248,24 @@ export function report({ ignored, untracked, modified = [], codes = {} }) {
   // wording was FALSE for half of them: a deleted or typechanged path is not "packed with its
   // working-tree bytes" — the pack simply LACKS a file the commit has, and npm drops a symlink
   // silently (#879 round 2, S5). The marker is git's own code, not a stamped ` M`.
-  const byRemedy = (predicate) => modified.filter((path) => predicate((codes[path] ?? '').trim()));
-  const absent = byRemedy((code) => code === 'D' || code === 'T');
-  const unmerged = byRemedy((code) => code === 'UU' || code === 'AA' || code.startsWith('U') || code.endsWith('U'));
+  //
+  // The porcelain code is TWO COLUMNS — index, then worktree — and what npm packs is the
+  // WORKTREE. Trimming the pair and comparing it whole read only the single-column codes, so
+  // `AD` (staged add, then `rm`) and `MD` (staged edit, then `rm`) were filed under MODIFIED
+  // "with their WORKING-TREE bytes" for paths npm packs no bytes of at all. Measured on git
+  // 2.43 with ` T`, `AD` and `MD` present under a shipped directory: `npm pack --dry-run`
+  // listed package.json alone (#879 round 3, SF1).
+  const raw = (path) => codes[path] ?? '';
+  // Every unmerged code, `DD` included — both sides deleted is a conflict, not an absence, and
+  // it fell through to MODIFIED before. Tested FIRST, so the worktree column below cannot claim
+  // `DD`, `DU` or `UD` from it.
+  const UNMERGED_CODES = new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);
+  const unmerged = modified.filter((path) => UNMERGED_CODES.has(raw(path)));
+  // Absent in the WORKTREE: a `D`/`T` worktree column under any index column, plus `D `/`T `,
+  // where the worktree agrees with an index that has already dropped or retyped the path.
+  const gone = (column) => column === 'D' || column === 'T';
+  const absent = modified.filter((path) => !unmerged.includes(path)
+    && (gone(raw(path)[1]) || (raw(path)[1] === ' ' && gone(raw(path)[0]))));
   const edited = modified.filter((path) => !absent.includes(path) && !unmerged.includes(path));
   for (const [label, paths, remedy] of [
     ['ABSENT-OR-RETYPED', absent, 'so the pack LACKS a file the commit has — restore it, or commit the removal'],

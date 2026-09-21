@@ -11,7 +11,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, unlinkSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { rmTree } from './_tmp.js';
@@ -378,9 +378,10 @@ test('the pack-hook sentence is DERIVED — a manifest without the hook yields n
   assert.equal(packHookSentence({ scripts: { postpack: 'node x.js' } }), '');
 });
 
-test('assertInterpretable refuses the two `files` shapes npm and this matcher disagree about', async () => {
+test('assertInterpretable refuses the two `files` shapes npm and this matcher disagree about', async (t) => {
   const { shippedEntries } = await import('../lib/skills-inventory.js');
   const dir = mkdtempSync(join(tmpdir(), 'publishable-files-'));
+  t.after(() => rmTree(dir));
   const manifest = (files) => {
     writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'x', files }));
     return () => shippedEntries(dir);
@@ -450,4 +451,90 @@ test('a rename INTO a negated directory reports the file the pack now LACKS', as
   assert.deepEqual(found.modified, ['skills/real/a.md']);
   assert.equal(found.codes['skills/real/a.md'], 'D ');
   assert.match(report(found).join('\n'), /ABSENT-OR-RETYPED[\s\S]*the pack LACKS a file the commit has/);
+});
+
+test('a TWO-COLUMN code is read at the WORKTREE column — `AD`, `MD` and ` T` are absences', async (t) => {
+  const dir = pkg(t);
+  const { execFileSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  // `AD`: staged add, then removed from the worktree. `MD`: staged edit, then removed. Both
+  // were filed under MODIFIED — "packed with their WORKING-TREE bytes" — because the old
+  // predicate trimmed the pair and compared it whole, so it only ever matched a single-column
+  // code (#879 round 3, SF1).
+  write(dir, { 'skills/real/added.md': '# added\n' });
+  git('add', 'skills/real/added.md');
+  unlinkSync(join(dir, 'skills/real/added.md'));
+  writeFileSync(join(dir, 'skills/real/SKILL.md'), '# edited\n');
+  git('add', 'skills/real/SKILL.md');
+  unlinkSync(join(dir, 'skills/real/SKILL.md'));
+  // ` T`: a tracked regular file replaced by a symlink. The half of this class that had no
+  // fixture at all — `--delete-matching` on the `T` arm survived its mutant because the only
+  // deletion test `git rm`s, which produces `D ` (#879 round 3, SF2).
+  unlinkSync(join(dir, 'skills/real/references/helper.py'));
+  symlinkSync('/dev/null', join(dir, 'skills/real/references/helper.py'));
+
+  const found = divergentPaths(dir);
+  assert.deepEqual(found.codes, {
+    'skills/real/SKILL.md': 'MD',
+    'skills/real/added.md': 'AD',
+    'skills/real/references/helper.py': ' T',
+  }, 'the fixture is vacuous unless git reports all three shapes — assert the codes, not the count');
+
+  const lines = report(found).join('\n');
+  assert.match(lines, /REFUSED: 3 ABSENT-OR-RETYPED path\(s\)/);
+  // Measured on this exact tree: `npm pack --dry-run --json` listed package.json alone. So
+  // describing any of the three as packed with its working-tree bytes is a false statement
+  // about a file the pack carries no bytes of.
+  assert.doesNotMatch(lines, /MODIFIED path\(s\)/);
+});
+
+test('every unmerged code is UNMERGED, `DD` included', async (t) => {
+  const dir = pkg(t);
+  const { spawnSync, execFileSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  // A rename/rename conflict, because it is the reachable shape that emits `DD` — measured on
+  // git 2.43, this tree reports `DD` for the original and `UA`/`AU` for the two destinations.
+  // `DD` matched none of the old predicate's four arms and fell through to MODIFIED, which
+  // tells an operator to "commit or revert" a path that is mid-conflict (#879 round 3).
+  git('switch', '-qc', 'left');
+  git('mv', 'skills/real/SKILL.md', 'skills/real/left.md');
+  git('commit', '-qm', 'left');
+  git('switch', '-q', 'main');
+  git('switch', '-qc', 'right');
+  git('mv', 'skills/real/SKILL.md', 'skills/real/right.md');
+  git('commit', '-qm', 'right');
+  const merge = spawnSync('git', ['-C', dir, 'merge', 'left'], { encoding: 'utf8' });
+  assert.notEqual(merge.status, 0, 'the fixture needs a CONFLICT; a clean merge asserts nothing');
+
+  const found = divergentPaths(dir);
+  assert.deepEqual(found.codes, {
+    'skills/real/SKILL.md': 'DD',
+    'skills/real/left.md': 'UA',
+    'skills/real/right.md': 'AU',
+  });
+
+  const lines = report(found).join('\n');
+  assert.match(lines, /REFUSED: 3 UNMERGED path\(s\)[\s\S]*resolve it/);
+  assert.doesNotMatch(lines, /ABSENT-OR-RETYPED|MODIFIED path\(s\)/,
+    'a conflicted path is not an absence and not an edit — the remedy is to resolve it');
+});
+
+test('a directory negation is a prefix on a SEGMENT boundary, not on bytes', async (t) => {
+  const { shippedEntries } = await import('../lib/skills-inventory.js');
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-segment-'));
+  t.after(() => rmTree(dir));
+  const manifest = (files) => {
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'x', files }));
+    return () => shippedEntries(dir);
+  };
+
+  // `lib` carves nothing from `lib-extra/x/` — npm packs neither path from the other — so
+  // refusing this array rejected a manifest that is interpretable (#879 round 3, Q1).
+  assert.deepEqual(manifest(['!lib-extra/x/', 'lib'])(),
+    { included: ['lib'], negations: ['lib-extra/x/'] });
+  // The refusal itself must survive the fix, with and without the inclusion's trailing slash.
+  assert.throws(manifest(['!skills/_template/', 'skills/']), /DIRECTORY negation placed before/);
+  assert.throws(manifest(['!skills/_template/', 'skills']), /DIRECTORY negation placed before/);
 });

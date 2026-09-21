@@ -356,8 +356,13 @@ function assertInterpretable(files, root) {
       // npm packs the whole directory when the order is reversed, while this matcher goes on
       // excluding it. Under-counting is the silent direction (#879 round 2).
       const carved = entry.slice(1);
+      // Prefix on a SEGMENT boundary, not on bytes: `"lib"` does not carve from `"lib-extra/x/"`,
+      // and a raw `startsWith` refused that array as a mis-ordered negation when npm packs
+      // neither path from the other (#879 round 3, Q1). An inclusion already ending in `/` is
+      // its own boundary.
       const inclusionAfter = files.slice(index + 1)
-        .some((later) => !later.startsWith('!') && carved.startsWith(later));
+        .some((later) => !later.startsWith('!')
+          && carved.startsWith(later.endsWith('/') ? later : `${later}/`));
       if (inclusionAfter) {
         throw new Error(
           `package.json \`files\` entry "${entry}" is a DIRECTORY negation placed before an `
