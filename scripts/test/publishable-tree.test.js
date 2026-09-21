@@ -49,7 +49,7 @@ test('a clean tree passes, and the negation is not mistaken for a shipped path',
 
   assert.deepEqual(shippedPaths(dir), { included: ['skills/'], negations: ['skills/_template/'] },
     'both halves are needed: the negation is not a path to scan, and not a path to forget');
-  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [] });
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
   assert.match(report(divergentPaths(dir))[0], /^OK: /);
 });
 
@@ -105,7 +105,7 @@ test('divergence OUTSIDE the shipped paths is ignored — the check is scoped, n
   // would block every publish from a working checkout and be disabled within a week.
   write(dir, { 'scripts/local-probe.js': '1\n', 'scripts/debug.log': 'noise\n' });
 
-  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [] });
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
 });
 
 test('a MODIFIED tracked file is refused — npm packs the working bytes, not the committed ones', async (t) => {
@@ -134,7 +134,7 @@ test('content under a NEGATED files entry is not refused — npm never packs it'
     'skills/_template/__pycache__/a.pyc': 'x',
   });
 
-  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [] });
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
 
   // …and the same shapes OUTSIDE the negation are still refused, so this is a carve-out and
   // not a hole.
@@ -288,7 +288,7 @@ test('npm’s own default excludes are not reported as "would be packed"', async
     'skills/real/notes.orig': 'x',
   });
 
-  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [] });
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
 
   // …but a nested node_modules under a shipped directory IS packed, so it must still refuse —
   // the same review measured `skills/real/node_modules/dep/index.js` in the listing, which is
@@ -338,7 +338,7 @@ test('the module can be IMPORTED where there is no script path', async () => {
   const out = execFileSync(process.execPath, [
     '--input-type=module', '-e',
     `import { report } from ${JSON.stringify(`${root}/scripts/check-publishable-tree.js`)};`
-    + 'console.log(report({ ignored: [], untracked: [], modified: [] })[0]);',
+    + 'console.log(report({ ignored: [], untracked: [], modified: [], codes: {} })[0]);',
   ], { encoding: 'utf8' });
 
   assert.match(out, /^OK: /);
@@ -392,4 +392,23 @@ test('a rename WITHIN a shipped directory reports both sides — what --no-renam
   // loss of the old file goes unreported. `--no-renames` emits `D old` + `A new`, and both are
   // real divergences: the pack lacks a file the commit has, and gains one it does not.
   assert.deepEqual(found.modified, ['skills/real/SKILL.md', 'skills/real/renamed.md']);
+});
+
+test('the remedy matches what git reported — a deletion is not "packed with its working bytes"', async (t) => {
+  const dir = pkg(t);
+  const { execFileSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  writeFileSync(join(dir, 'skills/real/SKILL.md'), '# edited after the commit\n');
+  git('rm', '-q', 'skills/real/references/helper.py');
+
+  const found = divergentPaths(dir);
+  const lines = report(found).join('\n');
+
+  // The pack LACKS helper.py; it does not carry it with working-tree bytes. Stamping ` M` on it
+  // and telling the reader to "commit or revert" described the wrong failure (#879 round 2, S5).
+  assert.match(lines, /REFUSED: 1 ABSENT-OR-RETYPED path\(s\).*the pack LACKS a file the commit has/s);
+  assert.match(lines, /REFUSED: 1 MODIFIED path\(s\).*WORKING-TREE bytes/s);
+  assert.match(lines, /D {2}skills\/real\/references\/helper\.py/);
+  assert.equal(found.codes['skills/real/SKILL.md'], ' M');
 });

@@ -198,6 +198,9 @@ export function divergentPaths(root = ROOT, shipped = shippedPaths(root)) {
   const ignored = [];
   const untracked = [];
   const modified = [];
+  // path -> porcelain code, so the report prints what git said and picks the remedy that fits,
+  // rather than stamping ` M` on a deletion the pack does not carry at all (#879 round 2, S5).
+  const codes = {};
   // NUL-separated because of -z. A rename entry emits its ORIGIN as a second record, which is
   // not a path npm would pack; the code check below keeps only records that begin with a status
   // pair, so an origin record falls through rather than being reported.
@@ -213,13 +216,16 @@ export function divergentPaths(root = ROOT, shipped = shippedPaths(root)) {
     // commit — modified, staged, deleted, renamed. npm packs the working copy, so the pack
     // carries those bytes and the release does not. Measured in the #879 review: 14 bytes packed
     // against 7 committed, while this check said "a pack here matches the commit".
-    else modified.push(path);
+    else {
+      modified.push(path);
+      codes[path] = code;
+    }
   }
-  return { ignored: ignored.sort(), untracked: untracked.sort(), modified: modified.sort() };
+  return { ignored: ignored.sort(), untracked: untracked.sort(), modified: modified.sort(), codes };
 }
 
 /** The report, as printable lines. Pure, so a test can assert the wording without a fixture. */
-export function report({ ignored, untracked, modified = [] }) {
+export function report({ ignored, untracked, modified = [], codes = {} }) {
   if (ignored.length === 0 && untracked.length === 0 && modified.length === 0) {
     return ['OK: every shipped path is tracked and unmodified; a pack here matches the commit.'];
   }
@@ -232,7 +238,24 @@ export function report({ ignored, untracked, modified = [] }) {
   };
   say('IGNORED', '!!', ignored, 'and are not in the commit — remove them, or pack from a clean clone');
   say('UNTRACKED', '??', untracked, 'and are not in the commit — commit or remove them');
-  say('MODIFIED', ' M', modified, 'with their WORKING-TREE bytes, not the committed ones — commit or revert them');
+  // Split by what git actually reported, because one remedy does not fit them all and the old
+  // wording was FALSE for half of them: a deleted or typechanged path is not "packed with its
+  // working-tree bytes" — the pack simply LACKS a file the commit has, and npm drops a symlink
+  // silently (#879 round 2, S5). The marker is git's own code, not a stamped ` M`.
+  const byRemedy = (predicate) => modified.filter((path) => predicate((codes[path] ?? '').trim()));
+  const absent = byRemedy((code) => code === 'D' || code === 'T');
+  const unmerged = byRemedy((code) => code === 'UU' || code === 'AA' || code.startsWith('U') || code.endsWith('U'));
+  const edited = modified.filter((path) => !absent.includes(path) && !unmerged.includes(path));
+  for (const [label, paths, remedy] of [
+    ['ABSENT-OR-RETYPED', absent, 'so the pack LACKS a file the commit has — restore it, or commit the removal'],
+    ['UNMERGED', unmerged, 'and a conflicted file would be packed with its markers — resolve it'],
+    ['MODIFIED', edited, 'with their WORKING-TREE bytes, not the committed ones — commit or revert them'],
+  ]) {
+    if (paths.length === 0) continue;
+    lines.push(`REFUSED: ${paths.length} ${label} path(s) under a shipped directory ${remedy}:`);
+    for (const path of paths.slice(0, 20)) lines.push(`  ${codes[path] ?? '??'} ${path}`);
+    if (paths.length > 20) lines.push(`  … and ${paths.length - 20} more`);
+  }
   lines.push('');
   lines.push('npm packs the WORKING TREE under a `files` array — it does not honour .gitignore —');
   lines.push('so this pack would differ from what CI publishes, which packs a commit. Remove the');
