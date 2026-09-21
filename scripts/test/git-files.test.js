@@ -83,62 +83,93 @@ test('the accept rule is git ignore and nothing else: ignored out, untracked IN'
     'tools/debug.log': 'noise\n',
     // Untracked and NOT ignored. #830's acceptance criteria refuse a fix that loses this: the
     // tools gate exists to catch a new tool file whose registry row is missing, and such a file
-    // is untracked at the moment its author runs the gate. `--cached` alone would drop it.
+    // is untracked at the moment its author runs the gate. An index-based listing would drop it.
     'tools/brand-new.sh': '#!/usr/bin/env bash\n',
   });
 
-  const { paths, missing, source } = listNonIgnored(dir, 'tools');
+  const { paths, source } = listNonIgnored(dir, 'tools');
 
   assert.equal(source, 'git', 'a real repository must take the git path, or this test asserts nothing');
   assert.deepEqual(paths, ['tools/brand-new.sh', 'tools/kept.py']);
-  assert.deepEqual(missing, []);
 });
 
-test('an index entry that is not in the working tree lands in `missing`, never in `paths`', async (t) => {
-  const { dir } = repo(t, { 'tools/gone.sh': 'x\n', 'tools/here.sh': 'y\n' });
-  unlinkSync(join(dir, 'tools/gone.sh'));
+test('a TRACKED file matching an ignore pattern stays in — it ships', async (t) => {
+  const { dir, git } = repo(t, { '.gitignore': '*.log\n', 'tools/plain.sh': 'x\n' });
+  writeFileSync(join(dir, 'tools/forced.log'), 'x\n');
+  git('add', '-f', 'tools/forced.log');
+  git('commit', '-qm', 'forced');
+  write(dir, { 'tools/loose.log': 'x\n' });
 
-  const { paths, missing } = listNonIgnored(dir, 'tools');
+  const { paths } = listNonIgnored(dir, 'tools');
 
-  // Merging the two would break one consumer or the other in the quiet direction: `checkParity`
-  // must still report a row whose file was deleted locally, and a consumer that READS each file
-  // cannot read one that is absent.
-  assert.deepEqual(paths, ['tools/here.sh']);
-  assert.deepEqual(missing, ['tools/gone.sh']);
+  // Measured on git 2.43: `check-ignore` consults the index and does not call a tracked path
+  // ignored (`--no-index` does). That is why this module carries no tracked-set union of its
+  // own — and this arm is what would notice if that behaviour were ever relied on wrongly.
+  assert.deepEqual(paths, ['tools/forced.log', 'tools/plain.sh']);
 });
 
-test('a BROKEN symlink is present, not missing — `lstat`, not `exists`', async (t) => {
+test('a BROKEN symlink is an entry like any other', async (t) => {
   const { dir, git } = repo(t, { 'tools/real.sh': 'x\n' });
   symlinkSync('nowhere.sh', join(dir, 'tools/dangling.sh'));
   git('add', '-A');
   git('commit', '-qm', 'dangling');
 
-  const { paths, missing } = listNonIgnored(dir, 'tools');
-
-  // `existsSync` follows the link and would sort this into `missing`, taking it away from
-  // `checkParity`'s third arm — the one written to report exactly this entry.
-  assert.deepEqual(paths, ['tools/dangling.sh', 'tools/real.sh']);
-  assert.deepEqual(missing, []);
+  // `checkParity`'s third arm is written to report exactly this entry, so it must survive the
+  // enumeration to reach the `lstat` that classifies it.
+  assert.deepEqual(listNonIgnored(dir, 'tools').paths, ['tools/dangling.sh', 'tools/real.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['dangling.sh', 'real.sh']);
 });
 
-test('topLevelEntries: a directory with no listed path is reported unless git ignores it', async (t) => {
-  const { dir } = repo(t, { '.gitignore': '__pycache__/\n', 'tools/flat.sh': 'x\n' });
+test('a file deleted but not staged is simply absent — the disk is the candidate source', async (t) => {
+  const { dir } = repo(t, { 'tools/gone.sh': 'x\n', 'tools/here.sh': 'y\n' });
+  unlinkSync(join(dir, 'tools/gone.sh'));
+
+  // The walk it replaced could not see it either, and `checkParity` reports the registry row
+  // through its own `existsSync`, which is where that defect belongs.
+  assert.deepEqual(listNonIgnored(dir, 'tools').paths, ['tools/here.sh']);
+});
+
+test('topLevelEntries: an EMPTY directory is still reported, an ignored one is not', async (t) => {
+  const { dir } = repo(t, { '.gitignore': '__pycache__/\nbuild/\n', 'tools/flat.sh': 'x\n' });
   mkdirSync(join(dir, 'tools/empty'));
   write(dir, {
     'tools/nested/deep.sh': 'x\n',
     'tools/__pycache__/thing.pyc': 'x',
+    'tools/build/out.txt': 'x',
   });
 
   const { files, dirs, source } = topLevelEntries(dir, 'tools');
 
   assert.equal(source, 'git');
   assert.deepEqual(files, ['flat.sh']);
-  // `empty` has no path git could list; `nested` is derived from its content; `__pycache__` is
-  // ignored and must stay out — the defect this whole change exists to fix.
+  // `empty` has no file under it and must survive anyway — it is representable by no registry
+  // row, which is what `checkParity`'s third arm reports. `__pycache__` and `build` are ignored
+  // by a pattern written with a trailing slash, and are asked about WITHOUT one: measured to be
+  // reported, which is what lets this be one question per entry rather than a walk.
   assert.deepEqual(dirs, ['empty', 'nested']);
 });
 
-test('outside a checkout the disk walk answers, and SAYS so', async (t) => {
+test('nested .gitignore files, negations and info/exclude are honoured, because git answers', async (t) => {
+  const { dir } = repo(t, {
+    '.gitignore': '*.tmp\n',
+    'tools/deep/.gitignore': '!keep.tmp\n',
+    'tools/stay.sh': 'x\n',
+  });
+  write(dir, {
+    'tools/deep/drop.tmp': 'x',
+    'tools/deep/keep.tmp': 'x',
+    'tools/excluded-here.sh': 'x',
+  });
+  writeFileSync(join(dir, '.git/info/exclude'), 'excluded-here.sh\n');
+
+  const { paths } = listNonIgnored(dir, 'tools');
+
+  // A hand-rolled matcher would have to implement all three. This module implements none of
+  // them, which is the point: `scripts/check-generated-artifacts.js` — "git is the ruler".
+  assert.deepEqual(paths, ['tools/deep/.gitignore', 'tools/deep/keep.tmp', 'tools/stay.sh']);
+});
+
+test('outside a checkout the plain listing answers, and SAYS so', async (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'git-files-bare-'));
   t.after(() => rmTree(dir));
   write(dir, { 'tools/a.sh': 'x\n', 'tools/sub/b.sh': 'y\n' });

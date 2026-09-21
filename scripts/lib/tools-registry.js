@@ -199,9 +199,9 @@ export function checkParity(root, entries) {
   for (const name of files) {
     if (NOT_TOOLS.has(name)) continue;
     const p = `${TOOLS_DIR}/${name}`;
-    // `files` classifies by path shape, so a symlink arrives here; `lstat` is what tells the
-    // two apart, and it is done here rather than in the enumerator because this is the only
-    // code that knows a tool must be one flat plain file.
+    // A symlink arrives here rather than under `dirs` — `readdirSync`'s dirent does not follow
+    // it — and `lstat` is what tells a symlink from a plain file. Done here rather than in the
+    // enumerator because this is the only code that knows a tool must be one flat plain file.
     if (lstatSync(join(root, TOOLS_DIR, name)).isFile()) onDisk.push(p);
     else notPlainFile.push(p);
   }
