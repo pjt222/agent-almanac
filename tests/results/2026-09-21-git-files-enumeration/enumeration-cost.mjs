@@ -3,10 +3,14 @@
 //
 // Run from the repository root:  node <this file>
 import { readdirSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { listNonIgnored, topLevelEntries } from '/mnt/d/dev/p/agent-almanac/scripts/lib/git-files.js';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { topLevelEntries } from '../../../scripts/lib/git-files.js';
 
-const ROOT = '/mnt/d/dev/p/agent-almanac';
+// Derived, never hardcoded: an absolute path measures whatever branch the author happens to have
+// checked out, not the revision this script was committed at — and the first version of this
+// file could not run at its own sha at all, because it imported a function the same PR deleted.
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const LOCALES = readdirSync(resolve(ROOT, 'i18n'), { withFileTypes: true })
   .filter((e) => e.isDirectory()).map((e) => e.name);
 const TYPES = ['skills', 'agents', 'teams', 'guides'];
@@ -44,10 +48,3 @@ const diskMs = timed('readdirSync (what it replaced)', () => {
 
 console.log(`\nsites measured: ${SITES.length} (2 top-level + ${LOCALES.length} locales x ${TYPES.length} types)`);
 console.log(`delta: ${(gitMs - diskMs).toFixed(0)} ms over the whole generator run`);
-
-// And the recursive one, which skills-inventory calls per content tree.
-timed('listNonIgnored x 4 trees', () => {
-  let n = 0;
-  for (const tree of TYPES) n += listNonIgnored(ROOT, tree).length;
-  return n;
-});

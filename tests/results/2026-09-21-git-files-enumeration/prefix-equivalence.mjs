@@ -8,10 +8,12 @@
 // This re-implements the ORIGINAL walk verbatim from git history and compares, on the real
 // corpus and on synthetic negation sets chosen to hit the boundaries.
 import { readdirSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { nonDocumentationFiles, shippedEntries } from '/mnt/d/dev/p/agent-almanac/scripts/lib/skills-inventory.js';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { nonDocumentationFiles, shippedEntries } from '../../../scripts/lib/skills-inventory.js';
 
-const ROOT = '/mnt/d/dev/p/agent-almanac';
+// Derived, never hardcoded — see enumeration-cost.mjs.
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const DOC = ['.md', '.yml', '.yaml'];
 
 // Verbatim from 7f3ffcf5d^:scripts/lib/skills-inventory.js

@@ -30,7 +30,7 @@
  * pack contains none of the three, because CI checks out a commit and there the disk IS the
  * tracked set. So "tracked or not ignored" describes neither artifact: it drops a `.pyc` a local
  * pack ships and keeps an untracked `.py` the release does not. The inventory therefore counts
- * the commit, and the generated sentence says so.
+ * the INDEX — what the next commit will contain — and the generated sentence says so.
  *
  * ## The ignore rule
  *
@@ -63,10 +63,12 @@
  *
  * That was the first implementation and it is 190x slower here, which matters because it sits on
  * the path of a required context. Measured on this checkout (WSL2, `/mnt/d` is 9p/drvfs), over
- * the 46 call sites `generate-readmes.js` makes:
+ * the 46 call sites `generate-readmes.js` makes. The first row is HISTORICAL, taken at b8eee5b7e
+ * when both implementations existed side by side; the committed cost probe measures the current
+ * one only, and the figures move by tens of milliseconds between runs:
  *
  *   ls-files --cached --others --exclude-standard   32612 ms
- *   readdirSync + one check-ignore batch per call     3291 ms
+ *   readdirSync + one check-ignore batch per call     3299 ms
  *   readdirSync alone, no ignore rule at all           173 ms
  *
  * The cost is not process spawn — `git rev-parse` measures 36 ms — it is `--others`, which walks
@@ -110,20 +112,21 @@
  *
  * ## Four ways `check-ignore` answers something other than "is this ignored"
  *
- * All four are measured (#874 review, git 2.43.0), and the first is why `escapePathspec`
+ * All four are measured (#874 review, git 2.43.0), and the first is why `assertPlainCandidates`
  * exists:
  *
- *   W1  **A candidate is parsed as a PATHSPEC, not as a name**, so its metacharacters are the
- *       caller's problem. A literal file `tools/x*y.log`, which `git status --ignored` lists as
- *       `!! tools/x*y.log`, comes back NOT ignored when a tracked sibling `xay.log` glob-matches
- *       it — and so does `tools/a\\b.log`, where `\\b` is read as an escaped `b`. The fix is to
- *       ESCAPE rather than to refuse, which is measured to work: `tools/x\\*y.log` returns
- *       `exit 0, ignored`, `tools/q\\?.sh` (genuinely not ignored) returns exit 1 with no false
- *       positive, and an ordinary candidate answers identically escaped or not.
- *       `--literal-pathspecs` is NOT the escape — this command rejects it outright, `fatal:
- *       pathspec magic not supported by this command: 'literal'`, exit 128, for ordinary
- *       candidates too. git echoes the ESCAPED form back, so the answer is keyed by it and
- *       mapped home.
+ *   W1  **A candidate is parsed as a PATHSPEC, not as a name**, and for such a name no form of
+ *       the question returns git's own answer. Sent RAW, `tools/x*y.log` comes back not ignored
+ *       when a tracked sibling glob-matches it — the name is taken for a pathspec, the pathspec
+ *       matches the index, and git decides the path is tracked. Sent ESCAPED, it comes back not
+ *       ignored whenever the PATTERN carries the metacharacter, because `check-ignore` matches
+ *       the pattern against the pathspec string as typed. Both directions were measured over
+ *       eight one-pattern fixtures with no tracked sibling anywhere: RAW agreed with
+ *       `git status --ignored` 8/8, ESCAPED 2/8. `--literal-pathspecs` is no escape either —
+ *       this command rejects it outright (`fatal: pathspec magic not supported by this command:
+ *       'literal'`, exit 128) for ordinary candidates too. So such a candidate is REFUSED by
+ *       name. An intermediate revision escaped instead; the matrix that refuted it is committed
+ *       beside the other probes.
  *   W2  **`core.ignorecase` is `true` on this checkout and `false` on a Linux runner**, so a
  *       candidate differing from a pattern only in case is invisible locally and visible in CI.
  *       "Passes locally" is not a pure function of the tree.
@@ -156,38 +159,54 @@ const ABSENT = new Set(['ENOENT', 'ENOTDIR']);
  * symbolic link`) and found the reason discarded, leaving only "Command failed".
  */
 /**
- * Escape a candidate so git reads it as a NAME rather than as a pathspec (W1).
+ * Refuse a candidate whose name git cannot be asked about correctly (W1).
  *
- * `\`, `*`, `?` and `[` are all pathspec syntax, and an unescaped one makes git answer a
- * different question: measured, `tools/x*y.log` and `tools/a\\b.log` both come back "not
- * ignored" while `git status --ignored` calls them ignored, because a tracked sibling matches
- * the glob. Escaped, both are reported correctly, a genuinely-not-ignored `tools/q\\?.sh` still
- * returns exit 1, and an ordinary candidate answers identically either way.
+ * `\`, `*`, `?` and `[` are pathspec syntax, so for such a name NEITHER form of the question
+ * gets git's own answer, and this was measured in both
+ * directions before settling on a refusal
+ * (`tests/results/2026-09-21-git-files-enumeration/escaping-matrix.mjs`):
  *
- * An earlier revision REFUSED such a candidate instead. Refusing was defensible — nothing in the
- * enumerated trees carries one — but it turned a file somebody may legitimately add into a
- * repository-wide gate failure, and the review measured that the escape simply works. A denylist
- * also has to be complete: the refusal shipped without `\`, which is the member that was found.
+ *   - RAW is wrong when the name, read as a glob, matches something in the INDEX: git decides the
+ *     path is tracked and reports it not ignored.
+ *   - ESCAPED is wrong whenever the PATTERN carries the metacharacter — `x?y.log`, `x\\*y.log`,
+ *     `x[*]y.log`, `a\\\\b.log`, `q\\?.sh` — because `check-ignore` matches the pattern against the
+ *     pathspec string as typed. Over eight one-pattern fixtures with no tracked sibling anywhere,
+ *     RAW agreed with `git status --ignored` 8 times out of 8 and ESCAPED 2 out of 8.
+ *
+ * An intermediate revision of this module escaped, on the argument that a refusal turns a file
+ * somebody may legitimately add into a gate failure. That argument still holds; what it is worth
+ * is a different question once the alternative is measured wrong in six of eight fixtures and
+ * silently — the `tree-counts` direction inflates a published count with nothing red anywhere.
+ * A refusal names the file and "rename it" is a path forward; a wrong answer has none.
  */
-function escapePathspec(path) {
-  return path.replace(/([\\*?[])/g, '\\$1');
+function assertPlainCandidates(paths) {
+  // No leading-`:` clause: pathspec magic is only significant at the START of the string, and
+  // every candidate here is `<dir>/<name>` — so that branch could never fire for these callers,
+  // and an unfirable guard reads as protection nobody has.
+  const magic = paths.filter((path) => /[\\*?[]/.test(path));
+  if (magic.length === 0) return;
+  throw new Error(
+    `git check-ignore reads each candidate as a pathspec, and ${magic.length} path(s) here carry `
+    + `pathspec syntax (\`\\\\\`, \`*\`, \`?\` or \`[\`): ${magic.slice(0, 5).join(', ')}. `
+    + 'Measured on git 2.43: sent raw, such a path is reported NOT ignored when the name glob-matches '
+    + 'something in the index; sent escaped, it is reported not ignored whenever the PATTERN carries '
+    + 'the metacharacter. Neither is git\'s answer, and `--literal-pathspecs` is rejected by this '
+    + 'command. Rename the file rather than letting either guess stand.',
+  );
 }
 
 function ignoredAmong(root, paths) {
   if (paths.length === 0) return new Set();
-  // git echoes the ESCAPED form back, so the answer is keyed by it and mapped home. Keying by
-  // the original would silently drop every escaped path from the ignored set — the quiet
-  // direction, where an ignored file is reported as present.
-  const home = new Map(paths.map((path) => [escapePathspec(path), path]));
+  assertPlainCandidates(paths);
   try {
     const out = execFileSync('git', ['check-ignore', '-z', '--stdin'], {
       cwd: root,
-      input: `${[...home.keys()].join('\0')}\0`,
+      input: `${paths.join('\0')}\0`,
       encoding: 'utf8',
       maxBuffer: GIT_BUFFER,
       stdio: ['pipe', 'pipe', 'pipe'],
     });
-    return new Set(out.split('\0').filter(Boolean).map((echoed) => home.get(echoed) ?? echoed));
+    return new Set(out.split('\0').filter(Boolean));
   } catch (error) {
     if (error?.status === 1) return new Set();
     const stderr = String(error?.stderr ?? '').trim();
@@ -219,8 +238,13 @@ function children(root, dir) {
  * `--others` costs, because `--others` is the part that walks the working tree.
  *
  * A path in the index but not in the working tree (deleted-not-staged, sparse checkout) is
- * listed here, because it is in the artifact. Consumers that READ each file must handle that;
- * the one consumer today counts and names them.
+ * listed here, because it is in the artifact. A consumer that READS such a file throws, which is
+ * the right direction and is not hypothetical: `executableFiles` opens every extensionless
+ * candidate to sniff for a shebang, and against a tracked-then-deleted `skills/a/scripts/run`
+ * it raises `could not read … ENOENT` rather than silently calling it non-executable. The
+ * corpus has no extensionless tracked non-documentation file, so the path is local-only today.
+ * An earlier version of this paragraph said the one consumer merely counts and names them,
+ * which was false (#874 review).
  *
  * @returns {string[]}
  */

@@ -248,30 +248,33 @@ test('listTracked answers about the COMMIT, which is a different set from the ig
 
 // ── the ways check-ignore answers something other than "is this ignored" ───────────────────────
 
-test('a candidate carrying pathspec metacharacters is ESCAPED, so git answers about the NAME', async (t) => {
-  const { dir, git } = repo(t, { '.gitignore': '*.log\n', 'tools/keep.sh': 'x\n' });
-  // The sibling must be TRACKED, and this arm shipped without that: W1 fires only when the
-  // candidate, read as a glob, matches something in the INDEX. Without `add -f` the fixture had
-  // no tracked `.log` at all, git fell back to reading each name literally, and raw and escaped
-  // answered identically — a mutant that disabled the escape survived the whole suite. The arm
-  // asserted the right answer for the wrong reason (#874 review W1/S2, caught by the envelope).
-  writeFileSync(join(dir, 'tools/ab.log'), 'x\n');
-  git('add', '-f', 'tools/ab.log');
-  git('commit', '-qm', 'tracked sibling the glob can match');
-  // Both are ignored — `git status --ignored` lists both — and each is MISSED when passed raw:
-  // `a\\b.log` reads as an escaped `b`, matching the tracked `ab.log`, so git calls it tracked
-  // rather than ignored. `\\` is the member a denylist of `*?[` missed.
-  writeFileSync(join(dir, 'tools/x*y.log'), 'x\n');
-  writeFileSync(join(dir, 'tools/a\\b.log'), 'x\n');
-  // Not ignored, and must not become a false positive from the escaping itself.
-  writeFileSync(join(dir, 'tools/q?.sh'), 'x\n');
+// One arm per member of the refused class, because the class is a denylist and a denylist is
+// only as good as its weakest member. `\\` shipped missing from the first version of this list,
+// and `?` and `[` were pinned by nothing at all while an intermediate revision escaped instead
+// of refusing — the escape was measured wrong in six of eight fixtures and no test could see it.
+for (const [label, name] of [['a star', 'x*y.log'], ['a question mark', 'q?.sh'], ['a bracket', 'b[1].sh'], ['a backslash', 'a\\b.log']]) {
+  test(`a candidate carrying ${label} is REFUSED — neither raw nor escaped is git's answer`, async (t) => {
+    const { dir } = repo(t, { '.gitignore': '*.log\n', 'tools/keep.sh': 'x\n' });
+    writeFileSync(join(dir, `tools/${name}`), 'x\n');
 
-  const { files } = topLevelEntries(dir, 'tools');
+    // Measured over eight one-pattern fixtures (escaping-matrix.mjs): sent RAW the answer is
+    // wrong when the name glob-matches the index; sent ESCAPED it is wrong whenever the PATTERN
+    // carries the metacharacter, because check-ignore matches the pattern against the pathspec
+    // string as typed. RAW agreed with git 8/8 there and ESCAPED 2/8 — but RAW's failure is the
+    // W1 case, so neither is git's answer in general. The refusal names the file.
+    assert.throws(() => topLevelEntries(dir, 'tools'), (error) => {
+      assert.match(error.message, /pathspec syntax/);
+      assert.ok(error.message.includes(name), `the refusal must name ${name}, got: ${error.message}`);
+      return true;
+    });
+  });
+}
 
-  // `ab.log` is tracked, so it stays in by the rule the fixture above pins; the two escaped
-  // names are excluded; `q?.sh` is genuinely not ignored and must not become a false positive
-  // of the escaping itself.
-  assert.deepEqual(files, ['ab.log', 'keep.sh', 'q?.sh']);
+test('CONTROL: an ordinary directory does not trip the refusal', async (t) => {
+  // Without this, all four arms above would pass against a guard that refused everything.
+  const { dir } = repo(t, { '.gitignore': '*.log\n', 'tools/keep.sh': 'x\n', 'tools/plain.log': 'x\n' });
+
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['keep.sh']);
 });
 
 test('a symlinked directory is asked about as itself, so a batch cannot be refused as a unit', async (t) => {
@@ -285,7 +288,7 @@ test('a symlinked directory is asked about as itself, so a batch cannot be refus
   // refactor to a recursive or stat-following enumeration from turning a green gate into a
   // refusal.
   assert.deepEqual(topLevelEntries(dir, 'tools').files, ['link', 'real.sh']);
-  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['link', 'real.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').dirs, [], 'a symlink is not a directory to this enumeration');
 });
 
 test('a git that EXISTS and FAILS refuses too — not only a missing repository', async (t) => {

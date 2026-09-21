@@ -15,7 +15,9 @@
 # absolute path under $DIR.
 set -uo pipefail
 
-SRC=/mnt/d/dev/p/agent-almanac
+# Derived from this script's own location, so the clone is of the revision the script was
+# committed at rather than of whatever the author has checked out.
+SRC=$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)
 DIR=$(mktemp -d)
 trap 'rm -rf "${DIR:?}"' EXIT
 cd "${DIR:?}" || exit 1
