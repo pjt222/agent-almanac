@@ -249,11 +249,18 @@ test('listTracked answers about the COMMIT, which is a different set from the ig
 // ── the ways check-ignore answers something other than "is this ignored" ───────────────────────
 
 test('a candidate carrying pathspec metacharacters is ESCAPED, so git answers about the NAME', async (t) => {
-  const { dir } = repo(t, { '.gitignore': '*.log\n', 'tools/ab.log': 'x\n', 'tools/keep.sh': 'x\n' });
-  // Measured on git 2.43 (#874 review, W1 and S2). Both of these are ignored — `git status
-  // --ignored` lists them — and both come back NOT ignored if the candidate is passed raw,
-  // because git reads it as a pathspec and the tracked sibling `ab.log` matches. `\\b` is the
-  // member a denylist of `*?[` missed; escaping covers the class rather than enumerating it.
+  const { dir, git } = repo(t, { '.gitignore': '*.log\n', 'tools/keep.sh': 'x\n' });
+  // The sibling must be TRACKED, and this arm shipped without that: W1 fires only when the
+  // candidate, read as a glob, matches something in the INDEX. Without `add -f` the fixture had
+  // no tracked `.log` at all, git fell back to reading each name literally, and raw and escaped
+  // answered identically — a mutant that disabled the escape survived the whole suite. The arm
+  // asserted the right answer for the wrong reason (#874 review W1/S2, caught by the envelope).
+  writeFileSync(join(dir, 'tools/ab.log'), 'x\n');
+  git('add', '-f', 'tools/ab.log');
+  git('commit', '-qm', 'tracked sibling the glob can match');
+  // Both are ignored — `git status --ignored` lists both — and each is MISSED when passed raw:
+  // `a\\b.log` reads as an escaped `b`, matching the tracked `ab.log`, so git calls it tracked
+  // rather than ignored. `\\` is the member a denylist of `*?[` missed.
   writeFileSync(join(dir, 'tools/x*y.log'), 'x\n');
   writeFileSync(join(dir, 'tools/a\\b.log'), 'x\n');
   // Not ignored, and must not become a false positive from the escaping itself.
@@ -261,7 +268,10 @@ test('a candidate carrying pathspec metacharacters is ESCAPED, so git answers ab
 
   const { files } = topLevelEntries(dir, 'tools');
 
-  assert.deepEqual(files, ['keep.sh', 'q?.sh'], 'the two ignored files are excluded and the third survives');
+  // `ab.log` is tracked, so it stays in by the rule the fixture above pins; the two escaped
+  // names are excluded; `q?.sh` is genuinely not ignored and must not become a false positive
+  // of the escaping itself.
+  assert.deepEqual(files, ['ab.log', 'keep.sh', 'q?.sh']);
 });
 
 test('a symlinked directory is asked about as itself, so a batch cannot be refused as a unit', async (t) => {
