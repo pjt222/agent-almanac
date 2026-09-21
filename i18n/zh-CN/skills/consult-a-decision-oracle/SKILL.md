@@ -27,7 +27,6 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: "5a4146256c265d7dceeb5dba2711c66ad07d6715"
-  fence_basis_commit: "5a4146256c265d7dceeb5dba2711c66ad07d6715"
   translator: "(untranslated stub)"
   translation_date: "2026-09-18"
 ---
@@ -118,7 +117,7 @@ measurement while removing the only property that made it one, and the resulting
 test cannot fail for its own defect.
 
 Do not build this corpus. Look for it. In the shipped integration this skill
-draws on the graded rows were **discovered, not built**: a log written to feed a
+draws on, the graded rows were **discovered, not built**: a log written to feed a
 circuit breaker had been accumulating externally-graded outcomes as a side effect
 of two unrelated commits. Where such graders hide, with the provenance of each
 claim and the measured span of that accident, is in
@@ -162,9 +161,9 @@ external verdict. Report three things together, never accuracy alone:
   class *          12           9
 ```
 
-*(Illustrative shape, from a real run whose three denominators are in
-[references/EXAMPLES.md](references/EXAMPLES.md#how-small-a-surgical-gate-is).
-Treat the numbers as an example of the table, not a property of any API.)*
+*(Illustrative shape, from a real run — model `jev-1.13.0`, 2026-09-17;
+[the full table](references/EXAMPLES.md#the-grading-table). Treat the numbers as
+an example of the table, not a property of any API.)*
 
 **Expected:** A table carrying accuracy, baseline, and per-class counts, plus
 the resolved model identifier and the date. Read its verdict before moving on:
@@ -174,10 +173,10 @@ baseline still costs latency, money and a dependency.
 
 **On failure:** The table cannot be produced, which differs from a table carrying
 a disappointing number. No resolvable model identifier, missing per-class counts
-and a single-class corpus each block Step 4 rather than informing it — a version
-nothing can be attributed to, a validated class indistinguishable from an
-unmeasured one, and an accuracy that is meaningless rather than high. Fix the
-instrumentation first.
+and a single-class corpus each block Step 4 rather than informing it — a
+measurement nothing can be attributed to a version of, a validated class
+indistinguishable from an unmeasured one, and an accuracy that, with no baseline,
+is meaningless rather than high. Fix the instrumentation first.
 
 ### Step 4: Measure the separation, then choose an operating point inside it
 
@@ -230,8 +229,9 @@ endpoint is the *lower* one and the interval is `[highest harmful, lowest
 beneficial)`. This is not pedantry: on a corpus whose beneficial rows all score
 1.00, taking 1.00 as the threshold under `>` fires on nothing at all and
 silently disables the oracle — the endpoint you were told was free. A missing
-scalar disables it the same way: `undefined >= X` is false and raises nothing, so
-assert the field is present before comparing it.
+scalar — a yes/no question type may return none — disables it the same way: the
+comparison is false and raises nothing, so assert the field is present before
+comparing it.
 
 **Report the width and the row counts, not only the bounds.** A gap is evidence
 that the scalar orders right above wrong, and a narrow gap over few rows is weak
@@ -319,7 +319,7 @@ removed it.
 **Step 6 is a precondition of that pin, not a later refinement.** Where the model
 identifier is environment-sourced, pinning is the change that first puts a value
 in that variable, so an unguarded read is armed by the pin itself: placeholder
-text goes out as the model id on every call. A tripwire tells you afterwards, and
+text (Step 6's case) goes out as the model id on every call. A tripwire tells you afterwards, and
 only if that is the error it watches; the guard refuses the value beforehand.
 
 Log the oracle's answer, the scalar, the resolved model identifier and the
@@ -349,9 +349,9 @@ have taken describes a system you are not running — fix that before measuring
 anything. A missing log line on agreements censors the corpus in the way Step 4's
 first exit describes, and Step 4 will not be runnable on it later. A pin with no
 alert, or one that landed before its variable was guarded, leaves a dependency
-whose death is indistinguishable from a quiet week; a
-logged identifier with no reader leaves the other direction the same way. Neither
-is a smaller version of the problem.
+whose death is indistinguishable from a quiet week; a logged identifier with no
+reader leaves the other direction the same way. Neither is a smaller version of
+the problem.
 
 ### Step 6: Guard every value that arrives from the environment
 
