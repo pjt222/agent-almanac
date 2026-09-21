@@ -1,11 +1,9 @@
 # Examples — consult-a-decision-oracle
 
-Extended material for [SKILL.md](../SKILL.md): where external graders hide, a runnable
-verdict fixture for the Validation section, the worked threshold derivation including
-the mistake that makes it worth reading, what an unguarded environment read does, which
-scalar to gate on, and two pitfalls whose numbers live here rather than in the skill.
-The section list is deliberately not counted — it said "three parts" through two
-revisions that added sections.
+Extended material for [SKILL.md](../SKILL.md). No inventory of it here: the previous two
+attempts at one said "three parts" through the revisions that made it four, then six,
+and this revision's own list omitted three sections while claiming to avoid exactly that.
+The headings below are the list, and they cannot go stale.
 
 **Provenance is marked per entry throughout.** One case here is a real shipped
 integration; the rest of the taxonomy is inference about where the same shape
@@ -18,16 +16,13 @@ the verified case's authority, so each entry says which it is:
 - **[reported]** — observed in a production system by someone else and relayed here.
   Stronger than inference, weaker than shipped: the author could not inspect the
   system, so the mechanism is carried and the measurements are not
+- **[authoring]** — observed while writing this skill. Not production, and labelled
+  rather than dropped because the failure modes of writing a method down are the ones
+  a reader is about to repeat
 
 ---
 
 ## Where external graders hide
-
-**[shipped]** In the integration this skill draws on, the append-only log had been
-accumulating externally-graded outcomes for **39 days** before anyone noticed it was a
-corpus — two unrelated commits, 39 days apart, produced it between them. Nobody designed
-it, which is the point of the section below: the question is where such a thing already
-exists, not how to build one.
 
 You are looking for rows where **something other than your code** decided whether
 an answer was right. The grader must be unable to inherit your mistake. That
@@ -312,8 +307,9 @@ language that RAISES on the comparison is failing the better way; measured, node
 
 ## What a confidence score cannot tell you
 
-**[shipped]** Referenced from Common Pitfalls. Two properties of these scores, and one measured
-observation about the escape option.
+**[shipped]** for the two properties; the escape-option pair was measured FOR this skill
+rather than observed in production, and is marked where it appears. Referenced from
+Common Pitfalls.
 
 A question with only one possible answer returns maximal confidence while carrying no
 information at all: the distribution is maximally concentrated because there is nowhere
@@ -346,7 +342,8 @@ this gate actually do": two answers.
 
 ## Writing the conclusion first
 
-**[shipped]** Referenced from Common Pitfalls. Both sessions that produced this skill
+**[authoring]** — a fourth class, and the legend above now carries it: observed while
+WRITING this skill rather than in a system that ran. Referenced from Common Pitfalls. Both sessions that produced this skill
 wrote a conclusion before running the arm that could refute it, within one afternoon of
 each other.
 
@@ -381,6 +378,6 @@ than your code. The second is inconvenient exactly once per call site, at the mo
 somebody is in a position to notice.
 
 This is the same shape as fail-open at the call site (Step 5) pointing the other way:
-there you want the absent dependency to be invisible, here you want the absent stub to
-be loud. What distinguishes them is who is meant to be surprised — a user, never; an
+there you want the absent dependency to be invisible in the OUTPUT, here you want the
+absent stub to be loud. What distinguishes them is who is meant to be surprised — a user, never; an
 author writing a test, always.
