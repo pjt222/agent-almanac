@@ -16,7 +16,23 @@
  * filesystem instead of asking git scans 7,177 files instead of 72"), and three enumerators
  * still walked disk. Prose did not transfer it; a module can.
  *
- * ## The rule
+ * ## Two rules, because there are two questions
+ *
+ * `listNonIgnored` answers **"what is in this working tree that git is not ignoring"** — the
+ * question a GATE asks, where an untracked new file with no registry row is the defect being
+ * looked for. `listTracked` answers **"what is in the committed artifact"** — the question
+ * SECURITY.md asks, where the subject is what a release contains.
+ *
+ * They were one rule until the #874 review measured the premise under it. "A gitignored file
+ * does not ship" is FALSE for a local pack: with a `files` array and no `.npmignore`, npm packs
+ * the working tree, so `npm pack --dry-run --json` in a tree carrying the #872 artefact shipped
+ * the ignored `.py`, the ignored `.pyc` AND an untracked sibling, 621 files in all. The release
+ * pack contains none of the three, because CI checks out a commit and there the disk IS the
+ * tracked set. So "tracked or not ignored" describes neither artifact: it drops a `.pyc` a local
+ * pack ships and keeps an untracked `.py` the release does not. The inventory therefore counts
+ * the commit, and the generated sentence says so.
+ *
+ * ## The ignore rule
  *
  * **The directory listing, minus what git ignores.** The disk is the candidate source and
  * `git check-ignore` is the only filter. Nothing here decides what is ignorable: a hand-rolled
@@ -88,6 +104,31 @@
  * functions away that an unreadable file rendering as "not there" is the wrong direction in a
  * security document, and git exits 0 with only a `warning: could not open directory` when it
  * hits one, so nothing downstream would refuse on its behalf.
+ *
+ * ## Four ways `check-ignore` answers something other than "is this ignored"
+ *
+ * All four are measured (#874 review, git 2.43.0), and the first is why `assertPlainCandidates`
+ * exists:
+ *
+ *   W1  **A candidate is parsed as a PATHSPEC, not as a name.** A literal file `tools/x*y.log`,
+ *       which `git status --ignored` lists as `!! tools/x*y.log`, is reported NOT ignored when a
+ *       tracked sibling `xay.log` glob-matches it. `--literal-pathspecs` is not the escape: this
+ *       command rejects it outright — `fatal: pathspec magic not supported by this command:
+ *       'literal'`, exit 128, for ORDINARY candidates too. So a candidate carrying `*`, `?`, `[`
+ *       or a leading `:` is refused rather than guessed at. No tracked name under the enumerated
+ *       trees carries one today; this is a class, not a live case.
+ *   W2  **`core.ignorecase` is `true` on this checkout and `false` on a Linux runner**, so a
+ *       candidate differing from a pattern only in case is invisible locally and visible in CI.
+ *       "Passes locally" is not a pure function of the tree.
+ *   W3  **Per-machine rules reach the answer**: `core.excludesFile` and `.git/info/exclude` are
+ *       honoured, because git is honouring them. Inherent to asking git, and stated here so a
+ *       "works on my machine" is diagnosed rather than investigated.
+ *   W4  **A batch refuses as a unit.** One bad candidate — a path THROUGH a symlink gives
+ *       `fatal: pathspec '…' is beyond a symbolic link`, exit 128 — hides the verdict for every
+ *       other path in the same call. Acceptable under refuse-never-guess, which is why the
+ *       thrown message carries git's stderr: the reason is what an operator needs. The walk
+ *       never descends through a symlink (`withFileTypes` reports one as a symlink, not a
+ *       directory), so the only way to reach that fatal is a symlinked directory named directly.
  */
 import { execFileSync } from 'node:child_process';
 import { readdirSync } from 'node:fs';
@@ -107,8 +148,29 @@ const ABSENT = new Set(['ENOENT', 'ENOTDIR']);
  * one exit-128 case reachable from a content tree (`fatal: pathspec 'tools/empty' is beyond a
  * symbolic link`) and found the reason discarded, leaving only "Command failed".
  */
+/**
+ * Refuse a candidate git would read as a pathspec rather than as a name (W1).
+ *
+ * `*`, `?` and `[` make it a glob; a leading `:` makes it pathspec magic. Measured: such a
+ * candidate can come back "not ignored" while `git status --ignored` calls it ignored, and
+ * `--literal-pathspecs` is rejected by this command, so there is nothing to fall back to. A
+ * refusal names the file; a guess publishes a wrong number.
+ */
+function assertPlainCandidates(paths) {
+  const magic = paths.filter((path) => /[*?[]/.test(path) || path.startsWith(':'));
+  if (magic.length === 0) return;
+  throw new Error(
+    `git check-ignore reads each candidate as a pathspec, and ${magic.length} path(s) here carry `
+    + `pathspec metacharacters (\`*\`, \`?\`, \`[\` or a leading \`:\`): ${magic.slice(0, 5).join(', ')}. `
+    + 'Measured on git 2.43: such a path can be reported NOT ignored while `git status --ignored` '
+    + 'calls it ignored, and `--literal-pathspecs` is rejected by this command. Rename the file, '
+    + 'or teach this module how to ask about it — do not let it be guessed at.',
+  );
+}
+
 function ignoredAmong(root, paths) {
   if (paths.length === 0) return new Set();
+  assertPlainCandidates(paths);
   try {
     const out = execFileSync('git', ['check-ignore', '-z', '--stdin'], {
       cwd: root,
@@ -163,6 +225,35 @@ export function listNonIgnored(root, dir) {
   const found = walk(root, dir);
   const ignored = ignoredAmong(root, found);
   return found.filter((rel) => !ignored.has(rel)).sort();
+}
+
+/**
+ * Files under `dir` that git TRACKS, repo-relative and sorted.
+ *
+ * The other question (see the header): what the committed artifact contains, which is what a
+ * release is packed from and therefore what SECURITY.md is describing. `--cached` reads the
+ * index and stats nothing — 94 ms repo-wide on this mount, against the 700 ms per call that
+ * `--others` costs, because `--others` is the part that walks the working tree.
+ *
+ * A path in the index but not in the working tree (deleted-not-staged, sparse checkout) is
+ * listed here, because it is in the artifact. Consumers that READ each file must handle that;
+ * the one consumer today counts and names them.
+ *
+ * @returns {string[]}
+ */
+export function listTracked(root, dir) {
+  try {
+    const out = execFileSync('git', ['ls-files', '-z', '--cached', '--', dir], {
+      cwd: root, encoding: 'utf8', maxBuffer: GIT_BUFFER, stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    return [...new Set(out.split('\0').filter(Boolean))].sort();
+  } catch (error) {
+    const stderr = String(error?.stderr ?? '').trim();
+    throw new Error(
+      `git ls-files failed in ${root}${stderr ? `: ${stderr}` : `: ${error.message}`}. Refusing to `
+      + 'report an empty artifact, which would publish "this tree contains nothing" as a fact.',
+    );
+  }
 }
 
 /**

@@ -20,7 +20,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { rmTree } from './_tmp.js';
 import { initRepo } from './_git-fixture.js';
-import { listNonIgnored, topLevelEntries } from '../lib/git-files.js';
+import { listNonIgnored, listTracked, topLevelEntries } from '../lib/git-files.js';
 import { checkParity } from '../lib/tools-registry.js';
 import { nonDocumentationFiles } from '../lib/skills-inventory.js';
 
@@ -207,10 +207,84 @@ test('WIRING skills-inventory: the SECURITY.md inventory counts the artifact, no
 
   // The #872 defect in both of its forms: the `.pyc` inflated the published COUNT, and the `.py`
   // would have been NAMED in the executable-scripts sentence as a shipped script.
-  assert.deepEqual(found, ['skills/real/references/fresh.py', 'skills/real/references/helper.py']);
-  assert.ok(!found.some((p) => p.includes('__pycache__')), 'a gitignored file does not ship and must not be inventoried');
+  //
+  // `fresh.py` is UNTRACKED and not ignored, and it is absent too — this consumer counts the
+  // commit, because that is what a release is packed from. The rule it does NOT use is "skip
+  // what git ignores": measured in the #874 review, a local `npm pack` packs the working tree
+  // and ships the ignored `.py`, the ignored `.pyc` and the untracked sibling alike, so that
+  // rule describes neither artifact.
+  assert.deepEqual(found, ['skills/real/references/helper.py']);
+  assert.ok(!found.some((p) => p.includes('__pycache__')), 'a gitignored file is not in the commit a release is packed from');
   // The npm-ships predicate is a SEPARATE rule and must survive the change of enumerator: the
   // recursive walk tested each directory before descending, so a flat listing has to test the
   // ancestor prefixes or `!skills/_template/` silently stops excluding anything.
   assert.ok(!found.some((p) => p.startsWith('skills/_template/')), 'the package negation still prunes the directory');
+});
+
+// ── the second rule: what the commit contains ─────────────────────────────────────────────────
+
+test('listTracked answers about the COMMIT, which is a different set from the ignore rule', async (t) => {
+  const { dir, git } = repo(t, { '.gitignore': '*.log\n', 'tools/tracked.sh': 'x\n' });
+  writeFileSync(join(dir, 'tools/forced.log'), 'x\n');
+  git('add', '-f', 'tools/forced.log');
+  git('commit', '-qm', 'forced');
+  write(dir, { 'tools/untracked.sh': 'x\n', 'tools/loose.log': 'x\n' });
+
+  // Three files on disk that git is not ignoring; only two of them are in the commit. That gap
+  // is the whole reason there are two functions: a GATE asks about the working tree, and
+  // SECURITY.md asks about the artifact a release is packed from.
+  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/forced.log', 'tools/tracked.sh', 'tools/untracked.sh']);
+  assert.deepEqual(listTracked(dir, 'tools'), ['tools/forced.log', 'tools/tracked.sh']);
+});
+
+// ── the ways check-ignore answers something other than "is this ignored" ───────────────────────
+
+test('a candidate carrying pathspec metacharacters is REFUSED, not guessed at', async (t) => {
+  const { dir } = repo(t, { '.gitignore': '*.log\n', 'tools/xay.log': 'x\n' });
+  // Measured on git 2.43 (#874 review, W1): `git status --ignored` calls this file ignored, and
+  // `check-ignore` reports it NOT ignored because the name is read as a glob that matches the
+  // tracked sibling. `--literal-pathspecs` is no escape — this command rejects it outright.
+  writeFileSync(join(dir, 'tools/x*y.log'), 'x\n');
+
+  assert.throws(() => listNonIgnored(dir, 'tools'), /pathspec metacharacters/);
+  assert.throws(() => topLevelEntries(dir, 'tools'), /pathspec metacharacters/);
+});
+
+test('the walk never descends THROUGH a symlink, so a batch cannot be refused as a unit', async (t) => {
+  const { dir } = repo(t, { 'tools/real.sh': 'x\n', 'outside/f.log': 'x\n' });
+  symlinkSync('../outside', join(dir, 'tools/link'));
+
+  // A path *through* a symlink is `fatal: pathspec '...' is beyond a symbolic link`, exit 128,
+  // for the WHOLE batch — one such candidate would hide the verdict for every other path. The
+  // walk keys on `isDirectory()`, which a symlink is not, so `tools/link` is asked about as
+  // itself and `tools/link/f.log` is never generated. This arm is what keeps a future refactor
+  // to a recursive or stat-following walk from turning a green gate into a refusal.
+  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/link', 'tools/real.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['link', 'real.sh']);
+});
+
+test('a git that EXISTS and FAILS refuses too — not only a missing repository', async (t) => {
+  const { dir } = repo(t, { '.gitignore': '__pycache__/\n', 'tools/kept.sh': 'x\n' });
+  write(dir, { 'tools/__pycache__/x.pyc': 'x' });
+
+  // The bundle's refusal arm used a bare directory, which answers a different question. The one
+  // that mattered in the #874 review was a git that runs and fails the way `safe.directory`
+  // does: under the old fallback that returned an UNFILTERED listing, silently.
+  const shim = mkdtempSync(join(tmpdir(), 'git-shim-'));
+  t.after(() => rmTree(shim));
+  writeFileSync(join(shim, 'git'), '#!/bin/sh\necho "fatal: detected dubious ownership in repository" >&2\nexit 128\n');
+  chmodSync(join(shim, 'git'), 0o755);
+
+  const realPath = process.env.PATH;
+  process.env.PATH = `${shim}:${realPath}`;
+  try {
+    assert.throws(() => listNonIgnored(dir, 'tools'), /dubious ownership/);
+    assert.throws(() => listTracked(dir, 'tools'), /dubious ownership/);
+  } finally {
+    process.env.PATH = realPath;
+  }
+
+  // And with the real git back, the same tree answers normally — so the arm above failed
+  // because of the shim, not because the fixture was broken.
+  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/kept.sh']);
 });

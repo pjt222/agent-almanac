@@ -64,3 +64,21 @@ export function initRepo(dir, { commit = true, message = 'fixture' } = {}) {
   }
   return git;
 }
+
+/**
+ * Stage and commit everything under `dir`.
+ *
+ * Fixtures that write files AFTER `initRepo` leave them untracked, and a consumer that counts
+ * the COMMIT — `nonDocumentationFiles`, since the #874 review showed a release is packed from
+ * one — then reports nothing. That is the consumer working, so the fixtures commit rather than
+ * the rule bending.
+ */
+export function commitAll(dir, message = 'fixture update') {
+  const git = (...args) => spawnSync('git', ['-C', dir, ...args], { encoding: 'utf8', env: cleanEnv(dir) });
+  const add = git('add', '-A');
+  if (add.status !== 0) throw new Error(`git add failed in ${dir}: ${add.stderr}`);
+  const commit = git('commit', '-qm', message);
+  if (commit.status !== 0 && !/nothing to commit/.test(commit.stdout + commit.stderr)) {
+    throw new Error(`git commit failed in ${dir}: ${commit.stderr}`);
+  }
+}

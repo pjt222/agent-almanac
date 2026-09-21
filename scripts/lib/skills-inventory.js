@@ -17,7 +17,7 @@ import { readFileSync, readdirSync, existsSync, openSync, readSync, closeSync } 
 import { resolve, join, dirname, basename } from 'node:path';
 import { declaresBash } from './readme-sections.js';
 import { CONTENT_TYPES } from './content-types.js';
-import { listNonIgnored } from './git-files.js';
+import { listTracked } from './git-files.js';
 
 /** Extensions the inventory is entitled to call "documentation". */
 const DOCUMENTATION_EXTENSIONS = ['.md', '.yml', '.yaml'];
@@ -138,13 +138,18 @@ function isExcludedFromPackage(relPath, negations) {
 /**
  * Every shipped file under `tree`, repo-relative.
  *
- * ENUMERATED BY GIT, not by a recursive `readdirSync` (#872). A gitignored file under a content
- * tree is not in the artifact this inventory describes, and counting it published a false number
- * in SECURITY.md: importing a skill asset with `importlib` left a `__pycache__/`, and the
- * committed document went out claiming 19 non-Markdown files where a clean checkout computed 18
- * — a `.py` there would have been NAMED in the executable-scripts sentence, under a paragraph
- * that asserts "All of it ships". Only CI could see the difference, because `check-readmes`
- * regenerates from the same contaminated tree it compares against.
+ * ENUMERATED FROM THE INDEX, not by a recursive `readdirSync` (#872), and not by the ignore rule
+ * either (#874 review). What this inventory describes is the RELEASE, which CI packs from a
+ * commit — so the honest set is what git tracks. The tempting shortcut, "skip what git ignores",
+ * rests on a premise measured false: with a `files` array and no `.npmignore`, a LOCAL
+ * `npm pack` packs the working tree, shipping an ignored `.pyc`, an ignored `.py` and an
+ * untracked sibling alike. So that rule would describe neither artifact.
+ *
+ * The defect it fixes is unchanged: importing a skill asset with `importlib` left a
+ * `__pycache__/`, and the committed SECURITY.md went out claiming 19 non-Markdown files where a
+ * clean checkout computed 18 — a `.py` there would have been NAMED in the executable-scripts
+ * sentence, under a paragraph asserting "All of it ships". Only CI could see it, because
+ * `check-readmes` regenerates from the same contaminated tree it compares against.
  *
  * The npm-ships predicate is UNCHANGED and is still `isExcludedFromPackage`. The recursive walk
  * tested each directory before descending, so every ancestor of a file was tested with its
@@ -155,7 +160,7 @@ function isExcludedFromPackage(relPath, negations) {
  */
 function shippedFilesUnder(root, tree, negations) {
   const treeDepth = tree.split('/').length;
-  return listNonIgnored(root, tree).filter((rel) => {
+  return listTracked(root, tree).filter((rel) => {
     const parts = rel.split('/');
     for (let depth = treeDepth; depth < parts.length - 1; depth++) {
       if (isExcludedFromPackage(`${parts.slice(0, depth + 1).join('/')}/`, negations)) return false;
