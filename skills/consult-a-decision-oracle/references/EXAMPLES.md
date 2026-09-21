@@ -273,3 +273,57 @@ Derive the separation over whichever you intend to gate on. The procedure is
 identical; the interval may not be. If a vendor tells you a concentration measure is
 not meant to carry a statistical decision, that is an argument for measuring which
 scalar separates on your rows, not for trusting the one that is easiest to read.
+
+### Two preconditions before reaching for the margin
+
+Reported from a production integration that tried it.
+
+**The margin needs the full distribution, and your client may have thrown it away.**
+A client that parses only the winning option has already discarded the runner-up, so
+"try the margin instead" is a client change first and a measurement second. Budget it
+that way, or the experiment stalls at the point where the rows turn out not to carry
+the quantity.
+
+**The margin has no analogue on a yes/no question type**, where the probability IS the
+only axis. Advice framed as "prefer the margin over the scalar" silently does not
+apply there, and the question type is usually chosen per call site rather than per
+service — so both shapes can exist in one integration.
+
+A related trap in the same place, and it fails **safe and silent**: a yes/no answer may
+carry no confidence field at all. A `confidence >= X` gate copied from a choice
+question then never fires, because `undefined >= X` is `false` in JavaScript and no
+error is raised. The gate is not off — it is absent, and it reports as a gate that
+simply never had cause to act. Assert the field is present before comparing it.
+
+## What a confidence score cannot tell you
+
+Referenced from Common Pitfalls. Two properties of these scores, and one measured
+observation about the escape option.
+
+A question with only one possible answer returns maximal confidence while carrying no
+information at all: the distribution is maximally concentrated because there is nowhere
+else for the mass to go. And because the distribution is computed over the candidate set
+**you supplied**, the score can never signal that the set itself was wrong — an input
+fitting none of your options still produces a confident-looking answer among them.
+
+Hence the escape option. On the single pair measured for this skill (n=1,
+`jev-1.13.0`, 2026-09-18) adding one changed nothing when it was unneeded, and converted
+a wrong answer into the right one when it was needed. That is one observation and not a
+rate; it is recorded because the direction is what the argument predicts, not because
+two calls establish anything.
+
+## How small a surgical gate is
+
+Referenced from Common Pitfalls. From the integration this skill draws on, model
+`jev-1.13.0`, 2026-09-17:
+
+- the gate changes **2 answers across 87 production rows**, of which 70 carry an
+  external grade
+- a separate **43-case regression suite** — not a subset of those 87 — passes 43/43 on
+  the phrasings it attests
+- a **20-case unattested set** scores 17/20
+
+Three denominators, and they do not nest. Quoting any one of them as "the accuracy"
+describes a population the other two are not drawn from, which is the shape a single
+headline number always hides. The first figure is the one that answers "how much does
+this gate actually do": two answers.
