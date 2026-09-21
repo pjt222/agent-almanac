@@ -20,7 +20,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { rmTree } from './_tmp.js';
 import { initRepo, isolateGitEnv } from './_git-fixture.js';
-import { listNonIgnored, listTracked, topLevelEntries } from '../lib/git-files.js';
+import { listTracked, topLevelEntries } from '../lib/git-files.js';
 import { checkParity } from '../lib/tools-registry.js';
 import { nonDocumentationFiles } from '../lib/skills-inventory.js';
 
@@ -40,7 +40,6 @@ function write(dir, files) {
 function repo(t, files) {
   const dir = mkdtempSync(join(tmpdir(), 'git-files-'));
   t.after(() => rmTree(dir));
-  mkdirSync(join(dir, '.git-placeholder'), { recursive: true });
   write(dir, files);
   const git = initRepo(dir);
   return { dir, git };
@@ -63,7 +62,7 @@ test('the accept rule is git ignore and nothing else: ignored out, untracked IN'
     'tools/brand-new.sh': '#!/usr/bin/env bash\n',
   });
 
-  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/brand-new.sh', 'tools/kept.py']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['brand-new.sh', 'kept.py']);
 });
 
 test('a TRACKED file matching an ignore pattern stays in — it ships', async (t) => {
@@ -76,7 +75,7 @@ test('a TRACKED file matching an ignore pattern stays in — it ships', async (t
   // Measured on git 2.43: `check-ignore` consults the index and does not call a tracked path
   // ignored (`--no-index` does). That is why this module carries no tracked-set union of its
   // own — and this arm is what would notice if that behaviour were ever relied on wrongly.
-  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/forced.log', 'tools/plain.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['forced.log', 'plain.sh']);
 });
 
 test('a BROKEN symlink is an entry like any other', async (t) => {
@@ -87,7 +86,6 @@ test('a BROKEN symlink is an entry like any other', async (t) => {
 
   // `checkParity`'s third arm is written to report exactly this entry, so it must survive the
   // enumeration to reach the `lstat` that classifies it.
-  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/dangling.sh', 'tools/real.sh']);
   assert.deepEqual(topLevelEntries(dir, 'tools').files, ['dangling.sh', 'real.sh']);
 });
 
@@ -97,7 +95,7 @@ test('a file deleted but not staged is simply absent — the disk is the candida
 
   // The walk it replaced could not see it either, and `checkParity` reports the registry row
   // through its own `existsSync`, which is where that defect belongs.
-  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/here.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['here.sh']);
 });
 
 test('topLevelEntries: an EMPTY directory is still reported, an ignored one is not', async (t) => {
@@ -134,7 +132,8 @@ test('nested .gitignore files, negations and info/exclude are honoured, because 
 
   // A hand-rolled matcher would have to implement all three. This module implements none of
   // them, which is the point: `scripts/check-generated-artifacts.js` — "git is the ruler".
-  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/deep/.gitignore', 'tools/deep/keep.tmp', 'tools/stay.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools/deep').files, ['.gitignore', 'keep.tmp']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['stay.sh']);
 });
 
 // ── it refuses rather than answering without the rule ──────────────────────────────────────────
@@ -148,14 +147,14 @@ test('outside a checkout it REFUSES — the fallback that hid a broken git is go
   // does put `tools/__pycache__` back into `notPlainFile` and a gitignored `evil.py` back into
   // the inventory, silently, behind a `source: 'disk'` marker no consumer read. An unfiltered
   // listing is not a degraded answer to this question; it is the defect.
-  assert.throws(() => listNonIgnored(dir, 'tools'), /Outside a git checkout there is no ignore rule/);
+  assert.throws(() => listTracked(dir, 'tools'), /not a git repository/i);
   assert.throws(() => topLevelEntries(dir, 'tools'), /check-ignore failed/);
 });
 
 test('a missing directory is empty; an UNREADABLE one throws', async (t) => {
   const { dir } = repo(t, { 'tools/a.sh': 'x\n', 'skills/real/references/helper.py': 'x\n' });
 
-  assert.deepEqual(listNonIgnored(dir, 'absent'), [], 'absent means absent');
+  assert.deepEqual(topLevelEntries(dir, 'absent'), { files: [], dirs: [] }, 'absent means absent');
 
   // EACCES rendering as "not there" is the direction `skills-inventory.js` argues against three
   // functions away, and git exits 0 with only `warning: could not open directory`, so nothing
@@ -169,7 +168,7 @@ test('a missing directory is empty; an UNREADABLE one throws', async (t) => {
   const locked = join(dir, 'skills/real/references');
   chmodSync(locked, 0o000);
   try {
-    assert.throws(() => listNonIgnored(dir, 'skills'), /EACCES|permission denied/i);
+    assert.throws(() => topLevelEntries(dir, 'skills/real/references'), /EACCES|permission denied/i);
   } finally {
     // Restored HERE, not in a t.after: the fixture's own teardown hook was registered first and
     // runs first, so an unreadable directory at that moment fails the removal with EACCES.
@@ -243,33 +242,39 @@ test('listTracked answers about the COMMIT, which is a different set from the ig
   // Three files on disk that git is not ignoring; only two of them are in the commit. That gap
   // is the whole reason there are two functions: a GATE asks about the working tree, and
   // SECURITY.md asks about the artifact a release is packed from.
-  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/forced.log', 'tools/tracked.sh', 'tools/untracked.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['forced.log', 'tracked.sh', 'untracked.sh']);
   assert.deepEqual(listTracked(dir, 'tools'), ['tools/forced.log', 'tools/tracked.sh']);
 });
 
 // ── the ways check-ignore answers something other than "is this ignored" ───────────────────────
 
-test('a candidate carrying pathspec metacharacters is REFUSED, not guessed at', async (t) => {
-  const { dir } = repo(t, { '.gitignore': '*.log\n', 'tools/xay.log': 'x\n' });
-  // Measured on git 2.43 (#874 review, W1): `git status --ignored` calls this file ignored, and
-  // `check-ignore` reports it NOT ignored because the name is read as a glob that matches the
-  // tracked sibling. `--literal-pathspecs` is no escape — this command rejects it outright.
+test('a candidate carrying pathspec metacharacters is ESCAPED, so git answers about the NAME', async (t) => {
+  const { dir } = repo(t, { '.gitignore': '*.log\n', 'tools/ab.log': 'x\n', 'tools/keep.sh': 'x\n' });
+  // Measured on git 2.43 (#874 review, W1 and S2). Both of these are ignored — `git status
+  // --ignored` lists them — and both come back NOT ignored if the candidate is passed raw,
+  // because git reads it as a pathspec and the tracked sibling `ab.log` matches. `\\b` is the
+  // member a denylist of `*?[` missed; escaping covers the class rather than enumerating it.
   writeFileSync(join(dir, 'tools/x*y.log'), 'x\n');
+  writeFileSync(join(dir, 'tools/a\\b.log'), 'x\n');
+  // Not ignored, and must not become a false positive from the escaping itself.
+  writeFileSync(join(dir, 'tools/q?.sh'), 'x\n');
 
-  assert.throws(() => listNonIgnored(dir, 'tools'), /pathspec metacharacters/);
-  assert.throws(() => topLevelEntries(dir, 'tools'), /pathspec metacharacters/);
+  const { files } = topLevelEntries(dir, 'tools');
+
+  assert.deepEqual(files, ['keep.sh', 'q?.sh'], 'the two ignored files are excluded and the third survives');
 });
 
-test('the walk never descends THROUGH a symlink, so a batch cannot be refused as a unit', async (t) => {
+test('a symlinked directory is asked about as itself, so a batch cannot be refused as a unit', async (t) => {
   const { dir } = repo(t, { 'tools/real.sh': 'x\n', 'outside/f.log': 'x\n' });
   symlinkSync('../outside', join(dir, 'tools/link'));
 
   // A path *through* a symlink is `fatal: pathspec '...' is beyond a symbolic link`, exit 128,
-  // for the WHOLE batch — one such candidate would hide the verdict for every other path. The
-  // walk keys on `isDirectory()`, which a symlink is not, so `tools/link` is asked about as
-  // itself and `tools/link/f.log` is never generated. This arm is what keeps a future refactor
-  // to a recursive or stat-following walk from turning a green gate into a refusal.
-  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/link', 'tools/real.sh']);
+  // for the WHOLE batch — one such candidate would hide the verdict for every other path. Only
+  // the immediate children of one directory are ever asked about, so `tools/link` is asked
+  // about as itself and `tools/link/f.log` is never generated. This arm is what keeps a future
+  // refactor to a recursive or stat-following enumeration from turning a green gate into a
+  // refusal.
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['link', 'real.sh']);
   assert.deepEqual(topLevelEntries(dir, 'tools').files, ['link', 'real.sh']);
 });
 
@@ -288,7 +293,7 @@ test('a git that EXISTS and FAILS refuses too — not only a missing repository'
   const realPath = process.env.PATH;
   process.env.PATH = `${shim}:${realPath}`;
   try {
-    assert.throws(() => listNonIgnored(dir, 'tools'), /dubious ownership/);
+    assert.throws(() => topLevelEntries(dir, 'tools'), /dubious ownership/);
     assert.throws(() => listTracked(dir, 'tools'), /dubious ownership/);
   } finally {
     process.env.PATH = realPath;
@@ -296,5 +301,5 @@ test('a git that EXISTS and FAILS refuses too — not only a missing repository'
 
   // And with the real git back, the same tree answers normally — so the arm above failed
   // because of the shim, not because the fixture was broken.
-  assert.deepEqual(listNonIgnored(dir, 'tools'), ['tools/kept.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['kept.sh']);
 });

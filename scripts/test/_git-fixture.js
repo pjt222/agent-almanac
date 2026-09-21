@@ -20,9 +20,10 @@
  * guard.
  */
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { rmTree } from './_tmp.js';
 
 /** An environment git cannot escape. `extra` is merged last, for a test that needs one key back. */
 export function cleanEnv(home, extra = {}) {
@@ -109,7 +110,11 @@ export function isolateGitEnv() {
   process.env.GIT_CONFIG_NOSYSTEM = '1';
   process.on('exit', () => {
     try {
-      rmSync(home, { recursive: true, force: true });
+      // `rmTree`, never the bare recursive call: CLAUDE.md bans it in a suite and
+      // `tmp-helper.test.js` fails on sight of one — but its scanner cannot see THIS file, whose
+      // `_` prefix keeps it out of the walk. A rule enforced everywhere the check looks and
+      // broken where it does not is the shape that gets rediscovered as a defect (#874 review).
+      rmTree(home);
     } catch { /* a leftover empty temp dir is not worth failing an exit over */ }
   });
   return home;

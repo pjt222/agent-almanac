@@ -140,7 +140,10 @@ function isExcludedFromPackage(relPath, negations) {
  *
  * ENUMERATED FROM THE INDEX, not by a recursive `readdirSync` (#872), and not by the ignore rule
  * either (#874 review). What this inventory describes is the RELEASE, which CI packs from a
- * commit — so the honest set is what git tracks. The tempting shortcut, "skip what git ignores",
+ * commit — so the honest set is the index, which is what the next commit will contain. (Index,
+ * not HEAD, and the difference is measurable: with one file `git add`ed and another
+ * `rm --cached`ed, HEAD and `ls-files --cached` disagree. The index is the better local
+ * predictor of the next release, which is why it is the one read.) The tempting shortcut, "skip what git ignores",
  * rests on a premise measured false: with a `files` array and no `.npmignore`, a LOCAL
  * `npm pack` packs the working tree, shipping an ignored `.pyc`, an ignored `.py` and an
  * untracked sibling alike. So that rule would describe neither artifact.

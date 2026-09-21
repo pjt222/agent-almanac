@@ -18,10 +18,10 @@
  *
  * ## Two rules, because there are two questions
  *
- * `listNonIgnored` answers **"what is in this working tree that git is not ignoring"** — the
+ * `topLevelEntries` answers **"what is in this directory that git is not ignoring"** — the
  * question a GATE asks, where an untracked new file with no registry row is the defect being
- * looked for. `listTracked` answers **"what is in the committed artifact"** — the question
- * SECURITY.md asks, where the subject is what a release contains.
+ * looked for. `listTracked` answers **"what is in the index"**, which is what the next commit
+ * will contain and therefore what a release is packed from — the question SECURITY.md asks.
  *
  * They were one rule until the #874 review measured the premise under it. "A gitignored file
  * does not ship" is FALSE for a local pack: with a `files` array and no `.npmignore`, npm packs
@@ -45,7 +45,8 @@
  * listing (`git ls-files` alone) would have turned a defect the gate exists to report into one
  * it cannot see — a silent narrowing, traded for the noisy one being fixed.
  *
- * Measured rather than assumed, on git 2.43 (`check-ignore-probe.sh`, 2026-09-21), and
+ * Measured rather than assumed, on git 2.43 (the probes are committed under
+ * `tests/results/2026-09-21-git-files-enumeration/`), and
  * independently re-derived by the #874 review over nine ignore mechanisms in one fixture:
  *
  *   - a TRACKED file matching an ignore pattern (`git add -f`) is NOT reported as ignored, so
@@ -74,12 +75,14 @@
  * against each other before this one replaced it: identical answers on 46/46 call sites and 4/4
  * content trees.
  *
- * ## A batch per call, never a spawn per directory
+ * ## One batch per directory, and no recursive walk of our own
  *
- * `listNonIgnored` walks the whole subtree first and asks about every path in ONE batch. Asking
- * per directory would be ~430 spawns for the four content trees, around 30 s at the ~70 ms a
- * spawn costs on this mount. Batching is correct as well as faster: git reports a path inside an
- * ignored directory as ignored, so pruning the walk is an optimisation, not a requirement.
+ * `topLevelEntries` asks about the immediate children of one directory in ONE `check-ignore`
+ * call. There is no recursive variant: an earlier revision had one, and at the end of this
+ * review no consumer took that shape — the gate is top-level by construction, and the inventory
+ * asks the index, which is recursive because `ls-files` is. A recursive walk plus a batch was
+ * kept for one revision purely because its header argued well for it, which is the defect this
+ * module's own PR body was corrected for.
  *
  * ## It REFUSES rather than answering without the rule
  *
@@ -107,16 +110,20 @@
  *
  * ## Four ways `check-ignore` answers something other than "is this ignored"
  *
- * All four are measured (#874 review, git 2.43.0), and the first is why `assertPlainCandidates`
+ * All four are measured (#874 review, git 2.43.0), and the first is why `escapePathspec`
  * exists:
  *
- *   W1  **A candidate is parsed as a PATHSPEC, not as a name.** A literal file `tools/x*y.log`,
- *       which `git status --ignored` lists as `!! tools/x*y.log`, is reported NOT ignored when a
- *       tracked sibling `xay.log` glob-matches it. `--literal-pathspecs` is not the escape: this
- *       command rejects it outright — `fatal: pathspec magic not supported by this command:
- *       'literal'`, exit 128, for ORDINARY candidates too. So a candidate carrying `*`, `?`, `[`
- *       or a leading `:` is refused rather than guessed at. No tracked name under the enumerated
- *       trees carries one today; this is a class, not a live case.
+ *   W1  **A candidate is parsed as a PATHSPEC, not as a name**, so its metacharacters are the
+ *       caller's problem. A literal file `tools/x*y.log`, which `git status --ignored` lists as
+ *       `!! tools/x*y.log`, comes back NOT ignored when a tracked sibling `xay.log` glob-matches
+ *       it — and so does `tools/a\\b.log`, where `\\b` is read as an escaped `b`. The fix is to
+ *       ESCAPE rather than to refuse, which is measured to work: `tools/x\\*y.log` returns
+ *       `exit 0, ignored`, `tools/q\\?.sh` (genuinely not ignored) returns exit 1 with no false
+ *       positive, and an ordinary candidate answers identically escaped or not.
+ *       `--literal-pathspecs` is NOT the escape — this command rejects it outright, `fatal:
+ *       pathspec magic not supported by this command: 'literal'`, exit 128, for ordinary
+ *       candidates too. git echoes the ESCAPED form back, so the answer is keyed by it and
+ *       mapped home.
  *   W2  **`core.ignorecase` is `true` on this checkout and `false` on a Linux runner**, so a
  *       candidate differing from a pattern only in case is invisible locally and visible in CI.
  *       "Passes locally" is not a pure function of the tree.
@@ -126,9 +133,9 @@
  *   W4  **A batch refuses as a unit.** One bad candidate — a path THROUGH a symlink gives
  *       `fatal: pathspec '…' is beyond a symbolic link`, exit 128 — hides the verdict for every
  *       other path in the same call. Acceptable under refuse-never-guess, which is why the
- *       thrown message carries git's stderr: the reason is what an operator needs. The walk
- *       never descends through a symlink (`withFileTypes` reports one as a symlink, not a
- *       directory), so the only way to reach that fatal is a symlinked directory named directly.
+ *       thrown message carries git's stderr: the reason is what an operator needs. Only the
+ *       immediate children of one directory are ever asked about, so reaching that fatal takes a
+ *       symlinked directory named directly.
  */
 import { execFileSync } from 'node:child_process';
 import { readdirSync } from 'node:fs';
@@ -149,37 +156,38 @@ const ABSENT = new Set(['ENOENT', 'ENOTDIR']);
  * symbolic link`) and found the reason discarded, leaving only "Command failed".
  */
 /**
- * Refuse a candidate git would read as a pathspec rather than as a name (W1).
+ * Escape a candidate so git reads it as a NAME rather than as a pathspec (W1).
  *
- * `*`, `?` and `[` make it a glob; a leading `:` makes it pathspec magic. Measured: such a
- * candidate can come back "not ignored" while `git status --ignored` calls it ignored, and
- * `--literal-pathspecs` is rejected by this command, so there is nothing to fall back to. A
- * refusal names the file; a guess publishes a wrong number.
+ * `\`, `*`, `?` and `[` are all pathspec syntax, and an unescaped one makes git answer a
+ * different question: measured, `tools/x*y.log` and `tools/a\\b.log` both come back "not
+ * ignored" while `git status --ignored` calls them ignored, because a tracked sibling matches
+ * the glob. Escaped, both are reported correctly, a genuinely-not-ignored `tools/q\\?.sh` still
+ * returns exit 1, and an ordinary candidate answers identically either way.
+ *
+ * An earlier revision REFUSED such a candidate instead. Refusing was defensible — nothing in the
+ * enumerated trees carries one — but it turned a file somebody may legitimately add into a
+ * repository-wide gate failure, and the review measured that the escape simply works. A denylist
+ * also has to be complete: the refusal shipped without `\`, which is the member that was found.
  */
-function assertPlainCandidates(paths) {
-  const magic = paths.filter((path) => /[*?[]/.test(path) || path.startsWith(':'));
-  if (magic.length === 0) return;
-  throw new Error(
-    `git check-ignore reads each candidate as a pathspec, and ${magic.length} path(s) here carry `
-    + `pathspec metacharacters (\`*\`, \`?\`, \`[\` or a leading \`:\`): ${magic.slice(0, 5).join(', ')}. `
-    + 'Measured on git 2.43: such a path can be reported NOT ignored while `git status --ignored` '
-    + 'calls it ignored, and `--literal-pathspecs` is rejected by this command. Rename the file, '
-    + 'or teach this module how to ask about it — do not let it be guessed at.',
-  );
+function escapePathspec(path) {
+  return path.replace(/([\\*?[])/g, '\\$1');
 }
 
 function ignoredAmong(root, paths) {
   if (paths.length === 0) return new Set();
-  assertPlainCandidates(paths);
+  // git echoes the ESCAPED form back, so the answer is keyed by it and mapped home. Keying by
+  // the original would silently drop every escaped path from the ignored set — the quiet
+  // direction, where an ignored file is reported as present.
+  const home = new Map(paths.map((path) => [escapePathspec(path), path]));
   try {
     const out = execFileSync('git', ['check-ignore', '-z', '--stdin'], {
       cwd: root,
-      input: `${paths.join('\0')}\0`,
+      input: `${[...home.keys()].join('\0')}\0`,
       encoding: 'utf8',
       maxBuffer: GIT_BUFFER,
       stdio: ['pipe', 'pipe', 'pipe'],
     });
-    return new Set(out.split('\0').filter(Boolean));
+    return new Set(out.split('\0').filter(Boolean).map((echoed) => home.get(echoed) ?? echoed));
   } catch (error) {
     if (error?.status === 1) return new Set();
     const stderr = String(error?.stderr ?? '').trim();
@@ -200,31 +208,6 @@ function children(root, dir) {
     if (ABSENT.has(error?.code)) return [];
     throw error;
   }
-}
-
-/** Every file under `dir`, repo-relative, recursively. */
-function walk(root, dir, out = []) {
-  for (const entry of children(root, dir)) {
-    const rel = `${dir}/${entry.name}`;
-    if (entry.isDirectory()) walk(root, rel, out);
-    else out.push(rel);
-  }
-  return out;
-}
-
-/**
- * Files under `dir` that git does not ignore, repo-relative and sorted.
- *
- * Recursive, and the whole subtree goes through one `check-ignore` batch.
- *
- * @param {string} root repository root; outside a checkout this throws rather than guessing
- * @param {string} dir repo-relative directory; a missing one yields no paths
- * @returns {string[]}
- */
-export function listNonIgnored(root, dir) {
-  const found = walk(root, dir);
-  const ignored = ignoredAmong(root, found);
-  return found.filter((rel) => !ignored.has(rel)).sort();
 }
 
 /**
@@ -259,7 +242,7 @@ export function listTracked(root, dir) {
 /**
  * The immediate children of `dir`, by name, split into files and directories.
  *
- * A separate walk rather than a projection of `listNonIgnored`, for two reasons. An EMPTY
+ * Asked about directly rather than derived from a recursive listing, for two reasons. An EMPTY
  * directory has no file under it to report, and `checkParity`'s third arm exists to report a
  * subdirectory under `tools/` precisely because a directory is representable by no registry row
  * — deriving directories from file paths would have stopped reporting an empty one, a quiet
