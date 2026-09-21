@@ -388,6 +388,21 @@ function assertInterpretable(files, root) {
         'silence. Teach scripts/lib/skills-inventory.js the pattern, or avoid the glob.',
       );
     }
+    // npm NORMALISES a leading `./` or `/`; this module compares literal paths, so `"./lib"`
+    // prefixes nothing and the model packs zero of what npm packs — and a negation beside it
+    // goes dead. Measured: `["!lib/x/", "./lib"]` packs `lib/a.js` and `lib/x/b.js` while the
+    // model packs neither (#883 review, N5). Under-counting in a published figure is the
+    // silent direction, so it is refused rather than normalised — normalising would mean
+    // reimplementing npm's path handling on the strength of one measurement.
+    const bare = entry.startsWith('!') ? entry.slice(1) : entry;
+    if (bare.startsWith('./') || bare.startsWith('/')) {
+      throw new Error(
+        `package.json \`files\` entry "${entry}" begins with "./" or "/". Measured: npm `
+        + 'normalises the prefix away and packs the directory, while this module compares '
+        + 'literal paths and matches nothing — so the published file count would be lower than '
+        + `what ships. Write it without the prefix: "${entry.startsWith('!') ? '!' : ''}${bare.replace(/^\.?\//, '')}".`,
+      );
+    }
     if (entry.startsWith('!') && !entry.slice(1).includes('/')) {
       throw new Error(
         `package.json \`files\` entry "${entry}" is an unanchored negation. Measured: npm ` +

@@ -261,15 +261,36 @@ export function report({ ignored, untracked, modified = [], codes = {} }) {
   // `DD`, `DU` or `UD` from it.
   const UNMERGED_CODES = new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);
   const unmerged = modified.filter((path) => UNMERGED_CODES.has(raw(path)));
-  // Absent in the WORKTREE: a `D`/`T` worktree column under any index column, plus `D `/`T `,
-  // where the worktree agrees with an index that has already dropped or retyped the path.
   const gone = (column) => column === 'D' || column === 'T';
+  // Absent from the WORKTREE, which is what npm packs: a `D`/`T` worktree column under any
+  // index column, plus `D `/`T `, where the worktree column is blank.
+  //
+  // Blank does NOT mean "the disk agrees with the index", which is what an earlier revision of
+  // this comment claimed. For `D ` the index has no entry left to agree with, and the disk
+  // state arrives as a SEPARATE `??`/`!!` record for the same path — so a `git rm --cached`
+  // leaves the file on disk, packable, while this arm calls it absent (#883 review, SF-A).
+  // Classifying from `lstatSync` instead — the disk is what npm reads — is the durable fix and
+  // is its own issue; what this arm can honestly say is what git's columns report.
+  const worktreeAbsent = (path) => gone(raw(path)[1])
+    || (raw(path)[1] === ' ' && gone(raw(path)[0]));
+  // Split by WHERE the missing file lives, because the two sentences are not interchangeable.
+  // `AD`/`AT` are staged additions removed from the worktree again: HEAD carries no such path,
+  // so "the pack LACKS a file the commit has" is false of them — it is the INDEX that has it,
+  // and the pack matches the commit exactly. That is the same shape of falsehood this function
+  // was condemned for stamping on deletions (#883 review, SF-B).
+  const stagedGone = modified.filter((path) => !unmerged.includes(path)
+    && worktreeAbsent(path) && raw(path)[0] === 'A');
   const absent = modified.filter((path) => !unmerged.includes(path)
-    && (gone(raw(path)[1]) || (raw(path)[1] === ' ' && gone(raw(path)[0]))));
-  const edited = modified.filter((path) => !absent.includes(path) && !unmerged.includes(path));
+    && !stagedGone.includes(path) && worktreeAbsent(path));
+  const edited = modified.filter((path) => !absent.includes(path) && !unmerged.includes(path)
+    && !stagedGone.includes(path));
   for (const [label, paths, remedy] of [
-    ['ABSENT-OR-RETYPED', absent, 'so the pack LACKS a file the commit has — restore it, or commit the removal'],
-    ['UNMERGED', unmerged, 'and a conflicted file would be packed with its markers — resolve it'],
+    ['ABSENT-OR-RETYPED', absent, 'so the pack LACKS a file the commit has — restore it (`git restore --staged --worktree <path>` for a `D ` path, which plain `git restore` cannot see), or commit the removal'],
+    ['STAGED-BUT-GONE', stagedGone, 'so the pack lacks a file the NEXT commit would have — `git restore <path>` brings it back, or unstage it'],
+    // Two of the seven unmerged codes pack markers; `UA`/`AU`/`UD`/`DU` pack one side's version
+    // with no markers at all, and `DD` packs nothing (#883 review, SF-D). "Resolve it" is right
+    // for all seven, so the verb stays and the false half of the sentence goes.
+    ['UNMERGED', unmerged, 'and a conflicted path would be packed as it sits on disk — with markers, as one side\'s version, or not at all — resolve it'],
     ['MODIFIED', edited, 'with their WORKING-TREE bytes, not the committed ones — commit or revert them'],
   ]) {
     if (paths.length === 0) continue;
