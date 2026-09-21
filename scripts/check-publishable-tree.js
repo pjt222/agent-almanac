@@ -174,7 +174,15 @@ export function divergentPaths(root = ROOT, shipped = shippedPaths(root)) {
       // -z, because porcelain QUOTES a path carrying a space or a non-ASCII byte, and that
       // quoting reached the report verbatim before (#879 review, N5). NUL-separated output is
       // unquoted, and the parse below splits on it.
-      ['status', '--porcelain', '-z', '--ignored=matching', '-uall', '--', ...included],
+      // --no-renames, and the reason is a carve-out that was reachable with THIS repository's
+      // own files array. Without it a staged rename is one record whose path field is
+      // `old -> new` (or, under -z, a pair), and a rename OUT of a negated directory — the
+      // seed-a-skill-from-`skills/_template/` move — could be tested against the old side and
+      // carved out whole, shipping the new file unrefused (#879 round 2). -z already splits the
+      // pair so the NEW path is what is tested; --no-renames removes the question entirely by
+      // emitting a plain D/A pair, and makes the answer independent of an operator's
+      // status.renames or diff.renames config, which can otherwise emit `C ` copy lines.
+      ['status', '--porcelain', '-z', '--no-renames', '--ignored=matching', '-uall', '--', ...included],
       { cwd: root, encoding: 'utf8', maxBuffer: 1 << 28, stdio: ['ignore', 'pipe', 'pipe'] },
     );
   } catch (error) {
@@ -237,7 +245,12 @@ export function report({ ignored, untracked, modified = [] }) {
 // under `/tmp/…/with space`: exit 0 with a gitignored `.pyc` staged to ship, against exit 1 at
 // a plain path — a fail-open in a guard, which is the one direction a guard must not fail
 // (#879 review, B1).
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+// `process.argv[1] &&` first: it is undefined when this module is imported from a context with
+// no script path — `node --input-type=module -e`, a REPL, some loaders — and `pathToFileURL`
+// THROWS `ERR_INVALID_ARG_TYPE` on undefined rather than returning something that fails to
+// match. The #879 review's suggested fix carried this guard and an earlier commit here typed a
+// variant without it, turning an importable module into one that crashes on import.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const lines = report(divergentPaths());
   const refused = lines.some((line) => line.startsWith('REFUSED:'));
   for (const line of lines) (refused ? console.error : console.log)(line);

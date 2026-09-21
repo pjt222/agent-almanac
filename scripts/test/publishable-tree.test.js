@@ -288,3 +288,40 @@ test('a path carrying a space or a non-ASCII byte is reported unquoted', async (
   assert.deepEqual(divergentPaths(dir).untracked,
     ['skills/real/has space.md', 'skills/real/umlaut-ä.md']);
 });
+
+test('a rename OUT of a negated directory refuses the new file', async (t) => {
+  const dir = pkg(t);
+  const git = initRepo; // the fixture is already a repo; drive it directly below
+  void git;
+  const { execFileSync } = await import('node:child_process');
+  const run = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  // Reachable with this repository's OWN files array: `!skills/_template/` is a directory
+  // negation, so seeding a skill from the template is a rename whose old side is carved out.
+  // Tested against the old side, the whole record disappears and the new file ships unrefused
+  // (#879 round 2, B1).
+  run('mv', 'skills/real/SKILL.md', 'skills/real/renamed.md');
+
+  const found = divergentPaths(dir);
+
+  const all = [...found.ignored, ...found.untracked, ...found.modified];
+  assert.ok(all.includes('skills/real/renamed.md'), `the new path must be reported, got ${JSON.stringify(found)}`);
+});
+
+test('the module can be IMPORTED where there is no script path', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { resolve, dirname } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+  // `pathToFileURL(undefined)` THROWS rather than returning a non-match, so a main-module guard
+  // without the `process.argv[1] &&` half turns an importable module into one that crashes on
+  // import from `node -e`, a REPL or a loader. A commit here typed exactly that variant.
+  const out = execFileSync(process.execPath, [
+    '--input-type=module', '-e',
+    `import { report } from ${JSON.stringify(`${root}/scripts/check-publishable-tree.js`)};`
+    + 'console.log(report({ ignored: [], untracked: [], modified: [] })[0]);',
+  ], { encoding: 'utf8' });
+
+  assert.match(out, /^OK: /);
+});
