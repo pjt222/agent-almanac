@@ -93,6 +93,8 @@
     "test:cli": "node --test cli/test/cli.test.js",
     "pretest:scripts": "node scripts/test/_assert-suite-nonempty.js",
     "test:scripts": "node --test scripts/test/*.test.js",
+    "prepack": "node scripts/check-publishable-tree.js",
+    "check:publishable-tree": "node scripts/check-publishable-tree.js",
     "prepublishOnly": "npm run test:cli",
     "validate:banned-invocations": "node scripts/check-banned-invocations.js"
   },
