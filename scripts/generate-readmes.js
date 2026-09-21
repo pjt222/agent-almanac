@@ -726,6 +726,17 @@ function generateSecuritySurface() {
   const workflowFiles = workflowFileCount(ROOT);
 
   const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8'));
+
+  // DERIVED, not asserted. An earlier revision wrote this sentence as a literal: deleting the
+  // hook from package.json left `check-readmes` green while SECURITY.md went on claiming the
+  // hook existed (#879 review, S4). Pack-time hooks run in the publisher's tree; the
+  // install-time ones the sentence above disclaims are `skills-inventory.js`'s INSTALL_HOOKS,
+  // and `assertInventoryClaims` throws if any of those ever appears.
+  const packHooks = ['prepack', 'postpack'].filter((hook) => pkg.scripts?.[hook]);
+  const packHookSentence = packHooks.length === 0 ? '' : ` It does declare ${
+    packHooks.map((hook) => `\`${hook}\``).join(' and ')}, which run${
+    packHooks.length === 1 ? 's' : ''} in the PUBLISHER's tree when the package is packed and never in a consumer's; ${
+    packHooks.length === 1 ? 'it refuses' : 'they refuse'} a pack carrying files the published commit does not (#876).`;
   const shipped = pkg.files || [];
   if (shipped.some((f) => f.replace(/^!/, '').startsWith('scripts'))) {
     throw new Error('SECURITY.md claims scripts/ does not ship, but package.json `files` says otherwise');
@@ -831,7 +842,7 @@ function generateSecuritySurface() {
   const toolsSkipped = toolRows.length - toolsInCi;
 
   return [
-    `**Which artifact this describes.** Everything below is derived from **the repository at this revision**, whose \`package.json\` declares version \`${pkg.version ?? '(unset)'}\`. That is not necessarily what \`npm install ${pkg.name ?? '(unnamed)'}\` installs — the published version can lag this tree, and has. Check with \`npm view ${pkg.name ?? '(unnamed)'} version\`. What ships, from \`package.json\`'s own \`files\`: ${shippedList.map((t) => `\`${t}\``).join(', ')}. \`package.json\` ships too — npm always includes it — and it declares no \`preinstall\`/\`install\`/\`postinstall\` hooks, so nothing here executes on install. It does declare \`prepack\`, which runs in the PUBLISHER's tree when the package is packed and never in a consumer's; it refuses a pack carrying files the published commit does not (#876). Everything else described below (${REPO_ONLY.map((d) => `\`${d}/\``).join(', ')}) exists only in the repository. A vulnerability report against an npm-installed copy is in scope for the shipped list, and may be against older code than this document describes.`,
+    `**Which artifact this describes.** Everything below is derived from **the repository at this revision**, whose \`package.json\` declares version \`${pkg.version ?? '(unset)'}\`. That is not necessarily what \`npm install ${pkg.name ?? '(unnamed)'}\` installs — the published version can lag this tree, and has. Check with \`npm view ${pkg.name ?? '(unnamed)'} version\`. What ships, from \`package.json\`'s own \`files\`: ${shippedList.map((t) => `\`${t}\``).join(', ')}. \`package.json\` ships too — npm always includes it — and it declares no \`preinstall\`/\`install\`/\`postinstall\` hooks, so nothing here executes on install.${packHookSentence} Everything else described below (${REPO_ONLY.map((d) => `\`${d}/\``).join(', ')}) exists only in the repository. A vulnerability report against an npm-installed copy is in scope for the shipped list, and may be against older code than this document describes.`,
     '',
     `- **${treeLabel}**: ${nonDoc.length === 0 ? 'Markdown and YAML only' : `mostly Markdown and YAML, plus **${nonDoc.length} files that are not** (${nonDocExtensions.join(', ')})${executable.length ? ` — ${executable.length === 1 ? 'one of them an executable script, ' : `${executable.length} of them executable scripts: `}${executable.map((f) => `\`${f}\``).join(', ')}` : ''}`}. All of it ships — counted from the index, which is what the next commit will contain and what a release is packed from; a local \`npm pack\` packs the working tree instead and can include files this count excludes. ${declaring} of ${ids.length} skills (~${share}%) declare \`Bash\` in their \`allowed-tools\`, meaning they instruct AI agents to execute shell commands when followed. Review any skill before letting an agent execute it.`,
     '- **Visualization pipeline** (`viz/`): A containerized R + Node.js + Vite build system with a Dockerfile, shell scripts, and an icon rendering pipeline. The Docker entrypoint serves content via a Python HTTP server.',

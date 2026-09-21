@@ -47,8 +47,9 @@ function pkg(t, extra = {}) {
 test('a clean tree passes, and the negation is not mistaken for a shipped path', async (t) => {
   const dir = pkg(t);
 
-  assert.deepEqual(shippedPaths(dir), ['skills/'], 'the `!` entry is an exclusion, not a path to scan');
-  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [] });
+  assert.deepEqual(shippedPaths(dir), { included: ['skills/'], negations: ['skills/_template/'] },
+    'both halves are needed: the negation is not a path to scan, and not a path to forget');
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [] });
   assert.match(report(divergentPaths(dir))[0], /^OK: /);
 });
 
@@ -104,7 +105,41 @@ test('divergence OUTSIDE the shipped paths is ignored — the check is scoped, n
   // would block every publish from a working checkout and be disabled within a week.
   write(dir, { 'scripts/local-probe.js': '1\n', 'scripts/debug.log': 'noise\n' });
 
-  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [] });
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [] });
+});
+
+test('a MODIFIED tracked file is refused — npm packs the working bytes, not the committed ones', async (t) => {
+  const dir = pkg(t);
+  // The OK line used to say "a pack here matches the commit" while this state packed 14 bytes
+  // against 7 committed (#879 review, S1). Same divergence as the other two classes, different
+  // remedy, so it gets its own list rather than a count.
+  writeFileSync(join(dir, 'skills/real/SKILL.md'), '# real, edited after the commit\n');
+
+  const found = divergentPaths(dir);
+
+  assert.deepEqual(found.modified, ['skills/real/SKILL.md']);
+  assert.deepEqual(found.ignored, []);
+  assert.deepEqual(found.untracked, []);
+  assert.ok(report(found).some((l) => l.startsWith('REFUSED: 1 MODIFIED')));
+});
+
+test('content under a NEGATED files entry is not refused — npm never packs it', async (t) => {
+  const dir = pkg(t);
+  // `files` carves `skills/_template/` back out, so nothing under it can reach the tarball.
+  // Refusing here would block a publish over a file that cannot ship (#879 review, S2). A
+  // pathspec cannot express this — `:(exclude)` does not drop the ignored-directory entry —
+  // so the filtering happens on the results.
+  write(dir, {
+    'skills/_template/scratch.md': 'x\n',
+    'skills/_template/__pycache__/a.pyc': 'x',
+  });
+
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [] });
+
+  // …and the same shapes OUTSIDE the negation are still refused, so this is a carve-out and
+  // not a hole.
+  write(dir, { 'skills/real/scratch.md': 'x\n' });
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/scratch.md']);
 });
 
 test('a git failure THROWS rather than reporting a clean tree', async (t) => {
@@ -147,5 +182,42 @@ test('`prepack` is wired, and it is deliberately NOT an install hook', async () 
   assert.ok(!INSTALL_HOOKS.includes('prepack'), 'prepack is not an install-time hook');
   for (const hook of INSTALL_HOOKS) {
     assert.equal(scripts[hook], undefined, `package.json must declare no ${hook} script`);
+  }
+});
+
+test('the main-module guard fires at a path npm percent-encodes — the #879 fail-open', async (t) => {
+  const { execFileSync } = await import('node:child_process');
+  const { copyFileSync } = await import('node:fs');
+  const { resolve, dirname } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+  const base = mkdtempSync(join(tmpdir(), 'publishable-url-'));
+  t.after(() => rmTree(base));
+
+  // A space is enough: `import.meta.url` percent-encodes it, `process.argv[1]` does not, and a
+  // `file://${process.argv[1]}` comparison therefore never matches — the script would exit 0
+  // having checked nothing, which is a guard failing OPEN. Measured before the fix: exit 0 with
+  // a gitignored `.pyc` staged to ship.
+  for (const name of ['plain', 'with space']) {
+    const dir = join(base, name);
+    mkdirSync(join(dir, 'skills/real/references/__pycache__'), { recursive: true });
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'x', version: '1.0.0', files: ['skills/'] }));
+    writeFileSync(join(dir, '.gitignore'), '__pycache__/\n');
+    writeFileSync(join(dir, 'skills/real/SKILL.md'), '# real\n');
+    writeFileSync(join(dir, 'skills/real/references/__pycache__/contaminant.pyc'), 'x');
+    copyFileSync(join(root, 'scripts/check-publishable-tree.js'), join(dir, 'check.mjs'));
+    initRepo(dir);
+
+    const run = () => {
+      try {
+        execFileSync(process.execPath, ['check.mjs'], { cwd: dir, encoding: 'utf8', stdio: 'pipe' });
+        return 0;
+      } catch (error) {
+        return error.status;
+      }
+    };
+
+    assert.equal(run(), 1, `the guard must refuse at "${name}" — exit 0 there is the fail-open`);
   }
 });
