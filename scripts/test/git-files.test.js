@@ -270,11 +270,25 @@ for (const [label, name] of [['a star', 'x*y.log'], ['a question mark', 'q?.sh']
   });
 }
 
-test('CONTROL: an ordinary directory does not trip the refusal', async (t) => {
-  // Without this, all four arms above would pass against a guard that refused everything.
-  const { dir } = repo(t, { '.gitignore': '*.log\n', 'tools/keep.sh': 'x\n', 'tools/plain.log': 'x\n' });
+test('CONTROL: ordinary names — including a space and the punctuation the corpus uses — do not trip the refusal', async (t) => {
+  // Without this, all four arms above would pass against a guard that refused everything. The
+  // review measured this control's honest size: an over-broad guard on a hyphen dies to nine
+  // tests because the real catalogue is full of hyphenated names, while one on a SPACE survived
+  // 912/912 — no fixture and no enumerated name carried one. So a space is here now, with the
+  // rest of the punctuation a filename in these trees may legitimately hold.
+  const { dir } = repo(t, {
+    '.gitignore': '*.log\n',
+    'tools/keep.sh': 'x\n',
+    'tools/kebab-case.sh': 'x\n',
+    'tools/with space.sh': 'x\n',
+    'tools/dot.separated.mjs': 'x\n',
+    'tools/under_score.py': 'x\n',
+    'tools/plain.log': 'x\n',
+  });
 
-  assert.deepEqual(topLevelEntries(dir, 'tools').files, ['keep.sh']);
+  assert.deepEqual(topLevelEntries(dir, 'tools').files, [
+    'dot.separated.mjs', 'kebab-case.sh', 'keep.sh', 'under_score.py', 'with space.sh',
+  ], 'only the gitignored .log is excluded, and nothing here is refused');
 });
 
 test('a symlinked directory is asked about as itself, so a batch cannot be refused as a unit', async (t) => {

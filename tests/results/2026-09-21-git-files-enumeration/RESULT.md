@@ -58,7 +58,9 @@ escaped is wrong when the pattern carries the metacharacter; and the second fail
 one — `tree-counts` would inflate a published count with nothing red anywhere. The module refuses
 such a candidate by name, which is what the first revision did before the escape replaced it.
 
-**Cost.** Over the 46 call sites, on this mount:
+**Cost.** The three figures below are one historical run over **46** sites; the committed probe
+now measures the **42** the generator actually makes, and reports 3.1-3.5 s against a ~170 ms
+`readdirSync` baseline.
 
 ```
 ls-files --cached --others --exclude-standard   32612 ms   (the first implementation)
@@ -66,15 +68,20 @@ readdirSync + one check-ignore batch per call    3299 ms   (this implementation)
 readdirSync alone, no ignore rule at all          173 ms   (what it replaced)
 ```
 
+The 46 came from deriving the locale list from the DIRECTORIES under `i18n/`, which includes
+`glossaries`; the generator iterates `_config.yml`'s `supported_locales`, which is ten. The four
+extra sites are absent directories that spawn no git process, so the timings stood while the
+count did not — the probe derives its locales from `_config.yml` now (#874 review, N3).
+
 The cost is not process spawn — `git rev-parse` is 36 ms and `ls-files --cached` is 94 ms
 repo-wide. It is `--others`, which walks and stats the working tree and loads a 13,492-entry index
 on every call. `check-ignore` consults the ignore rules and the index and stats nothing. The two
 implementations were run against each other before the replacement: identical answers on 46/46
 call sites and 4/4 content trees.
 
-`enumeration-cost.mjs` reports a slightly different total on each run (3299, 3312 and 3291 ms
-have all been observed). Quote the figure from a run, not from this file. The 32612 ms row is
-historical — no committed script produces it.
+`enumeration-cost.mjs` reports a different total on each run (3054, 3291, 3299, 3312 and 3460 ms
+have all been observed, the last two at 42 sites). Quote the figure from a run, not from this
+file. The 32612 ms row is historical — no committed script produces it.
 
 **Prefix equivalence.** The flat listing's ancestor-prefix test admits exactly what the recursive
 walk admitted: 8 negation shapes × 4 trees, 0 disagreements, with `no negations at all` and `a

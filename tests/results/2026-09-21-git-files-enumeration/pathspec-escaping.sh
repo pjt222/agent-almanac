@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# Re-derive the review's N3/S2 claim: does backslash-escaping a candidate make `check-ignore`
-# answer about the NAME rather than about a pathspec, and what does it echo back?
+# Does backslash-escaping a candidate make `check-ignore` answer about the NAME rather than
+# about a pathspec, and what does it echo back?
 #
-# The answer decides whether the enumerator refuses such a path or handles it.
+# This measures the INDEX side only, where the answer is yes. It is half the question, and the
+# half it does not cover is what decided the design: see `escaping-matrix.mjs`, which measures
+# the PATTERN side and finds escaping wrong in six of eight fixtures. The enumerator REFUSES such
+# a name; this script is the record of why the alternative looked good first.
 set -uo pipefail
 
 DIR=$(mktemp -d)

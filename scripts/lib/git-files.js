@@ -63,9 +63,11 @@
  *
  * That was the first implementation and it is 190x slower here, which matters because it sits on
  * the path of a required context. Measured on this checkout (WSL2, `/mnt/d` is 9p/drvfs), over
- * the 46 call sites `generate-readmes.js` makes. The first row is HISTORICAL, taken at b8eee5b7e
- * when both implementations existed side by side; the committed cost probe measures the current
- * one only, and the figures move by tens of milliseconds between runs:
+ * the call sites `generate-readmes.js` makes. All three rows are ONE HISTORICAL RUN, taken at
+ * b8eee5b7e over 46 sites when both implementations existed side by side; the committed probe
+ * measures the current implementation over the 42 sites the generator actually makes (its
+ * locale list came from the directories under `i18n/`, which includes `glossaries`) and reports
+ * 3.1-3.5 s against a ~170 ms baseline, moving between runs:
  *
  *   ls-files --cached --others --exclude-standard   32612 ms
  *   readdirSync + one check-ignore batch per call     3299 ms
