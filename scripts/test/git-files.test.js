@@ -19,10 +19,15 @@ import { mkdtempSync, mkdirSync, writeFileSync, unlinkSync, symlinkSync, chmodSy
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { rmTree } from './_tmp.js';
-import { initRepo } from './_git-fixture.js';
+import { initRepo, isolateGitEnv } from './_git-fixture.js';
 import { listNonIgnored, listTracked, topLevelEntries } from '../lib/git-files.js';
 import { checkParity } from '../lib/tools-registry.js';
 import { nonDocumentationFiles } from '../lib/skills-inventory.js';
+
+// Isolate git for this process before any test runs: the modules under test spawn git with
+// `process.env`, so a developer's own `$XDG_CONFIG_HOME/git/ignore` can redden a fixture (#874
+// review, S4).
+isolateGitEnv();
 
 function write(dir, files) {
   for (const [rel, content] of Object.entries(files)) {
@@ -155,7 +160,12 @@ test('a missing directory is empty; an UNREADABLE one throws', async (t) => {
   // EACCES rendering as "not there" is the direction `skills-inventory.js` argues against three
   // functions away, and git exits 0 with only `warning: could not open directory`, so nothing
   // downstream would refuse on its behalf (#874 review, S3).
-  if (process.getuid?.() === 0) return; // root reads anything; the arm would be vacuous
+  if (process.getuid?.() === 0) {
+    // Reported, not silently passed: root reads an unreadable directory, so the arm below would
+    // be vacuous rather than satisfied (#874 review, Q4).
+    t.skip('running as root: chmod 000 does not deny this process');
+    return;
+  }
   const locked = join(dir, 'skills/real/references');
   chmodSync(locked, 0o000);
   try {

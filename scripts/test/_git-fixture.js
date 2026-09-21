@@ -20,6 +20,8 @@
  * guard.
  */
 import { spawnSync } from 'node:child_process';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 /** An environment git cannot escape. `extra` is merged last, for a test that needs one key back. */
@@ -81,4 +83,34 @@ export function commitAll(dir, message = 'fixture update') {
   if (commit.status !== 0 && !/nothing to commit/.test(commit.stdout + commit.stderr)) {
     throw new Error(`git commit failed in ${dir}: ${commit.stderr}`);
   }
+}
+
+/**
+ * Isolate git for THIS PROCESS, not only for the fixture's own commands.
+ *
+ * `cleanEnv` covers the write side — the `git init`/`add`/`commit` this file runs. The module
+ * under test spawns its own git with `process.env`, which is the read side, and the #874 review
+ * measured the gap: one line in `$XDG_CONFIG_HOME/git/ignore` matching a fixture filename turned
+ * `the accept rule is git ignore and nothing else` red, with a control run proving the same suite
+ * green once the variable was unset. A developer would get a failure they cannot explain from the
+ * diff.
+ *
+ * Production must keep inheriting the environment — that is where `safe.directory` and an
+ * operator's excludes live — so this is per suite, called at module scope. `node --test` runs
+ * each file in its own process, which is what makes that safe.
+ */
+export function isolateGitEnv() {
+  const home = mkdtempSync(join(tmpdir(), 'git-env-'));
+  for (const key of Object.keys(process.env)) {
+    if (key.startsWith('GIT_')) delete process.env[key];
+  }
+  process.env.HOME = home;
+  process.env.XDG_CONFIG_HOME = join(home, '.config');
+  process.env.GIT_CONFIG_NOSYSTEM = '1';
+  process.on('exit', () => {
+    try {
+      rmSync(home, { recursive: true, force: true });
+    } catch { /* a leftover empty temp dir is not worth failing an exit over */ }
+  });
+  return home;
 }

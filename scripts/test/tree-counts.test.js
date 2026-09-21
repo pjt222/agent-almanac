@@ -25,10 +25,13 @@ import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { rmTree } from './_tmp.js';
-import { initRepo } from './_git-fixture.js';
+import { initRepo, isolateGitEnv } from './_git-fixture.js';
 import { scriptFileCount, workflowFileCount, localeTranslationCounts } from '../lib/tree-counts.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+// See git-files.test.js: the modules under test spawn git with `process.env` (#874 review, S4).
+isolateGitEnv();
 
 function write(dir, files) {
   for (const [rel, content] of Object.entries(files)) {
@@ -113,15 +116,14 @@ test('LIVE: the real tree still produces the numbers SECURITY.md publishes', () 
   assert.ok(scripts > 10, `scripts/ should hold more than ten top-level scripts, got ${scripts}`);
   assert.ok(workflows >= 1, `workflows/ should hold at least one non-template workflow, got ${workflows}`);
 
-  // The exact published sentence, not a loose substring: `includes(`${scripts} `)` was the
-  // first form here and it matches any digit run followed by a space anywhere in the document,
-  // which is a pass this function cannot fail.
-  const security = readFileSync(join(ROOT, 'SECURITY.md'), 'utf8');
-  assert.match(
-    security,
-    new RegExp(`\\*\\*Scripts\\*\\* \\(\`scripts/\`\\): ${scripts} top-level`),
-    `SECURITY.md should publish the ${scripts} this function computes`,
-  );
+  // NO assertion against SECURITY.md here, deliberately, and the history is the argument.
+  // The first form was vacuous — `includes(`${scripts} `)` matches any digit run followed by a
+  // space in any version of that document. The correction pinned the published sentence, and
+  // that over-corrected into a freshness gate inside `scripts-test`, a REQUIRED context: any PR
+  // adding a top-level script would go red for not having regenerated SECURITY.md (#874 review,
+  // S2). `validate-readmes.yml` refuses exactly that trade in its own comment — "a contract
+  // change wearing a bug fix's clothes" — and `check-readmes` already owns the question in a job
+  // that is not required. The bounds above are the non-vacuous part: `return 0` kills them.
 });
 
 test('TRIPWIRE (not the coverage claim): the generator holds no directory walk of its own', () => {

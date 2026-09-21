@@ -19,7 +19,7 @@ import { tmpdir } from 'node:os';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { rmTree } from './_tmp.js';
-import { initRepo, commitAll } from './_git-fixture.js';
+import { initRepo, commitAll, isolateGitEnv } from './_git-fixture.js';
 import {
   skillsDeclaringBash,
   nonDocumentationFiles,
@@ -33,6 +33,9 @@ import {
 } from '../lib/skills-inventory.js';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+// See git-files.test.js: the modules under test spawn git with `process.env` (#874 review, S4).
+isolateGitEnv();
 
 const BASH_SKILL = '---\nname: x\nallowed-tools: Read, Bash, Grep\n---\n\n# X\n';
 const QUIET_SKILL = '---\nname: y\nallowed-tools: Read, Grep\n---\n\n# Y\n';
