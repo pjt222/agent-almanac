@@ -26,7 +26,8 @@ metadata:
   tags: decision-oracle, confidence-scalar, threshold, classifier, fail-open, typed-decision, measurement, separation
   locale: zh-CN
   source_locale: en
-  source_commit: 4db57475b
+  source_commit: "941efa3f36583b72824567809ae696cd7cd81872"
+  fence_basis_commit: "941efa3f36583b72824567809ae696cd7cd81872"
   translator: "(untranslated stub)"
   translation_date: "2026-09-18"
 ---
