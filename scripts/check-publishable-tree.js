@@ -124,11 +124,17 @@ export function shippedPaths(root = ROOT) {
 // NOT `node_modules`: the same review measured `skills/real/node_modules/dep/index.js` present in
 // the pack listing, so a nested one under a shipped directory DOES ship and the guard's refusal
 // of it is real rather than redundant with npm's root exclusion (N1).
-const NPM_ALWAYS_EXCLUDES = new Set(['.npmrc', '.DS_Store', '.git', '.gitignore']);
+const NPM_ALWAYS_EXCLUDES = new Set([
+  '.npmrc', '.DS_Store', '.git', '.gitignore', '.npmignore',
+  'npm-debug.log', '.lock-wscript', 'CVS', '.svn', '.hg',
+]);
+
+/** Patterns npm drops that a name set cannot express; each measured absent from the pack. */
+const NPM_ALWAYS_EXCLUDED_PATTERNS = [/^\._/, /^\..*\.swp$/, /^\.wafpickle-/, /\.orig$/];
 
 function npmAlwaysExcludes(path) {
-  return path.split('/').some((segment) => NPM_ALWAYS_EXCLUDES.has(segment))
-    || path.endsWith('.orig');
+  return path.split('/').some((segment) => NPM_ALWAYS_EXCLUDES.has(segment)
+    || NPM_ALWAYS_EXCLUDED_PATTERNS.some((pattern) => pattern.test(segment)));
 }
 
 /**

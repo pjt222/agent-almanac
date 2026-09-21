@@ -286,15 +286,34 @@ test('npm’s own default excludes are not reported as "would be packed"', async
     'skills/real/.DS_Store': 'x',
     'skills/real/.npmrc': 'x',
     'skills/real/notes.orig': 'x',
+    // Nine further names the #879 re-grade measured refused-but-never-packed.
+    'skills/real/.npmignore': 'x',
+    'skills/real/._resourcefork': 'x',
+    'skills/real/.SKILL.md.swp': 'x',
+    'skills/real/npm-debug.log': 'x',
+    'skills/real/.lock-wscript': 'x',
+    'skills/real/.wafpickle-7': 'x',
+    'skills/real/CVS/Root': 'x',
+    'skills/real/.svn/entries': 'x',
+    'skills/real/.hg/store': 'x',
   });
 
   assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
 
-  // …but a nested node_modules under a shipped directory IS packed, so it must still refuse —
+  // …but the things npm DOES pack must still refuse. Measured packed, so correctly refused:
+  // a nested lockfile, and a nested node_modules.
+  write(dir, { 'skills/real/package-lock.json': '{}\n' });
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/package-lock.json'],
+    'a nested lockfile IS packed, so it is not a default exclude');
+
+  // …and a nested node_modules under a shipped directory IS packed, so it must still refuse —
   // the same review measured `skills/real/node_modules/dep/index.js` in the listing, which is
   // why that name is deliberately NOT in the default-excludes set.
   write(dir, { 'skills/real/node_modules/dep/index.js': 'x' });
-  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/node_modules/dep/index.js']);
+  assert.deepEqual(divergentPaths(dir).untracked, [
+    'skills/real/node_modules/dep/index.js',
+    'skills/real/package-lock.json',
+  ]);
 });
 
 test('a path carrying a space or a non-ASCII byte is reported unquoted', async (t) => {
@@ -309,8 +328,6 @@ test('a path carrying a space or a non-ASCII byte is reported unquoted', async (
 
 test('a rename OUT of a negated directory refuses the new file', async (t) => {
   const dir = pkg(t);
-  const git = initRepo; // the fixture is already a repo; drive it directly below
-  void git;
   const { execFileSync } = await import('node:child_process');
   const run = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
 
@@ -411,4 +428,26 @@ test('the remedy matches what git reported — a deletion is not "packed with it
   assert.match(lines, /REFUSED: 1 MODIFIED path\(s\).*WORKING-TREE bytes/s);
   assert.match(lines, /D {2}skills\/real\/references\/helper\.py/);
   assert.equal(found.codes['skills/real/SKILL.md'], ' M');
+});
+
+test('a rename INTO a negated directory reports the file the pack now LACKS', async (t) => {
+  const dir = pkg(t);
+  const { execFileSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  write(dir, { 'skills/real/a.md': '# a\n', 'skills/_template/SKILL.md': '# tpl\n' });
+  git('add', '-A');
+  git('commit', '-qm', 'a file that will be moved out of the shipped set');
+  git('mv', 'skills/real/a.md', 'skills/_template/a.md');
+
+  // The direction that produces a WRONG ANSWER rather than a weaker one. Under `-z` alone git
+  // emits `R  skills/_template/a.md\0skills/real/a.md\0`: the new path is carved out by the
+  // negation, the origin record is dropped by the parser, and the guard reports OK while the
+  // pack no longer carries a file the commit has. `--no-renames` splits it into `A ` + `D `, and
+  // the `D ` side is a real divergence under a shipped path (#879 re-grade, SF1).
+  const found = divergentPaths(dir);
+
+  assert.deepEqual(found.modified, ['skills/real/a.md']);
+  assert.equal(found.codes['skills/real/a.md'], 'D ');
+  assert.match(report(found).join('\n'), /ABSENT-OR-RETYPED[\s\S]*the pack LACKS a file the commit has/);
 });
