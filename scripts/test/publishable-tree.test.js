@@ -360,3 +360,36 @@ test('the pack-hook sentence is DERIVED — a manifest without the hook yields n
   // anything, and the sentence would be false of it (N9).
   assert.equal(packHookSentence({ scripts: { postpack: 'node x.js' } }), '');
 });
+
+test('assertInterpretable refuses the two `files` shapes npm and this matcher disagree about', async () => {
+  const { shippedEntries } = await import('../lib/skills-inventory.js');
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-files-'));
+  const manifest = (files) => {
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'x', files }));
+    return () => shippedEntries(dir);
+  };
+
+  // Measured: npm ignores a DIRECTORY negation placed before the inclusion it carves from and
+  // packs the whole directory, while this matcher goes on excluding it — the silent direction.
+  assert.throws(manifest(['!skills/_template/', 'skills/']), /DIRECTORY negation placed before/);
+  // Measured: npm packs a path re-included under a negated directory; this matcher carves it out.
+  assert.throws(manifest(['skills/', '!skills/_template/', 'skills/_template/SKILL.md']), /re-includes a path under a negated directory/);
+
+  // The real shape, and a FILE negation before its inclusion — measured honoured by npm, so
+  // refusing it would refuse a correct array.
+  assert.deepEqual(manifest(['skills/', '!skills/_template/'])(), { included: ['skills/'], negations: ['skills/_template/'] });
+  assert.deepEqual(manifest(['!agents/_template.md', 'agents/'])(), { included: ['agents/'], negations: ['agents/_template.md'] });
+});
+
+test('a rename WITHIN a shipped directory reports both sides — what --no-renames buys', async (t) => {
+  const dir = pkg(t);
+  const { execFileSync } = await import('node:child_process');
+  execFileSync('git', ['-C', dir, 'mv', 'skills/real/SKILL.md', 'skills/real/renamed.md'], { encoding: 'utf8' });
+
+  const found = divergentPaths(dir);
+
+  // With rename detection ON, git emits ONE record carrying only the new path, so the pack's
+  // loss of the old file goes unreported. `--no-renames` emits `D old` + `A new`, and both are
+  // real divergences: the pack lacks a file the commit has, and gains one it does not.
+  assert.deepEqual(found.modified, ['skills/real/SKILL.md', 'skills/real/renamed.md']);
+});
