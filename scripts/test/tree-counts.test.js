@@ -113,10 +113,14 @@ test('LIVE: the real tree still produces the numbers SECURITY.md publishes', () 
   assert.ok(scripts > 10, `scripts/ should hold more than ten top-level scripts, got ${scripts}`);
   assert.ok(workflows >= 1, `workflows/ should hold at least one non-template workflow, got ${workflows}`);
 
+  // The exact published sentence, not a loose substring: `includes(`${scripts} `)` was the
+  // first form here and it matches any digit run followed by a space anywhere in the document,
+  // which is a pass this function cannot fail.
   const security = readFileSync(join(ROOT, 'SECURITY.md'), 'utf8');
-  assert.ok(
-    security.includes(`${scripts} scripts`) || security.includes(`${scripts} `),
-    'the published SECURITY.md should carry the number this function computes',
+  assert.match(
+    security,
+    new RegExp(`\\*\\*Scripts\\*\\* \\(\`scripts/\`\\): ${scripts} top-level`),
+    `SECURITY.md should publish the ${scripts} this function computes`,
   );
 });
 
