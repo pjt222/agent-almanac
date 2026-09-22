@@ -55,6 +55,15 @@ if (titleAt === -1) {
     + 'if the title changed, update this anchor rather than the caller.',
   );
 }
+// The anchor's claim is that a reworded message cannot move it onto ANOTHER block. That holds
+// only while the title prefix is unique: a second test whose title starts the same way takes
+// the first occurrence, and which one that is depends on file order (#883 round 6 delta, N-2).
+if (source.indexOf(TITLE, titleAt + 1) !== -1) {
+  refuse(
+    `the title prefix "${TITLE}…" occurs more than once in ${path}, so this anchor does not `
+    + 'identify a single test. Rename one, or anchor on more of the title.',
+  );
+}
 
 const NEEDLE = 'deepEqual(found.codes, {';
 const openAt = source.indexOf(NEEDLE, titleAt);
@@ -62,26 +71,28 @@ if (openAt === -1) {
   refuse(`found the two-column test but no \`${NEEDLE}\` after it in ${path}.`);
 }
 
-// Brace matching from the `{`, so a nested object ends where it ends rather than closing the
-// block early. Quotes and comments are not tracked: a brace inside either would break this,
-// and the line accounting below reports the wreckage rather than letting it pass.
-const bodyStart = openAt + NEEDLE.length;
-let depth = 1;
-let index = bodyStart;
-for (; index < source.length && depth > 0; index += 1) {
-  if (source[index] === '{') depth += 1;
-  else if (source[index] === '}') depth -= 1;
-}
-if (depth !== 0) {
-  refuse(`the object literal after \`${NEEDLE}\` is never closed in ${path}.`);
-}
-
+// Extent and accounting in ONE line-wise pass, and the two are not separable. A character walk
+// counting braces treats a `}` inside a comment as a closer, which ends the block early and
+// silently — the truncated set compared equal and passed, measured (#883 round 6 delta, N-1).
+// Skipping comment lines BEFORE counting means a commented brace can neither close the block
+// nor extend it.
+//
+// Per line, in order: blank and comment lines contribute nothing at all; a line that brings
+// depth to zero ends the block and is not required to be an entry (it carries the assertion
+// tail); every other line must be an entry. A nested object therefore refuses rather than being
+// skipped, whether it is written on one line (depth returns to 1 and the line is not an entry)
+// or across several (depth stays above 1, same verdict).
 const ENTRY = /^'([^']+)':\s*'([^']*)',?$/;
+const isComment = (line) => line.startsWith('//') || line.startsWith('*') || line.startsWith('/*');
+
+let depth = 1;
+let closed = false;
 const rows = [];
-for (const raw of source.slice(bodyStart, index - 1).split('\n')) {
+for (const raw of source.slice(openAt + NEEDLE.length).split('\n')) {
   const line = raw.trim();
-  if (line === '') continue;
-  if (line.startsWith('//') || line.startsWith('*') || line.startsWith('/*')) continue;
+  if (line === '' || isComment(line)) continue;
+  depth += (line.match(/\{/g) ?? []).length - (line.match(/\}/g) ?? []).length;
+  if (depth <= 0) { closed = true; break; }
   const entry = line.match(ENTRY);
   if (!entry) {
     refuse(
@@ -94,6 +105,9 @@ for (const raw of source.slice(bodyStart, index - 1).split('\n')) {
   rows.push(`${entry[2]} ${entry[1]}`);
 }
 
+if (!closed) {
+  refuse(`the object literal after \`${NEEDLE}\` is never closed in ${path}.`);
+}
 if (rows.length === 0) {
   refuse(`the two-column \`deepEqual\` block in ${path} yielded no entries.`);
 }

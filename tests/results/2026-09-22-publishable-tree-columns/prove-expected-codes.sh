@@ -50,10 +50,41 @@ row() {                       # row <label> <lab> <want-codes-exit> <want-script
   [ "$verdict" = "ok" ]
 }
 
+# Provenance, because a table quoted out of this transcript has to say what it measured. Each
+# lab is `git archive HEAD` with the WORKING-TREE copies of the two files under test laid over
+# it, so a dirty copy is the normal case while a fix is being written — and a reader who does
+# not know that cannot tell a proof of the committed state from a proof of an uncommitted one
+# (#883 round 6 delta, N-3).
+SHA=$(cd "${REPO:?}" && git rev-parse --short HEAD 2>/dev/null || echo '<no repo>')
+DIRTY=$(cd "${REPO:?}" && git status --porcelain -- "${CODES}" "${SCRIPT}" 2>/dev/null)
+printf 'measuring: %s at %s, overlaid with the working-tree copies of\n' "$(basename "${BASH_SOURCE[0]}")" "$SHA"
+printf '  %s\n  %s\n' "${CODES}" "${SCRIPT}"
+if [ -n "$DIRTY" ]; then
+  printf 'those copies are DIRTY against %s:\n%s\n\n' "$SHA" "$(printf '%s' "$DIRTY" | sed 's/^/  /')"
+else
+  printf 'those copies are CLEAN against %s\n\n' "$SHA"
+fi
+
 BAD=0
 
 d=$(lab control) || exit 1
 row "control: untouched" "$d" 0 0 || BAD=$((BAD + 1))
+
+# The comment goes after the FIRST entry, not the last. A premature close has to drop something
+# for this arm to be able to fail: `staged.md` is the last key in the block, so a comment placed
+# after it truncates nothing and the arm would pass against the very parser it is meant to
+# catch. Placed here, the old character walk closed the block at the commented brace and kept
+# ONE entry.
+d=$(lab brace-comment) || exit 1
+python3 "${REPO:?}/tools/patch-literal.py" "${d:?}/${TEST}" --replace \
+  "    'skills/real/SKILL.md': 'MD',::    'skills/real/SKILL.md': 'MD',
+    // a comment carrying a stray } brace" >/dev/null
+row "} inside a comment in the block" "$d" 0 0 || BAD=$((BAD + 1))
+
+d=$(lab title-twice) || exit 1
+python3 "${REPO:?}/tools/patch-literal.py" "${d:?}/${TEST}" --replace \
+  "test('the four unmerged codes::test('a TWO-COLUMN code — the four unmerged codes" >/dev/null
+row "title prefix occurs twice" "$d" 2 2 || BAD=$((BAD + 1))
 
 d=$(lab dquote) || exit 1
 python3 "${REPO:?}/tools/patch-literal.py" "${d:?}/${TEST}" --replace \

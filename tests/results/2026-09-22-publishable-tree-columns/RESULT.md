@@ -238,6 +238,8 @@ at the first nested `}`.
 
 ```
 control: untouched                 codes exit 0 (8 lines)  script exit 0
+} inside a comment in the block    codes exit 0 (8 lines)  script exit 0
+title prefix occurs twice          codes exit 2 (0 lines)  script exit 2
 double-quoted ninth entry          codes exit 2 (0 lines)  script exit 2
 comment quoting a pair             codes exit 0 (8 lines)  script exit 0
 test title reworded                codes exit 2 (0 lines)  script exit 2
@@ -245,8 +247,16 @@ test fixture renamed               codes exit 0 (8 lines)  script exit 1
 assertion message reworded         codes exit 0 (8 lines)  script exit 0
 ```
 
-The control arm and the two that must NOT refuse are as load-bearing as the two that must: a
-rule that refuses everything would pass a matrix made only of the bad rows.
+Three arms must NOT refuse, and they are as load-bearing as the ones that must: a rule that
+refused everything would pass a matrix made only of bad rows. The `}`-in-a-comment arm places
+its comment after the FIRST entry rather than the last, and that placement is the arm — with
+the comment after the last key a premature close truncates nothing, and the arm would pass
+against the very parser it exists to catch. Measured against the pre-fix parser: 1 entry and a
+false refusal from the script; after: 8 and exit 0.
+
+The transcript carries its own provenance — the sha, and whether the two files under test were
+dirty against it — because each lab is `git archive HEAD` overlaid with working-tree copies, so
+a proof of uncommitted work and a proof of the committed state look identical otherwise.
 
 Two more things the round-6 review measured about this wiring, neither of which either lab had
 seen because both run under a `C`-family locale:
