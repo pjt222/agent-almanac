@@ -34,7 +34,15 @@ if [ -n "$(git status --porcelain -uno)" ]; then
   exit 2
 fi
 
-echo "read-the-kills: $(git rev-parse --short HEAD), every row under: ${TEST_CMD}"
+# The default `node:test` reporter is TAP on a non-TTY below Node 24 — measured on this machine:
+# v20.20.2 and v22.16.0 open their log with `TAP version 13`, v24.20.0 and v25.9.0 with `✖ …`.
+# `engines` allows `>=22.12.0`, so under a supported Node this script could print `--- <row>`
+# with no names beneath it and still exit 0: the reassuring-empty shape. Pinning the reporter
+# makes the bytes this file parses the same on every supported Node (verified on 20, 22 and 24).
+export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--test-reporter=spec --test-reporter-destination=stdout"
+
+echo "read-the-kills: $(git rev-parse --short HEAD), node $(node --version), every row under: ${TEST_CMD}"
+echo "  reporter pinned to spec via NODE_OPTIONS (the default is TAP on a non-TTY below Node 24)"
 echo
 
 LOGDIR=$(mktemp -d)
@@ -78,6 +86,17 @@ PY
   fi
 
   echo "--- ${id}  (exit ${rc})"
+  # A killed row that names nothing is a parse failure, not a quiet kill. Say so rather than
+  # letting an empty list read as "one unnamed failure".
+  if [ "$rc" -ne 0 ] && ! awk '/^✖ / && $0 != "✖ failing tests:" {found=1} END {exit !found}' "${OUT:?}"; then
+    # Copied OUT of LOGDIR first: the EXIT trap removes LOGDIR, so naming a path inside it hands
+    # the reader a path that does not exist by the time they open it.
+    KEEP=$(mktemp -d)
+    cp -- "${OUT:?}" "${KEEP:?}/"
+    echo "    REFUSED: the row is red but no ✖ line was parsed — the reporter is not spec." >&2
+    echo "    Log kept at ${KEEP}/$(basename "${OUT}")" >&2
+    exit 2
+  fi
   # The names, and the CLASS of each failure beside it. An assertion about the mutated property
   # and a crash on the way to it are both "a failing test"; only the first is coverage.
   # `✖ failing tests:` is node:test's section HEADER, not a test. Printed unfiltered it reads as

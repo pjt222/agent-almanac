@@ -31,7 +31,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { rmTree } from './_tmp.js';
-import { initRepo, isolateGitEnv } from './_git-fixture.js';
+import { initRepo, commitAll, isolateGitEnv } from './_git-fixture.js';
 import { scriptFileCount } from '../lib/tree-counts.js';
 import { generateSecuritySurface } from '../generate-readmes.js';
 
@@ -121,15 +121,15 @@ function fixture(t, extra = {}) {
       name: 'fixture-almanac',
       version: '0.0.1',
       files: ['skills/', '!skills/_template/', 'cli/'],
-      scripts: { test: 'true' },
+      // `prepack` is here because production declares one, and without it the fixture takes a
+      // branch production does not: `packHookSentence` returns `''` and the rendered paragraph
+      // is missing a clause the real one carries (#888 round-1 N9). It is not an INSTALL_HOOK,
+      // so `assertInventoryClaims` is untouched by it.
+      scripts: { test: 'true', prepack: 'node scripts/check-publishable-tree.js' },
     }, null, 2)}\n`,
-    // `local-*` is the #872 defect as a rule: a gitignored file under a directory a bullet
-    // counts. The pattern is extension-free ON PURPOSE. It was `local-*.js`, and under that
-    // pattern the Workflows arm was VACUOUS — measured, not suspected: its ignored file was a
-    // `.js`, which `workflowFileCount` drops by extension anyway, so a disk walk of
-    // `workflows/` produced the same 2 and the suite passed 8/8 against the mutant it existed
-    // to kill. A hostile input has to change the bytes the assertion reads.
-    '.gitignore': 'local-*\n__pycache__/\n',
+    // NOT the rule that hides `local-*` — that one lives in `.git/info/exclude`, written below.
+    // See the comment there.
+    '.gitignore': '__pycache__/\n',
     'skills/_registry.yml': SKILLS_REGISTRY,
     'skills/alpha/SKILL.md': BASH_SKILL,
     'skills/alpha/references/helper.py': 'print(1)\n',
@@ -163,7 +163,20 @@ function fixture(t, extra = {}) {
     'tools/merge-pr.sh': '1\n',
     ...extra,
   });
-  initRepo(dir);
+  // The ignore rule that matters lives in `.git/info/exclude`, where ONLY git reads it.
+  //
+  // In `.gitignore` it was a file on disk, and a walk that opens `.gitignore` and glob-matches
+  // basenames returns the same numbers as asking git — so the suite could not tell "asks git"
+  // from "re-implements git", which is the fourth-glob-implementation class `lib/git-files.js`
+  // exists to prevent. Measured in the #888 round-1 review: a hand-rolled matcher at the
+  // `scriptFileCount` call site SURVIVED the whole suite. `.git/info/exclude` is honoured by
+  // git and by nothing a re-implementation is likely to read, so the two answers separate.
+  //
+  // It must be written BEFORE the first commit, or `local-probe.js` is tracked and the
+  // unmutated suite goes red — correctly, because the enumerator counts tracked files.
+  initRepo(dir, { commit: false });
+  writeFileSync(join(dir, '.git', 'info', 'exclude'), 'local-*\n', 'utf8');
+  commitAll(dir, 'fixture');
   return dir;
 }
 
@@ -234,6 +247,12 @@ test('the content-tree bullet names its non-documentation files and its executab
   const surface = generateSecuritySurface({ root: dir });
 
   assert.match(surface, /\*\*Skills\*\*: mostly Markdown and YAML, plus \*\*2 files that are not\*\* \(\.json, \.py\)/);
+  // Two, not three: `references/__pycache__/…​.pyc` is ignored, and #871 is what happens when it
+  // is not — a committed SECURITY.md claiming 19 non-Markdown files where a clean checkout
+  // computed 18, with a `.py` in the executable list under a paragraph asserting "All of it ships".
+  assert.ok(!surface.includes('.pyc'), 'an ignored bytecode file must not reach the inventory');
+  // The `prepack` clause, which the fixture declares because production does.
+  assert.match(surface, /It does declare `prepack`, which runs in the PUBLISHER's tree/);
   assert.ok(
     surface.includes('`skills/alpha/references/helper.py`'),
     'the executable exemplar is derived from the tree, and this one is in it',

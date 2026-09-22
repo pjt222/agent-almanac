@@ -70,8 +70,15 @@ PY
 ) || { echo "${MUTATION}" >&2; exit 2; }
 MUT_FILE=${MUTATION%%$'\t'*}
 MUT_BODY=${MUTATION#*$'\t'}
+# The default `node:test` reporter is TAP on a non-TTY below Node 24 (measured: v20.20.2 and
+# v22.16.0 open with `TAP version 13`, v24.20.0 and v25.9.0 with `✖ …`), and `engines` allows
+# `>=22.12.0`. Under TAP the `KILLED by:` block below prints nothing beneath its heading while
+# the script still exits 0. Pin the reporter so every supported Node produces the bytes this
+# file parses (verified on 20, 22 and 24).
+export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--test-reporter=spec --test-reporter-destination=stdout"
+
 echo "prove-the-bypass-survived: row ${ROW_ID} on ${MUT_FILE}, every arm under: ${TEST_CMD}"
-echo "  base: $(git rev-parse --short "${BASE}")   head: $(git rev-parse --short HEAD)"
+echo "  base: $(git rev-parse --short "${BASE}")   head: $(git rev-parse --short HEAD)   node $(node --version)"
 echo
 
 LABS=$(mktemp -d)
@@ -117,8 +124,15 @@ for what in base head; do
   clean_rc=$(run_suite "$dir")
   clean_tests=$(sed -n 's/^. tests \([0-9]*\)$/\1/p' "${dir:?}/suite.log" | tail -1)
   if [ "$clean_rc" -ne 0 ] || [ -z "${clean_tests:-}" ]; then
+    # The log is copied OUT of LABS before the message names it. The EXIT trap removes LABS, so
+    # the earlier form pointed a reader at a path that no longer existed the moment they read it
+    # — and it happened: a load-dependent red on a base lab was unidentifiable because the
+    # evidence had been deleted by the script reporting it (#888 round-1 N7).
+    keep=$(mktemp -d)
+    cp -- "${dir:?}/suite.log" "${keep:?}/${what}-clean-suite.log" 2>/dev/null
     echo "REFUSED: the ${what} lab is not green UNMUTATED (exit ${clean_rc}, tests '${clean_tests:-none}')." >&2
-    echo "  Nothing measured against it would mean anything. Its log: ${dir}/suite.log" >&2
+    echo "  Nothing measured against it would mean anything." >&2
+    echo "  Its log is kept at ${keep}/${what}-clean-suite.log" >&2
     tail -12 "${dir:?}/suite.log" >&2
     exit 2
   fi
@@ -139,6 +153,15 @@ for what in base head; do
     fi
   else
     if [ "$mut_rc" -ne 0 ]; then
+      # A kill that names nothing is a parse failure, not a quiet kill: under a TAP reporter the
+      # heading below would print with an empty block beneath it and the script would exit 0.
+      if [ -z "$names" ]; then
+        keep=$(mktemp -d)
+        cp -- "${dir:?}/suite.log" "${keep:?}/head-mutated-suite.log" 2>/dev/null
+        echo "REFUSED: the head arm is red but no ✖ line was parsed — the reporter is not spec." >&2
+        echo "  Log kept at ${keep}/head-mutated-suite.log" >&2
+        exit 2
+      fi
       echo "head-mutated    exit ${mut_rc}  (${mut_tests} tests)   KILLED by:"
       printf '%s\n' "$names" | sed 's/^/    /'
     else

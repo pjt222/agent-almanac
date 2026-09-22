@@ -115,11 +115,31 @@ PY
 done
 
 echo
-# THE CONTROL that a diff needs: two empty trees are identical too. Both sides must carry all
-# twelve files, and the arms above must have produced a verdict in each.
+# THE CONTROLS that a diff needs, and the file count alone was NOT one of them. Two empty trees
+# are identical; so are two trees of twelve files holding the same failure. Measured in the #888
+# round-1 review: a `node` shim first on PATH that printed to stderr and exited 3 produced twelve
+# files per side, a byte-identical diff and a green VERDICT, having generated nothing. A missing
+# `node_modules` link, a wrong Node, an `ERR_MODULE_NOT_FOUND` — any SYMMETRIC failure read as
+# "AC 4 holds".
+#
+# So the six exit codes this file's header documents are asserted per side, not merely printed.
+# They are the verdicts the arms exist to produce, and a run that cannot produce them has
+# measured nothing whether or not its two halves agree.
+EXPECTED='list=exit=0 check-clean=exit=0 write-clean=porcelain-after-write=0 check-stale=exit=1 check-missing=exit=2 write-missing=exit=2'
 for what in base head; do
   n=$(find "${OUT:?}/${what}" -type f | wc -l | tr -d ' ')
-  [ "$n" -eq 12 ] || { echo "REFUSED: the ${what} tree holds ${n} file(s), expected 12" >&2; exit 2; }
+  [ "$n" -eq 12 ] || { echo "REFUSED: the ${what} tree holds ${n} file(s), expected 12 (six arms x stdout+stderr)" >&2; exit 2; }
+  observed=""
+  for a in list check-clean write-clean check-stale check-missing write-missing; do
+    observed="${observed}${observed:+ }${a}=$(tail -1 "${OUT:?}/${what}/${a}.out")"
+  done
+  if [ "$observed" != "$EXPECTED" ]; then
+    echo "REFUSED: the ${what} side did not produce the six verdicts this probe is about." >&2
+    echo "  expected: ${EXPECTED}" >&2
+    echo "  observed: ${observed}" >&2
+    echo "  Two sides can agree byte for byte and have generated nothing; that is not AC 4." >&2
+    exit 2
+  fi
 done
 
 if diff -r "${OUT:?}/base" "${OUT:?}/head"; then

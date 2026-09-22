@@ -8,18 +8,44 @@
  * repository in silence. The comment at the head of `generate-readmes.js` claims it does not, so
  * the claim is measured here rather than believed.
  *
- * It patches `node:fs` and `node:child_process` BEFORE the import and records every call. The
- * first wording of that comment said the import "reads no file", which this probe refuted on its
- * first run: 28 `openSync` calls, every one of them the ESM loader reading a module in the graph
- * — which happens for any import ever written. The claim worth making is the narrower one, and
- * this script is what tells the two apart.
+ * ## The instrument was dead, and this is the third version
  *
- * Exit 0 when every recorded call is the loader reading a `.js`/`.mjs` module. Exit 1 when any
- * call touches repository CONTENT — a registry, a SKILL.md, a `package.json` — or spawns git.
- * Exit 2 when it could not run.
+ * Every earlier version of this file reported a number that came from a patch the subject could
+ * not see. Both corrections came from an instrument, never from re-reading, and both are kept
+ * here because each one is a way this probe can silently stop working:
+ *
+ *   1. "reads no file" was the first claim. The import opens 28 — every import does. The claim
+ *      worth making is about repository CONTENT: a registry, a `SKILL.md`, a `package.json`, a
+ *      `git` spawn.
+ *   2. The classifier read `readSync`'s first argument as a path. It is a file DESCRIPTOR, so 28
+ *      loader reads were reported as content and the probe refused a module that was behaving.
+ *   3. **Assigning over `fs.readFileSync` does not reach `import { readFileSync } from 'fs'`.**
+ *      An ESM named binding to a builtin is resolved at link time and does NOT follow a later
+ *      property assignment until `module.syncBuiltinESMExports()` runs. The subject and every
+ *      lib under it import by name, so the patch was invisible to all of them — while both
+ *      controls called `fs.readFileSync` on the DEFAULT export and fired happily. Measured on
+ *      node v25.9.0: after the assignment `named === fs.readFileSync` is `false` and
+ *      `named === original` is `true`; after `syncBuiltinESMExports()` the named binding is the
+ *      patched function. Found by the #888 round-1 reviewer, re-derived here.
+ *
+ *      The number moved when the instrument was repaired: `84, all loader` became
+ *      `86 = 84 loader + 2 guard`, the two being `invokedAsScript()`'s own `realpathSync` calls.
+ *      The behavioural claim survived — no registry, no YAML, no `git` — but the measurement
+ *      behind it had not been made.
+ *
+ * ## Three controls, because "zero content reads" has three ways of being a lie
+ *
+ *   patch fires          one deliberate read must be recorded at all
+ *   patch reaches ESM    a NAMED binding must be the patched function after the sync
+ *   classifier bites     one deliberate registry read must land on the CONTENT side
+ *
+ * Any control failing exits 2. Exit 0 when every recorded call is the loader reading the module
+ * graph or the main-module guard resolving its two paths; exit 1 when anything touches
+ * repository content or spawns a process.
  */
-import fs from 'node:fs';
+import fs, { readFileSync as namedReadFileSync } from 'node:fs';
 import childProcess from 'node:child_process';
+import { syncBuiltinESMExports } from 'node:module';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -28,10 +54,9 @@ const ROOT = resolve(HERE, '..', '..', '..');
 const TARGET = resolve(ROOT, 'scripts', 'generate-readmes.js');
 
 const calls = [];
-// `readSync` takes a FILE DESCRIPTOR, not a path, so it cannot be classified by its argument.
-// The first version of this probe tried, and reported 28 "repository content" reads that were
-// the loader reading the 28 modules it had just opened. Descriptors opened on a `.js`/`.mjs`
-// are remembered here, and a `readSync` on one of them is the same loader read as its `openSync`.
+// `readSync` and `closeSync` take a FILE DESCRIPTOR, not a path, so they cannot be classified by
+// their argument. Descriptors opened on a `.js`/`.mjs` are remembered here, and a read or close
+// on one of them is the same loader activity as its `openSync`.
 const moduleDescriptors = new Set();
 const FS_NAMES = [
   'readFileSync', 'existsSync', 'readdirSync', 'opendirSync',
@@ -46,7 +71,7 @@ for (const name of FS_NAMES) {
       calls.push({ name, arg: String(args[0]) });
       if (/\.(m?js)$/.test(String(args[0]))) moduleDescriptors.add(result);
     } else if ((name === 'readSync' || name === 'closeSync') && moduleDescriptors.has(args[0])) {
-      calls.push({ name, arg: `fd:${args[0]} (module)`, loader: true });
+      calls.push({ name, arg: `fd:${args[0]} (module)`, kind: 'loader' });
       if (name === 'closeSync') moduleDescriptors.delete(args[0]);
     } else {
       calls.push({ name, arg: String(args[0]) });
@@ -62,39 +87,70 @@ for (const name of ['spawnSync', 'execSync', 'execFileSync']) {
     return original.apply(this, args);
   };
 }
+// THE line the first two versions of this probe were missing. Without it every `import { … }
+// from 'fs'` in the subject keeps the ORIGINAL function and this whole file measures nothing.
+syncBuiltinESMExports();
 
-// The patch must be able to FIRE, or "no data read" is a statement about a dead instrument
-// rather than about the module. One read of a file the module never touches, before the import.
+const refuse = (message, detail) => {
+  console.error(`REFUSED: ${message}`);
+  if (detail) console.error(`  ${detail}`);
+  process.exit(2);
+};
+
+// CONTROL 1 — the patch fires at all.
 fs.readFileSync(resolve(ROOT, 'package.json'), 'utf8');
 if (calls.length !== 1) {
-  console.error(`REFUSED: the fs patch recorded ${calls.length} call(s) for one deliberate read; it is not intercepting.`);
-  process.exit(2);
+  refuse(`the fs patch recorded ${calls.length} call(s) for one deliberate read; it is not intercepting.`);
+}
+calls.length = 0;
+
+// CONTROL 2 — the patch reaches the shape the SUBJECT uses. This file's own `namedReadFileSync`
+// was bound at link time, exactly as the subject's `readFileSync` was; if the sync above did not
+// take, this comparison is false and the probe stops rather than reporting a clean tree.
+if (namedReadFileSync !== fs.readFileSync) {
+  refuse(
+    'an ESM named import of readFileSync is NOT the patched function.',
+    'syncBuiltinESMExports() did not take, so every named import in the subject is invisible here.',
+  );
+}
+namedReadFileSync(resolve(ROOT, 'package.json'), 'utf8');
+if (calls.length !== 1) {
+  refuse(`a read through a NAMED binding recorded ${calls.length} call(s), expected 1.`);
 }
 calls.length = 0;
 
 await import(pathToFileURL(TARGET).href);
 
-// A module in the graph: the ESM loader opening a `.js`/`.mjs` file. Anything else — a `.yml`,
-// a `.md`, a `package.json`, a directory listing, a `git` spawn — is repository content.
-const isModuleRead = (call) => call.loader === true
+// Three buckets, not two. The guard's own `realpathSync` pair is neither loader activity nor
+// repository content: it is the module doing the one thing it is supposed to do at import.
+// Reported by name rather than filtered away, because a silent exemption is how a probe starts
+// excusing the thing it was built to catch.
+const GUARD_PATHS = new Set([TARGET, resolve(process.argv[1] ?? '')]);
+const isLoader = (call) => call.kind === 'loader'
   || (call.name === 'openSync' && /\.(m?js)$/.test(call.arg));
-const content = calls.filter((call) => !isModuleRead(call));
+const isGuard = (call) => call.name === 'realpathSync' && GUARD_PATHS.has(resolve(call.arg));
 
-// SECOND CONTROL, on the classifier rather than the patch. "Zero content reads" is also what a
-// classifier that calls everything a module read would say. One deliberate registry read, made
-// after the import and excluded from the verdict, must land on the content side.
+const guard = calls.filter((call) => !isLoader(call) && isGuard(call));
+const content = calls.filter((call) => !isLoader(call) && !isGuard(call));
+
+// CONTROL 3 — the classifier can still say "content". Zero content reads is also what a
+// classifier that calls everything loader activity would report. One deliberate registry read,
+// made after the import and excluded from the verdict, must land on the content side.
 const before = calls.length;
-fs.readFileSync(resolve(ROOT, 'skills', '_registry.yml'), 'utf8');
+namedReadFileSync(resolve(ROOT, 'skills', '_registry.yml'), 'utf8');
 const probe = calls.slice(before);
 calls.length = before;
-if (probe.length !== 1 || isModuleRead(probe[0])) {
-  console.error('REFUSED: a deliberate registry read did not classify as repository content;');
-  console.error(`  the classifier cannot tell the two apart. Recorded: ${JSON.stringify(probe)}`);
-  process.exit(2);
+if (probe.length !== 1 || isLoader(probe[0]) || isGuard(probe[0])) {
+  refuse(
+    'a deliberate registry read did not classify as repository content;',
+    `the classifier cannot tell the two apart. Recorded: ${JSON.stringify(probe)}`,
+  );
 }
 
 console.log(`calls during import: ${calls.length}`);
-console.log(`  module-graph reads (loader): ${calls.length - content.length}`);
+console.log(`  module-graph reads (loader):      ${calls.length - guard.length - content.length}`);
+console.log(`  main-module guard (realpathSync): ${guard.length}`);
+for (const call of guard) console.log(`    ${call.name} ${call.arg}`);
 console.log(`  repository content or subprocess: ${content.length}`);
 for (const call of content) console.log(`    ${call.name} ${call.arg}`);
 
@@ -103,4 +159,4 @@ if (content.length > 0) {
   console.error('The comment at the head of scripts/generate-readmes.js says it does not.');
   process.exit(1);
 }
-console.log('\nOK: every call during import is the ESM loader reading the module graph.');
+console.log('\nOK: every call during import is the loader reading the module graph, or the guard resolving its two paths.');
