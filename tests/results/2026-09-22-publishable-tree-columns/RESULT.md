@@ -130,8 +130,8 @@ refined (mkdtempSync > t.after+finally):   1   memory-blocks.test.js
 
 GROUND TRUTH — npm run test:scripts under an isolated TMPDIR, exit 0, 22 entries left:
    20 memblocks-
-    1 memcap-arms-
-    1 node-compile-cache          (node's own, not a fixture)
+    1 memcap-arms-               (only with python3 on PATH — see below)
+    1 node-compile-cache         (npm's, not a fixture — see below)
 
 memory-blocks.test.js alone:  21 directories left
 publishable-tree.test.js:      0   (the control row)
@@ -141,8 +141,22 @@ The ground-truth section is what settles it, because **both predicates are heuri
 refined one can UNDER-count**: it counts the token `finally` per file, not a `finally` that
 pairs with a given `mkdtempSync`, so a suite with three fixtures and three unrelated `finally`
 blocks passes it. Rather than refine the predicate further, the script runs the suite the way
-CI runs it and counts what is left. Every leaked entry belongs to `memory-blocks.test.js`, so
-the refined count of 1 is right here — measured, not argued.
+CI runs it and counts what is left. Every leaked **fixture** belongs to `memory-blocks.test.js`,
+so the refined count of 1 is right here — measured, not argued.
+
+Two qualifications on that `22`, because a bare total invites being quoted without them:
+
+- **`node-compile-cache` is not a fixture and not the suite's.** Measured: a bare
+  `node --test <suite>` under a fresh `TMPDIR` leaves 0 entries, while `npm run` of an entirely
+  unrelated script leaves exactly `node-compile-cache/`. It is npm enabling Node's compile
+  cache, and it appears here only because the probe goes through `npm run`. An earlier revision
+  of this paragraph said every leaked *entry* belonged to `memory-blocks.test.js`, which this
+  one entry refutes (#883 round 3 delta, N-B).
+- **`22` is conditional on `python3`.** The `memcap-arms-` fixture sits inside a test carrying
+  `skip: PYTHON3 === null` (`scripts/test/memory-blocks.test.js:277`, fixture at `:279`), so on
+  a machine without `python3` on `PATH` the run leaves **21** and that row disappears. The
+  probe prints the breakdown, so its own output shows the difference; prose quoting the total
+  has to carry the clause (N-A).
 
 The control row is the point of the last section, not decoration: a probe that counted nothing
 anywhere would otherwise read as a clean result.

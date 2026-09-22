@@ -52,8 +52,15 @@ else
   rc=$?
   total=$(find "${SANDBOX:?}" -mindepth 1 -maxdepth 1 | wc -l)
   echo "npm run test:scripts exit ${rc}; ${total} entr(ies) left, by fixture prefix:"
-  # `node-compile-cache` is node's own, not a fixture — it is listed rather than filtered, so
-  # the reader sees everything the run left and decides.
+  # Two rows are NOT what a careless reader will take them for, and both are listed rather than
+  # filtered so the reader sees everything the run left and decides:
+  #   node-compile-cache   npm's, not a fixture and not the suite's. A bare `node --test` under
+  #                        a fresh TMPDIR leaves 0; `npm run` of any script leaves this.
+  #   memcap-arms-         only present with python3 on PATH — its test carries
+  #                        `skip: PYTHON3 === null` (memory-blocks.test.js:277). Without it the
+  #                        total is 21 and this row is absent.
+  # `-printf` is GNU find. On BSD find the total above still prints and these rows silently do
+  # not, which is a degradation to a smaller claim rather than a wrong one.
   find "${SANDBOX:?}" -mindepth 1 -maxdepth 1 -printf '%f\n' \
     | sed 's/[A-Za-z0-9]\{6\}$//' | sort | uniq -c | sort -rn | sed 's/^/    /'
   rm -rf "${SANDBOX:?}"
