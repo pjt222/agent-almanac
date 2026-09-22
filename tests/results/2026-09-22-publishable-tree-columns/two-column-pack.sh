@@ -75,8 +75,17 @@ printf '# new2 edited\n' > "${DIR:?}/skills/real/new2.md"
 echo "git $(git --version | awk '{print $3}'), npm $(npm --version), node $(node --version)"
 echo
 echo "=== what git reports ==="
+# `LC_ALL=C sort`, because the two sides are sorted by different programs and only a byte order
+# is common to both. `expected-codes.mjs` sorts with JavaScript's `Array.prototype.sort`, which
+# is code-unit order, while coreutils `sort` collates by locale — and under `en_US.UTF-8`
+# leading whitespace is ignored at the first collation level, so `A  new.md` lands after
+# `AD added.md` instead of before it. Measured by the #883 round-6 reviewer against a privately
+# compiled `en_US.UTF-8`: exit 1, REFUSED, over a diff showing the same eight lines in two
+# orders. Under `C` and `C.UTF-8` the orders agree, which is why neither of us saw it until it
+# was looked for. It failed closed — a false refusal in a record script, not a false pass — and
+# it is a one-token fix either way.
 PORCELAIN=$(git status --porcelain -z --no-renames --ignored=matching -uall -- skills/ \
-  | tr '\0' '\n' | sed '/^$/d' | sort)
+  | tr '\0' '\n' | sed '/^$/d' | LC_ALL=C sort)
 printf '%s\n' "$PORCELAIN"
 
 # The tie to the test, READ FROM THE TEST. `expected-codes.mjs` parses the two-column test's
@@ -96,6 +105,15 @@ if [ "$NODE_STATUS" -ne 0 ] || [ -z "$EXPECTED" ]; then
   echo "Without them this script would compare its fixture against nothing and pass." >&2
   exit 2
 fi
+# WHAT THIS TIE DOES NOT COVER, stated because the comparison looks stronger than it is. The
+# codes match; the CONSTRUCTIONS are still duplicated, and a code does not determine whether
+# npm packs the path. Measured (#883 round 6, N-1): ` T` packs the file when the COMMITTED
+# object was a symlink retyped to a regular file, and drops it when a committed regular file
+# was retyped to a symlink — which is this fixture's shape and the test's. So "same codes"
+# implies "same pack" only because both commit regular files, and nothing here checks that. A
+# change in the test that keeps a code but flips packedness would leave this listing true of
+# this tree and false of the test's. The durable form, if that ever bites: the test asserts
+# `npm pack --dry-run --json` on its own fixture and this script retires.
 if [ "$PORCELAIN" != "$EXPECTED" ]; then
   echo "REFUSED: this fixture no longer builds the eight codes the two-column test asserts." >&2
   diff <(printf '%s\n' "$EXPECTED") <(printf '%s\n' "$PORCELAIN") >&2

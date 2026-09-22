@@ -39,3 +39,16 @@ sf1-staged-gone-narrows-to-AD	scripts/check-publishable-tree.js	    && worktreeA
 # sentence recommending a no-op — and no fixture read the report for that code.
 sf1r3-staged-gone-drops-worktree-test	scripts/check-publishable-tree.js	    && worktreeAbsent(path) && raw(path)[0] === 'A');::    && raw(path)[0] === 'A');
 sf2-absent-remedy-names-one-form	scripts/check-publishable-tree.js	'so the pack LACKS a file the commit has — restore it: `git restore <path>` for a worktree-only absence (` D`, ` T`) and to recover a staged edit (`MD`, `MT`), `git restore --staged --worktree <path>` where the index dropped or retyped the path too (`D `, `T `), because plain restore errors on `D ` and is a silent no-op on `T ` — or commit the removal'::'so the pack LACKS a file the commit has — restore it (`git restore --staged --worktree <path>` for a `D ` path, which plain `git restore` cannot see), or commit the removal'
+#
+# INSTRUMENT ROWS. Everything above mutates the SUBJECT. This one mutates the test file's own
+# helper, and it is here because round 4's lesson needs somewhere to live: it is the only row
+# in this plan that reads `KILLED by 2`, and both failures are AssertionErrors -- the parser
+# test's named assertion and the two-column `deepEqual` on the ABSENT block's ` T` member.
+# Read a by-2, never trust it; the checker's broad-kill heuristic is 0.25 of the baseline and
+# 2/939 is 0.002, so it will never question one for you.
+#
+# Why the scope is honest rather than mixed: a defect in the parser can only redden the
+# baseline, it cannot make a SUBJECT row survive. So this row is evidence about the instrument
+# and the rows above are evidence about the guard, and a reader who takes the count as
+# "sixteen claims about check-publishable-tree.js" is still right.
+trim-eats-the-space-leading-code	scripts/test/publishable-tree.test.js	    out.push(line.slice(2));::    out.push(line.trim());

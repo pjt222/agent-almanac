@@ -51,8 +51,9 @@ sf1-staged-gone-A-to-T                     MUTANT KILLED by 1 failing test(s)
 sf1-staged-gone-narrows-to-AD              MUTANT KILLED by 1 failing test(s)
 sf1r3-staged-gone-drops-worktree-test      MUTANT KILLED by 1 failing test(s)
 sf2-absent-remedy-names-one-form           MUTANT KILLED by 1 failing test(s)
+trim-eats-the-space-leading-code           MUTANT KILLED by 2 failing test(s)   [instrument]
 
-16 row(s), 0 not a clean kill
+17 row(s), 0 not a clean kill
 ```
 
 **Three rows earned their place by surviving, and they are the only ones whose kill carries
@@ -119,6 +120,19 @@ mixing the plan file's own header warns about.
 | `sf1-staged-gone-narrows-to-AD` | `AT` is in the fixture, so narrowing the arm to `AD` alone no longer passes unnoticed |
 | `sf1r3-staged-gone-drops-worktree-test` | the arm EXCLUDES a staged add still on disk; `A `/`AM` are MODIFIED, and the pack does carry them |
 | `sf2-absent-remedy-names-one-form` | the ABSENT remedy names a restore form per code, not one form for all of them |
+| `trim-eats-the-space-leading-code` | **instrument row** — the parser keeps a space-leading code (` T`) rather than trimming it |
+
+The last row mutates the test file's own helper, not the subject, and it is labelled in the plan
+as well. It is here because round 4's lesson needs a home: it is the only row that reads
+`KILLED by 2`, and a by-2 must be READ. Both failures are `AssertionError` with their own
+messages — `the space-leading code survives the slice` in the parser test, and the two-column
+`deepEqual` on the ABSENT block's ` T` member — so neither is a crash. The checker will never
+question a by-2 for you: its broad-kill heuristic is 0.25 of the baseline and 2/939 is 0.002.
+
+Mixing an instrument row into a subject table is honest here for one reason, and it is worth
+stating rather than assuming: a defect in the parser can only redden the baseline, it cannot
+make a subject row SURVIVE. So a reader who takes the other sixteen as claims about
+`check-publishable-tree.js` is still right.
 
 One failing test per row is the honest shape for this instrument. A broad kill would mean the
 mutant crashed on import rather than being caught by an assertion (#621) — and so, as the
@@ -233,6 +247,32 @@ assertion message reworded         codes exit 0 (8 lines)  script exit 0
 
 The control arm and the two that must NOT refuse are as load-bearing as the two that must: a
 rule that refuses everything would pass a matrix made only of the bad rows.
+
+Two more things the round-6 review measured about this wiring, neither of which either lab had
+seen because both run under a `C`-family locale:
+
+- **The two sides were sorted by different programs, and only a byte order is common to both.**
+  `expected-codes.mjs` sorts with JavaScript's `Array.prototype.sort` (code-unit order) while
+  the script piped its porcelain through coreutils `sort`, which collates by locale. Under a
+  privately compiled `en_US.UTF-8`, leading whitespace is ignored at the first collation level
+  and `A  new.md` lands after `AD added.md`, so the script exited 1 over a diff showing the
+  same eight lines in two orders. Reproduced here with `localedef -i en_US -f UTF-8`, and fixed
+  with `LC_ALL=C sort`:
+
+  ```
+  pre   C            exit=0  clean
+  pre   en_US.UTF-8  exit=1  REFUSED
+  post  C            exit=0  clean
+  post  en_US.UTF-8  exit=0  clean
+  ```
+
+  It failed closed — a false refusal in a record script, never a false pass.
+
+- **A code does not determine whether npm packs the path**, so the codes tie is sufficient only
+  under an assumption neither fixture states: ` T` packs the file when the COMMITTED object was
+  a symlink retyped to a regular file, and drops it when a committed regular file was retyped
+  to a symlink. Both fixtures commit regular files, and nothing checks that. The assumption is
+  now written where the comparison happens.
 
 ## Not covered here
 
