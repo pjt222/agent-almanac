@@ -103,6 +103,8 @@ const SHAPES = {
   'glob':            { expect: 'seen',  code: "import { globSync } from 'node:fs'; globSync('*.js', { cwd: R('scripts') });" },
   'spawn-sync':      { expect: 'seen',  code: "import { execFileSync } from 'node:child_process'; execFileSync('git', ['--version']);" },
   'spawn-async':     { expect: 'seen',  code: "import { spawn } from 'node:child_process'; spawn('git', ['--version']);" },
+  'write-stream':    { expect: 'seen',  code: "import { createWriteStream } from 'node:fs'; createWriteStream(T('streamed.txt')).end('x');" },
+  'cp-sync':         { expect: 'seen',  code: "import { cpSync } from 'node:fs'; cpSync(R('package.json'), T('copied.json'));" },
   'create-require':  { expect: 'seen',  code: "import { createRequire } from 'node:module'; createRequire(import.meta.url)('node:fs').readFileSync(R('package.json'), 'utf8');" },
   // BLIND, and declared so. A `.js` opened as DATA is indistinguishable from the loader opening
   // a module: both are `openSync` on a path ending `.js`, followed by reads and a close.
@@ -151,12 +153,16 @@ const FS_NAMES = [
   'readFileSync', 'existsSync', 'accessSync', 'readdirSync', 'opendirSync', 'globSync',
   'openSync', 'statSync', 'lstatSync', 'realpathSync', 'readSync', 'closeSync', 'readlinkSync',
   // write
-  'writeFileSync', 'appendFileSync', 'writeSync', 'mkdirSync', 'rmSync', 'rmdirSync',
-  'unlinkSync', 'renameSync', 'copyFileSync', 'symlinkSync', 'linkSync', 'truncateSync',
-  'chmodSync', 'chownSync', 'utimesSync', 'mkdtempSync',
+  'writeFileSync', 'appendFileSync', 'writeSync', 'writevSync', 'mkdirSync', 'rmSync', 'rmdirSync',
+  'unlinkSync', 'renameSync', 'copyFileSync', 'cpSync', 'symlinkSync', 'linkSync',
+  'truncateSync', 'ftruncateSync', 'chmodSync', 'chownSync', 'utimesSync', 'mkdtempSync',
+  // streams, which are neither read nor write names and reach the filesystem all the same.
+  // `createWriteStream(p).write(x)` at module scope touched none of the names above — found by
+  // asking "find a write that reaches the tree through none of them" before the reviewer did.
+  'createWriteStream', 'createReadStream',
   // callback API — a different set of functions from the sync ones, and unpatched until round 2
   'readFile', 'writeFile', 'appendFile', 'readdir', 'open', 'stat', 'lstat', 'access',
-  'mkdir', 'rm', 'unlink', 'rename', 'copyFile', 'realpath',
+  'mkdir', 'rm', 'unlink', 'rename', 'copyFile', 'cp', 'realpath',
 ];
 for (const name of FS_NAMES) {
   const original = fs[name];
@@ -182,7 +188,7 @@ for (const name of FS_NAMES) {
 // reason to cover it: the gap would open silently the first time something did.
 for (const name of [
   'readFile', 'writeFile', 'appendFile', 'readdir', 'opendir', 'stat', 'lstat', 'realpath',
-  'access', 'open', 'mkdir', 'rm', 'unlink', 'rename', 'copyFile', 'glob',
+  'access', 'open', 'mkdir', 'rm', 'unlink', 'rename', 'copyFile', 'cp', 'glob',
 ]) {
   const original = fsPromises[name];
   if (typeof original !== 'function') continue;
