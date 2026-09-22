@@ -24,10 +24,9 @@ same reason), and quoting one as a live verdict is the thing the convention exis
 The table in the PR body is now the output of this plan, taken at the head that carries this
 file, rather than a quotation of a run nobody else can take.
 
-## The verdicts, re-measured
+## The verdicts
 
-Taken at `29cfe074a` (the commit that adds this file), every row under
-`npm run test:scripts` — the command CI runs:
+Taken at `342a94777`, every row under `npm run test:scripts` — the command CI runs:
 
 ```
 sfc-absent-drops-T-index-column            MUTANT KILLED by 1 failing test(s)
@@ -42,18 +41,35 @@ n5-dot-slash-refusal-disabled              MUTANT KILLED by 1 failing test(s)
 r1-worktree-column-reverts-to-trim         MUTANT KILLED by 1 failing test(s)
 r1-absent-drops-T-worktree-column          MUTANT KILLED by 1 failing test(s)
 r1-negation-prefix-loses-segment-boundary  MUTANT KILLED by 1 failing test(s)
+sf1-staged-gone-A-to-T                     MUTANT KILLED by 1 failing test(s)
+sf1-staged-gone-narrows-to-AD              MUTANT KILLED by 1 failing test(s)
+sf2-absent-remedy-names-one-form           MUTANT KILLED by 1 failing test(s)
 
-12 row(s), 0 not a clean kill
+15 row(s), 0 not a clean kill
 ```
 
-One qualification about HOW that was taken, because the envelope's contract is one command for
-every row and the transcript shows three invocations. A row costs about 74 s here — the checker
-takes a fresh baseline per row — so twelve rows is roughly fifteen minutes, past the session's
-per-call ceiling. The plan was split 1 + 6 + 5 and each part run with the same `--test 'npm run
-test:scripts'`. What the envelope guarantees is that no row is measured under a different
-command, and that holds; what the split costs is a single exit code over the set, so the three
-`0 not a clean kill` lines above are the evidence in its place. Re-running the whole plan in one
-call reproduces the table wherever that ceiling does not apply.
+**The last three rows are the ones that matter most, and two of them earned their place by
+surviving.** At the twelve-row revision, `sf1-staged-gone-A-to-T` and
+`sf1-staged-gone-narrows-to-AD` both reported `MUTANT SURVIVED — this line is not covered`
+against all 938 tests. The arm was pinned by its block's *count*, and a swap preserves a count:
+turning `raw(path)[0] === 'A'` into `=== 'T'` put `AD` back under "a file the commit has" and
+moved `T ` into STAGED-BUT-GONE, leaving the 4 and the 1 untouched. Both are killed now that
+the blocks are asserted by membership. A row that once survived is the only kind whose kill
+carries information.
+
+One qualification about HOW the table was taken, because the envelope's contract is one command
+for every row and the transcript shows three invocations. A row costs about 74 s here — the
+checker takes a fresh baseline per row — so fifteen rows is roughly nineteen minutes, past the
+session's 600 s per-call ceiling. The plan was split into three parts of five, each run with the
+same `--test 'npm run test:scripts'`. What the envelope guarantees is that no row is measured
+under a different command, and that holds; what a split costs is a single exit code over the
+set, so the three `0 not a clean kill` lines stand in for it.
+
+Whether one call reproduces the table was **not** measured at fifteen rows and this file will
+not predict it. What was measured, by the round-2 reviewer in its own lab, is the twelve-row
+plan in a single envelope call under this file's own command: `12 row(s), 0 not a clean kill`,
+exit 0. Under the CI command a row cost 53 s there, so twelve rows is about 636 s and the split
+was needed in that lab too.
 
 ## What each row pins
 
@@ -67,9 +83,45 @@ call reproduces the table wherever that ceiling does not apply.
 | `r1-worktree-column-reverts-to-trim` | the predicate reads git's two columns, not a trimmed pair |
 | `r1-absent-drops-T-worktree-column` | the WORKTREE column's retype half (` T`) has a fixture |
 | `r1-negation-prefix-loses-segment-boundary` | a directory negation prefixes on a segment boundary, so `lib` does not carve from `lib-extra/x/` |
+| `sf1-staged-gone-A-to-T` | the STAGED-BUT-GONE arm is pinned by membership; a swap that preserves both counts is caught |
+| `sf1-staged-gone-narrows-to-AD` | `AT` is in the fixture, so narrowing the arm to `AD` alone no longer passes unnoticed |
+| `sf2-absent-remedy-names-one-form` | the ABSENT remedy names a restore form per code, not one form for all of them |
 
 One failing test per row is the honest shape for this instrument. A broad kill would mean the
 mutant crashed on import rather than being caught by an assertion (#621).
+
+## The two round-2 measurements, as scripts rather than as prose
+
+Both are runnable from anywhere and derive what they need themselves, so neither figure below
+is HISTORICAL.
+
+`restore-remedy-matrix.sh` — what `git restore` does for each absence code, one fresh
+repository per (code, command) pair. Measured on git 2.43.0. The row that moved the source:
+
+```
+[T ] | T  f.md | git restore -- f.md                     | exit 0  after: T  f.md
+[T ] | T  f.md | git restore --staged --worktree -- f.md | exit 0  after: (clean)
+```
+
+Plain restore on `T ` is a silent exit-0 no-op — the index holds the symlink, so restoring from
+it changes nothing — and the operator re-runs the guard, sees the same refusal, and has no error
+to explain it. The inverse trap is `MD`/`MT`, where the two-flag form clears the tree by
+DISCARDING the staged edit that plain restore recovers. That is why the remedy names a form per
+code instead of one form for all of them.
+
+`teardown-predicate.sh` — the #885 population, and whether its member leaks:
+
+```
+suites using mkdtempSync:                 43
+crude   (mkdtempSync > t.after):          20
+refined (mkdtempSync > t.after+finally):   1   memory-blocks.test.js
+memory-blocks.test.js:     21 directories left in an isolated TMPDIR
+publishable-tree.test.js:   0   (the control row)
+```
+
+The control row is the point of the script, not decoration: a probe that counted nothing
+anywhere would otherwise read as a clean result. The refined predicate is still crude — a
+`finally` that removes the wrong thing passes it — so one file to read, not a ratchet.
 
 ## Not covered here
 
