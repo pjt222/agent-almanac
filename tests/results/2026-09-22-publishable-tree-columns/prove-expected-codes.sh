@@ -81,6 +81,18 @@ python3 "${REPO:?}/tools/patch-literal.py" "${d:?}/${TEST}" --replace \
     // a comment carrying a stray } brace" >/dev/null
 row "} inside a comment in the block" "$d" 0 0 || BAD=$((BAD + 1))
 
+# The closing-line rule's own negative evidence. A `}` inside an entry's PATH brings depth to
+# zero on that line, so the old pass took it as the assertion tail, closed the block there and
+# dropped the entry — nine asserted, eight printed, exit 0, and the script passed too. The
+# character walk this replaced refused it, which made the line-wise pass a regression on this
+# one shape (#883 round 8, N-1). It goes LAST in the block so the drop is silent rather than
+# truncating what follows.
+d=$(lab brace-in-path) || exit 1
+python3 "${REPO:?}/tools/patch-literal.py" "${d:?}/${TEST}" --replace \
+  "    'skills/real/staged.md': 'T ',::    'skills/real/staged.md': 'T ',
+    'skills/real/brace}.md': 'AM'," >/dev/null
+row "} inside an entry's path" "$d" 2 2 || BAD=$((BAD + 1))
+
 d=$(lab title-twice) || exit 1
 python3 "${REPO:?}/tools/patch-literal.py" "${d:?}/${TEST}" --replace \
   "test('the four unmerged codes::test('a TWO-COLUMN code — the four unmerged codes" >/dev/null

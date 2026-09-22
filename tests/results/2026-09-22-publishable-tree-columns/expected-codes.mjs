@@ -92,7 +92,25 @@ for (const raw of source.slice(openAt + NEEDLE.length).split('\n')) {
   const line = raw.trim();
   if (line === '' || isComment(line)) continue;
   depth += (line.match(/\{/g) ?? []).length - (line.match(/\}/g) ?? []).length;
-  if (depth <= 0) { closed = true; break; }
+  if (depth <= 0) {
+    // The depth-zero line is exempt from the entry rule because it carries the assertion tail.
+    // CHECK that it is the tail rather than assuming it: an entry whose path or code contains
+    // a `}` also brings depth to zero, and was taken as the tail — the block closed there and
+    // the entry vanished, so a ninth entry could leave eight codes at exit 0 (#883 round 8,
+    // N-1). The character walk this replaced refused that shape, which made it a regression,
+    // and the header's "anything else exits 2" was broader than the code. The tail always
+    // starts with `}`; an entry never does.
+    if (!line.startsWith('}')) {
+      refuse(
+        `the line that closes the two-column \`deepEqual\` is not the assertion tail: ${JSON.stringify(line)}\n`
+        + '  A tail starts with `}`. A line that brings the brace depth to zero and does not is '
+        + 'an entry carrying a brace in its path or code, and taking it as the tail would drop '
+        + 'it from the set in silence.',
+      );
+    }
+    closed = true;
+    break;
+  }
   const entry = line.match(ENTRY);
   if (!entry) {
     refuse(

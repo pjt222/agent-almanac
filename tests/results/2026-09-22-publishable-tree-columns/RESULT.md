@@ -239,6 +239,7 @@ at the first nested `}`.
 ```
 control: untouched                 codes exit 0 (8 lines)  script exit 0
 } inside a comment in the block    codes exit 0 (8 lines)  script exit 0
+} inside an entry's path           codes exit 2 (0 lines)  script exit 2
 title prefix occurs twice          codes exit 2 (0 lines)  script exit 2
 double-quoted ninth entry          codes exit 2 (0 lines)  script exit 2
 comment quoting a pair             codes exit 0 (8 lines)  script exit 0
@@ -253,6 +254,14 @@ its comment after the FIRST entry rather than the last, and that placement is th
 the comment after the last key a premature close truncates nothing, and the arm would pass
 against the very parser it exists to catch. Measured against the pre-fix parser: 1 entry and a
 false refusal from the script; after: 8 and exit 0.
+
+The last rule to arrive is the one the line-wise pass needed and did not have: the depth-zero
+line is exempt from the entry rule because it carries the assertion tail, and nothing CHECKED
+that it was the tail. An entry whose path or code contains a `}` also brings depth to zero, so
+it was taken as the tail, the block closed there and the entry vanished — nine asserted, eight
+printed, exit 0, and the script passed too. The character walk it replaced refused that shape,
+which made the line-wise pass a regression on it (#883 round 8, N-1). A tail always starts with
+`}`; an entry never does, and the rule is that one line.
 
 The transcript carries its own provenance — the sha, and whether the two files under test were
 dirty against it — because each lab is `git archive HEAD` overlaid with working-tree copies, so
