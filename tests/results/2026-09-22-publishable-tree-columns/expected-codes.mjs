@@ -1,13 +1,29 @@
 // expected-codes.mjs — print the porcelain codes the two-column test asserts, one
 // `<code> <path>` per line, sorted.
 //
-// This exists so that `two-column-pack.sh` can compare its fixture against THE TEST rather than
-// against a literal of its own. The literal it carried before was the fifth instance of this
-// PR's recurring class: the script said it refused when the test's fixture changed, and it
-// never read the test. Measured — renaming `new2.md` to `new3.md` at all six sites of the
-// test's fixture left the test green at 27/27 and the script at exit 0 with zero `REFUSED`
-// lines, still reporting `new2.md` (#883 round 5, SF-1). There is now one source for the eight
-// codes, so there is nothing left for them to drift against.
+// `two-column-pack.sh` compares its fixture against THE TEST through this file, rather than
+// against a literal of its own. That literal was the fifth instance of this PR's recurring
+// class: the script said it refused when the test's fixture changed and never read the test
+// (#883 round 5, SF-1).
+//
+// ## Why this parser accounts for every line
+//
+// A parser that silently drops what it cannot read is the same defect one level down, and it
+// was measured on the predecessor: adding a DOUBLE-quoted ninth entry to the test's
+// `deepEqual` left this printing eight codes, the script's eight-code fixture matched, and the
+// guard passed while the test asserted nine (#883 round 5 delta, SF-A). An unreadable entry is
+// an ABSENCE to a regex and a MISMATCH to a human, and only the second reading is safe.
+//
+// So: every non-blank line inside the block must parse as an entry or be a comment. Anything
+// else exits 2. That one rule closes four shapes at once — a double-quoted entry refuses
+// instead of vanishing, a comment carrying a quoted pair is skipped instead of counted, a
+// block whose brace matching ran past its end carries lines that are neither, and a reworded
+// entry refuses rather than shortening the set.
+//
+// The anchor is the test's TITLE plus the first `deepEqual(found.codes` after it, not the
+// assertion message: a reworded message cannot then move the anchor onto a different block,
+// it can only fail to find this one. The block's extent is taken by brace matching, not by a
+// lazy `[\s\S]*?`, which stops at the first nested `}`.
 //
 // Root derived from this file's own location; pass one as argv[2] to point it elsewhere.
 // Exit 0 with the lines, or exit 2 with a reason on stderr and NOTHING on stdout — a caller
@@ -19,32 +35,67 @@ import { fileURLToPath } from 'node:url';
 const root = process.argv[2] ?? resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const path = `${root}/scripts/test/publishable-tree.test.js`;
 
+const refuse = (message) => {
+  console.error(`expected-codes: ${message}`);
+  process.exit(2);
+};
+
 let source;
 try {
   source = readFileSync(path, 'utf8');
 } catch (error) {
-  console.error(`expected-codes: cannot read ${path}: ${error.message}`);
-  process.exit(2);
+  refuse(`cannot read ${path}: ${error.message}`);
 }
 
-// Anchored on the assertion MESSAGE, not on position: the message names what the block is for
-// and a reformat of the object literal does not move it. If the message is reworded the match
-// fails and this exits 2, which is the safe direction — a silently different match would
-// compare the fixture against some other assertion in the file.
-const block = source.match(/assert\.deepEqual\(found\.codes, \{([\s\S]*?)\}, 'the fixture is vacuous/);
-if (!block) {
-  console.error(
-    `expected-codes: could not find the two-column \`deepEqual\` on \`found.codes\` in ${path}. `
-    + 'It is matched by its assertion message ("the fixture is vacuous unless git reports…"); '
-    + 'if that wording changed, update this matcher rather than the caller.',
+const TITLE = "test('a TWO-COLUMN code";
+const titleAt = source.indexOf(TITLE);
+if (titleAt === -1) {
+  refuse(
+    `could not find the two-column test in ${path}. It is anchored on its title, "${TITLE}…"; `
+    + 'if the title changed, update this anchor rather than the caller.',
   );
-  process.exit(2);
 }
 
-const rows = [...block[1].matchAll(/'([^']+)':\s*'([^']*)'/g)].map(([, p, code]) => `${code} ${p}`);
+const NEEDLE = 'deepEqual(found.codes, {';
+const openAt = source.indexOf(NEEDLE, titleAt);
+if (openAt === -1) {
+  refuse(`found the two-column test but no \`${NEEDLE}\` after it in ${path}.`);
+}
+
+// Brace matching from the `{`, so a nested object ends where it ends rather than closing the
+// block early. Quotes and comments are not tracked: a brace inside either would break this,
+// and the line accounting below reports the wreckage rather than letting it pass.
+const bodyStart = openAt + NEEDLE.length;
+let depth = 1;
+let index = bodyStart;
+for (; index < source.length && depth > 0; index += 1) {
+  if (source[index] === '{') depth += 1;
+  else if (source[index] === '}') depth -= 1;
+}
+if (depth !== 0) {
+  refuse(`the object literal after \`${NEEDLE}\` is never closed in ${path}.`);
+}
+
+const ENTRY = /^'([^']+)':\s*'([^']*)',?$/;
+const rows = [];
+for (const raw of source.slice(bodyStart, index - 1).split('\n')) {
+  const line = raw.trim();
+  if (line === '') continue;
+  if (line.startsWith('//') || line.startsWith('*') || line.startsWith('/*')) continue;
+  const entry = line.match(ENTRY);
+  if (!entry) {
+    refuse(
+      `line inside the two-column \`deepEqual\` is neither an entry nor a comment: ${JSON.stringify(line)}\n`
+      + '  Entries are single-quoted `\'<path>\': \'<code>\',`. This refuses rather than skipping '
+      + 'the line, because a dropped entry is an absence to a parser and a mismatch to a reader, '
+      + 'and the caller would compare its fixture against the shorter set and pass.',
+    );
+  }
+  rows.push(`${entry[2]} ${entry[1]}`);
+}
+
 if (rows.length === 0) {
-  console.error(`expected-codes: the block matched but yielded no entries in ${path}`);
-  process.exit(2);
+  refuse(`the two-column \`deepEqual\` block in ${path} yielded no entries.`);
 }
 
 console.log(rows.sort().join('\n'));

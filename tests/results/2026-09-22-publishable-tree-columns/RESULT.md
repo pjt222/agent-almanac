@@ -210,13 +210,29 @@ zero `REFUSED` lines, still reporting `new2.md` (#883 round 5, SF-1). The exerci
 been offered as evidence renamed the script's own literal, which is the one direction a
 self-comparison covers.
 
-Rewired, all three directions measured:
+A parser doing that job has the same defect available to it one level down, and the first
+version had it: a parser that DROPS what it cannot read reports an absence where a reader
+would see a mismatch. Measured — adding a double-quoted ninth entry to the test's `deepEqual`
+left it printing eight codes, the script's eight-code fixture matched, and the guard passed
+while the test asserted nine (#883 round 5 delta, SF-A). It now accounts for every non-blank
+line inside the block: an entry or a comment, anything else exits 2. The anchor is the test's
+TITLE rather than its assertion message, so a reworded message cannot move it onto another
+block, and the block's extent is taken by brace matching rather than a lazy match that stops
+at the first nested `}`.
+
+`prove-expected-codes.sh` is the negative evidence, one archive lab per arm:
 
 ```
-test fixture renamed, script not   exit 1, REFUSED, diff names AM new3.md vs new2.md
-assertion message reworded         exit 2, "would compare its fixture against nothing and pass"
-neither                            exit 0, 3 files packed
+control: untouched                 codes exit 0 (8 lines)  script exit 0
+double-quoted ninth entry          codes exit 2 (0 lines)  script exit 2
+comment quoting a pair             codes exit 0 (8 lines)  script exit 0
+test title reworded                codes exit 2 (0 lines)  script exit 2
+test fixture renamed               codes exit 0 (8 lines)  script exit 1
+assertion message reworded         codes exit 0 (8 lines)  script exit 0
 ```
+
+The control arm and the two that must NOT refuse are as load-bearing as the two that must: a
+rule that refuses everything would pass a matrix made only of the bad rows.
 
 ## Not covered here
 
