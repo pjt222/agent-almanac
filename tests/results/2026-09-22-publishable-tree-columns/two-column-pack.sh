@@ -8,7 +8,20 @@
 # avoid, so the fixture is rebuilt here and npm is asked.
 #
 # Builds the same eight codes as `scripts/test/publishable-tree.test.js`'s two-column test.
-# Needs git and npm; writes only under its own mktemp -d.
+#
+# DRIFT. The fixture is rebuilt here by hand rather than imported, so nothing structurally ties
+# the two: a change to the test's fixture would leave this script reporting the same 3 files
+# beside a comment that is false again — the same class, with a green script next to it this
+# time. What stands in for that tie is the assertion below: the eight porcelain codes are
+# declared here and compared, so drift REFUSES rather than reporting. Importing the test's
+# `pkg()` from a results directory would couple a record to a suite that is free to move; the
+# alternative worth taking if this drifts twice is for the test itself to shell out to
+# `npm pack --dry-run --json` and assert the listing, at about a second per run.
+#
+# Needs git and npm. It writes its fixture only under its own `mktemp -d`, but it is not free of
+# side effects: the `npm pack` it runs makes npm write a `node-compile-cache/` into `TMPDIR`,
+# outside `DIR`, which the trap does not remove (#883 round 4, N-1). An earlier revision of this
+# header claimed it wrote only under its own directory.
 set -uo pipefail
 
 DIR=$(mktemp -d)
@@ -55,7 +68,29 @@ printf '# new2 edited\n' > "${DIR:?}/skills/real/new2.md"
 echo "git $(git --version | awk '{print $3}'), npm $(npm --version), node $(node --version)"
 echo
 echo "=== what git reports ==="
-git status --porcelain -z --no-renames --ignored=matching -uall -- skills/ | tr '\0' '\n' | sed '/^$/d' | sort
+PORCELAIN=$(git status --porcelain -z --no-renames --ignored=matching -uall -- skills/ \
+  | tr '\0' '\n' | sed '/^$/d' | sort)
+printf '%s\n' "$PORCELAIN"
+
+# The tie to the test, since the fixture is duplicated rather than imported: these are the eight
+# codes `scripts/test/publishable-tree.test.js`'s two-column test asserts with `deepEqual`. If
+# the test's fixture changes and this one does not, the run REFUSES here instead of printing a
+# pack listing that backs a comment which is no longer true.
+EXPECTED=$(printf '%s\n' \
+  ' T skills/real/references/helper.py' \
+  'A  skills/real/new.md' \
+  'AD skills/real/added.md' \
+  'AM skills/real/new2.md' \
+  'AT skills/real/addsym.md' \
+  'MD skills/real/SKILL.md' \
+  'MT skills/real/retyped.md' \
+  'T  skills/real/staged.md' | sort)
+if [ "$PORCELAIN" != "$EXPECTED" ]; then
+  echo "REFUSED: this fixture no longer builds the eight codes the two-column test asserts." >&2
+  diff <(printf '%s\n' "$EXPECTED") <(printf '%s\n' "$PORCELAIN") >&2
+  echo "Reconcile it with scripts/test/publishable-tree.test.js before quoting any pack listing." >&2
+  exit 1
+fi
 
 echo
 echo "=== what npm packs ==="

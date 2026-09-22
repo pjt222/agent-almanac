@@ -5,8 +5,10 @@ Target: `scripts/check-publishable-tree.js` and `scripts/lib/skills-inventory.js
 
 ## What is here
 
-`mutation-plan.tsv` — the twelve mutants behind the verdict table in the PR body, one row per
-claim, runnable as a set:
+`mutation-plan.tsv` — the mutants behind the verdict table in the PR body, one row per claim,
+runnable as a set. The count lives in the plan and in the envelope's own summary line, not in
+this sentence: it said "twelve" for two rounds after the plan had grown to sixteen (#883 round
+4, N-2).
 
 ```
 bash tools/mutation-envelope.sh --test 'npm run test:scripts' \
@@ -26,11 +28,11 @@ file, rather than a quotation of a run nobody else can take.
 
 ## The verdicts
 
-Taken at `d19981306`, every row under `npm run test:scripts` — the command CI runs:
+Taken at `e0df06cb3` and after, every row under `npm run test:scripts` — the command CI runs:
 
 ```
 sfc-absent-drops-T-index-column            MUTANT KILLED by 1 failing test(s)
-sfb-staged-gone-folds-into-absent          MUTANT KILLED by 2 failing test(s)
+sfb-staged-gone-folds-into-absent          MUTANT KILLED by 1 failing test(s)
 sfd-unmerged-sentence-reverts              MUTANT KILLED by 1 failing test(s)
 n1-unmerged-drops-UU                       MUTANT KILLED by 1 failing test(s)
 n1-unmerged-drops-AA                       MUTANT KILLED by 1 failing test(s)
@@ -38,10 +40,10 @@ n1-unmerged-drops-UD                       MUTANT KILLED by 1 failing test(s)
 n1-unmerged-drops-DU                       MUTANT KILLED by 1 failing test(s)
 n1-unmerged-drops-DD                       MUTANT KILLED by 1 failing test(s)
 n5-dot-slash-refusal-disabled              MUTANT KILLED by 1 failing test(s)
-r1-worktree-column-reverts-to-trim         MUTANT KILLED by 2 failing test(s)
+r1-worktree-column-reverts-to-trim         MUTANT KILLED by 1 failing test(s)
 r1-absent-drops-T-worktree-column          MUTANT KILLED by 1 failing test(s)
 r1-negation-prefix-loses-segment-boundary  MUTANT KILLED by 1 failing test(s)
-sf1-staged-gone-A-to-T                     MUTANT KILLED by 2 failing test(s)
+sf1-staged-gone-A-to-T                     MUTANT KILLED by 1 failing test(s)
 sf1-staged-gone-narrows-to-AD              MUTANT KILLED by 1 failing test(s)
 sf1r3-staged-gone-drops-worktree-test      MUTANT KILLED by 1 failing test(s)
 sf2-absent-remedy-names-one-form           MUTANT KILLED by 1 failing test(s)
@@ -57,12 +59,27 @@ moved `T ` into STAGED-BUT-GONE, leaving the 4 and the 1 untouched. `sf1r3-…` 
 fifteen-row revision, for the mirror-image reason: membership over the codes the arm INCLUDES
 says nothing about the code it must EXCLUDE, and no fixture read the report for an `A ` path.
 
-Three rows kill by **2** rather than 1, and that is not the crash signature #621 warns about.
-The second failing test is `refusedBlock reads one block, and not the truncation line`, which
-calls `report` directly over a synthetic set of codes — so a mutation of the bucket predicates
-is genuinely asserted twice, once through the fixture and once through the parser's own unit
-test. Both assertions are about the property, which is what separates a real double kill from a
-mutant that crashed on import.
+**Every row is `KILLED by 1`, and three of them were `KILLED by 2` for a bad reason until the
+parser test was fixed.** The claim published here at that revision — that the second failing
+test was a second genuine assertion of the property — was false, and measuring it is what
+showed that:
+
+```
+sfb-staged-gone-folds-into-absent   two-column test: AssertionError deep-equal
+                                    parser test:     TypeError: Cannot read properties of null
+```
+
+The parser test hardcoded `refusedBlock(truncated, 'STAGED-BUT-GONE')`. Any mutant routing `AD`
+elsewhere made that block absent, `refusedBlock` returned `null`, and `.length` threw — a crash
+in a test asserting nothing about the mutated line, which is #621's shape with the roles
+reversed. It reads the label back out of `report`'s own output now, so the test is about the
+parser whatever bucket the paths land in, and all three rows return to 1.
+
+Two things worth keeping from that. The checker could not have caught it: its broad-kill
+heuristic trips at `BROAD_KILL_SHARE = 0.25` of the baseline and 2/939 is 0.002, so the count
+was never going to be questioned — **a `by 2` needs a human to read which two**. And "both
+assertions are about the property" was written from the shape of the tests rather than from
+their output; the failure names were one `node --test` away (#883 round 4, SF-1).
 
 One qualification about HOW the table was taken, because the envelope's contract is one command
 for every row and the transcript shows four invocations. A row costs about 74 s here — the
@@ -100,7 +117,8 @@ mixing the plan file's own header warns about.
 | `sf2-absent-remedy-names-one-form` | the ABSENT remedy names a restore form per code, not one form for all of them |
 
 One failing test per row is the honest shape for this instrument. A broad kill would mean the
-mutant crashed on import rather than being caught by an assertion (#621).
+mutant crashed on import rather than being caught by an assertion (#621) — and so, as the
+by-2 episode above shows, can a kill by two.
 
 ## The two round-2 measurements, as scripts rather than as prose
 

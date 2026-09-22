@@ -80,16 +80,21 @@ test('refusedBlock reads one block, and not the truncation line', () => {
   const twoBlocks = [
     'REFUSED: 1 IGNORED path(s) under a shipped directory would be packed and are not in the commit — remove them:',
     '  !! skills/real/debug.log',
-    'REFUSED: 2 STAGED-BUT-GONE path(s) under a shipped directory so the pack lacks a file:',
+    'REFUSED: 3 STAGED-BUT-GONE path(s) under a shipped directory so the pack lacks a file:',
     '  AD skills/real/added.md',
     '  AT skills/real/addsym.md',
+    // A SPACE-leading code, because the offset is the thing being pinned: `line.slice(2)` and
+    // `line.trim()` are indistinguishable over two-character codes, and `trim()` survived this
+    // test until this member existed (#883 round 4, N-3). `report` emits ` T`, ` D` and ` M`.
+    '   T skills/real/retyped.md',
     '',
     'npm packs the WORKING TREE under a `files` array — it does not honour .gitignore —',
   ].join('\n');
   assert.deepEqual(refusedBlock(twoBlocks, 'IGNORED'), ['!! skills/real/debug.log'],
     'a block ahead of another one ends where the next REFUSED line starts');
   assert.deepEqual(refusedBlock(twoBlocks, 'STAGED-BUT-GONE'),
-    ['AD skills/real/added.md', 'AT skills/real/addsym.md']);
+    ['AD skills/real/added.md', 'AT skills/real/addsym.md', ' T skills/real/retyped.md'],
+    'the space-leading code survives the slice — `trim()` would silently eat it');
   assert.equal(refusedBlock(twoBlocks, 'MODIFIED'), null, 'an absent block is null, not []');
 
   // The real thing, so the truncation shape is `report`'s and not a hand-written guess.
