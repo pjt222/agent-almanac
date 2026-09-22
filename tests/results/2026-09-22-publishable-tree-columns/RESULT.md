@@ -194,6 +194,23 @@ Exactly the two paths whose worktree file exists. "Packed with their WORKING-TRE
 true of those two and false of all six absences, which is the whole basis for splitting the
 remedy sentences by bucket.
 
+`check-drift-literal.mjs` — the tie between that script and the test it duplicates. The script
+refuses when its fixture stops producing the eight codes the test asserts, which moves the
+trust rather than removing it: the refusal only works if the eight literals were typed right
+once, and two of them carry trailing-space padding (`A `, `T `) that a diff will not show. This
+parses both sides and compares them:
+
+```
+test deepEqual  : 8 entries
+script EXPECTED : 8 entries
+IDENTICAL, character for character
+```
+
+It can fail — dropping one space from `'A  skills/real/new.md'` in a copy of the script gives
+`[1] test="A  skills/real/new.md" script="A skills/real/new.md"`, exit 1 — and it refuses with
+exit 2 rather than 0 if either side parses to nothing, because zero-vs-zero would read as
+agreement.
+
 ## Not covered here
 
 The classification source itself. This guard reads git's porcelain code; npm reads the disk, and
