@@ -109,19 +109,31 @@ to explain it. The inverse trap is `MD`/`MT`, where the two-flag form clears the
 DISCARDING the staged edit that plain restore recovers. That is why the remedy names a form per
 code instead of one form for all of them.
 
-`teardown-predicate.sh` — the #885 population, and whether its member leaks:
+`teardown-predicate.sh` — the #885 population, and whether it leaks:
 
 ```
 suites using mkdtempSync:                 43
 crude   (mkdtempSync > t.after):          20
 refined (mkdtempSync > t.after+finally):   1   memory-blocks.test.js
-memory-blocks.test.js:     21 directories left in an isolated TMPDIR
-publishable-tree.test.js:   0   (the control row)
+
+GROUND TRUTH — npm run test:scripts under an isolated TMPDIR, exit 0, 22 entries left:
+   20 memblocks-
+    1 memcap-arms-
+    1 node-compile-cache          (node's own, not a fixture)
+
+memory-blocks.test.js alone:  21 directories left
+publishable-tree.test.js:      0   (the control row)
 ```
 
-The control row is the point of the script, not decoration: a probe that counted nothing
-anywhere would otherwise read as a clean result. The refined predicate is still crude — a
-`finally` that removes the wrong thing passes it — so one file to read, not a ratchet.
+The ground-truth section is what settles it, because **both predicates are heuristics and the
+refined one can UNDER-count**: it counts the token `finally` per file, not a `finally` that
+pairs with a given `mkdtempSync`, so a suite with three fixtures and three unrelated `finally`
+blocks passes it. Rather than refine the predicate further, the script runs the suite the way
+CI runs it and counts what is left. Every leaked entry belongs to `memory-blocks.test.js`, so
+the refined count of 1 is right here — measured, not argued.
+
+The control row is the point of the last section, not decoration: a probe that counted nothing
+anywhere would otherwise read as a clean result.
 
 ## Not covered here
 

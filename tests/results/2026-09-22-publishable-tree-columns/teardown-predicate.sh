@@ -38,7 +38,29 @@ for (const r of refined) console.log(`  ${r}`);
 '
 
 echo
-echo "=== does the refined member leak? (control row second) ==="
+echo "=== GROUND TRUTH: the whole suite under an isolated TMPDIR ==="
+# The predicate above is a heuristic in BOTH directions, and its under-count is the one that
+# matters: it counts the token `finally` per file, not a `finally` that pairs with a given
+# `mkdtempSync`, so a suite with three fixtures and three unrelated `finally` blocks passes it.
+# This section does not reason about that — it runs the suite the way CI does and counts what
+# is left. What it reports is the leak set; the predicate is only the cheap way to guess it.
+if [ "${SKIP_GROUND_TRUTH:-0}" = "1" ]; then
+  echo "skipped (SKIP_GROUND_TRUTH=1)"
+else
+  SANDBOX=$(mktemp -d)
+  TMPDIR="${SANDBOX:?}" npm run test:scripts >/dev/null 2>&1
+  rc=$?
+  total=$(find "${SANDBOX:?}" -mindepth 1 -maxdepth 1 | wc -l)
+  echo "npm run test:scripts exit ${rc}; ${total} entr(ies) left, by fixture prefix:"
+  # `node-compile-cache` is node's own, not a fixture — it is listed rather than filtered, so
+  # the reader sees everything the run left and decides.
+  find "${SANDBOX:?}" -mindepth 1 -maxdepth 1 -printf '%f\n' \
+    | sed 's/[A-Za-z0-9]\{6\}$//' | sort | uniq -c | sort -rn | sed 's/^/    /'
+  rm -rf "${SANDBOX:?}"
+fi
+
+echo
+echo "=== does the refined member leak on its own? (control row second) ==="
 # memory-blocks is the member; publishable-tree is the CONTROL — a suite whose teardown is known
 # good. Without it, a probe that counted nothing anywhere would look like a clean result.
 for suite in memory-blocks publishable-tree; do
