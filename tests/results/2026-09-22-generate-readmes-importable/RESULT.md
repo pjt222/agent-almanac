@@ -11,7 +11,7 @@ repository root.
 | | |
 |---|---|
 | base commit | `d6b9b9c72dea1f88ab60f84c7611dfedc16790d4` (merge of #883) |
-| head at measurement | every figure below re-taken at `0b49d8041`, the round-3 fix commit |
+| head at measurement | every figure below re-taken at `930461b0c`, the round-4 fix commit. Later commits touching only this file change no measured artifact — the generator, the fixture, the suite and the probes are byte-identical at both |
 | working tree | clean at every run; the two probes that mutate refuse a dirty tree or run in a lab |
 | command every mutant and every suite arm ran under | `npm run test:scripts` |
 | node | **v25.9.0** for the suite figures, recorded rather than disclaimed — an earlier edition of this table said no figure depended on a version, and two did. The `node:test` reporter is TAP on a non-TTY below Node 24, so both mutation probes pin the spec reporter through `NODE_OPTIONS` (verified on v20.20.2, v22.16.0 and v24.20.0). The import probe was worse: its verdict was a Node-25 artefact and it REFUSED the unmodified generator on CI's own Node 24 (§4). It is now run and recorded on v22.16.0, v24.20.0 and v25.9.0, the whole range `engines` allows |
@@ -24,7 +24,7 @@ repository root.
 
 ```
 prove-the-bypass-survived: row opendir-bypass on scripts/generate-readmes.js, every arm under: npm run test:scripts
-  base: d6b9b9c72   head: 0b49d8041   node v25.9.0
+  base: d6b9b9c72   head: 930461b0c   node v25.9.0
 
 base-clean      exit 0  (939 tests)   <- control
 base-mutated    exit 0  (939 tests)   SURVIVED — the bypass was not covered
@@ -57,7 +57,7 @@ arms' own test counts, and they are how a reader can tell the two labs apart.
 contains a walker over English *history*, and a lab has none. Two things answer it. The counts:
 the base lab ran 939 tests and `mutation-check`'s own baseline on the real repository at
 `d6b9b9c72` reported *green (939 passing)*; the head lab ran 947 and so did the real repository
-at `0b49d8041`. Nothing skipped, nothing absent. And the mechanism: `english-history.test.js`
+at `930461b0c`. Nothing skipped, nothing absent. And the mechanism: `english-history.test.js`
 builds its own `mkdtempSync` repositories and never opens this one, which is what #559's `root`
 argument was extracted for. The suites that DO run against the repository root — the `LIVE` rows
 in `tree-counts.test.js` and `skills-inventory.test.js` — assert bounds a one-commit checkout of
@@ -265,7 +265,7 @@ by the round-2 reviewer with `strace -f -e trace=openat,execve` — an instrumen
 wrote — which saw the modules, six `package.json` opened by the loader through an internal
 binding, and no `execve` but node's own.
 
-### The claim was wrong five times, and the instrument was wrong four of those
+### The claim was wrong six times, and the instrument was wrong five of those
 
 Every correction came from a measurement. None came from re-reading the file.
 
@@ -286,6 +286,14 @@ Every correction came from a measurement. None came from re-reading the file.
    graded `OK, content 0` — an import that wrote a file, called clean. The negative test standing
    behind that verdict used `existsSync`: the one shape the probe was already best at. **A
    negative test that picks the instrument's strongest shape is not a negative test.**
+6. **The verdict was a SNAPSHOT.** It was taken the moment `await import()` resolved, so
+   anything the import *scheduled* reached the tree afterwards, with `OK` already printed. Three
+   planted writes did exactly that — `setTimeout(writeFileSync)`, `setImmediate(writeFileSync)`
+   and `new WriteStream(p).end(x)`, the last a constructor the enumeration skips by the
+   capitalised-name rule *and* a lazy `open`, two independent reasons to be missed. One line
+   after the import is the fix, and its own knockout is the proof: remove
+   `await new Promise((done) => process.once('beforeExit', done))` and `deferred-write` and
+   `write-stream-ctor` both flip to `blind`.
 5. **The verdict was a Node-25 artefact, and the name list kept leaking.** On the committed probe
    with an unmodified generator:
 
@@ -333,7 +341,7 @@ throwaway module, imports THAT instead of the generator, and asserts the verdict
 declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
 
 ```
---verify: 20 shape(s) on node v25.9.0, each planted into a throwaway module and imported
+--verify: 24 shape(s) on node v25.9.0, each planted into a throwaway module and imported
   wrapped by enumeration: 92 fs, 32 fs/promises, 8 child_process export(s)
   ok    empty              declared blind observed blind
   ok    sync-read          declared seen  observed seen
@@ -353,9 +361,18 @@ declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
   ok    create-require     declared seen  observed seen
   ok    json-import        declared seen  observed seen
   ok    open-js-as-data    declared seen  observed seen
-  ok    worker-write       declared blind observed blind
-  ok    process-binding    declared blind observed blind
+  ok    deferred-write     declared seen  observed seen
+  ok    write-stream-ctor  declared seen  observed seen
+  ok    worker-write       declared seen  observed seen
+  ok    process-binding    declared seen  observed seen
+  ok    dynamic-import-repo-js declared blind observed blind
+  ok    dep-import         declared blind observed blind
 ```
+
+Twenty-four arms now, twenty-two `seen` and two `blind`, identical on v22.16.0, v24.20.0 and
+v25.9.0. Four joined in round 4: `deferred-write` and `write-stream-ctor` for the snapshot class
+above, `dynamic-import-repo-js` for the one structural gap left, and `dep-import` as a blind
+control exercising the `node_modules` resolution path the real graph takes and `empty` does not.
 
 **`empty` is the arm that matters most**, and it is the one the first table lacked. A module that
 does nothing must grade `blind`; under the Node-25-only classifier it graded `seen` on 22 and 24,
@@ -363,18 +380,29 @@ which means every `ok seen` row in that table passed for the wrong reason — th
 before the planted line mattered. A twelve-row table of `ok` is exactly the shape that invites
 belief, and it was wrong.
 
-`worker-write` and `process-binding` are declared blind and measured blind: a worker has its own
-module registry and its own `fs`, and `process.binding` reaches the internal binding below every
-public name. `open-js-as-data` was declared blind while the classifier could not tell it from the
-loader; the combined rule can, so it is declared `seen` and the excuse is gone.
+**`worker-write` and `process-binding` used to be declared blind, and asserted nothing.** The
+round-4 reviewer replaced each arm's planted access with a no-op and both still read `blind` — an
+arm that passes with its subject removed. Both escape hatches are wrapped now: a worker has its
+own module registry and its own `fs`, and `process.binding` returns a binding below every public
+name, but the `Worker` constructor and `process.binding` itself are in THIS process and are
+patchable. Both arms are `seen`, and they plant what they grade. `open-js-as-data` went the same
+way one round earlier: declared blind while the classifier could not tell it from the loader,
+declared `seen` once the combined rule could.
 
-Three controls remain — the patch fires, the patch reaches a NAMED binding, the classifier can
-still say *content*. **They are necessary and they were never sufficient**: control 2 passed
-while writes, promises, callbacks and async spawns were all unreached. That is what the arms are
+The one structural blind spot left is `dynamic-import-repo-js`. This classifier's "loader" is
+whatever the loader loads, so executing an arbitrary repository `.js` at import is
+indistinguishable from loading a module of the graph. Closing it means comparing against the
+STATIC import graph — `importGraph()` in `scripts/check-workflow-generator-inputs.js`, which is
+module-private — so it is a follow-up issue with an arm holding its place.
+
+Four controls remain — the patch fires, the patch reaches a NAMED binding, the classifier can
+still say *content*, and no loader descriptor outlives the import (a recycled one would excuse
+whatever content call next drew that number). **They are necessary and they have never been
+sufficient**: control 2 passed through corrections 4, 5 and 6 alike. That is what the arms are
 for.
 
 Still unmeasured: a module loaded before the probe, and any side effect reaching the filesystem
-through neither those three modules nor a worker.
+through none of the wrapped entry points.
 
 ## 5. What this does NOT cover
 
@@ -396,11 +424,12 @@ Stated because the section above looks broader than it is.
   lets the counts be measured at all. No count of them is published here: they are spread across
   this function, `skills-inventory.js` and `tools-registry.js`, and an earlier edition said "six"
   from a five-item list (#888 round-1 N8).
-- **Import inertness is tested by two spawns plus twenty probe arms, not proven for every
+- **Import inertness is tested by two spawns plus twenty-four probe arms, not proven for every
   shape.** `node -e` leaves `process.argv[1]` undefined; an importer file gives it a real path
   that is not this module. A third shape — a loader or a `--require` hook that rewrites
-  `argv[1]` — is not covered, and neither is a native addon, a worker thread or `process.binding`
-  (§4 lists them). The
+  `argv[1]` — is not covered. A worker thread and `process.binding` ARE covered since round 4;
+  a native addon and a module loaded before the probe are not, and neither is a dynamic import of
+  a repository `.js`, which has its own declared-blind arm and its own follow-up issue. The
   round-1 reviewer measured nine invocation shapes and three import shapes against the guard and
   found no case where it answers wrongly, including `npm run`, `node --run`, a `..` path, an
   out-of-tree symlink and `sh -c`; `--preserve-symlinks-main` on the out-of-tree symlink fails at
@@ -409,12 +438,12 @@ Stated because the section above looks broader than it is.
   found it taking the other one: without it `packHookSentence` returns `''` and the paragraph is
   missing a clause the real one carries. The clause is now asserted.
 
-## 6. The defect class recurred eight times inside the PR that is about it
+## 6. The defect class recurred ten times inside the PR that is about it
 
 Worth a table, because the pattern is the point and no single bullet above carries it. #877
 exists because an instrument — a source scan — was honest about something narrower than the claim
-resting on it. Building the fix reproduced that eight times, twice inside a remedy written for a
-previous instance:
+resting on it. Building the fix reproduced that ten times, three of them inside a remedy written
+for a previous instance, and once in a sentence describing a fix rather than in the fix itself.
 
 | # | what | found by | how it showed |
 |---|---|---|---|
@@ -425,22 +454,50 @@ previous instance:
 | 5 | the probe patched no WRITE name, and its negative test used the shape it was best at | round 2 | a planted `writeFileSync` graded clean |
 | 6 | the cli-arms control counted files, then counted five verdicts of six | rounds 1 and 2 | a `node` shim exiting 3, then one failing only write mode, both went green |
 | 7 | the probe's verdict was a Node-25 artefact; it refused the unmodified generator on CI's Node | round 3 | `v24.20.0 exit=1 content=77` |
-| 8 | two write paths reached the tree through none of the patched names | this session, ahead of round 3 | `createWriteStream` and `cpSync` graded clean |
+| 8 | **the diagnosis of a fix I had already made was wrong** — see below | round 4 | `cpSync` was seen through `lstatSync`; the stream was missed for timing, not naming |
+| 9 | the verdict was a snapshot at `await import()`; anything scheduled landed after `OK` | round 4 | `setTimeout`, `setImmediate` and a lazy stream `open`, three planted writes under a green verdict |
+| 10 | two declared-blind arms asserted nothing | round 4 | replacing each arm's planted access with a no-op left both reading `blind` |
 
 Every one is the same shape: **an instrument that cannot fail on part of the population it
 vouches for, with its OK quoted somewhere a reader will trust.**
 
-Two of them are the harder variant — the class appearing inside a remedy written for it. #4 and
-#8 are gaps in the fix for #2 and #5. A third was caught before it shipped: the round-3 reviewer
-measured a pure-frame classifier, the natural remedy for #7, going blind to a JSON import of the
-registry. That would have been the ninth.
+### Row 8 is the one worth reading twice
 
-What actually caught them: running something. #2, #5, #7 and the near-miss came from a reviewer
-executing a planted shape; #4 and #8 from asking "find one this cannot see" and then running it.
-Only #1 was caught by reading — by asking what a hostile input actually changed, which is the
-cheapest habit here and the one to reach for first. That is why the blind list became `--verify`
-arms, the file-count control became six asserted verdicts, and the name list became an
-enumeration: each is a paragraph replaced by a run.
+An earlier edition of this section claimed two write paths "reached the tree through none of the
+patched names". The round-4 reviewer measured both halves against the probe of the day:
+
+```
+cpSync(a, b)                            -> REFUSED   seen as: lstatSync …
+createWriteStream(p).write(x)           -> OK        planted=1
+createWriteStream(p).end(x), awaited    -> REFUSED   seen as: open …
+```
+
+`cpSync` was never blind. The stream was blind because its `open` ran **after the verdict**, not
+because its name was absent from a list — and awaiting `.end()` made the same probe refuse it.
+The knockout I ran to support the claim (drop `createWriteStream` and the arm flips to `blind`)
+shows only that the *arm* depends on the name; it was never evidence about why the write had been
+invisible. So the fix was right, the arms are right, and the stated mechanism was wrong — which
+is the same class one level further out again: **a claim about an instrument, asserted from a
+test that could not distinguish the two explanations.** It stands corrected here rather than
+tidied away, and it is why row 9 exists.
+
+### What actually catches them
+
+Running something. #2, #5, #7, #8, #9 and #10 came from a reviewer executing a planted shape;
+#3 from a reviewer planting a hand-rolled matcher; #4 and the two write paths from asking "find
+one this cannot see" and then running it; #6 from a shim. **Only #1 was caught by reading** — by
+asking what a hostile input actually changed, which is the cheapest habit here and the one to
+reach for first.
+
+Two more were caught before they could ship, both in remedies: the round-3 reviewer measured a
+pure-frame classifier going blind to a JSON import of the registry, and the frame rule's first
+version passed on Node 22 while refusing on 24 and 25 because the loader reaches `openSync`
+through `readFileSync`. Neither reached a commit.
+
+That record is why the blind list became `--verify` arms, the file-count control became six
+asserted verdicts, the name list became an enumeration, and the paragraph about what the probe
+cannot see became two declared-blind arms with a control beside them. Each is a paragraph
+replaced by a run.
 
 ## 7. Choices recorded so they are choices
 
