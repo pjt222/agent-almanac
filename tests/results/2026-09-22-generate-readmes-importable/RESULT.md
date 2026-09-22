@@ -230,8 +230,8 @@ The arm emits a single `exit=N,porcelain=M` line now, and the reviewer's shim is
 ```
 base   list=exit=0 check-clean=exit=0 write-clean=exit=5,porcelain=1 check-stale=exit=1 check-missing=exit=2 write-missing=exit=2
 REFUSED: the base side did not produce the six verdicts this probe is about.
-  expected: … write-clean=exit=0,porcelain=0 …
-  observed: … write-clean=exit=5,porcelain=1 …
+  expected: list=exit=0 check-clean=exit=0 write-clean=exit=0,porcelain=0 check-stale=exit=1 check-missing=exit=2 write-missing=exit=2
+  observed: list=exit=0 check-clean=exit=0 write-clean=exit=5,porcelain=1 check-stale=exit=1 check-missing=exit=2 write-missing=exit=2
   Two sides can agree byte for byte and have generated nothing; that is not AC 4.
 ```
 
