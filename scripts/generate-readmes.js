@@ -14,11 +14,25 @@
 
 // This file walks no directory and stats no entry: every count it publishes comes from
 // `lib/tree-counts.js`, which enumerates through `lib/git-files.js`, so a gitignored artifact
-// cannot be counted or named in SECURITY.md (#872). The counts live in a lib because nothing
-// that calls `process.exit` at import time can be tested; `tree-counts.test.js` asserts the
-// published NUMBERS against a git fixture, and keeps a source tripwire over this file that is
-// deliberately not the coverage claim (#874 review, B1).
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+// cannot be counted or named in SECURITY.md (#872). The counts live in a lib because, until
+// #877, nothing that calls `process.exit` at import time could be tested, and the source scan
+// that stood in for coverage over THIS file was measured green with that defect restored
+// (#874 review, B1).
+//
+// Since #877 the import-time part of that sentence is no longer true. Importing this module
+// opens no repository content and runs nothing (see `loadRegistries` and the `invokedAsScript()`
+// guard at the foot), and `generateSecuritySurface({ root })` takes its tree, so
+// `scripts/test/security-surface.test.js` drives the CALL SITE against a git fixture carrying an
+// ignored `scripts/local-probe.js` — ignored through `.git/info/exclude`, where only git reads
+// it, so the suite can tell asking git from re-implementing it (#888 round 1).
+//
+// What that buys, stated as what is MEASURED rather than as a class: three mutants in
+// `tests/results/2026-09-22-generate-readmes-importable/mutation-plan.tsv` reintroduce a walk
+// here — `opendirSync` at each of the two counts, and a walk that re-implements `.gitignore` by
+// hand — and each dies to a named test. The assertion is the published NUMBER, so any walk that
+// disagrees with git about an ignored file moves it; a walk that agrees with git on this
+// fixture would not, which is why the fixture plants the ignored files it does.
+import { readFileSync, writeFileSync, existsSync, realpathSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import * as yaml from 'js-yaml';
@@ -33,50 +47,119 @@ import { scriptFileCount, workflowFileCount, localeTranslationCounts } from './l
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
-const CHECK_MODE = process.argv.includes('--check');
+// Assigned by `main()`, not read here. `process.argv` is an input to the PROCESS, so a module
+// that reads one at import time answers differently depending on who imported it — under
+// `node --test` this would have been reading the test runner's arguments.
+let CHECK_MODE = false;
 
-// ── Load registries ──────────────────────────────────────────────
-const skillsRegistry = yaml.load(
-  readFileSync(resolve(ROOT, 'skills/_registry.yml'), 'utf8')
-);
-const agentsRegistry = yaml.load(
-  readFileSync(resolve(ROOT, 'agents/_registry.yml'), 'utf8')
-);
-const teamsRegistryPath = resolve(ROOT, 'teams/_registry.yml');
-const teamsRegistry = existsSync(teamsRegistryPath)
-  ? yaml.load(readFileSync(teamsRegistryPath, 'utf8'))
-  : { total_teams: 0, teams: [] };
-const guidesRegistryPath = resolve(ROOT, 'guides/_registry.yml');
-const guidesRegistry = existsSync(guidesRegistryPath)
-  ? yaml.load(readFileSync(guidesRegistryPath, 'utf8'))
-  : { total_guides: 0, categories: {}, guides: [] };
-const testsRegistryPath = resolve(ROOT, 'tests/_registry.yml');
-const testsRegistry = existsSync(testsRegistryPath)
-  ? yaml.load(readFileSync(testsRegistryPath, 'utf8'))
-  : { total_tests: 0, tests: [] };
+// ── Registries ───────────────────────────────────────────────────
+//
+// DECLARED here, LOADED by `loadRegistries()`, which only `main()` calls. Importing this module
+// therefore reads no registry, parses no YAML, spawns no git, runs no pipeline and exits no
+// process — which is the whole of #877. Measured rather than asserted, by
+// `tests/results/2026-09-22-generate-readmes-importable/import-side-effects.mjs`; the figures and
+// what they do and do not cover are in that directory's RESULT.md § 4. No count is quoted here:
+// this comment carried one for three rounds after the instrument behind it was repaired and the
+// number changed, because the correction reached RESULT.md, the PR body and the probe, and not
+// the one artifact that ships (#888 round 3). The claim is "opens no repository content", never
+// "reads no file", which is false of every module ever written.
+//
+// Every extraction out of this file (#566, #691, #874) was made because nothing
+// living here could be imported, and each one left the CALL SITE covered by nothing but review;
+// a scan of this file's own source stood in for that coverage, and the #874 review measured it
+// green with the #872 defect restored.
+//
+// `const` becoming `let` is the price, and it buys one thing: `generateSecuritySurface({ root })`
+// can be driven against a FIXTURE tree by `scripts/test/security-surface.test.js`, so what a
+// directory walk in this file breaks is the published NUMBER rather than the spelling of an
+// import. The other generators still read these module-level names and still answer only about
+// this repository — making them injectable too is the #691-shaped extraction #877's second
+// option describes, and is deliberately not done here.
+let skillsRegistry;
+let agentsRegistry;
+let teamsRegistry;
+let guidesRegistry;
+let testsRegistry;
+let domains;
+let agents;
+let defaultSkills;
+let teams;
+let guides;
+let guideCategories;
+let tests;
+let totalSkills;
+let totalAgents;
+let totalTeams;
+let totalGuides;
+let totalTests;
+let totalDomains;
+let totalCoordinationPatterns;
+let supportedLocales;
+let localeCodes;
+let totalLocales;
 
-const domains = skillsRegistry.domains;
-const agents = agentsRegistry.agents;
-const defaultSkills = agentsRegistry.default_skills || [];
-const teams = teamsRegistry.teams || [];
-const guides = guidesRegistry.guides || [];
-const guideCategories = guidesRegistry.categories || {};
-const tests = testsRegistry.tests || [];
-const totalSkills = skillsRegistry.total_skills;
-const totalAgents = agentsRegistry.total_agents;
-const totalTeams = teamsRegistry.total_teams || 0;
-const totalGuides = guidesRegistry.total_guides || 0;
-const totalTests = testsRegistry.total_tests || 0;
-const totalDomains = Object.keys(domains).length;
-const totalCoordinationPatterns = new Set(
-  teams.map((t) => t.coordination).filter(Boolean)
-).size;
-const i18nConfigPath = resolve(ROOT, 'i18n/_config.yml');
-const supportedLocales = existsSync(i18nConfigPath)
-  ? yaml.load(readFileSync(i18nConfigPath, 'utf8')).supported_locales || []
-  : [];
-const localeCodes = supportedLocales.map((l) => l.code);
-const totalLocales = localeCodes.length;
+/**
+ * Fill every binding above from the registries under `root`.
+ *
+ * Unconditional and uncached: it re-reads on every call, so nothing here can serve one root's
+ * numbers to a later caller that named another. The pipeline calls it once, before the loop.
+ */
+function loadRegistries(root = ROOT) {
+  skillsRegistry = yaml.load(
+    readFileSync(resolve(root, 'skills/_registry.yml'), 'utf8')
+  );
+  agentsRegistry = yaml.load(
+    readFileSync(resolve(root, 'agents/_registry.yml'), 'utf8')
+  );
+  const teamsRegistryPath = resolve(root, 'teams/_registry.yml');
+  teamsRegistry = existsSync(teamsRegistryPath)
+    ? yaml.load(readFileSync(teamsRegistryPath, 'utf8'))
+    : { total_teams: 0, teams: [] };
+  const guidesRegistryPath = resolve(root, 'guides/_registry.yml');
+  guidesRegistry = existsSync(guidesRegistryPath)
+    ? yaml.load(readFileSync(guidesRegistryPath, 'utf8'))
+    : { total_guides: 0, categories: {}, guides: [] };
+  const testsRegistryPath = resolve(root, 'tests/_registry.yml');
+  testsRegistry = existsSync(testsRegistryPath)
+    ? yaml.load(readFileSync(testsRegistryPath, 'utf8'))
+    : { total_tests: 0, tests: [] };
+
+  domains = skillsRegistry.domains;
+  agents = agentsRegistry.agents;
+  defaultSkills = agentsRegistry.default_skills || [];
+  teams = teamsRegistry.teams || [];
+  guides = guidesRegistry.guides || [];
+  guideCategories = guidesRegistry.categories || {};
+  tests = testsRegistry.tests || [];
+  totalSkills = skillsRegistry.total_skills;
+  totalAgents = agentsRegistry.total_agents;
+  totalTeams = teamsRegistry.total_teams || 0;
+  totalGuides = guidesRegistry.total_guides || 0;
+  totalTests = testsRegistry.total_tests || 0;
+  totalDomains = Object.keys(domains).length;
+  totalCoordinationPatterns = new Set(
+    teams.map((t) => t.coordination).filter(Boolean)
+  ).size;
+  const i18nConfigPath = resolve(root, 'i18n/_config.yml');
+  supportedLocales = existsSync(i18nConfigPath)
+    ? yaml.load(readFileSync(i18nConfigPath, 'utf8')).supported_locales || []
+    : [];
+  localeCodes = supportedLocales.map((l) => l.code);
+  totalLocales = localeCodes.length;
+}
+
+/**
+ * The skills registry's `domains` map for `root`, read directly rather than through the binding
+ * above.
+ *
+ * `generateSecuritySurface` is the one generator a test drives against a fixture, and it must not
+ * be able to reach the repository's registry while doing so — nor may reading a fixture's
+ * registry overwrite the map the pipeline is mid-run with. One extra YAML read per run is what
+ * that costs.
+ */
+function skillDomainsAt(root) {
+  return yaml.load(readFileSync(resolve(root, 'skills/_registry.yml'), 'utf8')).domains;
+}
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -573,9 +656,12 @@ function generateTestsReadme() {
 // translation:status` must run BEFORE this generator, or the table renders
 // last cycle's numbers and the same commit overwrites the file it read.
 
-// The counts themselves live in `lib/tree-counts.js`, where a fixture can reach them. Nothing
-// that runs `process.exit` at import time can be imported, and a source scan standing in for a
-// test was measured green with the #872 defect restored (#874 review, B1).
+// The counts themselves live in `lib/tree-counts.js`, where a fixture can reach them, because a
+// source scan standing in for a test was measured green with the #872 defect restored (#874
+// review, B1). THIS function's call site is still uncovered: `generateTranslationsSection` reads
+// module-level registry totals, so no fixture drives it. `generateSecuritySurface` is the one
+// #877 made injectable; extending that to the translation tables is the same #691-shaped move
+// and has not been made.
 
 /**
  * Read `i18n/_config.yml` and each locale's `translation_status.yml`.
@@ -683,19 +769,26 @@ function generateTranslationsSection() {
  * any fork without credentials. It is written as prose with the command that checks it, which is
  * the honest form for a fact this repository does not own.
  */
-function generateSecuritySurface() {
+export function generateSecuritySurface({ root = ROOT } = {}) {
   // Extracted to `lib/skills-inventory.js` (#691 finding 3) so the registry-not-directory
-  // property can be tested: this file executes its whole pipeline on import, so nothing
-  // living here can be. A registry id with no SKILL.md now THROWS rather than counting as
-  // non-declaring — see that module's header, and #700 for the upstream registry gap.
-  const { ids, declaring } = skillsDeclaringBash(ROOT, domains);
+  // property could be tested at a time when this file executed its whole pipeline on import and
+  // nothing living here could be. #877 removed that constraint for this function, and the
+  // extraction stays where it is: the lib's own suite covers the predicate, and what the fixture
+  // test here covers is that THIS function still calls it. A registry id with no SKILL.md THROWS
+  // rather than counting as non-declaring — see that module's header, and #700 for the upstream
+  // registry gap.
+  //
+  // `skillDomainsAt(root)`, never the module-level `domains`: that binding is loaded from the
+  // repository by `main()`, so reading it here would have the fixture test measuring this tree's
+  // registry against a fixture's skills directory and throwing on the first id.
+  const { ids, declaring } = skillsDeclaringBash(root, skillDomainsAt(root));
   const share = Math.round((declaring / ids.length) * 100);
   // Both counts are ENUMERATED BY GIT and both live in `lib/tree-counts.js`, where a fixture can
   // reach them: a gitignored file under a directory this paragraph counts is not part of the
   // artifact it describes, and counting it publishes a false number in a security document
   // (#872). They are functions rather than lines here because the source scan that stood in for
   // their test was measured green with the defect restored (#874 review, B1).
-  const scriptFiles = scriptFileCount(ROOT);
+  const scriptFiles = scriptFileCount(root);
 
   // DERIVED from the adapter registry, not listed by hand (#686 review). The hand-written
   // version named 5 of 13 adapters and described them all as symlinking into home directories:
@@ -723,9 +816,9 @@ function generateSecuritySurface() {
   // code tested the `_`-prefix convention, so a future `workflows/_draft.mjs` would have gone
   // uncounted under a sentence that describes scaffolding as the only exclusion. No-op today:
   // `_template.mjs` is the sole `_`-prefixed entry in `workflows/`.
-  const workflowFiles = workflowFileCount(ROOT);
+  const workflowFiles = workflowFileCount(root);
 
-  const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8'));
+  const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 
   // DERIVED, not asserted. An earlier revision wrote this sentence as a literal: deleting the
   // hook from package.json left `check-readmes` green while SECURITY.md went on claiming the
@@ -753,9 +846,9 @@ function generateSecuritySurface() {
   // test can reach the guard. They were two lists for one revision, and the guard covered
   // two of the four names the sentence made — mixed authority, where a reader seeing two
   // throws infers the whole sentence is machine-checked.
-  assertInventoryClaims(ROOT);
+  assertInventoryClaims(root);
   for (const tool of ['normalize-i18n-fences.js', 'mutation-check.js', 'gate-envelope.js']) {
-    if (!existsSync(resolve(ROOT, 'scripts', tool))) {
+    if (!existsSync(resolve(root, 'scripts', tool))) {
       throw new Error(`SECURITY.md names scripts/${tool}, which does not exist`);
     }
   }
@@ -783,10 +876,10 @@ function generateSecuritySurface() {
   // `npx agent-almanac` executes — so the sentence told a researcher that a vulnerability
   // in the entry point was "against the repository only". #600's failure mode, in the
   // prose written to prevent it.
-  const shippedList = shippedEntries(ROOT).included;
-  const treeNames = contentTrees(ROOT);
+  const shippedList = shippedEntries(root).included;
+  const treeNames = contentTrees(root);
   const treeLabel = treeNames.map((t) => t[0].toUpperCase() + t.slice(1)).join(', ');
-  const nonDoc = nonDocumentationFiles(ROOT);
+  const nonDoc = nonDocumentationFiles(root);
   const nonDocExtensions = [...new Set(nonDoc.map(extensionOf).filter(Boolean))].sort();
   // DERIVED, not named. A hardcoded `verify_runtime.py` inside a generated sentence is the
   // exact defect this function polices ten lines up, where three `scripts/` tools get
@@ -794,7 +887,7 @@ function generateSecuritySurface() {
   // file — registry and SKILL.md untouched, so nothing throws and every gate stays green —
   // would have had the HEALER regenerate and auto-commit "15 files … including
   // verify_runtime.py": a false claim in a security document, produced by the machinery.
-  const executable = executableFiles(nonDoc, ROOT);
+  const executable = executableFiles(nonDoc, root);
 
   // DERIVED from tools/_registry.yml through the same reader the integrity gate uses. The tools
   // named by id below are the ones a researcher scoping side effects must see first, and the
@@ -808,7 +901,7 @@ function generateSecuritySurface() {
   // tools" had been left standing at four). Naming them is static prose inside generated
   // numbers, so each id is checked against the registry the way the three scripts/ names are
   // checked above.
-  const toolsReg = loadToolsRegistry(ROOT);
+  const toolsReg = loadToolsRegistry(root);
   if (toolsReg.errors.length) throw new Error(`tools/_registry.yml has schema errors; run \`npm run check:tools-registry\`:\n  ${toolsReg.errors.join('\n  ')}`);
   const toolRows = toolsReg.entries;
   // The tools that act beyond this checkout, by registry id, each with its effect. The count and
@@ -908,53 +1001,98 @@ const MANAGED = [
   }) },
 ];
 
-// --list-outputs: print managed output paths (one per line) and exit without
-// generating anything. Consumed by tooling that needs the authoritative list
-// (e.g. auto-commit file_pattern maintenance).
-if (process.argv.includes('--list-outputs')) {
-  for (const entry of MANAGED) console.log(entry.path);
-  process.exit(0);
-}
+/**
+ * The whole pipeline, and everything that reads `process.argv` or calls `process.exit`.
+ *
+ * It all lives inside this function so that importing the module does none of it — the
+ * precondition #877 is about. The ORDER of the first three statements is the order the module
+ * body used to run them in, and is kept: a broken `skills/_registry.yml` still throws before
+ * `--list-outputs` prints, rather than that flag quietly becoming the one mode that tolerates
+ * an unreadable registry.
+ *
+ * `MANAGED` stays at module scope on purpose. Integrity check A8 static-parses it with
+ * `sed -n '/^const MANAGED = \[/,/^\];/p'`, anchored at column 0, and its thunks are not invoked
+ * until the loop below reaches them.
+ */
+function main() {
+  CHECK_MODE = process.argv.includes('--check');
 
-let staleCount = 0;
+  loadRegistries();
 
-function run(label, changed) {
-  if (changed) {
-    staleCount++;
-    console.log(`${CHECK_MODE ? 'STALE' : 'UPDATED'}: ${label}`);
+  // --list-outputs: print managed output paths (one per line) and exit without
+  // generating anything. Consumed by tooling that needs the authoritative list
+  // (e.g. auto-commit file_pattern maintenance).
+  if (process.argv.includes('--list-outputs')) {
+    for (const entry of MANAGED) console.log(entry.path);
+    process.exit(0);
+  }
+
+  let staleCount = 0;
+
+  function run(label, changed) {
+    if (changed) {
+      staleCount++;
+      console.log(`${CHECK_MODE ? 'STALE' : 'UPDATED'}: ${label}`);
+    } else {
+      console.log(`OK: ${label}`);
+    }
+  }
+
+  for (const entry of MANAGED) {
+    run(entry.path, entry.make(resolve(ROOT, entry.path)));
+  }
+
+  // Summary
+  console.log(
+    `\nStats: ${totalSkills} skills, ${totalDomains} domains, ${totalAgents} agents, ${totalTeams} teams, ${totalGuides} guides, ${totalTests} tests`
+  );
+
+  // Fatal in BOTH modes, and before the staleness verdict. A missing marker is not staleness —
+  // regenerating cannot fix it, because there is nowhere to put the content — so reporting it as
+  // stale would send a maintainer to a command that exits 0 and changes nothing. It also must
+  // not be reachable in write mode: the auto-commit job would otherwise commit a file whose
+  // section silently stopped being generated.
+  if (missingMarkers.length) {
+    console.error(`\nERROR: AUTO markers missing for: ${[...new Set(missingMarkers)].join(', ')}`);
+    console.error('Those sections are no longer generated by anything, and regenerating cannot');
+    console.error('restore them. Put the <!-- AUTO:START:name --> / <!-- AUTO:END:name --> pair back.');
+    process.exit(2);
+  }
+
+  if (CHECK_MODE && staleCount > 0) {
+    console.error(`\n${staleCount} file(s) are stale. Run "npm run update-readmes" to fix.`);
+    process.exit(1);
+  } else if (CHECK_MODE) {
+    console.log('\nAll files are up to date.');
+  } else if (staleCount > 0) {
+    console.log(`\n${staleCount} file(s) updated.`);
   } else {
-    console.log(`OK: ${label}`);
+    console.log('\nNo changes needed.');
   }
 }
 
-for (const entry of MANAGED) {
-  run(entry.path, entry.make(resolve(ROOT, entry.path)));
+/**
+ * True when this file is the program node was asked to run, rather than a module something
+ * imported.
+ *
+ * PATHS, not URLs, and `realpathSync` on both sides. `process.argv[1]` is whatever reached node
+ * — `npm run update-readmes` passes an absolute path, a hand-typed `node scripts/…` is equally
+ * legal — and on this repository's drvfs mount one file has several spellings, of which a
+ * symlinked one compares unequal as a URL. Comparing `import.meta.url` to
+ * `pathToFileURL(process.argv[1]).href` is the form usually written and it calls those the same
+ * file only by luck of spelling.
+ *
+ * Returns false rather than throwing when `argv[1]` names nothing: an import must not fail
+ * because of how its importer was invoked.
+ */
+function invokedAsScript() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return realpathSync(entry) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
 }
 
-// Summary
-console.log(
-  `\nStats: ${totalSkills} skills, ${totalDomains} domains, ${totalAgents} agents, ${totalTeams} teams, ${totalGuides} guides, ${totalTests} tests`
-);
-
-// Fatal in BOTH modes, and before the staleness verdict. A missing marker is not staleness —
-// regenerating cannot fix it, because there is nowhere to put the content — so reporting it as
-// stale would send a maintainer to a command that exits 0 and changes nothing. It also must
-// not be reachable in write mode: the auto-commit job would otherwise commit a file whose
-// section silently stopped being generated.
-if (missingMarkers.length) {
-  console.error(`\nERROR: AUTO markers missing for: ${[...new Set(missingMarkers)].join(', ')}`);
-  console.error('Those sections are no longer generated by anything, and regenerating cannot');
-  console.error('restore them. Put the <!-- AUTO:START:name --> / <!-- AUTO:END:name --> pair back.');
-  process.exit(2);
-}
-
-if (CHECK_MODE && staleCount > 0) {
-  console.error(`\n${staleCount} file(s) are stale. Run "npm run update-readmes" to fix.`);
-  process.exit(1);
-} else if (CHECK_MODE) {
-  console.log('\nAll files are up to date.');
-} else if (staleCount > 0) {
-  console.log(`\n${staleCount} file(s) updated.`);
-} else {
-  console.log('\nNo changes needed.');
-}
+if (invokedAsScript()) main();

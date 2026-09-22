@@ -17,6 +17,11 @@
  * So the counts moved to `lib/tree-counts.js`, where a fixture can reach them, and the assertion
  * is the number itself. The source scan survives at the bottom as a tripwire, explicitly not the
  * coverage claim.
+ *
+ * #877 closed the other half: the generator's CALL SITE. `generateSecuritySurface({ root })` is
+ * driven against a git fixture by `security-surface.test.js`, so the two counts this suite
+ * covers as a library are now covered as a call too, and the tripwire below has shrunk to what
+ * nothing else reaches.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -126,14 +131,21 @@ test('LIVE: the real tree still produces the numbers SECURITY.md publishes', () 
   // that is not required. The bounds above are the non-vacuous part: `return 0` kills them.
 });
 
-test('TRIPWIRE (not the coverage claim): the generator holds no directory walk of its own', () => {
-  // Kept because it is cheap and it names the mistake, NOT because it proves the wiring — the
-  // #874 review measured it green with the defect restored. The behavioural coverage is the
-  // four tests above; this one only catches the naive revert.
+test('TRIPWIRE (not the coverage claim): what no fixture yet drives in the generator', () => {
+  // Still a denylist, still explicitly NOT the coverage claim, and now scoped to what is left
+  // uncovered. Since #877, `scriptFileCount` and `workflowFileCount` are called from
+  // `generateSecuritySurface({ root })`, which `security-surface.test.js` drives against a git
+  // fixture carrying a gitignored `scripts/local-probe.js` — a walk there moves a number that
+  // suite asserts, whichever `fs` name spells it. That is the coverage claim; the two call-shape
+  // assertions this test used to make for those two counts are gone with it. They were the
+  // "red on a harmless refactor" half the #874 review measured: renaming the parameter reddened
+  // them with the fix intact, which is what a denylist does when the thing it pins is a spelling.
+  //
+  // `localeTranslationCounts` keeps its call-shape assertion because nothing else covers it:
+  // `generateTranslationsSection` reads module-level registry totals, so no fixture reaches it.
+  // When that call site becomes injectable, this line goes the way of the other two.
   const source = readFileSync(join(ROOT, 'scripts/generate-readmes.js'), 'utf8');
   assert.ok(!/\breaddirSync\b/.test(source), 'generate-readmes.js must not walk a directory itself (#872)');
   assert.ok(!/\bstatSync\b/.test(source), 'generate-readmes.js must not stat entries itself (#872)');
-  assert.match(source, /scriptFileCount\(ROOT\)/);
-  assert.match(source, /workflowFileCount\(ROOT\)/);
   assert.match(source, /localeTranslationCounts\(ROOT,/);
 });
