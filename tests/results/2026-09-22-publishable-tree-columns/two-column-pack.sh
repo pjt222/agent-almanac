@@ -75,8 +75,14 @@ printf '# new2 edited\n' > "${DIR:?}/skills/real/new2.md"
 echo "git $(git --version | awk '{print $3}'), npm $(npm --version), node $(node --version)"
 echo
 echo "=== what git reports ==="
-# `LC_ALL=C sort`, because the two sides are sorted by different programs and only a byte order
-# is common to both. `expected-codes.mjs` sorts with JavaScript's `Array.prototype.sort`, which
+# `LC_ALL=C sort`, because the two sides are sorted by different programs and a byte order is
+# the nearest thing to a common one. Not identical: `LC_ALL=C sort` orders UTF-8 BYTES and
+# JavaScript's `.sort()` orders UTF-16 CODE UNITS, and the two disagree above the BMP — `𐀀`
+# (U+10000) sorts before `～` (U+FF5E) in JavaScript and after it under `sort`. They agree on
+# ASCII and on most of the BMP, which is every path any fixture here has had, and a disagreement
+# would be a spurious REFUSAL rather than a silent pass (#883 round 7, measured as a nit). A
+# fixture that ever needs an astral path should sort both sides in the same program instead.
+# `expected-codes.mjs` sorts with JavaScript's `Array.prototype.sort`, which
 # is code-unit order, while coreutils `sort` collates by locale — and under `en_US.UTF-8`
 # leading whitespace is ignored at the first collation level, so `A  new.md` lands after
 # `AD added.md` instead of before it. Measured by the #883 round-6 reviewer against a privately
