@@ -48,6 +48,12 @@
  * measured a pure-frame rule going blind to exactly that, which is this PR's own defect class one
  * level down, in the remedy. Extension alone is not enough either: that was correction 5.
  *
+ * **Four controls, because "zero content" has four ways of being a lie**: the patch fires at
+ * all; it reaches a NAMED binding (correction 3); the classifier can still say *content*; and no
+ * loader descriptor outlives the import, since a recycled one would excuse whatever content call
+ * next drew that number. They are necessary and they have never been sufficient — control 2
+ * passed through correction 4 and correction 5 both. The arms below are what is sufficient.
+ *
  * ## The reach claim is a RUN, not a paragraph
  *
  * `--verify` plants one shape per arm into a throwaway module, imports THAT instead of the
@@ -300,6 +306,22 @@ const isGuard = (call) => call.name.endsWith('.realpathSync') && GUARD_PATHS.has
 
 const guard = calls.filter((call) => !isLoader(call) && isGuard(call));
 const content = calls.filter((call) => !isLoader(call) && !isGuard(call));
+
+// CONTROL 4 — no loader descriptor outlived the import.
+//
+// The fd branch excuses ANY patched call whose first argument is a descriptor the loader opened,
+// which is right while that descriptor is the loader's and wrong the moment it is recycled. A
+// descriptor is dropped from the set when it is closed through a patched name; one closed some
+// other way — a `FileHandle.close()`, which is a method rather than an export — would linger and
+// excuse whatever content call next drew that number. Measured empty on v22.16.0 (the set never
+// fills: that loader reads through `promises.readFile`, whose first argument is a path),
+// v24.20.0 and v25.9.0.
+if (loaderDescriptors.size > 0) {
+  refuse(
+    `${loaderDescriptors.size} loader descriptor(s) outlived the import: ${[...loaderDescriptors].join(', ')}.`,
+    'A recycled descriptor would be graded loader activity, which is how this instrument would start excusing content.',
+  );
+}
 
 // CONTROL 3 — the classifier can still say "content". Zero content is also what a classifier that
 // calls everything loader activity would report.
