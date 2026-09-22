@@ -107,11 +107,15 @@ function write(dir, files) {
 /**
  * A tree `generateSecuritySurface` can answer about, and every guard in it can pass.
  *
- * That function carries six throws that exist to catch drift in THIS repository — three named
- * `scripts/` tools, four tool ids, the `files` array against `REPO_ONLY`, the install hooks, the
- * content-tree accounting. A fixture reaches the counts only by satisfying all of them, which is
- * why this is longer than a fixture for a library function: the guards are part of what the call
- * site is, and a fixture that stubbed them out would be testing a different function.
+ * That function refuses rather than publishes whenever this repository has drifted, and the
+ * refusals are spread across it and the libs it calls: the three named `scripts/` tools, the four
+ * tool ids, the `files` array against `REPO_ONLY`, the install hooks, the content-tree
+ * accounting, `assertInterpretable` on the `files` array, and `skillsDeclaringBash` on a registry
+ * id with no SKILL.md. No count is given because the sites are in several files and a number in
+ * a comment is one nobody re-derives (#888 round-1 N8 caught the earlier "six"). A fixture
+ * reaches the counts only by satisfying every one of them, which is why this is longer than a
+ * fixture for a library function: the refusals are part of what the call site IS, and a fixture
+ * that stubbed them out would be testing a different function.
  */
 function fixture(t, extra = {}) {
   const dir = mkdtempSync(join(tmpdir(), 'security-surface-'));

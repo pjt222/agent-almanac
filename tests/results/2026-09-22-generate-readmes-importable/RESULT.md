@@ -11,10 +11,10 @@ repository root.
 | | |
 |---|---|
 | base commit | `d6b9b9c72dea1f88ab60f84c7611dfedc16790d4` (merge of #883) |
-| head at measurement | §1 and §3 at `fdee31dac`; §2 re-run at `32acf2d38` after the sixth row was added; §4 at the commit that adds its probe, the first one carrying the corrected comment it checks |
+| head at measurement | every figure below re-taken at `93bd30650`, the round-1 fix commit |
 | working tree | clean at every run; the two probes that mutate refuse a dirty tree or run in a lab |
 | command every mutant and every suite arm ran under | `npm run test:scripts` |
-| node / npm | whatever the caller has; the probes record none, because no figure here depends on a version |
+| node | **v25.9.0**, recorded rather than disclaimed. An earlier edition of this table said no figure depended on a version; the node:test reporter is TAP on a non-TTY below Node 24, under which two of these probes printed no test names and still exited 0. Both now pin the spec reporter through `NODE_OPTIONS` (verified on v20.20.2, v22.16.0 and v24.20.0) |
 
 ---
 
@@ -24,7 +24,7 @@ repository root.
 
 ```
 prove-the-bypass-survived: row opendir-bypass on scripts/generate-readmes.js, every arm under: npm run test:scripts
-  base: d6b9b9c72   head: fdee31dac
+  base: d6b9b9c72   head: 93bd30650   node v25.9.0
 
 base-clean      exit 0  (939 tests)   <- control
 base-mutated    exit 0  (939 tests)   SURVIVED — the bypass was not covered
@@ -57,7 +57,7 @@ arms' own test counts, and they are how a reader can tell the two labs apart.
 contains a walker over English *history*, and a lab has none. Two things answer it. The counts:
 the base lab ran 939 tests and `mutation-check`'s own baseline on the real repository at
 `d6b9b9c72` reported *green (939 passing)*; the head lab ran 947 and so did the real repository
-at `fdee31dac`. Nothing skipped, nothing absent. And the mechanism: `english-history.test.js`
+at `93bd30650`. Nothing skipped, nothing absent. And the mechanism: `english-history.test.js`
 builds its own `mkdtempSync` repositories and never opens this one, which is what #559's `root`
 argument was extracted for. The suites that DO run against the repository root — the `LIVE` rows
 in `tree-counts.test.js` and `skills-inventory.test.js` — assert bounds a one-commit checkout of
@@ -67,18 +67,19 @@ the same tree still satisfies.
 
 ## 2. Every claim this change makes, as a mutant
 
-`mutation-plan.tsv` through `tools/mutation-envelope.sh`, at `32acf2d38`:
+`mutation-plan.tsv` through `tools/mutation-envelope.sh`, at `93bd30650`:
 
 | row | verdict |
 |---|---|
 | `opendir-bypass` | MUTANT KILLED by 1 |
 | `opendir-bypass-workflows` | MUTANT KILLED by 1 |
+| `handrolled-ignore-bypass` | MUTANT KILLED by 1 |
 | `root-not-injected` | MUTANT KILLED by 1 |
 | `domains-from-the-module` | MUTANT KILLED by 6 |
 | `guard-always-runs` | MUTANT KILLED by 1 |
 | `INSTRUMENT-ROW-expected-count` | MUTANT KILLED by 1 |
 
-`6 row(s), 0 not a clean kill.`
+`7 row(s), 0 not a clean kill.`
 
 ### What each kill actually failed on
 
@@ -95,6 +96,10 @@ prints the names:
 
 --- opendir-bypass-workflows  (exit 1)
     ✖ the Workflows count excludes the template and what git ignores
+    [AssertionError] x1
+
+--- handrolled-ignore-bypass  (exit 1)
+    ✖ the Scripts count is git-enumerated at the CALL SITE, not just in the lib
     [AssertionError] x1
 
 --- root-not-injected  (exit 1)
@@ -124,9 +129,10 @@ prints the names:
 per-test classification — the cheap half of the answer. They can disagree with the name list
 above: a reporter printing one error twice would double a class, and a failure whose message
 carries neither word would be counted by none. In this run they agree with the name counts on
-every row — five rows at one class-line for one name, and `domains-from-the-module` at 1 + 5 for
+every row — six rows at one class-line for one name, and `domains-from-the-module` at 1 + 5 for
 six — which is what lets the paragraphs below rest on them. The **names** are the evidence;
-these are the label.
+these are the label, and under a TAP reporter there would be no names at all (see the
+provenance table).
 
 Read row by row rather than as a column of KILLEDs:
 
@@ -150,6 +156,16 @@ Read row by row rather than as a column of KILLEDs:
   never vacuous** (`local-probe.js` is a `.js` and `scriptFileCount` counts `.js`), which is
   exactly why the Workflows one survived scrutiny: the two arms read as the same shape and only
   one of them was.
+- **`handrolled-ignore-bypass` is the class row**, and it exists because the fixture could not
+  tell *asks git* from *re-implements git*. A walk that opens `.gitignore`, turns each
+  slash-free line into a regex and filters basenames returns 4, 4 and 5 on the three Scripts
+  assertions — exactly what the real function returns — so it SURVIVED the whole suite. That is
+  the fourth-glob-implementation class `lib/git-files.js` exists to prevent, and the suite was
+  blind to it because the fixture's only ignore rule sat in a file any walk can read. The rule
+  moved to `.git/info/exclude`, which git honours and a re-implementation has no reason to open;
+  the row now dies with one `AssertionError` in the Scripts test. Found by the #888 round-1
+  reviewer, re-derived here. It must be written BEFORE the fixture's first commit — after it,
+  `local-probe.js` is tracked and the unmutated suite goes red, correctly.
 - **`domains-from-the-module` kills by REFUSAL, not by a wrong number**, and the table above
   would hide that. Five of its six failures are one throw from `skillsDeclaringBash`, quoted
   verbatim from the run rather than described:
@@ -190,8 +206,22 @@ load and now runs after an explicit `loadRegistries()` call — the statement or
 is deliberate for that reason, so a broken `skills/_registry.yml` still throws before the flag
 prints rather than that flag becoming the one mode that tolerates an unreadable registry.
 
-The probe also carries the control a `diff -r` needs: **two empty trees are identical too**, so
-both sides must hold twelve files before the diff is believed.
+**The file count was not a control, and saying it was is the mistake this section made.** "Two
+empty trees are identical too" is right as far as it goes; two trees of twelve files holding the
+same failure are identical as well. Measured by the #888 round-1 reviewer: a `node` shim first on
+PATH that printed to stderr and exited 3 produced twelve files per side, a byte-identical diff and
+a green `VERDICT`, having generated nothing. Any symmetric failure — a missing `node_modules`
+link, the wrong Node, an `ERR_MODULE_NOT_FOUND` — read as "AC 4 holds".
+
+So the six exit codes this probe is about are now asserted per side before the diff is believed,
+and the same shim re-run against the fixed script refuses:
+
+```
+REFUSED: the base side did not produce the six verdicts this probe is about.
+  expected: list=exit=0 check-clean=exit=0 write-clean=porcelain-after-write=0 check-stale=exit=1 check-missing=exit=2 write-missing=exit=2
+  observed: list=exit=3 check-clean=exit=3 write-clean=porcelain-after-write=0 check-stale=exit=3 check-missing=exit=3 write-missing=exit=3
+  Two sides can agree byte for byte and have generated nothing; that is not AC 4.
+```
 
 ---
 
@@ -203,27 +233,50 @@ of `generate-readmes.js` claims it does not, so `import-side-effects.mjs` patche
 `node:child_process` before the import and records every call:
 
 ```
-calls during import: 84
-  module-graph reads (loader): 84
+calls during import: 86
+  module-graph reads (loader):      84
+  main-module guard (realpathSync): 2
+    realpathSync …/tests/results/2026-09-22-generate-readmes-importable/import-side-effects.mjs
+    realpathSync …/scripts/generate-readmes.js
   repository content or subprocess: 0
 
-OK: every call during import is the ESM loader reading the module graph.
+OK: every call during import is the loader reading the module graph, or the guard resolving its two paths.
 ```
 
-84 is 28 modules × open/read/close. **The claim in that comment was wrong twice before it was
-right**, and both corrections came from the instrument rather than from re-reading:
+84 is 28 modules × open/read/close; the other 2 are `invokedAsScript()` resolving `argv[1]` and
+its own path. **The claim was wrong three times before it was right, and the instrument was wrong
+twice of those three.** Every correction came from a measurement, never from re-reading:
 
 1. It first said the import "reads no file". It opens 28 — every import does. The honest claim is
    about repository *content*: a registry, a `SKILL.md`, a `package.json`, a `git` spawn.
 2. The first classifier read `readSync`'s first argument as a path. It is a file DESCRIPTOR, so
    28 loader reads were reported as repository content and the probe refused a module that was
-   behaving. Descriptors opened on a `.js`/`.mjs` are now remembered, and a `readSync` on one of
-   them is the same loader read as its `openSync`.
+   behaving. Descriptors opened on a `.js`/`.mjs` are remembered now.
+3. **The patch never reached the subject.** It assigned over properties of the CJS `fs` object,
+   and an ESM named binding to a builtin is resolved at link time: `import { readFileSync } from
+   'fs'` does not follow a later property assignment until `module.syncBuiltinESMExports()` runs.
+   The generator and every lib under it import by name, so the patch was invisible to all of
+   them — while both controls called `fs.readFileSync` on the DEFAULT export and fired happily.
+   A probe that cannot fail on the population it vouches for, with its output quoted in a shipped
+   code comment. Found by the #888 round-1 reviewer; re-derived on node v25.9.0:
 
-The probe carries **two** controls, because "zero content reads" is also what a dead patch and an
-over-eager classifier both report: one deliberate read before the import must be intercepted
-(exactly one call recorded), and one deliberate registry read after it must land on the *content*
-side. Either control failing exits 2 rather than reporting a clean tree.
+       after the assignment:  named === fs.readFileSync  false     named === original  true
+       after syncBuiltinESMExports():  named === fs.readFileSync  true
+
+   The number moved when the instrument was repaired — `84, all loader` was the count of a dead
+   patch, and the module's own two `realpathSync` calls had never been seen. **The behavioural
+   claim survived**: under a working instrument there is still no registry read, no YAML parse
+   and no `git` spawn at import. What was false was that it had been measured.
+
+The probe carries **three** controls now, because "zero content reads" has three ways of being a
+lie: the patch fires at all (one deliberate read must be recorded), the patch reaches the shape
+the subject uses (a NAMED binding must be the patched function after the sync), and the
+classifier can still say *content* (one deliberate registry read after the import must land on
+that side). Any control failing exits 2 rather than reporting a clean tree.
+
+Negative test, because three controls still do not prove the verdict can fail: planting
+`existsSync(resolve(ROOT, 'skills/_registry.yml'))` at module scope — through the generator's own
+named import, the shape the dead patch could not see — is caught and refused, exit 1.
 
 ## 5. What this does NOT cover
 
@@ -239,12 +292,22 @@ Stated because the section above looks broader than it is.
   fixture. It is a claim about the CLI rather than about the tree, so the fixture's numbers are
   unaffected — but a test asserting the adapter list against a fixture would be asserting against
   this repository, and none does.
-- **The fixture satisfies six drift guards; it does not test them.** One of them is exercised
-  (`a guard that … fires on a fixture too`). The other five are reached and pass, which is what
-  lets the counts be measured at all.
+- **The fixture satisfies the function's drift guards; it does not test them.** One is
+  exercised (`a guard that … fires on a fixture too`, a deleted `scripts/mutation-check.js`) and
+  one more by the `domains-from-the-module` mutant. The rest are reached and pass, which is what
+  lets the counts be measured at all. No count of them is published here: they are spread across
+  this function, `skills-inventory.js` and `tools-registry.js`, and an earlier edition said "six"
+  from a five-item list (#888 round-1 N8).
 - **Import inertness is tested by two spawns, not proven for every shape.** `node -e` leaves
   `process.argv[1]` undefined; an importer file gives it a real path that is not this module.
-  A third shape — a loader or a `--require` hook that rewrites `argv[1]` — is not covered.
+  A third shape — a loader or a `--require` hook that rewrites `argv[1]` — is not covered. The
+  round-1 reviewer measured nine invocation shapes and three import shapes against the guard and
+  found no case where it answers wrongly, including `npm run`, `node --run`, a `..` path, an
+  out-of-tree symlink and `sh -c`; `--preserve-symlinks-main` on the out-of-tree symlink fails at
+  module resolution before the guard is reached, and nothing here uses that shape.
+- **The fixture declares a `prepack` so it takes production's branch**, after the round-1 review
+  found it taking the other one: without it `packHookSentence` returns `''` and the paragraph is
+  missing a clause the real one carries. The clause is now asserted.
 
 ## 6. Choices recorded so they are choices
 
@@ -253,13 +316,19 @@ Stated because the section above looks broader than it is.
   the parameter reddened them with the fix intact — the "red on a harmless refactor" half the
   #874 review measured. What is left is the two name denials plus the one call site nothing else
   reaches, under a relabelled comment.
-- **`const` became `let` for twenty-two bindings.** The alternative was threading a context
+- **`const` became `let` for twenty-two REGISTRY bindings** — twenty-three `let` lines in the
+  file, the twenty-third being `CHECK_MODE`, which was also a `const` reading `process.argv` at
+  module scope. The earlier "22 bindings" was the registry count offered as the file's count.
+
+  The alternative was threading a context
   object through thirty generator functions, which is the #691-shaped extraction #877 offers as
   its second option and is a larger change than the issue asks for. The cost is that the bindings
   are mutable; the guard is that only `main()` and `loadRegistries()` assign them.
 - **`skillDomainsAt(root)` re-reads `skills/_registry.yml`.** One extra YAML parse per run, so
   that a fixture's registry cannot overwrite the map the pipeline is mid-run with, and the
   repository's map cannot reach a fixture.
-- **The new suite costs 6.4 s standalone** (`node --test scripts/test/security-surface.test.js`,
-  drvfs, 8 tests). No whole-suite before/after delta is published here: the two numbers I have
-  were taken on different filesystems, and a delta across those is not a delta.
+- **The new suite costs about 6 s standalone** (`node --test scripts/test/security-surface.test.js`,
+  drvfs, 8 tests): 6.4 s measured here, 6.0 s by the round-1 reviewer on the same mount. Both are
+  single runs of a figure that moves with load, which is why the sentence says "about" rather
+  than picking one. No whole-suite before/after delta is published: the two whole-suite numbers
+  available were taken on different filesystems, and a delta across those is not a delta.
