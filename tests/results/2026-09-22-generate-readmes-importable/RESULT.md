@@ -53,6 +53,16 @@ Each lab therefore runs the suite unmutated first, and a lab whose clean arm is 
 the script rather than reporting a survival it cannot justify. `939` and `947` are the two clean
 arms' own test counts, and they are how a reader can tell the two labs apart.
 
+**Is a one-commit lab a fair stand-in for this repository?** It is a fair question — the suite
+contains a walker over English *history*, and a lab has none. Two things answer it. The counts:
+the base lab ran 939 tests and `mutation-check`'s own baseline on the real repository at
+`d6b9b9c72` reported *green (939 passing)*; the head lab ran 947 and so did the real repository
+at `fdee31dac`. Nothing skipped, nothing absent. And the mechanism: `english-history.test.js`
+builds its own `mkdtempSync` repositories and never opens this one, which is what #559's `root`
+argument was extracted for. The suites that DO run against the repository root — the `LIVE` rows
+in `tree-counts.test.js` and `skills-inventory.test.js` — assert bounds a one-commit checkout of
+the same tree still satisfies.
+
 ---
 
 ## 2. Every claim this change makes, as a mutant
@@ -104,6 +114,13 @@ prints the names:
     ✖ the Scripts count is git-enumerated at the CALL SITE, not just in the lib
     [AssertionError] x1
 ```
+
+**What the `[Class] xN` lines are, exactly.** Line counts over the whole suite log, not a
+per-test classification — the cheap half of the answer. They can disagree with the name list
+above: a reporter printing one error twice would double a class, and a failure whose message
+carries neither word would be counted by none. In this run they agree with the name counts
+exactly (1 and 1, 1 + 5 and 6, 1 and 1), which is what lets the paragraphs below rest on them.
+The **names** are the evidence; these are the label.
 
 Read row by row rather than as a column of KILLEDs:
 

@@ -83,6 +83,13 @@ PY
   # `✖ failing tests:` is node:test's section HEADER, not a test. Printed unfiltered it reads as
   # a seventh name in the six-name row below, which is the sort of off-by-one a reader inherits.
   awk '/^✖ / && $0 != "✖ failing tests:" {print "    " $0}' "${OUT:?}" | sed 's/ ([0-9.]*ms)$//' | sort -u
+  # These are LINE counts over the whole suite log, not a per-test classification. They are the
+  # cheap half of the answer and they can disagree with the name list above: a reporter that
+  # printed one error twice would double a class, and a failure whose message carries neither
+  # word would be counted by none. In the #877 run they agreed with the name counts exactly
+  # (1 and 1, 1+5 and 6, 1 and 1), which is why the RESULT.md paragraph built on them stands —
+  # but the names are the evidence and these are the label. Read the log if they ever disagree.
+  #
   # `awk`, not `grep`: inside Claude Code a bare `grep` is routed to a bundled ugrep with
   # `--ignore-files`, and this repository's own Bash hook blocks the name outright — a probe
   # whose counting tool differs between the machine that wrote it and the machine that reruns it
