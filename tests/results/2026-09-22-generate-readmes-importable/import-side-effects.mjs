@@ -42,8 +42,18 @@
  * Any control failing exits 2. Exit 0 when every recorded call is the loader reading the module
  * graph or the main-module guard resolving its two paths; exit 1 when anything touches
  * repository content or spawns a process.
+ *
+ * ## What it still cannot see, stated rather than left to be discovered
+ *
+ * It patches `node:fs` (sync names), `node:fs/promises` and `node:child_process`. It does NOT
+ * see a native addon, a worker thread, `process.binding`, an async `fs` callback API, or a read
+ * performed by a module loaded before this file runs. `createRequire(...)('node:fs')` IS seen —
+ * it returns the same module object whose properties are patched here. The verdict is therefore
+ * "nothing reached repository content through the three modules above", which is narrower than
+ * "nothing reached repository content" and is the claim the head of `generate-readmes.js` makes.
  */
 import fs, { readFileSync as namedReadFileSync } from 'node:fs';
+import fsPromises from 'node:fs/promises';
 import childProcess from 'node:child_process';
 import { syncBuiltinESMExports } from 'node:module';
 import { resolve, dirname } from 'node:path';
@@ -79,7 +89,19 @@ for (const name of FS_NAMES) {
     return result;
   };
 }
-for (const name of ['spawnSync', 'execSync', 'execFileSync']) {
+// `node:fs/promises` is a SEPARATE module object: patching `node:fs` does not reach it, and a
+// walk written `await readdir(dir)` would have been invisible to every version of this probe.
+// Nothing in the current graph imports it — which is exactly why it is worth covering, since the
+// gap would open silently the first time something did.
+for (const name of ['readFile', 'readdir', 'opendir', 'stat', 'lstat', 'realpath', 'access', 'open']) {
+  const original = fsPromises[name];
+  if (typeof original !== 'function') continue;
+  fsPromises[name] = function patched(...args) {
+    calls.push({ name: `promises.${name}`, arg: String(args[0]) });
+    return original.apply(this, args);
+  };
+}
+for (const name of ['spawnSync', 'execSync', 'execFileSync', 'spawn', 'exec', 'execFile', 'fork']) {
   const original = childProcess[name];
   if (typeof original !== 'function') continue;
   childProcess[name] = function patched(...args) {
