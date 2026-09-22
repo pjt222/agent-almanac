@@ -1,0 +1,19 @@
+# mutation-plan.tsv -- the claims PR #877 makes about generate-readmes.js, as mutants.
+#
+# Run, from the repository root:
+#
+#   bash tools/mutation-envelope.sh --test 'npm run test:scripts' \
+#     --plan tests/results/2026-09-22-generate-readmes-importable/mutation-plan.tsv
+#
+# Format: <id><TAB><file><TAB><old>::<new>. Every row must be MUTANT KILLED; the envelope exits
+# non-zero otherwise. Read RESULT.md for the verdicts and for what each kill FAILED ON -- an
+# assertion and a crash render the same in a count, and two rows here kill by a guard's throw.
+#
+# The last row is the INSTRUMENT: it mutates the new suite's own expected number, so a run in
+# which it does not die is a run that never reached the suite, and no other row's verdict in
+# that run means anything.
+opendir-bypass	scripts/generate-readmes.js	import { scriptFileCount, workflowFileCount, localeTranslationCounts } from './lib/tree-counts.js';::import { workflowFileCount, localeTranslationCounts } from './lib/tree-counts.js'; import { opendirSync } from 'fs'; const scriptFileCount = (r) => { const d = opendirSync(resolve(r, 'scripts')); let n = 0; for (let e; (e = d.readSync());) if (/[.](m?js|sh)$/.test(e.name)) n++; d.closeSync(); return n; };
+root-not-injected	scripts/generate-readmes.js	const scriptFiles = scriptFileCount(root);::const scriptFiles = scriptFileCount(ROOT);
+domains-from-the-module	scripts/generate-readmes.js	skillsDeclaringBash(root, skillDomainsAt(root))::skillsDeclaringBash(root, skillDomainsAt(ROOT))
+guard-always-runs	scripts/generate-readmes.js	if (invokedAsScript()) main();::if (true) main();
+INSTRUMENT-ROW-expected-count	scripts/test/security-surface.test.js	assert.equal(scriptsCount(surface), 4,::assert.equal(scriptsCount(surface), 99,
