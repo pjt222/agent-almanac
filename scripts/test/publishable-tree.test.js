@@ -98,7 +98,17 @@ test('refusedBlock reads one block, and not the truncation line', () => {
   );
   const truncated = report({ ignored: [], untracked: [], modified: Object.keys(many), codes: many }).join('\n');
   assert.match(truncated, /… and 1 more/, 'the fixture is vacuous unless report actually truncates');
-  const block = refusedBlock(truncated, 'STAGED-BUT-GONE');
+  // The label is read back from the output rather than hardcoded, and that is the whole point:
+  // hardcoding `'STAGED-BUT-GONE'` made this test fail under every mutation of a BUCKET
+  // predicate — the paths moved to another label, `refusedBlock` returned null and `.length`
+  // threw a TypeError. Three rows of the mutant table were then reported as `KILLED by 2` with
+  // the second failure being a crash in a test that is not about them, which is the shape #621
+  // says not to read as coverage. This test is about the PARSER: whatever bucket 21 `AD` paths
+  // land in, the block has 20 members and the last is a path.
+  const label = truncated.match(/^REFUSED: \d+ (\S+) path\(s\) /m)?.[1];
+  assert.ok(label, 'report emitted no REFUSED block at all — the fixture is vacuous');
+  const block = refusedBlock(truncated, label);
+  assert.ok(block, `refusedBlock found no block for the label report itself printed: ${label}`);
   assert.equal(block.length, 20);
   assert.equal(block.at(-1), 'AD skills/real/f19.md', 'the last member is a path, never the `… and N more` line');
 });
