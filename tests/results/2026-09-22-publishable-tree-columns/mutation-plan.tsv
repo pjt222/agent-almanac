@@ -1,0 +1,29 @@
+# The PR #883 mutant table, re-runnable. One row per claim: <id>\t<file>\t<old>::<new>.
+#
+#   bash tools/mutation-envelope.sh --test 'npm run test:scripts' \
+#     --plan tests/results/2026-09-22-publishable-tree-columns/mutation-plan.tsv
+#
+# Why this file exists at all: the #883 PR body published a twelve-row table of verdicts and
+# cited no plan. The rows were measured, but in a session scratchpad that no longer exists, so
+# nothing committed reproduced them -- which makes a published count HISTORICAL by this
+# repository's own rule, and a reviewer right to refuse it. The table in the body is now the
+# output of this file rather than a quotation of a run nobody else can take.
+#
+# Every count the body publishes is taken under the command above, which is the command CI runs.
+# A count taken under a single test file is a different number (#874's table mixed the two and
+# two of its rows were wrong that way).
+#
+# The three `r1-` rows are round 1's claims, re-measured at this head rather than carried over
+# from round 1's table.
+sfc-absent-drops-T-index-column	scripts/check-publishable-tree.js	    || (raw(path)[1] === ' ' && gone(raw(path)[0]));::    || (raw(path)[1] === ' ' && raw(path)[0] === 'D');
+sfb-staged-gone-folds-into-absent	scripts/check-publishable-tree.js	    && worktreeAbsent(path) && raw(path)[0] === 'A');::    && worktreeAbsent(path) && false);
+sfd-unmerged-sentence-reverts	scripts/check-publishable-tree.js	'and a conflicted path would be packed as it sits on disk — with markers, as one side\'s version, or not at all — resolve it'::'and a conflicted file would be packed with its markers — resolve it'
+n1-unmerged-drops-UU	scripts/check-publishable-tree.js	new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);::new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA']);
+n1-unmerged-drops-AA	scripts/check-publishable-tree.js	new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);::new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'UU']);
+n1-unmerged-drops-UD	scripts/check-publishable-tree.js	new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);::new Set(['DD', 'AU', 'UA', 'DU', 'AA', 'UU']);
+n1-unmerged-drops-DU	scripts/check-publishable-tree.js	new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);::new Set(['DD', 'AU', 'UD', 'UA', 'AA', 'UU']);
+n1-unmerged-drops-DD	scripts/check-publishable-tree.js	new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);::new Set(['AU', 'UD', 'UA', 'DU', 'AA', 'UU']);
+n5-dot-slash-refusal-disabled	scripts/lib/skills-inventory.js	    if (bare.startsWith('./') || bare.startsWith('/')) {::    if (false && (bare.startsWith('./') || bare.startsWith('/'))) {
+r1-worktree-column-reverts-to-trim	scripts/check-publishable-tree.js	  const worktreeAbsent = (path) => gone(raw(path)[1])::  const worktreeAbsent = (path) => gone(raw(path).trim())
+r1-absent-drops-T-worktree-column	scripts/check-publishable-tree.js	  const worktreeAbsent = (path) => gone(raw(path)[1])::  const worktreeAbsent = (path) => raw(path)[1] === 'D'
+r1-negation-prefix-loses-segment-boundary	scripts/lib/skills-inventory.js	          && carved.startsWith(later.endsWith('/') ? later : `${later}/`));::          && carved.startsWith(later));
