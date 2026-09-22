@@ -20,11 +20,18 @@
 // (#874 review, B1).
 //
 // Since #877 the import-time part of that sentence is no longer true. Importing this module
-// opens no repository content and runs nothing (see `loadRegistries` and the `invokedAsScript()` guard at the
-// foot), and `generateSecuritySurface({ root })` takes its tree, so
-// `scripts/test/security-surface.test.js` drives the CALL SITE against a git fixture carrying a
-// gitignored `scripts/local-probe.js`. A directory walk reintroduced anywhere in that function
-// now changes a number the suite asserts, whichever `fs` name it is spelled with.
+// opens no repository content and runs nothing (see `loadRegistries` and the `invokedAsScript()`
+// guard at the foot), and `generateSecuritySurface({ root })` takes its tree, so
+// `scripts/test/security-surface.test.js` drives the CALL SITE against a git fixture carrying an
+// ignored `scripts/local-probe.js` — ignored through `.git/info/exclude`, where only git reads
+// it, so the suite can tell asking git from re-implementing it (#888 round 1).
+//
+// What that buys, stated as what is MEASURED rather than as a class: three mutants in
+// `tests/results/2026-09-22-generate-readmes-importable/mutation-plan.tsv` reintroduce a walk
+// here — `opendirSync` at each of the two counts, and a walk that re-implements `.gitignore` by
+// hand — and each dies to a named test. The assertion is the published NUMBER, so any walk that
+// disagrees with git about an ignored file moves it; a walk that agrees with git on this
+// fixture would not, which is why the fixture plants the ignored files it does.
 import { readFileSync, writeFileSync, existsSync, realpathSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -50,10 +57,14 @@ let CHECK_MODE = false;
 // DECLARED here, LOADED by `loadRegistries()`, which only `main()` calls. Importing this module
 // therefore reads no registry, parses no YAML, spawns no git, runs no pipeline and exits no
 // process — which is the whole of #877. Measured rather than asserted, by
-// `tests/results/2026-09-22-generate-readmes-importable/import-side-effects.mjs`: patching
-// `node:fs` and `node:child_process` before the import records 84 calls, all 84 of them the ESM
-// loader opening, reading and closing the 28 modules in the graph — as it does for any import.
-// Not "reads no file", which is false of every module ever written. Every extraction out of this file (#566, #691, #874) was made because nothing
+// `tests/results/2026-09-22-generate-readmes-importable/import-side-effects.mjs`; the figures and
+// what they do and do not cover are in that directory's RESULT.md § 4. No count is quoted here:
+// this comment carried one for three rounds after the instrument behind it was repaired and the
+// number changed, because the correction reached RESULT.md, the PR body and the probe, and not
+// the one artifact that ships (#888 round 3). The claim is "opens no repository content", never
+// "reads no file", which is false of every module ever written.
+//
+// Every extraction out of this file (#566, #691, #874) was made because nothing
 // living here could be imported, and each one left the CALL SITE covered by nothing but review;
 // a scan of this file's own source stood in for that coverage, and the #874 review measured it
 // green with the #872 defect restored.

@@ -92,7 +92,14 @@ for what in base head; do
   # mount this repository lives on, and `--out` may point there. A no-op would leave BOTH lines
   # in place — the very defect this block exists to remove.
   wc_exit=$(sed -n 's/^exit=//p' "${out:?}/write-clean.out" | tail -1)
-  wc_porcelain=$(git -C "${lab:?}" status --porcelain | wc -l | tr -d ' ')
+  # `git status | wc -l` swallows git's exit status: a `git` that fails only `status` reported
+  # `porcelain=0` on both sides and the run went green (#888 round 3, F5). Capture, check, THEN
+  # count — an unreadable tree is not a clean one.
+  wc_status=$(git -C "${lab:?}" status --porcelain) || {
+    echo "REFUSED: \`git status\` failed in the ${what} lab; a porcelain count taken from it would read as clean" >&2
+    exit 2
+  }
+  wc_porcelain=$(printf '%s' "${wc_status}" | sed '/^$/d' | wc -l | tr -d ' ')
   sed '$d' "${out:?}/write-clean.out" > "${out:?}/write-clean.tmp"
   printf 'exit=%s,porcelain=%s\n' "${wc_exit}" "${wc_porcelain}" >> "${out:?}/write-clean.tmp"
   mv -- "${out:?}/write-clean.tmp" "${out:?}/write-clean.out"
