@@ -56,6 +56,13 @@ function pkg(t, extra = {}) {
  * STAGED-BUT-GONE, and both counts stay exactly where they were (#883 round 2, SF-1). A count
  * is preserved by a swap; membership is not. It is the same reason the codes map is asserted
  * with `deepEqual` rather than by length.
+ *
+ * `report` truncates a block at 20 paths and appends `  … and N more`, which starts with the
+ * same two spaces as a path line. Folding that into the membership fails closed — a
+ * `deepEqual` against real paths cannot pass with a phantom entry — but it would report a
+ * member that does not exist, so the loop stops there instead (#883 round 3, N-1). The helper
+ * has its own unit test below, because it is a parser and the file already unit-tests `say()`'s
+ * truncation.
  */
 function refusedBlock(lines, label) {
   const all = lines.split('\n');
@@ -63,11 +70,38 @@ function refusedBlock(lines, label) {
   if (start === -1) return null;
   const out = [];
   for (const line of all.slice(start + 1)) {
-    if (!line.startsWith('  ')) break;
+    if (!line.startsWith('  ') || line.startsWith('  … and ')) break;
     out.push(line.slice(2));
   }
   return out;
 }
+
+test('refusedBlock reads one block, and not the truncation line', () => {
+  const twoBlocks = [
+    'REFUSED: 1 IGNORED path(s) under a shipped directory would be packed and are not in the commit — remove them:',
+    '  !! skills/real/debug.log',
+    'REFUSED: 2 STAGED-BUT-GONE path(s) under a shipped directory so the pack lacks a file:',
+    '  AD skills/real/added.md',
+    '  AT skills/real/addsym.md',
+    '',
+    'npm packs the WORKING TREE under a `files` array — it does not honour .gitignore —',
+  ].join('\n');
+  assert.deepEqual(refusedBlock(twoBlocks, 'IGNORED'), ['!! skills/real/debug.log'],
+    'a block ahead of another one ends where the next REFUSED line starts');
+  assert.deepEqual(refusedBlock(twoBlocks, 'STAGED-BUT-GONE'),
+    ['AD skills/real/added.md', 'AT skills/real/addsym.md']);
+  assert.equal(refusedBlock(twoBlocks, 'MODIFIED'), null, 'an absent block is null, not []');
+
+  // The real thing, so the truncation shape is `report`'s and not a hand-written guess.
+  const many = Object.fromEntries(
+    Array.from({ length: 21 }, (_, i) => [`skills/real/f${String(i).padStart(2, '0')}.md`, 'AD']),
+  );
+  const truncated = report({ ignored: [], untracked: [], modified: Object.keys(many), codes: many }).join('\n');
+  assert.match(truncated, /… and 1 more/, 'the fixture is vacuous unless report actually truncates');
+  const block = refusedBlock(truncated, 'STAGED-BUT-GONE');
+  assert.equal(block.length, 20);
+  assert.equal(block.at(-1), 'AD skills/real/f19.md', 'the last member is a path, never the `… and N more` line');
+});
 
 test('a clean tree passes, and the negation is not mistaken for a shipped path', async (t) => {
   const dir = pkg(t);
@@ -521,16 +555,27 @@ test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not 
   git('add', 'skills/real/addsym.md');
   unlinkSync(join(dir, 'skills/real/addsym.md'));
   symlinkSync('/dev/null', join(dir, 'skills/real/addsym.md'));
+  // `A ` and `AM`: a staged add still on disk, and one edited after staging. They are here to
+  // pin what the STAGED-BUT-GONE arm must EXCLUDE, which membership over the codes it includes
+  // does not reach. Dropping `worktreeAbsent(path) &&` from the arm survived all 938 tests and
+  // filed both under "the pack lacks a file the NEXT commit would have" — while the pack
+  // carries both, and the `git restore <path>` it recommends is an exit-0 no-op on `A `
+  // (#883 round 3, SF-1). These are the commonest divergence a maintainer actually produces.
+  write(dir, { 'skills/real/new.md': '# new\n', 'skills/real/new2.md': '# new2\n' });
+  git('add', 'skills/real/new.md', 'skills/real/new2.md');
+  writeFileSync(join(dir, 'skills/real/new2.md'), '# new2 edited\n');
 
   const found = divergentPaths(dir);
   assert.deepEqual(found.codes, {
     'skills/real/SKILL.md': 'MD',
     'skills/real/added.md': 'AD',
     'skills/real/addsym.md': 'AT',
+    'skills/real/new.md': 'A ',
+    'skills/real/new2.md': 'AM',
     'skills/real/references/helper.py': ' T',
     'skills/real/retyped.md': 'MT',
     'skills/real/staged.md': 'T ',
-  }, 'the fixture is vacuous unless git reports all six shapes — assert the codes, not the count');
+  }, 'the fixture is vacuous unless git reports all eight shapes — assert the codes, not the count');
 
   const lines = report(found).join('\n');
   // `AD` and `AT` are STAGED-BUT-GONE, not ABSENT-OR-RETYPED: HEAD carries neither path, so the
@@ -555,10 +600,16 @@ test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not 
   // plain restore errors on `D `, is a silent exit-0 no-op on `T ` — which this fixture carries
   // — and on `MD`/`MT` the two-flag form DISCARDS the staged edit (#883 round 2, SF-2).
   assert.match(lines, /ABSENT-OR-RETYPED[\s\S]*silent no-op on `T `/);
-  // Measured on this exact tree: `npm pack --dry-run --json` listed package.json alone. So
-  // describing any of them as packed with its working-tree bytes is a false statement about a
-  // file the pack carries no bytes of.
-  assert.doesNotMatch(lines, /MODIFIED path\(s\)/);
+  // The third block, and the one the arm must NOT swallow. Measured on this exact tree by
+  // `tests/results/2026-09-22-publishable-tree-columns/two-column-pack.sh`: `npm pack
+  // --dry-run --json` lists package.json plus `skills/real/new.md` and `skills/real/new2.md`
+  // and NOTHING else — so "packed with their WORKING-TREE bytes" is true of exactly these two
+  // and false of all six absences. An earlier revision of this comment said the pack listed
+  // package.json alone, which was true of the tree before `A `/`AM` were added to it.
+  assert.deepEqual(refusedBlock(lines, 'MODIFIED'), [
+    'A  skills/real/new.md',
+    'AM skills/real/new2.md',
+  ]);
 });
 
 test('the four unmerged codes the rename/rename fixture cannot reach', async (t) => {

@@ -33,4 +33,9 @@ r1-negation-prefix-loses-segment-boundary	scripts/lib/skills-inventory.js	      
 # They are here because a row that once survived is the only kind whose kill means anything.
 sf1-staged-gone-A-to-T	scripts/check-publishable-tree.js	    && worktreeAbsent(path) && raw(path)[0] === 'A');::    && worktreeAbsent(path) && raw(path)[0] === 'T');
 sf1-staged-gone-narrows-to-AD	scripts/check-publishable-tree.js	    && worktreeAbsent(path) && raw(path)[0] === 'A');::    && worktreeAbsent(path) && raw(path)[0] === 'A' && raw(path)[1] === 'D');
+#
+# Round 3 found this one surviving against the fifteen: the arm was pinned on the codes it must
+# INCLUDE and not on the one it must exclude, so an `A ` path became STAGED-BUT-GONE — a false
+# sentence recommending a no-op — and no fixture read the report for that code.
+sf1r3-staged-gone-drops-worktree-test	scripts/check-publishable-tree.js	    && worktreeAbsent(path) && raw(path)[0] === 'A');::    && raw(path)[0] === 'A');
 sf2-absent-remedy-names-one-form	scripts/check-publishable-tree.js	'so the pack LACKS a file the commit has — restore it: `git restore <path>` for a worktree-only absence (` D`, ` T`) and to recover a staged edit (`MD`, `MT`), `git restore --staged --worktree <path>` where the index dropped or retyped the path too (`D `, `T `), because plain restore errors on `D ` and is a silent no-op on `T ` — or commit the removal'::'so the pack LACKS a file the commit has — restore it (`git restore --staged --worktree <path>` for a `D ` path, which plain `git restore` cannot see), or commit the removal'
