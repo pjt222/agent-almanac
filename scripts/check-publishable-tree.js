@@ -258,7 +258,8 @@ export function report({ ignored, untracked, modified = [], codes = {} }) {
   const raw = (path) => codes[path] ?? '';
   // Every unmerged code, `DD` included — both sides deleted is a conflict, not an absence, and
   // it fell through to MODIFIED before. Tested FIRST, so the worktree column below cannot claim
-  // `DD`, `DU` or `UD` from it.
+  // `DD` or `UD` from it. NOT `DU`, which the sentence used to name: its worktree column is
+  // `U`, which `gone` never matches, so no ordering was ever protecting it (#883 round 2, N-1).
   const UNMERGED_CODES = new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);
   const unmerged = modified.filter((path) => UNMERGED_CODES.has(raw(path)));
   const gone = (column) => column === 'D' || column === 'T';
@@ -284,8 +285,25 @@ export function report({ ignored, untracked, modified = [], codes = {} }) {
     && !stagedGone.includes(path) && worktreeAbsent(path));
   const edited = modified.filter((path) => !absent.includes(path) && !unmerged.includes(path)
     && !stagedGone.includes(path));
+  // Which restore form to name is per-code, and naming one of them uniformly is wrong in both
+  // directions. Measured on git 2.43, one fresh repository per (code, command) pair:
+  //
+  //     code   `git restore <path>`                    `git restore --staged --worktree <path>`
+  //      D     exit 0, clean                           exit 0, clean
+  //     D      exit 1, `pathspec … did not match`      exit 0, clean
+  //      T     exit 0, clean                           exit 0, clean
+  //     T      exit 0, NO CHANGE — still `T `          exit 0, clean
+  //     MD     exit 0, leaves `M ` (edit recovered)    exit 0, clean — the staged edit is GONE
+  //     MT     exit 0, leaves `M ` (edit recovered)    exit 0, clean — the staged edit is GONE
+  //
+  // So the two-flag form is required for `D ` and `T ` and DESTRUCTIVE for `MD`/`MT`, where
+  // plain restore recovers the staged edit and the guard then re-refuses under MODIFIED with a
+  // true sentence — a correct second step, not a failure. The old parenthetical named `D `
+  // alone and implied plain restore sufficed for the rest; for `T ` it is a silent exit-0
+  // no-op, so the operator re-runs the guard, sees the same refusal and has no error to explain
+  // it (#883 round 2, SF-2). Round 1's N6 measured `D ` only.
   for (const [label, paths, remedy] of [
-    ['ABSENT-OR-RETYPED', absent, 'so the pack LACKS a file the commit has — restore it (`git restore --staged --worktree <path>` for a `D ` path, which plain `git restore` cannot see), or commit the removal'],
+    ['ABSENT-OR-RETYPED', absent, 'so the pack LACKS a file the commit has — restore it: `git restore <path>` for a worktree-only absence (` D`, ` T`) and to recover a staged edit (`MD`, `MT`), `git restore --staged --worktree <path>` where the index dropped or retyped the path too (`D `, `T `), because plain restore errors on `D ` and is a silent no-op on `T ` — or commit the removal'],
     ['STAGED-BUT-GONE', stagedGone, 'so the pack lacks a file the NEXT commit would have — `git restore <path>` brings it back, or unstage it'],
     // Two of the seven unmerged codes pack markers; `UA`/`AU`/`UD`/`DU` pack one side's version
     // with no markers at all, and `DD` packs nothing (#883 review, SF-D). "Resolve it" is right

@@ -27,3 +27,10 @@ n5-dot-slash-refusal-disabled	scripts/lib/skills-inventory.js	    if (bare.start
 r1-worktree-column-reverts-to-trim	scripts/check-publishable-tree.js	  const worktreeAbsent = (path) => gone(raw(path)[1])::  const worktreeAbsent = (path) => gone(raw(path).trim())
 r1-absent-drops-T-worktree-column	scripts/check-publishable-tree.js	  const worktreeAbsent = (path) => gone(raw(path)[1])::  const worktreeAbsent = (path) => raw(path)[1] === 'D'
 r1-negation-prefix-loses-segment-boundary	scripts/lib/skills-inventory.js	          && carved.startsWith(later.endsWith('/') ? later : `${later}/`));::          && carved.startsWith(later));
+#
+# Round 2 of the review on this PR found the first two of these SURVIVING against the twelve
+# rows above: the STAGED-BUT-GONE arm was pinned by its block's COUNT, which a swap preserves.
+# They are here because a row that once survived is the only kind whose kill means anything.
+sf1-staged-gone-A-to-T	scripts/check-publishable-tree.js	    && worktreeAbsent(path) && raw(path)[0] === 'A');::    && worktreeAbsent(path) && raw(path)[0] === 'T');
+sf1-staged-gone-narrows-to-AD	scripts/check-publishable-tree.js	    && worktreeAbsent(path) && raw(path)[0] === 'A');::    && worktreeAbsent(path) && raw(path)[0] === 'A' && raw(path)[1] === 'D');
+sf2-absent-remedy-names-one-form	scripts/check-publishable-tree.js	'so the pack LACKS a file the commit has — restore it: `git restore <path>` for a worktree-only absence (` D`, ` T`) and to recover a staged edit (`MD`, `MT`), `git restore --staged --worktree <path>` where the index dropped or retyped the path too (`D `, `T `), because plain restore errors on `D ` and is a silent no-op on `T ` — or commit the removal'::'so the pack LACKS a file the commit has — restore it (`git restore --staged --worktree <path>` for a `D ` path, which plain `git restore` cannot see), or commit the removal'

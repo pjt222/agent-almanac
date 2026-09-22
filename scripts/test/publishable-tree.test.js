@@ -47,6 +47,28 @@ function pkg(t, extra = {}) {
   return dir;
 }
 
+/**
+ * The path lines of one REFUSED block, as `<code> <path>` strings in report order, or `null`
+ * when the report has no such block.
+ *
+ * Asserting a block's COUNT is what let two mutants of the STAGED-BUT-GONE predicate survive
+ * all 938 tests: swapping its `'A'` for `'T'` moves `AD` into ABSENT-OR-RETYPED and `T ` into
+ * STAGED-BUT-GONE, and both counts stay exactly where they were (#883 round 2, SF-1). A count
+ * is preserved by a swap; membership is not. It is the same reason the codes map is asserted
+ * with `deepEqual` rather than by length.
+ */
+function refusedBlock(lines, label) {
+  const all = lines.split('\n');
+  const start = all.findIndex((line) => line.startsWith('REFUSED: ') && line.includes(` ${label} path(s) `));
+  if (start === -1) return null;
+  const out = [];
+  for (const line of all.slice(start + 1)) {
+    if (!line.startsWith('  ')) break;
+    out.push(line.slice(2));
+  }
+  return out;
+}
+
 test('a clean tree passes, and the negation is not mistaken for a shipped path', async (t) => {
   const dir = pkg(t);
 
@@ -456,7 +478,7 @@ test('a rename INTO a negated directory reports the file the pack now LACKS', as
   assert.match(report(found).join('\n'), /ABSENT-OR-RETYPED[\s\S]*the pack LACKS a file the commit has/);
 });
 
-test('a TWO-COLUMN code is read at the WORKTREE column — `AD`, `MD` and ` T` are absences', async (t) => {
+test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not one the commit has', async (t) => {
   // The two extra files are committed BY pkg(), not by a `git commit` inside this test: an
   // earlier revision committed them mid-fixture and swept the staged `AD`/`MD` into the commit,
   // turning both into ` D` and deleting the very shapes under test.
@@ -492,22 +514,47 @@ test('a TWO-COLUMN code is read at the WORKTREE column — `AD`, `MD` and ` T` a
   git('add', 'skills/real/retyped.md');
   unlinkSync(join(dir, 'skills/real/retyped.md'));
   symlinkSync('/dev/null', join(dir, 'skills/real/retyped.md'));
+  // `AT`: staged add, then the added file retyped to a symlink. The half of the `A?` class the
+  // round-2 fix left untested — narrowing the STAGED-BUT-GONE arm to `AD` alone survived all
+  // 938 tests, because nothing built an `AT` to move (#883 round 2, SF-1).
+  write(dir, { 'skills/real/addsym.md': '# addsym\n' });
+  git('add', 'skills/real/addsym.md');
+  unlinkSync(join(dir, 'skills/real/addsym.md'));
+  symlinkSync('/dev/null', join(dir, 'skills/real/addsym.md'));
 
   const found = divergentPaths(dir);
   assert.deepEqual(found.codes, {
     'skills/real/SKILL.md': 'MD',
     'skills/real/added.md': 'AD',
+    'skills/real/addsym.md': 'AT',
     'skills/real/references/helper.py': ' T',
     'skills/real/retyped.md': 'MT',
     'skills/real/staged.md': 'T ',
-  }, 'the fixture is vacuous unless git reports all five shapes — assert the codes, not the count');
+  }, 'the fixture is vacuous unless git reports all six shapes — assert the codes, not the count');
 
   const lines = report(found).join('\n');
-  // `AD` is STAGED-BUT-GONE, not ABSENT-OR-RETYPED: HEAD carries no `added.md`, so the pack
-  // matches the commit for that path and "a file the commit has" would be false of it (SF-B).
-  assert.match(lines, /REFUSED: 4 ABSENT-OR-RETYPED path\(s\)/);
-  assert.match(lines, /REFUSED: 1 STAGED-BUT-GONE path\(s\)[\s\S]*the NEXT commit would have/);
-  assert.match(lines, /AD skills\/real\/added\.md/);
+  // `AD` and `AT` are STAGED-BUT-GONE, not ABSENT-OR-RETYPED: HEAD carries neither path, so the
+  // pack matches the commit for both and "a file the commit has" would be false of them (SF-B).
+  //
+  // MEMBERSHIP on both blocks, not their counts. The count assertions this replaces were
+  // preserved by a swap: mutating the arm's `raw(path)[0] === 'A'` to `=== 'T'` puts `AD` in
+  // ABSENT and `T ` in STAGED-BUT-GONE, leaving 4 and 1 intact, and it survived all 938 tests
+  // (#883 round 2, SF-1). Sorted path order, which is what `report` prints.
+  assert.deepEqual(refusedBlock(lines, 'STAGED-BUT-GONE'), [
+    'AD skills/real/added.md',
+    'AT skills/real/addsym.md',
+  ]);
+  assert.deepEqual(refusedBlock(lines, 'ABSENT-OR-RETYPED'), [
+    'MD skills/real/SKILL.md',
+    ' T skills/real/references/helper.py',
+    'MT skills/real/retyped.md',
+    'T  skills/real/staged.md',
+  ]);
+  assert.match(lines, /STAGED-BUT-GONE path\(s\)[\s\S]*the NEXT commit would have/);
+  // The remedy is per-code, and naming one restore form uniformly is wrong in both directions:
+  // plain restore errors on `D `, is a silent exit-0 no-op on `T ` — which this fixture carries
+  // — and on `MD`/`MT` the two-flag form DISCARDS the staged edit (#883 round 2, SF-2).
+  assert.match(lines, /ABSENT-OR-RETYPED[\s\S]*silent no-op on `T `/);
   // Measured on this exact tree: `npm pack --dry-run --json` listed package.json alone. So
   // describing any of them as packed with its working-tree bytes is a false statement about a
   // file the pack carries no bytes of.
