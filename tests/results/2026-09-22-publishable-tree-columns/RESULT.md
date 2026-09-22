@@ -28,7 +28,11 @@ file, rather than a quotation of a run nobody else can take.
 
 ## The verdicts
 
-Taken at `e0df06cb3` and after, every row under `npm run test:scripts` — the command CI runs:
+Provenance, because "and after" is not one. The sixteen rows were taken as a set at
+`d19981306` under `npm run test:scripts`, the command CI runs; the three that read `by 2` there
+were re-taken after the parser fix at `e0df06cb3` and read `by 1`. The round-5 reviewer then ran
+all sixteen in one envelope call at `d0e91c97e` in its own lab, under the file-level command,
+and read every row `by 1` — the table below is that shape:
 
 ```
 sfc-absent-drops-T-index-column            MUTANT KILLED by 1 failing test(s)
@@ -194,22 +198,25 @@ Exactly the two paths whose worktree file exists. "Packed with their WORKING-TRE
 true of those two and false of all six absences, which is the whole basis for splitting the
 remedy sentences by bucket.
 
-`check-drift-literal.mjs` — the tie between that script and the test it duplicates. The script
-refuses when its fixture stops producing the eight codes the test asserts, which moves the
-trust rather than removing it: the refusal only works if the eight literals were typed right
-once, and two of them carry trailing-space padding (`A `, `T `) that a diff will not show. This
-parses both sides and compares them:
+`expected-codes.mjs` — the eight codes, read out of the test. `two-column-pack.sh` calls it and
+compares its own fixture's porcelain against the result, so there is ONE source for the set and
+nothing left for it to drift against.
+
+It carried a literal of its own for one round, and that was the fifth instance of this PR's
+recurring class: the script named the test in three comments, read nothing from it, and claimed
+to refuse when the test's fixture changed. Measured — rename `new2.md` to `new3.md` at all six
+sites of the TEST's fixture, and the test stays green at 27/27 while the script exits 0 with
+zero `REFUSED` lines, still reporting `new2.md` (#883 round 5, SF-1). The exercise that had
+been offered as evidence renamed the script's own literal, which is the one direction a
+self-comparison covers.
+
+Rewired, all three directions measured:
 
 ```
-test deepEqual  : 8 entries
-script EXPECTED : 8 entries
-IDENTICAL, character for character
+test fixture renamed, script not   exit 1, REFUSED, diff names AM new3.md vs new2.md
+assertion message reworded         exit 2, "would compare its fixture against nothing and pass"
+neither                            exit 0, 3 files packed
 ```
-
-It can fail — dropping one space from `'A  skills/real/new.md'` in a copy of the script gives
-`[1] test="A  skills/real/new.md" script="A skills/real/new.md"`, exit 1 — and it refuses with
-exit 2 rather than 0 if either side parses to nothing, because zero-vs-zero would read as
-agreement.
 
 ## Not covered here
 

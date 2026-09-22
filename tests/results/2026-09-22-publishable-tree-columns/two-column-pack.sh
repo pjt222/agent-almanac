@@ -11,18 +11,25 @@
 #
 # DRIFT. The fixture is rebuilt here by hand rather than imported, so nothing structurally ties
 # the two: a change to the test's fixture would leave this script reporting the same 3 files
-# beside a comment that is false again — the same class, with a green script next to it this
-# time. What stands in for that tie is the assertion below: the eight porcelain codes are
-# declared here and compared, so drift REFUSES rather than reporting. Importing the test's
-# `pkg()` from a results directory would couple a record to a suite that is free to move; the
-# alternative worth taking if this drifts twice is for the test itself to shell out to
-# `npm pack --dry-run --json` and assert the listing, at about a second per run.
+# beside a comment that is false again. The tie is the comparison below, and it reads the eight
+# codes OUT OF THE TEST (`expected-codes.mjs`) rather than declaring its own. A declared literal
+# was the state until #883 round 5, and it was the fifth instance of this PR's recurring class:
+# the guard compared two things in the same file while its comment said it refused when the
+# test's fixture changed. Importing the test's `pkg()` from a results directory would couple a
+# record to a suite that is free to move; the alternative worth taking if this drifts again is
+# for the test itself to shell out to `npm pack --dry-run --json` and assert the listing, at
+# about a second per run, retiring this script.
 #
-# Needs git and npm. It writes its fixture only under its own `mktemp -d`, but it is not free of
-# side effects: the `npm pack` it runs makes npm write a `node-compile-cache/` into `TMPDIR`,
-# outside `DIR`, which the trap does not remove (#883 round 4, N-1). An earlier revision of this
-# header claimed it wrote only under its own directory.
+# Needs git, npm and node. It writes only under its own `mktemp -d`: `NODE_DISABLE_COMPILE_CACHE`
+# is set because the `npm pack` it runs otherwise makes npm write a `node-compile-cache/` into
+# `TMPDIR`, outside `DIR`, which the trap does not remove (#883 round 4, N-1). An earlier
+# revision of this header claimed the clean behaviour before it was true.
 set -uo pipefail
+
+# Resolved BEFORE the cd, and absolutely: everything below runs inside a throwaway fixture.
+HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+REPO_ROOT=$(cd "${HERE:?}/../../.." && pwd)
+export NODE_DISABLE_COMPILE_CACHE=1
 
 DIR=$(mktemp -d)
 trap 'rm -rf "${DIR:?}"' EXIT
@@ -72,19 +79,23 @@ PORCELAIN=$(git status --porcelain -z --no-renames --ignored=matching -uall -- s
   | tr '\0' '\n' | sed '/^$/d' | sort)
 printf '%s\n' "$PORCELAIN"
 
-# The tie to the test, since the fixture is duplicated rather than imported: these are the eight
-# codes `scripts/test/publishable-tree.test.js`'s two-column test asserts with `deepEqual`. If
-# the test's fixture changes and this one does not, the run REFUSES here instead of printing a
-# pack listing that backs a comment which is no longer true.
-EXPECTED=$(printf '%s\n' \
-  ' T skills/real/references/helper.py' \
-  'A  skills/real/new.md' \
-  'AD skills/real/added.md' \
-  'AM skills/real/new2.md' \
-  'AT skills/real/addsym.md' \
-  'MD skills/real/SKILL.md' \
-  'MT skills/real/retyped.md' \
-  'T  skills/real/staged.md' | sort)
+# The tie to the test, READ FROM THE TEST. `expected-codes.mjs` parses the two-column test's
+# `deepEqual` on `found.codes` and prints the eight codes it asserts, so if the test's fixture
+# changes and this one does not, the run REFUSES here instead of printing a pack listing that
+# backs a comment which is no longer true.
+#
+# This carried a literal of its own until #883 round 5: the script named the test in three
+# comments and read nothing from it, so the only drift it could see was between two things in
+# the same file — a check described as guarding X that never reads X. Measured: renaming
+# `new2.md` to `new3.md` at all six sites of the test's fixture left the test green (27/27) and
+# this script at exit 0 with zero `REFUSED` lines.
+EXPECTED=$(node "${HERE:?}/expected-codes.mjs" "${REPO_ROOT:?}")
+NODE_STATUS=$?
+if [ "$NODE_STATUS" -ne 0 ] || [ -z "$EXPECTED" ]; then
+  echo "REFUSED: could not read the codes the two-column test asserts (exit ${NODE_STATUS})." >&2
+  echo "Without them this script would compare its fixture against nothing and pass." >&2
+  exit 2
+fi
 if [ "$PORCELAIN" != "$EXPECTED" ]; then
   echo "REFUSED: this fixture no longer builds the eight codes the two-column test asserts." >&2
   diff <(printf '%s\n' "$EXPECTED") <(printf '%s\n' "$PORCELAIN") >&2
