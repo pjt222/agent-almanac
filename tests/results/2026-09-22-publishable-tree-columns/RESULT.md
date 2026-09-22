@@ -26,11 +26,11 @@ file, rather than a quotation of a run nobody else can take.
 
 ## The verdicts
 
-Taken at `342a94777`, every row under `npm run test:scripts` — the command CI runs:
+Taken at `d19981306`, every row under `npm run test:scripts` — the command CI runs:
 
 ```
 sfc-absent-drops-T-index-column            MUTANT KILLED by 1 failing test(s)
-sfb-staged-gone-folds-into-absent          MUTANT KILLED by 1 failing test(s)
+sfb-staged-gone-folds-into-absent          MUTANT KILLED by 2 failing test(s)
 sfd-unmerged-sentence-reverts              MUTANT KILLED by 1 failing test(s)
 n1-unmerged-drops-UU                       MUTANT KILLED by 1 failing test(s)
 n1-unmerged-drops-AA                       MUTANT KILLED by 1 failing test(s)
@@ -38,38 +38,49 @@ n1-unmerged-drops-UD                       MUTANT KILLED by 1 failing test(s)
 n1-unmerged-drops-DU                       MUTANT KILLED by 1 failing test(s)
 n1-unmerged-drops-DD                       MUTANT KILLED by 1 failing test(s)
 n5-dot-slash-refusal-disabled              MUTANT KILLED by 1 failing test(s)
-r1-worktree-column-reverts-to-trim         MUTANT KILLED by 1 failing test(s)
+r1-worktree-column-reverts-to-trim         MUTANT KILLED by 2 failing test(s)
 r1-absent-drops-T-worktree-column          MUTANT KILLED by 1 failing test(s)
 r1-negation-prefix-loses-segment-boundary  MUTANT KILLED by 1 failing test(s)
-sf1-staged-gone-A-to-T                     MUTANT KILLED by 1 failing test(s)
+sf1-staged-gone-A-to-T                     MUTANT KILLED by 2 failing test(s)
 sf1-staged-gone-narrows-to-AD              MUTANT KILLED by 1 failing test(s)
+sf1r3-staged-gone-drops-worktree-test      MUTANT KILLED by 1 failing test(s)
 sf2-absent-remedy-names-one-form           MUTANT KILLED by 1 failing test(s)
 
-15 row(s), 0 not a clean kill
+16 row(s), 0 not a clean kill
 ```
 
-**The last three rows are the ones that matter most, and two of them earned their place by
-surviving.** At the twelve-row revision, `sf1-staged-gone-A-to-T` and
-`sf1-staged-gone-narrows-to-AD` both reported `MUTANT SURVIVED — this line is not covered`
-against all 938 tests. The arm was pinned by its block's *count*, and a swap preserves a count:
+**Three rows earned their place by surviving, and they are the only ones whose kill carries
+information.** `sf1-staged-gone-A-to-T` and `sf1-staged-gone-narrows-to-AD` survived the
+twelve-row revision: the arm was pinned by its block's *count*, and a swap preserves a count —
 turning `raw(path)[0] === 'A'` into `=== 'T'` put `AD` back under "a file the commit has" and
-moved `T ` into STAGED-BUT-GONE, leaving the 4 and the 1 untouched. Both are killed now that
-the blocks are asserted by membership. A row that once survived is the only kind whose kill
-carries information.
+moved `T ` into STAGED-BUT-GONE, leaving the 4 and the 1 untouched. `sf1r3-…` then survived the
+fifteen-row revision, for the mirror-image reason: membership over the codes the arm INCLUDES
+says nothing about the code it must EXCLUDE, and no fixture read the report for an `A ` path.
+
+Three rows kill by **2** rather than 1, and that is not the crash signature #621 warns about.
+The second failing test is `refusedBlock reads one block, and not the truncation line`, which
+calls `report` directly over a synthetic set of codes — so a mutation of the bucket predicates
+is genuinely asserted twice, once through the fixture and once through the parser's own unit
+test. Both assertions are about the property, which is what separates a real double kill from a
+mutant that crashed on import.
 
 One qualification about HOW the table was taken, because the envelope's contract is one command
-for every row and the transcript shows three invocations. A row costs about 74 s here — the
-checker takes a fresh baseline per row — so fifteen rows is roughly nineteen minutes, past the
-session's 600 s per-call ceiling. The plan was split into three parts of five, each run with the
+for every row and the transcript shows four invocations. A row costs about 74 s here — the
+checker takes a fresh baseline per row — so sixteen rows is roughly twenty minutes, past the
+session's 600 s per-call ceiling. The plan was split into four parts of four, each run with the
 same `--test 'npm run test:scripts'`. What the envelope guarantees is that no row is measured
 under a different command, and that holds; what a split costs is a single exit code over the
-set, so the three `0 not a clean kill` lines stand in for it.
+set, so the four `0 not a clean kill` lines stand in for it.
 
-Whether one call reproduces the table was **not** measured at fifteen rows and this file will
-not predict it. What was measured, by the round-2 reviewer in its own lab, is the twelve-row
-plan in a single envelope call under this file's own command: `12 row(s), 0 not a clean kill`,
-exit 0. Under the CI command a row cost 53 s there, so twelve rows is about 636 s and the split
-was needed in that lab too.
+**No one-call run of this plan under `npm run test:scripts` has been taken in any lab**, and
+this file will not predict one. What was measured, by the round-2 reviewer in its own lab, is
+the twelve-row revision of the plan in a single envelope call under a different command —
+`--test 'node --test scripts/test/publishable-tree.test.js'`, the file-level one: `12 row(s), 0
+not a clean kill`, exit 0, **53 s in total**. Under `npm run test:scripts` a single row cost
+53 s in that same lab, which is where twelve rows ≈ 636 s comes from. The two 53 s figures are
+a coincidence of that lab and mean different things; an earlier revision of this paragraph
+attributed the one-call run to the CI command and merged them (#883 round 3, SF-2). This is the
+mixing the plan file's own header warns about.
 
 ## What each row pins
 
@@ -85,6 +96,7 @@ was needed in that lab too.
 | `r1-negation-prefix-loses-segment-boundary` | a directory negation prefixes on a segment boundary, so `lib` does not carve from `lib-extra/x/` |
 | `sf1-staged-gone-A-to-T` | the STAGED-BUT-GONE arm is pinned by membership; a swap that preserves both counts is caught |
 | `sf1-staged-gone-narrows-to-AD` | `AT` is in the fixture, so narrowing the arm to `AD` alone no longer passes unnoticed |
+| `sf1r3-staged-gone-drops-worktree-test` | the arm EXCLUDES a staged add still on disk; `A `/`AM` are MODIFIED, and the pack does carry them |
 | `sf2-absent-remedy-names-one-form` | the ABSENT remedy names a restore form per code, not one form for all of them |
 
 One failing test per row is the honest shape for this instrument. A broad kill would mean the
@@ -134,6 +146,21 @@ the refined count of 1 is right here — measured, not argued.
 
 The control row is the point of the last section, not decoration: a probe that counted nothing
 anywhere would otherwise read as a clean result.
+
+`two-column-pack.sh` — what npm packs from the eight-code fixture the two-column test builds.
+The test's closing comment states which of the eight reach the tarball, and that sentence has
+been wrong once already (it said "package.json alone", true before `A `/`AM` were added to the
+fixture and false after), so it is re-derived rather than remembered:
+
+```
+git reports:  A  new.md   AD added.md   AM new2.md   AT addsym.md
+              MD SKILL.md  MT retyped.md  T  staged.md   T references/helper.py
+npm packs:    package.json, skills/real/new.md, skills/real/new2.md   — 3 files
+```
+
+Exactly the two paths whose worktree file exists. "Packed with their WORKING-TREE bytes" is
+true of those two and false of all six absences, which is the whole basis for splitting the
+remedy sentences by bucket.
 
 ## Not covered here
 
