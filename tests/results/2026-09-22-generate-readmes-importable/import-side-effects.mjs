@@ -147,30 +147,41 @@ const SHAPES = {
   // graph to compare against — `importGraph()` in `scripts/check-workflow-generator-inputs.js`,
   // module-private today. Filed as a follow-up; an arm until then (#888 round 4, F2).
   'dynamic-import-repo-js': { expect: 'blind', code: "await import(new URL('file://' + R('scripts/lib/parse-args.js')).href);" },
-  // CONTROL, declared blind: resolving a real dependency through node_modules is the path the
-  // generator's own graph takes, and `empty` does not exercise it. A false positive here would
-  // mean the classifier calls ordinary resolution "content".
+  // CONTROL, declared blind: a LOAD of a file under `node_modules`, which `empty` does not
+  // exercise. It was described as exercising bare-specifier RESOLUTION and does not — it imports
+  // an absolute `file://` URL, so nothing is resolved (#888 round 5, F2). The arm below is the
+  // one that resolves, and both are blind on 22, 24 and 25, so ordinary resolution is not a
+  // false-positive source either way.
   'dep-import':       { expect: 'blind', code: "await import(new URL('file://' + R('node_modules/js-yaml/dist/js-yaml.mjs')).href);" },
+  'bare-resolve-import': { expect: 'blind', code: "import { createRequire } from 'node:module'; const req = createRequire(R('package.json')); await import(new URL('file://' + req.resolve('js-yaml')).href);" },
+  // THE VERDICT IS TAKEN AT A MOMENT, and these three land after it. `exits-during-import` is the
+  // sharp one: without the guard the probe prints nothing at all and exits 0 — a silent pass,
+  // which is worse than the hang the drain's comment called "the right failure" (#888 round 5).
+  'exits-during-import':  { expect: 'no-verdict', code: "process.exit(0);" },
+  'exit-handler-write':   { expect: 'seen-late', code: "import { writeFileSync } from 'node:fs'; process.on('exit', () => writeFileSync(T('from-exit.txt'), 'x'));" },
+  'beforeexit-reschedule':{ expect: 'seen-late', code: "import { writeFileSync } from 'node:fs'; process.once('beforeExit', () => setTimeout(() => writeFileSync(T('rescheduled.txt'), 'x'), 0));" },
 };
 
 // The shape module is written BEFORE the patch loops, so writing it is not itself recorded.
 let TARGET = GENERATOR;
 let SHAPE_DIR = null;
+let rmOriginal = null;
 if (SHAPE) {
   const shape = SHAPES[SHAPE];
   if (!shape) {
     console.error(`REFUSED: unknown shape \`${SHAPE}\`. Known: ${Object.keys(SHAPES).join(', ')}`);
     process.exit(2);
   }
-  // Captured BEFORE the patch loops and used from an `exit` handler, so every path cleans up —
-  // including a refusal. A probe about side effects that leaked a directory per arm would be the
-  // joke it deserves (#885 is that class).
-  const rmOriginal = fs.rmSync;
+  // Captured BEFORE the patch loops, so the removal itself is never recorded. A probe about side
+  // effects that leaked a directory per arm would be the joke it deserves (#885 is that class).
+  rmOriginal = fs.rmSync;
   SHAPE_DIR = fs.mkdtempSync(resolve(tmpdir(), 'import-shape-'));
   process.env.SHAPE_TMP = SHAPE_DIR;
-  process.on('exit', () => {
-    try { rmOriginal(SHAPE_DIR, { recursive: true, force: true }); } catch { /* best effort */ }
-  });
+  // The handler is registered at the FOOT of this file, not here. `exit` handlers run in
+  // registration order, and a shape that writes from its own `exit` handler registers during the
+  // import — so a cleanup registered here would delete the directory first and the planted write
+  // would throw ENOENT instead of being recorded. Measured: `exit-handler-write` read `blind`.
+  
   TARGET = resolve(SHAPE_DIR, 'shape.mjs');
   fs.writeFileSync(TARGET, [
     "import { resolve } from 'node:path';",
@@ -297,8 +308,13 @@ if (VERIFY) {
     // The VERDICT comes from a marker line, never from the exit code alone: node exits 1 on any
     // uncaught exception, so a shape that merely threw used to grade `seen`, and a blind shape
     // whose path did not exist used to grade `seen` too (#888 round 3).
-    const marker = (run.stdout || '').split('\n').find((line) => line.startsWith(VERDICT_MARKER));
-    const got = marker ? marker.slice(VERDICT_MARKER.length).trim() : `error(no verdict, exit ${run.status})`;
+    const lines = (run.stdout || '').split('\n');
+    const marker = lines.find((line) => line.startsWith(VERDICT_MARKER));
+    const late = lines.some((line) => line.startsWith('SHAPE-LATE:'));
+    const verdict = marker ? marker.slice(VERDICT_MARKER.length).trim() : null;
+    // `seen-late` is its own verdict: the content was real and the probe found it AFTER printing
+    // OK. Collapsing it into `seen` would hide the half of the class the drain cannot reach.
+    const got = late ? 'seen-late' : verdict ?? `error(no verdict, exit ${run.status})`;
     const ok = got === expect;
     if (!ok) bad++;
     rows.push(`  ${ok ? 'ok  ' : 'FAIL'}  ${name.padEnd(18)} declared ${expect.padEnd(5)} observed ${got}`);
@@ -341,16 +357,34 @@ if (calls.length !== 1) {
 }
 calls.length = 0;
 
+// GUARD 1, registered BEFORE the import so it survives a subject that ends the process. Without
+// it, `process.exit(0)` during import leaves the probe with no output at all and exit 0 — a
+// SILENT pass, and the drain's comment called a hang "the right failure" while this one existed
+// (#888 round 5, F1). Nothing about the generator does this; the probe's claim did not say so.
+let verdictReached = false;
+process.on('exit', () => {
+  if (verdictReached) return;
+  if (SHAPE) console.log(`${VERDICT_MARKER} no-verdict`);
+  console.error('REFUSED: the import exited the process before any verdict was reached.');
+  process.exitCode = 1;
+});
+
 await import(pathToFileURL(TARGET).href);
 
 // THE DRAIN. Without it the verdict is a snapshot taken the moment `await import()` resolves, and
 // anything the import SCHEDULED lands afterwards — a `setTimeout` write, a `setImmediate` write,
 // a stream whose `open` is lazy — with `OK` already printed. Measured in #888 round 4: three
-// planted writes reached the tree under a green verdict. `beforeExit` fires when the loop is
-// empty, so this waits for exactly the work the import left behind.
+// planted writes reached the tree under a green verdict, and the knockout for this line is that
+// removing it flips `deferred-write` and `write-stream-ctor` to `blind`.
 //
-// An import that leaves a LIVE handle makes this hang. That is the right failure: a probe that
-// timed out silently and graded anyway is what the rest of this file exists to avoid.
+// WHAT THAT KNOCKOUT DOES NOT SHOW is that the drain is complete, and an earlier version of this
+// comment said it waits for "exactly the work the import left behind" on exactly that evidence —
+// the same shape as the mis-stated mechanism in RESULT.md §6 row 8, one round later and inside
+// the remedy for it (#888 round 5). It is NOT complete: a write from the subject's own `exit`
+// handler, and a timer the subject arms from its own `beforeExit`, both run after this returns.
+// Guard 2 below reports those after the fact rather than pretending the drain caught them, and
+// three arms pin all of it. A live handle still makes this hang, which is a loud failure; the
+// silent one — a subject that ends the process during import — is Guard 1's.
 await new Promise((done) => process.once('beforeExit', done));
 
 // Three buckets. The guard's own `realpathSync` pair is neither loader activity nor repository
@@ -360,9 +394,15 @@ await new Promise((done) => process.once('beforeExit', done));
 const GUARD_PATHS = new Set([TARGET, GENERATOR, resolve(process.argv[1] ?? '')]);
 const isLoader = (call) => call.kind === 'loader';
 const isGuard = (call) => call.name.endsWith('.realpathSync') && GUARD_PATHS.has(resolve(call.arg));
+// A write to fd 0, 1 or 2 is this process talking, not repository content. It has to be said
+// explicitly because `console.log` reaches stdout through `fs.writeSync` on some Node versions
+// and not others: on v22.16.0 the probe's own report made every arm read `seen-late`, which is
+// the instrument grading its own output (#888 round 5, found while fixing F1).
+const isStdio = (call) => /\.(writeSync|writevSync|write|writev)$/.test(call.name)
+  && /^fd:[012] |^[012]$/.test(call.arg);
 
 const guard = calls.filter((call) => !isLoader(call) && isGuard(call));
-const content = calls.filter((call) => !isLoader(call) && !isGuard(call));
+const content = calls.filter((call) => !isLoader(call) && !isGuard(call) && !isStdio(call));
 
 // CONTROL 4 — no loader descriptor outlived the import.
 //
@@ -393,12 +433,34 @@ if (check.length !== 1 || isLoader(check[0]) || isGuard(check[0])) {
   );
 }
 
+verdictReached = true;
+
+// GUARD 2, registered AFTER the import so it runs after the SUBJECT's own `exit` handlers. The
+// drain waits for the loop to empty; it cannot wait for work the subject schedules from an
+// `exit` handler, or for a timer it arms from its own `beforeExit`. Those go through the wrapped
+// names and are recorded — after the verdict has been printed. Reporting them late is worth more
+// than not reporting them (#888 round 5, F1).
+const contentAtVerdict = calls.length;
+process.on('exit', () => {
+  const late = calls.slice(contentAtVerdict).filter((call) => !isLoader(call) && !isGuard(call) && !isStdio(call));
+  if (late.length === 0) return;
+  if (SHAPE) console.log(`SHAPE-LATE: ${late.length}`);
+  console.error(`\nREFUSED: ${late.length} call(s) touched repository content AFTER the verdict was taken:`);
+  for (const call of late) console.error(`  ${call.name} ${call.arg}`);
+  process.exitCode = 1;
+});
+
 if (SHAPE) {
   // One line the parent grades on, so a crash is never read as a verdict.
   console.log(`${VERDICT_MARKER} ${content.length > 0 ? 'seen' : 'blind'}`);
   for (const call of content) console.log(`  ${call.name} ${call.arg}`);
-  process.exit(content.length > 0 ? 1 : 0);
-}
+  // NOT `process.exit()`: that would skip the exit handlers, including the late-content one
+  // registered just above. `exitCode` lets the loop end on its own — which is also why the main
+  // report below is in an `else`: without it, swapping `exit()` for `exitCode` made shape mode
+  // fall through and print the whole report, six lines of which the instrument then recorded as
+  // late content on Node 22 (#888 round 5, found while fixing F1).
+  process.exitCode = content.length > 0 ? 1 : 0;
+} else {
 
 console.log(`calls during import: ${calls.length}  (node ${process.version})`);
 console.log(`  module-graph reads (loader):      ${calls.length - guard.length - content.length}`);
@@ -410,6 +472,18 @@ for (const call of content) console.log(`    ${call.name} ${call.arg}`);
 if (content.length > 0) {
   console.error('\nREFUSED: importing the generator touched repository content or spawned a process.');
   console.error('The comment at the head of scripts/generate-readmes.js says it does not.');
-  process.exit(1);
+  // `exitCode`, not `exit()`: the late-content handler above must still get to run.
+  process.exitCode = 1;
+} else {
+  console.log('\nOK: every call during import is the loader reading the module graph, or the guard resolving its two paths.');
 }
-console.log('\nOK: every call during import is the loader reading the module graph, or the guard resolving its two paths.');
+
+}
+
+// Registered LAST: see the note where SHAPE_DIR is created. A shape that writes from its own
+// `exit` handler must have its directory still there when that handler runs.
+if (SHAPE_DIR && rmOriginal) {
+  process.on('exit', () => {
+    try { rmOriginal(SHAPE_DIR, { recursive: true, force: true }); } catch { /* best effort */ }
+  });
+}

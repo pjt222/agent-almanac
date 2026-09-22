@@ -11,7 +11,7 @@ repository root.
 | | |
 |---|---|
 | base commit | `d6b9b9c72dea1f88ab60f84c7611dfedc16790d4` (merge of #883) |
-| head at measurement | every figure below re-taken at `930461b0c`, the round-4 fix commit. Later commits touching only this file change no measured artifact — the generator, the fixture, the suite and the probes are byte-identical at both |
+| head at measurement | every figure below re-taken at `cda4429f2`, the round-5 base; the probe's own arm table at the round-5 fix commit. Later commits touching only this file change no measured artifact — the generator, the fixture, the suite and the probes are byte-identical at both |
 | working tree | clean at every run; the two probes that mutate refuse a dirty tree or run in a lab |
 | command every mutant and every suite arm ran under | `npm run test:scripts` |
 | node | **v25.9.0** for the suite figures, recorded rather than disclaimed — an earlier edition of this table said no figure depended on a version, and two did. The `node:test` reporter is TAP on a non-TTY below Node 24, so both mutation probes pin the spec reporter through `NODE_OPTIONS` (verified on v20.20.2, v22.16.0 and v24.20.0). The import probe was worse: its verdict was a Node-25 artefact and it REFUSED the unmodified generator on CI's own Node 24 (§4). It is now run and recorded on v22.16.0, v24.20.0 and v25.9.0, the whole range `engines` allows |
@@ -265,7 +265,7 @@ by the round-2 reviewer with `strace -f -e trace=openat,execve` — an instrumen
 wrote — which saw the modules, six `package.json` opened by the loader through an internal
 binding, and no `execve` but node's own.
 
-### The claim was wrong six times, and the instrument was wrong five of those
+### The claim was wrong seven times, and the instrument was wrong six of those
 
 Every correction came from a measurement. None came from re-reading the file.
 
@@ -286,6 +286,16 @@ Every correction came from a measurement. None came from re-reading the file.
    graded `OK, content 0` — an import that wrote a file, called clean. The negative test standing
    behind that verdict used `existsSync`: the one shape the probe was already best at. **A
    negative test that picks the instrument's strongest shape is not a negative test.**
+7. **The drain's completeness was asserted from a knockout that could not show it.** The comment
+   said `beforeExit` "waits for exactly the work the import left behind", on the evidence that
+   removing the line flips two arms to `blind` — which shows those arms depend on it and nothing
+   about work it does not wait for. **The same evidential shape as row 8 in §6, one round later,
+   inside the remedy for correction 6.** Three shapes still landed after the verdict: a write
+   from the subject's own `exit` handler, a timer armed from the subject's `beforeExit`, and —
+   the sharp one — `process.exit(0)` during import, which left the probe with **no output at all
+   and exit 0**. A silent pass, while the comment called a hang "the right failure". Two guards
+   now: one registered before the import that refuses when no verdict was reached, one registered
+   after it that reports content recorded past the verdict. Both proven by their own knockouts.
 6. **The verdict was a SNAPSHOT.** It was taken the moment `await import()` resolved, so
    anything the import *scheduled* reached the tree afterwards, with `OK` already printed. Three
    planted writes did exactly that — `setTimeout(writeFileSync)`, `setImmediate(writeFileSync)`
@@ -341,7 +351,7 @@ throwaway module, imports THAT instead of the generator, and asserts the verdict
 declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
 
 ```
---verify: 24 shape(s) on node v25.9.0, each planted into a throwaway module and imported
+--verify: 28 shape(s) on node v25.9.0, each planted into a throwaway module and imported
   wrapped by enumeration: 92 fs, 32 fs/promises, 8 child_process export(s)
   ok    empty              declared blind observed blind
   ok    sync-read          declared seen  observed seen
@@ -367,12 +377,26 @@ declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
   ok    process-binding    declared seen  observed seen
   ok    dynamic-import-repo-js declared blind observed blind
   ok    dep-import         declared blind observed blind
+  ok    bare-resolve-import declared blind observed blind
+  ok    exits-during-import declared no-verdict observed no-verdict
+  ok    exit-handler-write declared seen-late observed seen-late
+  ok    beforeexit-reschedule declared seen-late observed seen-late
 ```
 
-Twenty-four arms now, twenty-two `seen` and two `blind`, identical on v22.16.0, v24.20.0 and
-v25.9.0. Four joined in round 4: `deferred-write` and `write-stream-ctor` for the snapshot class
-above, `dynamic-import-repo-js` for the one structural gap left, and `dep-import` as a blind
-control exercising the `node_modules` resolution path the real graph takes and `empty` does not.
+`no-verdict` and `seen-late` are verdicts of their own rather than collapsed into `seen`: the
+first is a subject that ended the process before the probe could say anything, the second is
+content the probe found only AFTER printing its answer. Folding either into `seen` would hide
+exactly the half of the class the drain cannot reach.
+
+Twenty-eight arms now, identical on v22.16.0, v24.20.0 and v25.9.0. Four joined in round 4:
+`deferred-write` and `write-stream-ctor` for the snapshot class above, `dynamic-import-repo-js`
+for the one structural gap left, and `dep-import` as a blind control. Four more in round 5:
+`exits-during-import`, `exit-handler-write` and `beforeexit-reschedule` for correction 7, and
+`bare-resolve-import` — because `dep-import` was *described* as exercising bare-specifier
+resolution and does not: it imports an absolute `file://` URL, so nothing is resolved. Its
+verdict was right and its stated mechanism was not, which is row 8's shape again in miniature.
+The new arm is the one that actually resolves, and both are blind on all three Nodes, so
+ordinary resolution is not a false-positive source.
 
 **`empty` is the arm that matters most**, and it is the one the first table lacked. A module that
 does nothing must grade `blind`; under the Node-25-only classifier it graded `seen` on 22 and 24,
@@ -424,7 +448,7 @@ Stated because the section above looks broader than it is.
   lets the counts be measured at all. No count of them is published here: they are spread across
   this function, `skills-inventory.js` and `tools-registry.js`, and an earlier edition said "six"
   from a five-item list (#888 round-1 N8).
-- **Import inertness is tested by two spawns plus twenty-four probe arms, not proven for every
+- **Import inertness is tested by two spawns plus twenty-eight probe arms, not proven for every
   shape.** `node -e` leaves `process.argv[1]` undefined; an importer file gives it a real path
   that is not this module. A third shape — a loader or a `--require` hook that rewrites
   `argv[1]` — is not covered. A worker thread and `process.binding` ARE covered since round 4;
@@ -438,12 +462,13 @@ Stated because the section above looks broader than it is.
   found it taking the other one: without it `packHookSentence` returns `''` and the paragraph is
   missing a clause the real one carries. The clause is now asserted.
 
-## 6. The defect class recurred ten times inside the PR that is about it
+## 6. The defect class recurred eleven times inside the PR that is about it
 
 Worth a table, because the pattern is the point and no single bullet above carries it. #877
 exists because an instrument — a source scan — was honest about something narrower than the claim
-resting on it. Building the fix reproduced that ten times, three of them inside a remedy written
-for a previous instance, and once in a sentence describing a fix rather than in the fix itself.
+resting on it. Building the fix reproduced that eleven times, three of them inside a remedy
+written for a previous instance, and twice in a sentence describing a fix rather than in the fix
+itself.
 
 | # | what | found by | how it showed |
 |---|---|---|---|
@@ -457,6 +482,7 @@ for a previous instance, and once in a sentence describing a fix rather than in 
 | 8 | **the diagnosis of a fix I had already made was wrong** — see below | round 4 | `cpSync` was seen through `lstatSync`; the stream was missed for timing, not naming |
 | 9 | the verdict was a snapshot at `await import()`; anything scheduled landed after `OK` | round 4 | `setTimeout`, `setImmediate` and a lazy stream `open`, three planted writes under a green verdict |
 | 10 | two declared-blind arms asserted nothing | round 4 | replacing each arm's planted access with a no-op left both reading `blind` |
+| 11 | **the drain's completeness was asserted from a knockout that could not show it** — row 8's shape, inside the remedy for row 9 | round 5 | `process.exit(0)` at import gave no output and exit 0; a write from the subject's `exit` handler and a timer from its `beforeExit` both landed after `OK` |
 
 Every one is the same shape: **an instrument that cannot fail on part of the population it
 vouches for, with its OK quoted somewhere a reader will trust.**
@@ -483,16 +509,25 @@ tidied away, and it is why row 9 exists.
 
 ### What actually catches them
 
-Running something. #2, #5, #7, #8, #9 and #10 came from a reviewer executing a planted shape;
-#3 from a reviewer planting a hand-rolled matcher; #4 and the two write paths from asking "find
-one this cannot see" and then running it; #6 from a shim. **Only #1 was caught by reading** — by
-asking what a hostile input actually changed, which is the cheapest habit here and the one to
-reach for first.
+Running something. #2, #5, #7, #8, #9, #10 and #11 came from a reviewer executing a planted
+shape; #3 from a reviewer planting a hand-rolled matcher; #4 from asking "find one this cannot
+see" and then running it; #6 from a shim. **Only #1 was caught by reading** — by asking what a
+hostile input actually changed, which is the cheapest habit here and the one to reach for first.
 
-Two more were caught before they could ship, both in remedies: the round-3 reviewer measured a
-pure-frame classifier going blind to a JSON import of the registry, and the frame rule's first
-version passed on Node 22 while refusing on 24 and 25 because the loader reaches `openSync`
-through `readFileSync`. Neither reached a commit.
+The `createWriteStream` half of the between-rounds commit belongs with #4 as a real find by
+running; its `cpSync` half does not, because `cpSync` was never blind (row 8). An earlier edition
+of this paragraph credited both.
+
+**Three of the eleven are the class inside a remedy written for a previous instance**: #4 (a gap
+in the fix for #2), #8 (a sentence about the fix for #4 and #5) and #11 (a claim about the fix
+for #9, resting on a knockout of the same non-discriminating shape as #8). Four more were caught
+before they could ship, all in remedies and none reaching a commit: the round-3 reviewer measured
+a pure-frame classifier going blind to a JSON import of the registry; the frame rule's first
+version passed on Node 22 while refusing on 24 and 25; and while implementing #11's fix, the
+probe graded its own `console.log` output as late content on Node 22, and a
+`process.exit` → `process.exitCode` swap made shape mode fall through into the main report. That
+last pair is worth stating plainly: **fixing the instrument broke the instrument, twice, in one
+edit** — which is why every guard added in this PR carries its own knockout.
 
 That record is why the blind list became `--verify` arms, the file-count control became six
 asserted verdicts, the name list became an enumeration, and the paragraph about what the probe
