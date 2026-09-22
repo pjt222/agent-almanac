@@ -11,10 +11,10 @@ repository root.
 | | |
 |---|---|
 | base commit | `d6b9b9c72dea1f88ab60f84c7611dfedc16790d4` (merge of #883) |
-| head at measurement | every figure below re-taken at `1cb20d1b1`, the round-2 fix commit |
+| head at measurement | every figure below re-taken at `0b49d8041`, the round-3 fix commit |
 | working tree | clean at every run; the two probes that mutate refuse a dirty tree or run in a lab |
 | command every mutant and every suite arm ran under | `npm run test:scripts` |
-| node | **v25.9.0**, recorded rather than disclaimed. An earlier edition of this table said no figure depended on a version; the node:test reporter is TAP on a non-TTY below Node 24, under which two of these probes printed no test names and still exited 0. Both now pin the spec reporter through `NODE_OPTIONS` (verified on v20.20.2, v22.16.0 and v24.20.0) |
+| node | **v25.9.0** for the suite figures, recorded rather than disclaimed — an earlier edition of this table said no figure depended on a version, and two did. The `node:test` reporter is TAP on a non-TTY below Node 24, so both mutation probes pin the spec reporter through `NODE_OPTIONS` (verified on v20.20.2, v22.16.0 and v24.20.0). The import probe was worse: its verdict was a Node-25 artefact and it REFUSED the unmodified generator on CI's own Node 24 (§4). It is now run and recorded on v22.16.0, v24.20.0 and v25.9.0, the whole range `engines` allows |
 
 ---
 
@@ -24,7 +24,7 @@ repository root.
 
 ```
 prove-the-bypass-survived: row opendir-bypass on scripts/generate-readmes.js, every arm under: npm run test:scripts
-  base: d6b9b9c72   head: 1cb20d1b1   node v25.9.0
+  base: d6b9b9c72   head: 0b49d8041   node v25.9.0
 
 base-clean      exit 0  (939 tests)   <- control
 base-mutated    exit 0  (939 tests)   SURVIVED — the bypass was not covered
@@ -57,7 +57,7 @@ arms' own test counts, and they are how a reader can tell the two labs apart.
 contains a walker over English *history*, and a lab has none. Two things answer it. The counts:
 the base lab ran 939 tests and `mutation-check`'s own baseline on the real repository at
 `d6b9b9c72` reported *green (939 passing)*; the head lab ran 947 and so did the real repository
-at `1cb20d1b1`. Nothing skipped, nothing absent. And the mechanism: `english-history.test.js`
+at `0b49d8041`. Nothing skipped, nothing absent. And the mechanism: `english-history.test.js`
 builds its own `mkdtempSync` repositories and never opens this one, which is what #559's `root`
 argument was extracted for. The suites that DO run against the repository root — the `LIVE` rows
 in `tree-counts.test.js` and `skills-inventory.test.js` — assert bounds a one-commit checkout of
@@ -244,96 +244,137 @@ not do. The rewrite goes through a temp file rather than `sed -i`, which no-ops 
 ## 4. Importing it opens no repository content
 
 `security-surface.test.js` proves the import prints nothing and exits 0 — the property the guard
-is for, and blind to the quieter one: a module can read the whole repository in silence. The head
-of `generate-readmes.js` claims it does not, so `import-side-effects.mjs` patches `node:fs`,
-`node:fs/promises` and `node:child_process` before the import and records every call through
-them:
+is for, and blind to the quieter one: a module can read, or write, the whole repository in
+silence. The head of `generate-readmes.js` claims it does not, so `import-side-effects.mjs`
+wraps every own function-valued, non-constructor export of `node:fs`, `node:fs/promises` and
+`node:child_process` before the import and records every call through them.
 
-```
-calls during import: 86
-  module-graph reads (loader):      84
-  main-module guard (realpathSync): 2
-    realpathSync …/tests/results/2026-09-22-generate-readmes-importable/import-side-effects.mjs
-    realpathSync …/scripts/generate-readmes.js
-  repository content or subprocess: 0
+**On every Node the package allows, not on one:**
 
-OK: every call during import is the loader reading the module graph, or the guard resolving its two paths.
-```
+| node | calls | loader | guard | content | verdict |
+|---|---|---|---|---|---|
+| v22.16.0 | 30 | 28 | 2 | 0 | OK |
+| v24.20.0 | 164 | 162 | 2 | 0 | OK |
+| v25.9.0 | 86 | 84 | 2 | 0 | OK |
 
-84 is 28 modules × open/read/close; the other 2 are `invokedAsScript()` resolving `argv[1]` and
-its own path. Confirmed independently by the round-2 reviewer with `strace -f -e trace=openat,execve`
-around the import — an instrument nobody here wrote: 27 `.js`/`.mjs` modules and 6 `package.json`
-opened under the lab, nothing else, no `execve` but node's own.
+The totals differ because the ESM loader reads modules through different functions per version —
+`fs.promises.readFile` on 22, `readFileSync` on 24, `openSync` + `readSync` + `closeSync` on 25.
+What does not differ is the answer: no registry read, no YAML parse, no `git` spawn, and the two
+`realpathSync` calls are `invokedAsScript()` resolving its own two paths. Confirmed independently
+by the round-2 reviewer with `strace -f -e trace=openat,execve` — an instrument nobody here
+wrote — which saw the modules, six `package.json` opened by the loader through an internal
+binding, and no `execve` but node's own.
 
-### The claim was wrong four times, and the instrument was wrong three of those
+### The claim was wrong five times, and the instrument was wrong four of those
 
 Every correction came from a measurement. None came from re-reading the file.
 
-1. It first said the import "reads no file". It opens 28 — every import does. The honest claim is
-   about repository *content*: a registry, a `SKILL.md`, a `git` spawn.
-2. The classifier read `readSync`'s first argument as a path. It is a file DESCRIPTOR, so 28
-   loader reads were reported as content and the probe refused a module that was behaving.
-3. **The patch never reached the subject.** It assigned over properties of the CJS `fs` object,
-   and an ESM named binding to a builtin is resolved at link time: `import { readFileSync } from
-   'fs'` does not follow a later property assignment until `module.syncBuiltinESMExports()` runs.
-   The generator and every lib under it import by name, so the patch was invisible to all of
-   them — while both controls called `fs.readFileSync` on the DEFAULT export and fired happily.
-   Re-derived on node v25.9.0:
+1. It said the import "reads no file". It opens 28 modules — every import does. The claim worth
+   making is about repository *content*: a registry, a `SKILL.md`, a `git` spawn.
+2. The classifier read `readSync`'s first argument as a path. It is a file DESCRIPTOR, so loader
+   reads were reported as content and the probe refused a module that was behaving.
+3. **The patch never reached the subject.** Assigning over `fs.readFileSync` does not reach
+   `import { readFileSync } from 'fs'`: an ESM named binding to a builtin is resolved at link
+   time and follows a property assignment only after `module.syncBuiltinESMExports()`. The
+   generator and every lib under it import by name, so the patch was invisible to all of them —
+   while both controls used the DEFAULT export and fired happily. Re-derived on v25.9.0:
 
-       after the assignment:  named === fs.readFileSync  false     named === original  true
+       after the assignment:           named === fs.readFileSync  false    named === original  true
        after syncBuiltinESMExports():  named === fs.readFileSync  true
 
-   The number moved: `84, all loader` was the count of a dead patch, and the module's own two
-   `realpathSync` calls had never been seen.
-4. **It patched no WRITE name at all.** With the patch alive, the round-2 reviewer planted a
-   `writeFileSync` into the tree at module scope and the probe said `OK`, `content 0` — an import
-   that wrote a file, graded clean. The same round found the callback API, `accessSync` and
-   `globSync` unreached, and `node:fs/promises` had been covered one commit earlier for the same
-   reason. The negative test standing behind the verdict used `existsSync`: the one shape the
-   probe was already best at. **A negative test that picks the instrument's strongest shape is
-   not a negative test.**
+4. **No WRITE name was patched at all.** With the patch alive, a planted `writeFileSync` was
+   graded `OK, content 0` — an import that wrote a file, called clean. The negative test standing
+   behind that verdict used `existsSync`: the one shape the probe was already best at. **A
+   negative test that picks the instrument's strongest shape is not a negative test.**
+5. **The verdict was a Node-25 artefact, and the name list kept leaking.** On the committed probe
+   with an unmodified generator:
 
-Through all four, the behavioural claim survived unchanged — no registry read, no YAML parse, no
+       v22.16.0  exit=1  calls=30   loader=0   content=28
+       v24.20.0  exit=1  calls=164  loader=84  content=77
+       v25.9.0   exit=0  calls=86   loader=84  content=0
+
+   CI runs Node 24. The probe printed *"The comment at the head of scripts/generate-readmes.js
+   says it does not"* — a false accusation — on the one version a reader would reach for. And a
+   hand-written list of names still left callback `symlink`, `promises.mkdtemp` and a worker able
+   to change the tree with the probe saying OK.
+
+Through all five the behavioural claim survived unchanged — no registry read, no YAML parse, no
 `git` spawn at import. What kept being false was the instrument, and the number it published.
 
-### The blind list is a RUN now, not a paragraph
+### Two rules that only work together
 
-Three of the four corrections were to a paragraph describing what the probe could see. So the
-paragraph was replaced by arms: `--verify` plants one shape per arm into a throwaway module,
-imports THAT instead of the generator, and asserts the verdict each shape is declared to produce.
+Classification is now **the nearest caller frame inside `node:internal/modules/` AND an argument
+naming a `.js`/`.mjs`/`.cjs`**. Neither half is sufficient, and both failures were measured
+rather than reasoned:
+
+- **Extension alone** was correction 5: the loader's own reads carry module extensions and were
+  graded content wherever the loader did not use `openSync`.
+- **Frame alone** goes blind to a `with { type: 'json' }` import of the registry, which has a
+  loader frame and *is* a content read. That is this PR's defect class appearing one level down
+  **inside the remedy**, and the round-3 reviewer caught it before it was written here.
+  `json-import` is an arm now, not a sentence.
+
+The frame half needed a correction of its own, also from a run: on 24 and 25 the loader calls
+`fs.readFileSync`, which calls the PUBLIC `fs.openSync`, so that `openSync`'s nearest frame is
+`at readFileSync (node:fs:440:35)` — not a module frame at all. `node:fs` frames are skipped.
+The first version of the rule passed on 22 and refused on 24 and 25: one version-dependent rule
+swapped for another.
+
+### Patching is by enumeration, and the reach claim is a RUN
+
+The name list leaked four times, so there is no list. Every own function-valued,
+non-constructor export of the three modules is wrapped — 92 + 32 + 8 on Node 25 — with own
+properties copied onto each wrapper so `realpathSync.native` and the `util.promisify.custom`
+hooks survive. The frame classifier is what makes wrapping everything safe: the loader's reads
+are recognised by where they come from, not by what they are called.
+
+And the blind list stopped being a paragraph. `--verify` plants one shape per arm into a
+throwaway module, imports THAT instead of the generator, and asserts the verdict each shape is
+declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
 
 ```
---verify: 12 shape(s), each planted into a throwaway module and imported
+--verify: 20 shape(s) on node v25.9.0, each planted into a throwaway module and imported
+  wrapped by enumeration: 92 fs, 32 fs/promises, 8 child_process export(s)
+  ok    empty              declared blind observed blind
   ok    sync-read          declared seen  observed seen
   ok    sync-write         declared seen  observed seen
   ok    sync-mkdir         declared seen  observed seen
   ok    access             declared seen  observed seen
   ok    callback-read      declared seen  observed seen
+  ok    callback-symlink   declared seen  observed seen
   ok    promises-read      declared seen  observed seen
   ok    promises-readdir   declared seen  observed seen
+  ok    promises-mkdtemp   declared seen  observed seen
   ok    glob               declared seen  observed seen
+  ok    write-stream       declared seen  observed seen
+  ok    cp-sync            declared seen  observed seen
   ok    spawn-sync         declared seen  observed seen
   ok    spawn-async        declared seen  observed seen
   ok    create-require     declared seen  observed seen
-  ok    open-js-as-data    declared blind observed blind
+  ok    json-import        declared seen  observed seen
+  ok    open-js-as-data    declared seen  observed seen
+  ok    worker-write       declared blind observed blind
+  ok    process-binding    declared blind observed blind
 ```
 
-`open-js-as-data` is the one shape declared BLIND and asserted to stay blind: a content `.js`
-opened as data is `openSync` on a path ending `.js` followed by reads and a close, which is what
-the loader does, and no call record distinguishes them. Beyond the arms and unmeasured: a native
-addon, a worker thread, `process.binding`, and anything a module loaded before this file does.
-The verdict is therefore **"nothing reached repository content through `node:fs`,
-`node:fs/promises` or `node:child_process`"**, which is the claim the head of the generator makes.
+**`empty` is the arm that matters most**, and it is the one the first table lacked. A module that
+does nothing must grade `blind`; under the Node-25-only classifier it graded `seen` on 22 and 24,
+which means every `ok seen` row in that table passed for the wrong reason — the child refused
+before the planted line mattered. A twelve-row table of `ok` is exactly the shape that invites
+belief, and it was wrong.
 
-Each arm removes its temp directory from an `exit` handler, using an `rmSync` captured before the
-patch loops — a probe about side effects that leaked a directory per arm would deserve the joke.
+`worker-write` and `process-binding` are declared blind and measured blind: a worker has its own
+module registry and its own `fs`, and `process.binding` reaches the internal binding below every
+public name. `open-js-as-data` was declared blind while the classifier could not tell it from the
+loader; the combined rule can, so it is declared `seen` and the excuse is gone.
 
-Three controls remain, because "zero content reads" has three ways of being a lie: the patch
-fires at all, the patch reaches the shape the subject uses (a NAMED binding must be the patched
-function after the sync), and the classifier can still say *content*. **They are necessary and
-they were not sufficient** — the reviewer's answer to that question is worth keeping: control 2
-vouches "the patch reaches the shape the subject uses" and passed while writes, promises,
-callbacks and async spawns were all unreached. That is what the arms are for.
+Three controls remain — the patch fires, the patch reaches a NAMED binding, the classifier can
+still say *content*. **They are necessary and they were never sufficient**: control 2 passed
+while writes, promises, callbacks and async spawns were all unreached. That is what the arms are
+for.
+
+Still unmeasured: a module loaded before the probe, and any side effect reaching the filesystem
+through neither those three modules nor a worker.
 
 ## 5. What this does NOT cover
 
@@ -355,7 +396,7 @@ Stated because the section above looks broader than it is.
   lets the counts be measured at all. No count of them is published here: they are spread across
   this function, `skills-inventory.js` and `tools-registry.js`, and an earlier edition said "six"
   from a five-item list (#888 round-1 N8).
-- **Import inertness is tested by two spawns plus twelve probe arms, not proven for every
+- **Import inertness is tested by two spawns plus twenty probe arms, not proven for every
   shape.** `node -e` leaves `process.argv[1]` undefined; an importer file gives it a real path
   that is not this module. A third shape — a loader or a `--require` hook that rewrites
   `argv[1]` — is not covered, and neither is a native addon, a worker thread or `process.binding`
@@ -368,25 +409,38 @@ Stated because the section above looks broader than it is.
   found it taking the other one: without it `packHookSentence` returns `''` and the paragraph is
   missing a clause the real one carries. The clause is now asserted.
 
-## 6. The defect class recurred four times inside the PR that is about it
+## 6. The defect class recurred eight times inside the PR that is about it
 
-Worth stating together, because the pattern is the point and no single bullet above carries it.
-#877 exists because an instrument — a source scan — was honest about something narrower than the
-claim resting on it. Building the fix reproduced that four times:
+Worth a table, because the pattern is the point and no single bullet above carries it. #877
+exists because an instrument — a source scan — was honest about something narrower than the claim
+resting on it. Building the fix reproduced that eight times, twice inside a remedy written for a
+previous instance:
 
-| what | found by | how |
-|---|---|---|
-| the Workflows arm's ignored file was a `.js`, which the count drops by extension anyway | this session, before round 1 reported | a disk walk of `workflows/` passed the suite 8/8 |
-| the import probe's patch never reached an ESM named binding | round 1 | `named === fs.readFileSync` is false without `syncBuiltinESMExports()` |
-| the repaired probe could not see `node:fs/promises` | this session, between rounds | a planted `await readdir(...)` was graded clean |
-| the probe patched no WRITE name, and its negative test used the shape it was best at | round 2 | a planted `writeFileSync` was graded clean |
+| # | what | found by | how it showed |
+|---|---|---|---|
+| 1 | the Workflows arm's ignored file was a `.js`, which the count drops by extension anyway | this session, before round 1 reported | a disk walk of `workflows/` passed the suite 8/8 |
+| 2 | the import probe's patch never reached an ESM named binding | round 1 | `named === fs.readFileSync` is false without `syncBuiltinESMExports()` |
+| 3 | the fixture's ignore rule sat where a walk could read it | round 1 | a hand-rolled `.gitignore` matcher survived the suite |
+| 4 | the repaired probe could not see `node:fs/promises` | this session, between rounds | a planted `await readdir(...)` graded clean |
+| 5 | the probe patched no WRITE name, and its negative test used the shape it was best at | round 2 | a planted `writeFileSync` graded clean |
+| 6 | the cli-arms control counted files, then counted five verdicts of six | rounds 1 and 2 | a `node` shim exiting 3, then one failing only write mode, both went green |
+| 7 | the probe's verdict was a Node-25 artefact; it refused the unmodified generator on CI's Node | round 3 | `v24.20.0 exit=1 content=77` |
+| 8 | two write paths reached the tree through none of the patched names | this session, ahead of round 3 | `createWriteStream` and `cpSync` graded clean |
 
 Every one is the same shape: **an instrument that cannot fail on part of the population it
-vouches for, with its OK quoted somewhere a reader will trust.** Three of the four were caught by
-running something rather than by reading, which is why the blind list became `--verify` arms and
-the file-count control became six asserted verdicts. The fourth — the Workflows arm — was caught
-by asking what its hostile input actually changed, which is the cheaper habit and the one to
-reach for first.
+vouches for, with its OK quoted somewhere a reader will trust.**
+
+Two of them are the harder variant — the class appearing inside a remedy written for it. #4 and
+#8 are gaps in the fix for #2 and #5. A third was caught before it shipped: the round-3 reviewer
+measured a pure-frame classifier, the natural remedy for #7, going blind to a JSON import of the
+registry. That would have been the ninth.
+
+What actually caught them: running something. #2, #5, #7 and the near-miss came from a reviewer
+executing a planted shape; #4 and #8 from asking "find one this cannot see" and then running it.
+Only #1 was caught by reading — by asking what a hostile input actually changed, which is the
+cheapest habit here and the one to reach for first. That is why the blind list became `--verify`
+arms, the file-count control became six asserted verdicts, and the name list became an
+enumeration: each is a paragraph replaced by a run.
 
 ## 7. Choices recorded so they are choices
 
