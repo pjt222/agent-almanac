@@ -11,7 +11,7 @@ repository root.
 | | |
 |---|---|
 | base commit | `d6b9b9c72dea1f88ab60f84c7611dfedc16790d4` (merge of #883) |
-| head at measurement | `fdee31dac` |
+| head at measurement | `fdee31dac` for §1–§3; §4 was taken at the commit that adds its probe, which is the first commit carrying the corrected comment it checks |
 | working tree | clean at every run; the two probes that mutate refuse a dirty tree or run in a lab |
 | command every mutant and every suite arm ran under | `npm run test:scripts` |
 | node / npm | whatever the caller has; the probes record none, because no figure here depends on a version |
@@ -156,7 +156,37 @@ both sides must hold twelve files before the diff is believed.
 
 ---
 
-## 4. What this does NOT cover
+## 4. Importing it opens no repository content
+
+`security-surface.test.js` proves the import prints nothing and exits 0 — the property the guard
+is for, and blind to the quieter one: a module can read the whole repository in silence. The head
+of `generate-readmes.js` claims it does not, so `import-side-effects.mjs` patches `node:fs` and
+`node:child_process` before the import and records every call:
+
+```
+calls during import: 84
+  module-graph reads (loader): 84
+  repository content or subprocess: 0
+
+OK: every call during import is the ESM loader reading the module graph.
+```
+
+84 is 28 modules × open/read/close. **The claim in that comment was wrong twice before it was
+right**, and both corrections came from the instrument rather than from re-reading:
+
+1. It first said the import "reads no file". It opens 28 — every import does. The honest claim is
+   about repository *content*: a registry, a `SKILL.md`, a `package.json`, a `git` spawn.
+2. The first classifier read `readSync`'s first argument as a path. It is a file DESCRIPTOR, so
+   28 loader reads were reported as repository content and the probe refused a module that was
+   behaving. Descriptors opened on a `.js`/`.mjs` are now remembered, and a `readSync` on one of
+   them is the same loader read as its `openSync`.
+
+The probe carries **two** controls, because "zero content reads" is also what a dead patch and an
+over-eager classifier both report: one deliberate read before the import must be intercepted
+(exactly one call recorded), and one deliberate registry read after it must land on the *content*
+side. Either control failing exits 2 rather than reporting a clean tree.
+
+## 5. What this does NOT cover
 
 Stated because the section above looks broader than it is.
 
@@ -177,7 +207,7 @@ Stated because the section above looks broader than it is.
   `process.argv[1]` undefined; an importer file gives it a real path that is not this module.
   A third shape — a loader or a `--require` hook that rewrites `argv[1]` — is not covered.
 
-## 5. Choices recorded so they are choices
+## 6. Choices recorded so they are choices
 
 - **The tripwire was kept, not removed.** #877's fifth criterion allows either. Its two
   call-shape assertions for `scriptFileCount` and `workflowFileCount` are gone, because renaming
