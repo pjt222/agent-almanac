@@ -11,7 +11,7 @@ repository root.
 | | |
 |---|---|
 | base commit | `d6b9b9c72dea1f88ab60f84c7611dfedc16790d4` (merge of #883) |
-| head at measurement | `fdee31dac` for §1–§3; §4 was taken at the commit that adds its probe, which is the first commit carrying the corrected comment it checks |
+| head at measurement | §1 and §3 at `fdee31dac`; §2 re-run at `32acf2d38` after the sixth row was added; §4 at the commit that adds its probe, the first one carrying the corrected comment it checks |
 | working tree | clean at every run; the two probes that mutate refuse a dirty tree or run in a lab |
 | command every mutant and every suite arm ran under | `npm run test:scripts` |
 | node / npm | whatever the caller has; the probes record none, because no figure here depends on a version |
@@ -67,17 +67,18 @@ the same tree still satisfies.
 
 ## 2. Every claim this change makes, as a mutant
 
-`mutation-plan.tsv` through `tools/mutation-envelope.sh`, at `fdee31dac`:
+`mutation-plan.tsv` through `tools/mutation-envelope.sh`, at `32acf2d38`:
 
 | row | verdict |
 |---|---|
 | `opendir-bypass` | MUTANT KILLED by 1 |
+| `opendir-bypass-workflows` | MUTANT KILLED by 1 |
 | `root-not-injected` | MUTANT KILLED by 1 |
 | `domains-from-the-module` | MUTANT KILLED by 6 |
 | `guard-always-runs` | MUTANT KILLED by 1 |
 | `INSTRUMENT-ROW-expected-count` | MUTANT KILLED by 1 |
 
-`5 row(s), 0 not a clean kill.`
+`6 row(s), 0 not a clean kill.`
 
 ### What each kill actually failed on
 
@@ -90,6 +91,10 @@ prints the names:
 ```
 --- opendir-bypass  (exit 1)
     ✖ the Scripts count is git-enumerated at the CALL SITE, not just in the lib
+    [AssertionError] x1
+
+--- opendir-bypass-workflows  (exit 1)
+    ✖ the Workflows count excludes the template and what git ignores
     [AssertionError] x1
 
 --- root-not-injected  (exit 1)
@@ -118,9 +123,10 @@ prints the names:
 **What the `[Class] xN` lines are, exactly.** Line counts over the whole suite log, not a
 per-test classification — the cheap half of the answer. They can disagree with the name list
 above: a reporter printing one error twice would double a class, and a failure whose message
-carries neither word would be counted by none. In this run they agree with the name counts
-exactly (1 and 1, 1 + 5 and 6, 1 and 1), which is what lets the paragraphs below rest on them.
-The **names** are the evidence; these are the label.
+carries neither word would be counted by none. In this run they agree with the name counts on
+every row — five rows at one class-line for one name, and `domains-from-the-module` at 1 + 5 for
+six — which is what lets the paragraphs below rest on them. The **names** are the evidence;
+these are the label.
 
 Read row by row rather than as a column of KILLEDs:
 
@@ -128,6 +134,22 @@ Read row by row rather than as a column of KILLEDs:
   one failing test, an `AssertionError`, in the test written for the property. The second swaps
   `scriptFileCount(root)` for `scriptFileCount(ROOT)` and is what makes the injection
   load-bearing rather than decorative — with it, the fixture is handed this repository's count.
+- **`opendir-bypass-workflows` exists because its arm was VACUOUS**, and the fixture had to
+  change before the row could die. This is the finding of the round, and it is in the test rather
+  than in the code — the same class the whole PR is about, one level down. The fixture's
+  `.gitignore` read `local-*.js`, so the ignored file it planted under `workflows/` was a `.js`,
+  which `workflowFileCount` drops **by extension anyway**. A disk walk of `workflows/` therefore
+  published the same 2 as git:
+
+      const workflowFileCount = (r) => { const d = opendirSync(resolve(r, 'workflows')); … }
+      node --test scripts/test/security-surface.test.js   ->   pass 8   fail 0
+
+  The pattern is now extension-free and the planted file is `workflows/local-draft.mjs` —
+  shipped-shaped, so a walk publishes 3 where git publishes 2. The arm also gained the direction
+  that must not be lost with it: an untracked `three.mjs` that must count. **The Scripts arm was
+  never vacuous** (`local-probe.js` is a `.js` and `scriptFileCount` counts `.js`), which is
+  exactly why the Workflows one survived scrutiny: the two arms read as the same shape and only
+  one of them was.
 - **`domains-from-the-module` kills by REFUSAL, not by a wrong number**, and the table above
   would hide that. Five of its six failures are one throw from `skillsDeclaringBash`, quoted
   verbatim from the run rather than described:
