@@ -39,6 +39,15 @@ fi
 # `engines` allows `>=22.12.0`, so under a supported Node this script could print `--- <row>`
 # with no names beneath it and still exit 0: the reassuring-empty shape. Pinning the reporter
 # makes the bytes this file parses the same on every supported Node (verified on 20, 22 and 24).
+# A caller who already pins a reporter gets TWO of them if this simply appends: the #888 round-2
+# review measured every `✖` line, every class line and the `tests N` summary printed twice, which
+# doubles the class counts below (the names survive `sort -u`; the label does not). So existing
+# `--test-reporter*` tokens are stripped before ours is added, and nothing else in NODE_OPTIONS is
+# touched.
+strip_reporter() {
+  printf '%s' "${1:-}" | tr ' ' '\n' | sed '/^--test-reporter/d' | tr '\n' ' ' | sed 's/  */ /g; s/^ //; s/ $//'
+}
+NODE_OPTIONS=$(strip_reporter "${NODE_OPTIONS:-}")
 export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--test-reporter=spec --test-reporter-destination=stdout"
 
 echo "read-the-kills: $(git rev-parse --short HEAD), node $(node --version), every row under: ${TEST_CMD}"
@@ -105,9 +114,10 @@ PY
   # These are LINE counts over the whole suite log, not a per-test classification. They are the
   # cheap half of the answer and they can disagree with the name list above: a reporter that
   # printed one error twice would double a class, and a failure whose message carries neither
-  # word would be counted by none. In the #877 run they agreed with the name counts exactly
-  # (1 and 1, 1+5 and 6, 1 and 1), which is why the RESULT.md paragraph built on them stands —
-  # but the names are the evidence and these are the label. Read the log if they ever disagree.
+  # word would be counted by none. In the #877 runs they agreed with the name counts on every
+  # row — one class-line per name everywhere but `domains-from-the-module`, which is 1 + 5 for
+  # six — which is why the RESULT.md paragraph built on them stands. The names are the evidence
+  # and these are the label. Read the log if they ever disagree.
   #
   # `awk`, not `grep`: inside Claude Code a bare `grep` is routed to a bundled ugrep with
   # `--ignore-files`, and this repository's own Bash hook blocks the name outright — a probe

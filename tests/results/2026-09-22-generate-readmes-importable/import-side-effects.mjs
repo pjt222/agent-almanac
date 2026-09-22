@@ -8,11 +8,11 @@
  * repository in silence. The comment at the head of `generate-readmes.js` claims it does not, so
  * the claim is measured here rather than believed.
  *
- * ## The instrument was dead, and this is the third version
+ * ## The instrument was dead, and this is the fourth version
  *
  * Every earlier version of this file reported a number that came from a patch the subject could
- * not see. Both corrections came from an instrument, never from re-reading, and both are kept
- * here because each one is a way this probe can silently stop working:
+ * not see. Every correction came from a measurement, never from re-reading, and all four are
+ * kept here because each one is a way this probe can silently stop working:
  *
  *   1. "reads no file" was the first claim. The import opens 28 — every import does. The claim
  *      worth making is about repository CONTENT: a registry, a `SKILL.md`, a `package.json`, a
@@ -43,14 +43,31 @@
  * graph or the main-module guard resolving its two paths; exit 1 when anything touches
  * repository content or spawns a process.
  *
- * ## What it still cannot see, stated rather than left to be discovered
+ *   4. **It patched no WRITE name at all.** The round-2 reviewer planted a `writeFileSync` into
+ *      the tree at module scope and the probe said OK — while its header claimed to record every
+ *      call, and its negative test used `existsSync`, the shape it was already best at. The same
+ *      round found the callback API, `accessSync` and `globSync` unpatched, and `node:fs/promises`
+ *      had been covered only one commit earlier for the same reason. The most damaging thing an
+ *      import can do was the thing this instrument could not see, and its OK was quoted in a
+ *      shipped comment.
  *
- * It patches `node:fs` (sync names), `node:fs/promises` and `node:child_process`. It does NOT
- * see a native addon, a worker thread, `process.binding`, an async `fs` callback API, or a read
- * performed by a module loaded before this file runs. `createRequire(...)('node:fs')` IS seen —
- * it returns the same module object whose properties are patched here. The verdict is therefore
- * "nothing reached repository content through the three modules above", which is narrower than
- * "nothing reached repository content" and is the claim the head of `generate-readmes.js` makes.
+ * ## What it can and cannot see, as a RUN rather than a paragraph
+ *
+ *   node …/import-side-effects.mjs --verify
+ *
+ * A paragraph listing blind spots is a claim like any other, and the four corrections above were
+ * all discovered in a paragraph that was wrong. `--verify` plants one shape per arm into a
+ * throwaway module, imports THAT instead of the generator, and asserts the verdict each shape is
+ * declared to produce — every SEEN arm must refuse, every BLIND arm must pass. An arm that stops
+ * behaving as declared fails the run.
+ *
+ * The one declared BLIND shape is `openSync` of a content `.js` read as data: this instrument
+ * classifies a `.js` open as loader activity by extension, and nothing in a call record
+ * distinguishes the loader opening a module from a module opening a `.js` as data. Beyond the
+ * arms, and unmeasured: a native addon, a worker thread, `process.binding`, and anything a module
+ * loaded before this file does. The verdict is therefore "nothing reached repository content
+ * through `node:fs`, `node:fs/promises` or `node:child_process`", which is the claim the head of
+ * `generate-readmes.js` makes — not "nothing reached repository content".
  */
 import fs, { readFileSync as namedReadFileSync } from 'node:fs';
 import fsPromises from 'node:fs/promises';
@@ -58,19 +75,88 @@ import childProcess from 'node:child_process';
 import { syncBuiltinESMExports } from 'node:module';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { tmpdir } from 'node:os';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..', '..', '..');
-const TARGET = resolve(ROOT, 'scripts', 'generate-readmes.js');
+const GENERATOR = resolve(ROOT, 'scripts', 'generate-readmes.js');
+
+const ARGS = process.argv.slice(2);
+const VERIFY = ARGS.includes('--verify');
+const SHAPE = ARGS.includes('--shape') ? ARGS[ARGS.indexOf('--shape') + 1] : null;
+
+/**
+ * One planted import-time side effect per arm, and the verdict it must produce.
+ *
+ * `seen` means the probe must REFUSE (exit 1): the shape reaches repository content through a
+ * module this file patches. `blind` means it must pass: the shape is invisible BY CONSTRUCTION,
+ * and saying so in a run is the difference between a measured limit and a paragraph.
+ */
+const SHAPES = {
+  'sync-read':       { expect: 'seen',  code: "import { existsSync } from 'node:fs'; existsSync(R('skills/_registry.yml'));" },
+  'sync-write':      { expect: 'seen',  code: "import { writeFileSync } from 'node:fs'; writeFileSync(T('planted.txt'), 'x');" },
+  'sync-mkdir':      { expect: 'seen',  code: "import { mkdirSync } from 'node:fs'; mkdirSync(T('planted-dir'), { recursive: true });" },
+  'access':          { expect: 'seen',  code: "import { accessSync } from 'node:fs'; accessSync(R('package.json'));" },
+  'callback-read':   { expect: 'seen',  code: "import { readFile } from 'node:fs'; readFile(R('package.json'), () => {});" },
+  'promises-read':   { expect: 'seen',  code: "import { readFile } from 'node:fs/promises'; await readFile(R('package.json'), 'utf8');" },
+  'promises-readdir':{ expect: 'seen',  code: "import { readdir } from 'node:fs/promises'; await readdir(R('scripts'));" },
+  'glob':            { expect: 'seen',  code: "import { globSync } from 'node:fs'; globSync('*.js', { cwd: R('scripts') });" },
+  'spawn-sync':      { expect: 'seen',  code: "import { execFileSync } from 'node:child_process'; execFileSync('git', ['--version']);" },
+  'spawn-async':     { expect: 'seen',  code: "import { spawn } from 'node:child_process'; spawn('git', ['--version']);" },
+  'create-require':  { expect: 'seen',  code: "import { createRequire } from 'node:module'; createRequire(import.meta.url)('node:fs').readFileSync(R('package.json'), 'utf8');" },
+  // BLIND, and declared so. A `.js` opened as DATA is indistinguishable from the loader opening
+  // a module: both are `openSync` on a path ending `.js`, followed by reads and a close.
+  'open-js-as-data': { expect: 'blind', code: "import { openSync, closeSync } from 'node:fs'; closeSync(openSync(R('cli/index.js'), 'r'));" },
+};
+
+// The shape module is written BEFORE the patch loops below, so writing it is not itself recorded.
+let TARGET = GENERATOR;
+let SHAPE_DIR = null;
+if (SHAPE) {
+  const shape = SHAPES[SHAPE];
+  if (!shape) {
+    console.error(`REFUSED: unknown shape \`${SHAPE}\`. Known: ${Object.keys(SHAPES).join(', ')}`);
+    process.exit(2);
+  }
+  // Captured BEFORE the patch loops, and used from an `exit` handler so every path cleans up —
+  // including `refuse`'s exit 2 and the content-found exit 1. A probe about side effects that
+  // leaks a directory per arm would be the joke it deserves (#885 is that class).
+  const rmOriginal = fs.rmSync;
+  SHAPE_DIR = fs.mkdtempSync(resolve(tmpdir(), 'import-shape-'));
+  process.on('exit', () => {
+    try { rmOriginal(SHAPE_DIR, { recursive: true, force: true }); } catch { /* best effort */ }
+  });
+  TARGET = resolve(SHAPE_DIR, 'shape.mjs');
+  fs.writeFileSync(TARGET, [
+    `import { resolve } from 'node:path';`,
+    `const R = (p) => resolve(${JSON.stringify(ROOT)}, p);`,
+    `const T = (p) => resolve(${JSON.stringify(SHAPE_DIR)}, p);`,
+    shape.code,
+    '',
+  ].join('\n'), 'utf8');
+}
 
 const calls = [];
 // `readSync` and `closeSync` take a FILE DESCRIPTOR, not a path, so they cannot be classified by
 // their argument. Descriptors opened on a `.js`/`.mjs` are remembered here, and a read or close
 // on one of them is the same loader activity as its `openSync`.
 const moduleDescriptors = new Set();
+// Reads AND WRITES, and `access` with them. The round-2 review planted a `writeFileSync` into
+// the tree at import and this probe said OK: it patched no write name at all, while its header
+// claimed to record every call and its negative test used `existsSync` — the shape it was
+// already best at. A probe that cannot see the most damaging thing an import can do is worse
+// than none, because its OK is quoted.
 const FS_NAMES = [
-  'readFileSync', 'existsSync', 'readdirSync', 'opendirSync',
-  'openSync', 'statSync', 'lstatSync', 'realpathSync', 'readSync', 'closeSync',
+  // read
+  'readFileSync', 'existsSync', 'accessSync', 'readdirSync', 'opendirSync', 'globSync',
+  'openSync', 'statSync', 'lstatSync', 'realpathSync', 'readSync', 'closeSync', 'readlinkSync',
+  // write
+  'writeFileSync', 'appendFileSync', 'writeSync', 'mkdirSync', 'rmSync', 'rmdirSync',
+  'unlinkSync', 'renameSync', 'copyFileSync', 'symlinkSync', 'linkSync', 'truncateSync',
+  'chmodSync', 'chownSync', 'utimesSync', 'mkdtempSync',
+  // callback API — a different set of functions from the sync ones, and unpatched until round 2
+  'readFile', 'writeFile', 'appendFile', 'readdir', 'open', 'stat', 'lstat', 'access',
+  'mkdir', 'rm', 'unlink', 'rename', 'copyFile', 'realpath',
 ];
 for (const name of FS_NAMES) {
   const original = fs[name];
@@ -89,11 +175,15 @@ for (const name of FS_NAMES) {
     return result;
   };
 }
-// `node:fs/promises` is a SEPARATE module object: patching `node:fs` does not reach it, and a
-// walk written `await readdir(dir)` would have been invisible to every version of this probe.
-// Nothing in the current graph imports it — which is exactly why it is worth covering, since the
-// gap would open silently the first time something did.
-for (const name of ['readFile', 'readdir', 'opendir', 'stat', 'lstat', 'realpath', 'access', 'open']) {
+// `node:fs/promises` is a SEPARATE module object — patching `node:fs` does not reach it, and a
+// walk written `await readdir(dir)` was invisible to every version of this probe before this
+// one. (It is the same object as `fs.promises`, measured: `fs.promises === fsPromises` is true,
+// so one patch covers both spellings.) Nothing in the current graph imports it, which is the
+// reason to cover it: the gap would open silently the first time something did.
+for (const name of [
+  'readFile', 'writeFile', 'appendFile', 'readdir', 'opendir', 'stat', 'lstat', 'realpath',
+  'access', 'open', 'mkdir', 'rm', 'unlink', 'rename', 'copyFile', 'glob',
+]) {
   const original = fsPromises[name];
   if (typeof original !== 'function') continue;
   fsPromises[name] = function patched(...args) {
@@ -112,6 +202,31 @@ for (const name of ['spawnSync', 'execSync', 'execFileSync', 'spawn', 'exec', 'e
 // THE line the first two versions of this probe were missing. Without it every `import { … }
 // from 'fs'` in the subject keeps the ORIGINAL function and this whole file measures nothing.
 syncBuiltinESMExports();
+
+// `--verify` never patches anything itself: it spawns one child per arm, each of which patches
+// and imports its own planted module. One process per arm, because the patch and the import are
+// one-shot.
+if (VERIFY) {
+  const rows = [];
+  let bad = 0;
+  for (const [name, { expect }] of Object.entries(SHAPES)) {
+    const run = childProcess.spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--shape', name],
+      { encoding: 'utf8' });
+    const got = run.status === 1 ? 'seen' : run.status === 0 ? 'blind' : `error(${run.status})`;
+    const ok = got === expect;
+    if (!ok) bad++;
+    rows.push(`  ${ok ? 'ok  ' : 'FAIL'}  ${name.padEnd(18)} declared ${expect.padEnd(5)} observed ${got}`);
+    if (!ok && run.stderr) rows.push(`        ${run.stderr.trim().split('\n')[0]}`);
+  }
+  console.log(`--verify: ${Object.keys(SHAPES).length} shape(s), each planted into a throwaway module and imported`);
+  for (const row of rows) console.log(row);
+  if (bad) {
+    console.error(`\nREFUSED: ${bad} shape(s) did not behave as declared. The header's reach claim is wrong.`);
+    process.exit(1);
+  }
+  console.log('\nOK: every shape behaves as the header declares, including the one declared BLIND.');
+  process.exit(0);
+}
 
 const refuse = (message, detail) => {
   console.error(`REFUSED: ${message}`);
@@ -177,8 +292,8 @@ console.log(`  repository content or subprocess: ${content.length}`);
 for (const call of content) console.log(`    ${call.name} ${call.arg}`);
 
 if (content.length > 0) {
-  console.error('\nREFUSED: importing the generator touched repository content or spawned a process.');
-  console.error('The comment at the head of scripts/generate-readmes.js says it does not.');
+  console.error(`\nREFUSED: importing ${SHAPE ? `the \`${SHAPE}\` shape` : 'the generator'} touched repository content or spawned a process.`);
+  if (!SHAPE) console.error('The comment at the head of scripts/generate-readmes.js says it does not.');
   process.exit(1);
 }
 console.log('\nOK: every call during import is the loader reading the module graph, or the guard resolving its two paths.');

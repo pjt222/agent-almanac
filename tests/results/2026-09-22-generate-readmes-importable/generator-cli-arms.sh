@@ -12,7 +12,7 @@
 #
 #   list            --list-outputs, the twelve managed paths           exit 0
 #   check-clean     --check on an untouched tree                       exit 0
-#   write-clean     write mode on an untouched tree, plus `git status` exit 0, 0 dirty
+#   write-clean     write mode on an untouched tree, plus `git status` exit 0, 0 dirty (ONE line)
 #   check-stale     --check with one generated line perturbed          exit 1
 #   check-missing   --check with one AUTO:END marker deleted           exit 2
 #   write-missing   write mode with the same marker deleted            exit 2
@@ -81,8 +81,21 @@ for what in base head; do
   arm "$lab" "$out" list        -- node "$gen" --list-outputs
   arm "$lab" "$out" check-clean -- node "$gen" --check
   arm "$lab" "$out" write-clean -- node "$gen"
-  echo "porcelain-after-write=$(git -C "${lab:?}" status --porcelain | wc -l | tr -d ' ')" \
-    >> "${out:?}/write-clean.out"
+  # ONE line, not two. The porcelain count used to be appended BELOW the `exit=` line, and the
+  # verdict comparison reads `tail -1` — so the write-clean arm's exit code was never compared at
+  # all. Measured in the #888 round-2 review with a `node` shim that failed plain write mode with
+  # exit 5: twelve files per side, a byte-identical diff and a green VERDICT, with write mode
+  # having exited 5 on both sides. Round-1 F3's shim is refused; this was the same class one line
+  # up.
+  #
+  # Rewritten through a temp file rather than `sed -i`: in-place sed silently no-ops on the NTFS
+  # mount this repository lives on, and `--out` may point there. A no-op would leave BOTH lines
+  # in place — the very defect this block exists to remove.
+  wc_exit=$(sed -n 's/^exit=//p' "${out:?}/write-clean.out" | tail -1)
+  wc_porcelain=$(git -C "${lab:?}" status --porcelain | wc -l | tr -d ' ')
+  sed '$d' "${out:?}/write-clean.out" > "${out:?}/write-clean.tmp"
+  printf 'exit=%s,porcelain=%s\n' "${wc_exit}" "${wc_porcelain}" >> "${out:?}/write-clean.tmp"
+  mv -- "${out:?}/write-clean.tmp" "${out:?}/write-clean.out"
 
   # STALE: perturb one generated line inside an AUTO section.
   LAB="${lab:?}" python3 - <<'PY'
@@ -93,6 +106,11 @@ marker = '<!-- AUTO:START:security-surface -->\n'
 i = s.index(marker)
 p.write_text(s[:i] + marker + 'PERTURBED\n' + s[i + len(marker):], encoding='utf-8')
 PY
+  # A perturbation that did not apply makes the arm run against an UNPERTURBED tree, and the
+  # verdict assertion then refuses under "did not produce the six verdicts" — the right exit for
+  # the wrong stated reason (#888 round-2 N3). `s.index` raises on a renamed marker; python exits
+  # non-zero and this says so.
+  [ $? -eq 0 ] || { echo "REFUSED: could not perturb SECURITY.md — has the AUTO marker been renamed?" >&2; exit 2; }
   arm "$lab" "$out" check-stale -- node "$gen" --check
   git -C "${lab:?}" restore SECURITY.md || exit 2
 
@@ -103,6 +121,7 @@ p = pathlib.Path(os.environ['LAB']) / 'i18n' / 'README.md'
 s = p.read_text(encoding='utf-8')
 p.write_text(s.replace('<!-- AUTO:END:i18n-locales -->\n', '', 1), encoding='utf-8')
 PY
+  [ $? -eq 0 ] || { echo "REFUSED: could not perturb i18n/README.md — has the AUTO marker been renamed?" >&2; exit 2; }
   arm "$lab" "$out" check-missing -- node "$gen" --check
   arm "$lab" "$out" write-missing -- node "$gen"
   git -C "${lab:?}" restore i18n/README.md || exit 2
@@ -125,7 +144,7 @@ echo
 # So the six exit codes this file's header documents are asserted per side, not merely printed.
 # They are the verdicts the arms exist to produce, and a run that cannot produce them has
 # measured nothing whether or not its two halves agree.
-EXPECTED='list=exit=0 check-clean=exit=0 write-clean=porcelain-after-write=0 check-stale=exit=1 check-missing=exit=2 write-missing=exit=2'
+EXPECTED='list=exit=0 check-clean=exit=0 write-clean=exit=0,porcelain=0 check-stale=exit=1 check-missing=exit=2 write-missing=exit=2'
 for what in base head; do
   n=$(find "${OUT:?}/${what}" -type f | wc -l | tr -d ' ')
   [ "$n" -eq 12 ] || { echo "REFUSED: the ${what} tree holds ${n} file(s), expected 12 (six arms x stdout+stderr)" >&2; exit 2; }

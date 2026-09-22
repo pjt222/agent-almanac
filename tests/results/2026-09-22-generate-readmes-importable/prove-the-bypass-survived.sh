@@ -75,6 +75,15 @@ MUT_BODY=${MUTATION#*$'\t'}
 # `>=22.12.0`. Under TAP the `KILLED by:` block below prints nothing beneath its heading while
 # the script still exits 0. Pin the reporter so every supported Node produces the bytes this
 # file parses (verified on 20, 22 and 24).
+# A caller who already pins a reporter gets TWO of them if this simply appends: the #888 round-2
+# review measured every `✖` line, every class line and the `tests N` summary printed twice, which
+# doubles the class counts below (the names survive `sort -u`; the label does not). So existing
+# `--test-reporter*` tokens are stripped before ours is added, and nothing else in NODE_OPTIONS is
+# touched.
+strip_reporter() {
+  printf '%s' "${1:-}" | tr ' ' '\n' | sed '/^--test-reporter/d' | tr '\n' ' ' | sed 's/  */ /g; s/^ //; s/ $//'
+}
+NODE_OPTIONS=$(strip_reporter "${NODE_OPTIONS:-}")
 export NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--test-reporter=spec --test-reporter-destination=stdout"
 
 echo "prove-the-bypass-survived: row ${ROW_ID} on ${MUT_FILE}, every arm under: ${TEST_CMD}"
