@@ -123,13 +123,21 @@ function fixture(t, extra = {}) {
       files: ['skills/', '!skills/_template/', 'cli/'],
       scripts: { test: 'true' },
     }, null, 2)}\n`,
-    // `local-*.js` is the #872 defect as a rule: a gitignored script under a directory the
-    // Scripts bullet counts.
-    '.gitignore': 'local-*.js\n__pycache__/\n',
+    // `local-*` is the #872 defect as a rule: a gitignored file under a directory a bullet
+    // counts. The pattern is extension-free ON PURPOSE. It was `local-*.js`, and under that
+    // pattern the Workflows arm was VACUOUS — measured, not suspected: its ignored file was a
+    // `.js`, which `workflowFileCount` drops by extension anyway, so a disk walk of
+    // `workflows/` produced the same 2 and the suite passed 8/8 against the mutant it existed
+    // to kill. A hostile input has to change the bytes the assertion reads.
+    '.gitignore': 'local-*\n__pycache__/\n',
     'skills/_registry.yml': SKILLS_REGISTRY,
     'skills/alpha/SKILL.md': BASH_SKILL,
     'skills/alpha/references/helper.py': 'print(1)\n',
     'skills/alpha/references/data.json': '{}\n',
+    // #871, as the fixture's own trap: importing a skill asset leaves a `__pycache__`, and the
+    // committed SECURITY.md went out claiming 19 non-Markdown files where a clean checkout
+    // computed 18. Ignored, so it must not reach the content-tree bullet's count.
+    'skills/alpha/references/__pycache__/helper.cpython-312.pyc': 'bytecode\n',
     'skills/beta/SKILL.md': QUIET_SKILL,
     // Declares Bash and is NOT a registry entry, exactly as the real one does: a directory walk
     // would report 2 of 3 where the registry says 1 of 2.
@@ -145,6 +153,9 @@ function fixture(t, extra = {}) {
     'workflows/one.mjs': '1\n',
     'workflows/two.mjs': '1\n',
     'workflows/_template.mjs': '1\n',
+    // A gitignored file of the SHIPPED SHAPE — `.mjs`, not `_template` — so that a disk walk of
+    // `workflows/` publishes 3 where git publishes 2. Without it the Workflows arm cannot fail.
+    'workflows/local-draft.mjs': 'a scratch workflow, gitignored\n',
     'tools/_registry.yml': TOOLS_REGISTRY,
     'tools/wirecap.py': '1\n',
     'tools/merge-dependabot.sh': '1\n',
@@ -186,8 +197,15 @@ test('the Scripts count is git-enumerated at the CALL SITE, not just in the lib'
 });
 
 test('the Workflows count excludes the template and what git ignores', async (t) => {
-  const dir = fixture(t, { 'workflows/local-draft.js': 'ignored\n' });
-  assert.equal(workflowsCount(generateSecuritySurface({ root: dir })), 2, '_template.mjs is scaffolding');
+  const dir = fixture(t);
+
+  // Three `.mjs` are shipped-shaped on disk — `one`, `two` and the gitignored `local-draft` —
+  // and `_template.mjs` is scaffolding. A disk walk publishes 3; git publishes 2.
+  assert.equal(workflowsCount(generateSecuritySurface({ root: dir })), 2, '_template.mjs is scaffolding, local-draft.mjs is ignored');
+
+  // And the direction that must not be lost with it.
+  write(dir, { 'workflows/three.mjs': '1\n' });
+  assert.equal(workflowsCount(generateSecuritySurface({ root: dir })), 3, 'untracked is not ignored — it is simply new');
 });
 
 test('the Bash share enumerates the REGISTRY; _template declares Bash and is not a skill', async (t) => {

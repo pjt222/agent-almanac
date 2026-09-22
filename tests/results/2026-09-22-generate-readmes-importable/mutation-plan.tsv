@@ -13,6 +13,7 @@
 # which it does not die is a run that never reached the suite, and no other row's verdict in
 # that run means anything.
 opendir-bypass	scripts/generate-readmes.js	import { scriptFileCount, workflowFileCount, localeTranslationCounts } from './lib/tree-counts.js';::import { workflowFileCount, localeTranslationCounts } from './lib/tree-counts.js'; import { opendirSync } from 'fs'; const scriptFileCount = (r) => { const d = opendirSync(resolve(r, 'scripts')); let n = 0; for (let e; (e = d.readSync());) if (/[.](m?js|sh)$/.test(e.name)) n++; d.closeSync(); return n; };
+opendir-bypass-workflows	scripts/generate-readmes.js	import { scriptFileCount, workflowFileCount, localeTranslationCounts } from './lib/tree-counts.js';::import { scriptFileCount, localeTranslationCounts } from './lib/tree-counts.js'; import { opendirSync } from 'fs'; const workflowFileCount = (r) => { const d = opendirSync(resolve(r, 'workflows')); let n = 0; for (let e; (e = d.readSync());) if (e.name.endsWith('.mjs') && e.name !== '_template.mjs') n++; d.closeSync(); return n; };
 root-not-injected	scripts/generate-readmes.js	const scriptFiles = scriptFileCount(root);::const scriptFiles = scriptFileCount(ROOT);
 domains-from-the-module	scripts/generate-readmes.js	skillsDeclaringBash(root, skillDomainsAt(root))::skillsDeclaringBash(root, skillDomainsAt(ROOT))
 guard-always-runs	scripts/generate-readmes.js	if (invokedAsScript()) main();::if (true) main();
