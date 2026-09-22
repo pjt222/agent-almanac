@@ -248,13 +248,67 @@ export function report({ ignored, untracked, modified = [], codes = {} }) {
   // wording was FALSE for half of them: a deleted or typechanged path is not "packed with its
   // working-tree bytes" — the pack simply LACKS a file the commit has, and npm drops a symlink
   // silently (#879 round 2, S5). The marker is git's own code, not a stamped ` M`.
-  const byRemedy = (predicate) => modified.filter((path) => predicate((codes[path] ?? '').trim()));
-  const absent = byRemedy((code) => code === 'D' || code === 'T');
-  const unmerged = byRemedy((code) => code === 'UU' || code === 'AA' || code.startsWith('U') || code.endsWith('U'));
-  const edited = modified.filter((path) => !absent.includes(path) && !unmerged.includes(path));
+  //
+  // The porcelain code is TWO COLUMNS — index, then worktree — and what npm packs is the
+  // WORKTREE. Trimming the pair and comparing it whole read only the single-column codes, so
+  // `AD` (staged add, then `rm`) and `MD` (staged edit, then `rm`) were filed under MODIFIED
+  // "with their WORKING-TREE bytes" for paths npm packs no bytes of at all. Measured on git
+  // 2.43 with ` T`, `AD` and `MD` present under a shipped directory: `npm pack --dry-run`
+  // listed package.json alone (#879 round 3, SF1).
+  const raw = (path) => codes[path] ?? '';
+  // Every unmerged code, `DD` included — both sides deleted is a conflict, not an absence, and
+  // it fell through to MODIFIED before. Tested FIRST, so the worktree column below cannot claim
+  // `DD` or `UD` from it. NOT `DU`, which the sentence used to name: its worktree column is
+  // `U`, which `gone` never matches, so no ordering was ever protecting it (#883 round 2, N-1).
+  const UNMERGED_CODES = new Set(['DD', 'AU', 'UD', 'UA', 'DU', 'AA', 'UU']);
+  const unmerged = modified.filter((path) => UNMERGED_CODES.has(raw(path)));
+  const gone = (column) => column === 'D' || column === 'T';
+  // Absent from the WORKTREE, which is what npm packs: a `D`/`T` worktree column under any
+  // index column, plus `D `/`T `, where the worktree column is blank.
+  //
+  // Blank does NOT mean "the disk agrees with the index", which is what an earlier revision of
+  // this comment claimed. For `D ` the index has no entry left to agree with, and the disk
+  // state arrives as a SEPARATE `??`/`!!` record for the same path — so a `git rm --cached`
+  // leaves the file on disk, packable, while this arm calls it absent (#883 review, SF-A).
+  // Classifying from `lstatSync` instead — the disk is what npm reads — is the durable fix and
+  // is its own issue; what this arm can honestly say is what git's columns report.
+  const worktreeAbsent = (path) => gone(raw(path)[1])
+    || (raw(path)[1] === ' ' && gone(raw(path)[0]));
+  // Split by WHERE the missing file lives, because the two sentences are not interchangeable.
+  // `AD`/`AT` are staged additions removed from the worktree again: HEAD carries no such path,
+  // so "the pack LACKS a file the commit has" is false of them — it is the INDEX that has it,
+  // and the pack matches the commit exactly. That is the same shape of falsehood this function
+  // was condemned for stamping on deletions (#883 review, SF-B).
+  const stagedGone = modified.filter((path) => !unmerged.includes(path)
+    && worktreeAbsent(path) && raw(path)[0] === 'A');
+  const absent = modified.filter((path) => !unmerged.includes(path)
+    && !stagedGone.includes(path) && worktreeAbsent(path));
+  const edited = modified.filter((path) => !absent.includes(path) && !unmerged.includes(path)
+    && !stagedGone.includes(path));
+  // Which restore form to name is per-code, and naming one of them uniformly is wrong in both
+  // directions. Measured on git 2.43, one fresh repository per (code, command) pair:
+  //
+  //     code   `git restore <path>`                    `git restore --staged --worktree <path>`
+  //      D     exit 0, clean                           exit 0, clean
+  //     D      exit 1, `pathspec … did not match`      exit 0, clean
+  //      T     exit 0, clean                           exit 0, clean
+  //     T      exit 0, NO CHANGE — still `T `          exit 0, clean
+  //     MD     exit 0, leaves `M ` (edit recovered)    exit 0, clean — the staged edit is GONE
+  //     MT     exit 0, leaves `M ` (edit recovered)    exit 0, clean — the staged edit is GONE
+  //
+  // So the two-flag form is required for `D ` and `T ` and DESTRUCTIVE for `MD`/`MT`, where
+  // plain restore recovers the staged edit and the guard then re-refuses under MODIFIED with a
+  // true sentence — a correct second step, not a failure. The old parenthetical named `D `
+  // alone and implied plain restore sufficed for the rest; for `T ` it is a silent exit-0
+  // no-op, so the operator re-runs the guard, sees the same refusal and has no error to explain
+  // it (#883 round 2, SF-2). Round 1's N6 measured `D ` only.
   for (const [label, paths, remedy] of [
-    ['ABSENT-OR-RETYPED', absent, 'so the pack LACKS a file the commit has — restore it, or commit the removal'],
-    ['UNMERGED', unmerged, 'and a conflicted file would be packed with its markers — resolve it'],
+    ['ABSENT-OR-RETYPED', absent, 'so the pack LACKS a file the commit has — restore it: `git restore <path>` for a worktree-only absence (` D`, ` T`) and to recover a staged edit (`MD`, `MT`), `git restore --staged --worktree <path>` where the index dropped or retyped the path too (`D `, `T `), because plain restore errors on `D ` and is a silent no-op on `T ` — or commit the removal'],
+    ['STAGED-BUT-GONE', stagedGone, 'so the pack lacks a file the NEXT commit would have — `git restore <path>` brings it back, or unstage it'],
+    // Two of the seven unmerged codes pack markers; `UA`/`AU`/`UD`/`DU` pack one side's version
+    // with no markers at all, and `DD` packs nothing (#883 review, SF-D). "Resolve it" is right
+    // for all seven, so the verb stays and the false half of the sentence goes.
+    ['UNMERGED', unmerged, 'and a conflicted path would be packed as it sits on disk — with markers, as one side\'s version, or not at all — resolve it'],
     ['MODIFIED', edited, 'with their WORKING-TREE bytes, not the committed ones — commit or revert them'],
   ]) {
     if (paths.length === 0) continue;
