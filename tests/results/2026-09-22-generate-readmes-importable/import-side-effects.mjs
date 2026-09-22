@@ -10,7 +10,7 @@
  * the whole repository in silence. The head of `generate-readmes.js` claims it does not, so the
  * claim is measured here rather than believed.
  *
- * ## Five corrections, every one of them from a measurement
+ * ## Six corrections, every one of them from a measurement
  *
  * No version of this file has yet been right on its first run, and the failures are worth
  * keeping because each is a way a probe silently stops working:
@@ -63,11 +63,19 @@
  * passed for the wrong reason on Node 22 and 24 in the previous version.
  *
  * Still unmeasured beyond the declared-blind arms: a module loaded before this file, and any
- * side effect reaching the filesystem through neither those three modules nor a worker.
+ * side effect reaching the filesystem through none of the wrapped entry points.
+ *
+ *   6. **The verdict was a snapshot.** It was taken the moment `await import()` resolved, so
+ *      anything the import SCHEDULED — a `setTimeout` write, a `setImmediate` write, a stream
+ *      whose `open` is lazy — reached the tree after `OK` was printed. Three planted writes did
+ *      exactly that under a green verdict. The drain after the import is the fix, and the
+ *      knockout is the proof: remove that one line and `deferred-write` and `write-stream-ctor`
+ *      both flip to `blind`. (#888 round 4)
  */
 import fs, { readFileSync as namedReadFileSync } from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import childProcess from 'node:child_process';
+import workerThreads from 'node:worker_threads';
 import { syncBuiltinESMExports } from 'node:module';
 import { resolve, dirname, basename } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -119,12 +127,30 @@ const SHAPES = {
   // classifier could not tell it from the loader and it was declared blind on that ground; the
   // combined rule separates them, so it is declared `seen` and the ground is gone.
   'open-js-as-data':  { expect: 'seen',  code: "import { openSync, closeSync } from 'node:fs'; closeSync(openSync(R('cli/index.js'), 'r'));" },
-  // DECLARED BLIND, and measured so rather than asserted in prose. A worker has its own module
-  // registry and its own `fs`; nothing patched here reaches it.
-  'worker-write':     { expect: 'blind', code: "import { Worker } from 'node:worker_threads'; const w = new Worker(\"import('node:fs').then((m) => m.writeFileSync(process.env.SHAPE_TMP + '/from-worker.txt', 'x'));\", { eval: true }); await new Promise((r) => w.on('exit', r));" },
-  // DECLARED BLIND. `process.binding` reaches the internal binding directly, below every public
-  // name this file can wrap. Deprecated, and the arm stays blind on a node that refuses it.
-  'process-binding':  { expect: 'blind', code: "try { process.binding('fs'); } catch { /* removed in a future node; blind either way */ }" },
+  // DEFERRED past the import's resolution. Both were invisible until the drain below: the verdict
+  // used to be a snapshot taken when `await import()` resolved, so anything scheduled reached the
+  // tree after the OK was printed (#888 round 4).
+  'deferred-write':   { expect: 'seen',  code: "import { writeFileSync } from 'node:fs'; setTimeout(() => writeFileSync(T('deferred.txt'), 'x'), 0);" },
+  // The same class through a CONSTRUCTOR, which the enumeration skips by the capitalised-name
+  // rule, and whose `open` is lazy. The sharp one: two independent reasons to be missed.
+  'write-stream-ctor':{ expect: 'seen',  code: "import { WriteStream } from 'node:fs'; new WriteStream(T('ctor.txt')).end('x');" },
+  // Wrapped since round 4, so no longer blind: a worker has its own module registry and its own
+  // `fs`, and nothing patched inside this process reaches it — but the Worker CONSTRUCTOR is in
+  // this process, and that is the thing worth seeing.
+  'worker-write':     { expect: 'seen',  code: "import { Worker } from 'node:worker_threads'; const w = new Worker(\"import('node:fs').then((m) => m.writeFileSync(process.env.SHAPE_TMP + '/from-worker.txt', 'x'));\", { eval: true }); await new Promise((r) => w.on('exit', r));" },
+  // Wrapped too. `process.binding` reaches the internal binding below every public name; the
+  // escape hatch itself is patchable even though what it returns is not.
+  'process-binding':  { expect: 'seen',  code: "try { process.binding('fs'); } catch { /* removed in a future node */ }" },
+  // DECLARED BLIND, and the reason is structural rather than a gap in a list: this classifier's
+  // "loader" is whatever the loader loads, so executing an arbitrary repository `.js` at import
+  // is indistinguishable from loading a module of the graph. Closing it needs the static import
+  // graph to compare against — `importGraph()` in `scripts/check-workflow-generator-inputs.js`,
+  // module-private today. Filed as a follow-up; an arm until then (#888 round 4, F2).
+  'dynamic-import-repo-js': { expect: 'blind', code: "await import(new URL('file://' + R('scripts/lib/parse-args.js')).href);" },
+  // CONTROL, declared blind: resolving a real dependency through node_modules is the path the
+  // generator's own graph takes, and `empty` does not exercise it. A false positive here would
+  // mean the classifier calls ordinary resolution "content".
+  'dep-import':       { expect: 'blind', code: "await import(new URL('file://' + R('node_modules/js-yaml/dist/js-yaml.mjs')).href);" },
 };
 
 // The shape module is written BEFORE the patch loops, so writing it is not itself recorded.
@@ -230,6 +256,27 @@ const patchedCounts = {
   promises: patchModule(fsPromises, 'promises'),
   child_process: patchModule(childProcess, 'cp'),
 };
+// The two escape hatches out of everything above. Neither is reachable by enumerating the three
+// modules: a worker gets its own module registry and its own `fs`, and `process.binding` returns
+// an internal binding below every public name. What IS in this process, and patchable, is the
+// way in — the constructor and the function — so both were blind arms until round 4 and are
+// coverage now. Assigned on the CJS module objects: an `import *` namespace is immutable and the
+// assignment throws.
+const WorkerOriginal = workerThreads.Worker;
+workerThreads.Worker = class PatchedWorker extends WorkerOriginal {
+  constructor(...args) {
+    calls.push({ name: 'worker.Worker', arg: '(a worker thread, whose own fs this process cannot see)', kind: 'other' });
+    super(...args);
+  }
+};
+const bindingOriginal = process.binding;
+if (typeof bindingOriginal === 'function') {
+  process.binding = function patchedBinding(...args) {
+    calls.push({ name: 'process.binding', arg: String(args[0]), kind: 'other' });
+    return bindingOriginal.apply(this, args);
+  };
+}
+
 // THE line the first two versions were missing. Without it every `import { … } from 'fs'` in the
 // subject keeps the ORIGINAL function and this whole file measures nothing.
 syncBuiltinESMExports();
@@ -295,6 +342,16 @@ if (calls.length !== 1) {
 calls.length = 0;
 
 await import(pathToFileURL(TARGET).href);
+
+// THE DRAIN. Without it the verdict is a snapshot taken the moment `await import()` resolves, and
+// anything the import SCHEDULED lands afterwards — a `setTimeout` write, a `setImmediate` write,
+// a stream whose `open` is lazy — with `OK` already printed. Measured in #888 round 4: three
+// planted writes reached the tree under a green verdict. `beforeExit` fires when the loop is
+// empty, so this waits for exactly the work the import left behind.
+//
+// An import that leaves a LIVE handle makes this hang. That is the right failure: a probe that
+// timed out silently and graded anyway is what the rest of this file exists to avoid.
+await new Promise((done) => process.once('beforeExit', done));
 
 // Three buckets. The guard's own `realpathSync` pair is neither loader activity nor repository
 // content: it is the module doing the one thing it is supposed to do at import. Reported by name
