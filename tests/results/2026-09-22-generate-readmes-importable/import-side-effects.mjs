@@ -166,6 +166,22 @@ const SHAPES = {
 let TARGET = GENERATOR;
 let SHAPE_DIR = null;
 let rmOriginal = null;
+let shapeCleaned = false;
+/**
+ * Remove the shape directory, once, from whichever exit path gets there first.
+ *
+ * Two paths need it and they cannot share one registration. The NORMAL path needs the handler
+ * registered at the FOOT of this file, because `exit` handlers run in registration order and a
+ * shape that writes from its own `exit` handler must still have its directory. The EARLY path —
+ * `exits-during-import`, which calls `process.exit(0)` — never reaches the foot at all, so that
+ * arm leaked a directory per run: the ordering fix created a leak for the one arm the same
+ * commit added (#888 round 6). Guard 1 below calls this directly, and the flag keeps it to once.
+ */
+const cleanupShape = () => {
+  if (shapeCleaned || !SHAPE_DIR || !rmOriginal) return;
+  shapeCleaned = true;
+  try { rmOriginal(SHAPE_DIR, { recursive: true, force: true }); } catch { /* best effort */ }
+};
 if (SHAPE) {
   const shape = SHAPES[SHAPE];
   if (!shape) {
@@ -367,6 +383,9 @@ process.on('exit', () => {
   if (SHAPE) console.log(`${VERDICT_MARKER} no-verdict`);
   console.error('REFUSED: the import exited the process before any verdict was reached.');
   process.exitCode = 1;
+  // This handler is the only one that runs when the subject ends the process, so the cleanup
+  // has to happen here too. A handler registered from inside an `exit` handler never runs.
+  cleanupShape();
 });
 
 await import(pathToFileURL(TARGET).href);
@@ -482,8 +501,4 @@ if (content.length > 0) {
 
 // Registered LAST: see the note where SHAPE_DIR is created. A shape that writes from its own
 // `exit` handler must have its directory still there when that handler runs.
-if (SHAPE_DIR && rmOriginal) {
-  process.on('exit', () => {
-    try { rmOriginal(SHAPE_DIR, { recursive: true, force: true }); } catch { /* best effort */ }
-  });
-}
+if (SHAPE_DIR && rmOriginal) process.on('exit', cleanupShape);
