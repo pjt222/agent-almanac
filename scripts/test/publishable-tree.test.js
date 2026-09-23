@@ -645,7 +645,11 @@ test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not 
   // `--dry-run` still writes the tarball into the cache, so the cache lives in a directory this
   // test removes. The update notifier is the only network this command makes, and the compile
   // cache is npm's own write into TMPDIR (#885's control row). `--ignore-scripts` because
-  // `--dry-run` still runs `prepack`, whose output would corrupt `--json`.
+  // `--dry-run` still runs `prepack`, whose output would corrupt `--json` (measured on npm
+  // 11.13.0: a `prepack` echoing to stdout makes JSON.parse fail on its first line).
+  // `--no-workspaces` because npm walks up from the fixture looking for a workspace root: under
+  // a TMPDIR inside a root whose `workspaces` glob covers the fixture, it adopted that root and
+  // probed its `.npmrc`, a project config outside the sandbox (#902 review, N-1).
   const npmSandbox = mkdtempSync(join(tmpdir(), 'npm-pack-'));
   t.after(() => rmTree(npmSandbox));
   mkdirSync(join(npmSandbox, 'home'));
@@ -658,7 +662,7 @@ test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not 
     npm_config_update_notifier: 'false',
     NODE_DISABLE_COMPILE_CACHE: '1',
   });
-  const packResult = spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], {
+  const packResult = spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts', '--no-workspaces'], {
     cwd: dir, env: npmEnv, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 60_000,
   });
   // Never a skip: a required context that skips this reports green having checked nothing.

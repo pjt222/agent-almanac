@@ -305,10 +305,11 @@ filed as #884 with its own measurement, deliberately outside this PR.
 Their job was to keep a hand-built second copy of the two-column test's fixture in step with
 the test, so that a pack listing measured on the copy said something about the test. The
 two-column test in `scripts/test/publishable-tree.test.js` now runs
-`npm pack --dry-run --json --ignore-scripts` on its OWN fixture and asserts two things, in the
-required `scripts-test` context. It asserts the sorted listing with `deepEqual` (`:670`,
-message at `:674`). It asserts the two packed sizes, `[6, 14]`, which checks the MODIFIED block's
-"WORKING-TREE bytes" too: `new2.md` is 7 bytes staged and 14 on disk (`:681`). That is the exit
+`npm pack --dry-run --json --ignore-scripts --no-workspaces` on its OWN fixture and asserts two
+things, in the required `scripts-test` context. It asserts the sorted listing with `deepEqual`
+(`:674`, message at `:678`). It asserts the two packed sizes, `[6, 14]` (`:684`, message at
+`:685`), which checks the MODIFIED block's "WORKING-TREE bytes" too: `new2.md` is 7 bytes staged
+and 14 on disk. That is the exit
 `two-column-pack.sh` named for itself in its header. With one fixture there is no second one to
 drift, which is what the parser and its nine-arm proof existed to manage.
 
@@ -324,8 +325,9 @@ The expected listing is a literal on purpose. A porcelain code does not decide p
 reports `A `, every block of the report is unchanged, and npm drops the file. A listing derived
 from the report would not see that, and one derived from `lstat` would move with the fixture.
 Under `npm run test:scripts` the row SURVIVED at `ea824907d`. It was KILLED at `e86416167`, and
-a direct run of the mutated file fails the two-column test alone, 26 pass and 1 fail, at `:670`
-with `actual: [ 'package.json', 'skills/real/new2.md' ]`. The row's needle is `git('add', …)`
+a direct run of the mutated file fails the two-column test alone, 26 pass and 1 fail, at the
+listing assertion (`:670` at that commit, `:674` from the #902 round-1 commit on) with
+`actual: [ 'package.json', 'skills/real/new2.md' ]`. The row's needle is `git('add', …)`
 rather than the `write(…)` line above it, because `tools/mutation-envelope.sh` refuses any OLD
 text holding two colons, and the `write` line's object literal holds two.
 
