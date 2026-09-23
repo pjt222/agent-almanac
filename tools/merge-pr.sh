@@ -30,6 +30,13 @@
 #   - a check context that is not pass or skipping, or NO context at all: an empty answer is
 #     what an unknown PR, an expired token and "no checks reported yet" look like, and none of
 #     them is green (fail-closed, as tools/watch-checks.sh)
+#   - a REQUIRED context of the base branch that is missing or not pass. The set is read from
+#     `gh api repos/O/N/rules/branches/<base>`, never listed here. Every context green is not
+#     every required one green -- a required workflow that never started leaves nothing red --
+#     and the maintainer merges as a ruleset bypass actor, so GitHub does not refuse it (#896)
+#   - a mergeStateStatus other than CLEAN or HAS_HOOKS (DIRTY, BLOCKED, BEHIND, DRAFT,
+#     UNSTABLE, ...), named; UNKNOWN is polled first, with a bound, because GitHub computes it
+#     lazily (UNKNOWN on a first read, CLEAN about 10 s later, measured on #889-#891)
 # The check read is instantaneous -- wait with tools/watch-checks.sh first -- and the merge
 # passes `--match-head-commit`, which GitHub honours. Measured 2026-09-08 on #810 (the fact
 # sheet posted there, F15): `gh pr merge <n> --merge --match-head-commit <a sha that is not
@@ -49,14 +56,17 @@
 # ORDER OF OPERATIONS
 # -------------------
 #   1  read the PR: state, head sha, head branch, base branch, cross-repository or not
-#   2  read every check context; count pass / skipping / other
+#   2  read every check context; count pass / skipping / other; then the base branch's required
+#      contexts, each present and pass; then mergeStateStatus, polled past UNKNOWN
 #   3  record where this checkout is (branch name, or the detached sha), for the restore path
 #   4  fetch origin/<base>; create the seat branch from it (refused if the name already exists)
 #   5  gh pr merge --merge --match-head-commit <head>
 #   6  verdict: gh pr view --json state,mergeCommit; not MERGED -> restore step 3, drop the seat, exit 1
 #   7  fetch origin/<base> until it CONTAINS the merge commit (the README healer may already
 #      have pushed on top of it, so equality is the wrong test); five tries
-#   8  detach onto origin/<base>; git branch -d the seat and the local head branch
+#   8  detach onto origin/<base>; git branch -d the seat; delete the local head branch only when
+#      its tip is an ancestor of the merge commit, then with -D -- never on -d's own say, which
+#      trusts the branch's upstream and a stale one deletes an unmerged tip (#896, #865)
 #   9  git push origin --delete <head branch>, then confirm by ls-remote
 # Steps 8-9 skip the head branch, local and remote, when the PR comes from a fork: the branch
 # name belongs to the fork, and a same-named branch here would be the wrong thing to delete.
@@ -94,7 +104,8 @@
 #                      origin's ends at step 7 with exit 3 and nothing deleted
 #     --seat NAME      the throwaway branch (default merge-seat-<pr>)
 #     --keep-remote    do not delete the remote head branch
-#     --interval S     seconds between the fetches of step 7 (default 2)
+#     --interval S     seconds between the mergeStateStatus reads of step 2 and the fetches of
+#                      step 7 (default 2)
 #     --dry-run        the reads and the refusals (steps 1-3), then the plan; create nothing,
 #                      merge nothing; exit 0 when it would proceed, 1 or 2 when it would not
 #     GH=<cmd>         the gh executable (default gh); --verify puts a fake gh on PATH instead
@@ -104,7 +115,8 @@
 #     0    MERGED at --head; this checkout detached on the merged origin/<base>; branches deleted
 #     1    refused before merging (nothing changed), or gh merged nothing (checkout restored)
 #     2    could not run: arguments, not a git checkout, gh missing or unauthenticated, repo or
-#          PR unreadable, an unparsable answer, the seat branch name already taken, an
+#          PR unreadable, the base branch's rules or the mergeStateStatus unreadable, an
+#          unparsable answer, the seat branch name already taken, an
 #          operation in progress (a merge, rebase, am, cherry-pick, revert or bisect), HEAD
 #          unreadable, origin/<base> unfetchable, or the seat checkout refused by git (a
 #          modification it would overwrite) -- and one case after the merge attempt: the
@@ -152,6 +164,7 @@ SEAT=""
 KEEP_REMOTE=0
 INTERVAL=2
 DRY_RUN=0
+MSS_READS=10   # mergeStateStatus reads before an UNKNOWN is refused; at --interval 2, about 20 s
 
 usage() {
   cat <<'EOF'
@@ -254,6 +267,61 @@ run_merge() {
     refuse "$other context(s) not pass or skipping on PR $PR -- run tools/watch-checks.sh $PR and fix or re-run what is red"
   fi
 
+  # 2b. the REQUIRED contexts, from the rules in effect on the base branch (#896). "Every context
+  #     green" is not "every required context green": a required workflow that never started (a
+  #     path filter, a workflow that fails to load, an Actions outage while server-side CodeQL
+  #     still runs) leaves nothing red to see. GitHub would refuse that merge for anyone else, but
+  #     in this repository the maintainer is a ruleset bypass actor, so for the usual caller this
+  #     is the only check. Read from the API rather than listed here, so the set cannot drift from
+  #     the ruleset; an unreadable answer refuses to run rather than proceeding without it.
+  local rules_json required req bucket req_total=0 req_bad=0
+  # --paginate: without it gh returns the first page only. With it, gh (2.92.0) splices array
+  # pages into ONE array -- measured on rulesets?per_page=1, two pages -> one array of length 2,
+  # no "][" in the output (#898 round 2). jq -s plus .[][] reads that one array, and would also
+  # read pages printed separately (gh's documented shape for object pages), so neither form
+  # counts a context twice.
+  rules_json=$("$GH" api "repos/$REPO/rules/branches/$PR_BASE" --paginate 2>/dev/null) || rules_json=""
+  [ -n "$rules_json" ] || die "cannot read the rules in effect on $PR_BASE (gh api repos/$REPO/rules/branches/$PR_BASE); not merging without the required contexts"
+  required=$(printf '%s\n' "$rules_json" | jq -rs 'if any(.[]; type != "array") then error("not a rules array") else [.[][] | select(.type == "required_status_checks") | .parameters.required_status_checks[]?.context] | unique | .[] end' 2>/dev/null) \
+    || die "cannot read the rules in effect on $PR_BASE: unparsable answer $(printf '%s' "$rules_json" | head -c 200)"
+  if [ -z "$required" ]; then
+    say "required contexts on $PR_BASE: none (no required_status_checks rule; classic branch protection is not read)"
+  else
+    say "required contexts on $PR_BASE: $(printf '%s\n' "$required" | paste -sd, - | sed 's/,/, /g')"
+    while IFS= read -r req; do
+      req_total=$((req_total + 1))
+      bucket=$(printf '%s\n' "$checks" | awk -F'\t' -v n="$req" '$1 == n { print $2; exit }')
+      if [ -z "$bucket" ]; then say "  required context missing: $req"; req_bad=$((req_bad + 1))
+      elif [ "$bucket" != pass ]; then say "  required context not pass: $req ($bucket)"; req_bad=$((req_bad + 1)); fi
+    done <<< "$required"
+    [ "$req_bad" -eq 0 ] || refuse "$req_bad of $req_total required context(s) on $PR_BASE not pass on PR $PR -- a bypass merge would not be stopped by GitHub; wait with tools/watch-checks.sh $PR, or find out why the required workflow did not run"
+  fi
+
+  # 2c. mergeStateStatus, the state GitHub computes for the merge itself. It reads UNKNOWN until
+  #     GitHub has computed it -- measured on #889-#891: UNKNOWN on a first read, CLEAN about 10 s
+  #     later -- so UNKNOWN is polled, with a bound. CLEAN and HAS_HOOKS merge; every other state
+  #     is named and refused. The ruleset here is non-strict and has no review rule (read on
+  #     2026-09-23), so BEHIND and a review BLOCKED are not expected -- refused if they appear,
+  #     because either would mean the rules changed under this tool.
+  local mss="" mss_reads=0
+  while [ "$mss_reads" -lt "$MSS_READS" ]; do
+    mss_reads=$((mss_reads + 1))
+    mss=$("$GH" pr view "$PR" -R "$REPO" --json mergeStateStatus 2>/dev/null | jq -r '.mergeStateStatus // empty' 2>/dev/null)
+    [ -n "$mss" ] || die "cannot read mergeStateStatus for PR $PR"
+    [ "$mss" = UNKNOWN ] || break
+    [ "$mss_reads" -lt "$MSS_READS" ] && sleep "$INTERVAL"
+  done
+  case "$mss" in
+    CLEAN|HAS_HOOKS) say "mergeStateStatus $mss after $mss_reads read(s)" ;;
+    UNKNOWN) refuse "mergeStateStatus is still UNKNOWN after $mss_reads read(s) on PR $PR -- GitHub has not computed mergeability yet; run again shortly" ;;
+    DIRTY)    refuse "mergeStateStatus is DIRTY on PR $PR -- it conflicts with $PR_BASE, and no pull_request workflow runs until it does not" ;;
+    BLOCKED)  refuse "mergeStateStatus is BLOCKED on PR $PR -- a rule on $PR_BASE is not satisfied; a bypass merge would override it" ;;
+    BEHIND)   refuse "mergeStateStatus is BEHIND on PR $PR -- the head is behind $PR_BASE under a strict rule" ;;
+    DRAFT)    refuse "mergeStateStatus is DRAFT on PR $PR -- mark it ready first" ;;
+    UNSTABLE) refuse "mergeStateStatus is UNSTABLE on PR $PR -- a status the checks list did not show is not passing" ;;
+    *)        refuse "mergeStateStatus is $mss on PR $PR -- not a state this tool knows to be mergeable" ;;
+  esac
+
   # 3. where this checkout is, and that nothing is in progress (a checkout would walk away
   #    from a paused merge, rebase, am, cherry-pick, revert, bisect or sequencer run, and the
   #    carry-along is not benign)
@@ -332,9 +400,21 @@ run_merge() {
   if git branch -d "$SEAT" >/dev/null 2>&1; then say "deleted local branch $SEAT"
   else say "could not delete local branch $SEAT"; incomplete=1; fi
   if [ "$same_repo" -eq 1 ]; then
+    # The local head branch is deleted only when its tip is IN the merge commit. `git branch -d`
+    # is not that check: it compares against the branch's upstream when one resolves (git 2.43
+    # `git help branch`), and this tool fetches only the base, so a stale origin/<head> -- a
+    # local branch someone force-pushed over -- made -d delete an unmerged tip at exit 0, its
+    # warning discarded with stderr (#896, measured by the #865 challenge). Ancestry against the
+    # merge is the accept-rule itself; once it holds, -D is REQUIRED, not a shortcut (#865): when
+    # origin/<head> resolves but lags BEHIND a tip the merge contains (pushed from another
+    # clone), -d refuses -- "not yet merged to origin/<head>, even though it is merged to HEAD",
+    # exit 1, measured on git 2.43.0 (#898 round 1). Case 11g pins that -D is what deletes it.
     if git show-ref --verify -q "refs/heads/$PR_HEAD_BRANCH"; then
-      if git branch -d "$PR_HEAD_BRANCH" >/dev/null 2>&1; then say "deleted local branch $PR_HEAD_BRANCH"
-      else say "could not delete local branch $PR_HEAD_BRANCH (git branch -d refused it)"; incomplete=1; fi
+      local tip; tip=$(git rev-parse "refs/heads/$PR_HEAD_BRANCH")
+      if ! git merge-base --is-ancestor "$tip" "$oid" 2>/dev/null; then
+        say "kept local branch $PR_HEAD_BRANCH: its tip ${tip:0:9} is not in the merge ${oid:0:9} (a commit never pushed, or a branch force-pushed over); inspect it, then git branch -D $PR_HEAD_BRANCH"; incomplete=1
+      elif git branch -D "$PR_HEAD_BRANCH" >/dev/null 2>&1; then say "deleted local branch $PR_HEAD_BRANCH"
+      else say "could not delete local branch $PR_HEAD_BRANCH (git branch -D failed; checked out in another worktree?)"; incomplete=1; fi
     else
       say "no local branch $PR_HEAD_BRANCH to delete"
     fi
@@ -396,9 +476,34 @@ merge_for_real() {
 case "$1 $2" in
   "auth status") exit 0 ;;
   "repo view") printf '{"nameWithOwner":"o/r"}\n' ;;
+  # The rules in effect on the base branch, in the shape `gh api repos/O/N/rules/branches/B`
+  # returned for this repository on 2026-09-23: an array of rules, the required contexts under
+  # required_status_checks[].parameters.required_status_checks[].context. A branch with no rules
+  # answers [].
+  "api repos/o/r/rules/branches/main")
+    case "${FAKE_RULES:-default}" in
+      unreadable) exit 1 ;;
+      emptybody) exit 0 ;;
+      default) printf '%s\n' '[{"type":"deletion","parameters":null},{"type":"non_fast_forward","parameters":null},{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":false,"required_status_checks":[{"context":"line-endings"},{"context":"integrity"},{"context":"skills"},{"context":"scripts-test"},{"context":"cli-test"}]}}]' ;;
+      # "][" is THIS fake's page marker, not gh's output. Under --paginate gh splices array pages
+      # into one array (measured, gh 2.92.0), so the fake does the same; without the flag gh
+      # returns the first page only, which is what an unpaginated call would read.
+      *) if [[ "$FAKE_RULES" != *']['* ]]; then printf '%s\n' "$FAKE_RULES"
+         elif [[ "$*" == *--paginate* ]]; then printf '%s\n' "${FAKE_RULES//\]\[/,}"
+         else printf '%s]\n' "${FAKE_RULES%%\]\[*}"; fi ;;
+    esac ;;
   "pr view")
     case "$*" in
       *headRefOid*) printf '{"state":"%s","headRefOid":"%s","headRefName":"%s","baseRefName":"%s","isCrossRepository":%s}\n' "$FAKE_PR_STATE" "$FAKE_HEAD_SHA" "$FAKE_HEAD_BRANCH" "$FAKE_BASE" "$FAKE_CROSS" ;;
+      # FAKE_MSS is a comma list answered one element per read, the last repeating, so a case
+      # can script UNKNOWN before the state settles. The read count comes from the call log,
+      # which already holds this call.
+      *mergeStateStatus*)
+        [ "${FAKE_MSS:-CLEAN}" = unreadable ] && exit 1
+        n=$(grep -c 'mergeStateStatus' "$FAKEGH_LOG")
+        IFS=, read -r -a mss <<< "${FAKE_MSS:-CLEAN}"
+        [ "$n" -gt "${#mss[@]}" ] && n=${#mss[@]}
+        printf '{"mergeStateStatus":"%s"}\n' "${mss[$((n - 1))]}" ;;
       *mergeCommit*)
         case "${FAKE_VERDICT:-}" in
           unreadable) exit 1 ;;
@@ -480,7 +585,9 @@ verify() {
   export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null
   export GIT_AUTHOR_NAME=verify GIT_AUTHOR_EMAIL=verify@example GIT_COMMITTER_NAME=verify GIT_COMMITTER_EMAIL=verify@example
   export FAKE_PR_STATE=OPEN FAKE_HEAD_BRANCH=feat/x FAKE_BASE=main FAKE_CROSS=false FAKE_MERGE=do
-  export FAKE_CHECKS='[{"name":"integrity","bucket":"pass"},{"name":"CodeQL","bucket":"skipping"}]'
+  # The five contexts the default FAKE_RULES requires, all pass, plus a non-required skip.
+  local all_required='{"name":"line-endings","bucket":"pass"},{"name":"integrity","bucket":"pass"},{"name":"skills","bucket":"pass"},{"name":"scripts-test","bucket":"pass"},{"name":"cli-test","bucket":"pass"}'
+  export FAKE_CHECKS="[$all_required,{\"name\":\"CodeQL\",\"bucket\":\"skipping\"}]"
   local d merged
 
   # 1. happy path from the head branch: merged, verdict from the API, detached on the merged
@@ -593,6 +700,57 @@ verify() {
   FAKE_PR_STATE=MERGED v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'refuse/already-merged' 1 "$V_RC"
   v_has 'already-merged message' "$V_OUT" '^merge-pr: REFUSED: PR 42 is MERGED, not OPEN'
+  # 6b. the REQUIRED contexts, read from the base branch's rules (#896). Every other context
+  #     green is not enough: the maintainer merges as a ruleset bypass actor, so GitHub does not
+  #     refuse a merge whose required contexts never reported, and this tool is the only check.
+  #     The issue's own experiment first: four CodeQL contexts, all pass, no required context.
+  FAKE_CHECKS='[{"name":"CodeQL","bucket":"pass"},{"name":"Analyze (actions)","bucket":"pass"},{"name":"Analyze (javascript-typescript)","bucket":"pass"},{"name":"Analyze (python)","bucket":"pass"}]' v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'refuse/only-non-required-green' 1 "$V_RC"
+  v_has 'only-non-required: names what is missing' "$V_OUT" '^merge-pr:   required context missing: line-endings$'
+  v_has 'only-non-required: refusal' "$V_OUT" '^merge-pr: REFUSED: 5 of 5 required context\(s\) on main not pass on PR 42'
+  FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/{"name":"cli-test","bucket":"pass"}/{"name":"cli-test","bucket":"skipping"}/')]" v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'refuse/required-skipping' 1 "$V_RC"
+  v_has 'required-skipping: named with its bucket' "$V_OUT" '^merge-pr:   required context not pass: cli-test \(skipping\)$'
+  FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/,{"name":"skills","bucket":"pass"}//')]" v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'refuse/one-required-missing' 1 "$V_RC"
+  v_has 'one-required-missing: named' "$V_OUT" '^merge-pr:   required context missing: skills$'
+  v_has 'one-required-missing: refusal' "$V_OUT" '^merge-pr: REFUSED: 1 of 5 required context\(s\) on main not pass on PR 42'
+  # X2. a superstring is not the context: validate-skills present, skills absent, refused.
+  FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/{"name":"skills","bucket":"pass"}/{"name":"validate-skills","bucket":"pass"},{"name":"skills (pull_request)","bucket":"pass"}/')]" v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'refuse/required-superstring-only' 1 "$V_RC"
+  v_has 'required-superstring: skills still missing' "$V_OUT" '^merge-pr:   required context missing: skills$'
+  # A required rule on the SECOND page is read (the fake splices it in only under --paginate, as
+  # gh does): one context missing there is refused by name.
+  FAKE_RULES='[{"type":"deletion","parameters":null}][{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":false,"required_status_checks":[{"context":"line-endings"},{"context":"integrity"},{"context":"skills"},{"context":"scripts-test"},{"context":"cli-test"}]}}]' \
+    FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/,{"name":"cli-test","bucket":"pass"}//')]" v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'refuse/required-rule-on-page-2' 1 "$V_RC"
+  v_has 'page-2: the missing context named' "$V_OUT" '^merge-pr:   required context missing: cli-test$'
+  FAKE_RULES=unreadable v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'rules-unreadable' 2 "$V_RC"
+  v_has 'rules-unreadable: says so' "$V_OUT" '^merge-pr: cannot read the rules in effect on main'
+  FAKE_RULES='{"message":"Not Found"}' v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'rules-not-an-array' 2 "$V_RC"
+  # jq prints nothing on an empty body and exits 0, which would read as "no required rule".
+  FAKE_RULES=emptybody v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'rules-empty-body' 2 "$V_RC"
+  # 6c. mergeStateStatus, polled past UNKNOWN (measured on #889-#891: UNKNOWN on a first read,
+  #     CLEAN about 10 s later), accepted only as CLEAN or HAS_HOOKS. The UNKNOWN list ends in
+  #     CLEAN on purpose: a poll with no bound would reach it and merge, so this arm fails on an
+  #     unbounded loop rather than hanging the self-test.
+  FAKE_MSS='UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,CLEAN' v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'refuse/mss-unknown-forever' 1 "$V_RC"
+  v_has 'mss-unknown-forever: refusal' "$V_OUT" '^merge-pr: REFUSED: mergeStateStatus is still UNKNOWN after 10 read\(s\) on PR 42'
+  for mss in DIRTY BLOCKED BEHIND DRAFT UNSTABLE; do
+    FAKE_MSS=$mss v_run "$d" 42 --head "$FX_HEAD" --interval 0
+    v_rc "refuse/mss-$mss" 1 "$V_RC"
+    v_has "mss-$mss: named" "$V_OUT" "^merge-pr: REFUSED: mergeStateStatus is $mss on PR 42"
+  done
+  FAKE_MSS=unreadable v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'mss-unreadable' 2 "$V_RC"
+  # X1. a state this tool has never heard of is refused by the default case, and named.
+  FAKE_MSS=MERGEABLE_SOON v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'refuse/mss-unknown-state' 1 "$V_RC"
+  v_has 'mss-unknown-state: named by the default case' "$V_OUT" '^merge-pr: REFUSED: mergeStateStatus is MERGEABLE_SOON on PR 42 -- not a state this tool knows to be mergeable'
   v_false 'refusals: no merge attempted' "grep -q '^pr merge' '$d/gh.log'"
   v_false 'refusals: no seat' "v_has_branch '$d' merge-seat-42"
   v_true 'refusals: HEAD where it was' "[ \"\$(v_state '$d')\" = '$before' ]"
@@ -604,6 +762,23 @@ verify() {
   FAKE_PR_STATE='' FAKE_HEAD_SHA='' v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'empty-pr-fields' 2 "$V_RC"
   v_true 'exit-2 cases: HEAD where it was' "[ \"\$(v_state '$d')\" = '$before' ]"
+
+  # 7b. mergeStateStatus UNKNOWN then CLEAN merges, and read exactly as often as it took.
+  d="$root/c6d"; fixture "$d" || return 2
+  FAKE_MSS='UNKNOWN,UNKNOWN,CLEAN' v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'mss-unknown-then-clean' 0 "$V_RC"
+  v_true 'mss-unknown-then-clean: read three times' "[ \"\$(grep -c 'mergeStateStatus' '$d/gh.log')\" = 3 ]"
+  v_has 'mss-unknown-then-clean: the settled state is printed' "$V_OUT" '^merge-pr: mergeStateStatus CLEAN after 3 read\(s\)$'
+  # HAS_HOOKS is CLEAN with a pre-receive hook in the way; it merges.
+  d="$root/c6d-hooks"; fixture "$d" || return 2
+  FAKE_MSS=HAS_HOOKS v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'mss-has-hooks' 0 "$V_RC"
+  # A base with no required-status-checks rule (another repository, or none configured): the
+  # required set is empty and says so, and the ordinary gate still applies.
+  d="$root/c6d-norules"; fixture "$d" || return 2
+  FAKE_RULES='[]' FAKE_CHECKS='[{"name":"CodeQL","bucket":"pass"}]' v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'no-required-rule' 0 "$V_RC"
+  v_has 'no-required-rule: says so' "$V_OUT" '^merge-pr: required contexts on main: none \(no required_status_checks rule; classic branch protection is not read\)$'
 
   # 8. a fork PR: merged, but the head branch is left alone locally and on origin.
   d="$root/c8"; fixture "$d" || return 2
@@ -695,18 +870,44 @@ verify() {
     v_true "verdict-$fv: remote branch kept" "v_remote_has '$d' feat/x"
   done
 
-  # 11d. A cleanup step fails after the merge: the local head branch carries a commit that was
-  #      never pushed, so `git branch -d` refuses it. The merge stands, the remote branch still
-  #      goes, and the exit is 3 with the refusal named, never 1.
+  # 11d. A cleanup step is refused after the merge: the local head branch carries a commit that
+  #      was never pushed, so its tip is not in the merge. The merge stands, the remote branch
+  #      still goes, and the exit is 3 with the reason named, never 1.
   d="$root/c11d"; fixture "$d" || return 2
   (cd "$d/checkout" && echo local > LOCAL && git add LOCAL && git commit -q -m unpushed) || return 2
   v_run "$d" 42 --head "$FX_HEAD" --interval 0
   v_rc 'cleanup-refused' 3 "$V_RC"
-  v_has 'cleanup-refused: names the step' "$V_OUT" '^merge-pr: could not delete local branch feat/x \(git branch -d refused it\)$'
+  v_has 'cleanup-refused: names the step' "$V_OUT" '^merge-pr: kept local branch feat/x: its tip [0-9a-f]{9} is not in the merge [0-9a-f]{9}'
   v_has 'cleanup-refused: verdict still names the merge' "$V_OUT" '^merge-pr: MERGED #42 as [0-9a-f]{40}, cleanup incomplete$'
   v_true 'cleanup-refused: local branch kept' "v_has_branch '$d' feat/x"
   v_false 'cleanup-refused: remote branch gone' "v_remote_has '$d' feat/x"
   v_true 'cleanup-refused: detached on the merged main' "[ \"\$(v_state '$d' | cut -d' ' -f1)\" = detached ]"
+
+  # 11f. The local head branch's tip is NOT in the merge, but its remote-tracking ref says it
+  #      is merged: the tool fetches only the base, so origin/feat/x can be stale -- a local
+  #      branch someone force-pushed over, as on a Dependabot rebase. `git branch -d` checks the
+  #      upstream when one resolves (git 2.43 `git help branch`), so it deleted this branch at
+  #      exit 0 and the redirect threw its warning away (#896, measured by the #865 challenge).
+  #      The ancestry check against the merge commit keeps it.
+  d="$root/c11f"; fixture "$d" || return 2
+  (cd "$d/checkout" && echo stale > STALE && git add STALE && git commit -q -m 'force-pushed over' \
+    && git update-ref refs/remotes/origin/feat/x HEAD) || return 2
+  local stale_tip; stale_tip=$(git -C "$d/checkout" rev-parse feat/x)
+  v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'stale-tracking-ref' 3 "$V_RC"
+  v_has 'stale-tracking: kept, with the reason' "$V_OUT" "^merge-pr: kept local branch feat/x: its tip ${stale_tip:0:9} is not in the merge"
+  v_true 'stale-tracking: the unmerged tip survives' "[ \"\$(git -C '$d/checkout' rev-parse feat/x 2>/dev/null)\" = '$stale_tip' ]"
+  v_has 'stale-tracking: verdict still names the merge' "$V_OUT" '^merge-pr: MERGED #42 as [0-9a-f]{40}, cleanup incomplete$'
+
+  # 11g. The local tip IS in the merge, but origin/feat/x is stale BEHIND it (the push came
+  #      from another clone): `git branch -d` compares against the upstream and refuses even
+  #      though HEAD contains the tip; the ancestry check holds and -D deletes. Exit 0.
+  d="$root/c11g"; fixture "$d" || return 2
+  git -C "$d/checkout" update-ref refs/remotes/origin/feat/x "$FX_BASE_SHA" || return 2
+  v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'stale-behind-tracking-ref' 0 "$V_RC"
+  v_has 'stale-behind: deleted' "$V_OUT" '^merge-pr: deleted local branch feat/x$'
+  v_false 'stale-behind: local branch gone' "v_has_branch '$d' feat/x"
 
   # 11e. ls-remote fails after the push --delete (a git wrapper on PATH that refuses only that
   #      subcommand): an empty answer from a failed command is not "absent", so exit 3, not 0.
@@ -744,7 +945,7 @@ verify() {
   v_has 'not-a-checkout message' "$V_OUT" '^merge-pr: not inside a git checkout$'
 
   if [ "$V_FAILS" -eq 0 ]; then
-    echo "verify: $V_CASES run(s), 0 failure(s) -- the seat-branch merge against a real bare origin under the worktree constraint: verdict from the API over gh's exit (1 after a merge, 0 without one, 1 with nothing merged), a head moved between read and merge refused, restore on no merge, the refusals before anything is touched (an operation in progress included), fork and --keep-remote, exit 3 when the merge never reaches origin or reports no commit or a cleanup step fails, exit 2 when the verdict is unreadable or carries no state, the own-PR run from a file the seat checkout removes, the argument refusals"
+    echo "verify: $V_CASES run(s), 0 failure(s) -- the seat-branch merge against a real bare origin under the worktree constraint: verdict from the API over gh's exit (1 after a merge, 0 without one, 1 with nothing merged), a head moved between read and merge refused, restore on no merge, the refusals before anything is touched (an operation in progress, a required context missing or not pass, a mergeStateStatus other than CLEAN/HAS_HOOKS, an UNKNOWN that never settles included), fork and --keep-remote, a local head tip not in the merge kept whatever its upstream says, exit 3 when the merge never reaches origin or reports no commit or a cleanup step fails, exit 2 when the verdict is unreadable or carries no state, the own-PR run from a file the seat checkout removes, the argument refusals"
     return 0
   fi
   echo "verify: $V_CASES run(s), $V_FAILS failure(s)" >&2
