@@ -1,4 +1,4 @@
-# The PR #883 mutant table, re-runnable. One row per claim: <id>\t<file>\t<old>::<new>.
+# The PR #883 mutant table, re-runnable. One row per claim: <id>\t<file>\t<old>::<new>. Plus #886's row, at the end.
 #
 #   bash tools/mutation-envelope.sh --test 'npm run test:scripts' \
 #     --plan tests/results/2026-09-22-publishable-tree-columns/mutation-plan.tsv
@@ -52,3 +52,7 @@ sf2-absent-remedy-names-one-form	scripts/check-publishable-tree.js	'so the pack 
 # and the rows above are evidence about the guard, and a reader who takes the count as
 # "sixteen claims about check-publishable-tree.js" is still right.
 trim-eats-the-space-leading-code	scripts/test/publishable-tree.test.js	    out.push(line.slice(2));::    out.push(line.trim());
+# #886: the pack assertion the two-column test gained. The mutant stages `new.md` as a symlink:
+# git still reports `A ` and every refusedBlock is unchanged, while npm drops it, so only the
+# `npm pack` deepEqual can see it. SURVIVED at ea824907d, before the assertion existed.
+886-new-md-staged-as-symlink	scripts/test/publishable-tree.test.js	git('add', 'skills/real/new.md', 'skills/real/new2.md');::unlinkSync(join(dir, 'skills/real/new.md')); symlinkSync('/dev/null', join(dir, 'skills/real/new.md')); git('add', 'skills/real/new.md', 'skills/real/new2.md');
