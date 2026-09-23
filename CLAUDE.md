@@ -291,14 +291,38 @@ the PR and then fails its local checkout: exit 1 with the merge done and neither
 deleted (#792, where all three local states were measured; a detached HEAD fails one step
 earlier, a named branch that is not the PR's head is silent). The recipe is
 `bash tools/merge-pr.sh <n> --head <reviewed sha>`: it merges from a throwaway seat branch,
-reads the verdict from the API, refuses a head that is not the sha you name or a check context
-that is not green, passes `--match-head-commit` (measured to be honoured: a stale sha is
-refused and the PR stays OPEN), and deletes the branches afterwards. Its exit 3 means merged
+reads the verdict from the API, refuses a head that is not the sha you name, a check context
+that is not green, a **required** context of the base branch that is missing or not `pass`, or
+a `mergeStateStatus` other than `CLEAN`/`HAS_HOOKS`, passes `--match-head-commit` (measured to
+be honoured: a stale sha is refused and the PR stays OPEN), and deletes the branches
+afterwards. The required set is read from `gh api repos/<o>/<n>/rules/branches/<base>` on every
+run. That check exists because the maintainer merges as a ruleset bypass actor, so GitHub
+would not stop a merge whose required workflows never started; "every context green" can hold
+with all five required contexts absent (#896). Its exit 3 means merged
 but not cleaned up, which is not "not merged": read the lines, then `guard:rebaseline`. One
 trap for a hand-written probe, measured 2026-09-08 on #810: `gh pr merge` given an EMPTY PR
 argument acts on the checked-out branch's pull request, so a script that has lost its number
 fires at the PR it is standing on; validate the number before every `gh pr` call, as the tool
 does.
+
+**`git branch -d` is not a merge check** (#865). It compares the branch against its upstream
+when one resolves, and against the HEAD of the worktree it runs in otherwise (`git help branch`,
+git 2.43). Both directions fail silently, and both were measured on 2026-09-23 in a throwaway
+repository. With a live upstream, `-d` deletes a pushed branch that never reached `main`: exit 0
+and one warning on stderr, which a `2>/dev/null` wrapper throws away. Once the upstream is gone,
+`-d` refuses a branch that IS merged, because the HEAD that answers is a stale local `main`. A
+merged PR's remote branch is usually deleted, and `git push --delete` drops the local tracking
+ref with it. The check that means "merged" is ancestry against the merge commit the API
+reports, and after it `-D` is the right tool, not a shortcut:
+
+```bash
+oid=$(gh pr view <n> --json mergeCommit --jq .mergeCommit.oid)
+git merge-base --is-ancestor <branch> "$oid" && git branch -D <branch>
+```
+
+`tools/merge-pr.sh` does exactly this for the PR's head branch. When the local tip is not in the
+merge, it keeps the branch and exits 3: that is a commit never pushed, or a branch someone
+force-pushed over while its tracking ref went stale (#896).
 
 **`CodeQL: neutral` is not evidence that code scanning passed.** The aggregate check by that name
 comes from the `github-advanced-security` app and reports `neutral` while the per-language
