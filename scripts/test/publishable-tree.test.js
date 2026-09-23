@@ -532,7 +532,7 @@ test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not 
   // earlier revision committed them mid-fixture and swept the staged `AD`/`MD` into the commit,
   // turning both into ` D` and deleting the very shapes under test.
   const dir = pkg(t, { 'skills/real/staged.md': '# staged\n', 'skills/real/retyped.md': '# retyped\n' });
-  const { execFileSync } = await import('node:child_process');
+  const { execFileSync, spawnSync } = await import('node:child_process');
   const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
 
   // `AD`: staged add, then removed from the worktree. `MD`: staged edit, then removed. Both
@@ -549,7 +549,11 @@ test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not 
   // fixture at all — `--delete-matching` on the `T` arm survived its mutant because the only
   // deletion test `git rm`s, which produces `D ` (#879 round 3, SF2).
   unlinkSync(join(dir, 'skills/real/references/helper.py'));
-  symlinkSync('/dev/null', join(dir, 'skills/real/references/helper.py'));
+  // Pointed at a REGULAR file, not /dev/null, so the pack assertion below can see npm start
+  // following symlinks: a followed /dev/null is a character device, which npm-packlist drops
+  // anyway, so that target would keep the listing unchanged under exactly the premise change
+  // the assertion exists for. The code stays ` T` either way (#886).
+  symlinkSync(join(dir, 'package.json'), join(dir, 'skills/real/references/helper.py'));
   // `T `: the SAME retype, staged. The index column, which the ` T` case above leaves untested —
   // weakening `gone(raw(path)[0])` to `raw(path)[0] === 'D'` survived all 937 tests (#883
   // review, SF-C). Fixing "the T half has no fixture" for one column and leaving the other in
@@ -615,16 +619,70 @@ test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not 
   // plain restore errors on `D `, is a silent exit-0 no-op on `T ` — which this fixture carries
   // — and on `MD`/`MT` the two-flag form DISCARDS the staged edit (#883 round 2, SF-2).
   assert.match(lines, /ABSENT-OR-RETYPED[\s\S]*silent no-op on `T `/);
-  // The third block, and the one the arm must NOT swallow. Measured on this exact tree by
-  // `tests/results/2026-09-22-publishable-tree-columns/two-column-pack.sh`: `npm pack
-  // --dry-run --json` lists package.json plus `skills/real/new.md` and `skills/real/new2.md`
-  // and NOTHING else — so "packed with their WORKING-TREE bytes" is true of exactly these two
-  // and false of all six absences. An earlier revision of this comment said the pack listed
-  // package.json alone, which was true of the tree before `A `/`AM` were added to it.
+  // The third block, and the one the arm must NOT swallow. "Packed with their WORKING-TREE
+  // bytes" is true of exactly these two and false of all six absences, which the `npm pack`
+  // assertions closing this test check against npm itself, on this tree (#886).
   assert.deepEqual(refusedBlock(lines, 'MODIFIED'), [
     'A  skills/real/new.md',
     'AM skills/real/new2.md',
   ]);
+
+  // The premise under all three blocks, asserted rather than measured by hand: npm packs an
+  // on-disk REGULAR file and drops a symlink or an absence, whatever git's code says. The code
+  // does not decide it — `new.md` staged as a symlink still reads `A ` and leaves every block
+  // above unchanged while npm drops it — so the expected listing is a literal. Derived from the
+  // report it would move with the guard; derived from lstat it would move with the fixture,
+  // which is the change it exists to catch (#886).
+  //
+  // npm's environment is isolated the way `cleanEnv` isolates git's: by prefix, not by the keys
+  // anyone thought of. Every `npm_*` key goes, in either case — `npm run test:scripts` hands its
+  // child the caller's cache, userconfig and user-config values in lower case, and setup-node's
+  // `registry-url` exports `NPM_CONFIG_USERCONFIG`, which npm honours too (release.yml runs this
+  // suite under it). Overriding without stripping is not enough: when both cases are present npm
+  // takes whichever comes later in the environment, so the result would depend on key order
+  // (measured on npm 11.13.0 and 11.19.0: `npm config get` returns the later of
+  // `NPM_CONFIG_X` and `npm_config_x`, and honours the upper case alone).
+  // `--dry-run` still writes the tarball into the cache, so the cache lives in a directory this
+  // test removes. The update notifier is the only network this command makes, and the compile
+  // cache is npm's own write into TMPDIR (#885's control row). `--ignore-scripts` because
+  // `--dry-run` still runs `prepack`, whose output would corrupt `--json` (measured on npm
+  // 11.13.0: a `prepack` echoing to stdout makes JSON.parse fail on its first line).
+  // `--no-workspaces` because npm walks up from the fixture looking for a workspace root: under
+  // a TMPDIR inside a root whose `workspaces` glob covers the fixture, it adopted that root and
+  // probed its `.npmrc`, a project config outside the sandbox (#902 review, N-1).
+  const npmSandbox = mkdtempSync(join(tmpdir(), 'npm-pack-'));
+  t.after(() => rmTree(npmSandbox));
+  mkdirSync(join(npmSandbox, 'home'));
+  const npmEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^npm_/i.test(key)));
+  Object.assign(npmEnv, {
+    HOME: join(npmSandbox, 'home'),
+    npm_config_cache: join(npmSandbox, 'cache'),
+    npm_config_userconfig: join(npmSandbox, 'npmrc'),
+    npm_config_globalconfig: join(npmSandbox, 'npmrc-global'),
+    npm_config_update_notifier: 'false',
+    NODE_DISABLE_COMPILE_CACHE: '1',
+  });
+  const packResult = spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts', '--no-workspaces'], {
+    cwd: dir, env: npmEnv, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 60_000,
+  });
+  // Never a skip: a required context that skips this reports green having checked nothing.
+  // `ifError` first, because an absent npm or a timeout leaves `status` null and the status
+  // assertion alone would say only `null !== 0`.
+  assert.ifError(packResult.error);
+  assert.equal(packResult.status, 0, `npm pack --dry-run failed: ${packResult.stderr}`);
+  const packed = JSON.parse(packResult.stdout)[0].files;
+  assert.deepEqual(packed.map((file) => file.path).sort(), [
+    'package.json',
+    'skills/real/new.md',
+    'skills/real/new2.md',
+  ], 'npm packs the two regular files and none of the six absences');
+  // And with their WORKING-TREE bytes, which is what the MODIFIED block says: `new2.md`'s
+  // staged blob is `# new2\n` (7 bytes) and its working tree `# new2 edited\n` (14), so a pack
+  // read from the index would show 7. `package.json`'s size is left out: whether it is stable
+  // across npm versions was not measured.
+  const sizeOf = (path) => packed.find((file) => file.path === path).size;
+  assert.deepEqual([sizeOf('skills/real/new.md'), sizeOf('skills/real/new2.md')], [6, 14],
+    'npm packs the working-tree bytes, not the staged blob');
 });
 
 test('the four unmerged codes the rename/rename fixture cannot reach', async (t) => {

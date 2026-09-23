@@ -141,7 +141,7 @@ by-2 episode above shows, can a kill by two.
 ## The two round-2 measurements, as scripts rather than as prose
 
 Both are runnable from anywhere and derive what they need themselves, so neither figure below
-is HISTORICAL.
+is HISTORICAL. (True of the two round-2 scripts that follow. The three from `two-column-pack.sh` on were retired by #886 and their figures are HISTORICAL — see § Addendum (#886).)
 
 `restore-remedy-matrix.sh` — what `git restore` does for each absence code, one fresh
 repository per (code, command) pair. Measured on git 2.43.0. The row that moved the source:
@@ -197,7 +197,7 @@ Two qualifications on that `22`, because a bare total invites being quoted witho
 The control row is the point of the last section, not decoration: a probe that counted nothing
 anywhere would otherwise read as a clean result.
 
-`two-column-pack.sh` — what npm packs from the eight-code fixture the two-column test builds.
+`two-column-pack.sh` — what npm packs from the eight-code fixture the two-column test builds. (Retired by #886: the two-column test now asserts this listing on its own fixture — see § Addendum (#886).)
 The test's closing comment states which of the eight reach the tarball, and that sentence has
 been wrong once already (it said "package.json alone", true before `A `/`AM` were added to the
 fixture and false after), so it is re-derived rather than remembered:
@@ -214,7 +214,7 @@ remedy sentences by bucket.
 
 `expected-codes.mjs` — the eight codes, read out of the test. `two-column-pack.sh` calls it and
 compares its own fixture's porcelain against the result, so there is ONE source for the set and
-nothing left for it to drift against.
+nothing left for it to drift against. (Retired by #886 with `two-column-pack.sh`, its only caller.)
 
 It carried a literal of its own for one round, and that was the fifth instance of this PR's
 recurring class: the script named the test in three comments, read nothing from it, and claimed
@@ -234,7 +234,7 @@ TITLE rather than its assertion message, so a reworded message cannot move it on
 block, and the block's extent is taken by brace matching rather than a lazy match that stops
 at the first nested `}`.
 
-`prove-expected-codes.sh` is the negative evidence, one archive lab per arm:
+`prove-expected-codes.sh` is the negative evidence, one archive lab per arm: (retired by #886; the table below is HISTORICAL)
 
 ```
 control: untouched                 codes exit 0 (8 lines)  script exit 0
@@ -265,7 +265,7 @@ which made the line-wise pass a regression on it (#883 round 8, N-1). A tail alw
 
 The transcript carries its own provenance — the sha, and whether the two files under test were
 dirty against it — because each lab is `git archive HEAD` overlaid with working-tree copies, so
-a proof of uncommitted work and a proof of the committed state look identical otherwise.
+a proof of uncommitted work and a proof of the committed state look identical otherwise. (That transcript was `prove-expected-codes.sh`'s, retired by #886.)
 
 Two more things the round-6 review measured about this wiring, neither of which either lab had
 seen because both run under a `C`-family locale:
@@ -285,16 +285,54 @@ seen because both run under a `C`-family locale:
   post  en_US.UTF-8  exit=0  clean
   ```
 
-  It failed closed — a false refusal in a record script, never a false pass.
+  It failed closed — a false refusal in a record script, never a false pass. (Moot since #886: both sides of that comparison were retired with `expected-codes.mjs`.)
 
 - **A code does not determine whether npm packs the path**, so the codes tie is sufficient only
   under an assumption neither fixture states: ` T` packs the file when the COMMITTED object was
   a symlink retyped to a regular file, and drops it when a committed regular file was retyped
   to a symlink. Both fixtures commit regular files, and nothing checks that. The assumption is
-  now written where the comparison happens.
+  now written where the comparison happens. (Retired by #886: that comment went with `two-column-pack.sh`, and the test now asserts npm's listing for its own fixture instead of assuming it.)
 
 ## Not covered here
 
 The classification source itself. This guard reads git's porcelain code; npm reads the disk, and
 the two disagree for `git rm --cached` (two records for one path) and for `TM`/`TT`. That is
 filed as #884 with its own measurement, deliberately outside this PR.
+
+## Addendum (#886)
+
+`two-column-pack.sh`, `expected-codes.mjs` and `prove-expected-codes.sh` are retired by #886.
+Their job was to keep a hand-built second copy of the two-column test's fixture in step with
+the test, so that a pack listing measured on the copy said something about the test. The
+two-column test in `scripts/test/publishable-tree.test.js` now runs
+`npm pack --dry-run --json --ignore-scripts --no-workspaces` on its OWN fixture and asserts two
+things, in the required `scripts-test` context. It asserts the sorted listing with `deepEqual`
+(`:674`, message at `:678`). It asserts the two packed sizes, `[6, 14]` (`:684`, message at
+`:685`), which checks the MODIFIED block's "WORKING-TREE bytes" too: `new2.md` is 7 bytes staged
+and 14 on disk. That is the exit
+`two-column-pack.sh` named for itself in its header. With one fixture there is no second one to
+drift, which is what the parser and its nine-arm proof existed to manage.
+
+The pack listing under `two-column-pack.sh`, the nine-arm table under `prove-expected-codes.sh`
+and the locale table are HISTORICAL from #886, because the scripts that measured them are gone.
+Recover any of the three with
+`git show ea824907d:tests/results/2026-09-22-publishable-tree-columns/<name>`. The two known nits
+of `expected-codes.mjs` went with it: the over-refusal of a trailing `// …`, and the
+`/* tail */ }` mis-anchor. Both are recorded in #886's body.
+
+The expected listing is a literal on purpose. A porcelain code does not decide packedness. The
+`mutation-plan.tsv` row `886-new-md-staged-as-symlink` stages `new.md` as a symlink. git still
+reports `A `, every block of the report is unchanged, and npm drops the file. A listing derived
+from the report would not see that, and one derived from `lstat` would move with the fixture.
+Under `npm run test:scripts` the row SURVIVED at `ea824907d`. It was KILLED at `e86416167`, and
+a direct run of the mutated file fails the two-column test alone, 26 pass and 1 fail, at the
+listing assertion (`:670` at that commit, `:674` from the #902 round-1 commit on) with
+`actual: [ 'package.json', 'skills/real/new2.md' ]`. The row's needle is `git('add', …)`
+rather than the `write(…)` line above it, because `tools/mutation-envelope.sh` refuses any OLD
+text holding two colons, and the `write` line's object literal holds two.
+
+The ` T` fixture's symlink targets `package.json` rather than `/dev/null` since #886. A
+followed `/dev/null` is a character device, which npm-packlist drops anyway. So with that target
+the literal could not see npm start following symlinks. The #886 design review measured this
+with an npm-packlist patched to follow symlinks: the old target stayed green, and the new
+target went red, gaining `skills/real/references/helper.py`.
