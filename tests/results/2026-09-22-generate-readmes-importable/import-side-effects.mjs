@@ -10,7 +10,7 @@
  * the whole repository in silence. The head of `generate-readmes.js` claims it does not, so the
  * claim is measured here rather than believed.
  *
- * ## Six corrections, every one of them from a measurement
+ * ## Corrections, every one of them from a measurement
  *
  * No version of this file has yet been right on its first run, and the failures are worth
  * keeping because each is a way a probe silently stops working:
@@ -32,8 +32,20 @@
  *      refused the unmodified generator, and printed a false accusation on CI's own Node.
  *      Separately, a hand-written list of names left callback `symlink`, `promises.mkdtemp` and
  *      others able to change the tree with the probe saying OK. (#888 round 3)
+ *   6. **The verdict was a snapshot.** It was taken the moment `await import()` resolved, so
+ *      anything the import SCHEDULED — a `setTimeout` write, a `setImmediate` write, a stream
+ *      whose `open` is lazy — reached the tree after `OK` was printed. Three planted writes did
+ *      exactly that under a green verdict. The drain after the import is the fix, and the
+ *      knockout is the proof: remove that one line and `deferred-write` and `write-stream-ctor`
+ *      both flip to `blind`. (#888 round 4)
+ *   7. **The drain's completeness was asserted from a knockout that could not show it.** A write
+ *      from the subject's `exit` handler, a timer armed from its `beforeExit`, and
+ *      `process.exit(0)` during import — no output at all, exit 0 — all landed past the verdict.
+ *      Guard 1 and guard 2 below are the fix. (#888 round 5)
  *
- * Corrections 3, 4 and 5 were all found by someone running something. None came from re-reading.
+ * This list and `RESULT.md` §4 are one list, and §4 is the long form. Only §4 states how many:
+ * a count kept in two places is how this heading said "six" while §4 said "seven" (#893).
+ * Corrections 3 onward were all found by someone running something. None came from re-reading.
  *
  * ## What this version does differently, and why
  *
@@ -64,13 +76,6 @@
  *
  * Still unmeasured beyond the declared-blind arms: a module loaded before this file, and any
  * side effect reaching the filesystem through none of the wrapped entry points.
- *
- *   6. **The verdict was a snapshot.** It was taken the moment `await import()` resolved, so
- *      anything the import SCHEDULED — a `setTimeout` write, a `setImmediate` write, a stream
- *      whose `open` is lazy — reached the tree after `OK` was printed. Three planted writes did
- *      exactly that under a green verdict. The drain after the import is the fix, and the
- *      knockout is the proof: remove that one line and `deferred-write` and `write-stream-ctor`
- *      both flip to `blind`. (#888 round 4)
  */
 import fs, { readFileSync as namedReadFileSync } from 'node:fs';
 import fsPromises from 'node:fs/promises';
