@@ -11,7 +11,7 @@ repository root.
 | | |
 |---|---|
 | base commit | `d6b9b9c72dea1f88ab60f84c7611dfedc16790d4` (merge of #883) |
-| head at measurement | every figure below re-taken at `cda4429f2`, the round-5 base; the import probe's arm table re-taken after merge, for #893, at the head of that PR. The generator, the fixture, the suite and the two mutation probes are byte-identical at `cda4429f2` and at that head; the import probe is not — #893 changed its grading and added arms. Its §4 main-mode table reproduces at that head on a pipe and, since #893 counts the loader before printing, to a regular file too; before that, a file stdout added the probe's own first report line to the loader column |
+| head at measurement | every figure below re-taken at `cda4429f2`, the round-5 base; the import probe's arm table re-taken after merge, for #893, at the head of PR #895 — the second parent of that PR's merge commit, which is where to read it once the branch is gone. The generator, the fixture, the suite and the two mutation probes are byte-identical at `cda4429f2` and at that head; the import probe is not — #893 changed its grading and added arms. Its §4 main-mode table reproduces at that head on a pipe and, since #893 counts the loader before printing, to a regular file too; before that, a file stdout added the probe's own first report line to the loader column |
 | working tree | clean at every run; the two probes that mutate refuse a dirty tree or run in a lab |
 | command every mutant and every suite arm ran under | `npm run test:scripts` |
 | node | **v25.9.0** for the suite figures, recorded rather than disclaimed — an earlier edition of this table said no figure depended on a version, and two did. The `node:test` reporter is TAP on a non-TTY below Node 24, so both mutation probes pin the spec reporter through `NODE_OPTIONS` (verified on v20.20.2, v22.16.0 and v24.20.0). The import probe was worse: its verdict was a Node-25 artefact and it REFUSED the unmodified generator on CI's own Node 24 (§4). It is now run and recorded on v22.16.0, v24.20.0 and v25.9.0, the whole range `engines` allows |
@@ -352,7 +352,7 @@ throwaway module, imports THAT instead of the generator, and asserts the verdict
 declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
 
 ```
---verify: 32 shape(s) on node v25.9.0, each planted into a throwaway module and imported
+--verify: 33 shape(s) on node v25.9.0, each planted into a throwaway module and imported
   wrapped by enumeration: 92 fs, 32 fs/promises, 8 child_process export(s)
   ok    empty              declared blind observed blind
   ok    sync-read          declared seen  observed seen
@@ -380,6 +380,7 @@ declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
   ok    dep-import         declared blind observed blind
   ok    bare-resolve-import declared blind observed blind
   ok    exits-during-import declared no-verdict(exit 0) observed no-verdict(exit 0)
+  ok    bare-exit-during-import declared no-verdict(exit 0) observed no-verdict(exit 0)
   ok    exit-nonzero-during-import declared no-verdict(exit 3) observed no-verdict(exit 3)
   ok    exit-1-during-import declared no-verdict(exit 1) observed no-verdict(exit 1)
   ok    throws-during-import declared no-verdict(exit 1) observed no-verdict(exit 1)
@@ -397,16 +398,20 @@ Both are finer than they were at merge (#893). `no-verdict` carries the exit cod
 escape `exits-during-import` is named for is the CLEAN exit — no output, exit 0, a silent pass —
 and it graded identically to a crash. `exit-nonzero-during-import` exits 3, so the code is
 shown to pass through rather than be folded to 0 or 1 — with only 0 and 1 planted, a mutant
-printing `code ? 1 : 0` survived every arm (#893 round 1). The code is all guard 1 can see, so
+printing `code ? 1 : 0` survived every arm (#893 round 1). `bare-exit-during-import` is the
+spelling most code uses, `process.exit()`: its handler argument is 0 and `process.exitCode` is
+`undefined`, where `exit(0)` makes both 0 — so it is the arm that pins "the argument, not
+`exitCode`". Without it, a guard reading `process.exitCode ?? 1` survived all the other arms and
+graded that clean exit as a crash (#893 round 2). The code is all guard 1 can see, so
 `process.exit(1)` and a bare `throw` still grade alike, as `no-verdict(exit 1)`; two arms declare
 that rather than leave it to be discovered. And a shape found both in time and late used to grade
 `seen-late`, because `late` won the grading ternary without a word said about it. It is
 `seen+late` now, with `sync-write-and-exit-handler` producing it. Each change has a mutant, and
-each mutant dies only to arms planted for the property it breaks (v24.20.0): format the marker
-from `process.exitCode` after guard 1 sets it, and the two arms whose code is not 1 fail —
-`exits-during-import` and `exit-nonzero-during-import` both read `no-verdict(exit 1)`; fold the
-code with `code ? 1 : 0`, and only `exit-nonzero-during-import` fails; restore the old ternary,
-and only `sync-write-and-exit-handler` fails, reading `seen-late`.
+each mutant dies only to arms planted for the property it breaks (v22.16.0, v24.20.0 and
+v25.9.0): format the marker from `process.exitCode` after guard 1 sets it, and the arms whose code
+is not 1 fail; fold the code with `code ? 1 : 0`, and only `exit-nonzero-during-import` fails;
+read `process.exitCode ?? 1` instead of the argument, and only `bare-exit-during-import` fails;
+restore the old ternary, and only `sync-write-and-exit-handler` fails, reading `seen-late`.
 
 **Neither guard reports everything it holds, and #894 is the follow-up.** Guard 2 runs after the
 subject's own `exit` handlers only while they return: one that writes and then calls
@@ -423,9 +428,9 @@ for the one structural gap left, and `dep-import` as a blind control. Four more 
 resolution and does not: it imports an absolute `file://` URL, so nothing is resolved. Its
 verdict was right and its stated mechanism was not, which is row 8's shape again in miniature.
 The new arm is the one that actually resolves, and both are blind on all three Nodes, so
-ordinary resolution is not a false-positive source. Four more after merge, in #893:
-`exit-nonzero-during-import`, `exit-1-during-import`, `throws-during-import` and
-`sync-write-and-exit-handler`, for the two finer verdicts above.
+ordinary resolution is not a false-positive source. Five more after merge, in #893:
+`bare-exit-during-import`, `exit-nonzero-during-import`, `exit-1-during-import`,
+`throws-during-import` and `sync-write-and-exit-handler`, for the two finer verdicts above.
 
 **`empty` is the arm that matters most**, and it is the one the first table lacked. A module that
 does nothing must grade `blind`; under the Node-25-only classifier it graded `seen` on 22 and 24,

@@ -168,6 +168,11 @@ const SHAPES = {
   // identically because the exit code is all guard 1 can see; only the throw is a crash, and the
   // pair is declared so the collision is a stated limit rather than a surprise (#893).
   'exits-during-import':  { expect: 'no-verdict(exit 0)', code: "process.exit(0);" },
+  // The bare spelling most code uses for a clean exit. At guard-1 time its handler argument is 0
+  // and `process.exitCode` is `undefined`, where `exit(0)` makes both 0 — so this is the arm
+  // that pins "the ARGUMENT, not `exitCode`". Without it, a guard reading `process.exitCode ?? 1`
+  // survived every other arm and graded this clean exit as a crash (#893 round 2).
+  'bare-exit-during-import': { expect: 'no-verdict(exit 0)', code: "process.exit();" },
   'exit-nonzero-during-import': { expect: 'no-verdict(exit 3)', code: "process.exit(3);" },
   'exit-1-during-import': { expect: 'no-verdict(exit 1)', code: "process.exit(1);" },
   'throws-during-import': { expect: 'no-verdict(exit 1)', code: "throw new Error('planted');" },
@@ -439,9 +444,13 @@ const GUARD_PATHS = new Set([TARGET, GENERATOR, resolve(process.argv[1] ?? '')])
 const isLoader = (call) => call.kind === 'loader';
 const isGuard = (call) => call.name.endsWith('.realpathSync') && GUARD_PATHS.has(resolve(call.arg));
 // A write to fd 0, 1 or 2 is this process talking, not repository content. It has to be said
-// explicitly because `console.log` reaches stdout through `fs.writeSync` on some Node versions
-// and not others: on v22.16.0 the probe's own report made every arm read `seen-late`, which is
-// the instrument grading its own output (#888 round 5, found while fixing F1).
+// explicitly because `console.log` can reach stdout through `fs.writeSync`. What decides it, as
+// measured in #893: when stdout is a regular file it is a `SyncWriteStream` and every line goes
+// through the patched `fs.writeSync`, on v22, v24 and v25 alike; a pipe does not. The round-5
+// observation stands as an observation — on v22.16.0 the probe's own report once made every arm
+// read `seen-late`, the instrument grading its own output (#888 round 5, found while fixing F1)
+// — but its stated cause, a Node-version difference, is not what reproduces now: a `--verify`
+// child records no stdio call on any of the three. The filter is right under either mechanism.
 const isStdio = (call) => /\.(writeSync|writevSync|write|writev)$/.test(call.name)
   && /^fd:[012] |^[012]$/.test(call.arg);
 
