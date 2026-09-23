@@ -275,8 +275,11 @@ run_merge() {
   #     is the only check. Read from the API rather than listed here, so the set cannot drift from
   #     the ruleset; an unreadable answer refuses to run rather than proceeding without it.
   local rules_json required req bucket req_total=0 req_bad=0
-  # --paginate: the endpoint pages at 30 rules; the pages print back to back, so jq -s reads them
-  # as one list of arrays rather than counting a context once per page.
+  # --paginate: without it gh returns the first page only. With it, gh (2.92.0) splices array
+  # pages into ONE array -- measured on rulesets?per_page=1, two pages -> one array of length 2,
+  # no "][" in the output (#898 round 2). jq -s plus .[][] reads that one array, and would also
+  # read pages printed separately (gh's documented shape for object pages), so neither form
+  # counts a context twice.
   rules_json=$("$GH" api "repos/$REPO/rules/branches/$PR_BASE" --paginate 2>/dev/null) || rules_json=""
   [ -n "$rules_json" ] || die "cannot read the rules in effect on $PR_BASE (gh api repos/$REPO/rules/branches/$PR_BASE); not merging without the required contexts"
   required=$(printf '%s\n' "$rules_json" | jq -rs 'if any(.[]; type != "array") then error("not a rules array") else [.[][] | select(.type == "required_status_checks") | .parameters.required_status_checks[]?.context] | unique | .[] end' 2>/dev/null) \
@@ -482,9 +485,11 @@ case "$1 $2" in
       unreadable) exit 1 ;;
       emptybody) exit 0 ;;
       default) printf '%s\n' '[{"type":"deletion","parameters":null},{"type":"non_fast_forward","parameters":null},{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":false,"required_status_checks":[{"context":"line-endings"},{"context":"integrity"},{"context":"skills"},{"context":"scripts-test"},{"context":"cli-test"}]}}]' ;;
-      # A multi-page answer ("][" between pages) is printed whole only under --paginate; without
-      # it gh returns the first page, which is what an unpaginated call would read.
-      *) if [[ "$*" == *--paginate* || "$FAKE_RULES" != *']['* ]]; then printf '%s\n' "$FAKE_RULES"
+      # "][" is THIS fake's page marker, not gh's output. Under --paginate gh splices array pages
+      # into one array (measured, gh 2.92.0), so the fake does the same; without the flag gh
+      # returns the first page only, which is what an unpaginated call would read.
+      *) if [[ "$FAKE_RULES" != *']['* ]]; then printf '%s\n' "$FAKE_RULES"
+         elif [[ "$*" == *--paginate* ]]; then printf '%s\n' "${FAKE_RULES//\]\[/,}"
          else printf '%s]\n' "${FAKE_RULES%%\]\[*}"; fi ;;
     esac ;;
   "pr view")
@@ -714,8 +719,8 @@ verify() {
   FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/{"name":"skills","bucket":"pass"}/{"name":"validate-skills","bucket":"pass"},{"name":"skills (pull_request)","bucket":"pass"}/')]" v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'refuse/required-superstring-only' 1 "$V_RC"
   v_has 'required-superstring: skills still missing' "$V_OUT" '^merge-pr:   required context missing: skills$'
-  # The rules answer pages at 30, and --paginate prints the pages back to back. A required rule
-  # on the SECOND page is read: one context missing there is refused by name.
+  # A required rule on the SECOND page is read (the fake splices it in only under --paginate, as
+  # gh does): one context missing there is refused by name.
   FAKE_RULES='[{"type":"deletion","parameters":null}][{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":false,"required_status_checks":[{"context":"line-endings"},{"context":"integrity"},{"context":"skills"},{"context":"scripts-test"},{"context":"cli-test"}]}}]' \
     FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/,{"name":"cli-test","bucket":"pass"}//')]" v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'refuse/required-rule-on-page-2' 1 "$V_RC"
