@@ -381,14 +381,18 @@ if (VERIFY) {
   // count has been taken.
   const verifyRoot = fs.mkdtempSync(resolve(tmpdir(), 'import-shape-verify-'));
   const childEnv = { ...process.env, TMPDIR: verifyRoot };
-  // The `finally` below covers the parent's normal exits, not its interruption. SIGINT or SIGTERM
-  // to the parent ends the run at once and leaves this root under `/tmp/import-shape-verify-*`,
-  // holding the in-flight child's directory when the signal lands during an arm; remove it by
-  // hand (measured on v24: SIGTERM, exit 143, 1 entry; SIGINT, exit 130, 0 entries). A signal listener cannot
-  // fix that here: `--verify` is one synchronous block, so the listener's callback never runs
-  // before `process.exit()`, and installing one only makes the run ignore the signal. Measured in
-  // #904 round 1: with a SIGTERM listener, SIGTERM to the parent 3 s in left the run completing
-  // 40/40 at exit 0 (#894 design critique, point 3, left open).
+  // The `finally` below covers the parent's normal exits, not its interruption, and that leak is
+  // NEW with #894. Before it, each child removed its own directory, so a signal to the parent
+  // alone left nothing: the orphaned child finished and cleaned up. Parent-owned cleanup put the
+  // removal on the parent's exit paths, and a signal is not one of them. Measured on v24,
+  // signalling the parent about 3 s in: the pre-#894 probe left nothing; this one exits 143 on
+  // SIGTERM or 130 on SIGINT and leaves this root under `/tmp/import-shape-verify-*`, holding the
+  // in-flight child's directory, since the parent spends almost all its time inside an arm (1
+  // entry in 3 of 3 runs for either signal, measured in the #904 review). Remove it by hand.
+  // A signal listener cannot fix it: `--verify` is one synchronous block, so the listener's
+  // callback never runs before `process.exit()`, and installing one only makes the run ignore the
+  // signal (#904 round 1). A child that removed its own directory at exit only when orphaned would
+  // restore the old behaviour [proposed, not run] (#894 design critique, point 3, left open).
   const SHAPE_DIR_NAME = /^import-shape-[A-Za-z0-9]{6}$/;
   let leftover = [];
   try {

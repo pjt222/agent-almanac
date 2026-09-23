@@ -657,15 +657,24 @@ AC3 evidence is that row together with the mutant that deletes the parent's per-
 leak, because the `finally` removes the root with everything in it. That count was 0 before and 0
 after on all three Nodes, and it catches only a leaked root or a child that ignores `TMPDIR`.
 
-When the parent itself is interrupted, the root is left behind, as it was before #894. SIGINT
-or SIGTERM ends the run at once and leaves `/tmp/import-shape-verify-*`, holding the in-flight
-child's directory when the signal lands during an arm, to be removed by hand. Measured on v24
-by signalling the parent about 3 s in: SIGTERM exited 143 and left the root with 1 entry, and
-SIGINT exited 130 and left it with 0 entries. A signal handler was tried and removed: the
-#904 review measured that it never runs. `--verify` is one synchronous block, so a listener's
-callback cannot fire before `process.exit()`. The listener only made the parent ignore the
-signal: SIGTERM to the parent 3 s in, and the run still completed 40/40 at exit 0. An earlier
-draft of this paragraph described what that handler did, and it was wrong.
+When the parent itself is interrupted, the root is left behind, and that is **new with #894**.
+Before it, each child removed its own directory, so a signal to the parent alone left nothing:
+the orphaned child finished and cleaned up. Parent-owned cleanup moved the removal onto the
+parent's exit paths, and a signal is not one of them.
+
+Measured on v24 by signalling the parent about 3 s in:
+- the pre-#894 probe left nothing;
+- this one exits 143 on SIGTERM or 130 on SIGINT, and leaves `/tmp/import-shape-verify-*` holding
+  the in-flight child's directory, to be removed by hand. The #904 review measured 1 entry in 3 of
+  3 runs for either signal, because the parent spends almost all its time inside an arm. One
+  earlier SIGINT run that landed between arms left 0.
+
+A signal handler was tried and removed: the #904 review measured that it never runs. `--verify` is
+one synchronous block, so a listener's callback cannot fire before `process.exit()`. The listener
+only made the parent ignore the signal: SIGTERM to the parent 3 s in, and the run still completed
+40/40 at exit 0. A child that removed its own directory at exit only when orphaned would restore
+the old behaviour [proposed, not run]. Two earlier drafts of this paragraph were wrong: one
+described what that handler did, and one said interruption was unchanged from before #894.
 
 A standalone `--shape` leaves its directory and prints its path on the first line.
 
