@@ -157,7 +157,15 @@ const SHAPES = {
   // THE VERDICT IS TAKEN AT A MOMENT, and these three land after it. `exits-during-import` is the
   // sharp one: without the guard the probe prints nothing at all and exits 0 — a silent pass,
   // which is worse than the hang the drain's comment called "the right failure" (#888 round 5).
-  'exits-during-import':  { expect: 'no-verdict', code: "process.exit(0);" },
+  // The clean-exit form is the escape: exit 0 with no verdict is the silent pass. The two below
+  // are CRASH forms, and they grade identically to each other because the exit code is all
+  // guard 1 can see — declared, so the collision is a stated limit rather than a surprise (#893).
+  'exits-during-import':  { expect: 'no-verdict(exit 0)', code: "process.exit(0);" },
+  'exit-nonzero-during-import': { expect: 'no-verdict(exit 1)', code: "process.exit(1);" },
+  'throws-during-import': { expect: 'no-verdict(exit 1)', code: "throw new Error('planted');" },
+  // Content both in time AND late. The in-time half alone already refuses, so this is `seen+late`
+  // rather than `seen-late`: the late half is additional, not the only finding (#893).
+  'sync-write-and-exit-handler': { expect: 'seen+late', code: "import { writeFileSync } from 'node:fs'; writeFileSync(T('planted.txt'), 'x'); process.on('exit', () => writeFileSync(T('from-exit.txt'), 'x'));" },
   'exit-handler-write':   { expect: 'seen-late', code: "import { writeFileSync } from 'node:fs'; process.on('exit', () => writeFileSync(T('from-exit.txt'), 'x'));" },
   'beforeexit-reschedule':{ expect: 'seen-late', code: "import { writeFileSync } from 'node:fs'; process.once('beforeExit', () => setTimeout(() => writeFileSync(T('rescheduled.txt'), 'x'), 0));" },
 };
@@ -330,7 +338,12 @@ if (VERIFY) {
     const verdict = marker ? marker.slice(VERDICT_MARKER.length).trim() : null;
     // `seen-late` is its own verdict: the content was real and the probe found it AFTER printing
     // OK. Collapsing it into `seen` would hide the half of the class the drain cannot reach.
-    const got = late ? 'seen-late' : verdict ?? `error(no verdict, exit ${run.status})`;
+    // `seen+late` is a shape found BOTH before and after the verdict. It used to grade
+    // `seen-late`, undocumented, because `late` won the ternary — which hid that the in-time
+    // verdict had already refused it (#893).
+    const got = late
+      ? (verdict === 'seen' ? 'seen+late' : 'seen-late')
+      : verdict ?? `error(no verdict, exit ${run.status})`;
     const ok = got === expect;
     if (!ok) bad++;
     rows.push(`  ${ok ? 'ok  ' : 'FAIL'}  ${name.padEnd(18)} declared ${expect.padEnd(5)} observed ${got}`);
@@ -378,9 +391,13 @@ calls.length = 0;
 // SILENT pass, and the drain's comment called a hang "the right failure" while this one existed
 // (#888 round 5, F1). Nothing about the generator does this; the probe's claim did not say so.
 let verdictReached = false;
-process.on('exit', () => {
+process.on('exit', (code) => {
   if (verdictReached) return;
-  if (SHAPE) console.log(`${VERDICT_MARKER} no-verdict`);
+  // The code comes from the handler's ARGUMENT, read before the `exitCode = 1` below: formatted
+  // from `process.exitCode` after that line, every arm would print `exit 1` and the clean-exit
+  // escape could not be told from a crash (#893). A bare `throw` and `process.exit(1)` both
+  // arrive as 1 — the code is all this handler can see, and the arms say so.
+  if (SHAPE) console.log(`${VERDICT_MARKER} no-verdict(exit ${code})`);
   console.error('REFUSED: the import exited the process before any verdict was reached.');
   process.exitCode = 1;
   // This handler is the only one that runs when the subject ends the process, so the cleanup
