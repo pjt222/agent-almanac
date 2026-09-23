@@ -260,7 +260,12 @@ def _mermaid_decode(s: str) -> str:
 
 
 def _parse_html(text: str) -> _Positions:
-    """One feed, then close. `_Positions.close` reads the tail `feed` left, so feed only once."""
+    """One feed, then close. `_Positions.close` reads the tail `feed` left, so feed only once.
+
+    A second `feed()` on the patched 3.12 parser can sit in `_pending`, which `close()` merges
+    only after `_Positions.close` has read `rawdata`, so a drop there would go unseen (#909
+    round 1, N-4). One feed per instance is the contract.
+    """
     p = _Positions()
     p.feed(text)
     p.close()
@@ -321,7 +326,18 @@ def redact_text(text: str, table: dict[str, str], kind: str, also_deny=(), asser
     out = text if assert_only else apply_mapping(text, table)
     terms = list(table.keys()) + [t for t in also_deny if t]
     assert_clean(out, terms, "whole-text")
-    if kind == "html" and _parse_html(out).dropped:
+    dropped = kind == "html" and _parse_html(out).dropped
+    survivors = structure_survivors(out, terms, kind)
+    # Survivors first: a leak the tier FOUND is a finding (exit 1) even when the parser also
+    # dropped input after it. Checked the other way round, an established `text[1]` hit became
+    # exit 2 and a caller branching on 1 heard nothing (#909 round 1).
+    if survivors:
+        raise RedactionError(
+            f"structure: term(s) survive at {', '.join(survivors)}"
+            + ("; the parser also dropped input it could not tokenise, so this list may be "
+               "incomplete" if dropped else "")
+        )
+    if dropped:
         # Malformed markup (an unterminated attribute quote) makes HTMLParser drop the rest of the
         # document unexamined, and a clean result over the part it did see would read as a pass.
         # Keyed on the drop itself, not on an empty position list: `<div></div>` yields no
@@ -332,9 +348,6 @@ def redact_text(text: str, table: dict[str, str], kind: str, also_deny=(), asser
             "attribute quote or tag, say), so the structure tier did not examine all of it. "
             "This is COULD-NOT-MEASURE (exit 2), not a finding (exit 1)."
         )
-    survivors = structure_survivors(out, terms, kind)
-    if survivors:
-        raise RedactionError(f"structure: term(s) survive at {', '.join(survivors)}")
     matched = sum(1 for src in table if src in text)
     return out, {
         "mappings": len(table),
@@ -652,6 +665,8 @@ def _verify() -> int:
         ("text ending in a lone <", "x <"),
         ("an unclosed comment, which close() emits", "<p>x</p><!-- never closed"),
         ("an unclosed CDATA section, which close() emits to unknown_decl", "<svg><text><![CDATA[x"),
+        ("an unclosed doctype, which close() emits to handle_decl", "<p>ok</p><!DOCTYPE html"),
+        ("an unclosed XML declaration, which close() emits to handle_pi", '<?xml version="1.0"'),
     ):
         check(f"well-formed or examined markup is NOT refused: {name}", not refused(doc), repr(doc))
 
@@ -666,6 +681,23 @@ def _verify() -> int:
     ):
         check(f"a dropped tail REFUSES whatever precedes it: {name}", refused(prefix + stall),
               repr(prefix + stall))
+
+    # A leak already FOUND is a finding, even when the parser also dropped input after it. The
+    # drop check used to run first, so an established `text[1]` hit became exit 2, and a caller
+    # branching on exit 1 heard nothing (#909 round 1).
+    leak_then_stall = "<p>acme&#95;secret</p>" + stall
+    got = survivors_of(leak_then_stall)
+    check("a leak found ahead of a dropped tail is exit 1 (a finding), not exit 2",
+          got.startswith("structure:") and "text[1]:acme_secret" in got and "dropped" in got,
+          got or "no raise")
+
+    # Only html can reach the refusal. Mermaid bytes that would stall HTMLParser (a `<` in a
+    # label) are read line by line and must not be refused under an `--type html` message.
+    try:
+        redact_text('graph TD\n  a["a<b"]\n', {"never": "x"}, "mermaid")
+        check("a mermaid label holding `<` is not refused (the refusal is html-only)", True)
+    except (RedactionError, UnmeasurableError) as exc:
+        check("a mermaid label holding `<` is not refused (the refusal is html-only)", False, str(exc))
     try:
         redact_text('<text data-id="acme&#95;secret>x</text>', {"never": "x"}, "html")
         check("markup the tier cannot examine REFUSES rather than reporting 0 positions as clean",
