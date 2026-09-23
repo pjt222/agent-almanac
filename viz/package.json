@@ -27,7 +27,7 @@
     "js-yaml": "^5.4.1",
     "sharp": "^0.35.4",
     "vite": "^8",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.1"
   },
   "//": "overrides.lodash-es: mermaid 12.0.0 depends on chevrotain ~11.1.2, which pins lodash-es to exactly 4.17.23 (GHSA-r5fr-rjxr-66jc, GHSA-f23m-r3pf-42rh). Drop the override once mermaid depends on chevrotain >=12, which has no lodash-es dependency.",
   "overrides": {
