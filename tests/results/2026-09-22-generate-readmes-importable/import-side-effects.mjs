@@ -229,7 +229,10 @@ const SHAPES = {
 // The shape module is written BEFORE the patch loops, so writing it is not itself recorded.
 let TARGET = GENERATOR;
 if (SHAPE) {
-  const shape = SHAPES[SHAPE];
+  // Own keys only: `SHAPES['__proto__']`, `['constructor']` and the like are inherited, so a bare
+  // lookup let those names past the refusal below and grade an empty module `blind` at exit 0
+  // (#904 round 1, N4). `--verify` iterates own keys and was never affected.
+  const shape = Object.hasOwn(SHAPES, SHAPE) ? SHAPES[SHAPE] : null;
   if (!shape) {
     console.error(`REFUSED: unknown shape \`${SHAPE}\`. Known: ${Object.keys(SHAPES).join(', ')}`);
     process.exit(2);
@@ -251,7 +254,9 @@ if (SHAPE) {
     // The two paths come from the environment, not from source text built around them: a path
     // interpolated into generated code is what CodeQL's js/bad-code-sanitization flagged on these
     // two lines (alerts #16 and #18 on main, #21 on #904). Nothing is interpolated now. Both
-    // variables ride the child environment into anything a shape spawns, which no arm relies on.
+    // variables ride the child environment into anything a shape spawns, which no arm relies on,
+    // and R and T now resolve at call time: a shape that rewrote them before writing would redirect
+    // its own write. No arm does, and `plants` counts the real directory regardless.
     'const R = (p) => resolve(process.env.SHAPE_ROOT, p);',
     'const T = (p) => resolve(process.env.SHAPE_TMP, p);',
     shape.code,
