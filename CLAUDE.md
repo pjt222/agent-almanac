@@ -305,17 +305,28 @@ argument acts on the checked-out branch's pull request, so a script that has los
 fires at the PR it is standing on; validate the number before every `gh pr` call, as the tool
 does.
 
-**`git branch -d` is not a merge check** (#865). It compares the branch against its upstream
-when one resolves, and against the HEAD of the worktree it runs in otherwise (`git help branch`,
-git 2.43). Both directions fail silently, and both were measured on 2026-09-23 in a throwaway
-repository. With a live upstream, `-d` deletes a pushed branch that never reached `main`: exit 0
-and one warning on stderr, which a `2>/dev/null` wrapper throws away. Once the upstream is gone,
-`-d` refuses a branch that IS merged, because the HEAD that answers is a stale local `main`. A
-merged PR's remote branch is usually deleted, and `git push --delete` drops the local tracking
-ref with it. The check that means "merged" is ancestry against the merge commit the API
-reports, and after it `-D` is the right tool, not a shortcut:
+**`git branch -d` is not a merge check** (#865). It asks whether the branch's tip is in its
+upstream when one resolves, and in the HEAD of the worktree it runs in otherwise (`git help
+branch`, git 2.43). That reference is often not the one that means "merged". Three cases were
+measured on 2026-09-23 in a throwaway repository:
+
+- **It deletes an unmerged branch, silently.** A branch pushed with `-u` and with nothing
+  unpushed has its tip in its upstream, so `-d` deletes it even if it never reached `main`. It
+  exits 0 with one warning on stderr, which a `2>/dev/null` wrapper throws away.
+- **It refuses a merged branch.** A merged PR's remote branch is usually deleted, and
+  `git push --delete` drops the local tracking ref with it. With the upstream gone, HEAD
+  answers, and a stale local `main` does not contain the tip: `error: … not fully merged`,
+  exit 1.
+- **It refuses a merged branch even when HEAD contains it.** An upstream that resolves but lags
+  behind the tip (the push came from another clone) is still the reference asked:
+  `not yet merged to 'refs/remotes/origin/<b>', even though it is merged to HEAD`, exit 1.
+
+The check that means "merged" is ancestry against the merge commit the API reports. Fetch the
+base first, so that commit is present locally, or the ancestry test fails for want of the
+object. After that check, `-D` is the right tool, not a shortcut:
 
 ```bash
+git fetch origin <base>
 oid=$(gh pr view <n> --json mergeCommit --jq .mergeCommit.oid)
 git merge-base --is-ancestor <branch> "$oid" && git branch -D <branch>
 ```

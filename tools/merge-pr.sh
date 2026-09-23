@@ -275,12 +275,14 @@ run_merge() {
   #     is the only check. Read from the API rather than listed here, so the set cannot drift from
   #     the ruleset; an unreadable answer refuses to run rather than proceeding without it.
   local rules_json required req bucket req_total=0 req_bad=0
-  rules_json=$("$GH" api "repos/$REPO/rules/branches/$PR_BASE" 2>/dev/null) || rules_json=""
+  # --paginate: the endpoint pages at 30 rules; the pages print back to back, so jq -s reads them
+  # as one list of arrays rather than counting a context once per page.
+  rules_json=$("$GH" api "repos/$REPO/rules/branches/$PR_BASE" --paginate 2>/dev/null) || rules_json=""
   [ -n "$rules_json" ] || die "cannot read the rules in effect on $PR_BASE (gh api repos/$REPO/rules/branches/$PR_BASE); not merging without the required contexts"
-  required=$(printf '%s\n' "$rules_json" | jq -r 'if type != "array" then error("not a rules array") else [.[] | select(.type == "required_status_checks") | .parameters.required_status_checks[]?.context] | unique | .[] end' 2>/dev/null) \
+  required=$(printf '%s\n' "$rules_json" | jq -rs 'if any(.[]; type != "array") then error("not a rules array") else [.[][] | select(.type == "required_status_checks") | .parameters.required_status_checks[]?.context] | unique | .[] end' 2>/dev/null) \
     || die "cannot read the rules in effect on $PR_BASE: unparsable answer $(printf '%s' "$rules_json" | head -c 200)"
   if [ -z "$required" ]; then
-    say "required contexts on $PR_BASE: none (no required_status_checks rule)"
+    say "required contexts on $PR_BASE: none (no required_status_checks rule; classic branch protection is not read)"
   else
     say "required contexts on $PR_BASE: $(printf '%s\n' "$required" | paste -sd, - | sed 's/,/, /g')"
     while IFS= read -r req; do
@@ -400,7 +402,10 @@ run_merge() {
     # `git help branch`), and this tool fetches only the base, so a stale origin/<head> -- a
     # local branch someone force-pushed over -- made -d delete an unmerged tip at exit 0, its
     # warning discarded with stderr (#896, measured by the #865 challenge). Ancestry against the
-    # merge is the accept-rule itself; once it holds, -D is the right tool, not a shortcut (#865).
+    # merge is the accept-rule itself; once it holds, -D is REQUIRED, not a shortcut (#865): when
+    # origin/<head> resolves but lags BEHIND a tip the merge contains (pushed from another
+    # clone), -d refuses -- "not yet merged to origin/<head>, even though it is merged to HEAD",
+    # exit 1, measured on git 2.43.0 (#898 round 1). Case 11g pins that -D is what deletes it.
     if git show-ref --verify -q "refs/heads/$PR_HEAD_BRANCH"; then
       local tip; tip=$(git rev-parse "refs/heads/$PR_HEAD_BRANCH")
       if ! git merge-base --is-ancestor "$tip" "$oid" 2>/dev/null; then
@@ -477,7 +482,10 @@ case "$1 $2" in
       unreadable) exit 1 ;;
       emptybody) exit 0 ;;
       default) printf '%s\n' '[{"type":"deletion","parameters":null},{"type":"non_fast_forward","parameters":null},{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":false,"required_status_checks":[{"context":"line-endings"},{"context":"integrity"},{"context":"skills"},{"context":"scripts-test"},{"context":"cli-test"}]}}]' ;;
-      *) printf '%s\n' "$FAKE_RULES" ;;
+      # A multi-page answer ("][" between pages) is printed whole only under --paginate; without
+      # it gh returns the first page, which is what an unpaginated call would read.
+      *) if [[ "$*" == *--paginate* || "$FAKE_RULES" != *']['* ]]; then printf '%s\n' "$FAKE_RULES"
+         else printf '%s]\n' "${FAKE_RULES%%\]\[*}"; fi ;;
     esac ;;
   "pr view")
     case "$*" in
@@ -702,6 +710,16 @@ verify() {
   v_rc 'refuse/one-required-missing' 1 "$V_RC"
   v_has 'one-required-missing: named' "$V_OUT" '^merge-pr:   required context missing: skills$'
   v_has 'one-required-missing: refusal' "$V_OUT" '^merge-pr: REFUSED: 1 of 5 required context\(s\) on main not pass on PR 42'
+  # X2. a superstring is not the context: validate-skills present, skills absent, refused.
+  FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/{"name":"skills","bucket":"pass"}/{"name":"validate-skills","bucket":"pass"},{"name":"skills (pull_request)","bucket":"pass"}/')]" v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'refuse/required-superstring-only' 1 "$V_RC"
+  v_has 'required-superstring: skills still missing' "$V_OUT" '^merge-pr:   required context missing: skills$'
+  # The rules answer pages at 30, and --paginate prints the pages back to back. A required rule
+  # on the SECOND page is read: one context missing there is refused by name.
+  FAKE_RULES='[{"type":"deletion","parameters":null}][{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":false,"required_status_checks":[{"context":"line-endings"},{"context":"integrity"},{"context":"skills"},{"context":"scripts-test"},{"context":"cli-test"}]}}]' \
+    FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/,{"name":"cli-test","bucket":"pass"}//')]" v_run "$d" 42 --head "$FX_HEAD"
+  v_rc 'refuse/required-rule-on-page-2' 1 "$V_RC"
+  v_has 'page-2: the missing context named' "$V_OUT" '^merge-pr:   required context missing: cli-test$'
   FAKE_RULES=unreadable v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'rules-unreadable' 2 "$V_RC"
   v_has 'rules-unreadable: says so' "$V_OUT" '^merge-pr: cannot read the rules in effect on main'
@@ -716,7 +734,7 @@ verify() {
   #     unbounded loop rather than hanging the self-test.
   FAKE_MSS='UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,CLEAN' v_run "$d" 42 --head "$FX_HEAD" --interval 0
   v_rc 'refuse/mss-unknown-forever' 1 "$V_RC"
-  v_has 'mss-unknown-forever: refusal' "$V_OUT" '^merge-pr: REFUSED: mergeStateStatus is still UNKNOWN after [0-9]+ read\(s\) on PR 42'
+  v_has 'mss-unknown-forever: refusal' "$V_OUT" '^merge-pr: REFUSED: mergeStateStatus is still UNKNOWN after 10 read\(s\) on PR 42'
   for mss in DIRTY BLOCKED BEHIND DRAFT UNSTABLE; do
     FAKE_MSS=$mss v_run "$d" 42 --head "$FX_HEAD" --interval 0
     v_rc "refuse/mss-$mss" 1 "$V_RC"
@@ -724,6 +742,10 @@ verify() {
   done
   FAKE_MSS=unreadable v_run "$d" 42 --head "$FX_HEAD" --interval 0
   v_rc 'mss-unreadable' 2 "$V_RC"
+  # X1. a state this tool has never heard of is refused by the default case, and named.
+  FAKE_MSS=MERGEABLE_SOON v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'refuse/mss-unknown-state' 1 "$V_RC"
+  v_has 'mss-unknown-state: named by the default case' "$V_OUT" '^merge-pr: REFUSED: mergeStateStatus is MERGEABLE_SOON on PR 42 -- not a state this tool knows to be mergeable'
   v_false 'refusals: no merge attempted' "grep -q '^pr merge' '$d/gh.log'"
   v_false 'refusals: no seat' "v_has_branch '$d' merge-seat-42"
   v_true 'refusals: HEAD where it was' "[ \"\$(v_state '$d')\" = '$before' ]"
@@ -751,7 +773,7 @@ verify() {
   d="$root/c6d-norules"; fixture "$d" || return 2
   FAKE_RULES='[]' FAKE_CHECKS='[{"name":"CodeQL","bucket":"pass"}]' v_run "$d" 42 --head "$FX_HEAD" --interval 0
   v_rc 'no-required-rule' 0 "$V_RC"
-  v_has 'no-required-rule: says so' "$V_OUT" '^merge-pr: required contexts on main: none \(no required_status_checks rule\)$'
+  v_has 'no-required-rule: says so' "$V_OUT" '^merge-pr: required contexts on main: none \(no required_status_checks rule; classic branch protection is not read\)$'
 
   # 8. a fork PR: merged, but the head branch is left alone locally and on origin.
   d="$root/c8"; fixture "$d" || return 2
@@ -871,6 +893,16 @@ verify() {
   v_has 'stale-tracking: kept, with the reason' "$V_OUT" "^merge-pr: kept local branch feat/x: its tip ${stale_tip:0:9} is not in the merge"
   v_true 'stale-tracking: the unmerged tip survives' "[ \"\$(git -C '$d/checkout' rev-parse feat/x 2>/dev/null)\" = '$stale_tip' ]"
   v_has 'stale-tracking: verdict still names the merge' "$V_OUT" '^merge-pr: MERGED #42 as [0-9a-f]{40}, cleanup incomplete$'
+
+  # 11g. The local tip IS in the merge, but origin/feat/x is stale BEHIND it (the push came
+  #      from another clone): `git branch -d` compares against the upstream and refuses even
+  #      though HEAD contains the tip; the ancestry check holds and -D deletes. Exit 0.
+  d="$root/c11g"; fixture "$d" || return 2
+  git -C "$d/checkout" update-ref refs/remotes/origin/feat/x "$FX_BASE_SHA" || return 2
+  v_run "$d" 42 --head "$FX_HEAD" --interval 0
+  v_rc 'stale-behind-tracking-ref' 0 "$V_RC"
+  v_has 'stale-behind: deleted' "$V_OUT" '^merge-pr: deleted local branch feat/x$'
+  v_false 'stale-behind: local branch gone' "v_has_branch '$d' feat/x"
 
   # 11e. ls-remote fails after the push --delete (a git wrapper on PATH that refuses only that
   #      subcommand): an empty answer from a failed command is not "absent", so exit 3, not 0.
