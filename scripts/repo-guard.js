@@ -709,7 +709,7 @@ if (changed) {
     if (worktreeMoved) {
       console.error('Inspect it before assuming it was yours.');
     } else if (branchMoved) {
-      // The command bare, for the reason given at INDEX_FLAGS_LEGEND. The HEAD-moved advice
+      // The command bare, for the reason in the comment above BRANCH_ARGS. The HEAD-moved advice
       // above still carries the `#` form (#908).
       console.error('\n  If you made this checkout, run this. It prints the delta and refuses; read it, then accept:');
       console.error('    npm run guard:rebaseline');
