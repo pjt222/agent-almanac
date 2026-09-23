@@ -657,12 +657,15 @@ AC3 evidence is that row together with the mutant that deletes the parent's per-
 leak, because the `finally` removes the root with everything in it. That count was 0 before and 0
 after on all three Nodes, and it catches only a leaked root or a child that ignores `TMPDIR`.
 
-When the parent itself is interrupted, a SIGINT/SIGTERM handler removes the root. This was measured
-on v24 by signalling a run about 3 s in:
-- SIGINT or SIGTERM to the parent alone leaves nothing;
-- SIGINT to its process group leaves nothing;
-- SIGTERM to the process group still leaves the root, empty, in 3 of 3 runs, and why was not
-  established.
+When the parent itself is interrupted, the root is left behind, as it was before #894. SIGINT
+or SIGTERM ends the run at once and leaves `/tmp/import-shape-verify-*`, holding the in-flight
+child's directory when the signal lands during an arm, to be removed by hand. Measured on v24
+by signalling the parent about 3 s in: SIGTERM exited 143 and left the root with 1 entry, and
+SIGINT exited 130 and left it with 0 entries. A signal handler was tried and removed: the
+#904 review measured that it never runs. `--verify` is one synchronous block, so a listener's
+callback cannot fire before `process.exit()`. The listener only made the parent ignore the
+signal: SIGTERM to the parent 3 s in, and the run still completed 40/40 at exit 0. An earlier
+draft of this paragraph described what that handler did, and it was wrong.
 
 A standalone `--shape` leaves its directory and prints its path on the first line.
 
@@ -769,7 +772,6 @@ Not gated, stated so nobody reads it as covered:
 - **The parent's path check before `rmSync`.** No arm can make the child announce a hostile path.
 - **The strict parse of the count.** No arm prints a malformed `SHAPE-LATE`.
 - **The `mainInTimeClean` flag.** No arm runs main mode with content, where `OK` must be withheld.
-- **The signal handlers.** They are measured by the kill script above, not by an arm.
 - **The `spawnSync` timeouts.** No arm hangs.
 - **Markers printed by a subject.** A subject can forge `SHAPE-LATE: 0` from its `exit` handler
   before exiting, as it already could `SHAPE-VERDICT:` during the import. The probe's subject is a

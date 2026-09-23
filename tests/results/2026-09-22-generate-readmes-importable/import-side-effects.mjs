@@ -250,7 +250,8 @@ if (SHAPE) {
     "import { resolve } from 'node:path';",
     // The two paths come from the environment, not from source text built around them: a path
     // interpolated into generated code is what CodeQL's js/bad-code-sanitization flagged on these
-    // two lines (alerts #16 and #18 on main, #21 on #904). Nothing is interpolated now.
+    // two lines (alerts #16 and #18 on main, #21 on #904). Nothing is interpolated now. Both
+    // variables ride the child environment into anything a shape spawns, which no arm relies on.
     'const R = (p) => resolve(process.env.SHAPE_ROOT, p);',
     'const T = (p) => resolve(process.env.SHAPE_TMP, p);',
     shape.code,
@@ -375,17 +376,14 @@ if (VERIFY) {
   // count has been taken.
   const verifyRoot = fs.mkdtempSync(resolve(tmpdir(), 'import-shape-verify-'));
   const childEnv = { ...process.env, TMPDIR: verifyRoot };
-  // The `finally` below covers the parent's normal exits, not its interruption: SIGINT or SIGTERM
-  // to the parent left the verify root and the in-flight child's directory behind (#894 design
-  // critique, point 3). With these handlers, measured on v24 by signalling a run ~3 s in: SIGINT or
-  // SIGTERM to the parent alone, and SIGINT to its process group, leave nothing; SIGTERM to the
-  // process group still leaves the verify root, empty, in 3 of 3 runs, and why was not
-  // established. The exit code is the conventional 128 + signal number.
-  const removeRootAndExit = (signal) => {
-    try { fs.rmSync(verifyRoot, { recursive: true, force: true }); } finally { process.exit(signal === 'SIGINT' ? 130 : 143); }
-  };
-  process.once('SIGINT', removeRootAndExit);
-  process.once('SIGTERM', removeRootAndExit);
+  // The `finally` below covers the parent's normal exits, not its interruption. SIGINT or SIGTERM
+  // to the parent ends the run at once and leaves this root under `/tmp/import-shape-verify-*`,
+  // holding the in-flight child's directory when the signal lands during an arm; remove it by
+  // hand (measured on v24: SIGTERM, exit 143, 1 entry; SIGINT, exit 130, 0 entries). A signal listener cannot
+  // fix that here: `--verify` is one synchronous block, so the listener's callback never runs
+  // before `process.exit()`, and installing one only makes the run ignore the signal. Measured in
+  // #904 round 1: with a SIGTERM listener, SIGTERM to the parent 3 s in left the run completing
+  // 40/40 at exit 0 (#894 design critique, point 3, left open).
   const SHAPE_DIR_NAME = /^import-shape-[A-Za-z0-9]{6}$/;
   let leftover = [];
   try {
