@@ -39,7 +39,7 @@ ${steps.map((s) => `      - run: ${s}`).join('\n')}
 `;
 
 /** Build a throwaway tree and run the check over it. */
-function run({ paths, steps, files, scripts = {}, warn = false, extraWorkflows = {}, omitExternalPublisher = false }) {
+function run({ paths, steps, files, scripts = {}, warn = false, extraWorkflows = {}, omitExternalPublisher = false, cwd = null }) {
   const dir = mkdtempSync(join(tmpdir(), 'gen-inputs-'));
   try {
     mkdirSync(join(dir, '.github/workflows'), { recursive: true });
@@ -65,7 +65,9 @@ function run({ paths, steps, files, scripts = {}, warn = false, extraWorkflows =
     let status = 0;
     try {
       const argv = warn ? [CHECK, '--root', dir, '--warn'] : [CHECK, '--root', dir];
-      output = execFileSync('node', argv, { cwd: dir, encoding: 'utf8' });
+      // `cwd` defaults to the fixture, which makes `--root` and the working directory the same
+      // path; the test below separates them.
+      output = execFileSync('node', argv, { cwd: cwd ?? dir, encoding: 'utf8' });
     } catch (error) {
       output = `${error.stdout || ''}${error.stderr || ''}`;
       status = error.status;
@@ -89,6 +91,20 @@ test('a fully listed graph passes', () => {
   const { output, status } = run(BASE);
   assert.equal(status, 0);
   assert.match(output, /; 0 unlisted$/m);
+});
+
+test('the graph is walked from --root, not from the working directory', () => {
+  // Every other test runs with the working directory AT the fixture, so passing
+  // `process.cwd()` to `importGraph` instead of `ROOT` survived all of them once the walk took
+  // its root as a parameter (#892). Run from an empty directory: the graph must still be found.
+  const elsewhere = mkdtempSync(join(tmpdir(), 'gen-inputs-cwd-'));
+  try {
+    const { output, status } = run({ ...BASE, cwd: elsewhere });
+    assert.equal(status, 0, output);
+    assert.match(output, /2 module\(s\) reachable from 1 entry point\(s\); 0 unlisted$/m);
+  } finally {
+    rmTree(elsewhere);
+  }
 });
 
 test('an exported function whose body quotes a dotted string is not read as an import', () => {
