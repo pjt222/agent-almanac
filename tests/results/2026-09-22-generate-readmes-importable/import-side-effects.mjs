@@ -64,7 +64,7 @@
  * all; it reaches a NAMED binding (correction 3); the classifier can still say *content*; and no
  * loader descriptor outlives the import, since a recycled one would excuse whatever content call
  * next drew that number. They are necessary and they have never been sufficient — control 2
- * passed through correction 4 and correction 5 both. The arms below are what is sufficient.
+ * passed through every correction from 4 on. The arms below are what is sufficient.
  *
  * ## The reach claim is a RUN, not a paragraph
  *
@@ -162,11 +162,14 @@ const SHAPES = {
   // THE VERDICT IS TAKEN AT A MOMENT, and these three land after it. `exits-during-import` is the
   // sharp one: without the guard the probe prints nothing at all and exits 0 — a silent pass,
   // which is worse than the hang the drain's comment called "the right failure" (#888 round 5).
-  // The clean-exit form is the escape: exit 0 with no verdict is the silent pass. The two below
-  // are CRASH forms, and they grade identically to each other because the exit code is all
-  // guard 1 can see — declared, so the collision is a stated limit rather than a surprise (#893).
+  // The clean-exit form is the escape: exit 0 with no verdict is the silent pass. `exit(3)` pins
+  // that the code passes through rather than being folded to 0 or 1 — with only 0 and 1 planted,
+  // `code ? 1 : 0` survived every arm (#893 round 1, N2). `exit(1)` and a bare `throw` grade
+  // identically because the exit code is all guard 1 can see; only the throw is a crash, and the
+  // pair is declared so the collision is a stated limit rather than a surprise (#893).
   'exits-during-import':  { expect: 'no-verdict(exit 0)', code: "process.exit(0);" },
-  'exit-nonzero-during-import': { expect: 'no-verdict(exit 1)', code: "process.exit(1);" },
+  'exit-nonzero-during-import': { expect: 'no-verdict(exit 3)', code: "process.exit(3);" },
+  'exit-1-during-import': { expect: 'no-verdict(exit 1)', code: "process.exit(1);" },
   'throws-during-import': { expect: 'no-verdict(exit 1)', code: "throw new Error('planted');" },
   // Content both in time AND late. The in-time half alone already refuses, so this is `seen+late`
   // rather than `seen-late`: the late half is additional, not the only finding (#893).
@@ -481,6 +484,13 @@ verdictReached = true;
 // `exit` handler, or for a timer it arms from its own `beforeExit`. Those go through the wrapped
 // names and are recorded — after the verdict has been printed. Reporting them late is worth more
 // than not reporting them (#888 round 5, F1).
+//
+// It runs after the subject's own `exit` handlers PROVIDED THEY RETURN. A handler that calls
+// `process.exit()` or throws ends the exit phase before this one runs, so its write is reported
+// nowhere: measured on v22, v24 and v25, a write then `process.exit(5)` from the subject's
+// `exit` handler grades `blind` with the file on disk, the throw form does the same at exit 0,
+// and both leak the shape directory because the foot cleanup never runs either (#893 round 1,
+// S1). Not closed here: the remedy is a grading change of its own, and it is #894.
 const contentAtVerdict = calls.length;
 process.on('exit', () => {
   const late = calls.slice(contentAtVerdict).filter((call) => !isLoader(call) && !isGuard(call) && !isStdio(call));
@@ -503,8 +513,13 @@ if (SHAPE) {
   process.exitCode = content.length > 0 ? 1 : 0;
 } else {
 
+// Counted BEFORE the first `console.log`. When stdout is a regular file, `process.stdout` is a
+// `SyncWriteStream` and each line reaches the patched `fs.writeSync` on fd 1, so a count taken
+// after the first line included the probe's own report: 163 on v24 to a file, 162 to a pipe
+// (#893 round 1, N4). `content` was never affected — `isStdio` excludes it.
+const loaderCount = calls.length - guard.length - content.length;
 console.log(`calls during import: ${calls.length}  (node ${process.version})`);
-console.log(`  module-graph reads (loader):      ${calls.length - guard.length - content.length}`);
+console.log(`  module-graph reads (loader):      ${loaderCount}`);
 console.log(`  main-module guard (realpathSync): ${guard.length}`);
 for (const call of guard) console.log(`    ${call.name} ${call.arg}`);
 console.log(`  repository content or subprocess: ${content.length}`);

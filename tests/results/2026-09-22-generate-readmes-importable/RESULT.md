@@ -11,7 +11,7 @@ repository root.
 | | |
 |---|---|
 | base commit | `d6b9b9c72dea1f88ab60f84c7611dfedc16790d4` (merge of #883) |
-| head at measurement | every figure below re-taken at `cda4429f2`, the round-5 base; the probe's own arm table re-taken after merge for #893, at `8206f551f`, the commit that changed its grading (later #893 edits to the probe touch comments only). Later commits touching only this file change no measured artifact — the generator, the fixture, the suite and the probes are byte-identical at both |
+| head at measurement | every figure below re-taken at `cda4429f2`, the round-5 base; the import probe's arm table re-taken after merge, for #893, at the head of that PR. The generator, the fixture, the suite and the two mutation probes are byte-identical at `cda4429f2` and at that head; the import probe is not — #893 changed its grading and added arms. Its §4 main-mode table reproduces at that head on a pipe and, since #893 counts the loader before printing, to a regular file too; before that, a file stdout added the probe's own first report line to the loader column |
 | working tree | clean at every run; the two probes that mutate refuse a dirty tree or run in a lab |
 | command every mutant and every suite arm ran under | `npm run test:scripts` |
 | node | **v25.9.0** for the suite figures, recorded rather than disclaimed — an earlier edition of this table said no figure depended on a version, and two did. The `node:test` reporter is TAP on a non-TTY below Node 24, so both mutation probes pin the spec reporter through `NODE_OPTIONS` (verified on v20.20.2, v22.16.0 and v24.20.0). The import probe was worse: its verdict was a Node-25 artefact and it REFUSED the unmodified generator on CI's own Node 24 (§4). It is now run and recorded on v22.16.0, v24.20.0 and v25.9.0, the whole range `engines` allows |
@@ -314,7 +314,8 @@ Every correction came from a measurement. None came from re-reading the file.
    the sharp one — `process.exit(0)` during import, which left the probe with **no output at all
    and exit 0**. A silent pass, while the comment called a hang "the right failure". Two guards
    now: one registered before the import that refuses when no verdict was reached, one registered
-   after it that reports content recorded past the verdict. Both proven by their own knockouts.
+   after it that reports content recorded past the verdict. Both proven by their own knockouts —
+   and the second runs only while the subject's own `exit` handlers return, which #894 is about.
 
 Through all of them the behavioural claim survived unchanged — no registry read, no YAML parse, no
 `git` spawn at import. What kept being false was the instrument, and the number it published.
@@ -351,7 +352,7 @@ throwaway module, imports THAT instead of the generator, and asserts the verdict
 declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
 
 ```
---verify: 31 shape(s) on node v25.9.0, each planted into a throwaway module and imported
+--verify: 32 shape(s) on node v25.9.0, each planted into a throwaway module and imported
   wrapped by enumeration: 92 fs, 32 fs/promises, 8 child_process export(s)
   ok    empty              declared blind observed blind
   ok    sync-read          declared seen  observed seen
@@ -379,7 +380,8 @@ declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
   ok    dep-import         declared blind observed blind
   ok    bare-resolve-import declared blind observed blind
   ok    exits-during-import declared no-verdict(exit 0) observed no-verdict(exit 0)
-  ok    exit-nonzero-during-import declared no-verdict(exit 1) observed no-verdict(exit 1)
+  ok    exit-nonzero-during-import declared no-verdict(exit 3) observed no-verdict(exit 3)
+  ok    exit-1-during-import declared no-verdict(exit 1) observed no-verdict(exit 1)
   ok    throws-during-import declared no-verdict(exit 1) observed no-verdict(exit 1)
   ok    sync-write-and-exit-handler declared seen+late observed seen+late
   ok    exit-handler-write declared seen-late observed seen-late
@@ -393,14 +395,25 @@ exactly the half of the class the drain cannot reach.
 
 Both are finer than they were at merge (#893). `no-verdict` carries the exit code, because the
 escape `exits-during-import` is named for is the CLEAN exit — no output, exit 0, a silent pass —
-and it graded identically to a crash. The code is all guard 1 can see, so `process.exit(1)` and
-a bare `throw` still grade alike, as `no-verdict(exit 1)`; two arms declare that rather than
-leave it to be discovered. And a shape found both in time and late used to grade `seen-late`,
-because `late` won the grading ternary without a word said about it. It is `seen+late` now,
-with `sync-write-and-exit-handler` producing it. Each change has a mutant that the arm it names
-kills and nothing else does: format the marker from `process.exitCode` after guard 1 sets it,
-and `exits-during-import` reads `no-verdict(exit 1)`; restore the old ternary, and
-`sync-write-and-exit-handler` reads `seen-late`.
+and it graded identically to a crash. `exit-nonzero-during-import` exits 3, so the code is
+shown to pass through rather than be folded to 0 or 1 — with only 0 and 1 planted, a mutant
+printing `code ? 1 : 0` survived every arm (#893 round 1). The code is all guard 1 can see, so
+`process.exit(1)` and a bare `throw` still grade alike, as `no-verdict(exit 1)`; two arms declare
+that rather than leave it to be discovered. And a shape found both in time and late used to grade
+`seen-late`, because `late` won the grading ternary without a word said about it. It is
+`seen+late` now, with `sync-write-and-exit-handler` producing it. Each change has a mutant, and
+each mutant dies only to arms planted for the property it breaks (v24.20.0): format the marker
+from `process.exitCode` after guard 1 sets it, and the two arms whose code is not 1 fail —
+`exits-during-import` and `exit-nonzero-during-import` both read `no-verdict(exit 1)`; fold the
+code with `code ? 1 : 0`, and only `exit-nonzero-during-import` fails; restore the old ternary,
+and only `sync-write-and-exit-handler` fails, reading `seen-late`.
+
+**Neither guard reports everything it holds, and #894 is the follow-up.** Guard 2 runs after the
+subject's own `exit` handlers only while they return: one that writes and then calls
+`process.exit()` or throws ends the exit phase first, and the arm prints `blind` with the file on
+disk — at exit 0 for the throw form — and leaks the shape directory, since the foot cleanup is an
+`exit` handler too. Guard 1's `no-verdict` refuses correctly and names none of the content
+already recorded before the subject exited. Both measured, neither fixed here.
 
 The arms are identical on v22.16.0, v24.20.0 and v25.9.0. Four joined in round 4:
 `deferred-write` and `write-stream-ctor` for the snapshot class above, `dynamic-import-repo-js`
@@ -410,9 +423,9 @@ for the one structural gap left, and `dep-import` as a blind control. Four more 
 resolution and does not: it imports an absolute `file://` URL, so nothing is resolved. Its
 verdict was right and its stated mechanism was not, which is row 8's shape again in miniature.
 The new arm is the one that actually resolves, and both are blind on all three Nodes, so
-ordinary resolution is not a false-positive source. Three more after merge, in #893:
-`exit-nonzero-during-import`, `throws-during-import` and `sync-write-and-exit-handler`, for the
-two finer verdicts above.
+ordinary resolution is not a false-positive source. Four more after merge, in #893:
+`exit-nonzero-during-import`, `exit-1-during-import`, `throws-during-import` and
+`sync-write-and-exit-handler`, for the two finer verdicts above.
 
 **`empty` is the arm that matters most**, and it is the one the first table lacked. A module that
 does nothing must grade `blind`; under the Node-25-only classifier it graded `seen` on 22 and 24,
@@ -438,8 +451,8 @@ module-private — so it is a follow-up issue with an arm holding its place.
 Four controls remain — the patch fires, the patch reaches a NAMED binding, the classifier can
 still say *content*, and no loader descriptor outlives the import (a recycled one would excuse
 whatever content call next drew that number). **They are necessary and they have never been
-sufficient**: control 2 passed through corrections 4, 5 and 6 alike. That is what the arms are
-for.
+sufficient**: control 2 has been present since the round-1 fix and passed through every
+correction from 4 on. That is what the arms are for.
 
 Still unmeasured: a module loaded before the probe, and any side effect reaching the filesystem
 through none of the wrapped entry points.
@@ -537,8 +550,8 @@ of this paragraph credited both.
 
 **Four of the eleven are the class inside a remedy written for a previous instance**: #4 (a gap
 in the fix for #2), #8 (a sentence about the fix for #4 and #5), #10 (two declared-blind arms
-added by round 3's remedy — the one that turned the blind-list paragraph into arms — which
-asserted nothing) and #11 (a claim about the fix for #9, resting on a knockout of the same
+added by the round-3 remedy for #7 — the commit that turned the blind-list paragraph into arms,
+standing in for escape hatches #7's finding named — which asserted nothing) and #11 (a claim about the fix for #9, resting on a knockout of the same
 non-discriminating shape as #8). #8 and #11 are also the two that lived in a sentence rather
 than in code, so that pair is a subset of this four, not a second group. Five more were caught
 before they could ship, all in remedies and none reaching `main`: the round-3 reviewer measured
