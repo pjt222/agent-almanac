@@ -169,8 +169,9 @@ const SHAPES = {
   // DECLARED BLIND, and the reason is structural rather than a gap in a list: this classifier's
   // "loader" is whatever the loader loads, so executing an arbitrary repository `.js` at import
   // is indistinguishable from loading a module of the graph. Closing it needs the static import
-  // graph to compare against — `importGraph()` in `scripts/check-workflow-generator-inputs.js`,
-  // module-private today. Filed as a follow-up; an arm until then (#888 round 4, F2).
+  // graph to compare against — `importGraph(root, entry, seen)`, exported from
+  // `scripts/lib/import-graph.js` since #906. The comparison is #892; an arm until then (#888
+  // round 4, F2).
   'dynamic-import-repo-js': { expect: 'blind', code: "await import(new URL('file://' + R('scripts/lib/parse-args.js')).href);" },
   // CONTROL, declared blind: a LOAD of a file under `node_modules`, which `empty` does not
   // exercise. It was described as exercising bare-specifier RESOLUTION and does not — it imports

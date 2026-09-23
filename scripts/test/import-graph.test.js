@@ -4,9 +4,9 @@
  * The walk's PARSING — which `import`/`export` lines are edges, and which quoted strings are not —
  * is pinned through its first consumer in `workflow-generator-inputs.test.js`, where every one of
  * those cases was found. This suite pins what the extraction added and what a second consumer
- * relies on: the root is a parameter, the output is root-relative with `/` separators and includes
- * the entry, a cycle terminates, a missing file throws, a bare specifier is not walked, and a
- * seeded accumulator is the one returned.
+ * relies on: the root is a parameter, the output is root-relative and includes the entry, a cycle
+ * terminates, a missing file throws, a bare specifier is not walked, and a seeded accumulator is
+ * the one returned.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -26,17 +26,22 @@ function fixture(t, files) {
   return dir;
 }
 
-test('paths are relative to the root it is GIVEN, with `/` separators, and include the entry', (t) => {
+test('paths are relative to the root it is GIVEN, and include the entry', (t) => {
   const files = {
     'src/a.js': "import { b } from './b.js';\nimport { c } from '../lib/c.js';\n",
     'src/b.js': 'export const b = 1;\n',
     'lib/c.js': 'export const c = 1;\n',
   };
-  // Two roots holding the same tree: a walk that still closed over one fixed root would report
-  // one of them relative to the wrong directory, or refuse the other as missing.
-  for (const root of [fixture(t, files), fixture(t, files)]) {
-    assert.deepEqual([...importGraph(root, 'src/a.js')].sort(), ['lib/c.js', 'src/a.js', 'src/b.js']);
-  }
+  // Two roots holding DIFFERENT trees. The same tree in both could not see a root captured on the
+  // first call and reused: that walk reports the first tree for the second root, and identical
+  // trees made the answer look right (#906 round 1, SF-1).
+  const other = {
+    ...files,
+    'src/a.js': "import { d } from './d.js';\nimport { c } from '../lib/c.js';\n",
+    'src/d.js': 'export const d = 1;\n',
+  };
+  assert.deepEqual([...importGraph(fixture(t, files), 'src/a.js')].sort(), ['lib/c.js', 'src/a.js', 'src/b.js']);
+  assert.deepEqual([...importGraph(fixture(t, other), 'src/a.js')].sort(), ['lib/c.js', 'src/a.js', 'src/d.js']);
 });
 
 test('a cycle terminates, and each module is reported once', (t) => {

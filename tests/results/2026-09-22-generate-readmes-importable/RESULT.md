@@ -451,7 +451,7 @@ The one structural blind spot left is `dynamic-import-repo-js`. This classifier'
 whatever the loader loads, so executing an arbitrary repository `.js` at import is
 indistinguishable from loading a module of the graph. Closing it means comparing against the
 STATIC import graph — `importGraph()` in `scripts/check-workflow-generator-inputs.js`, which is
-module-private — so it is a follow-up issue with an arm holding its place.
+module-private — so it is a follow-up issue with an arm holding its place. #906 exports it as `importGraph(root, entry, seen)` from `scripts/lib/import-graph.js`; the comparison itself is #892.
 
 Four controls remain — the patch fires, the patch reaches a NAMED binding, the classifier can
 still say *content*, and no loader descriptor outlives the import (a recycled one would excuse
