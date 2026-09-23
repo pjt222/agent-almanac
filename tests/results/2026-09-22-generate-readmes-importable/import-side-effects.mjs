@@ -10,7 +10,7 @@
  * the whole repository in silence. The head of `generate-readmes.js` claims it does not, so the
  * claim is measured here rather than believed.
  *
- * ## Six corrections, every one of them from a measurement
+ * ## Corrections, every one of them from a measurement
  *
  * No version of this file has yet been right on its first run, and the failures are worth
  * keeping because each is a way a probe silently stops working:
@@ -32,8 +32,20 @@
  *      refused the unmodified generator, and printed a false accusation on CI's own Node.
  *      Separately, a hand-written list of names left callback `symlink`, `promises.mkdtemp` and
  *      others able to change the tree with the probe saying OK. (#888 round 3)
+ *   6. **The verdict was a snapshot.** It was taken the moment `await import()` resolved, so
+ *      anything the import SCHEDULED — a `setTimeout` write, a `setImmediate` write, a stream
+ *      whose `open` is lazy — reached the tree after `OK` was printed. Three planted writes did
+ *      exactly that under a green verdict. The drain after the import is the fix, and the
+ *      knockout is the proof: remove that one line and `deferred-write` and `write-stream-ctor`
+ *      both flip to `blind`. (#888 round 4)
+ *   7. **The drain's completeness was asserted from a knockout that could not show it.** A write
+ *      from the subject's `exit` handler, a timer armed from its `beforeExit`, and
+ *      `process.exit(0)` during import — no output at all, exit 0 — all landed past the verdict.
+ *      Guard 1 and guard 2 below are the fix. (#888 round 5)
  *
- * Corrections 3, 4 and 5 were all found by someone running something. None came from re-reading.
+ * This list and `RESULT.md` §4 are one list, and §4 is the long form. Only §4 states how many:
+ * a count kept in two places is how this heading said "six" while §4 said "seven" (#893).
+ * Corrections 3 onward were all found by someone running something. None came from re-reading.
  *
  * ## What this version does differently, and why
  *
@@ -52,7 +64,7 @@
  * all; it reaches a NAMED binding (correction 3); the classifier can still say *content*; and no
  * loader descriptor outlives the import, since a recycled one would excuse whatever content call
  * next drew that number. They are necessary and they have never been sufficient — control 2
- * passed through correction 4 and correction 5 both. The arms below are what is sufficient.
+ * passed through every correction from 4 on. The arms below are what is sufficient.
  *
  * ## The reach claim is a RUN, not a paragraph
  *
@@ -64,13 +76,6 @@
  *
  * Still unmeasured beyond the declared-blind arms: a module loaded before this file, and any
  * side effect reaching the filesystem through none of the wrapped entry points.
- *
- *   6. **The verdict was a snapshot.** It was taken the moment `await import()` resolved, so
- *      anything the import SCHEDULED — a `setTimeout` write, a `setImmediate` write, a stream
- *      whose `open` is lazy — reached the tree after `OK` was printed. Three planted writes did
- *      exactly that under a green verdict. The drain after the import is the fix, and the
- *      knockout is the proof: remove that one line and `deferred-write` and `write-stream-ctor`
- *      both flip to `blind`. (#888 round 4)
  */
 import fs, { readFileSync as namedReadFileSync } from 'node:fs';
 import fsPromises from 'node:fs/promises';
@@ -157,7 +162,23 @@ const SHAPES = {
   // THE VERDICT IS TAKEN AT A MOMENT, and these three land after it. `exits-during-import` is the
   // sharp one: without the guard the probe prints nothing at all and exits 0 — a silent pass,
   // which is worse than the hang the drain's comment called "the right failure" (#888 round 5).
-  'exits-during-import':  { expect: 'no-verdict', code: "process.exit(0);" },
+  // The clean-exit form is the escape: exit 0 with no verdict is the silent pass. `exit(3)` pins
+  // that the code passes through rather than being folded to 0 or 1 — with only 0 and 1 planted,
+  // `code ? 1 : 0` survived every arm (#893 round 1, N2). `exit(1)` and a bare `throw` grade
+  // identically because the exit code is all guard 1 can see; only the throw is a crash, and the
+  // pair is declared so the collision is a stated limit rather than a surprise (#893).
+  'exits-during-import':  { expect: 'no-verdict(exit 0)', code: "process.exit(0);" },
+  // The bare spelling most code uses for a clean exit. At guard-1 time its handler argument is 0
+  // and `process.exitCode` is `undefined`, where `exit(0)` makes both 0 — so this is the arm
+  // that pins "the ARGUMENT, not `exitCode`". Without it, a guard reading `process.exitCode ?? 1`
+  // survived every other arm and graded this clean exit as a crash (#893 round 2).
+  'bare-exit-during-import': { expect: 'no-verdict(exit 0)', code: "process.exit();" },
+  'exit-nonzero-during-import': { expect: 'no-verdict(exit 3)', code: "process.exit(3);" },
+  'exit-1-during-import': { expect: 'no-verdict(exit 1)', code: "process.exit(1);" },
+  'throws-during-import': { expect: 'no-verdict(exit 1)', code: "throw new Error('planted');" },
+  // Content both in time AND late. The in-time half alone already refuses, so this is `seen+late`
+  // rather than `seen-late`: the late half is additional, not the only finding (#893).
+  'sync-write-and-exit-handler': { expect: 'seen+late', code: "import { writeFileSync } from 'node:fs'; writeFileSync(T('planted.txt'), 'x'); process.on('exit', () => writeFileSync(T('from-exit.txt'), 'x'));" },
   'exit-handler-write':   { expect: 'seen-late', code: "import { writeFileSync } from 'node:fs'; process.on('exit', () => writeFileSync(T('from-exit.txt'), 'x'));" },
   'beforeexit-reschedule':{ expect: 'seen-late', code: "import { writeFileSync } from 'node:fs'; process.once('beforeExit', () => setTimeout(() => writeFileSync(T('rescheduled.txt'), 'x'), 0));" },
 };
@@ -330,7 +351,12 @@ if (VERIFY) {
     const verdict = marker ? marker.slice(VERDICT_MARKER.length).trim() : null;
     // `seen-late` is its own verdict: the content was real and the probe found it AFTER printing
     // OK. Collapsing it into `seen` would hide the half of the class the drain cannot reach.
-    const got = late ? 'seen-late' : verdict ?? `error(no verdict, exit ${run.status})`;
+    // `seen+late` is a shape found BOTH before and after the verdict. It used to grade
+    // `seen-late`, undocumented, because `late` won the ternary — which hid that the in-time
+    // verdict had already refused it (#893).
+    const got = late
+      ? (verdict === 'seen' ? 'seen+late' : 'seen-late')
+      : verdict ?? `error(no verdict, exit ${run.status})`;
     const ok = got === expect;
     if (!ok) bad++;
     rows.push(`  ${ok ? 'ok  ' : 'FAIL'}  ${name.padEnd(18)} declared ${expect.padEnd(5)} observed ${got}`);
@@ -378,9 +404,13 @@ calls.length = 0;
 // SILENT pass, and the drain's comment called a hang "the right failure" while this one existed
 // (#888 round 5, F1). Nothing about the generator does this; the probe's claim did not say so.
 let verdictReached = false;
-process.on('exit', () => {
+process.on('exit', (code) => {
   if (verdictReached) return;
-  if (SHAPE) console.log(`${VERDICT_MARKER} no-verdict`);
+  // The code comes from the handler's ARGUMENT, read before the `exitCode = 1` below: formatted
+  // from `process.exitCode` after that line, every arm would print `exit 1` and the clean-exit
+  // escape could not be told from a crash (#893). A bare `throw` and `process.exit(1)` both
+  // arrive as 1 — the code is all this handler can see, and the arms say so.
+  if (SHAPE) console.log(`${VERDICT_MARKER} no-verdict(exit ${code})`);
   console.error('REFUSED: the import exited the process before any verdict was reached.');
   process.exitCode = 1;
   // This handler is the only one that runs when the subject ends the process, so the cleanup
@@ -414,9 +444,15 @@ const GUARD_PATHS = new Set([TARGET, GENERATOR, resolve(process.argv[1] ?? '')])
 const isLoader = (call) => call.kind === 'loader';
 const isGuard = (call) => call.name.endsWith('.realpathSync') && GUARD_PATHS.has(resolve(call.arg));
 // A write to fd 0, 1 or 2 is this process talking, not repository content. It has to be said
-// explicitly because `console.log` reaches stdout through `fs.writeSync` on some Node versions
-// and not others: on v22.16.0 the probe's own report made every arm read `seen-late`, which is
-// the instrument grading its own output (#888 round 5, found while fixing F1).
+// explicitly because `console.log` can reach stdout through `fs.writeSync`. What decides it, as
+// measured in #893: when stdout is a regular file — or `/dev/null`, which libuv also treats as a
+// file — it is a `SyncWriteStream` and every line goes
+// through the patched `fs.writeSync`, on v22, v24 and v25 alike; a pipe does not. The round-5
+// observation stands as an observation — on v22.16.0 the probe's own report once made every arm
+// read `seen-late`, the instrument grading its own output (#888 round 5, found while fixing F1)
+// — but its stated cause, a Node-version difference, is not what reproduces now: the probe's own
+// report in a `--verify` child records no stdio call on any of the three. A SUBJECT's own write
+// to fd 1 or 2 is recorded, and this filter is what drops it. Right under either mechanism.
 const isStdio = (call) => /\.(writeSync|writevSync|write|writev)$/.test(call.name)
   && /^fd:[012] |^[012]$/.test(call.arg);
 
@@ -459,6 +495,13 @@ verdictReached = true;
 // `exit` handler, or for a timer it arms from its own `beforeExit`. Those go through the wrapped
 // names and are recorded — after the verdict has been printed. Reporting them late is worth more
 // than not reporting them (#888 round 5, F1).
+//
+// It runs after the subject's own `exit` handlers PROVIDED THEY RETURN. A handler that calls
+// `process.exit()` or throws ends the exit phase before this one runs, so its write is reported
+// nowhere: measured on v22, v24 and v25, a write then `process.exit(5)` from the subject's
+// `exit` handler grades `blind` with the file on disk, the throw form does the same at exit 0,
+// and both leak the shape directory because the foot cleanup never runs either (#893 round 1,
+// S1). Not closed here: the remedy is a grading change of its own, and it is #894.
 const contentAtVerdict = calls.length;
 process.on('exit', () => {
   const late = calls.slice(contentAtVerdict).filter((call) => !isLoader(call) && !isGuard(call) && !isStdio(call));
@@ -481,8 +524,13 @@ if (SHAPE) {
   process.exitCode = content.length > 0 ? 1 : 0;
 } else {
 
+// Counted BEFORE the first `console.log`. When stdout is a regular file, `process.stdout` is a
+// `SyncWriteStream` and each line reaches the patched `fs.writeSync` on fd 1, so a count taken
+// after the first line included the probe's own report: 163 on v24 to a file, 162 to a pipe
+// (#893 round 1, N4). `content` was never affected — `isStdio` excludes it.
+const loaderCount = calls.length - guard.length - content.length;
 console.log(`calls during import: ${calls.length}  (node ${process.version})`);
-console.log(`  module-graph reads (loader):      ${calls.length - guard.length - content.length}`);
+console.log(`  module-graph reads (loader):      ${loaderCount}`);
 console.log(`  main-module guard (realpathSync): ${guard.length}`);
 for (const call of guard) console.log(`    ${call.name} ${call.arg}`);
 console.log(`  repository content or subprocess: ${content.length}`);
