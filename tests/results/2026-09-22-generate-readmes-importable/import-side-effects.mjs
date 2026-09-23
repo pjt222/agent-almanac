@@ -445,12 +445,14 @@ const isLoader = (call) => call.kind === 'loader';
 const isGuard = (call) => call.name.endsWith('.realpathSync') && GUARD_PATHS.has(resolve(call.arg));
 // A write to fd 0, 1 or 2 is this process talking, not repository content. It has to be said
 // explicitly because `console.log` can reach stdout through `fs.writeSync`. What decides it, as
-// measured in #893: when stdout is a regular file it is a `SyncWriteStream` and every line goes
+// measured in #893: when stdout is a regular file — or `/dev/null`, which libuv also treats as a
+// file — it is a `SyncWriteStream` and every line goes
 // through the patched `fs.writeSync`, on v22, v24 and v25 alike; a pipe does not. The round-5
 // observation stands as an observation — on v22.16.0 the probe's own report once made every arm
 // read `seen-late`, the instrument grading its own output (#888 round 5, found while fixing F1)
-// — but its stated cause, a Node-version difference, is not what reproduces now: a `--verify`
-// child records no stdio call on any of the three. The filter is right under either mechanism.
+// — but its stated cause, a Node-version difference, is not what reproduces now: the probe's own
+// report in a `--verify` child records no stdio call on any of the three. A SUBJECT's own write
+// to fd 1 or 2 is recorded, and this filter is what drops it. Right under either mechanism.
 const isStdio = (call) => /\.(writeSync|writevSync|write|writev)$/.test(call.name)
   && /^fd:[012] |^[012]$/.test(call.arg);
 
