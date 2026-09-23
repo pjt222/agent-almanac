@@ -50,6 +50,7 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname, relative, resolve as resolvePath } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { importGraph } from './lib/import-graph.js';
 
 function flagValue(name) {
   const at = process.argv.indexOf(name);
@@ -298,61 +299,6 @@ function entryScript(command, packageScripts, viaNpmRun = false) {
 }
 
 /**
- * Every repo-local module reachable from `entry` by static relative imports.
- *
- * Only relative specifiers are followed: a bare specifier is a package, and packages are
- * covered by the `package.json` / `package-lock.json` entries the filter already carries for
- * exactly this reason.
- */
-function importGraph(entry, seen = new Set()) {
-  const absolute = resolvePath(ROOT, entry);
-  const rel = relative(ROOT, absolute).split('\\').join('/');
-  if (seen.has(rel)) return seen;
-  if (!existsSync(absolute)) {
-    throw new Error(`entry or import does not exist: ${rel}`);
-  }
-  seen.add(rel);
-  const text = readFileSync(absolute, 'utf8');
-  // `export … from './x.js'` is an edge as much as `import` is: a re-exporting barrel module
-  // sits in the graph and its own changes move generated output. The negated character class
-  // spans newlines, so multi-line forms are covered without an `s` flag.
-  //
-  // Two constraints on the span before the specifier, and both are load-bearing.
-  //
-  // ANCHORED ON `from`, because without it the class ran from an `export` keyword straight into
-  // the FUNCTION BODY below and took the first quoted string it found:
-  //
-  //     export function isExcludedId(id) {
-  //       const stem = id.endsWith('.md') ? …
-  //
-  // read as an import of `./lib/.md`, which does not exist, so this check hard-refused —
-  // exiting non-zero even under `--warn`, in a REQUIRED context. It surfaced the first time a
-  // module in the healer's graph exported a function whose body's first quoted literal began
-  // with a dot (#672), and would have recurred for any future one. `import './side-effect.js'`
-  // has no `from`, hence the optional group rather than a required one.
-  //
-  // And the span is `[\w$*,{}\s]`, not `[^'"]`, because anchoring alone did NOT close the
-  // class -- it only narrowed it. Any line-start `export`/`import` whose text contains the word
-  // `from` before a dotted quoted string still matched, so
-  //
-  //     export const probe = 1; // adapted from './old.js'
-  //
-  // reproduced the same hard refusal. Measured on this tree, not argued. The character class
-  // is what an import CLAUSE can actually contain -- identifiers, `*`, `as`, commas, braces,
-  // whitespace -- and it admits the multi-line form (a newline is `\s`) while excluding the
-  // `=`, `;`, `(` and `/` that any statement or comment carrying a stray `from` must have.
-  //
-  // Found by an adversarial reviewer, who named the experiment rather than asserting it; the
-  // planted line refused exactly as predicted.
-  const specifiers = [...text.matchAll(/^\s*(?:import|export)\s(?:[\w$*,{}\s]*?\bfrom\s*)?['"](\.[^'"]+)['"]/gm)]
-    .map((m) => m[1]);
-  for (const specifier of specifiers) {
-    importGraph(relative(ROOT, resolvePath(dirname(absolute), specifier)), seen);
-  }
-  return seen;
-}
-
-/**
  * Compile one GitHub path-filter entry to a regex.
  *
  * `**` crosses `/`, `*` and `?` do not — that is GitHub's rule, and the difference is what the
@@ -519,7 +465,7 @@ for (const workflow of HEALER_WORKFLOWS) {
   const reachable = new Set();
   try {
     for (const script of scripts) {
-      for (const module of importGraph(script)) reachable.add(module);
+      for (const module of importGraph(ROOT, script)) reachable.add(module);
     }
   } catch (error) {
     // Inside the try for the same reason the resolution is: `importGraph` throws on an import
