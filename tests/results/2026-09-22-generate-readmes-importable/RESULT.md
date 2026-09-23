@@ -607,7 +607,8 @@ replaced by a run.
 
 §4 closed on two gaps that were measured and not fixed. Guard 2 said nothing when a subject `exit`
 handler ended the process. Guard 1 dropped content it had already recorded. Both are fixed by the
-probe at `f70a96408`. The transcript below is that probe's `--verify` on v25.9.0. The same 40
+probe at `f70a96408`. The transcript below is that probe's `--verify` on v25.9.0, and it is
+byte-identical after the CodeQL fix described at the end of this Addendum. The same 40
 rows read `ok` on v22.16.0 and v24.20.0. Only two things differ across Nodes: the enumeration line
 (91 fs and 31 fs/promises on v22), and the self-arm's totals, which are each Node's own §4 row.
 
@@ -773,3 +774,16 @@ Not gated, stated so nobody reads it as covered:
 - **Markers printed by a subject.** A subject can forge `SHAPE-LATE: 0` from its `exit` handler
   before exiting, as it already could `SHAPE-VERDICT:` during the import. The probe's subject is a
   generator, not an adversary.
+
+**CodeQL, on #904.** The PR's CodeQL check raised three alerts, and all three are fixed in this PR:
+
+- `js/bad-code-sanitization` on the two lines that built the shape module's source around
+  `JSON.stringify(ROOT)` and `JSON.stringify(shapeDir)`. `main` already carried both as alerts #16
+  and #18, and #904 re-raised one as #21. The module now reads both paths from `SHAPE_ROOT` and
+  `SHAPE_TMP` in the environment, so nothing is interpolated into generated code.
+- `js/incomplete-sanitization` (#19, #20) on the self-arm's two regexes, which escaped only `(`
+  and `)` in `MAIN_LATE_LABEL`. They now go through a helper that escapes every metacharacter,
+  backslash included.
+
+After the fix, `--verify` passes 40/40 and main mode reports `content 0` on v22.16.0, v24.20.0 and
+v25.9.0. The self-arm mutants from the table above give the same results as before on all three.

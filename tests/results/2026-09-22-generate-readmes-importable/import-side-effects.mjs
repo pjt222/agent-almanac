@@ -115,6 +115,9 @@ const SHAPE_DIR_MARKER = 'SHAPE-DIR:';
  * critique, point 1).
  */
 const MAIN_LATE_LABEL = 'after the verdict (exit handlers):';
+/** Every RegExp metacharacter escaped, backslash included — escaping only `(` and `)` was CodeQL's
+ * js/incomplete-sanitization on #904 (alerts #19, #20). */
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
  * One planted import-time side effect per arm, and the verdict it must produce.
@@ -241,11 +244,15 @@ if (SHAPE) {
   // names and a standalone `--shape` leaves it for inspection (#894).
   console.log(`${SHAPE_DIR_MARKER} ${shapeDir}`);
   process.env.SHAPE_TMP = shapeDir;
+  process.env.SHAPE_ROOT = ROOT;
   TARGET = resolve(shapeDir, 'shape.mjs');
   fs.writeFileSync(TARGET, [
     "import { resolve } from 'node:path';",
-    `const R = (p) => resolve(${JSON.stringify(ROOT)}, p);`,
-    `const T = (p) => resolve(${JSON.stringify(shapeDir)}, p);`,
+    // The two paths come from the environment, not from source text built around them: a path
+    // interpolated into generated code is what CodeQL's js/bad-code-sanitization flagged on these
+    // two lines (alerts #16 and #18 on main, #21 on #904). Nothing is interpolated now.
+    'const R = (p) => resolve(process.env.SHAPE_ROOT, p);',
+    'const T = (p) => resolve(process.env.SHAPE_TMP, p);',
     shape.code,
     '',
   ].join('\n'), 'utf8');
@@ -467,10 +474,10 @@ if (VERIFY) {
     const loader = figure(/^  module-graph reads \(loader\): +(\d+)$/m);
     const guardCount = figure(/^  main-module guard \(realpathSync\): (\d+)$/m);
     const contentCount = figure(/^  repository content or subprocess: (\d+)$/m);
-    const lateCount = figure(new RegExp(`^${MAIN_LATE_LABEL.replace(/[()]/g, '\\$&')} (\\d+)$`, 'm'));
+    const lateCount = figure(new RegExp(`^${escapeRegExp(MAIN_LATE_LABEL)} (\\d+)$`, 'm'));
     // `OK` must come AFTER guard 2's count: that order is what makes a cut-short exit phase end the
     // report without `OK`, so an `OK` printed before the exit phase is refused here.
-    const lateAt = report.search(new RegExp(`^${MAIN_LATE_LABEL.replace(/[()]/g, '\\$&')} \\d+$`, 'm'));
+    const lateAt = report.search(new RegExp(`^${escapeRegExp(MAIN_LATE_LABEL)} \\d+$`, 'm'));
     const okAt = report.search(/^OK: every call during import/m);
     const okPresent = okAt >= 0 && lateAt >= 0 && okAt > lateAt;
     const parsed = [total, loader, guardCount, contentCount, lateCount].every((value) => value !== null);
