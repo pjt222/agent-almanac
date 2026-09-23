@@ -315,7 +315,7 @@ Every correction came from a measurement. None came from re-reading the file.
    and exit 0**. A silent pass, while the comment called a hang "the right failure". Two guards
    now: one registered before the import that refuses when no verdict was reached, one registered
    after it that reports content recorded past the verdict. Both proven by their own knockouts —
-   and the second runs only while the subject's own `exit` handlers return, which #894 is about.
+   and the second runs only while the subject's own `exit` handlers return, which #894 is about. Closed by #894: see the Addendum at the end of this file.
 
 Through all of them the behavioural claim survived unchanged — no registry read, no YAML parse, no
 `git` spawn at import. What kept being false was the instrument, and the number it published.
@@ -392,7 +392,7 @@ declared to produce — identical on v22.16.0, v24.20.0 and v25.9.0:
 `no-verdict` and `seen-late` are verdicts of their own rather than collapsed into `seen`: the
 first is a subject that ended the process before the probe could say anything, the second is
 content the probe found only AFTER printing its answer. Folding either into `seen` would hide
-exactly the half of the class the drain cannot reach.
+exactly the half of the class the drain cannot reach. #894 adds `unreported-exit` and `no-verdict(…)+seen`: see the Addendum.
 
 Both are finer than they were at merge (#893). `no-verdict` carries the exit code, because the
 escape `exits-during-import` is named for is the CLEAN exit — no output, exit 0, a silent pass —
@@ -418,7 +418,7 @@ subject's own `exit` handlers only while they return: one that writes and then c
 `process.exit()` or throws ends the exit phase first, and the arm prints `blind` with the file on
 disk — at exit 0 for the throw form — and leaks the shape directory, since the foot cleanup is an
 `exit` handler too. Guard 1's `no-verdict` refuses correctly and names none of the content
-already recorded before the subject exited. Both measured, neither fixed here.
+already recorded before the subject exited. Both measured, neither fixed here. Both fixed by #894, whose Addendum at the end of this file replaces this paragraph.
 
 The arms are identical on v22.16.0, v24.20.0 and v25.9.0. Four joined in round 4:
 `deferred-write` and `write-stream-ctor` for the snapshot class above, `dynamic-import-repo-js`
@@ -600,3 +600,201 @@ replaced by a run.
   single runs of a figure that moves with load, which is why the sentence says "about" rather
   than picking one. No whole-suite before/after delta is published: the two whole-suite numbers
   available were taken on different filesystems, and a delta across those is not a delta.
+
+---
+
+## Addendum (#894): guard 2 reports whenever it runs to its end, and the parent owns the directory
+
+§4 closed on two gaps that were measured and not fixed. Guard 2 said nothing when a subject `exit`
+handler ended the process. Guard 1 dropped content it had already recorded. Both are fixed by the
+probe at `f70a96408`. The transcript below is that probe's `--verify` on v25.9.0, and it is
+byte-identical after the CodeQL fix described at the end of this Addendum. The same 40
+rows read `ok` on v22.16.0 and v24.20.0. Only two things differ across Nodes: the enumeration line
+(91 fs and 31 fs/promises on v22), and the self-arm's totals, which are each Node's own §4 row.
+
+This is not an eighth correction. It is correction 7's remedy one level down. Guard 2 was the fix
+for the drain, and it is an `exit` handler itself.
+
+**Guard 2 prints its count whenever it runs to its end, and a missing count is a verdict.**
+Nothing in the child can prove guard 2 ran, because a subject handler that calls `process.exit()`
+or throws ends the exit phase before it. So guard 2 prints `SHAPE-LATE: <n>`, zero included, and
+the parent grades an in-time verdict with no count as `unreported-exit(exit N)`. If the in-time
+verdict was `seen`, the grade is `seen+unreported-exit(exit N)`, which keeps that finding visible
+the way `seen+late` does. A `no-verdict` result is taken as printed: guard 2 is registered after
+the import, so those arms never reach it.
+
+One level further down, a subject can register an `exit` listener after guard 2, from a timer
+armed in its own `beforeExit`, and that listener runs after the count was printed. Guard 2 now
+withholds its count when any listener follows it. Without that check, `late-registered-exit-handler`
+grades `blind` with its file on disk.
+
+The verdict names that the count is missing, not why. The design critique also measured it for
+three other cases:
+- SIGKILL from a subject `exit` handler (exit null);
+- `process.reallyExit(0)` from a timer that fires after the verdict;
+- `process.removeAllListeners('exit')` from such a timer.
+
+It can over-refuse. A subject `exit` handler that adds another listener during the exit phase makes
+guard 2 withhold, although Node copied the listener list before calling it, so that listener never
+runs. That errs loud, not silent.
+
+**Guard 1 reports what it holds.** When the subject ended the process after content was recorded,
+guard 1 prints `no-verdict(exit N)+seen` and lists the calls. That required moving the classifier
+above guard 1. As `const`s declared after the import, it was in its temporal dead zone when guard 1
+ran: moved back below, all six `no-verdict` arms read `error(no verdict)`.
+
+**The parent owns the shape directory.** The child prints `SHAPE-DIR: <path>` before the import
+and never removes it. The parent removes the directory after `spawnSync` returns, and only if it is
+a direct child of the parent's own root with the `mkdtemp` name shape.
+
+Every cleanup tried inside the child was an `exit` handler, and each one tried failed on some exit
+path. That includes a foot handler kept alongside the new design: the designer measured it on
+v24.20.0 deleting the directory before `late-registered-exit-handler` wrote.
+
+Each child's `os.tmpdir()` is that root, so the `leak-count` row counts what the children left. The
+AC3 evidence is that row together with the mutant that deletes the parent's per-arm removal, which
+`leak-count` kills with 38 left. A before/after count of `/tmp/import-shape-*` cannot show that
+leak, because the `finally` removes the root with everything in it. That count was 0 before and 0
+after on all three Nodes, and it catches only a leaked root or a child that ignores `TMPDIR`.
+
+When the parent itself is interrupted, the root is left behind, and that is **new with #894**.
+Before it, each child removed its own directory, so a signal to the parent alone left nothing:
+the orphaned child finished and cleaned up. Parent-owned cleanup moved the removal onto the
+parent's exit paths, and a signal is not one of them.
+
+Measured on v24 by signalling the parent about 3 s in:
+- the pre-#894 probe left nothing;
+- this one exits 143 on SIGTERM or 130 on SIGINT, and leaves `/tmp/import-shape-verify-*` holding
+  the in-flight child's directory, to be removed by hand. The #904 review measured 1 entry in 3 of
+  3 runs for either signal, because the parent spends almost all its time inside an arm. One
+  earlier SIGINT run that landed between arms left 0.
+
+A signal handler was tried and removed: the #904 review measured that it never runs. `--verify` is
+one synchronous block, so a listener's callback cannot fire before `process.exit()`. The listener
+only made the parent ignore the signal: SIGTERM to the parent 3 s in, and the run still completed
+40/40 at exit 0. A child that removed its own directory at exit only when orphaned would restore
+the old behaviour [proposed, not run]. Two earlier drafts of this paragraph were wrong: one
+described what that handler did, and one said interruption was unchanged from before #894.
+
+A standalone `--shape` leaves its directory and prints its path on the first line.
+
+**Main mode prints `OK` after guard 2's count, from inside guard 2.** A report whose exit phase was
+cut short therefore ends with neither the count nor `OK`. Before, it ended with `OK`. This was
+measured with the generator replaced by a subject whose `exit` handler writes a file and then calls
+`process.exit(0)`: on v22, v24 and v25 the report ends with no count and no `OK`, and the file is on
+disk.
+
+The exit code is still the subject's 0, which the probe cannot override. So in main mode run by
+hand, the missing `OK` is the only sign.
+
+**The loader count and the `OK` order have a gate.** A self-arm, `main-report-to-file`, runs main
+mode with stdout a regular file. It asserts `calls = loader + guard + content`, and that the `OK`
+line comes after guard 2's count. A pipe does not work for this check: the loader-count mutant
+survives when the self-arm's stdout is a pipe, which is the control row below. Main mode on the
+unmodified generator is still `content 0`, with the §4 figures on all three Nodes.
+
+```
+--verify: 38 shape(s) on node v25.9.0, each planted into a throwaway module and imported
+  wrapped by enumeration: 92 fs, 32 fs/promises, 8 child_process export(s)
+  ok    empty              declared blind observed blind
+  ok    sync-read          declared seen  observed seen
+  ok    sync-write         declared seen  observed seen
+  ok    sync-mkdir         declared seen  observed seen
+  ok    access             declared seen  observed seen
+  ok    callback-read      declared seen  observed seen
+  ok    callback-symlink   declared seen  observed seen
+  ok    promises-read      declared seen  observed seen
+  ok    promises-readdir   declared seen  observed seen
+  ok    promises-mkdtemp   declared seen  observed seen
+  ok    glob               declared seen  observed seen
+  ok    write-stream       declared seen  observed seen
+  ok    cp-sync            declared seen  observed seen
+  ok    spawn-sync         declared seen  observed seen
+  ok    spawn-async        declared seen  observed seen
+  ok    create-require     declared seen  observed seen
+  ok    json-import        declared seen  observed seen
+  ok    open-js-as-data    declared seen  observed seen
+  ok    deferred-write     declared seen  observed seen
+  ok    write-stream-ctor  declared seen  observed seen
+  ok    worker-write       declared seen  observed seen
+  ok    process-binding    declared seen  observed seen
+  ok    dynamic-import-repo-js declared blind observed blind
+  ok    dep-import         declared blind observed blind
+  ok    bare-resolve-import declared blind observed blind
+  ok    exits-during-import declared no-verdict(exit 0) observed no-verdict(exit 0)
+  ok    bare-exit-during-import declared no-verdict(exit 0) observed no-verdict(exit 0)
+  ok    exit-nonzero-during-import declared no-verdict(exit 3) observed no-verdict(exit 3)
+  ok    exit-1-during-import declared no-verdict(exit 1) observed no-verdict(exit 1)
+  ok    throws-during-import declared no-verdict(exit 1) observed no-verdict(exit 1)
+  ok    sync-write-and-exit-handler declared seen+late observed seen+late
+  ok    exit-handler-write declared seen-late observed seen-late
+  ok    beforeexit-reschedule declared seen-late observed seen-late
+  ok    exit-handler-write-then-exit declared unreported-exit(exit 5) observed unreported-exit(exit 5)
+  ok    exit-handler-write-then-throw declared unreported-exit(exit 0) observed unreported-exit(exit 0)
+  ok    sync-write-and-exit-handler-exit declared seen+unreported-exit(exit 5) observed seen+unreported-exit(exit 5)
+  ok    late-registered-exit-handler declared unreported-exit(exit 1) observed unreported-exit(exit 1)
+  ok    write-then-exit-during-import declared no-verdict(exit 0)+seen observed no-verdict(exit 0)+seen
+  ok    main-report-to-file declared calls = loader + guard + content, OK after the late count observed 86 = 84 + 2 + 0, late 0, OK after the count
+  ok    leak-count         declared 0 left under the verify root observed 0
+```
+
+`plants` is the parent's count of files in the shape directory, declared on the four arms where
+guard 2 never runs. On those arms the grade cannot depend on the write, so an arm whose write was
+deleted would otherwise pass for the wrong reason. On `late-registered-exit-handler` it is also the
+only thing that tells a withheld count from guard 2 crashing. A throw inside guard 2 ends the exit
+phase before the late write runs, so the verdict is the same, and only `plants` (0, not 1) differs.
+
+### Mutants
+
+Each mutant was run under `--verify` on v22.16.0, v24.20.0 and v25.9.0, in a lab whose `scripts/`
+is a real copy. A symlinked `scripts/` puts the generator's real path outside the guard's path set
+and fails the self-arm on the unmodified probe, which the pristine control caught. The kill sets
+were identical on all three Nodes:
+
+| mutant | killed by |
+|---|---|
+| guard 2 prints its count only when `late.length > 0` (the child half of the old protocol) | 26: every arm where guard 2 runs and finds nothing, and `main-report-to-file` |
+| the parent reads a missing count as zero (the parent half) | exactly the four `unreported-exit` arms |
+| both halves: the old protocol restored | the four `unreported-exit` arms and `main-report-to-file` |
+| the parent does not remove the shape directory | `leak-count` (38 left) |
+| guard 1 holds nothing | `write-then-exit-during-import` |
+| the loader counted after the first `console.log` | `main-report-to-file` |
+| the same, with the self-arm's stdout a pipe (control) | survives |
+| no listener-order check in guard 2 | `late-registered-exit-handler` |
+| the child does not announce its directory | all 38 arms and `leak-count` |
+| the write deleted from `exit-handler-write-then-exit` | that arm, by `plants` |
+| the same, with the `plants` check off (control) | survives |
+| the classifier moved back below the import | the six `no-verdict` arms |
+| the `unreported-exit` code folded to 0 or 1 | the two arms that exit 5 |
+| `seen` dropped from `seen+unreported-exit` | `sync-write-and-exit-handler-exit` |
+| main mode stops printing its late line | `main-report-to-file` |
+| `OK` printed before the exit phase again, from main mode's own branch | `main-report-to-file` (`OK` before the count) |
+| the self-arm does not require the late line (check mutant) | survives alone; with the child-half mutant it is still 26, because the `OK`-after-count check needs the count line too |
+| the self-arm's order check dropped (check mutant) | survives alone; it is what kills the early-`OK` mutant |
+
+The issue asked for a mutant restoring "print only when nonzero" that dies to exactly the
+exit-handler arms. A mutant on guard 2 alone cannot do that, because guard 2 never runs in those
+arms. The child-half mutant fails every arm where guard 2 runs and finds nothing, since the parent
+now requires the line. The parent half is the mutant that dies to exactly those arms.
+
+Not gated, stated so nobody reads it as covered:
+- **The parent's path check before `rmSync`.** No arm can make the child announce a hostile path.
+- **The strict parse of the count.** No arm prints a malformed `SHAPE-LATE`.
+- **The `mainInTimeClean` flag.** No arm runs main mode with content, where `OK` must be withheld.
+- **The `spawnSync` timeouts.** No arm hangs.
+- **Markers printed by a subject.** A subject can forge `SHAPE-LATE: 0` from its `exit` handler
+  before exiting, as it already could `SHAPE-VERDICT:` during the import. The probe's subject is a
+  generator, not an adversary.
+
+**CodeQL, on #904.** The PR's CodeQL check raised three alerts, and all three are fixed in this PR:
+
+- `js/bad-code-sanitization` on the two lines that built the shape module's source around
+  `JSON.stringify(ROOT)` and `JSON.stringify(shapeDir)`. `main` already carried both as alerts #16
+  and #18, and #904 re-raised one as #21. The module now reads both paths from `SHAPE_ROOT` and
+  `SHAPE_TMP` in the environment, so nothing is interpolated into generated code.
+- `js/incomplete-sanitization` (#19, #20) on the self-arm's two regexes, which escaped only `(`
+  and `)` in `MAIN_LATE_LABEL`. They now go through a helper that escapes every metacharacter,
+  backslash included.
+
+After the fix, `--verify` passes 40/40 and main mode reports `content 0` on v22.16.0, v24.20.0 and
+v25.9.0. The self-arm mutants from the table above give the same results as before on all three.
