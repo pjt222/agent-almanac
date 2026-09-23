@@ -411,11 +411,11 @@ test('a branch-only change names the command that shows it, not git diff (#887)'
 
   assert.equal(r.status, 1, 'a branch change is still a change');
   assert.match(r.stderr, /branch changed: HEAD -> main/);
-  assert.match(r.stderr, /the branch \(HEAD -> main\): {2}git branch --show-current/);
+  assert.match(r.stderr, /the branch \(HEAD -> main\): {2}git rev-parse --abbrev-ref HEAD\n/);
   assert.doesNotMatch(r.stderr, /worktree change|git diff|working tree/,
     'no worktree finding was made, so none may be described');
   assert.doesNotMatch(r.stderr, /git reset --mixed/, 'HEAD never moved');
-  assert.match(r.stderr, /If you made this checkout:\n {4}npm run guard:rebaseline {4}#/,
+  assert.match(r.stderr, /If you made this checkout, run this\.[^\n]*:\n {4}npm run guard:rebaseline\n/,
     'rebaseline accepts a branch-only change, so it is the exit to name');
   assert.ok(!r.stderr.includes('--accept='), 'and verify still never prints a paste-ready override');
 });
@@ -429,10 +429,34 @@ test('a branch change AND a worktree change names both commands, and no rebaseli
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1);
-  assert.match(r.stderr, /the branch \(main -> elsewhere\): {2}git branch --show-current/);
+  assert.match(r.stderr, /the branch \(main -> elsewhere\): {2}git rev-parse --abbrev-ref HEAD\n/);
   assert.match(r.stderr, /the working tree: {2}git diff {2}\/ {2}git status --porcelain -uall/);
   assert.doesNotMatch(r.stderr, /guard:rebaseline/,
     'rebaseline refuses any worktree change, so naming it here is advice that fails');
+  assert.match(r.stderr, /Inspect it before assuming it was yours\./);
+});
+
+test('the branch command prints something on a DETACHED HEAD too — the mirror of #887 (#907)', async (t) => {
+  // Round 1 on #907: the first fix named `git branch --show-current`, which prints NOTHING on a
+  // detached HEAD — the #887 defect again, for `git checkout --detach`. The advice now names the
+  // command the baseline reads the branch with. Both premises are asserted in the fixture.
+  const dir = makeRepo(t);
+  guard(dir, ['snapshot']);
+  git(dir, ['checkout', '-q', '--detach']);
+  assert.equal(git(dir, ['branch', '--show-current']), '', 'the old command prints nothing here');
+  assert.equal(git(dir, ['rev-parse', '--abbrev-ref', 'HEAD']), 'HEAD', 'the named one does not');
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /the branch \(main -> HEAD\): {2}git rev-parse --abbrev-ref HEAD\n/);
+  assert.doesNotMatch(r.stderr, /show-current/);
+
+  const refused = guard(dir, ['rebaseline']);
+
+  assert.equal(refused.status, 2);
+  assert.match(refused.stderr, /the checkout you made:\n {2}git rev-parse --abbrev-ref HEAD\n/);
+  assert.doesNotMatch(refused.stderr, /show-current/);
 });
 
 test('an index-flag-only change names git ls-files -v, not git diff (#887)', async (t) => {
@@ -442,14 +466,20 @@ test('an index-flag-only change names git ls-files -v, not git diff (#887)', asy
   const dir = makeRepo(t);
   guard(dir, ['snapshot']);
   git(dir, ['update-index', '--skip-worktree', 'src/a.txt']);
+  // The file is MODIFIED under the flag, so the two empty outputs below are the flag hiding a
+  // change, not the absence of one (#907 round 1, N3).
+  writeFileSync(join(dir, 'src', 'a.txt'), 'changed under skip-worktree\n', 'utf8');
   assert.equal(git(dir, ['diff']), '', 'git diff shows nothing for a flag-only change');
   assert.equal(git(dir, ['status', '--porcelain', '-uall']), '', 'nor does git status');
 
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1);
-  assert.match(r.stderr, /the index flags: {2}git ls-files -v {4}# at the repository root; a tag other than H/);
+  assert.match(r.stderr,
+    /the index flags \(run at the repository root; a tag other than H: [^)]*\):\n {4}git ls-files -v\n/,
+    'the legend on its own line, and the command bare, so it pastes under any shell');
   assert.doesNotMatch(r.stderr, /git diff|git status|the working tree/);
+  assert.match(r.stderr, /Inspect it before assuming it was yours\./);
   assert.doesNotMatch(r.stderr, /guard:rebaseline/, 'rebaseline refuses an index-flag change too');
 });
 
@@ -475,7 +505,7 @@ test('a conflicted merge is an index-flag finding, and the legend names its tag 
 
   assert.equal(r.status, 1);
   assert.match(r.stderr, /index flags \(skip-worktree \/ assume-unchanged \/ unmerged\)/);
-  assert.match(r.stderr, /the index flags: {2}git ls-files -v .*\bM is unmerged\b/);
+  assert.match(r.stderr, /the index flags \([^)]*\bM is unmerged\b[^)]*\):\n {4}git ls-files -v\n/);
 });
 
 // ── failing closed ──────────────────────────────────────────────────────────
@@ -811,7 +841,8 @@ test('REFUSES when the WORKING TREE moved, not just HEAD', async (t) => {
   const r = guard(dir, ['rebaseline', `--accept=${head}`]);
 
   assert.equal(r.status, 1, 'this is the case the guard exists for — it must go red');
-  assert.match(r.stderr, /WORKING TREE moved/);
+  assert.match(r.stderr, /the WORKING TREE moved, not just HEAD\./,
+    'HEAD moved here, so the heading says so (#907 round 1: only the negative was pinned)');
   const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
   assert.notEqual(snap.head, head, 'the baseline must NOT have been moved');
 });
@@ -829,13 +860,23 @@ test('a branch-only change is not described as a HEAD move, and can be accepted 
 
   assert.equal(refused.status, 2, 'still an unanswered question, not a yes');
   assert.match(refused.stderr, /only the branch changed\. HEAD did not move, so no commit was added\./);
-  assert.match(refused.stderr, /git branch --show-current/);
+  assert.match(refused.stderr, /the checkout you made:\n {2}git rev-parse --abbrev-ref HEAD\n/);
   assert.doesNotMatch(refused.stderr, /HEAD moved|commits above/);
   assert.ok(refused.stderr.includes(`--accept=${head}`), 'rebaseline, unlike verify, names the sha');
+
+  const mistyped = guard(dir, ['rebaseline', '--accept=0123456789abcdef']);
+
+  assert.equal(mistyped.status, 2);
+  assert.match(mistyped.stderr, /HEAD has not moved since the snapshot, so the sha was mistyped\./);
+  assert.doesNotMatch(mistyped.stderr, /HEAD moved again/, 'it did not move at all (#907 round 1)');
 
   const accepted = guard(dir, ['rebaseline', `--accept=${head}`]);
 
   assert.equal(accepted.status, 0, accepted.stderr);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+  assert.deepEqual(snap.rebaselinedFrom.acceptedCommits, []);
+  assert.equal(snap.rebaselinedFrom.fastForward, null,
+    "no HEAD move, so no ancestry reading — not 'created', the unborn value (#907 round 1)");
   assert.equal(guard(dir, ['verify']).status, 0, 're-armed on the branch it now sits on');
 });
 
@@ -852,7 +893,7 @@ test('rebaseline refusing an index-flag change names git ls-files -v, and not a 
   assert.equal(r.status, 1, 'a flag change is never accepted');
   assert.match(r.stderr, /the WORKING TREE moved\./);
   assert.doesNotMatch(r.stderr, /not just HEAD/, 'HEAD did not move');
-  assert.match(r.stderr, /Inspect it first:\n {2}git ls-files -v/);
+  assert.match(r.stderr, /Inspect it first:\n {2}for the index flags \([^)]*\):\n {4}git ls-files -v\n/);
   assert.doesNotMatch(r.stderr, /git diff|git status/);
 });
 

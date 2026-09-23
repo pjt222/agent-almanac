@@ -110,11 +110,18 @@ const SNAPSHOT_NAME = 'repo-guard.json';
 const FORMAT_VERSION = 3;
 /** Sentinel for a repository with no commits yet. */
 const UNBORN = '(unborn)';
-/** How the baseline reads index flags, and so the command the advice names for a flag change. */
+// How the baseline reads the branch and the index flags, and so the commands the advice names for
+// each: a command the guard does not read with can print nothing where the guard found a change.
+// `git branch --show-current` prints nothing on a detached HEAD (#907 round 1), and this prints
+// `HEAD`. The legend sits on its own line so the command pastes bare: under zsh's default,
+// where interactive comments are off, a trailing `#` is not a comment, so its words became
+// arguments to the command and a `;` in it started a second one (measured on #907).
+const BRANCH_ARGS = ['rev-parse', '--abbrev-ref', 'HEAD'];
+const BRANCH_COMMAND = `git ${BRANCH_ARGS.join(' ')}`;
 const INDEX_FLAGS_ARGS = ['ls-files', '-v'];
-const INDEX_FLAGS_COMMAND = `git ${INDEX_FLAGS_ARGS.join(' ')}    ` +
-  '# at the repository root; a tag other than H: S is skip-worktree, M is unmerged, ' +
-  'lowercase is assume-unchanged';
+const INDEX_FLAGS_COMMAND = `git ${INDEX_FLAGS_ARGS.join(' ')}`;
+const INDEX_FLAGS_LEGEND = 'run at the repository root; a tag other than H: S is skip-worktree, ' +
+  'M is unmerged, lowercase is assume-unchanged';
 // Named in the npm form because `die()` appends this to every argument error,
 // and a usage block contradicting the rest of the tool's advice is how a caller
 // ends up running the one form that swallows its flags. Flags need `--` to cross
@@ -284,7 +291,7 @@ function captureState() {
   // abbrev-ref for it. That is a legitimate state to snapshot, not an error —
   // dying here would make the guard unusable on a fresh fixture.
   const head = git(['rev-parse', 'HEAD'], { cwd: TOPLEVEL, allowFailure: true });
-  const branch = git(['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: TOPLEVEL, allowFailure: true });
+  const branch = git(BRANCH_ARGS, { cwd: TOPLEVEL, allowFailure: true });
 
   return {
     toplevel: TOPLEVEL,
@@ -399,7 +406,10 @@ const after = captureState();
 let changed = false;
 let headMoved = false;
 let branchMoved = false;
-let fastForward = 'created';
+// null until a HEAD move sets it. It defaulted to 'created', the unborn-baseline value, so a
+// branch-only acceptance recorded "this history was created" for a commit that never moved
+// (#907 round 1).
+let fastForward = null;
 let addedCommits = [];
 let commitsEnumerated = true;
 
@@ -523,7 +533,7 @@ if (command === 'rebaseline') {
     console.error('would rebaseline a stray write as the new normal.');
     console.error('\nInspect it first:');
     if (filesMoved) console.error('  git status --porcelain -uall  /  git diff');
-    if (flagsMoved) console.error(`  ${INDEX_FLAGS_COMMAND}`);
+    if (flagsMoved) console.error(`  for the index flags (${INDEX_FLAGS_LEGEND}):\n    ${INDEX_FLAGS_COMMAND}`);
     console.error('The snapshot was KEPT, so `npm run guard:verify` still works after you clean up.');
     process.exit(1);
   }
@@ -558,7 +568,7 @@ if (command === 'rebaseline') {
     // moved and asks the caller to read the commits above, and there are none.
     console.error('\nrepo-guard: only the branch changed. HEAD did not move, so no commit was added.');
     console.error('Nothing has been accepted yet. Check that this is the checkout you made:');
-    console.error('  git branch --show-current');
+    console.error(`  ${BRANCH_COMMAND}`);
     console.error('\nIf it is, re-run naming the HEAD it sits on:');
     console.error(`  npm run guard:rebaseline -- --accept=${after.head}`);
     process.exit(2);
@@ -588,7 +598,10 @@ if (command === 'rebaseline') {
     die(`you accepted '${accepted}', but HEAD is ${after.head}.\n` +
       (accepted.length < 7
         ? 'A sha shorter than 7 characters is not specific enough to be an acknowledgement.\n'
-        : 'HEAD moved again between reading it and accepting it, or the sha was mistyped.\n') +
+        : headMoved
+          ? 'HEAD moved again between reading it and accepting it, or the sha was mistyped.\n'
+          // Not moved since the snapshot, so HEAD is the sha the refusal printed (#907 round 1).
+          : 'HEAD has not moved since the snapshot, so the sha was mistyped.\n') +
       'Re-run `npm run guard:rebaseline` with no --accept to see the current delta.');
   }
 
@@ -685,19 +698,21 @@ if (changed) {
     // (#887). So each finding gets the command that can show it, and only the findings made.
     console.error('HEAD did not move. What moved, and the command that shows it:');
     if (branchMoved) {
-      console.error(`  the branch (${before.branch} -> ${after.branch}):  git branch --show-current`);
+      console.error(`  the branch (${before.branch} -> ${after.branch}):  ${BRANCH_COMMAND}`);
     }
     if (filesMoved) {
       console.error('  the working tree:  git diff  /  git status --porcelain -uall');
     }
     if (flagsMoved) {
-      console.error(`  the index flags:  ${INDEX_FLAGS_COMMAND}`);
+      console.error(`  the index flags (${INDEX_FLAGS_LEGEND}):\n    ${INDEX_FLAGS_COMMAND}`);
     }
     if (worktreeMoved) {
       console.error('Inspect it before assuming it was yours.');
     } else if (branchMoved) {
-      console.error('\n  If you made this checkout:');
-      console.error('    npm run guard:rebaseline    # prints the delta and refuses; read it, then accept');
+      // The command bare, for the reason given at INDEX_FLAGS_LEGEND. The HEAD-moved advice
+      // above still carries the `#` form (#908).
+      console.error('\n  If you made this checkout, run this. It prints the delta and refuses; read it, then accept:');
+      console.error('    npm run guard:rebaseline');
     }
   }
   if (argv.includes('--release')) {
