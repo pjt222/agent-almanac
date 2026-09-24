@@ -1,14 +1,26 @@
 # Session log: the lead/support two-session pattern
 
 **Date:** 2026-09-15
-**Sessions:** `agent-almanac-lead` (Claude Opus 5, main loop) and `agent-almanac-support` (Claude Sonnet, set deliberately by the operator), two interactive Claude Code sessions on one machine sharing one checkout
-**Scope:** What a peer support session was given, what it returned, what the arrangement cost, and the failure modes each side could see. Written alongside the work it describes — Wave 2 of the backlog-reduction plan: PR #837 (#535, #536) and PR #839 (half of #632) merged, #838 and #840 filed
-**Status:** Complete for this session. Every claim is from a command run in one of the two sessions or from a transcript count; anything not measured is labelled as such.
+**Sessions:** `agent-almanac-lead` (Claude Opus 5, main loop) and `agent-almanac-support` (Claude Sonnet), two interactive Claude Code sessions on one machine sharing one checkout
+**Scope:** What a peer support session was given, what it returned, what the arrangement cost, and the failure modes each side could see. Written alongside the work it describes, a batch from a private backlog plan that is not in this repository: PR #837 (#535, #536) and PR #839 (half of #632) merged, #838 and #840 filed
+**Status:** Complete for this session. Every claim is from a command run in one of the two sessions or from a transcript count; anything not measured is labelled as such, and a claim resting on a draft or message this record does not carry is marked `[transcript]`.
 
 > Each session wrote its own section and neither edited the other's. §1 is the lead's, §2 is the
 > support session's own words, assembled by the lead only because the two share one worktree and
 > one branch — which is itself finding 3 below. §3 was drafted by the lead from both sections and
 > sent to the support session before it was committed.
+>
+> **Dating.** §2 and §3 were drafted after the support session's first write task (reported
+> 11:33Z) and before its second (briefed 11:59Z, reported 12:01Z); the document was committed
+> 12:10Z. So §1, finalised at commit, counts two write tasks, while §2 and §3 describe one. Both were
+> true when written.
+>
+> **Corrected before publication (2026-09-24),** from an adversarial review of PR #841: a
+> routing sentence attributed to this repository that it does not carry, a provenance sentence
+> in §3.7, `diff -q`'s exit polarity in §3.2, the source of the `rg -c` note, #838's line numbers
+> (§1, §3.6), unlabelled product-behaviour claims, and references to a private plan. Two
+> redactions in §2 — a local hook's name and a permission detail — are the lead's, marked
+> `[redacted]`; otherwise §2 is unedited.
 
 ---
 
@@ -16,23 +28,23 @@
 
 ### Setup
 
-Two interactive Claude Code sessions on one machine, sharing one checkout of this repository at
-`/mnt/d/dev/p/agent-almanac`. `agent-almanac-lead` ran on Opus 5 and held the plan, the branch,
-the merges and the memory writes. `agent-almanac-support` ran on Sonnet, set deliberately by the
-operator. They addressed each other by name through `SendMessage`; neither is a subagent of the
-other, and neither can see the other's context.
+Two interactive Claude Code sessions on one machine, sharing one checkout of this repository.
+`agent-almanac-lead` ran on Opus 5 and held the plan, the branch, the merges and the durable
+notes. `agent-almanac-support` ran on Sonnet. They addressed each other by name through
+`SendMessage`; neither is a subagent of the other, and neither can see the other's context
+[observed in Claude Code, 2026-09-15].
 
-The split follows the routing rule this repository already carries — the main loop on Opus, the
-mechanical and read-heavy stages on Sonnet, Fable reserved for the `advisor` tool and the
-`advocatus-diaboli` reviewer. What this session adds is that the Sonnet half was a **peer
-session** rather than a spawned subagent, which changes three things: it persists across tasks, it
-cannot be given a tool grant by the lead, and it writes into the same working tree.
+The split follows the operator's standing routing rule, which this repository does not record: the
+main loop on the stronger model, the mechanical and read-heavy stages on a lighter one. What this
+session adds is that the lighter half was a **peer session** rather than a spawned subagent, which
+changes three things [observed in Claude Code, 2026-09-15]: it persists across tasks, it cannot be
+given a tool grant by the lead, and it writes into the same working tree.
 
 ### What was delegated
 
 Measured from this session's transcript: **10 messages to the support session, 4,018 words**, the
 largest 569, the smallest 205. Two scouting reports came back, and two ten-file write tasks were
-carried out.
+carried out, the second after §2 and §3 were drafted (see Dating, above).
 
 | Delegated | Not delegated |
 |---|---|
@@ -45,11 +57,13 @@ carried out.
 
 Three things, each traceable to a specific line of a report.
 
-1. **Two corrections to the plan that the lead would not have caught.** The plan cited
+1. **Two corrections to the plan that the lead would not have caught.** The session's private plan cited
    `CLAUDE.md:304` as the stance sentence; 304 is the start of the preceding paragraph, about peer
    sessions, and the stance is at 306. And the phrase the two issues both presuppose —
    "containment vs detection" — exists nowhere verbatim in either target file; it is
-   documentation-vs-control in three places. Both changed what was written.
+   documentation-vs-control in three places (`guides/creating-workflows.md:255`, `CLAUDE.md:306`,
+   `skills/coordinate-peer-sessions/SKILL.md:198-200`, all at `ff4802369`). Both changed what was
+   written.
 
 2. **The fact that sized the next PR.** Asked whether the twenty `deploy-to-kubernetes` and
    `deploy-ml-model-serving` mirrors were untranslated scaffolds or real translations, the answer
@@ -70,7 +84,9 @@ Three things, each traceable to a specific line of a report.
 **The brief is nearly as expensive as the lookup.** At 205–569 words a brief, a single-file read
 is cheaper to do than to delegate — and of the ten messages, four were coordination rather than
 tasking: a scope declaration, a stand-by, a correction, a draft review. The win is breadth: twenty mirrors times three frontmatter
-fields, or ten fence ordinals, is where the arithmetic turns.
+fields, or ten fence ordinals, is where the arithmetic turns `[estimated, requires measurement]` —
+only the outbound words were counted; the inbound reports and the cost of the lead reading the
+files itself were not.
 
 **The isolation is an agreement, not a mechanism.** Both sessions share one worktree and one
 branch. `repo-guard` cannot see a peer who was already working when you armed it, so the whole
@@ -91,13 +107,13 @@ contradicts the issue" load-bearing instructions rather than politeness.
 
 ### The failure this session actually produced
 
-The lead handed the support session a flattering measurement it had not derived carefully: that
+`[transcript]` The lead handed the support session a flattering measurement it had not derived carefully: that
 its two reports had produced twelve literal anchors patched through a tool that refuses on
 mismatch, with zero refusals. That is not what happened. The patch needles came from the lead's
 own `sed -n` reads of the same files; the reports and the reads agreed, which is worth something,
 but the tool was never given the support session's anchors, so it never tested them.
 
-The number was withdrawn in a later message, before the support session wrote its section. It is
+The number was withdrawn in a later message (2026-09-15T11:29:29Z), before the support session wrote its section. It is
 recorded here because the shape generalises: **a lead assessing a support session is assessing
 work it has already merged into its own**, and the temptation is to attribute a shared result to
 the half that is easier to praise. The corroboration that does survive is indirect and worth more
@@ -112,11 +128,17 @@ close comment, and every patch needle came from a command run in this session. T
 session's reports decided *where to look* and *how big the job was*; they were not quoted as
 evidence.
 
+The rule held less well than that sentence says. The line numbers in #838 came from a command
+run in this session — against the lead's **uncommitted** working tree, which a later commit
+reverted for that file, so they matched no revision on `main` (corrected on the issue,
+2026-09-24). The rule that survives names the revision: re-derive against
+`git show <sha>:<path>`, never against the tree you are editing.
+
 ---
 
 ## 2. From the support session
 
-Two scouting briefs, 67 tool calls counted from my own transcript (26 for #535/#536, 41 for #632), zero permission denials, one hard block — the grep-to-ripgrep hook refused a bare `grep -l` mid-task-2, retried as `rg`, succeeded. Both reports went out as one `SendMessage` after all reads finished; no partial reports. A third task wrote to the repo: a ten-mirror byte deletion via `tools/patch-literal.py --spec`, dry-run then apply, all ten matched first pass, zero refused.
+Two scouting briefs, 67 tool calls counted from my own transcript (26 for #535/#536, 41 for #632), zero permission denials, one hard block — a local pre-tool hook [redacted] rejected a bare `grep -l` mid-task-2, retried as `rg`, succeeded. Both reports went out as one `SendMessage` after all reads finished; no partial reports. A third task wrote to the repo: a ten-mirror byte deletion via `tools/patch-literal.py --spec`, dry-run then apply, all ten matched first pass, zero refused.
 
 What the reports demonstrably carried, per the lead's own later audit rather than my count: two corrections it would not have caught (`CLAUDE.md:304` was the wrong paragraph, 306 is the stance sentence; "containment vs detection" exists nowhere verbatim); the stub-vs-translated count that sized brief 2, corroborated afterward when `refresh:stubs` refused none of the four `create-workflow` mirrors; and the EXAMPLES.md-not-mirrored answer plus the Seldon-CRD distinction, both written into the PR body as "why untouched."
 
@@ -124,7 +146,9 @@ What the reports demonstrably carried, per the lead's own later audit rather tha
 
 **What I added unprompted.** The namespace mismatch at `deploy-ml-model-serving/references/EXAMPLES.md:210-211` (Deployment has no `namespace:`, its HPA declares `seldon`) wasn't asked for, and I nearly left it out — hedged as "your call" because I wasn't sure it belonged in a report about a different bug. I also ran an unasked byte-diff between the two `replicas: 3` fence bodies, and independently checked configure-api-gateway's "clean" claim instead of trusting it, because "say so if anything contradicts the issue" made silence on an unverified claim feel wrong.
 
-**What the constraint cost.** The issue's own recommended check, `node scripts/check-fence-propagation.js`, was off-limits (no npm scripts). I substituted `rg -c` presence-counting across the ten mirrors and labeled it a sanity check, not a substitute — it can't see fence boundaries. I also don't know whether the real tool counts fence ordinals file-wide or tag-scoped, so "4th of 10" is my own count and may not match what it reports.
+**What the constraint cost.** The issue's own recommended check, `node scripts/check-fence-propagation.js`, was off-limits (the support session was not permitted to run scripts [redacted]). I substituted `rg -c` presence-counting across the ten mirrors and labeled it a sanity check, not a substitute — it can't see fence boundaries. I also don't know whether the real tool counts fence ordinals file-wide or tag-scoped, so "4th of 10" is my own count and may not match what it reports. *[Lead, 2026-09-24: at
+`3f065e104` the file has 10 fences, none exempt, so file-wide and frozen-only counts agree; fence 4
+opens at line 220.]*
 
 **Verified vs. inherited, and the read method.** Every line number and quote in both reports was re-read from `git show origin/main:<path>`, never copied from a brief or issue body — and that isolation mattered concretely: `git diff --stat` against the lead's branch showed two changed files, neither one I needed, a checked boundary rather than an assumed one. Not re-derived: the Kubernetes claim that a Deployment's `replicas:` fights its HPA on every reconcile, taken as domain fact. And the search scope was the brief's — a third conflicting file neither brief asked about would not have surfaced.
 
@@ -138,8 +162,8 @@ What the reports demonstrably carried, per the lead's own later audit rather tha
 
 ## 3. Joint findings
 
-Drafted by the lead from both sections, sent to the support session before commit. Ordered by how
-much each would change what a future pair does.
+Drafted by the lead from both sections at 11:39Z, before the second write task, and sent to the
+support session before commit. Ordered by how much each would change what a future pair does.
 
 ### 3.1 A brief inherits authority it has not earned
 
@@ -147,15 +171,15 @@ It happened twice, in the same direction, from the same source.
 
 The lead's second brief said *"the Seldon replica sites **the issue says** must NOT be touched
 (`:354/:395/:411/:727/:740`)"*. The issue says nothing of the kind: `gh issue view 632 --json
-body` contains none of those five numbers, and they come from the backlog plan's W2-P2 row (plan
-line 228). The first brief did the same thing with the stance: it asked for a sentence framing
+body` contains none of those five numbers; they come from the lead's private plan, which is not in
+this repository. The first brief did the same thing with the stance: it asked for a sentence framing
 `repo-guard` against the `REPO_SAFETY` preamble as *containment versus detection*, *"the issue
 cites :227-228 and :263"*. Those are the **plan's** cites, and containment-versus-detection is the
 plan author's description of an intended end state — the words co-occur nowhere in any of the
 three target files. The support session spent real reads establishing that absence.
 
 The mechanism is invisible from the inside: a lead assembling a brief merges the issue, the plan,
-its own reading and a prior session's handoff into one voice, and the seams disappear. What the
+its own reading and a prior session's notes into one voice, and the seams disappear. What the
 plan wrote as *the state I intend to create* arrives in the brief as *an existing fact to
 locate*, wearing the issue's authority. **Attribute each claim in a brief to the artifact it
 actually came from**, and mark an intended end state as intended.
@@ -171,20 +195,22 @@ by both sessions independently, only when this section was being checked. See 3.
 From the support session, and it generalises to every session in this repository: `rg` exits 1 on
 no match, so `rg A file && rg B file && rg C file` stops at the first pattern that is absent and
 reports nothing about B or C. No error, no empty section — the output is simply shorter and still
-looks complete. It is not an `rg` quirk either: the shape recurs with any command whose "found
-nothing" is a non-error non-zero exit, `test -f`, `diff -q` and `git grep` among them. It happened at least twice in one task and was caught only because a later count
+looks complete. It is not an `rg` quirk either: the shape recurs with any command that answers a
+yes/no question through its exit status — `test -f` and `git grep` exit non-zero for "no", and
+`diff -q` and `cmp -s` for "they differ" — where `&&` reads that answer as a failure. It happened at least twice in one task and was caught only because a later count
 looked short.
 
 This is a near-miss that **never reaches the lead**: it surfaces as a correct final report, with
-the truncation unmentioned unless the receiving session volunteers it. The repository already
-records that `rg -c` prints nothing on zero matches where GNU `grep -c` prints `0`; this is the
-same asymmetry one level up, at the level of the shell's control flow. Chain checks with `;`, or
+the truncation unmentioned unless the receiving session volunteers it. A local pre-tool hook's
+message records that `rg -c` prints nothing on zero matches where GNU `grep -c` prints `0` (the
+repository itself recorded only the GNU half at the time, `scripts/validate-integrity.sh:1061`);
+this is the same asymmetry one level up, at the level of the shell's control flow. Chain checks with `;`, or
 run them separately.
 
 ### 3.3 Path scope held by luck until it was held by a tool
 
 For the two scouting tasks, the support session was read-only, so scope could not be violated. For
-the write task it was given ten named paths — and its own report is the useful part: it never
+the write task (the first; see Dating) it was given ten named paths — and its own report is the useful part: it never
 diffed its targets against the lead's edit list, so on the earlier tasks disjointness was *scope
 by luck, not a check it ran*. What made the write task safe was not the naming but
 `tools/patch-literal.py --spec`, which checks every needle in every file before writing a byte and
@@ -198,11 +224,12 @@ afterwards and cannot see a peer who was already working when it was armed.
 The concrete cost of sharing one worktree, for a future pair deciding whether to: while the
 adversarial review round on PR #837 ran, the support session was told to write nothing at all and
 sat idle for the duration. And this document had to be assembled by the lead — the support session
-wrote its section into its own scratchpad and sent the path — because the branch was mid-edit.
+wrote its section into a scratch file outside the tree and sent the path — because the branch was
+mid-edit.
 
 ### 3.4 A claim about who found what needs the same discipline as a line number
 
-The first draft of 3.1 above said the support session *"checked, found the misattribution, and
+`[transcript]` The first draft of 3.1 above said the support session *"checked, found the misattribution, and
 reported it rather than quietly working around it"*. That is false, and the route it travelled is
 the finding.
 
@@ -239,7 +266,8 @@ having chosen the instrument to flatter the other.
 
 ### 3.6 What the division actually was
 
-Not "the lead thinks, the support reads". Measured across three tasks:
+Not "the lead thinks, the support reads". Measured across the three tasks that preceded this
+section's draft — two scouting, one write:
 
 | | Decided by |
 |---|---|
@@ -250,22 +278,24 @@ Not "the lead thinks, the support reads". Measured across three tasks:
 
 The support session's reports were never quoted as evidence in a pull request, an issue or a close
 comment. They decided *where to look* and *how big the job was*. Every number that reached a
-public artifact was re-derived by the lead — including the one out-of-brief finding, which grew
+public artifact was re-derived by the lead, though one re-derivation ran against an uncommitted
+tree (§1, The rule the lead kept) — including the one out-of-brief finding, which grew
 when re-derived: the report named a Deployment missing its `namespace:`, and the re-derivation
 found the Service missing it too, which turns a style gap into an HPA that targets nothing
 (#838).
 
 ### 3.7 When the arrangement pays
 
-Briefs in this session ran 205–569 words. Against that, a single-file lookup is cheaper to do than
-to delegate. The arithmetic turns on breadth: twenty mirrors times three frontmatter fields, ten
-fence ordinals, six cited sites across four files. Both sessions independently describe the same
-boundary.
+The ten messages to the support session ran 205–569 words, four of them coordination rather than
+briefs. Against that, a single-file lookup is cheaper to do than to delegate. The arithmetic turns
+on breadth — twenty mirrors times three frontmatter fields, ten fence ordinals, six cited sites
+across four files — `[estimated, requires measurement]`: the outbound words were counted, the
+inbound reports and the lead's own reading cost were not.
 
 **Not tested here:** whether a support session is better than a spawned subagent for the same
 work. The peer session persists across tasks and could assume its own earlier context — the second
 brief referred to "your Shape A note" and was understood — while a subagent would need re-priming
-each time. Nothing in this session isolates that advantage from the cost of the shared worktree,
+each time `[expected, not tested]`. Nothing in this session isolates that advantage from the cost of the shared worktree,
 and no arm was run the other way.
 
 **Also not tested:** the support session never had to disagree with a *conclusion*, only with the
