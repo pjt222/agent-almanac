@@ -50,6 +50,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+from bisect import bisect_right
 from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
@@ -104,20 +105,30 @@ DECODING_TYPES = ("html", "mermaid")
 class _Positions(HTMLParser):
     """Collect (position-label, decoded-value) for every place an HTML leak would matter.
 
-    THE RULE THIS CLASS FOLLOWS: a run of text is broken only by something a RENDERER breaks it
-    with. What a reader of the published artifact sees is the only thing that matters, so:
+    WHAT IT CAN DECIDE FROM MARKUP, AND WHAT IT CANNOT. Whether two pieces of text render as one
+    word is a CSS question (`display`), and this tool never sees the stylesheet. So it does not
+    claim a renderer's rule. It does this:
 
-      - an inline tag does not break a run: `acme_sec<b></b>ret` renders as one identifier
-      - a COMMENT does not break a run either: `acme_<!-- c -->secret` renders as `acme_secret`,
-        and an earlier version flushed on it, which re-opened the exact hole that joining runs
-        had just closed (measured CLEAN while the tag form raised)
-      - a BLOCK-level boundary DOES break it: `</td><td>` and `</p><p>` put the halves in
-        different boxes, and joining across them reports a leak an operator cannot act on
+      - an inline tag does not break a run: `acme_sec<b></b>ret` is one `text[N]` position
+      - a COMMENT does not break a run either: `acme_<!-- c -->secret` is one position too. An
+        earlier version flushed on it, which re-opened the exact hole that joining runs had just
+        closed (measured CLEAN while the tag form raised)
+      - a BLOCK-level tag starts a new run, so `text[N]` never spans one. A term split ACROSS a
+        block boundary is still reported, under its own label `text-across-block[N]`, and it
+        fails the run like any other survivor (#870). `<div style="display:inline">` renders its
+        halves as one word, so dropping the join — which an earlier version did, on all 37
+        BLOCK tags — was a false CLEAN. The label tells the operator it is the lower-confidence
+        kind: two table cells that really do render apart also raise it.
+
+    `<br>` and `<hr>` are in BLOCK, but in SVG they are not rendered elements at all, so
+    `<text>acme_<br/>secret</text>` may render as one identifier. That is inferred from SVG
+    semantics and NOT measured against a renderer; either way it now raises, under
+    `text-across-block`.
     """
 
-    # Block-level elements a renderer separates. Not exhaustive — it does not need to be, since
-    # erring toward joining is fail-closed (a false positive) while erring toward flushing is
-    # fail-open (a false CLEAN), and only the second loses a leak.
+    # Block-level elements. Membership decides only WHICH label a split term gets — `text[N]` or
+    # `text-across-block[N]` — not whether it is reported, so an omission here costs a label, not
+    # a leak.
     BLOCK = frozenset(
         "address article aside blockquote br dd div dl dt fieldset figcaption figure footer "
         "form h1 h2 h3 h4 h5 h6 header hr li main nav ol p pre section table tbody td tfoot th "
@@ -130,15 +141,23 @@ class _Positions(HTMLParser):
         self._n = 0
         self._run: list[str] = []
         self._run_start = 0
+        # Every run, whitespace-only ones included, in document order. Consecutive runs are
+        # separated by a block boundary and nothing else, which is what `across_block` joins.
+        self._runs: list[tuple[int, str]] = []
+        # Handler calls, counted apart from `_n`, which numbers positions and skips end tags.
+        self._events = 0
+        self.dropped = False
 
     def _flush(self) -> None:
         if self._run:
             joined = "".join(self._run)
+            self._runs.append((self._run_start, joined))
             if joined.strip():
                 self.found.append((f"text[{self._run_start}]", joined))
             self._run = []
 
     def handle_data(self, data: str) -> None:
+        self._events += 1
         self._n += 1
         if not self._run:
             self._run_start = self._n
@@ -147,19 +166,32 @@ class _Positions(HTMLParser):
     def handle_comment(self, data: str) -> None:
         # No flush: a comment is invisible to a renderer, so the text around it is one run.
         # `convert_charrefs` does not reach inside a comment, hence the explicit unescape.
+        self._events += 1
         self._n += 1
         if data.strip():
             self.found.append((f"comment[{self._n}]", unescape(data)))
 
+    # A declaration or processing instruction is counted — it is an event, and it keeps every
+    # later label's ordinal where it was — but yields no position. Neither is ever unescaped, so
+    # its value was always a substring of the text the whole-text tier had already checked: it
+    # inflated `N decoded position(s)` and could report nothing (#870, low-priority item).
     def handle_decl(self, decl: str) -> None:
+        self._events += 1
         self._n += 1
-        self.found.append((f"decl[{self._n}]", decl))
 
     def handle_pi(self, data: str) -> None:
+        self._events += 1
         self._n += 1
-        self.found.append((f"pi[{self._n}]", data))
+
+    def unknown_decl(self, data: str) -> None:
+        # A CDATA section arrives here. Like a decl it is never unescaped, so it yields no
+        # position; it is still an event, so `close()` emitting an unclosed one is not read as a
+        # drop. Uncounted, `<![CDATA[x` refused at exit 2 while `<![CDATA[x]]>` passed (#870).
+        # `_n` is left alone, so no label after a CDATA section moves.
+        self._events += 1
 
     def handle_starttag(self, tag: str, attrs) -> None:
+        self._events += 1
         if tag in self.BLOCK:
             self._flush()
         for name, value in attrs:
@@ -170,14 +202,53 @@ class _Positions(HTMLParser):
                 self.found.append((f"attr:{name}[{self._n}]", value))
 
     def handle_endtag(self, tag: str) -> None:
+        self._events += 1
         if tag in self.BLOCK:
             self._flush()
 
     handle_startendtag = handle_starttag
 
     def close(self) -> None:  # noqa: D102
+        # Whether the parser DROPPED input no handler ever saw. What `feed()` could not tokenise
+        # is left in `rawdata`. An unconsumed tail alone proves nothing: `AT&T` leaves one, a
+        # charref held back in case more input completes it, and `close()` emits it. What marks
+        # content lost is a tail for which `close()` calls none of this class's handlers. An
+        # unterminated attribute quote swallows the rest of the document that way, and so does an
+        # unterminated start or end tag, while an unclosed comment, decl, PI, CDATA section or
+        # script is emitted and examined (measured on 3.12.3, #870). "This class's handlers" is
+        # load-bearing: CDATA reads as a drop unless `unknown_decl` is counted. A parser that
+        # parsed nothing until `close()` would leave no tail here and pass a stall; the
+        # self-test's stall arms are what would say so.
+        tail = self.rawdata
+        before = self._events
         super().close()
+        self.dropped = bool(tail) and self._events == before
         self._flush()
+
+    def across_block(self, terms) -> list[str]:
+        """Labels for a term found only by joining runs across a block boundary.
+
+        An occurrence wholly inside one run is `text[N]`'s and is not repeated here. Each label
+        names the run the occurrence starts in, and never the text around it.
+        """
+        joined = "".join(run for _, run in self._runs)
+        offsets, at = [], 0
+        for _, run in self._runs:
+            offsets.append(at)
+            at += len(run)
+        hits: list[str] = []
+        for t in terms:
+            if not t:
+                continue
+            i = joined.find(t)
+            while i >= 0:
+                k = bisect_right(offsets, i) - 1
+                if i + len(t) > offsets[k] + len(self._runs[k][1]):
+                    label = f"text-across-block[{self._runs[k][0]}]:{t}"
+                    if label not in hits:
+                        hits.append(label)
+                i = joined.find(t, i + 1)
+        return hits
 
 
 _MERMAID_NUMERIC = re.compile(r"#(\d{1,6});")
@@ -186,6 +257,19 @@ _MERMAID_NUMERIC = re.compile(r"#(\d{1,6});")
 def _mermaid_decode(s: str) -> str:
     """Mermaid renders `#95;` as `_`, so a diagram can carry an identifier the bytes do not."""
     return _MERMAID_NUMERIC.sub(lambda m: chr(int(m.group(1))), s)
+
+
+def _parse_html(text: str) -> _Positions:
+    """One feed, then close. `_Positions.close` reads the tail `feed` left, so feed only once.
+
+    A second `feed()` on the patched 3.12 parser can sit in `_pending`, which `close()` merges
+    only after `_Positions.close` has read `rawdata`, so a drop there would go unseen (#909
+    round 1, N-4). One feed per instance is the contract.
+    """
+    p = _Positions()
+    p.feed(text)
+    p.close()
+    return p
 
 
 def positions(text: str, kind: str) -> list[tuple[str, str]]:
@@ -197,10 +281,7 @@ def positions(text: str, kind: str) -> list[tuple[str, str]]:
     version's structure tier dead for three of four types.
     """
     if kind == "html":
-        p = _Positions()
-        p.feed(text)
-        p.close()
-        return p.found
+        return _parse_html(text).found
     if kind == "mermaid":
         out: list[tuple[str, str]] = []
         # Whole lines rather than a bracket regex: an earlier version matched only `[Label]`-style
@@ -229,6 +310,8 @@ def structure_survivors(text: str, terms, kind: str) -> list[str]:
         for t in terms:
             if t and t in value:
                 hits.append(f"{label}:{t}")
+    if kind == "html":
+        hits.extend(_parse_html(text).across_block(terms))
     return hits
 
 
@@ -243,16 +326,28 @@ def redact_text(text: str, table: dict[str, str], kind: str, also_deny=(), asser
     out = text if assert_only else apply_mapping(text, table)
     terms = list(table.keys()) + [t for t in also_deny if t]
     assert_clean(out, terms, "whole-text")
-    if kind in DECODING_TYPES and out.strip() and not positions(out, kind):
-        # Malformed markup (an unterminated attribute quote) makes HTMLParser consume the
-        # document and yield nothing; `0 decoded position(s), 0 survivor(s)` then reads as a pass.
-        raise UnmeasurableError(
-            f"--type {kind} yielded no positions over non-empty input, so the structure tier "
-            f"examined nothing. This is COULD-NOT-MEASURE (exit 2), not a finding (exit 1)."
-        )
+    dropped = kind == "html" and _parse_html(out).dropped
     survivors = structure_survivors(out, terms, kind)
+    # Survivors first: a leak the tier FOUND is a finding (exit 1) even when the parser also
+    # dropped input after it. Checked the other way round, an established `text[1]` hit became
+    # exit 2 and a caller branching on 1 heard nothing (#909 round 1).
     if survivors:
-        raise RedactionError(f"structure: term(s) survive at {', '.join(survivors)}")
+        raise RedactionError(
+            f"structure: term(s) survive at {', '.join(survivors)}"
+            + ("; the parser also dropped input it could not tokenise, so this list may be "
+               "incomplete" if dropped else "")
+        )
+    if dropped:
+        # Malformed markup (an unterminated attribute quote) makes HTMLParser drop the rest of the
+        # document unexamined, and a clean result over the part it did see would read as a pass.
+        # Keyed on the drop itself, not on an empty position list: `<div></div>` yields no
+        # positions and is well-formed, while text AHEAD of a drop yields some and hid it (#870).
+        # Only html can reach this: mermaid is read line by line and drops nothing.
+        raise UnmeasurableError(
+            "--type html: the parser dropped input it could not tokenise (an unterminated "
+            "attribute quote or tag, say), so the structure tier did not examine all of it. "
+            "This is COULD-NOT-MEASURE (exit 2), not a finding (exit 1)."
+        )
     matched = sum(1 for src in table if src in text)
     return out, {
         "mappings": len(table),
@@ -416,7 +511,9 @@ def _verify() -> int:
         try:
             out, _ = redact_text(sample, tbl, kind)
             check(f"{kind}: redacts and passes its own assertion", "acme_secret" not in out, out)
-        except RedactionError as exc:
+        except (RedactionError, UnmeasurableError) as exc:
+            # Both, because UnmeasurableError is not a RedactionError: a refusal here used to
+            # escape as a traceback, which a mutation run scores as a kill with no arm named (#870).
             check(f"{kind}: redacts and passes its own assertion", False, str(exc))
 
     # --- the structure tier must be ADDITIVE exactly where DECODING_TYPES says ----------------
@@ -468,7 +565,7 @@ def _verify() -> int:
             redact_text(doc, {"never-present": "x"}, kind, also_deny=["acme_secret"])
             got = "no raise"
             ok = False
-        except RedactionError as exc:
+        except (RedactionError, UnmeasurableError) as exc:
             got = str(exc)
             ok = "structure:" in got or "whole-text" in got
         check(f"caught: {name}", ok, got)
@@ -487,24 +584,120 @@ def _verify() -> int:
             f"it now detects it, so the header's disclosure is stale: {exc}",
         )
 
-    # --- a comment does NOT break a text run; a BLOCK boundary does ---------------------------
+    # --- a comment does NOT break a text run; a BLOCK boundary starts a new one ---------------
     # The first is a regression arm: an earlier fix flushed the run on a comment, which re-opened
     # the split-text hole it had just closed. A renderer drops the comment and shows one word.
-    for doc, must_raise, why in (
-        ("<p>acme_<!-- c -->secret</p>", True, "a COMMENT does not interrupt rendered text"),
-        ("<p>acme_<?php ?>secret</p>", True, "a processing instruction does not either"),
-        ("<p>acme_<b></b>secret</p>", True, "nor does an inline tag"),
-        ("<table><tr><td>acme_</td><td>secret</td></tr></table>", False,
-         "a BLOCK boundary DOES, so joining across it would be an unactionable false positive"),
-    ):
+    def survivors_of(doc: str) -> str:
         try:
             redact_text(doc, {"never": "x"}, "html", also_deny=["acme_secret"])
-            raised = False
-        except RedactionError:
-            raised = True
-        check(f"text runs: {why}", raised == must_raise, f"raised={raised}, wanted {must_raise}")
+            return ""
+        except (RedactionError, UnmeasurableError) as exc:
+            return str(exc)
 
-    # --- malformed markup cannot report a pass -------------------------------------------------
+    for doc, want, why in (
+        ("<p>acme_<!-- c -->secret</p>", "text[", "a COMMENT does not interrupt rendered text"),
+        ("<p>acme_<?php ?>secret</p>", "text[", "a processing instruction does not either"),
+        ("<p>acme_<b></b>secret</p>", "text[", "nor does an inline tag"),
+        ("<span>acme_</span><span>secret</span>", "text[", "two SPANs are one run (control)"),
+        # Until #870 the four below were a silent CLEAN: the run was flushed on the BLOCK tag and
+        # the join dropped, while an inline display renders the halves as one word. The table
+        # cell arm asserted the opposite, calling the join an unactionable false positive; it is
+        # now reported, under a label that says which kind of hit it is.
+        ('<div style="display:inline">acme_</div><div style="display:inline">secret</div>',
+         "text-across-block[", "inline-styled DIVs are joined, under their own label"),
+        ('<div style="display:inline">acme&#95;</div><div style="display:inline">secret</div>',
+         "text-across-block[", "...and in the entity-encoded form only tier 2 can see"),
+        ('<p class="inline">acme_</p><p class="inline">secret</p>',
+         "text-across-block[", "class-driven inline Ps (the CSS is in a stylesheet)"),
+        ("<table><tr><td>acme_</td><td>secret</td></tr></table>",
+         "text-across-block[", "table cells, which a renderer separates, still raise: fail-closed"),
+    ):
+        got = survivors_of(doc)
+        check(f"text runs: {why}", got.startswith("structure:") and want in got,
+              f"wanted a {want}…] survivor, got {got or 'no raise'!r}")
+
+    # Across-block is only for what no single run holds, so one leak gets one label.
+    one_run = survivors_of("<div>acme&#95;secret</div><div>x</div>")
+    check("a term inside ONE run is text[N] only, not also text-across-block",
+          "text[" in one_run and "text-across-block" not in one_run, one_run or "no raise")
+
+    # The join keeps whitespace-only runs. Between two blocks, whitespace renders as a space or
+    # a line break, never as nothing, so dropping it would join what no renderer joins.
+    spaced = survivors_of("<div>acme_</div>\n<div>secret</div>")
+    check("whitespace between two blocks stays in the join, so it does not raise", spaced == "", spaced)
+
+    # The label names the run the occurrence STARTS in (the docstring's promise), and one run
+    # gets one label however many occurrences start there.
+    hits = structure_survivors("<div>x</div><div>acme_</div><div>secret</div>", ["acme_secret"], "html")
+    check("a text-across-block label names the run the term starts in",
+          hits == ["text-across-block[2]:acme_secret"], str(hits))
+    hits = structure_survivors("<div>xaba</div><div>bab</div>", ["abab"], "html")
+    check("two occurrences starting in one run give one label", hits == ["text-across-block[1]:abab"],
+          str(hits))
+
+    # --- malformed markup cannot report a pass, and well-formed markup is not refused ---------
+    # The refusal used to key on an EMPTY position list, which is true of valid markup with no
+    # text (9 of 12 such documents refused, #870) and false once any text precedes the stall
+    # (those passed at exit 0 with the stalled tail unexamined). It now keys on input the parser
+    # DROPPED.
+    def refused(doc: str) -> bool:
+        try:
+            redact_text(doc, {"never": "x"}, "html")
+            return False
+        except UnmeasurableError:
+            return True
+        except RedactionError:
+            return False
+
+    for name, doc in (
+        ("an empty div", "<div></div>"),
+        ("a lone br", "<br/>"),
+        ("a lone hr", "<hr>"),
+        ("an img with no attributes", "<img>"),
+        ("an empty paragraph", "<p></p>"),
+        ("an SVG of shape elements with no attributes", "<svg><rect/><circle/></svg>"),
+        ("an empty table", "<table></table>"),
+        ("an empty list", "<ul></ul>"),
+        ("empty nested elements", "<div><span><b></b></span></div>"),
+        ("empty input", ""),
+        ("whitespace-only input", "  \n\t "),
+        ("text whose tail is a held-back charref, AT&T", "AT&T"),
+        ("text ending in a lone <", "x <"),
+        ("an unclosed comment, which close() emits", "<p>x</p><!-- never closed"),
+        ("an unclosed CDATA section, which close() emits to unknown_decl", "<svg><text><![CDATA[x"),
+        ("an unclosed doctype, which close() emits to handle_decl", "<p>ok</p><!DOCTYPE html"),
+        ("an unclosed XML declaration, which close() emits to handle_pi", '<?xml version="1.0"'),
+    ):
+        check(f"well-formed or examined markup is NOT refused: {name}", not refused(doc), repr(doc))
+
+    stall = '<text data-id="acme&#95;secret>x</text>'
+    for name, prefix in (
+        ("nothing before it", ""),
+        ("a paragraph of text", "<p>ok</p>"),
+        ("bare text", "x"),
+        ("an element with an attribute", '<a href="y"></a>'),
+        ("a comment", "<!-- c -->"),
+        ("a doctype", "<!DOCTYPE html>"),
+    ):
+        check(f"a dropped tail REFUSES whatever precedes it: {name}", refused(prefix + stall),
+              repr(prefix + stall))
+
+    # A leak already FOUND is a finding, even when the parser also dropped input after it. The
+    # drop check used to run first, so an established `text[1]` hit became exit 2, and a caller
+    # branching on exit 1 heard nothing (#909 round 1).
+    leak_then_stall = "<p>acme&#95;secret</p>" + stall
+    got = survivors_of(leak_then_stall)
+    check("a leak found ahead of a dropped tail is exit 1 (a finding), not exit 2",
+          got.startswith("structure:") and "text[1]:acme_secret" in got and "dropped" in got,
+          got or "no raise")
+
+    # Only html can reach the refusal. Mermaid bytes that would stall HTMLParser (a `<` in a
+    # label) are read line by line and must not be refused under an `--type html` message.
+    try:
+        redact_text('graph TD\n  a["a<b"]\n', {"never": "x"}, "mermaid")
+        check("a mermaid label holding `<` is not refused (the refusal is html-only)", True)
+    except (RedactionError, UnmeasurableError) as exc:
+        check("a mermaid label holding `<` is not refused (the refusal is html-only)", False, str(exc))
     try:
         redact_text('<text data-id="acme&#95;secret>x</text>', {"never": "x"}, "html")
         check("markup the tier cannot examine REFUSES rather than reporting 0 positions as clean",
@@ -546,7 +739,7 @@ def _verify() -> int:
     try:
         redact_text("<p>acme_secret</p>", {"nothing": "x"}, "html", also_deny=["acme_secret"])
         check("a whole-text survivor raises", False, "no raise")
-    except RedactionError as exc:
+    except (RedactionError, UnmeasurableError) as exc:
         check(
             "the whole-text tier names the term and never the surrounding markup",
             "<p>" not in str(exc) and "acme_secret" in str(exc),
@@ -559,7 +752,7 @@ def _verify() -> int:
             also_deny=["acme_secret"],
         )
         check("a structure-only survivor raises", False, "no raise")
-    except RedactionError as exc:
+    except (RedactionError, UnmeasurableError) as exc:
         msg = str(exc)
         check(
             "the structure tier names a POSITION and never the surrounding content",
