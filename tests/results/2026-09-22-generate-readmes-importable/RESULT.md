@@ -451,7 +451,7 @@ The one structural blind spot left is `dynamic-import-repo-js`. This classifier'
 whatever the loader loads, so executing an arbitrary repository `.js` at import is
 indistinguishable from loading a module of the graph. Closing it means comparing against the
 STATIC import graph — `importGraph()` in `scripts/check-workflow-generator-inputs.js`, which is
-module-private — so it is a follow-up issue with an arm holding its place. #906 exports it as `importGraph(root, entry, seen)` from `scripts/lib/import-graph.js`; the comparison itself is #892.
+module-private — so it is a follow-up issue with an arm holding its place. #906 exports it as `importGraph(root, entry, seen)` from `scripts/lib/import-graph.js`; the comparison itself is #892. It landed: see the Addendum (#892) at the end of this file.
 
 Four controls remain — the patch fires, the patch reaches a NAMED binding, the classifier can
 still say *content*, and no loader descriptor outlives the import (a recycled one would excuse
@@ -798,3 +798,72 @@ Not gated, stated so nobody reads it as covered:
 
 After the fix, `--verify` passes 40/40 and main mode reports `content 0` on v22.16.0, v24.20.0 and
 v25.9.0. The self-arm mutants from the table above give the same results as before on all three.
+
+## Addendum (#892): a module outside the static import graph is content
+
+§4 named one structural blind spot, `dynamic-import-repo-js`. It existed because the classifier's
+"loader" was whatever the loader loads, so a dynamic `import()` or `require()` of a repository
+`.js` at import time looked exactly like the loader reading a module of the graph. #906 extracted
+`importGraph(root, entry, seen)` to `scripts/lib/import-graph.js`. The probe now compares against
+it.
+
+**The rule.** A loader-frame read of a `.js`/`.mjs`/`.cjs` counts as the loader's only when the
+module is in the subject's static relative-import graph, or under the root's own `node_modules`
+(spelled or realpath'd). Anything else it loaded is content, reported with the note "outside the
+static import graph". The graph is taken before the patch loops, so taking it is not recorded.
+
+**The two sets are equal on the unmodified generator.** On all three Node versions, the loader's
+module reads in main mode resolve to exactly the 27 repository modules
+`importGraph(ROOT, 'scripts/generate-readmes.js')` returns, with none missing, plus
+`js-yaml/dist/js-yaml.mjs` from the dependency tree:
+
+| Node | loader reads (calls) | loaded repo modules = graph | content |
+|---|---|---|---|
+| v22.16.0 | 28 | 27 = 27 | 0 |
+| v24.20.0 | 162 | 27 = 27 | 0 |
+| v25.9.0 | 84 | 27 = 27 | 0 |
+
+The call counts are unchanged from before this addendum, and the `OK` line is present on all three.
+
+**Why the root's `node_modules` in its realpath form too.** In a git worktree whose `node_modules`
+is a symlink into the main checkout, the loader reads js-yaml at the symlink's target, which lies
+outside ROOT. **Why not "any `node_modules` segment":** a repository `.js` under a nested
+`node_modules/` would then be excused. The new arm `foreign-node-modules-import` pins that.
+
+**Arms.** `--verify` now passes 42 rows on v22.16.0, v24.20.0 and v25.9.0: 40 shapes plus
+`main-report-to-file` and `leak-count`.
+
+| arm | before | now |
+|---|---|---|
+| `dynamic-import-repo-js` | declared blind | `seen` |
+| `require-repo-js` (new, the `require()` twin, #888 round 4 B2) | — | `seen` |
+| `foreign-node-modules-import` (new; module planted before the patch loops through a new `files` field, so writing it cannot be what the arm sees) | — | `seen` |
+| `dep-import`, `bare-resolve-import` (controls) | blind | blind |
+
+For each new `seen` arm, on each version, every content line the shape prints is a module read
+marked "outside the static import graph". Apart from the `readSync`/`closeSync` on that module's
+own descriptor, no other call contributes, so the arms pass for the reason they are declared.
+
+**Still unmeasured**, as the probe's header states: a module loaded before the probe, any side
+effect reaching the filesystem through none of the wrapped entry points, and code in the root's own
+dependency tree, which the rule exempts by design. A **static** import by absolute path or
+`file://` URL is outside `importGraph`'s relative-only walk too, so it grades as content. That is
+the loud direction, and nothing in the generator's graph is written that way.
+
+### Mutants
+
+Measured with `tools/mutation-envelope.sh --test 'node …/import-side-effects.mjs --verify'` on
+v25.9.0; all five were killed. The failing rows come from re-running each mutant by hand, with the
+file restored byte-identical (sha256) afterwards:
+
+| mutant | failing rows |
+|---|---|
+| graph check dropped (`loader = moduleRead`) | `dynamic-import-repo-js`, `require-repo-js`, `foreign-node-modules-import` |
+| dependency exemption dropped | `dep-import`, `bare-resolve-import`, `main-report-to-file` |
+| exemption by `node_modules` segment instead of root prefix | `foreign-node-modules-import` |
+| realpath of the dependency root dropped | `dep-import`, `bare-resolve-import`, `main-report-to-file` |
+| pre-planting of `files` dropped | `foreign-node-modules-import` |
+
+The realpath row is killed only where `node_modules` is a symlink, as in the worktree these were
+measured in. In a checkout with a real `node_modules` directory that mutant is equivalent, and no
+arm here can tell the difference.
