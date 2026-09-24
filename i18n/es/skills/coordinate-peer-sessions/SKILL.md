@@ -8,13 +8,16 @@ description: >
   starting work in a repository that may already be occupied, when a git
   command fails with `index.lock: File exists`, when `guard:snapshot` refuses
   because a snapshot already exists, or when a commit turns out to contain a
-  file this session never edited. Distinct from subagent concurrency: a peer
-  session cannot be bracketed, because no baseline exists from before its edits.
+  file this session never edited. When one session leads and the other
+  supports, divide the labour by shape and re-derive every reported number
+  against a named revision before citing it. Distinct from subagent concurrency:
+  a peer session cannot be bracketed, because no baseline exists from before its
+  edits.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: git
   complexity: intermediate
   language: multi
@@ -22,7 +25,6 @@ metadata:
   locale: es
   source_locale: en
   source_commit: "d34f9ced6"
-  fence_basis_commit: "d34f9ced6"
   translator: "(untranslated stub)"
   translation_date: "2026-08-18"
 ---
@@ -44,6 +46,7 @@ necessary at all.
 - `npm run guard:snapshot` refuses because a snapshot already exists and you did not arm it.
 - A commit or branch contains a file this session never edited.
 - A generated artifact is stale and nothing this session did explains it.
+- One session leads a plan and hands scouting or mechanical writes to the other (Steps 9-10).
 
 ## Inputs
 
@@ -230,6 +233,61 @@ removes it from the shared tree — untrack before switching, and tell them. If 
 artifact is stale for no reason you can name, investigate before regenerating: regenerating
 turns the check green and destroys the only signal that the corpus moved.
 
+### Step 9: Divide the labour when one session leads
+
+When the two sessions work one plan rather than two tasks, one leads — it holds the branch, the
+commits, the merges and everything cited in public — and the other supports. Assign by the
+shape of the work, not by "one thinks, one reads":
+
+```text
+Support decides: where to look, what is on disk, how big the job is
+Lead decides:    what a finding means, what the prose says, what is cited publicly
+Support writes:  nothing by default; for a write task, through a tool that refuses on mismatch
+```
+
+Delegate breadth — N files times M fields, fence ordinals across mirrors, cited sites across
+files — rather than a single-file lookup, which costs about as much to brief as to do
+[estimated]. In each brief, **attribute every claim to the artifact it came from** — the issue,
+the plan, your own read — and mark an end state you intend to create as intended: a plan's
+target reaches the support as "the issue says" and is searched for as an existing fact. Ask for
+re-derivation from a named sha, for "say so if anything contradicts the source", and for
+observations and near-misses outside the brief: the report is the only interface, and nothing
+the brief did not ask for arrives unless the support volunteers it.
+
+Write scope has three strengths: read-only removes the failure mode, a tool that checks every
+needle before writing (`tools/patch-literal.py --spec`) is next, and a list of named paths is
+the weakest, because it constrains where a session intends to write rather than where it does.
+While an adversarial review runs on a branch the sessions share, the support writes nothing.
+
+**Expected:** every brief names the source of each claim and states its write scope as one of
+the three levels.
+
+**On failure:** if you cannot say where a claim in a brief came from, delete it or mark it as
+intended before sending — a brief lends the plan's guesses the authority of the source it cites.
+
+### Step 10: Receive the report and re-derive before citing
+
+The report decides where to look and how big the job is. It is never quoted as evidence. Every
+number that will reach a pull request, an issue or a close comment is re-derived by the lead
+against a **named committed revision**, not against the tree being edited:
+
+```bash
+git show "origin/main:path/to/file" | rg -n 'pattern'   # a revision the reader can open
+```
+
+Judge the support's accuracy with an instrument neither session chose — a tool's refusal count,
+say — never with a number the lead derived loosely and offered. And a claim about *who found
+what* gets the same command as a line number: provenance reads as narration, not as an
+assertion, which is why it slips through.
+
+**Expected:** every published number traces to a command against a named sha, and the support's
+report appears nowhere as a source.
+
+**On failure:** if a number was taken from a working tree, re-derive it against the base branch
+and correct the artifact where it was published. The dated record behind this step
+(`docs/investigations/lead-support-coordination-2026-09-15.md`, PR #841) holds one such case: an
+issue's line numbers came from an uncommitted tree and matched no revision on `main`.
+
 ## Validation
 
 - [ ] A separate worktree was considered, and the reason for sharing is recorded
@@ -241,6 +299,8 @@ turns the check green and destroys the only signal that the corpus moved.
 - [ ] No guard slot was released that this session did not arm
 - [ ] Tracked-ness of the settings files was checked, not just their contents
 - [ ] The branch was diffed against its merge base with three dots before the PR was opened
+- [ ] When one session led: every brief attributed each claim to its source and stated write
+      scope, and every published number was re-derived against a named committed revision
 
 ## Common Pitfalls
 
@@ -267,6 +327,16 @@ turns the check green and destroys the only signal that the corpus moved.
   reasonably be written.
 - **Regenerating a stale artifact before explaining it**: staleness is often the only evidence
   that a peer moved the corpus, and regenerating destroys it.
+- **A brief that inherits authority**: the lead merges issue, plan and its own reading into one
+  voice, and an intended end state arrives at the support as a fact to locate (Step 9).
+- **Write scope held by luck**: disjoint targets that nobody checked are not a control; a tool
+  that refuses on mismatch is.
+- **Chaining checks with `&&`**: `rg`, `test -f` and `git grep` answer "no" with a non-zero exit,
+  and `diff -q` answers "they differ" the same way, so `&&` stops at the first such answer and
+  the output is shorter but looks complete. Run checks separately or join them with `;`.
+- **Assessing work already merged into your own**: a lead grading its support is not
+  disinterested, and a flattering number it did not derive carefully is undetectable from the
+  support's side (Step 10).
 
 ## Limitations
 
@@ -304,10 +374,17 @@ The control git does provide sits one level up: a second worktree (Step 1). Each
 own index and HEAD, and git refuses to check out one branch in two of them — an exclusion rather
 than an agreement, which is the difference this whole section is about.
 
+**Steps 9 and 10 rest on one recorded pairing**, the 2026-09-15 session log cited in Step 10. Two
+questions it did not test: whether a peer session does the support work better than a spawned
+subagent would, and whether the division survives a support session that disagrees with the
+lead's *conclusion* rather than with a brief's framing. The breadth threshold in Step 9 is an
+estimate from counted brief lengths alone; the cost of the lead reading the files itself was
+never measured.
+
 ## Related Skills
 
 - `commit-changes` -- explicit-path staging, which this skill depends on
 - `create-pull-request` -- opens the PR whose branch Step 8 reviews
 - `resolve-git-conflicts` -- for a collision that reached the index rather than the working tree
 - `write-continue-here` -- the handoff to the NEXT session, which is not where a peer-scope declaration belongs (#660): its reader deletes it
-- `unleash-the-agents` -- subagent fan-out, the case this skill is explicitly *not* about
+- `unleash-the-agents` -- subagent fan-out: Steps 1-8 do not apply to spawned agents, while Step 9's rules for a brief do
