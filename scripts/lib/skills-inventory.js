@@ -417,9 +417,9 @@ function assertInterpretable(files, root) {
     if (!entry.startsWith('!') && bareNegated.has(entry.replace(/\/$/, ''))) {
       throw new Error(
         `package.json \`files\` both includes and negates "${entry}". In the measurements on `
-        + '#882 (npm 11.13.0), whether npm packed such a path depended on which entry came first, while this module always '
-        + 'carves it out, so the published file count can be lower than what ships. Remove one '
-        + 'of the two entries (#882).',
+        + '#882 (npm 11.13.0), whether npm packed such a path depended on which entry came first. '
+        + 'This module does not model entry order, so its published file count can disagree with '
+        + 'what ships. Remove one of the two entries (#882).',
       );
     }
   }
