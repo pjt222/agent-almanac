@@ -166,8 +166,85 @@ test('detects a stray write to an ALREADY-modified file', async (t) => {
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1, 'a status-line-only comparison would pass here');
-  assert.match(r.stderr, /contents changed/);
-  assert.match(r.stderr, /src\/a\.txt/);
+  // The whole heading and the path under it: this is the one shape whose status line really did
+  // not move, so it is the control for the #899 tests below, which must not print it.
+  assert.match(r.stderr,
+    /contents changed \(same status line as at the snapshot, so only the bytes show the write\):\n {4}~ src\/a\.txt\n/);
+});
+
+/** Two branches that both rewrite `src/a.txt`, so `git merge side` on main conflicts. */
+function prepareConflict(dir) {
+  git(dir, ['checkout', '-q', '-b', 'side']);
+  writeFileSync(join(dir, 'src', 'a.txt'), 'side\n', 'utf8');
+  git(dir, ['commit', '-qam', 'side']);
+  git(dir, ['checkout', '-q', 'main']);
+  writeFileSync(join(dir, 'src', 'a.txt'), 'main\n', 'utf8');
+  git(dir, ['commit', '-qam', 'main']);
+}
+
+test('a path whose status line MOVED is not described as one whose line did not (#899)', async (t) => {
+  // The heading said "file was already modified, so its status line did not move" over every
+  // path whose bytes differ, a fact the code never checked. Each shape below moves the path's
+  // status line, so the path is already listed under `working tree:`; listing it again under a
+  // heading that says the opposite is the defect. Detection must not change: all exit 1.
+  const cases = [
+    { name: 'A: a new untracked file',
+      act: (dir) => writeFileSync(join(dir, 'stray.txt'), 'x\n', 'utf8'),
+      listed: /\n {4}\+ \?\? stray\.txt\n/ },
+    { name: 'B: a clean tracked file modified',
+      act: (dir) => writeFileSync(join(dir, 'src', 'a.txt'), 'changed\n', 'utf8'),
+      listed: /\n {4}\+ {2}M src\/a\.txt\n/ },
+    { name: 'C: a clean tracked file deleted',
+      act: (dir) => rmSync(join(dir, 'src', 'a.txt')),
+      listed: /\n {4}\+ {2}D src\/a\.txt\n/ },
+    // The shape a narrow fix misses: the path WAS in the snapshot's status list, as ` M`, so
+    // filtering on "was it listed before" keeps it, while its line moved to `MM`.
+    { name: 'D: an already-modified file staged, then rewritten',
+      setup: (dir) => writeFileSync(join(dir, 'src', 'a.txt'), 'mine\n', 'utf8'),
+      act: (dir) => {
+        git(dir, ['add', '--', 'src/a.txt']);
+        writeFileSync(join(dir, 'src', 'a.txt'), 'rewritten\n', 'utf8');
+      },
+      listed: /\n {4}\+ MM src\/a\.txt\n/ },
+    // Added to #899 from #907's round 1: a conflict moves the line from nothing to `UU`.
+    { name: 'E: a conflicted merge',
+      setup: prepareConflict,
+      act: (dir) => assert.notEqual(
+        spawnSync('git', ['merge', '-q', 'side'], { cwd: dir, encoding: 'utf8' }).status, 0,
+        'the fixture must actually conflict'),
+      listed: /\n {4}\+ UU src\/a\.txt\n/ },
+  ];
+
+  for (const { name, setup, act, listed } of cases) {
+    const dir = makeRepo(t);
+    setup?.(dir);
+    guard(dir, ['snapshot']);
+    act(dir);
+
+    const r = guard(dir, ['verify']);
+
+    assert.equal(r.status, 1, `${name}: still detected`);
+    assert.match(r.stderr, listed, `${name}: listed under working tree`);
+    assert.doesNotMatch(r.stderr, /contents changed|status line did not move|already modified/,
+      `${name}: its status line moved, so no heading may say it did not:\n${r.stderr}`);
+  }
+});
+
+test('the contents heading lists only the paths whose status line did not move (#899)', async (t) => {
+  // One write of each kind in the same run: the filter must be per path, not all or nothing.
+  const dir = makeRepo(t);
+  writeFileSync(join(dir, 'src', 'a.txt'), 'my own work in progress\n', 'utf8');
+  guard(dir, ['snapshot']);
+  writeFileSync(join(dir, 'src', 'a.txt'), 'overwritten\n', 'utf8');
+  writeFileSync(join(dir, 'stray.txt'), 'x\n', 'utf8');
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /\n {4}\+ \?\? stray\.txt\n/);
+  assert.match(r.stderr, /the bytes show the write\):\n {4}~ src\/a\.txt\n\n/,
+    'exactly one path under the heading, the one whose line did not move');
+  assert.doesNotMatch(r.stderr, /~ stray\.txt/);
 });
 
 test('detects a stray write to a NON-ASCII path', async (t) => {
@@ -1011,8 +1088,8 @@ test('THE HOLE: verify must not hand out a paste-ready override', async (t) => {
   // naming line carries no `--accept=` substring at all, so the strong form is free.
   assert.ok(!r.stderr.includes('--accept='),
     'verify must not print a paste-ready --accept at ANY abbreviation length');
-  assert.match(r.stderr, /npm run guard:rebaseline {4}#/,
-    'it may still NAME the command — the caller must fetch the sha themselves');
+  assert.match(r.stderr, /\n {4}npm run guard:rebaseline\n/,
+    'it may still NAME the command, bare (#908) — the caller must fetch the sha themselves');
 });
 
 test('verify does not advise rebaseline when it would refuse', async (t) => {
@@ -1027,11 +1104,33 @@ test('verify does not advise rebaseline when it would refuse', async (t) => {
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1);
-  assert.match(r.stderr, /would refuse. Settle that first/);
+  // "Settle that first" named no command until #908; now it names the one that shows the move.
+  assert.match(r.stderr,
+    /would refuse\. Settle that first:\n {4}the working tree: {2}git diff {2}\/ {2}git status --porcelain -uall\n/);
+  assert.doesNotMatch(r.stderr, /git ls-files -v/, 'no flag moved, so no flag command');
   assert.ok(!r.stderr.includes('If every commit IS yours'),
     'the rebaseline exit must not be offered when the tree also moved');
   assert.ok(!/the tree is otherwise clean/.test(r.stderr),
     'and it must not claim the tree is clean when it is not');
+});
+
+test('a HEAD move plus an index-flag change names git ls-files -v (#908)', async (t) => {
+  // The HEAD-moved path said "Settle that first." and named nothing, while git diff and git
+  // status print nothing for a flag. The other two paths name `git ls-files -v` since #907.
+  const dir = makeRepo(t);
+  guard(dir, ['snapshot']);
+  mergeOwnBranch(dir);
+  git(dir, ['update-index', '--skip-worktree', 'src/a.txt']);
+  writeFileSync(join(dir, 'src', 'a.txt'), 'changed under skip-worktree\n', 'utf8');
+  assert.equal(git(dir, ['diff']), '', 'git diff shows nothing for a flag-only change');
+  assert.equal(git(dir, ['status', '--porcelain', '-uall']), '', 'nor does git status');
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr,
+    /would refuse\. Settle that first:\n {4}the index flags \(run at the repository root; [^)]*\):\n {6}git ls-files -v\n/);
+  assert.doesNotMatch(r.stderr, /the working tree: /, 'no file moved, so no file command');
 });
 
 test('an unanswerable ancestry is reported as unknown, not as "no"', async (t) => {
@@ -1163,4 +1262,153 @@ test('rebaseline rejects flags that belong to another subcommand', async (t) => 
     assert.equal(r.status, 2, `${bad} should be refused`);
     assert.match(r.stderr, /unknown argument/);
   }
+});
+
+// ── #908: a HEAD move that added no commit, an unborn branch switch, and advice that pastes ──
+
+/** Arm on a branch one commit ahead of main, then check main out: HEAD moves BACKWARD. */
+function armAheadThenCheckoutMain(t) {
+  const dir = makeRepo(t);
+  git(dir, ['checkout', '-q', '-b', 'feature']);
+  writeFileSync(join(dir, 'src', 'b.txt'), 'feature work\n', 'utf8');
+  git(dir, ['add', '--', 'src/b.txt']);
+  git(dir, ['commit', '-m', 'feature work']);
+  const before = git(dir, ['rev-parse', 'HEAD']);
+  guard(dir, ['snapshot']);
+  git(dir, ['checkout', '-q', 'main']);
+  return { dir, before, head: git(dir, ['rev-parse', 'HEAD']) };
+}
+
+test('a HEAD move BACKWARD is not called diverged, and names a range that prints something (#908)', async (t) => {
+  // `ancestry(before, after) === false` covered unrelated history AND a move onto an ancestor,
+  // and the advice then said "Read every commit listed above" over none, naming a range that
+  // printed nothing. Both premises are asserted, so the fixture cannot drift into another shape.
+  const { dir, before } = armAheadThenCheckoutMain(t);
+  const short = before.slice(0, 8);
+  assert.equal(git(dir, ['log', '--oneline', `${before}..HEAD`]), '', 'no commit was added');
+  assert.match(git(dir, ['log', '--oneline', `HEAD..${short}`]), /feature work/, 'the reverse range prints');
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1, 'a backward move is still a change');
+  assert.match(r.stderr, /the new HEAD is an ANCESTOR of the snapshot commit — HEAD moved backward, so no commit was added\./);
+  assert.doesNotMatch(r.stderr, /diverged or was replaced/);
+  assert.match(r.stderr, /commits the snapshot had that HEAD no longer does:\n {2}\S+ .*feature work\n/);
+  assert.doesNotMatch(r.stderr, /commits added:|Read every commit listed above|If a commit is NOT yours|git reset --mixed/,
+    'no commit was added, so none may be described, and there is nothing to reset away');
+  assert.ok(r.stderr.includes(`\n    git log --oneline HEAD..${short}\n`), 'the range that prints, bare');
+  assert.match(r.stderr, /Read it, then accept:\n {4}npm run guard:rebaseline\n/);
+  assert.ok(!r.stderr.includes('--accept='), 'and verify still never prints a paste-ready override');
+});
+
+test('rebaseline over a backward move does not ask for commits that are not there (#908)', async (t) => {
+  const { dir, head } = armAheadThenCheckoutMain(t);
+
+  const refused = guard(dir, ['rebaseline']);
+
+  assert.equal(refused.status, 2, 'still an unanswered question');
+  assert.match(refused.stderr, /HEAD moved, but no commit was added: it moved backward/);
+  assert.doesNotMatch(refused.stderr, /Read the commits above|commits added:/);
+  assert.ok(refused.stderr.includes(`--accept=${head}`), 'rebaseline, unlike verify, names the sha');
+
+  const accepted = guard(dir, ['rebaseline', `--accept=${head}`]);
+
+  assert.equal(accepted.status, 0, accepted.stderr);
+  assert.match(accepted.stdout, /accepting 0 commit\(s\) \(HEAD moved backward\)/);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+  assert.deepEqual(snap.rebaselinedFrom.acceptedCommits, []);
+  assert.equal(snap.rebaselinedFrom.fastForward, 'backward',
+    'recorded as a backward move, not as `false`, which reads as unrelated history');
+});
+
+test('a HEAD move onto an unborn branch is not blamed on a corrupt object (#908)', async (t) => {
+  // `git checkout --orphan` is the other HEAD move that adds no commit. It was reported as
+  // "could NOT determine ancestry (a pruned or corrupt object?)", told the caller to read the
+  // commits listed above, and named `git log <before>..HEAD`, which fails on an unborn HEAD.
+  const dir = makeRepo(t);
+  const short = git(dir, ['rev-parse', 'HEAD']).slice(0, 8);
+  guard(dir, ['snapshot']);
+  git(dir, ['checkout', '-q', '--orphan', 'fresh']);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /HEAD moved: \S+ -> \(unborn\)/);
+  assert.match(r.stderr, /the new HEAD is on a branch with no commits \(an orphan checkout\?\), so no commit was added\./);
+  assert.doesNotMatch(r.stderr, /could NOT determine ancestry|pruned or corrupt/);
+  assert.doesNotMatch(r.stderr, /Read every commit listed above|git reset --mixed|\.\.HEAD/);
+  assert.ok(r.stderr.includes(`\n    git log --oneline ${short}\n`), 'the snapshot commit is still there to read');
+  assert.match(r.stderr, /branch changed: main -> fresh/, 'the unborn branch is read by name, not as (unborn)');
+  // The orphan keeps the index, so the tree moved too and rebaseline would refuse.
+  assert.match(r.stderr, /Settle that first:\n {4}the working tree: /);
+});
+
+test('an unborn baseline sees a branch switch, and names a command that prints it (#908)', async (t) => {
+  // `git rev-parse --abbrev-ref HEAD` exits 128 on an unborn branch, so both captures read
+  // `(unborn)` and a switch passed as "unchanged", exit 0. Both premises are asserted.
+  const dir = mkdtempSync(join(tmpdir(), 'repo-guard-unborn-'));
+  t.after(() => rmTree(dir));
+  git(dir, ['init', '-b', 'main']);
+  guard(dir, ['snapshot']);
+  git(dir, ['checkout', '-q', '-b', 'other']);
+  assert.notEqual(spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: dir }).status, 0,
+    'the primary read fails on an unborn branch');
+  assert.equal(git(dir, ['symbolic-ref', '--short', 'HEAD']), 'other', 'the named command does not');
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1, 'a branch switch on an unborn repository is a change');
+  assert.match(r.stderr, /branch changed: main -> other/);
+  assert.match(r.stderr, /the branch \(main -> other\): {2}git symbolic-ref --short HEAD\n/);
+
+  const refused = guard(dir, ['rebaseline']);
+
+  assert.equal(refused.status, 2);
+  assert.match(refused.stderr, /the checkout you made:\n {2}git symbolic-ref --short HEAD\n/);
+  // `(unborn)` unquoted is a glob group under zsh and a syntax error under bash.
+  assert.ok(refused.stderr.includes("npm run guard:rebaseline -- --accept='(unborn)'\n"),
+    'the sentinel is quoted, so the line pastes');
+
+  const accepted = guard(dir, ['rebaseline', '--accept=(unborn)']);
+
+  assert.equal(accepted.status, 0, accepted.stderr);
+  assert.equal(guard(dir, ['verify']).status, 0, 're-armed on the branch it now sits on');
+});
+
+test('no command the guard prints for pasting carries a trailing # comment (#908)', async (t) => {
+  // With interactive comments off, zsh's default, `#` starts no comment: its words become
+  // arguments, and a `;` in them starts a second command (measured on #907). Every fixture
+  // below reaches a line that carried one, and the first three assertions prove it did.
+  const outputs = [];
+  {
+    const dir = makeRepo(t);
+    guard(dir, ['snapshot']);
+    mergeOwnBranch(dir);
+    outputs.push(guard(dir, ['verify']).stderr);
+  }
+  {
+    // The enumeration refusal: a snapshot commit git cannot find.
+    const dir = makeRepo(t);
+    guard(dir, ['snapshot']);
+    const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+    snap.head = '0'.repeat(40);
+    writeFileSync(snapshotPath(dir), JSON.stringify(snap), 'utf8');
+    outputs.push(guard(dir, ['rebaseline', `--accept=${git(dir, ['rev-parse', 'HEAD'])}`]).stderr);
+  }
+  {
+    // The branch-only advice, whose prose line carried `; read it` (#908 NOTE-1).
+    const dir = makeRepo(t);
+    git(dir, ['checkout', '-q', '--detach']);
+    guard(dir, ['snapshot']);
+    git(dir, ['checkout', '-q', 'main']);
+    outputs.push(guard(dir, ['verify']).stderr);
+  }
+  const all = outputs.join('\n');
+  assert.match(all, /\n {4}git reset --mixed \S+\n/, 'the fixtures reached the reset line');
+  assert.match(all, /\n {4}git log --oneline 0{8}\.\.HEAD\n/, 'and the enumeration refusal');
+  assert.match(all, /\n {4}npm run guard:rebaseline\n/, 'and the rebaseline hint');
+
+  const commented = all.split('\n').filter((line) => /^\s+(?:git|npm run) /.test(line) && /\s#/.test(line));
+  assert.deepEqual(commented, [], 'a command line with a trailing # does not paste under zsh');
+  assert.doesNotMatch(all, /;\s*read\b/, 'a `read` after a `;` runs as a command when pasted');
 });
