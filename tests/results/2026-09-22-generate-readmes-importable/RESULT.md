@@ -491,7 +491,7 @@ Stated because the section above looks broader than it is.
   round-1 reviewer measured nine invocation shapes and three import shapes against the guard and
   found no case where it answers wrongly, including `npm run`, `node --run`, a `..` path, an
   out-of-tree symlink and `sh -c`; `--preserve-symlinks-main` on the out-of-tree symlink fails at
-  module resolution before the guard is reached, and nothing here uses that shape.
+  module resolution before the guard is reached, and nothing here uses that shape. (The dynamic import of a repository `.js` named above has since been closed; see the Addendum (#892) at the end of this file.)
 - **The fixture declares a `prepack` so it takes production's branch**, after the round-1 review
   found it taking the other one: without it `packHookSentence` returns `''` and the paragraph is
   missing a clause the real one carries. The clause is now asserted.
@@ -824,13 +824,17 @@ module reads in main mode resolve to exactly the 27 repository modules
 | v25.9.0 | 84 | 27 = 27 | 0 |
 
 The call counts are unchanged from before this addendum, and the `OK` line is present on all three.
+Since the #915 review, main mode prints the sets themselves, so this table is re-derived by running
+the probe: `module set: graph 27, graph loaded 27, graph not loaded 0, dependency paths 1` on v22
+and v25, `… dependency paths 2` on v24.
 
 **Why the root's `node_modules` in its realpath form too.** In a git worktree whose `node_modules`
 is a symlink into the main checkout, the loader reads js-yaml at the symlink's target, which lies
-outside ROOT. **Why not "any `node_modules` segment":** a repository `.js` under a nested
+outside ROOT; v24 reads it under both the spelled and the real path, so there both forms are
+load-bearing. **Why not "any `node_modules` segment":** a repository `.js` under a nested
 `node_modules/` would then be excused. The new arm `foreign-node-modules-import` pins that.
 
-**Arms.** `--verify` now passes 42 rows on v22.16.0, v24.20.0 and v25.9.0: 40 shapes plus
+**Arms.** `--verify` now passes 43 rows on v22.16.0, v24.20.0 and v25.9.0: 41 shapes plus
 `main-report-to-file` and `leak-count`.
 
 | arm | before | now |
@@ -839,6 +843,7 @@ outside ROOT. **Why not "any `node_modules` segment":** a repository `.js` under
 | `require-repo-js` (new, the `require()` twin, #888 round 4 B2) | — | `seen` |
 | `foreign-node-modules-import` (new; module planted before the patch loops through a new `files` field, so writing it cannot be what the arm sees) | — | `seen` |
 | `dep-import`, `bare-resolve-import` (controls) | blind | blind |
+| `commented-import-then-dynamic` (new, #915 round 1: a line-start `import` inside a block comment puts a planted sibling into the regex graph, and its dynamic import then grades as the loader's) | — | declared blind |
 
 For each new `seen` arm, on each version, every content line the shape prints is a module read
 marked "outside the static import graph". Apart from the `readSync`/`closeSync` on that module's
@@ -867,3 +872,37 @@ file restored byte-identical (sha256) afterwards:
 The realpath row is killed only where `node_modules` is a symlink, as in the worktree these were
 measured in. In a checkout with a real `node_modules` directory that mutant is equivalent, and no
 arm here can tell the difference.
+
+### Round 1 of the #915 review
+
+`BLOCKING=1 SHOULD-FIX=2 NOTE=7`. What changed:
+
+- **B1, a structural hole nobody had declared.** The "static graph" is `importGraph`'s per-line
+  regex over source text. A line-start `import … from './x'` inside a block comment or a template
+  literal puts `x` into the graph without loading it, and a dynamic import of `x` then grades as the
+  loader's. The reviewer measured it on the real generator: the comment alone turned `REFUSED` into
+  `OK` on v22 and v25. It is now the declared-blind arm `commented-import-then-dynamic`. Its
+  control, the same shape without the comment, reads `seen` on v22 and v25, so the arm does not pass
+  for the wrong reason. Closing the hole needs a parser in the shared module, which is filed
+  separately as #918.
+- **S1:** §5's sentence about the dynamic import now carries a pointer here.
+- **S2:** the header no longer carries the 27. Main mode prints the `module set:` line instead
+  (see above).
+- **N1:** the `files` pre-plant was pinned only on one side. Moving it to just before the import
+  (the reviewer's M13) survived every arm. A check before the import now refuses a run in which
+  anything was recorded after the controls. M13 is killed by `foreign-node-modules-import` and
+  `commented-import-then-dynamic`.
+- **N4, N5:** two more items are recorded in the header's list of what remains unmeasured. A
+  `?query` re-import of a graph member is a second read and a second execution, graded as the
+  loader's. And the probe itself loads `scripts/lib/import-graph.js` before patching.
+- **Left unpinned, loud in both cases:**
+  - The `note` text has no arm asserting it (N2).
+  - `startsWith(root)` without the separator is not pinned (N3). It would excuse a sibling named
+    `node_modules-…`, and none exists.
+  - `modulePath` returning `null` is not pinned either (N3). No arm produces a loader-frame read
+    whose argument is neither an absolute path nor a `file:` URL.
+- **N7, the mutant table above was measured on v25 only.** The reviewer re-ran it:
+  - All five rows reproduce by row name on v25.
+  - The realpath row is equivalent with a real `node_modules` (42/42 on v25 and v22).
+  - A mutant that makes `modulePath` return `null` for absolute paths is held by one arm on v22 and
+    v25 (`bare-resolve-import`) and by three on v24, whose ESM resolver also calls `realpathSync`.

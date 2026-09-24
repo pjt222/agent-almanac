@@ -69,9 +69,12 @@
  * import or chose to run it with a dynamic `import()` or `require()` at import time. So a module
  * read counts as the loader's only when the module is in the subject's static relative-import
  * graph (`importGraph`, `scripts/lib/import-graph.js`) or in the root's own `node_modules`, and
- * anything else it loaded is reported as content, marked "outside the static import graph". On
- * the unmodified generator the two sets are equal: 27 repository modules in the graph, the same
- * 27 read by the loader, plus js-yaml from the dependency tree, on v22, v24 and v25.
+ * anything else it loaded is reported as content, marked "outside the static import graph". Main
+ * mode prints the sizes of both sets (`module set:`), so that the unmodified generator's graph and
+ * the modules the loader read can be seen to coincide by running this, not by quoting a figure;
+ * the figures measured when the rule landed are in RESULT.md's #892 Addendum. The "graph" is a
+ * per-line regex over source TEXT, so a line-start `import` inside a comment or a string is in
+ * it — see `commented-import-then-dynamic`.
  *
  * **Four controls, because "zero content" has four ways of being a lie**: the patch fires at
  * all; it reaches a NAMED binding (correction 3); the classifier can still say *content*; and no
@@ -93,8 +96,13 @@
  * Still unmeasured beyond the declared-blind arms: a module loaded before this file, any side
  * effect reaching the filesystem through none of the wrapped entry points, and code in the root's
  * own dependency tree, which the graph rule exempts by design (`dep-import` and
- * `bare-resolve-import` declare that). A dynamic import of a repository `.js` is no longer on this
- * list: `dynamic-import-repo-js` and `require-repo-js` read `seen` since #892.
+ * `bare-resolve-import` declare that). Three more, from the #915 review: a module the regex graph
+ * takes from a comment or a string, then imported dynamically (`commented-import-then-dynamic`,
+ * declared blind); a re-import of a graph member under a `?query`, which is a second read and a
+ * second execution graded as the loader's, since the module is in the graph; and
+ * `scripts/lib/import-graph.js`, which this probe itself loads before patching. A dynamic import of
+ * a repository `.js` outside the graph is no longer on this list: `dynamic-import-repo-js` and
+ * `require-repo-js` read `seen` since #892.
  */
 import fs, { readFileSync as namedReadFileSync } from 'node:fs';
 import fsPromises from 'node:fs/promises';
@@ -191,6 +199,12 @@ const SHAPES = {
   // module under some other `node_modules/` is code the subject chose to run. The file is planted
   // before the patch loops (`files`), so the arm cannot read `seen` on the strength of writing it.
   'foreign-node-modules-import': { expect: 'seen', files: { 'node_modules/planted/index.mjs': 'export const planted = true;\n' }, code: "await import(new URL('file://' + T('node_modules/planted/index.mjs')).href);" },
+  // DECLARED BLIND, for a structural reason: the "static graph" is `importGraph`'s per-line regex
+  // over source TEXT, which cannot tell code from a comment or a string. A line-start `import`
+  // inside a block comment (or a template literal) puts its module into the graph without
+  // loading it, and a dynamic import of that module then grades as the loader's. Closing it
+  // needs a parser in `scripts/lib/import-graph.js`, not a probe change (#915 round 1, B1; #918).
+  'commented-import-then-dynamic': { expect: 'blind', files: { 'planted.mjs': 'export const planted = true;\n' }, code: "/*\nimport x from './planted.mjs'\n*/\nawait import(new URL('./planted.mjs', import.meta.url).href);" },
   // CONTROL, declared blind: a LOAD of a file under the root's `node_modules`, which `empty` does not
   // exercise. It was described as exercising bare-specifier RESOLUTION and does not — it imports
   // an absolute `file://` URL, so nothing is resolved (#888 round 5, F2). The arm below is the
@@ -269,7 +283,9 @@ if (SHAPE) {
   process.env.SHAPE_ROOT = ROOT;
   // Files a shape needs to exist BEFORE it runs, written here, before the patch loops, for the same
   // reason as the module itself: a shape that wrote them at import would already read `seen`, and
-  // the arm would pass on that write rather than on what it is declared to test.
+  // the arm would pass on that write rather than on what it is declared to test. The check just
+  // before the import refuses a run in which anything was recorded after the controls, which is
+  // what pins this placement (#915 round 1, N1).
   for (const [name, text] of Object.entries(shape.files ?? {})) {
     fs.mkdirSync(dirname(resolve(shapeDir, name)), { recursive: true });
     fs.writeFileSync(resolve(shapeDir, name), text, 'utf8');
@@ -326,6 +342,8 @@ function inGraphOrDependencies(arg) {
 
 const calls = [];
 const loaderDescriptors = new Set();
+/** Every module path a loader-kind call named, for main mode's `module set:` line. */
+const loadedModules = new Set();
 
 /**
  * The nearest stack frame that is neither this file's wrapper nor the filesystem layer itself.
@@ -382,6 +400,7 @@ function patchModule(target, label) {
       calls.push({ name: `${label}.${name}`, arg, kind: loader ? 'loader' : 'other', frame, note });
       const result = original.apply(this, args);
       if (loader && typeof result === 'number') loaderDescriptors.add(result);
+      if (loader) loadedModules.add(modulePath(arg));
       return result;
     };
     for (const key of Reflect.ownKeys(original)) {
@@ -654,6 +673,13 @@ process.on('exit', (code) => {
   process.exitCode = 1;
 });
 
+// Nothing may be recorded between the controls' reset and the import. A shape's `files` written here
+// rather than before the patch loops would be graded as the subject's content, and its arm would
+// read `seen` on that write; that mutant survived every arm (#915 round 1, N1).
+if (calls.length !== 0) {
+  refuse(`${calls.length} call(s) were recorded before the import began; the subject would be charged with them.`);
+}
+
 await import(pathToFileURL(TARGET).href);
 
 // THE DRAIN. Without it the verdict is a snapshot taken the moment `await import()` resolves, and
@@ -766,6 +792,12 @@ console.log(`  main-module guard (realpathSync): ${guard.length}`);
 for (const call of guard) console.log(`    ${describe(call)}`);
 console.log(`  repository content or subprocess: ${content.length}`);
 for (const call of content) console.log(`    ${describe(call)}`);
+// The two SETS behind the rule, so "the loader read exactly the graph" is re-derived by running this
+// rather than quoted (#915 round 1, S2). Distinct paths: v24 reads a dependency under both its
+// spelled and its real path in a worktree whose `node_modules` is a symlink.
+const graphLoaded = [...STATIC_GRAPH].filter((path) => loadedModules.has(path)).length;
+const dependencyPaths = [...loadedModules].filter((path) => !STATIC_GRAPH.has(path)).length;
+console.log(`  module set: graph ${STATIC_GRAPH.size}, graph loaded ${graphLoaded}, graph not loaded ${STATIC_GRAPH.size - graphLoaded}, dependency paths ${dependencyPaths}`);
 
 if (content.length > 0) {
   console.error('\nREFUSED: importing the generator touched repository content or spawned a process.');
