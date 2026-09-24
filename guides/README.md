@@ -19,7 +19,7 @@ Designing agent personas, composing teams, and choosing coordination patterns.
 Authoring code-driven orchestration workflows — the meta contract, the agent/parallel/pipeline/phase primitives, and the capability rule.
 
 ### [Coordinating Peer Sessions](coordinate-peer-sessions.md)
-Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, and what the guard cannot see.
+Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, what the guard cannot see, and dividing the labour when one session leads.
 
 ### [Running a Code Review](running-a-code-review.md)
 Multi-agent code review using review teams for R packages and web projects.

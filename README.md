@@ -148,7 +148,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Creating Skills](guides/creating-skills.md) — Authoring, evolving, and reviewing skills following the agentskills.io standard
 - [Creating Agents and Teams](guides/creating-agents-and-teams.md) — Designing agent personas, composing teams, and choosing coordination patterns
 - [Creating Workflows](guides/creating-workflows.md) — Authoring code-driven orchestration workflows — the meta contract, the agent/parallel/pipeline/phase primitives, and the capability rule
-- [Coordinating Peer Sessions](guides/coordinate-peer-sessions.md) — Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, and what the guard cannot see
+- [Coordinating Peer Sessions](guides/coordinate-peer-sessions.md) — Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, what the guard cannot see, and dividing the labour when one session leads
 - [Running a Code Review](guides/running-a-code-review.md) — Multi-agent code review using review teams for R packages and web projects
 - [Managing a Scrum Sprint](guides/managing-a-scrum-sprint.md) — Running Scrum sprints with the scrum-team: planning, dailies, review, and retro
 - [Visualizing Workflows with putior](guides/visualizing-workflows-with-putior.md) — End-to-end putior workflow visualization from annotation to themed Mermaid diagrams
