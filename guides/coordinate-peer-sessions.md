@@ -302,8 +302,8 @@ name, find the reason before you regenerate.
 
 ## Dividing the labour: lead and support
 
-Most of this guide is about not colliding with a peer. When the peer is a collaborator instead, one session leads a plan and hands the other the read-heavy
-scouting, or a mechanical write across many files. The arrangement was recorded once, on
+Most of this guide is about not colliding with a peer. When the peer is a collaborator
+instead, one session leads a plan and hands the other the read-heavy scouting, or a mechanical write across many files. The arrangement was recorded once, on
 2026-09-15 (`docs/investigations/lead-support-coordination-2026-09-15.md`, PR #841), and the
 procedure is Steps 9 and 10 of the `coordinate-peer-sessions` skill. This section is the why.
 
@@ -335,8 +335,8 @@ peer.
 **The report is never the evidence.** It decides where to look. Every number that reaches a
 pull request or an issue is re-derived by the lead, against a committed revision the reader can
 open, and the artifact names that revision. In the recorded pairing an issue cited line numbers
-that were right at one commit and stale at `main`'s tip a few minutes later, because a revert in
-the same PR moved the lines, and the issue never said which revision it meant.
+that were right at a commit that reached `main`, then went stale when a revert in the same PR
+moved the lines, and the issue never said which revision it meant.
 
 **Not tested.** Whether a peer session beats a spawned subagent for the same support work, and
 whether the division holds when the support thinks the lead's plan is wrong rather than merely
