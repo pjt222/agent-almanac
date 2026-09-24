@@ -129,10 +129,12 @@ session's reports decided *where to look* and *how big the job was*; they were n
 evidence.
 
 The rule held less well than that sentence says. The line numbers in #838 came from a command
-run in this session — against the lead's **uncommitted** working tree, which a later commit
-reverted for that file, so they matched no revision on `main` (corrected on the issue,
-2026-09-24). The rule that survives names the revision: re-derive against
-`git show <sha>:<path>`, never against the tree you are editing.
+run in this session against the lead's working tree, six minutes before that tree was committed as
+`fb1bf3802`. They are correct at that commit, which reached `main` through #839, but a revert in the
+same PR (`f496058ae`) moved the lines back, so at `main`'s tip they point at the wrong places — and
+the issue never said which revision it meant (corrected on the issue, 2026-09-24). Re-deriving
+against a committed revision would not have prevented this: `fb1bf3802` *is* one. What would have
+is **naming the revision in the artifact that publishes the number**, so a reader can open it.
 
 ---
 
@@ -278,8 +280,8 @@ section's draft — two scouting, one write:
 
 The support session's reports were never quoted as evidence in a pull request, an issue or a close
 comment. They decided *where to look* and *how big the job was*. Every number that reached a
-public artifact was re-derived by the lead, though one re-derivation ran against an uncommitted
-tree (§1, The rule the lead kept) — including the one out-of-brief finding, which grew
+public artifact was re-derived by the lead, though one published number named no revision and
+went stale inside the same PR (§1, The rule the lead kept) — including the one out-of-brief finding, which grew
 when re-derived: the report named a Deployment missing its `namespace:`, and the re-derivation
 found the Service missing it too, which turns a style gap into an HPA that targets nothing
 (#838).
