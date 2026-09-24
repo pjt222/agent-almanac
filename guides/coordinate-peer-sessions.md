@@ -1,6 +1,6 @@
 ---
 title: "Coordinating Peer Sessions"
-description: "Working safely when a second interactive session shares your worktree — separate worktrees first, then path scope, index etiquette, and the guard's limits"
+description: "Working safely when a second interactive session shares your worktree — separate worktrees first, then path scope, index etiquette, and the guard's limits — and dividing the labour when one session leads the other"
 category: workflow
 agents: []
 teams: []
@@ -30,6 +30,7 @@ procedure here leads with an agreement, not an instrument.
   when you are not the only session in the tree.
 - A collision already happened: your commit contains a file you never touched, or a
   generated artifact went stale for no reason you can explain.
+- One session leads a plan and hands scouting or mechanical writes to the other.
 
 ## Prerequisites
 
@@ -55,7 +56,8 @@ one set of refs. This repository already mandates it for reviewer subagents, whi
 Share one tree only when you have a reason: two sessions genuinely collaborating on the same
 branch, a toolchain that resolves paths against a fixed checkout, or a filesystem where a
 second checkout is expensive. If you cannot name the reason, take the second worktree and
-skip the rest of this guide.
+skip to [Dividing the labour](#dividing-the-labour-lead-and-support) if one session leads the
+other, or stop here if not.
 
 ## Notice the peer before you edit
 
@@ -300,14 +302,14 @@ name, find the reason before you regenerate.
 
 ## Dividing the labour: lead and support
 
-Everything above treats the peer as a neighbour working on something else. Sometimes the peer
-is a collaborator instead: one session leads a plan and hands the other the read-heavy
+Most of this guide is about not colliding with a peer. When the peer is a collaborator instead, one session leads a plan and hands the other the read-heavy
 scouting, or a mechanical write across many files. The arrangement was recorded once, on
 2026-09-15 (`docs/investigations/lead-support-coordination-2026-09-15.md`, PR #841), and the
 procedure is Steps 9 and 10 of the `coordinate-peer-sessions` skill. This section is the why.
 
 **Divide by shape, not by "thinking versus reading".** In the recorded pairing the support
-session decided where to look, what was on disk and how big the job was. The lead decided what
+session decided where to look and what was on disk, and its counts sized the job while the lead
+made the call. The lead decided what
 a finding meant, what the prose said and what was cited in public. What it contributed beyond the lookups — two
 corrections to the lead's plan, and a finding nobody had asked for, which the log calls the most
 valuable thing either session produced — is not "reading".
@@ -316,11 +318,13 @@ valuable thing either session produced — is not "reading".
 - **A brief costs about as much as the lookup it replaces.** The ten recorded messages ran 205 to
   569 words, so delegation pays for breadth, across many files or many fields, and not for a
   single lookup. That threshold is an estimate: only the outbound words were counted.
-- **The support sits idle during review rounds.** While an adversarial review ran on the shared
-  branch, the support was told to write nothing.
-- **Everything is assembled through the lead,** because one worktree has one branch.
+- **Sharing one worktree adds two more.** While an adversarial review ran on the shared branch,
+  the support was told to write nothing and sat idle; and anything both sessions write is
+  assembled through the lead, because one worktree has one branch. A pair in separate worktrees
+  avoids both.
 
-**Two failures only this arrangement produces.**
+**Two failures this arrangement makes likely.** The first applies to any brief, subagent or
+peer.
 - **The brief inherits authority it has not earned.** A lead merging the issue, its plan and
   its own reading into one message turns the plan's intended end state into "the issue says…",
   and the support then searches for a fact that does not exist. Attribute each claim in a brief
@@ -330,8 +334,9 @@ valuable thing either session produced — is not "reading".
 
 **The report is never the evidence.** It decides where to look. Every number that reaches a
 pull request or an issue is re-derived by the lead, against a committed revision the reader can
-open. In the recorded pairing one number was taken from the lead's uncommitted working tree,
-and the issue it went into cited line numbers that no revision on `main` has ever had.
+open, and the artifact names that revision. In the recorded pairing an issue cited line numbers
+that were right at one commit and stale at `main`'s tip a few minutes later, because a revert in
+the same PR moved the lines, and the issue never said which revision it meant.
 
 **Not tested.** Whether a peer session beats a spawned subagent for the same support work, and
 whether the division holds when the support thinks the lead's plan is wrong rather than merely
