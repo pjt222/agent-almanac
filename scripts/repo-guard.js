@@ -519,16 +519,28 @@ if (before.branch !== after.branch) {
 // That branch is read too, and its new commits join the list rebaseline makes the caller
 // acknowledge. Commits HEAD reaches are excluded, so a branch merged into HEAD is not listed
 // twice. No other ref is read: see "What it does NOT cover" in the header.
-let leftBranch = null;   // stays null while HEAD is on it, or when the snapshot had no branch
+//
+// It is read only when the branch changed; while HEAD is still on it, HEAD's own range covers
+// it. The name is what `rev-parse --abbrev-ref` printed, which is `heads/<b>` when a tag or
+// another ref shares the short name, so `refs/heads/<name>` is tried first (a branch really
+// called `heads/x`) and then `refs/<name>`. Reading only the first reported a live branch as
+// deleted and skipped its commits (#920 round 2, R2-1). Printed ranges name the full ref,
+// because `git log` resolves a short name a tag shares to the tag; a checkout takes the short
+// name, which git resolves to the branch (both measured on git 2.43).
+let leftBranch = null;   // { name, ref, state }; null when the branch did not change or had no name
 let leftCommits = [];
-if ((headMoved || branchMoved) && before.branch !== 'HEAD' && before.branch !== UNBORN) {
-  const tip = git(['rev-parse', '--quiet', '--verify', `refs/heads/${before.branch}^{commit}`],
-    { cwd: TOPLEVEL, allowFailure: true })?.trim() ?? null;
+if (branchMoved && before.branch !== 'HEAD' && before.branch !== UNBORN) {
+  const tipOf = (ref) => git(['rev-parse', '--quiet', '--verify', `${ref}^{commit}`],
+    { cwd: TOPLEVEL, allowFailure: true })?.trim() || null;
+  let ref = `refs/heads/${before.branch}`;
+  let tip = tipOf(ref);
+  if (tip === null && before.branch.startsWith('heads/') && tipOf(`refs/${before.branch}`) !== null) {
+    ref = `refs/${before.branch}`;
+    tip = tipOf(ref);
+  }
+  const name = ref.slice('refs/heads/'.length);
   if (tip !== after.head) {
-    leftBranch = {
-      name: before.branch,
-      state: tip === null ? 'gone' : tip === before.head ? 'unmoved' : 'moved',
-    };
+    leftBranch = { name, ref, state: tip === null ? 'gone' : tip === before.head ? 'unmoved' : 'moved' };
     if (leftBranch.state === 'moved') {
       const exclude = [before.head, after.head].filter((sha) => sha !== UNBORN).map((sha) => `^${sha}`);
       const log = git(['log', '--format=  %h %an <%ae>  %s', tip, ...exclude],
@@ -540,15 +552,34 @@ if ((headMoved || branchMoved) && before.branch !== 'HEAD' && before.branch !== 
       // it gained is already in HEAD's list, and saying that it moved would only repeat that list.
       const inHeadHistory = log !== null && leftCommits.length === 0 && ancestry(tip, after.head) === true;
       if (!inHeadHistory) {
-        console.error(`\n  ${before.branch}, the branch HEAD left, moved: ${before.head.slice(0, 8)} -> ${tip.slice(0, 8)}`);
+        console.error(`\n  ${name}, the branch HEAD left, moved: ${before.head.slice(0, 8)} -> ${tip.slice(0, 8)}`);
         if (leftCommits.length) {
-          console.error(`  commits added to ${before.branch}, the branch HEAD left:`);
+          console.error(`  commits added to ${name}, the branch HEAD left:`);
           console.error(log.trimEnd());
         }
       }
     }
   }
 }
+
+// An orphan move adds no commit to HEAD, so what it may have left behind is on the branch the
+// snapshot was on. When that branch could not be read, "found nothing there" is not known, and
+// rebaseline must not accept `acceptedCommits: []` over it (#920 round 2, R2-2). The shapes:
+// a detached snapshot, a branch deleted since, and HEAD's own branch losing its ref
+// (`update-ref -d`), which leaves HEAD unborn on the same name. The old build refused them
+// all, because the range `<sha>..(unborn)` failed; this refuses them on purpose.
+const leftUnreadReason = before.branch === 'HEAD' ? 'the snapshot was on a detached HEAD'
+  : before.branch === UNBORN ? "the snapshot's branch could not be read"
+    : leftBranch?.state === 'gone' ? `${leftBranch.name}, the branch the snapshot was on, no longer exists`
+      : !branchMoved && fastForward === 'to-unborn' ? `${before.branch} no longer points at a commit`
+        : null;
+if (fastForward === 'to-unborn' && leftUnreadReason) commitsEnumerated = false;
+/** The range that shows the left branch's commits; with no snapshot commit, the whole branch. */
+const leftLogCommand = () => (before.head === UNBORN
+  ? `git log --oneline ${shellWord(leftBranch.ref)}`
+  : `git log --oneline ${before.head.slice(0, 8)}..${shellWord(leftBranch.ref)}`);
+// `git reflog` exits 128 on an unborn HEAD; the reflog file is still there (#920 round 2, R2-6).
+const reflogCommand = after.head === UNBORN ? 'cat "$(git rev-parse --git-dir)/logs/HEAD"' : 'git reflog';
 
 // The two HEAD moves that add no commit to HEAD (#908), when the branch HEAD left gained none
 // either (#920 review, F1). Advice keyed on "HEAD moved" alone told the caller to read commits
@@ -574,7 +605,9 @@ function printNoCommitScope() {
   if (before.branch === 'HEAD') {
     console.error('The snapshot was on a detached HEAD, so a commit made there and then left is not ' +
       'checked here. The reflog lists every commit HEAD visited:');
-    console.error('  git reflog');
+    console.error(`  ${reflogCommand}`);
+  } else if (!branchMoved && fastForward === 'to-unborn') {
+    console.error(`${before.branch} no longer points at a commit, so a commit made on it is not checked here.`);
   } else if (leftBranch?.state === 'unmoved') {
     console.error(`${leftBranch.name}, the branch HEAD left, gained none either.`);
   } else if (leftBranch?.state === 'gone') {
@@ -621,9 +654,17 @@ const contentChanged = Object.keys(after.contents)
   .sort();
 if (contentChanged.length) {
   worktreeMoved = true;
-  const linesOf = (state, path) => state.status.filter((line) => line.slice(3) === path).join('\n');
+  // Grouped once per capture: filtering the whole list once per changed path made verify
+  // quadratic in the number of pending paths (#920 round 2, R2-4).
+  const linesByPath = (state) => {
+    const byPath = new Map();
+    for (const line of state.status) byPath.set(line.slice(3), `${byPath.get(line.slice(3)) ?? ''}${line}\n`);
+    return byPath;
+  };
+  const beforeLines = linesByPath(before);
+  const afterLines = linesByPath(after);
   const hidden = contentChanged
-    .filter((path) => linesOf(before, path) !== '' && linesOf(before, path) === linesOf(after, path));
+    .filter((path) => beforeLines.has(path) && beforeLines.get(path) === afterLines.get(path));
   if (hidden.length) {
     console.error('\n  contents changed (same status line as at the snapshot, so only the bytes show the write):');
     for (const path of hidden) console.error(`    ~ ${path}`);
@@ -695,6 +736,17 @@ if (command === 'rebaseline') {
     }
   }
 
+  if (!commitsEnumerated && fastForward === 'to-unborn' && leftUnreadReason) {
+    // Not git failing: the branch that could hold what an orphan move left behind cannot be
+    // read, so an empty list would be a guess (#920 round 2, R2-2).
+    console.error(`\nrepo-guard: HEAD moved onto a branch with no commits, and ${leftUnreadReason}, so a ` +
+      'commit made before the move cannot be listed.');
+    console.error('There is nothing to read, so there is nothing to acknowledge. Accepting here would');
+    console.error('write `acceptedCommits: []` into the record — provenance asserting a review that');
+    console.error('could not happen. The reflog still lists every commit HEAD visited:');
+    console.error(`  ${reflogCommand}`);
+    process.exit(2);
+  }
   if (!commitsEnumerated) {
     console.error('\nrepo-guard: git could not list the commits between the baseline and HEAD.');
     console.error('There is nothing to read, so there is nothing to acknowledge. Accepting here would');
@@ -778,7 +830,9 @@ if (command === 'rebaseline') {
       head: before.head,
       branch: before.branch,
       takenAt: before.takenAt ?? null,
-      // HEAD's range and the branch HEAD left, the list the caller just read (#920 review, F1).
+      // HEAD's range and the branch HEAD left, as THIS run read and printed them (#920 review, F1).
+      // `--accept` pins HEAD only, so a commit that reached the left branch after the refusal the
+      // caller read is shown only in this run's output before it is recorded (#920 round 2, R2-7).
       acceptedCommits: [...addedCommits, ...leftCommits],
       fastForward,
       reason: values['--reason'] ?? null,
@@ -869,7 +923,10 @@ if (changed) {
       console.error(`\n  If you did NOT make it, this moves ${after.branch} back to the snapshot commit, ` +
         'refusing rather than overwriting:');
       console.error(`    git merge --ff-only ${before.head.slice(0, 8)}`);
-    } else if (branchMoved && leftBranch?.state === 'unmoved') {
+    } else if (branchMoved && leftBranch?.state === 'unmoved' && !leftBranch.name.startsWith('-')) {
+      // A name starting with `-` reaches git as an option whatever the quoting, and `git checkout
+      // -f` discards local edits; only plumbing makes such a branch, and it gets no way back
+      // (#920 round 2, R2-5).
       console.error("\n  If you did NOT make it, this returns to the snapshot's branch:");
       console.error(`    git checkout ${shellWord(leftBranch.name)}`);
     }
@@ -901,8 +958,8 @@ if (changed) {
       console.error(`    git reset --mixed ${before.head.slice(0, 8)}`);
     }
     if (leftCommits.length) {
-      console.error(`    The ones on ${before.branch}, the branch HEAD left:`);
-      console.error(`    git log --oneline ${before.head.slice(0, 8)}..${shellWord(before.branch)}`);
+      console.error(`    The ones on ${leftBranch.name}, the branch HEAD left:`);
+      console.error(`    ${leftLogCommand()}`);
     }
     console.error('    Investigate BEFORE PUSHING — a stray commit is recoverable while unpushed.');
     if (!headRange) {
@@ -932,8 +989,7 @@ if (changed) {
     }
     if (leftCommits.length) {
       // HEAD did not move, and the branch it left gained commits (#920 review, F1).
-      console.error(`  commits on ${before.branch}, the branch HEAD left:  ` +
-        `git log --oneline ${before.head.slice(0, 8)}..${shellWord(before.branch)}`);
+      console.error(`  commits on ${leftBranch.name}, the branch HEAD left:  ${leftLogCommand()}`);
     }
     printWorktreeCommands('  ');
     if (worktreeMoved) {
