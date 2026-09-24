@@ -49,10 +49,12 @@
  * coincidentally while the steps no longer correspond. A third check reads the
  * CODE SKELETON of each gated fence pair and refuses the file when it says the
  * nth fence is a different step (#498, `lib/code-tokens.js`). Without it, an
- * unscoped run today rewrites all 8 fences of `i18n/de/skills/design-shiny-ui`,
- * whose Schritt 5 is English Step 6 — and the parity checker reports the result
- * `OK`, because a scrambled file is a permutation of legitimate English bodies
- * and every fence individually matches some English revision.
+ * unscoped run at `ab46c9dae^` rewrote all 8 fences of
+ * `i18n/de/skills/design-shiny-ui`, whose Schritt 5 was English Step 6 — and the
+ * parity checker reported the result `OK`, because a scrambled file is a
+ * permutation of legitimate English bodies and every fence individually matches
+ * some English revision. #534 re-scaffolded that file, so today's corpus holds no
+ * known fork; the check guards against the next one.
  *
  * Scope: all four content trees — `skills`, `agents`, `teams`, `guides` — so it
  * covers exactly what `check-i18n-fence-parity.js` flags. It was skills-only
@@ -644,9 +646,10 @@ for (const t of targets) {
 
   /**
    * Fence count and tag sequence can both agree while the translation is a fork
-   * whose steps no longer correspond (#498). `de/design-shiny-ui` carries 8 `r`
-   * fences in the same sequence as English, but its Schritt 5 is English's Step
-   * 6 — so ordinal restore gives every fence the body of a different step, and
+   * whose steps no longer correspond (#498). `de/design-shiny-ui` carried 8 `r`
+   * fences in the same sequence as English until #534 re-scaffolded it, but its
+   * Schritt 5 was English's Step 6 — so ordinal restore gave every fence the body
+   * of a different step, and
    * the parity checker cannot see it: a scrambled file is a permutation of
    * legitimate English bodies, so every fence individually matches SOME English
    * revision and passes.

@@ -308,6 +308,17 @@ test('python triple-quoted docstrings are string bodies, not code', () => {
   assert.equal(m.containment, 1);
 });
 
+test('a MULTI-line python docstring is a string body too', () => {
+  // The one-line docstring above is stripped by the plain double-quote rule on
+  // its own, so it cannot show whether the triple-quote entry exists. A
+  // docstring spanning lines can (#512 review, SF-5).
+  const de = lines('def f():', '    """Gibt den Wert zurueck.', '    Ausfuehrlich erklaert."""', '    return value');
+  const en = lines('def f():', '    """Return the value.', '    Explained at length."""', '    return value');
+  const m = measure(de, en, 'python');
+  assert.equal(m.measurable, true);
+  assert.equal(m.containment, 1);
+});
+
 test('sql uses -- for line comments', () => {
   const m = measure(
     lines('-- Alle Chargen', 'SELECT batch_id FROM batches;'),
@@ -357,7 +368,7 @@ test('the report carries the token count the verdict rests on', () => {
   assert.ok(m.tokens > 0);
 });
 
-test('the default threshold sits between the measured populations', () => {
+test('the default threshold is above the fork band and at most 0.5', () => {
   // Clean population minimum across the 956 merged-batch fences: 0.40.
   // Fork population: six of eight below 0.26. Any value in (0.25, 0.40)
   // separates them; the default is deliberately above that band for margin.
@@ -419,6 +430,11 @@ test('a rust lifetime does not open a string and eat the signature', () => {
   const { tokens } = codeTokens("fn parse<'a>(input: &'a str) -> Result<Token, Error> {", 'rust');
   assert.ok(tokens.has('Result'), 'a lifetime swallowed the return type');
   assert.ok(tokens.has('Error'), 'a lifetime swallowed the error type');
+  // A LONE lifetime is the discriminating input: the two `'a` above pair up as
+  // one quoted string under a single-quote rule and still leave both types
+  // standing, so that line cannot tell the rules apart (#512 review, SF-5).
+  const lone = codeTokens("fn name(x: &'static str) -> Result<Token, Error> {", 'rust').tokens;
+  assert.ok(lone.has('Result') && lone.has('Error'), 'a lone lifetime opened a string');
 });
 
 test('ini treats ; as a comment, its canonical marker', () => {

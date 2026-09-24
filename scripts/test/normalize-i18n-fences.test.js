@@ -616,8 +616,9 @@ test('a template or README inside a tree is not a target', async (t) => {
  * fence count in the SAME tag sequence — so both structural guards pass and the
  * tool would rewrite every fence with the body of a different step.
  *
- * This is `de/design-shiny-ui` in miniature: there, German Schritt 5 is English
- * Step 6, and `check-i18n-fence-parity.js` reports the corrupted result `OK`,
+ * This is `de/design-shiny-ui` in miniature (as it was before #534): there,
+ * German Schritt 5 was English Step 6, and `check-i18n-fence-parity.js` reported
+ * the corrupted result `OK`,
  * because a scrambled file is a permutation of legitimate English bodies and
  * every fence individually matches some English revision.
  */
@@ -712,7 +713,9 @@ test('the fork guard does not refuse an ordinary faithful translation', async (t
 test('--fork-threshold rejects a value outside [0, 1]', async (t) => {
   const { dir } = makeFixture(t);
 
-  for (const value of ['2', '-1', 'half', '']) {
+  // `1.5` passes the pattern and is rejected only by the range check; the other
+  // four fail the pattern first, so without it the range check could not fail.
+  for (const value of ['2', '-1', 'half', '', '1.5']) {
     const r = run(dir, ['--fork-threshold', value]);
     assert.equal(r.status, 2, `'${value}' was accepted`);
   }
@@ -771,6 +774,58 @@ test('a file with only SOME fences forked is still refused', async (t) => {
   assert.match(r.stdout, /i18n\/de\/skills\/partly-forked\/SKILL\.md/);
   assert.match(r.stdout, /1 of 3 measured gated fence\(s\) below threshold/);
   assert.equal(readFileSync(partly, 'utf8'), before, 'a partly-forked file was rewritten');
+});
+
+/**
+ * The MIXED case: two fences permuted with their bodies byte-identical to
+ * English (so neither is divergent, and neither alone would bring the file to
+ * the normalizer), beside one aligned fence that IS divergent. The fork check
+ * measures every gated pair, not only the divergent ones; measuring only the
+ * divergent fence here scores 1.00 and rewrites a file whose first two steps are
+ * swapped (#512 review, SF-4).
+ */
+function addPermutedBesideDivergentSkill(dir) {
+  const english = [
+    '---', 'name: permuted', 'description: Three steps.', '---', '',
+    '# Permuted', '', '## Procedure', '',
+    '```r', 'library(shiny)', 'runApp("app")', '```', '',
+    '```r', 'install.packages("bslib")', 'library(bslib)', '```', '',
+    '```r', 'sass_input <- sass::sass_file("styles.scss")', 'sass::sass(sass_input)', '```', '',
+  ].join('\n');
+  mkdirSync(join(dir, 'skills', 'permuted'), { recursive: true });
+  writeFileSync(join(dir, 'skills', 'permuted', 'SKILL.md'), english, 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'english permuted source']);
+  const sc = git(dir, ['rev-parse', 'HEAD']);
+
+  const p = join(dir, 'i18n', 'de', 'skills', 'permuted', 'SKILL.md');
+  mkdirSync(dirname(p), { recursive: true });
+  writeFileSync(p, [
+    '---', 'name: permuted', 'description: Drei Schritte.',
+    'locale: de', 'source_locale: en', `source_commit: ${sc}`, '---', '',
+    '# Vertauscht', '', '## Ablauf', '',
+    // Fences 1 and 2 swapped, byte-identical to English: not divergent.
+    '```r', 'install.packages("bslib")', 'library(bslib)', '```', '',
+    '```r', 'library(shiny)', 'runApp("app")', '```', '',
+    // Fence 3 aligned, with a German comment: divergent, and faithful.
+    '```r', '# Stil laden', 'sass_input <- sass::sass_file("styles.scss")', 'sass::sass(sass_input)', '```', '',
+  ].join('\n'), 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'de translation with two steps swapped and one comment translated']);
+  return p;
+}
+
+test('permuted fences are measured even when only an aligned fence is divergent', async (t) => {
+  const { dir } = makeFixture(t);
+  const permuted = addPermutedBesideDivergentSkill(dir);
+  const before = readFileSync(permuted, 'utf8');
+
+  const r = run(dir, ['--write']);
+
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /i18n\/de\/skills\/permuted\/SKILL\.md/);
+  assert.match(r.stdout, /2 of 3 measured gated fence\(s\) below threshold/);
+  assert.equal(readFileSync(permuted, 'utf8'), before, 'a file with two swapped steps was rewritten');
 });
 
 test('--fork-threshold 0 restores the partly-forked file too', async (t) => {

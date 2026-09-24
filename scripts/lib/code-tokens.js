@@ -10,8 +10,8 @@
  * The normalizer maps translated fence *i* onto English fence *i*, guarded by
  * fence count and tag sequence. Both can agree coincidentally while the
  * translation's steps no longer correspond to English — `de/design-shiny-ui`
- * carries 8 `r` fences in the same tag sequence as its English source, but its
- * Schritt 5 is English's Step 6. Restoring by ordinal there gives every fence
+ * carried 8 `r` fences in the same tag sequence as its English source (until #534
+ * re-scaffolded it), but its Schritt 5 was English's Step 6. Restoring by ordinal there gives every fence
  * the body of a different step, and neither existing gate can see it:
  * `check-i18n-fence-parity.js` asks whether a body matches SOME English fence in
  * SOME revision, and a scrambled file is a permutation of legitimate English
@@ -23,7 +23,8 @@
  * CODE alone — that is the keep-code-in-English rule the repair exists to
  * restore. So strip exactly what a translator legitimately rewrites (comments,
  * string bodies) and compare what is left: the code skeleton. An old and new
- * body of the same fence share nearly all of it; a fork shares almost none.
+ * body of the same fence share nearly all of it; a fork usually shares much
+ * less, but not always — see the measured escape rates below.
  *
  * `containment(pre, post) = |tokens(post) ∩ tokens(pre)| / |tokens(post)|`
  *
@@ -326,10 +327,22 @@ export function measure(pre, post, tag) {
  * Raising the threshold refuses MORE. So the margin does nothing about a future
  * clean fence scoring below 0.40 — that fence gets refused either way, and a
  * false refusal is the recoverable error: the file goes to manual triage. What
- * the margin covers is the unobserved upper tail of the FORK population, a fork
- * scoring in [0.40, 0.50) that a threshold fitted to the clean minimum would
- * wave through and rewrite. With one fork on record, that tail is unmeasured,
- * and 0.5 prices it at 3 fences in 2 files out of the 345 swept.
+ * the margin covers is the upper tail of the FORK population, a fork scoring in
+ * [0.40, 0.50) that a threshold fitted to the clean minimum would wave through
+ * and rewrite. 0.5 prices that margin at 3 fences in 2 files out of the 345
+ * swept.
+ *
+ * That tail was measured after the one real fork, on SYNTHETIC forks built from
+ * the English corpus at 990f08a2a (#512 review): of 1,604 fences shifted one
+ * same-tag position, 356 (22%) score 0.5 or more and 64 score exactly 1.00. What
+ * holds the line is refusing a FILE on its worst fence: rotating every same-tag
+ * fence by one escapes 2 of 206 files (1.0%) at 0.5. A LOCAL fork does worse —
+ * swapping one adjacent same-tag pair escapes 140 of 959 (14.6%) — and
+ * config-shaped fences worst, since keys-only json and yaml cannot tell two
+ * steps sharing a schema apart (json 8 of 18, yaml 22 of 93 escape). English
+ * against English overstates escapes, since a real translated fork only loses
+ * shared tokens. So "refuses nothing" means no fork this check can see, not no
+ * fork.
  *
  * Both false suspects are small-token artifacts and are reported with their
  * token count so a reviewer can see it: `de/generate-puzzle` (c=0.40, n=5) is a
