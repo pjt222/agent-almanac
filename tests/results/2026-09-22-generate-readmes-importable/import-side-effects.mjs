@@ -64,6 +64,15 @@
  * measured a pure-frame rule going blind to exactly that, which is this PR's own defect class one
  * level down, in the remedy. Extension alone is not enough either: that was correction 5.
  *
+ * **And the module must be one the subject statically imports** (#892). Frame and extension say
+ * that the LOADER read a module; they cannot say whether the subject asked for it with a static
+ * import or chose to run it with a dynamic `import()` or `require()` at import time. So a module
+ * read counts as the loader's only when the module is in the subject's static relative-import
+ * graph (`importGraph`, `scripts/lib/import-graph.js`) or in the root's own `node_modules`, and
+ * anything else it loaded is reported as content, marked "outside the static import graph". On
+ * the unmodified generator the two sets are equal: 27 repository modules in the graph, the same
+ * 27 read by the loader, plus js-yaml from the dependency tree, on v22, v24 and v25.
+ *
  * **Four controls, because "zero content" has four ways of being a lie**: the patch fires at
  * all; it reaches a NAMED binding (correction 3); the classifier can still say *content*; and no
  * loader descriptor outlives the import, since a recycled one would excuse whatever content call
@@ -81,17 +90,21 @@
  * regular file and checks that its four counts add up and that the late count and the `OK` line
  * are both present, and `leak-count` counts what the children left (#894).
  *
- * Still unmeasured beyond the declared-blind arms: a module loaded before this file, and any
- * side effect reaching the filesystem through none of the wrapped entry points.
+ * Still unmeasured beyond the declared-blind arms: a module loaded before this file, any side
+ * effect reaching the filesystem through none of the wrapped entry points, and code in the root's
+ * own dependency tree, which the graph rule exempts by design (`dep-import` and
+ * `bare-resolve-import` declare that). A dynamic import of a repository `.js` is no longer on this
+ * list: `dynamic-import-repo-js` and `require-repo-js` read `seen` since #892.
  */
 import fs, { readFileSync as namedReadFileSync } from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import childProcess from 'node:child_process';
 import workerThreads from 'node:worker_threads';
 import { syncBuiltinESMExports } from 'node:module';
-import { resolve, dirname, basename } from 'node:path';
+import { resolve, dirname, basename, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { tmpdir } from 'node:os';
+import { importGraph } from '../../../scripts/lib/import-graph.js';
 
 const SELF = fileURLToPath(import.meta.url);
 const SELF_NAME = basename(SELF);
@@ -166,14 +179,19 @@ const SHAPES = {
   // Wrapped too. `process.binding` reaches the internal binding below every public name; the
   // escape hatch itself is patchable even though what it returns is not.
   'process-binding':  { expect: 'seen',  code: "try { process.binding('fs'); } catch { /* removed in a future node */ }" },
-  // DECLARED BLIND, and the reason is structural rather than a gap in a list: this classifier's
-  // "loader" is whatever the loader loads, so executing an arbitrary repository `.js` at import
-  // is indistinguishable from loading a module of the graph. Closing it needs the static import
-  // graph to compare against — `importGraph(root, entry, seen)`, exported from
-  // `scripts/lib/import-graph.js` since #906. The comparison is #892; an arm until then (#888
-  // round 4, F2).
-  'dynamic-import-repo-js': { expect: 'blind', code: "await import(new URL('file://' + R('scripts/lib/parse-args.js')).href);" },
-  // CONTROL, declared blind: a LOAD of a file under `node_modules`, which `empty` does not
+  // Declared blind until #892, for a structural reason: the classifier's "loader" was whatever the
+  // loader loads, so executing an arbitrary repository `.js` at import could not be told from
+  // loading a module of the graph (#888 round 4, F2). A loader read now counts as the loader's
+  // only when the module is in the subject's STATIC import graph (`importGraph`, #906) or in the
+  // root's own dependency tree. `parse-args.js` is in neither for this shape, so these read `seen`.
+  // The `require()` twin is the same hole through the CJS loader (#888 round 4, B2).
+  'dynamic-import-repo-js': { expect: 'seen', code: "await import(new URL('file://' + R('scripts/lib/parse-args.js')).href);" },
+  'require-repo-js':        { expect: 'seen', code: "import { createRequire } from 'node:module'; createRequire(import.meta.url)(R('scripts/lib/parse-args.js'));" },
+  // The dependency exemption is the ROOT's `node_modules`, not any directory of that name: a
+  // module under some other `node_modules/` is code the subject chose to run. The file is planted
+  // before the patch loops (`files`), so the arm cannot read `seen` on the strength of writing it.
+  'foreign-node-modules-import': { expect: 'seen', files: { 'node_modules/planted/index.mjs': 'export const planted = true;\n' }, code: "await import(new URL('file://' + T('node_modules/planted/index.mjs')).href);" },
+  // CONTROL, declared blind: a LOAD of a file under the root's `node_modules`, which `empty` does not
   // exercise. It was described as exercising bare-specifier RESOLUTION and does not — it imports
   // an absolute `file://` URL, so nothing is resolved (#888 round 5, F2). The arm below is the
   // one that resolves, and both are blind on 22, 24 and 25, so ordinary resolution is not a
@@ -249,6 +267,13 @@ if (SHAPE) {
   console.log(`${SHAPE_DIR_MARKER} ${shapeDir}`);
   process.env.SHAPE_TMP = shapeDir;
   process.env.SHAPE_ROOT = ROOT;
+  // Files a shape needs to exist BEFORE it runs, written here, before the patch loops, for the same
+  // reason as the module itself: a shape that wrote them at import would already read `seen`, and
+  // the arm would pass on that write rather than on what it is declared to test.
+  for (const [name, text] of Object.entries(shape.files ?? {})) {
+    fs.mkdirSync(dirname(resolve(shapeDir, name)), { recursive: true });
+    fs.writeFileSync(resolve(shapeDir, name), text, 'utf8');
+  }
   TARGET = resolve(shapeDir, 'shape.mjs');
   fs.writeFileSync(TARGET, [
     "import { resolve } from 'node:path';",
@@ -263,6 +288,38 @@ if (SHAPE) {
     shape.code,
     '',
   ].join('\n'), 'utf8');
+}
+
+// ── the static import graph ─────────────────────────────────────────────────
+
+// What the loader is ALLOWED to read, taken before the patch loops so taking it is not recorded.
+// A loader-frame read of a module is loader activity only if the module is in the subject's static
+// relative-import graph, or in this repository's own dependency tree. Anything else the loader
+// reads was reached by a dynamic `import()` or a `require()` at import time: code the subject
+// chose to run, which is content (#892). `importGraph` follows relative specifiers only, so a
+// STATIC import by absolute path or `file://` URL is outside the graph too and grades as content.
+// That is the loud direction, and nothing in the generator's graph is written that way.
+const STATIC_GRAPH = new Set([...importGraph(ROOT, relative(ROOT, TARGET))].map((rel) => resolve(ROOT, rel)));
+// The ROOT's `node_modules`, in both its spelled and its real form: in a worktree whose
+// `node_modules` is a symlink, the loader reads the real path, which lies outside ROOT. Not "any
+// path with a `node_modules` segment", which would also excuse a repository `.js` that happens to
+// sit under a nested `node_modules/` (the `foreign-node-modules-import` arm).
+const DEPENDENCY_ROOTS = [resolve(ROOT, 'node_modules')];
+try { DEPENDENCY_ROOTS.push(fs.realpathSync(DEPENDENCY_ROOTS[0])); } catch { /* no dependencies installed */ }
+
+/** The filesystem path a module argument names, or `null` when it names none. */
+function modulePath(arg) {
+  if (arg.startsWith('file:')) {
+    try { return fileURLToPath(arg); } catch { return null; }
+  }
+  return arg.startsWith('/') ? arg : null;
+}
+
+/** Is this module argument in the static graph, or in the root's own dependency tree? */
+function inGraphOrDependencies(arg) {
+  const path = modulePath(arg);
+  if (path === null) return false;
+  return STATIC_GRAPH.has(path) || DEPENDENCY_ROOTS.some((root) => path.startsWith(root + sep));
 }
 
 // ── the instrument ──────────────────────────────────────────────────────────
@@ -319,8 +376,10 @@ function patchModule(target, label) {
       }
       const frame = nearestCallerFrame();
       const arg = String(args[0]);
-      const loader = LOADER_FRAME.test(frame) && MODULE_ARG.test(arg);
-      calls.push({ name: `${label}.${name}`, arg, kind: loader ? 'loader' : 'other', frame });
+      const moduleRead = LOADER_FRAME.test(frame) && MODULE_ARG.test(arg);
+      const loader = moduleRead && inGraphOrDependencies(arg);
+      const note = moduleRead && !loader ? 'loaded, but outside the static import graph' : undefined;
+      calls.push({ name: `${label}.${name}`, arg, kind: loader ? 'loader' : 'other', frame, note });
       const result = original.apply(this, args);
       if (loader && typeof result === 'number') loaderDescriptors.add(result);
       return result;
@@ -562,6 +621,8 @@ const isGuard = (call) => call.name.endsWith('.realpathSync') && GUARD_PATHS.has
 const isStdio = (call) => /\.(writeSync|writevSync|write|writev)$/.test(call.name)
   && /^fd:[012] |^[012]$/.test(call.arg);
 const isContent = (call) => !isLoader(call) && !isGuard(call) && !isStdio(call);
+/** One recorded call as a report line: name, argument, and why it is content when that is not obvious. */
+const describe = (call) => `${call.name} ${call.arg}${call.note ? ` (${call.note})` : ''}`;
 
 // GUARD 1, registered BEFORE the import so it survives a subject that ends the process. Without
 // it, `process.exit(0)` during import leaves the probe with no output at all and exit 0 — a
@@ -583,12 +644,12 @@ process.on('exit', (code) => {
   const held = calls.filter(isContent);
   if (SHAPE) {
     console.log(`${VERDICT_MARKER} no-verdict(exit ${code})${held.length > 0 ? '+seen' : ''}`);
-    for (const call of held) console.log(`  ${call.name} ${call.arg}`);
+    for (const call of held) console.log(`  ${describe(call)}`);
   }
   console.error('REFUSED: the import exited the process before any verdict was reached.');
   if (held.length > 0) {
     console.error(`  ${held.length} call(s) had already touched repository content:`);
-    for (const call of held) console.error(`    ${call.name} ${call.arg}`);
+    for (const call of held) console.error(`    ${describe(call)}`);
   }
   process.exitCode = 1;
 });
@@ -677,7 +738,7 @@ const guardTwo = () => {
     return;
   }
   console.error(`\nREFUSED: ${late.length} call(s) touched repository content AFTER the verdict was taken:`);
-  for (const call of late) console.error(`  ${call.name} ${call.arg}`);
+  for (const call of late) console.error(`  ${describe(call)}`);
   process.exitCode = 1;
 };
 process.on('exit', guardTwo);
@@ -685,7 +746,7 @@ process.on('exit', guardTwo);
 if (SHAPE) {
   // One line the parent grades on, so a crash is never read as a verdict.
   console.log(`${VERDICT_MARKER} ${content.length > 0 ? 'seen' : 'blind'}`);
-  for (const call of content) console.log(`  ${call.name} ${call.arg}`);
+  for (const call of content) console.log(`  ${describe(call)}`);
   // NOT `process.exit()`: that would skip the exit handlers, including the late-content one
   // registered just above. `exitCode` lets the loop end on its own — which is also why the main
   // report below is in an `else`: without it, swapping `exit()` for `exitCode` made shape mode
@@ -702,9 +763,9 @@ const loaderCount = calls.length - guard.length - content.length;
 console.log(`calls during import: ${calls.length}  (node ${process.version})`);
 console.log(`  module-graph reads (loader):      ${loaderCount}`);
 console.log(`  main-module guard (realpathSync): ${guard.length}`);
-for (const call of guard) console.log(`    ${call.name} ${call.arg}`);
+for (const call of guard) console.log(`    ${describe(call)}`);
 console.log(`  repository content or subprocess: ${content.length}`);
-for (const call of content) console.log(`    ${call.name} ${call.arg}`);
+for (const call of content) console.log(`    ${describe(call)}`);
 
 if (content.length > 0) {
   console.error('\nREFUSED: importing the generator touched repository content or spawned a process.');
