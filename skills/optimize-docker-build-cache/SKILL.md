@@ -226,6 +226,7 @@ RUN --mount=type=cache,target=/root/.npm \
 - **Too many layers**: Each `RUN`, `COPY`, `ADD` creates a layer. Combine where logical.
 - **Not cleaning apt cache**: Always end apt-get installs with `&& rm -rf /var/lib/apt/lists/*`
 - **Platform-specific caches**: Cache layers are platform-specific. CI runners may not benefit from local caches.
+- **No cache between CI runs**: Ephemeral runners start with an empty local cache, so every run rebuilds from scratch. Export the cache to a registry with `--cache-to type=registry,ref=<registry>/<cache-image>,mode=max` and import it on the next run with `--cache-from type=registry,ref=<registry>/<cache-image>`; `mode=max` also caches layers from intermediate stages, where the default `mode=min` caches only layers present in the final image. Neither this backend nor the GitHub Actions one (`type=gha`) is available on the default `docker` driver without extra setup (`type=registry` requires the containerd image store enabled), so create a dedicated builder first with `docker buildx create --driver docker-container --use`.
 
 ## Related Skills
 

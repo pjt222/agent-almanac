@@ -3,6 +3,7 @@ name: design-a2a-agent-card
 locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
+fence_basis_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-23"
 description: >

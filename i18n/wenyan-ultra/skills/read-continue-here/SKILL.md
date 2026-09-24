@@ -3,6 +3,7 @@ name: read-continue-here
 locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
+fence_basis_commit: afb148e637f7987255890aa34c1fd08c70caa121
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-26"
 description: >
@@ -48,7 +49,23 @@ metadata:
 查根 `CONTINUE_HERE.md`：
 
 ```bash
-ls -la CONTINUE_HERE.md 2>/dev/null
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
+CONTINUE_FILE=
+for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
+  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
+done
+if [ -n "$CONTINUE_FILE" ]; then
+  echo "handoff: $CONTINUE_FILE"
+else
+  ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
+    -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
+  if [ -n "$ELSEWHERE" ]; then
+    echo "no handoff at a resolved path, but one exists elsewhere:"
+    echo "$ELSEWHERE"
+  else
+    echo "no handoff"
+  fi
+fi
 ```
 
 無→雅退。
@@ -64,8 +81,9 @@ ls -la CONTINUE_HERE.md 2>/dev/null
 時與今較：
 
 ```bash
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 # File modification time
-stat -c '%Y' CONTINUE_HERE.md 2>/dev/null || stat -f '%m' CONTINUE_HERE.md
+stat -c '%Y' "$CONTINUE_FILE" 2>/dev/null || stat -f '%m' "$CONTINUE_FILE"
 # Current time
 date +%s
 ```
@@ -78,8 +96,9 @@ date +%s
 察枝合：
 
 ```bash
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 git branch --show-current
-git log --oneline --since="$(stat -c '%Y' CONTINUE_HERE.md | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
+git log --oneline --since="$(stat -c '%Y' "$CONTINUE_FILE" | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
 得：鮮分（鮮、舊、越）有據。
@@ -118,7 +137,35 @@ Next Steps 標 `**[USER]**`→明揭，需用決方行。
 交用畢、工已起→刪 CONTINUE_HERE.md：
 
 ```bash
-rm CONTINUE_HERE.md
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+# A handoff that carries `coordinate-peer-sessions` Step 3's scope declaration is about to lose
+# its only durable copy — this is the one point in the lifecycle where anyone could still act on
+# it. A shell loop, not `grep`/`rg`: a session may run this in an environment that has neither on
+# PATH, or that blocks a bare `grep` outright (this repository's own Bash hook does exactly that,
+# which would otherwise make this warning never fire where it matters most). Anchored on the
+# LINE START, not `*Nobody runs:*`: a handoff can quote or discuss the mechanism in prose (as this
+# skill's own commit history has), and an unanchored match warns on that too — a real declaration
+# always starts the line, by construction of the fence that emits it.
+SCOPE_LINE=$(while IFS= read -r l; do
+  case "$l" in "Nobody runs:"*) printf '%s' "$l"; break ;; esac
+done < "$CONTINUE_FILE")
+if [ -n "$SCOPE_LINE" ]; then
+  echo "WARNING: $CONTINUE_FILE carries a peer-session scope declaration about to be lost:" >&2
+  echo "  $SCOPE_LINE" >&2
+  echo "Copy it somewhere durable (an issue comment, a message to the peer) before it is gone." >&2
+fi
+if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
+  # Tracked: the deletion is recoverable, which is what makes it safe.
+  # The pathspec is load-bearing: `git commit -m` with none commits the WHOLE
+  # index, so a peer session's staged work is swept into a commit titled for the
+  # handoff. This runs at session start, which is exactly when that is likely.
+  git rm -q "$CONTINUE_FILE" &&
+    git commit -qm 'chore: consume the session handoff' -- "$CONTINUE_FILE"
+else
+  # Untracked, ignored, or no repository at all — all three land here, and for
+  # all three an ordinary delete is the right and only option.
+  rm -- "$CONTINUE_FILE"
+fi
 ```
 
 舊續檔致後會混。
@@ -137,56 +184,78 @@ rm CONTINUE_HERE.md
 mkdir -p ~/.claude/hooks/continue-here
 
 cat > ~/.claude/hooks/continue-here/read-continuation.sh << 'SCRIPT'
-#!/bin/bash
-# SessionStart hook: inject CONTINUE_HERE.md into session context
-# OS-aware: works on native Linux, WSL, macOS, and Windows (Git Bash/MSYS)
+#!/usr/bin/env bash
+# SessionStart hook: inject the resolved CONTINUE_HERE.md into session context.
+# OS-aware: works on native Linux, WSL, macOS, and Windows (Git Bash/MSYS).
 set -uo pipefail
 
-# --- Platform detection ---
-detect_platform() {
-  case "$(uname -s)" in
-    Darwin) echo "mac" ;;
-    Linux)
-      if grep -qi microsoft /proc/version 2>/dev/null; then
-        echo "wsl"
-      else
-        echo "linux"
-      fi ;;
-    MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
-    *) echo "unknown" ;;
-  esac
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
+CONTINUE_FILE=
+for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
+  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
+done
+
+emit() {
+  # additionalContext sits DIRECTLY under hookSpecificOutput. Nesting it inside a
+  # "sessionStartContext" object — the shape this hook shipped until 2.0 — names a
+  # key Claude Code does not know, so the whole object is discarded and the failure
+  # is reported nowhere the user will look (#844). stdout carries the JSON and
+  # nothing else.
+  if command -v jq >/dev/null 2>&1; then
+    ESCAPED=$(printf '%s' "$1" | jq -Rsa .)
+  else
+    ESCAPED=$(printf '%s' "$1" | awk '
+      BEGIN {
+        ORS = ""
+        # JSON forbids every raw byte below 0x20 inside a string, not only the
+        # three with short escapes. Handling \\ " and tab alone left CR, ESC and
+        # the rest to pass through raw, which made the object unparseable — and
+        # an unparseable object is discarded in exactly the silent way #844 was.
+        # A handoff quoting terminal output carries ESC; one written on NTFS
+        # carries CR. Both are ordinary here.
+        for (i = 1; i < 32; i++) esc[sprintf("%c", i)] = sprintf("\\u%04x", i)
+        esc["\t"] = "\\t"
+        print "\""
+      }
+      {
+        line = $0
+        gsub(/\\/, "\\\\", line)
+        gsub(/"/, "\\\"", line)
+        if (line ~ /[\001-\037]/) {
+          out = ""
+          n = length(line)
+          for (i = 1; i <= n; i++) {
+            ch = substr(line, i, 1)
+            out = out (ch in esc ? esc[ch] : ch)
+          }
+          line = out
+        }
+        if (NR > 1) print "\\n"
+        print line
+      }
+      END { print "\"" }
+    ')
+  fi
+  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":%s}}' "$ESCAPED"
 }
-PLATFORM=${PLATFORM:-$(detect_platform)}
 
-CONTINUE_FILE="$PWD/CONTINUE_HERE.md"
-
-if [ ! -f "$CONTINUE_FILE" ]; then
+if [ -n "$CONTINUE_FILE" ]; then
+  # Strip CRLF (files on NTFS often have Windows line endings)
+  emit "$(sed 's/\r$//' "$CONTINUE_FILE")"
   exit 0
 fi
 
-# Strip CRLF (files on NTFS often have Windows line endings)
-CONTENT=$(sed 's/\r$//' "$CONTINUE_FILE")
-
-# JSON-escape: prefer jq, fall back to portable awk
-if command -v jq >/dev/null 2>&1; then
-  ESCAPED=$(printf '%s' "$CONTENT" | jq -Rsa .)
-else
-  ESCAPED=$(printf '%s' "$CONTENT" | awk '
-    BEGIN { ORS=""; print "\"" }
-    {
-      gsub(/\\/, "\\\\")
-      gsub(/"/, "\\\"")
-      gsub(/\t/, "\\t")
-      if (NR > 1) print "\\n"
-      print
-    }
-    END { print "\"" }
-  ')
+# No handoff at a resolved path. Exiting silently here is what made a misplaced
+# handoff indistinguishable from a project that has none, so look once more, cheaply,
+# and say what was found.
+ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
+  -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
+if [ -n "$ELSEWHERE" ]; then
+  emit "A CONTINUE_HERE.md exists in this project but not where the continuation hook resolves it. The hook looks for CONTINUE_HERE.md, docs/CONTINUE_HERE.md and .claude/CONTINUE_HERE.md, relative to the repository root. Found instead:
+$ELSEWHERE
+Read it if it is a handoff for this session, or move it to one of the resolved paths."
 fi
-
-cat << EOF
-{"hookSpecificOutput":{"sessionStartContext":{"additionalContext":$ESCAPED}}}
-EOF
+exit 0
 SCRIPT
 
 chmod +x ~/.claude/hooks/continue-here/read-continuation.sh

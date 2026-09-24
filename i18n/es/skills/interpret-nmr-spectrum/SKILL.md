@@ -18,9 +18,9 @@ metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: spectroscopy
-  complexity: intermediate
+  complexity: advanced
   language: natural
-  tags: spectroscopy, nmr, structure-elucidation, organic-chemistry, 2d-nmr
+  tags: spectroscopy, nmr, chemical-shift, coupling, structure-elucidation
 ---
 
 # Interpretar Espectro de RMN

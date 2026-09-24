@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-07-27T06:30:47.529Z",
-    "totalSkills": 369,
+    "generated": "2026-09-03T15:39:08.058Z",
+    "totalSkills": 372,
     "totalAgents": 75,
     "totalTeams": 22,
-    "totalNodes": 466,
-    "totalLinks": 1904,
+    "totalNodes": 469,
+    "totalLinks": 1926,
     "totalAgentLinks": 297,
     "totalTeamLinks": 73,
-    "totalDomains": 66,
+    "totalDomains": 67,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -53,11 +53,11 @@
     },
     "git": {
       "description": "Git version control and GitHub workflow skills",
-      "count": 10
+      "count": 11
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
-      "count": 24
+      "count": 25
     },
     "citations": {
       "description": "Academic and software citation management with R and BibTeX",
@@ -285,6 +285,10 @@
     },
     "ocr": {
       "description": "Optical character and handwritten-text recognition — engine selection, benchmarking, and transcription quality measurement",
+      "count": 1
+    },
+    "agent-commerce": {
+      "description": "Agent payment protocols — testing, conformance, and settlement verification for x402 and related rails",
       "count": 1
     }
   },
@@ -2371,6 +2375,36 @@
       ]
     },
     {
+      "id": "coordinate-peer-sessions",
+      "type": "skill",
+      "title": "Coordinate Peer Sessions",
+      "domain": "git",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Coordinate with a peer interactive session sharing one git worktree — declare path scope before the first edit, survive a contended index lock, and read a guard slot you did not arm",
+      "tags": [
+        "git",
+        "coordination",
+        "worktree",
+        "concurrency",
+        "safety"
+      ],
+      "related": [
+        "commit-changes",
+        "create-pull-request",
+        "resolve-git-conflicts",
+        "write-continue-here",
+        "unleash-the-agents"
+      ],
+      "path": "coordinate-peer-sessions/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
       "id": "commit-changes",
       "type": "skill",
       "title": "Commit Changes",
@@ -2779,7 +2813,7 @@
       "domain": "general",
       "complexity": "intermediate",
       "language": "multi",
-      "description": "Organize, extract, prune, and verify Claude Code persistent memory files",
+      "description": "Organize and extract Claude Code memory under the dual 200-line / 25KB load cap, with a reachability gate on every index rewrite",
       "tags": [
         "memory",
         "claude-code",
@@ -2788,13 +2822,16 @@
         "auto-memory"
       ],
       "related": [
+        "verify-memory-integrity",
         "write-claude-md",
         "prune-agent-memory",
         "write-continue-here",
         "read-continue-here",
         "create-skill",
         "heal",
-        "meditate"
+        "meditate",
+        "catalog-collection",
+        "preserve-materials"
       ],
       "path": "manage-memory/SKILL.md",
       "locales": [
@@ -3173,10 +3210,12 @@
         "retention-policy",
         "maintenance",
         "auto-memory",
-        "inoculation"
+        "inoculation",
+        "deaccession"
       ],
       "related": [
         "manage-memory",
+        "verify-memory-integrity",
         "meditate",
         "rest",
         "assess-context"
@@ -3193,6 +3232,38 @@
         "wenyan-lite",
         "wenyan",
         "wenyan-ultra"
+      ]
+    },
+    {
+      "id": "verify-memory-integrity",
+      "type": "skill",
+      "title": "Verify Memory Integrity",
+      "domain": "general",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Verify memory reachability and dual-cap budget read-only, without modifying the store",
+      "tags": [
+        "memory",
+        "claude-code",
+        "verification",
+        "reachability",
+        "read-only",
+        "maintenance"
+      ],
+      "related": [
+        "manage-memory",
+        "prune-agent-memory",
+        "repair-broken-references",
+        "catalog-collection",
+        "preserve-materials",
+        "write-claude-md"
+      ],
+      "path": "verify-memory-integrity/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
       ]
     },
     {
@@ -3291,7 +3362,8 @@
         "bootstrap-agent-identity",
         "manage-memory",
         "commit-changes",
-        "write-claude-md"
+        "write-claude-md",
+        "coordinate-peer-sessions"
       ],
       "path": "write-continue-here/SKILL.md",
       "locales": [
@@ -3611,7 +3683,9 @@
       ],
       "related": [
         "manage-bibliography",
-        "format-citations"
+        "format-citations",
+        "repair-broken-references",
+        "verify-memory-integrity"
       ],
       "path": "validate-references/SKILL.md",
       "locales": [
@@ -10765,7 +10839,9 @@
         "clean-codebase",
         "tidy-project-structure",
         "escalate-issues",
-        "validate-references"
+        "validate-references",
+        "manage-memory",
+        "verify-memory-integrity"
       ],
       "path": "repair-broken-references/SKILL.md",
       "locales": [
@@ -13435,6 +13511,33 @@
       ]
     },
     {
+      "id": "test-x402-payment-client",
+      "type": "skill",
+      "title": "Test an x402 Payment Client",
+      "domain": "agent-commerce",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Test an x402 payment client end to end against a live endpoint — drive the 402/PAYMENT-REQUIRED/sign/PAYMENT-SIGNATURE/verify/settle loop, confirm settlement on chain, and check offer/receipt conformance",
+      "tags": [
+        "agent-commerce",
+        "x402",
+        "payments",
+        "testing",
+        "conformance"
+      ],
+      "related": [
+        "test-a2a-interop",
+        "build-custom-mcp-server"
+      ],
+      "path": "test-x402-payment-client/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
       "id": "agent:r-developer",
       "type": "agent",
       "title": "R Developer",
@@ -14497,7 +14600,7 @@
         "preserve-materials",
         "curate-collection",
         "manage-memory",
-        "observe"
+        "prune-agent-memory"
       ],
       "path": "agents/librarian.md",
       "locales": []
@@ -17653,6 +17756,31 @@
       "type": "skill"
     },
     {
+      "source": "coordinate-peer-sessions",
+      "target": "commit-changes",
+      "type": "skill"
+    },
+    {
+      "source": "coordinate-peer-sessions",
+      "target": "create-pull-request",
+      "type": "skill"
+    },
+    {
+      "source": "coordinate-peer-sessions",
+      "target": "resolve-git-conflicts",
+      "type": "skill"
+    },
+    {
+      "source": "coordinate-peer-sessions",
+      "target": "write-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "coordinate-peer-sessions",
+      "target": "unleash-the-agents",
+      "type": "skill"
+    },
+    {
       "source": "commit-changes",
       "target": "manage-git-branches",
       "type": "skill"
@@ -17869,6 +17997,11 @@
     },
     {
       "source": "manage-memory",
+      "target": "verify-memory-integrity",
+      "type": "skill"
+    },
+    {
+      "source": "manage-memory",
       "target": "write-claude-md",
       "type": "skill"
     },
@@ -17900,6 +18033,16 @@
     {
       "source": "manage-memory",
       "target": "meditate",
+      "type": "skill"
+    },
+    {
+      "source": "manage-memory",
+      "target": "catalog-collection",
+      "type": "skill"
+    },
+    {
+      "source": "manage-memory",
+      "target": "preserve-materials",
       "type": "skill"
     },
     {
@@ -18124,6 +18267,11 @@
     },
     {
       "source": "prune-agent-memory",
+      "target": "verify-memory-integrity",
+      "type": "skill"
+    },
+    {
+      "source": "prune-agent-memory",
       "target": "meditate",
       "type": "skill"
     },
@@ -18135,6 +18283,36 @@
     {
       "source": "prune-agent-memory",
       "target": "assess-context",
+      "type": "skill"
+    },
+    {
+      "source": "verify-memory-integrity",
+      "target": "manage-memory",
+      "type": "skill"
+    },
+    {
+      "source": "verify-memory-integrity",
+      "target": "prune-agent-memory",
+      "type": "skill"
+    },
+    {
+      "source": "verify-memory-integrity",
+      "target": "repair-broken-references",
+      "type": "skill"
+    },
+    {
+      "source": "verify-memory-integrity",
+      "target": "catalog-collection",
+      "type": "skill"
+    },
+    {
+      "source": "verify-memory-integrity",
+      "target": "preserve-materials",
+      "type": "skill"
+    },
+    {
+      "source": "verify-memory-integrity",
+      "target": "write-claude-md",
       "type": "skill"
     },
     {
@@ -18215,6 +18393,11 @@
     {
       "source": "write-continue-here",
       "target": "write-claude-md",
+      "type": "skill"
+    },
+    {
+      "source": "write-continue-here",
+      "target": "coordinate-peer-sessions",
       "type": "skill"
     },
     {
@@ -18385,6 +18568,16 @@
     {
       "source": "validate-references",
       "target": "format-citations",
+      "type": "skill"
+    },
+    {
+      "source": "validate-references",
+      "target": "repair-broken-references",
+      "type": "skill"
+    },
+    {
+      "source": "validate-references",
+      "target": "verify-memory-integrity",
       "type": "skill"
     },
     {
@@ -22618,6 +22811,16 @@
       "type": "skill"
     },
     {
+      "source": "repair-broken-references",
+      "target": "manage-memory",
+      "type": "skill"
+    },
+    {
+      "source": "repair-broken-references",
+      "target": "verify-memory-integrity",
+      "type": "skill"
+    },
+    {
       "source": "audit-discovery-symlinks",
       "target": "repair-broken-references",
       "type": "skill"
@@ -24138,6 +24341,16 @@
       "type": "skill"
     },
     {
+      "source": "test-x402-payment-client",
+      "target": "test-a2a-interop",
+      "type": "skill"
+    },
+    {
+      "source": "test-x402-payment-client",
+      "target": "build-custom-mcp-server",
+      "type": "skill"
+    },
+    {
       "source": "agent:r-developer",
       "target": "create-r-package",
       "type": "agent"
@@ -24834,7 +25047,7 @@
     },
     {
       "source": "agent:librarian",
-      "target": "observe",
+      "target": "prune-agent-memory",
       "type": "agent"
     },
     {

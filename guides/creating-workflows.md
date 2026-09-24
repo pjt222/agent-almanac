@@ -68,7 +68,7 @@ return { findings }
 
 ### Sidecar frontmatter
 
-The `// --- … ---` comment block at the very top mirrors `meta` and is the **catalog source of truth** — the analogue of the YAML frontmatter on skills, agents, teams, and guides. It lets the repo's grep+count tooling read a workflow's metadata without a JavaScript parser. Keep the sidecar `name`/`description` in agreement with `meta`, and keep the sidecar `phases:` list a superset of every title passed to `phase()`.
+The `// --- … ---` comment block at the very top mirrors `meta` and is the **catalog source of truth** — the analogue of the YAML frontmatter on skills, agents, teams, and guides. It lets the repo's grep+count tooling read a workflow's metadata without a JavaScript parser. Keep the sidecar `name`/`description` in agreement with `meta`, and keep the sidecar `phases:` list **equal** to the `meta.phases[]` titles and to the titles the body uses through `phase()` and the per-call `phase:` option — integrity check A7b holds all three to an exact set in both directions (#773). If any stage mutates artifacts (an implementing `agentType` such as `general-purpose`, or `isolation: 'worktree'`), declare those phases on a sidecar line of the form `// implementing-phases: Generate`; A7b requires a spawn targeting an implementing type to sit in a listed phase, and requires each listed phase to contain at least one such spawn; a phase may mix a scout with a writer, and absent means none. Each `agent()` call must name its `agentType` as a plain string in a literal options object — a shared base spread across spawns (`agent(p, { ...base })`) is reported, since a spread defeats the per-spawn classification A7b performs. Before that check existed, retargeting a read-only stage to `general-purpose` and misspelling a `phase()` title both passed every gate.
 
 ### Orchestration primitives
 
@@ -135,8 +135,64 @@ The runtime enforces these — violating them breaks the run:
 
 - **Plain JavaScript only.** No TypeScript syntax (`: string[]`, interfaces, generics).
 - **No `Date.now()`, `Math.random()`, or argless `new Date()`** — they would break workflow resume. Pass timestamps via `args`; vary randomness by agent index or label.
-- **No filesystem or Node API.** Standard JS built-ins (`JSON`, `Math`, `Array`) only; agents do the file and shell work.
+- **No filesystem or Node API.** Standard JS built-ins (`JSON`, `Math`, `Array`) only; agents do the file and shell work. The consequence is structural rather than stylistic: because the body cannot persist anything, a workflow **cannot checkpoint itself**, so a single-barrier run that is interrupted returns nothing at all. Decide how the run survives interruption before writing the body — see [Surviving an Interrupted Run](#surviving-an-interrupted-run).
 - The body runs in an async context — use top-level `await` and a top-level `return` directly.
+
+## Surviving an Interrupted Run
+
+A workflow body cannot write to disk, so it cannot record its own progress. Nothing
+in a run is durable except what the *agents* write and what the invoker keeps
+between calls. Two consequences follow, and both have to be designed in before the
+body is written:
+
+- **An interrupted `Workflow(...)` call returns nothing.** The unit of loss is the
+  call, not the fan-out primitive: the script's return value reaches the invoker
+  only when the run completes, so a `pipeline()` that dies mid-flight loses what a
+  `parallel()` barrier would have. Choosing between the two is a wall-clock
+  decision and buys no durability. What the finished agents produced is in the
+  journal (below), where the script cannot reach it.
+- **Resume does not cross sessions.** `resumeFromRunId` replays a prior run's
+  completed `agent()` calls from cache, but it is **same-session only**: once the
+  session that launched the run is gone, so is the run. That is the tool's own
+  contract, and what has been observed here is the process-death case; whether a
+  session resumed under the same id can resume the run is untested.
+
+One invariant decides whether a run survives: **every expensive result is on disk
+before the run can die.** The two shapes below differ in *where that write
+happens*, not in whether it has to, and they compose — a batched run whose agents
+also write gated artifacts bounds its loss twice. So the question is not which to
+pick, but where the write belongs:
+
+| Durability model | How it survives | Fits |
+|---|---|---|
+| **The agents write validator-gated artifacts to disk** — the [`batch-generate-waves`](../workflows/batch-generate-waves.mjs) model | Each agent writes its artifact and validates it *before* returning, so a stage that dies loses only its unfinished items, and an idempotent scout re-derives the todo list from disk on relaunch | A large pool of independent per-item artifacts, where "done" is visible on disk |
+| **The invoker batches and persists between calls** | The `Workflow(...)` call is split into several smaller invocations, and the loop around them merges each batch's results to disk before launching the next | Results the invoker must merge, dedupe or review; pools small enough to slice; anything whose output is one synthesized answer |
+
+Neither model can live *inside* the script. Both are properties of the shape of
+the run, which is what makes this a design decision rather than a coding one. The
+first bounds loss to a stage's unfinished items, the second to a single batch — so
+where per-item results are expensive and independent, put the write in the agents
+and let batching bound whatever is left.
+
+**Salvage, when neither was applied.** A run that died with results in flight
+leaves a journal on disk at
+`~/.claude/projects/<project-slug>/<session-id>/subagents/workflows/<runId>/journal.jsonl`,
+one line per event, the completed agents' results among them. Hand-parsing it is
+the last-resort path: it recovers what finished, not the run.
+
+**Field evidence (2026-08-11).** A verification workflow put 15 long web-research
+agents into one `parallel()` barrier. The session died roughly three hours in.
+`resumeFromRunId` was useless because the session was gone, 4 of the 15 results
+were recovered by hand from `journal.jsonl`, and the other 11 were lost outright.
+The relaunch was three sequential `Workflow` invocations of 4, 4 and 3 items with
+the merge-to-disk step in the invoker's loop between them, and it completed — the
+second model above, arrived at the expensive way. The first would have fitted as
+well, since the 15 verdicts were independent; batching was simply the smaller
+change to make under time pressure. That relaunch is a before-and-
+after report rather than a controlled comparison: different items, a narrower
+fan-out, no arm run the old way alongside it. The author had read the Hard
+Constraints; "no filesystem or Node API" did not suggest "therefore batch it",
+which is why that constraint now states its consequence.
 
 ## Fanning Out Against a Live Repository
 
@@ -152,6 +208,22 @@ agent's `bash fixture.sh /tmp/nf-skipwt` ran a script that ignored its argument
 and never created the directory. Its `cd "$1"` then failed, execution continued
 regardless, and `mkdir`, `cat >`, `git add -A` and `git commit` all landed on the
 real repository.
+
+A second incident, on 2026-08-11, shows the cheaper and more common shape. A
+15-agent verification fan-out — web-research agents whose only job was to read
+survey codebooks — downloaded roughly 100 MB of questionnaires, protocols and
+papers into the repository root: `oijk/`, `ytuf/`, `lbrp/`, `scsn_verify/`,
+`hywo/`, `SLHN_paper.pdf`, `kff8378.pdf`, `macpac22.xlsx`, `cb2025.csv`. Nothing
+collided over a shared path, nothing was staged, nothing was committed, and no
+agent intended to touch the repository at all — these were read-only by intent.
+They inherited the repository as their working directory and wrote where they
+stood. The relaunch appended one sentence to each prompt, naming the scratchpad
+and saying not to write to the repository, and the repository stayed clean — an
+author's before-and-after report, not a controlled comparison. Note also what a
+harness may already do for you: a session whose agents are told at spawn time to
+use a scratchpad directory has the *naming* half covered, and what the sentence
+still adds is the prohibition on the repository root and the scope — every file
+the agent produces, not only its temporary ones.
 
 ### Bracket the run
 
@@ -189,7 +261,64 @@ means a stray write to `CONTINUE_HERE.md` would not be seen.
 until `npm run guard:release`. Both exist because a single global slot otherwise lets a
 nested run rebaseline the outer run's damage into a green.
 
+### Sharing the worktree with a peer session
+
+A second interactive Claude Code session can be running in this same worktree.
+That is not hypothetical: it happened, and a peer's `git add -A` swept another
+session's untracked file into a commit on the wrong branch. Two facts about the
+guard follow from it, and neither is obvious from the commands.
+
+**The snapshot records no owner.** It carries `formatVersion`, the captured
+state, `takenAt`, and `toplevel` — nothing that identifies which session armed
+it. `verify` fails closed on a snapshot from a *different repository* or a
+*different format version*, and those are the only two senses in which a
+snapshot is "foreign" to it. A peer in the same repo clears both checks, so
+`guard:release` from the wrong session drops the incumbent's baseline the moment
+the tree happens to compare clean. Never release a slot you did not arm.
+
+**The guard is a detector, and it must be armed before the thing it detects.**
+It cannot see a peer who was already working when you arrived, because there is
+no baseline from before their edits. So arriving in an occupied worktree is not
+a case the guard covers — it is a case for agreeing on scope.
+
+**And a verify against a slot you did not arm answers a question you did not
+ask.** Clean means the tree has not moved since that snapshot was taken — an
+incumbent whose fan-out has not written yet compares clean — never that the run
+has finished. Verify reports tree movement, not run liveness. Its failure output
+is worse to borrow: on a moved HEAD it prints `git reset --mixed <baseline>`,
+recovery advice written for whoever armed the snapshot, and following it from
+another session drops that session's commit. Use verify to look; do not act on
+what it tells you to do.
+
+The working rule, which is a matching condition rather than a lock:
+
+- **Declare path scope before your first edit**, not before your first commit —
+  by then the collision has already happened. Divide by **paths, not tasks**:
+  the tree is the shared resource, and two agents on unrelated tasks still
+  collide in one file.
+- **Stage explicit paths.** `git add -A`, `git add --all` and `git add .` cannot
+  distinguish your work from a neighbour's untracked file.
+- **Review the whole branch, not the tip**: `git diff origin/<base> --name-only`.
+  A `git show` on your last commit cannot show you what an earlier one swept in.
+- **Leave the neighbour's edges alone.** Additive files, and no rewriting of
+  what is already placed.
+
+A generated artifact is the backstop that actually caught the incident: `check-dreams`
+went red because an extra dream file made the committed atlas stale. Treat unexplained
+staleness in a generated file as evidence the corpus moved, and investigate before
+regenerating — regenerating first would have turned the job green and buried it.
+
 ### Contain the agents
+
+**Name a write location in every prompt.** This is the cheapest control, and the
+one that reaches a stage nobody classified as writing at all. One sentence per
+`Bash`-capable stage, naming an absolute path and ruling out the repository root —
+`Write every file you produce under /abs/path; write nothing under the repository
+root` — and it goes into the read-only-by-intent stages too, since those are
+exactly the ones that pollute by inherited working directory alone. It is not the
+preamble's `mktemp -d` restated: that gives a shell block a private directory,
+while this covers every file the agent produces by any tool — a download, a
+report, a fetched dataset — and names the repository root as off limits.
 
 `workflows/_template.mjs` defines a `REPO_SAFETY` preamble — a plain `const`, not
 an export, since the documented wrap-then-check recipe rewrites only
@@ -202,13 +331,35 @@ Copying the template gets you this by default.
 |---|---|
 | `isolation: 'worktree'` on any stage that might mutate | Everything below, structurally |
 | Per-agent scratch dirs (`mktemp -d`, never a shared fixed path) | Filename collisions between parallel agents |
-| `cd <dir> \|\| exit 1` in generated scripts | A failed `cd` silently redirecting relative paths at the repo |
-| `git rev-parse --show-toplevel` assertion before `git add -A` / `git commit` / any write flag | A destructive step aimed at the wrong tree |
+| `cd "${DIR:?}" \|\| exit 1` in generated scripts | A failed `cd` silently redirecting relative paths at the repo. Braced because `cd ""` returns 0 without moving, so an unset variable defeats the `\|\| exit 1` |
+| A braced absolute path under the scratch dir in every destructive command (`rm -rf "${DIR:?}/fixtures"`, never `rm -rf fixtures` and never a bare `"$DIR/fixtures"`) | The row above being the *only* thing between a relative `rm` and the repository. The brace is load-bearing: `cd ""` returns 0 without moving, so an unset `DIR` both leaves you in the repository and expands the unbraced form to `/fixtures` |
+| A braced `git rev-parse --show-toplevel` assertion (`= "${DIR:?}"`) before `git add`, `git commit`, or a tool run with a write flag | A `git` or write-flag step aimed at the wrong tree. Braced because outside any repository `git rev-parse` prints nothing, so the unbraced form compares `""` to `""` and passes |
+| A named write location in every `Bash`-capable stage prompt | An agent that never meant to touch the repository and writes where it stands |
 
-A prompt sentence is documentation, not a control — which is why the preamble is
-paired with the guard rather than trusted on its own. The prompt in that run named
-the directory, the tool, and the file to copy, and specificity did not help,
-because the failure was mechanical rather than a matter of the agent's compliance.
+**These controls are complements, not alternatives.** The prompt-level line
+*prevents* a compliant agent from writing where it happens to stand. The guard
+*detects*, which is the only thing that still works when an instruction is ignored
+or mechanically defeated — and because the body cannot run shell, it can run only
+before and after the whole `Workflow(...)` call, so across a three-hour fan-out it
+is blind for three hours.
+
+Worktree isolation is the structural control and it is stronger than either. The
+table prescribes it for stages that *might mutate*, and there is the gap: the
+stages that polluted the repository in the second incident were read-only by
+intent, so nobody would have classified them as mutating. That is what the prompt
+sentence covers — not "the only control operating during the run", which worktree
+isolation and the preamble's own assertions also are, but the only one that
+reaches a stage nobody thought would write. Blanket `isolation: 'worktree'` on
+every `Bash`-capable stage would close the gap structurally, and is not prescribed
+here because a worktree checks out the default branch rather than yours, needs its
+own dependency symlinks, and is slow to create on a network or NTFS mount — a cost
+per stage, against one sentence per stage.
+
+What a prompt sentence cannot do is bind. In the fixture incident above the prompt
+named the directory, the tool and the file to copy, the agent complied with all
+three, and specificity did not help, because the failure was mechanical rather
+than a matter of the agent's compliance. Instruction is worth its one sentence;
+it is not worth a guarantee.
 
 > **Generated artifacts are integrity checks.** What surfaced that stray commit was
 > not any deliberate check but `npm run check-readmes` going stale: the README
@@ -231,7 +382,7 @@ The Workflow **run model** is generally available on paid Claude Code plans (~v2
 | A mutating stage is rejected / misbehaves | Stage targets an advisory `agentType` but needs to write | Target an `implementing` agent type for any Write/Edit/Bash or `worktree` stage |
 | A "read-only" run left the repo changed | Agents inherit the repo as their cwd; the declared `intent` does not constrain Bash | Apply the containments in [Fanning Out Against a Live Repository](#fanning-out-against-a-live-repository) and bracket the run with `npm run guard:snapshot` / `guard:verify` |
 | `guard:verify` says "no snapshot" | The snapshot was released, or never taken | Re-snapshot and re-run. Never read exit 2 as a pass — it means the comparison did not happen |
-| `guard:snapshot` says one already exists | Another guarded run is open, or an earlier one was never released | Close it with `npm run guard:release`. Do not `--force` unless you know the other run is dead: re-arming rebaselines its damage |
+| `guard:snapshot` says one already exists | Another guarded run is open, or an earlier one was never released | Do **not** run `guard:release` — the snapshot records no owner, so releasing drops whosever baseline it is (see [Sharing the worktree with a peer session](#sharing-the-worktree-with-a-peer-session)). Wait for that run to release its own, or `npm run guard:snapshot -- --force` only if you know it is dead: re-arming rebaselines its damage |
 | `Date.now is not a function` | Used a forbidden non-deterministic call | Pass the value via `args`; vary by index/label instead |
 
 ## Related Resources
@@ -239,7 +390,9 @@ The Workflow **run model** is generally available on paid Claude Code plans (~v2
 - [Understanding the System](understanding-the-system.md) -- where workflows sit among the Five Pillars and the canonical Teams-vs-Workflows boundary
 - [Creating Agents and Teams](creating-agents-and-teams.md) -- the `agent:`/`subagent_type:` decoupling and the `intent` contract workflows reuse
 - [Production Coordination Patterns](production-coordination-patterns.md) -- runtime-health layers that apply to both teams and workflows
-- [`review-changes`](../workflows/review-changes.mjs) -- the seed workflow this guide references
+- [`review-changes`](../workflows/review-changes.mjs) -- the seed workflow this guide's examples are drawn from
+- [`batch-generate-waves`](../workflows/batch-generate-waves.mjs) -- also shipped: resumable scout → generate → audit waves, artifacts disk-durable and validator-gated
+- [`verify-handoff`](../workflows/verify-handoff.mjs) -- also shipped: three adversarial lenses over a `CONTINUE_HERE.md` draft, read-only
 - [`workflows/_template.mjs`](../workflows/_template.mjs) -- the copy-and-rename scaffold
 - [Workflows README](../workflows/README.md) -- the directory overview and authoring convention
 - [Create Workflow skill](../skills/create-workflow/SKILL.md) -- the step-by-step authoring meta-skill (`/create-workflow`)

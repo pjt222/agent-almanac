@@ -1,27 +1,11 @@
 name: CI Node CLI
 on:
+  # No `paths:` filter, deliberately (#641): a REQUIRED status check that does not run sits on
+  # "Expected — waiting for status to be reported" and refuses the merge forever, so only an
+  # unfiltered workflow can be required.
   push:
     branches: [main]
-    paths:
-      - 'cli/**'
-      # CLI tests are registry-derived (#307): registry changes must re-run them.
-      - 'skills/_registry.yml'
-      - 'agents/_registry.yml'
-      - 'teams/_registry.yml'
-      - 'guides/_registry.yml'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/ci-node-cli.yml'
   pull_request:
-    paths:
-      - 'cli/**'
-      - 'skills/_registry.yml'
-      - 'agents/_registry.yml'
-      - 'teams/_registry.yml'
-      - 'guides/_registry.yml'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/ci-node-cli.yml'
   workflow_dispatch:
 
 permissions:

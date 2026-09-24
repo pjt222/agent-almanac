@@ -139,6 +139,38 @@ Beispiel mit `node_type`:
 #   output:'result.parquet'
 ```
 
+**Block comment syntax** (for `//`-prefix languages only: JS, TS, Go, Rust, C, C++, Java, etc.):
+
+Languages that use `//` for line comments also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
+
+```javascript
+/* put id:'init', label:'Initialize Config', output:'config.internal' */
+
+/**
+ * put id:'process', \
+ *   label:'Process Records', \
+ *   input:'config.internal, records.json', \
+ *   output:'results.json'
+ */
+function processRecords(config, records) {
+  // ...
+}
+```
+
+JSDoc-style annotations are particularly useful when documenting workflow steps alongside API documentation:
+
+```typescript
+/**
+ * Transform raw sensor data into normalized readings.
+ * put id:'normalize', label:'Normalize Sensor Data', input:'raw_readings.json', output:'normalized.parquet'
+ */
+export function normalizeSensorData(readings: SensorReading[]): NormalizedData {
+  // ...
+}
+```
+
+> **Note:** Block comment annotations are **not** supported for `#`-prefix languages (R, Python, Shell) or `--`-prefix languages (SQL, Lua). Use only line comments for those languages. Block-originated annotations do not support backslash continuation across lines.
+
 **Dateiübergreifender Datenfluss** (Skripte über dateibasiertes I/O verbinden):
 ```r
 # Skript 1: extract.R
@@ -219,38 +251,6 @@ cat(put_diagram(merged, theme = "github"))
 - Doppelte Anführungszeichen innerhalb: `id:"name"` → `id:'name'`
 - Doppelte IDs über Dateien hinweg: jede `id` muss innerhalb des gesamten gescannten Verzeichnisses eindeutig sein
 - Backslash-Fortsetzung auf der falschen Zeile: `\` muss das letzte Zeichen vor dem Zeilenumbruch sein
-
-**Block comment syntax** (for `//`-prefix languages only: JS, TS, Go, Rust, C, C++, Java, etc.):
-
-Languages that use `//` for line comments also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
-
-```javascript
-/* put id:'init', label:'Initialize Config', output:'config.internal' */
-
-/**
- * put id:'process', \
- *   label:'Process Records', \
- *   input:'config.internal, records.json', \
- *   output:'results.json'
- */
-function processRecords(config, records) {
-  // ...
-}
-```
-
-JSDoc-style annotations are particularly useful when documenting workflow steps alongside API documentation:
-
-```typescript
-/**
- * Transform raw sensor data into normalized readings.
- * put id:'normalize', label:'Normalize Sensor Data', input:'raw_readings.json', output:'normalized.parquet'
- */
-export function normalizeSensorData(readings: SensorReading[]): NormalizedData {
-  // ...
-}
-```
-
-> **Note:** Block comment annotations are **not** supported for `#`-prefix languages (R, Python, Shell) or `--`-prefix languages (SQL, Lua). Use only line comments for those languages.
 
 ## Validierung
 

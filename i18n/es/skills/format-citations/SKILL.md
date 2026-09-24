@@ -1,190 +1,357 @@
 ---
 name: format-citations
 description: >
-  Formatear citas y bibliografías según estilos académicos específicos (APA 7,
-  Chicago, Vancouver, IEEE) usando el ecosistema CSL/citeproc. Cubre la
-  selección de archivos CSL, configuración de citeproc en flujos de trabajo
-  LaTeX, R Markdown y Quarto, resolución de casos extremos de formato, y
-  verificación de la salida renderizada contra el manual de estilo.
+  Format citations across academic styles (APA 7, Chicago, Vancouver, IEEE)
+  using CSL processors and R tooling. Convert between citation styles, generate
+  in-text citations and reference lists, and validate formatting against style
+  guides using citeproc, knitcitations, and Quarto's built-in citation engine.
+  Use when rendering a Quarto or R Markdown document with formatted citations,
+  converting a bibliography between citation styles, generating a standalone
+  reference list, or setting up citation infrastructure for a multi-document
+  project.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: citations
   complexity: intermediate
-  language: multi
-  tags: citations, csl, citeproc, apa, formatting
+  language: R
+  tags: citations, formatting, csl, apa, academic
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Formatear Citas
+# Format Citations
 
-Formatear citas en el texto y entradas de bibliografía según un estilo académico específico usando archivos CSL (Citation Style Language) con el procesador citeproc, cubriendo la selección del estilo, configuración del flujo de trabajo, manejo de casos extremos (múltiples autores, fechas faltantes, fuentes no estándar), y verificación contra el manual de estilo.
+Format citations across academic styles using CSL (Citation Style Language)
+processors and R tooling. This skill covers converting BibTeX entries into
+properly formatted in-text citations and reference lists for APA 7, Chicago,
+Vancouver, IEEE, and custom styles. It leverages Pandoc's citeproc, the
+knitcitations package, and Quarto's native citation engine for reproducible
+document production.
 
-## Cuándo Usar
+## When to Use
 
-- Formateando un manuscrito para envío a una revista con requisitos de estilo específicos
-- Cambiando entre estilos de cita (p.ej., de APA a Vancouver) para diferentes envíos
-- Resolviendo casos extremos de formato que citeproc no maneja automáticamente
-- Configurando la canalización de citas en R Markdown, Quarto o LaTeX por primera vez
-- Verificando que las citas renderizadas coinciden exactamente con las especificaciones del manual de estilo
+- Rendering an R Markdown or Quarto document with formatted citations
+- Converting a bibliography from one citation style to another
+- Generating a standalone reference list from a .bib file
+- Validating that in-text citations match a specific style guide
+- Setting up citation infrastructure for a multi-document project (book, thesis)
 
-## Entradas
+## Inputs
 
-- **Requerido**: Archivo de bibliografía (`.bib`, `.json`, `.yaml`) con entradas de referencia
-- **Requerido**: Estilo de cita objetivo (nombre del estilo o archivo `.csl`)
-- **Requerido**: Formato del documento (LaTeX, R Markdown, Quarto, Word, HTML)
-- **Opcional**: Requisitos de localización (idioma para "y", "et al.", abreviaturas de meses)
-- **Opcional**: Formato de cita requerido por la revista (si difiere del CSL estándar)
-- **Opcional**: Listas de requisitos especiales (DOIs en las referencias, URLs para contenido web, fechas de acceso)
+- **Required**: A .bib file (or other bibliography source recognized by Pandoc)
+- **Required**: Target citation style (e.g., `apa`, `chicago-author-date`, `ieee`)
+- **Optional**: CSL file path (default: uses Pandoc built-in styles)
+- **Optional**: Output format (`html`, `pdf`, `docx`; default: inferred from document)
+- **Optional**: Locale for language-specific formatting (default: `en-US`)
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Seleccionar y Obtener el Archivo CSL
+### Step 1: Verify Citation Infrastructure
 
-Identificar el archivo CSL correcto para el estilo objetivo:
+```r
+# Check Pandoc availability (required for citeproc)
+pandoc_path <- Sys.which("pandoc")
+if (!nzchar(pandoc_path)) {
+  pandoc_path <- Sys.getenv("RSTUDIO_PANDOC")
+}
+stopifnot("Pandoc not found" = nzchar(pandoc_path))
+message(sprintf("Pandoc: %s", system2(pandoc_path, "--version", stdout = TRUE)[1]))
 
-1. **Identificar el estilo**: Determinar el estilo de cita exacto requerido. Fuentes comunes: instrucciones para autores de la revista, guía de estilo de la universidad, estándares del campo (APA 7 para psicología, Vancouver para medicina, IEEE para ingeniería, Chicago para humanidades).
-2. **Buscar en el repositorio CSL**: Buscar en el repositorio oficial de estilos CSL (github.com/citation-style-language/styles) por nombre de revista o nombre de estilo. Más de 10,000 estilos están disponibles.
-3. **Verificar la versión del estilo**: Confirmar que la versión del CSL coincide con el manual de estilo actual (p.ej., APA 7a edición, no la 6a). Los archivos CSL incluyen metadatos de versión en el encabezado XML.
-4. **Descargar y ubicar**: Colocar el archivo `.csl` en el directorio del proyecto o en un directorio de estilos compartido. Documentar la ruta en la configuración del proyecto.
-5. **Verificación de localización**: Si el documento no está en inglés, verificar si el estilo CSL soporta la localización requerida. La mayoría de los estilos usan cadenas localizables (p.ej., "y" / "and", "et al.") que se adaptan según el atributo `default-locale` del archivo CSL.
-
-```yaml
-# Configuración YAML de R Markdown / Quarto
-bibliography: references.bib
-csl: apa-7th-edition.csl
-lang: es-ES
+# Check for citeproc support
+citeproc_ok <- any(grepl("citeproc", system2(pandoc_path, "--list-extensions", stdout = TRUE)))
+message(sprintf("Citeproc: %s", ifelse(citeproc_ok, "built-in", "external needed")))
 ```
 
-**Esperado:** El archivo CSL correcto está identificado, descargado y configurado en el flujo de trabajo del proyecto, con la localización verificada.
+**Expected:** Pandoc version 2.11+ detected with built-in citeproc support.
 
-**En caso de fallo:** Si no existe CSL para la revista objetivo, buscar un estilo de la misma editorial (los estilos a menudo se comparten entre revistas de la misma editorial). Como último recurso, personalizar el CSL más cercano -- los archivos CSL son XML legible y los cambios comunes (puntuación, orden de autor) están bien documentados.
+**On failure:** Install Pandoc or set `RSTUDIO_PANDOC` in `.Renviron` to point to
+the RStudio-bundled Pandoc. Quarto also ships its own Pandoc.
 
-### Paso 2: Configurar la Canalización de Citas
+### Step 2: Configure Document YAML for Citations
 
-Conectar el archivo de bibliografía, el estilo CSL y el sistema de documentos:
+For R Markdown:
 
-1. **R Markdown / Quarto**:
-   - Agregar `bibliography:` y `csl:` al encabezado YAML
-   - Las citas en el texto usan la sintaxis `[@claveAutor2024]` para paréntesis o `@claveAutor2024` para narrativa
-   - La bibliografía se renderiza automáticamente al final del documento o en un div `{#refs}`
-   - Para múltiples archivos `.bib`: `bibliography: [refs1.bib, refs2.bib]`
+```yaml
+---
+title: "My Document"
+bibliography: references.bib
+csl: apa.csl
+link-citations: true
+output:
+  html_document:
+    pandoc_args: ["--citeproc"]
+---
+```
 
-2. **LaTeX con BibLaTeX**:
-   ```latex
-   \usepackage[style=apa,backend=biber]{biblatex}
-   \addbibresource{references.bib}
-   % En el cuerpo: \parencite{clave} o \textcite{clave}
-   % Al final: \printbibliography
-   ```
+For Quarto:
 
-3. **LaTeX con BibTeX (legado)**:
-   ```latex
-   \bibliographystyle{plain}  % o apalike, ieeetr, etc.
-   \bibliography{references}
-   % En el cuerpo: \cite{clave}
-   ```
+```yaml
+---
+title: "My Document"
+bibliography: references.bib
+csl: apa.csl
+link-citations: true
+cite-method: citeproc
+---
+```
 
-4. **Pandoc directo**: `pandoc input.md --citeproc --bibliography=references.bib --csl=style.csl -o output.docx`
+**Expected:** YAML header correctly references the .bib file and CSL style.
 
-5. **Compilación de prueba**: Renderizar el documento con un subconjunto de citas para verificar que la canalización funciona antes de procesar el documento completo.
+**On failure:** If the CSL file is not found, download it from the CSL repository
+(see Step 3) and place it in the project directory.
 
-**Esperado:** La canalización de citas está configurada y una compilación de prueba produce citas formateadas y una bibliografía sin errores.
+### Step 3: Obtain and Customize CSL Style Files
 
-**En caso de fallo:** Si las citas aparecen como `[@clave]` sin formato en la salida, citeproc no se está ejecutando. En R Markdown, asegurar que `pandoc-citeproc` o `--citeproc` está habilitado. En Quarto, la cita es automática. En LaTeX, ejecutar la secuencia completa de compilación: `pdflatex` -> `biber` (o `bibtex`) -> `pdflatex` -> `pdflatex`.
+```r
+# Common CSL styles and their repository names
+csl_styles <- list(
+  apa         = "apa.csl",
+  chicago     = "chicago-author-date.csl",
+  vancouver   = "vancouver.csl",
+  ieee        = "ieee.csl",
+  nature      = "nature.csl",
+  harvard     = "harvard-cite-them-right.csl",
+  mla         = "modern-language-association.csl"
+)
 
-### Paso 3: Manejar Casos Extremos de Formato
+download_csl <- function(style, dest_dir = ".") {
+  base_url <- "https://raw.githubusercontent.com/citation-style-language/styles/master"
+  filename <- csl_styles[[style]]
+  if (is.null(filename)) stop(sprintf("Unknown style: %s", style))
+  dest <- file.path(dest_dir, filename)
+  utils::download.file(
+    url = sprintf("%s/%s", base_url, filename),
+    destfile = dest, quiet = TRUE
+  )
+  message(sprintf("Downloaded %s to %s", filename, dest))
+  dest
+}
 
-Resolver los problemas de formato de citas más comunes que la automatización no resuelve completamente:
+# Download APA 7 style
+download_csl("apa")
+```
 
-1. **Múltiples autores**:
-   - APA: 1-2 autores: siempre listar todos. 3+ autores: usar "et al." desde la primera cita.
-   - Vancouver: listar hasta 6, luego "et al."
-   - Chicago: listar hasta 3 en nota, abreviar en notas subsecuentes
-   - Verificar que el CSL implementa la regla correcta de truncamiento de autores
+A downloaded style is rarely the last word — journals routinely deviate from the
+canonical style in small ways, and the fix is to edit the `.csl` file rather than to
+post-process the rendered output.
 
-2. **Autores corporativos**: Proteger los nombres para evitar que se analicen como `Apellido, Nombre`: en BibTeX usar `author = {{Organización Mundial de la Salud}}` (doble llave).
+A CSL style is XML rooted in a `<style>` element that declares the CSL namespace as
+its default (`xmlns="http://purl.org/net/xbiblio/csl"`). Elements inside the file are
+therefore written **unprefixed** — `<citation>`, `<bibliography>`, `<sort>`. The CSL
+specification names the same elements as `cs:style`, `cs:citation` and so on; that
+prefix is the spec's notation for talking about them, not text you will find in
+`apa.csl`. Searching a downloaded style for `<cs:citation>` returns nothing.
 
-3. **Fechas faltantes o parciales**: Usar `year = {s.f.}` para sin fecha (APA) o `year = {en prensa}`. Verificar que el CSL maneja estas cadenas especiales correctamente.
+Four parts account for nearly every journal-specific tweak:
 
-4. **Contenido web y URLs**: Agregar `url` y `urldate` (fecha de acceso) para recursos en línea. APA requiere formato "Recuperado el [fecha] de [URL]"; Vancouver usa "Disponible en: [URL]".
+- **Where the two formats live.** `<citation>` is required and appears exactly once;
+  it controls the in-text citation or footnote. `<bibliography>` is optional and
+  controls the reference list. Changing how a citation looks in the text and changing
+  how it looks in the reference list are edits to *different* elements — this is the
+  most common source of "I changed it and nothing happened".
+- **Sort order.** Both `<citation>` and `<bibliography>` may carry a `<sort>` child,
+  which must appear *before* `<layout>` and must contain one or more `<key>`
+  elements. This is what switches a bibliography between author-alphabetical,
+  by-year, and citation-order.
+- **"et al." thresholds.** `et-al-min` and `et-al-use-first` together enable et-al
+  abbreviation: once the author count reaches `et-al-min`, the list truncates after
+  `et-al-use-first` names. Set them on `<name>`, or inherit them from `<style>`,
+  `<citation>`, or `<bibliography>`.
+- **Localization.** Set the `default-locale` attribute on the root `<style>` element
+  to translate style-generated terms ("and", "et al.", "eds."). The attribute is
+  `default-locale` — a bare `locale` attribute belongs on `<locale>` elements and
+  will not do this.
 
-5. **DOI como enlace**: Formatear DOIs como URLs completas (`https://doi.org/10.1234/example`) según las directrices actuales. Algunos estilos prefieren `doi:10.1234/example`.
+Validate any edited style at <https://validator.citationstyles.org/>, which checks a
+file (by URL, upload, or paste) against the CSL schema and reports the offending line.
+Do this before rendering: Pandoc's failure mode for a malformed style is unhelpful.
 
-6. **Citas secundarias**: Para citas "como se citó en", citar solo la fuente secundaria en la bibliografía pero mencionar la primaria en el texto: `(Estudio original, como se citó en @fuenteSecundaria2024)`.
+**Expected:** CSL file downloaded to the project directory, and any journal-specific
+edits validate cleanly against the CSL schema.
 
-7. **Múltiples trabajos del mismo autor/año**: Agregar sufijos de letra: `miller2024a`, `miller2024b`. La mayoría de los procesadores CSL manejan esto automáticamente si las entradas `.bib` tienen años idénticos y autores coincidentes.
+**On failure:** Check network connectivity. The CSL GitHub repository contains 10,000+
+styles. For offline use, bundle required CSL files in the project. If an edited style
+fails validation, the validator names the line — the usual causes are a `<sort>`
+placed after `<layout>` rather than before it, and a misspelled attribute, which the
+schema rejects rather than ignores.
 
-**Esperado:** Todos los casos extremos están resueltos con un formato que coincide con las especificaciones del manual de estilo.
+### Step 4: Write In-Text Citations
 
-**En caso de fallo:** Si citeproc no produce la salida correcta para un caso extremo, considerar: (1) editar el archivo CSL para el caso específico, (2) agregar texto estático en el documento para anular la cita automática, o (3) contactar al mantenedor del estilo CSL con un informe de error.
+Use Pandoc citation syntax in your document body:
 
-### Paso 4: Verificar Contra el Manual de Estilo
+```markdown
+<!-- Single citation -->
+According to @Smith2020, the method improves accuracy.
 
-Comparar la salida renderizada con ejemplos del manual de estilo:
+<!-- Parenthetical citation -->
+The method improves accuracy [@Smith2020].
 
-1. **Citas en el texto**: Para cada tipo de cita (paréntesis, narrativa, con página, múltiples fuentes), verificar:
-   - Puntuación correcta (comas, punto y coma, ampersand vs. "y")
-   - Orden correcto de autores
-   - Regla correcta de "et al."
-   - Formato de número de página ("pp. 23-45" vs. "23-45")
+<!-- Multiple citations -->
+Several studies confirm this [@Smith2020; @Jones2021; @Lee2022].
 
-2. **Entradas de bibliografía**: Para cada tipo de referencia (artículo, libro, capítulo, web, tesis), verificar:
-   - Orden de los elementos (autor, año, título, revista, volumen, páginas, DOI)
-   - Formato de puntuación entre elementos
-   - Cursiva/negrita aplicada correctamente (títulos de revistas en cursiva en APA, títulos de artículos en cursiva en Chicago notas)
-   - Sangría francesa (si es requerida por el estilo)
+<!-- Citation with page number -->
+As noted by @Smith2020 [p. 42], the results are significant.
 
-3. **Elementos especiales**: Verificar el formato de ediciones traducidas, reimpresiones, artículos con número de artículo en lugar de páginas, conjuntos de datos, software y redes sociales (si se citan).
+<!-- Suppress author name -->
+The results are significant [-@Smith2020].
 
-4. **Documentar desviaciones**: Si el procesador CSL no puede reproducir exactamente el estilo manual para ciertos tipos de entrada, documentar la desviación y decidir si es aceptable o requiere corrección manual.
+<!-- Citation with prefix -->
+[see @Smith2020, pp. 42-45; also @Jones2021, ch. 3]
+```
 
-**Esperado:** Las citas renderizadas coinciden con los ejemplos del manual de estilo para todos los tipos de referencia encontrados en el documento.
+**Expected:** Pandoc/Quarto renders these into properly formatted citations in the
+target style (e.g., `(Smith, 2020)` for APA, `(Smith 2020)` for Chicago).
 
-**En caso de fallo:** Para desviaciones menores (una coma en lugar de un punto en un lugar), evaluar si la revista/institución acepta la salida del procesador CSL tal cual. Muchas revistas aceptan CSL estándar aunque difiera ligeramente de su guía. Para desviaciones mayores, editar el CSL o aplicar correcciones manuales en la etapa de prueba final.
+### Step 5: Generate Standalone Reference Lists with R
 
-### Paso 5: Producir Bibliografía Final
+```r
+# Using RefManageR to print formatted references
+library(RefManageR)
+BibOptions(style = "text", bib.style = "authoryear", sorting = "nyt")
+bib <- ReadBib("references.bib", check = FALSE)
 
-Generar la bibliografía final lista para publicación:
+# Print all entries in text format
+print(bib)
 
-1. **Renderizar documento completo**: Compilar el documento completo y examinar la bibliografía en su totalidad.
-2. **Verificar completitud**: Asegurar que cada referencia citada en el texto aparece en la bibliografía y viceversa (sin referencias huérfanas ni citas no citadas).
-3. **Orden de clasificación**: Verificar que la bibliografía está ordenada según el estilo (alfabético por autor en APA, numérico en orden de aparición en Vancouver).
-4. **Formato consistente**: Escanear visualmente toda la lista buscando inconsistencias (mezcla de puntos y comas, mayúsculas inconsistentes en títulos, DOIs parcialmente formateados).
-5. **Exportar para envío**: Generar el formato requerido por la revista (.docx, .pdf, .tex). Si se requiere un archivo `.bib` separado para envío, incluirlo con solo las entradas citadas.
+# Format specific entries
+print(bib[author = "Smith"])
 
-**Esperado:** Una bibliografía completa, correctamente formateada y lista para envío que coincide con los requisitos de estilo del destino.
+# Generate markdown reference list programmatically
+format_reference_list <- function(bib, style = "apa") {
+  BibOptions(style = "text", bib.style = "authoryear")
+  entries <- capture.output(print(bib))
+  entries <- entries[nzchar(trimws(entries))]
+  paste(sprintf("- %s", entries), collapse = "\n")
+}
 
-**En caso de fallo:** Si se descubren errores después del renderizado final, corregir en el archivo `.bib` fuente (no en el documento de salida) y volver a renderizar. Las correcciones manuales en el documento de salida se perderán al recompilar.
+cat(format_reference_list(bib))
+```
 
-## Validación
+**Expected:** Formatted reference list printed to console or captured as character
+vector for further processing.
 
-- [ ] Archivo CSL correcto identificado y verificado contra la versión actual del manual de estilo
-- [ ] Canalización de citas configurada y verificada con compilación de prueba
-- [ ] Casos extremos de formato resueltos (múltiples autores, autores corporativos, fechas faltantes, URLs)
-- [ ] Citas en el texto verificadas contra los ejemplos del manual de estilo
-- [ ] Entradas de bibliografía verificadas contra los ejemplos del manual de estilo para cada tipo de referencia
-- [ ] Sin referencias huérfanas ni citas faltantes
-- [ ] Orden de clasificación de la bibliografía correcto
-- [ ] Documento final renderizado y verificado visualmente
+### Step 6: Convert Between Citation Styles
 
-## Errores Comunes
+```r
+# Render the same document in different styles
+styles <- c("apa", "chicago", "ieee")
 
-- **Usar un CSL desactualizado**: Los manuales de estilo se actualizan (APA 6 a 7, Chicago 16 a 17). Usar un CSL viejo produce un formato que no cumple con los requisitos actuales. Siempre verificar que la versión del CSL coincide con la edición requerida.
-- **Ignorar la localización**: Un CSL en inglés en un documento en español producirá "and" en lugar de "y", "Retrieved from" en lugar de "Recuperado de". Establecer `lang:` en el YAML o `default-locale` en el CSL.
-- **Protección excesiva con llaves en títulos**: `title = {{Cada Palabra en Llaves}}` evita que BibTeX ajuste las mayúsculas, pero también evita que el estilo de cita aplique sus reglas de capitalización. Proteger solo acrónimos y nombres propios.
-- **No distinguir paréntesis de narrativa**: `[@clave]` produce "(Autor, 2024)" mientras que `@clave` produce "Autor (2024)". Usar la forma incorrecta causa errores gramaticales en el texto.
-- **Corregir manualmente la salida en lugar del fuente**: Las correcciones en el archivo Word o PDF renderizado se pierden al recompilar. Siempre corregir en el archivo `.bib` o `.csl` fuente.
-- **Mezclar sistemas de citas**: Usar tanto BibTeX como citeproc en el mismo documento causa conflictos. Elegir un sistema y usarlo exclusivamente.
+for (style in styles) {
+  csl_file <- download_csl(style)
+  output_file <- sprintf("output_%s.html", style)
 
-## Habilidades Relacionadas
+  rmarkdown::render(
+    input = "document.Rmd",
+    output_file = output_file,
+    params = list(csl = csl_file),
+    quiet = TRUE
+  )
+  message(sprintf("Rendered %s with %s style", output_file, style))
+}
+```
 
-- `manage-bibliography` -- gestionar la colección bibliográfica que alimenta este flujo de trabajo de formato
-- `validate-references` -- verificar la integridad de las referencias antes del formato
-- `write-roxygen-docs` -- documentación R con citas integradas
+For Quarto:
+
+```bash
+quarto render document.qmd --metadata csl:apa.csl -o output_apa.html
+quarto render document.qmd --metadata csl:ieee.csl -o output_ieee.html
+```
+
+**Expected:** Multiple output files, each with the same content formatted in a
+different citation style.
+
+**On failure:** If rendering fails, check that all citation keys in the document body
+exist in the .bib file. Missing keys produce warnings but may break formatting.
+
+### Step 7: Validate Citation Formatting
+
+```r
+# Check for undefined citations in rendered output
+validate_citations <- function(rmd_file, bib_file) {
+  # Extract citation keys from document
+  doc_text <- readLines(rmd_file, warn = FALSE)
+  doc_keys <- unique(unlist(regmatches(
+    doc_text,
+    gregexpr("@([A-Za-z][A-Za-z0-9_:.#$%&+-?<>~/]*)", doc_text)
+  )))
+  doc_keys <- gsub("^@", "", doc_keys)
+  # Remove false positives (email-like patterns)
+  doc_keys <- doc_keys[!grepl("\\.", doc_keys)]
+
+  # Extract keys from .bib file
+  bib <- RefManageR::ReadBib(bib_file, check = FALSE)
+  bib_keys <- names(bib)
+
+  # Find mismatches
+  undefined <- setdiff(doc_keys, bib_keys)
+  unused <- setdiff(bib_keys, doc_keys)
+
+  list(
+    undefined = undefined,
+    unused = unused,
+    cited = intersect(doc_keys, bib_keys)
+  )
+}
+
+result <- validate_citations("document.Rmd", "references.bib")
+if (length(result$undefined) > 0) {
+  warning(sprintf("Undefined citation keys: %s",
+                  paste(result$undefined, collapse = ", ")))
+}
+if (length(result$unused) > 0) {
+  message(sprintf("Unused .bib entries: %s",
+                  paste(result$unused, collapse = ", ")))
+}
+```
+
+**Expected:** Report of undefined keys (cited but not in .bib), unused entries
+(in .bib but never cited), and valid citations.
+
+**On failure:** False positives may occur with email addresses or code containing `@`.
+Refine the regex or manually review flagged keys.
+
+## Validation
+
+- [ ] Document renders without citation warnings from Pandoc/citeproc
+- [ ] All `@key` references in the document resolve to .bib entries
+- [ ] Reference list appears at the end of the document (or in `div#refs`)
+- [ ] In-text citations match the target style format
+- [ ] Citation sorting follows style rules (alphabetical for APA, numbered for IEEE)
+- [ ] Hyperlinks from in-text citations to reference list entries work (if `link-citations: true`)
+
+## Common Pitfalls
+
+- **Missing CSL file**: Pandoc falls back to Chicago author-date if no CSL is
+  specified. Always set `csl:` explicitly for style consistency
+- **Citation key typos**: A misspelled key like `@Smtih2020` silently renders as
+  literal text. Enable Pandoc warnings with `--verbose` to catch these
+- **Locale-dependent formatting**: APA requires "and" between authors in English
+  but "und" in German. Set `lang:` in the YAML header to match
+- **nocite for uncited entries**: To include entries in the reference list without
+  citing them in text, add `nocite: '@*'` (all) or `nocite: '@key1, @key2'` to YAML
+- **CSL version mismatch**: Some older CSL 0.8 files are incompatible with modern
+  Pandoc. Always use CSL 1.0+ from the official repository
+- **Quarto vs R Markdown differences**: Quarto uses `cite-method: citeproc` by
+  default; R Markdown may need explicit `pandoc_args: ["--citeproc"]`
+- **Confusing CSL styles with LaTeX bibliography styles**: three separate formats
+  answer to "APA style" and none is interchangeable with the others. `.csl` drives
+  Pandoc, Quarto, and Zotero. Legacy BibTeX uses `.bst` files, selected with
+  `\bibliographystyle{}` and processed by the `bibtex` program. Modern biblatex uses
+  its own `.bbx`/`.cbx` styles, selected with `\usepackage[style=apa]{biblatex}` and
+  processed by `biber`. Putting a `.csl` filename in a `csl:` field is right; putting
+  one anywhere in a LaTeX preamble is not, and each of these tools fails on the
+  others' files in ways that do not name the cause
+
+## Related Skills
+
+- `manage-bibliography` - create and maintain the .bib files this skill consumes
+- `validate-references` - verify .bib entry completeness before formatting
+- `../reporting/format-apa-report` - full APA report formatting beyond citations
+- `../reporting/create-quarto-report` - Quarto document setup with citation support

@@ -18,7 +18,7 @@ metadata:
   domain: esoteric
   complexity: advanced
   language: natural
-  tags: esoteric, healing, self-repair, meta-cognition, ai-self-application
+  tags: esoteric, healing, self-assessment, meta-cognition, subsystem-check
   locale: es
   source_locale: en
   source_commit: 33b561c9

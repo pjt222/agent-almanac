@@ -255,6 +255,31 @@ if (!result.success) {
 
 创建模式文档页面，包含概述、字段表、变更日志和兼容性策略。
 
+```markdown
+# Measurement Schema (v1)
+
+## Overview
+Represents a single sensor reading with metadata.
+
+## Fields
+| Field | Type | Required | Description | Constraints |
+|-------|------|----------|-------------|-------------|
+| sensor_id | string | Yes | Unique sensor ID | Pattern: `^[a-z]+-[0-9]+$` |
+| value | number | Yes | Measured value | Any valid IEEE 754 double |
+| unit | enum | Yes | Unit of measurement | One of: celsius, fahrenheit, kelvin, percent, ppm |
+| timestamp | string | Yes | Reading time | ISO 8601 with timezone |
+| metadata | object | No | Key-value pairs | String keys and values |
+
+## Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| v1 | 2025-03-01 | Initial schema |
+
+## Compatibility
+- **Backwards**: Consumers of v1 will continue to work with future versions
+- **Policy**: Only additive, optional field changes between minor versions
+```
+
 **预期结果：** 文档自动生成或与模式定义保持同步。
 **失败处理：** 如果文档与模式不同步，添加 CI 检查来验证文档与模式源的一致性。
 

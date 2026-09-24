@@ -1,6 +1,6 @@
 # Guides
 
-34 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+35 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -17,6 +17,9 @@ Designing agent personas, composing teams, and choosing coordination patterns.
 
 ### [Creating Workflows](creating-workflows.md)
 Authoring code-driven orchestration workflows — the meta contract, the agent/parallel/pipeline/phase primitives, and the capability rule.
+
+### [Coordinating Peer Sessions](coordinate-peer-sessions.md)
+Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, and what the guard cannot see.
 
 ### [Running a Code Review](running-a-code-review.md)
 Multi-agent code review using review teams for R packages and web projects.
@@ -116,3 +119,10 @@ The adaptic concept — panoramic synthesis through simultaneous multi-domain aw
 
 ### [Agent Memory Hygiene](agent-memory-hygiene.md)
 Three-layer model — weights, retrieval, behavior — for diagnosing what kind of forgetting a memory problem actually needs and applying the right tool.
+
+## Investigation
+
+*Methodology guides for legitimate research, audit, and reverse-engineering of integration surfaces*
+
+### [Reverse-Engineering a CLI Harness](reverse-engineering-a-cli-harness.md)
+Five-phase methodology for legitimate integration research against a closed-source CLI harness — baseline, flag discovery, dark-launch detection, wire capture, redaction discipline.

@@ -70,7 +70,10 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 2.3. Verify the scaffolded file has translation frontmatter fields:
    - `locale` — matches target locale
    - `source_locale` — `en`
-   - `source_commit` — current git short hash
+   - `source_commit` — current git short hash; the English revision a human translated against
+   - `fence_basis_commit` — the revision this file's frozen fences were verified against (#552).
+     Equal to `source_commit` on a fresh scaffold, because a scaffold is a byte copy, and they
+     diverge from the first edit of either kind. Never move this one by hand.
    - `translator` — attribution string
    - `translation_date` — today's date
 

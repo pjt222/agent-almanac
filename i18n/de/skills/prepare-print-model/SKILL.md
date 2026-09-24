@@ -54,16 +54,14 @@ metadata:
 Das 3D-Modell in einem geeigneten Format fuer den Druck exportieren:
 
 **Fuer FDM/SLA**:
-```bash
-# If starting from CAD (Fusion 360, SolidWorks)
-# Export as: STL (binary) or 3MF
-# Resolution: High (triangle count sufficient for detail)
-# Units: mm (verify scale)
+Bei Start aus CAD (Fusion 360, SolidWorks)
+Exportieren als: STL (binaer) oder 3MF
+Aufloesung: Hoch (Dreiecksanzahl ausreichend fuer Details)
+Einheiten: mm (Massstab ueberpruefen)
 
-# Example export settings:
-# STL: Binary format, refinement 0.1mm
-# 3MF: Include color/material data if using multi-material printer
-```
+Beispiel-Exporteinstellungen:
+STL: Binaerformat, Verfeinerung 0.1mm
+3MF: Farb-/Materialdaten einschliessen bei Multimaterial-Drucker
 
 **Erwartet:** Modelldatei mit geeigneter Aufloesung exportiert (0.1mm Sehnentoleranz fuer mechanische Teile, 0.05mm fuer organische Formen).
 
@@ -130,16 +128,14 @@ Mindestwandstaerke fuer gewaehltes Verfahren verifizieren:
 | SLA (Engineering) | 0.6mm | 1.2mm | 2.5mm+ |
 | SLS (Nylon) | 0.7mm | 1.0mm | 2.0mm+ |
 
-```bash
-# Check wall thickness visually in slicer:
-# - Import model
-# - Enable "Thin walls" detection
-# - Slice with 0 infill to see wall structure
+Wandstaerke visuell im Slicer pruefen:
+- Modell importieren
+- "Duennwaende"-Erkennung aktivieren
+- Mit 0 Fuellung slicen um Wandstruktur zu sehen
 
-# For precise measurement, use CAD software:
-# - Measure distance between parallel surfaces
-# - Check in critical load-bearing areas
-```
+Fuer praezise Messung CAD-Software verwenden:
+- Abstand zwischen parallelen Flaechen messen
+- In kritischen lasttragenden Bereichen pruefen
 
 **Erwartet:** Alle Waende erfuellen Mindeststärke fuer gewaehltes Verfahren. Duenne Waende zur Pruefung markiert.
 
@@ -211,15 +207,13 @@ Automatische oder manuelle Stuetzstrukturen fuer Ueberhaenge konfigurieren:
 - Reduziert Oberflaechenmarkierungen
 - Etwas einfachere Entfernung
 
-```bash
-# In slicer (PrusaSlicer example):
-# Print Settings → Support material
-# - Generate support material: Yes
-# - Overhang threshold: 45° (FDM) / 30° (SLA)
-# - Pattern: Rectilinear / Tree (auto)
-# - Interface layers: 3
-# - Interface pattern spacing: 0.2mm
-```
+Im Slicer (PrusaSlicer Beispiel):
+Print Settings → Support material
+- Generate support material: Yes
+- Overhang threshold: 45° (FDM) / 30° (SLA)
+- Pattern: Rectilinear / Tree (auto)
+- Interface layers: 3
+- Interface pattern spacing: 0.2mm
 
 **Erwartet:** Stuetzstrukturen fuer alle Ueberhaenge ueber Schwellenwertwinkel generiert, Vorschau zeigt keine schwebende Geometrie.
 
@@ -275,17 +269,15 @@ retract_speed: 150-180mm/min
 
 Gesliceten G-Code auf Probleme untersuchen:
 
-```bash
-# In slicer:
-# - Slice model
-# - Use layer preview slider to inspect each layer
-# - Check for:
-#   * Gaps in perimeters (indicates thin walls)
-#   * Floating regions (missing supports)
-#   * Excessive stringing paths (reduce travel)
-#   * First layer: proper squish and adhesion
-#   * Top layers: sufficient solid infill
-```
+Im Slicer:
+- Modell slicen
+- Schichtvorschau-Schieberegler zur Inspektion jeder Schicht verwenden
+- Pruefen auf:
+  * Luecken in Perimetern (zeigt duenne Waende an)
+  * Schwebende Bereiche (fehlende Stuetzstrukturen)
+  * Uebermassige Fadenzieh-Pfade (Fahrwege reduzieren)
+  * Erste Schicht: korrekte Anpressung und Haftung
+  * Obere Schichten: ausreichende Vollmaterial-Fuellung
 
 **Warnsignale in der Vorschau**:
 - **Weisse Luecken in Vollbereichen**: Waende zu duenn fuer aktuelle Linienbreite

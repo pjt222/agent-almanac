@@ -124,6 +124,24 @@ enum Unit {
 }
 ```
 
+#### Apache-Avro-Beispiel:
+
+```json
+{
+  "type": "record",
+  "name": "Measurement",
+  "namespace": "com.example.sensors",
+  "doc": "A sensor measurement reading",
+  "fields": [
+    {"name": "sensor_id", "type": "string", "doc": "Unique sensor identifier"},
+    {"name": "value", "type": "double", "doc": "Measured value"},
+    {"name": "unit", "type": {"type": "enum", "name": "Unit", "symbols": ["CELSIUS", "FAHRENHEIT", "KELVIN", "PERCENT", "PPM"]}},
+    {"name": "timestamp", "type": {"type": "long", "logicalType": "timestamp-millis"}},
+    {"name": "metadata", "type": ["null", {"type": "map", "values": "string"}], "default": null}
+  ]
+}
+```
+
 **Erwartet:** Schema ist selbstdokumentierend mit Beschreibungen, Beschraenkungen und klaren Typdefinitionen.
 **Bei Fehler:** Falls das Datenmodell noch nicht stabil ist, das Schema als `draft` markieren und die Veroeffentlichung in einer Registry vermeiden.
 
@@ -147,6 +165,48 @@ Sichere Evolutionsstrategie:
 2. **Niemals entfernen oder umbenennen** -- stattdessen deprecaten
 3. **Schema versionieren** im Bezeichner (`v1`, `v2`)
 4. **Schema-Registry verwenden** fuer Binaerformate (Confluent Schema Registry fuer Avro/Protobuf)
+
+#### Protobuf-Evolutionsregeln:
+
+```protobuf
+// v1 — original
+message Measurement {
+  string sensor_id = 1;
+  double value = 2;
+  Unit unit = 3;
+}
+
+// v2 — safe evolution
+message Measurement {
+  string sensor_id = 1;
+  double value = 2;
+  Unit unit = 3;
+  // NEW: added in v2 — old clients ignore this field
+  google.protobuf.Timestamp timestamp = 4;
+  // DEPRECATED: use sensor_id instead
+  reserved 6;
+  reserved "old_sensor_name";
+}
+```
+
+#### JSON-Schema-Versionierung:
+
+```json
+{
+  "$id": "https://example.com/schemas/measurement/v2",
+  "allOf": [
+    {"$ref": "https://example.com/schemas/measurement/v1"},
+    {
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "Added in v2: GPS coordinates"
+        }
+      }
+    }
+  ]
+}
+```
 
 **Erwartet:** Evolutionsplan dokumentiert: welche Aenderungen sicher sind, welche neue Versionen erfordern.
 **Bei Fehler:** Falls eine brechende Aenderung unvermeidlich ist, das Schema versionieren (v1 -> v2) und parallele Unterstuetzung waehrend der Migration aufrechterhalten.
@@ -201,6 +261,31 @@ if (!result.success) {
 ### Schritt 5: Schema dokumentieren
 
 Eine Schema-Dokumentationsseite erstellen mit Uebersicht, Feldbeschreibungen, Aenderungsprotokoll und Kompatibilitaetsrichtlinie.
+
+```markdown
+# Measurement Schema (v1)
+
+## Overview
+Represents a single sensor reading with metadata.
+
+## Fields
+| Field | Type | Required | Description | Constraints |
+|-------|------|----------|-------------|-------------|
+| sensor_id | string | Yes | Unique sensor ID | Pattern: `^[a-z]+-[0-9]+$` |
+| value | number | Yes | Measured value | Any valid IEEE 754 double |
+| unit | enum | Yes | Unit of measurement | One of: celsius, fahrenheit, kelvin, percent, ppm |
+| timestamp | string | Yes | Reading time | ISO 8601 with timezone |
+| metadata | object | No | Key-value pairs | String keys and values |
+
+## Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| v1 | 2025-03-01 | Initial schema |
+
+## Compatibility
+- **Backwards**: Consumers of v1 will continue to work with future versions
+- **Policy**: Only additive, optional field changes between minor versions
+```
 
 **Erwartet:** Dokumentation ist automatisch generiert oder bleibt mit der Schema-Definition synchron.
 **Bei Fehler:** Falls Dokumentation vom Schema abweicht, einen CI-Check hinzufuegen, der die Dokumentation gegen die Schema-Quelle validiert.

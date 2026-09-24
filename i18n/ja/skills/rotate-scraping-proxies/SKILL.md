@@ -71,16 +71,15 @@ metadata:
 ワークフロー全体を、文書化された法的・倫理的レビューの通過を条件として
 ゲートします。この手順を飛ばすことが、害の最大の発生源です。
 
-```python
-# Inputs to confirm before writing any code:
-# 1. Is the data public (no login required)?
-# 2. Does robots.txt permit the path?
-# 3. Does the site's ToS prohibit automated access? (read it)
-# 4. Would the scraping process personal data? If yes, what is the legal basis?
-# 5. Could this access circumvent geo-licensing, paywalls, or auth?
-# 6. Is there a public API or data dump that would make scraping unnecessary?
-# 7. Have you contacted the site owner if scope is large?
-```
+コードを書き始める前に確認すべき入力:
+
+1. データは公開されているか（ログイン不要か）？
+2. robots.txt は該当パスを許可しているか？
+3. サイトの ToS は自動アクセスを禁止していないか？（実際に読む）
+4. 処理対象に個人データは含まれるか？ 含まれる場合、法的根拠は何か？
+5. このアクセスは地理ライセンス、有料コンテンツ、認証の回避になり得るか？
+6. スクレイピング不要にできる公開 API やデータダンプは存在しないか？
+7. 範囲が大きい場合、サイト運営者に連絡したか？
 
 **Expected:** すべての質問に、説明可能な書面での回答が揃っている。最初に
 「いいえ」または「不明」が出た時点で、解決するまで手順を停止する。

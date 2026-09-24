@@ -3,6 +3,7 @@ name: create-glyph
 locale: zh-CN
 source_locale: en
 source_commit: 33b561c9
+fence_basis_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -224,31 +225,21 @@ print(p)
 
 ### 步骤 5：渲染 — 生成图标
 
-运行构建流水线渲染 WebP 文件。
+运行图标流水线渲染新字形。始终使用 `build.sh` 作为入口点 — 它会处理平台检测和 R 二进制文件的选择。完整的标志参考和流水线架构见 [render-icon-pipeline](../render-icon-pipeline/SKILL.md)。
 
-1. 切换到 `viz/` 目录
-2. 根据实体类型进行渲染：
-
-**技能：**
 ```bash
-cd viz && Rscript build-icons.R --only <domain>
-# Or skip existing: Rscript build-icons.R --only <domain> --skip-existing
+# From project root — renders all palettes, standard + HD, skips existing icons
+bash viz/build.sh --only <domain> --skip-existing          # skills
+bash viz/build.sh --type agent --only <id> --skip-existing # agents
+bash viz/build.sh --type team --only <id> --skip-existing  # teams
+
+# Dry run first:
+bash viz/build.sh --only <domain> --dry-run
 ```
 
-**代理：**
-```bash
-cd viz && Rscript build-agent-icons.R --only <agent-id>
-# Or skip existing: Rscript build-agent-icons.R --only <agent-id> --skip-existing
-```
+`build.sh` 会运行完整流水线（调色板 → 数据 → 清单 → 渲染 → 终端字形）。非渲染步骤约需 10 秒，但可确保所有数据都是最新的。
 
-**团队：**
-```bash
-cd viz && Rscript build-team-icons.R --only <team-id>
-# Or skip existing: Rscript build-team-icons.R --only <team-id> --skip-existing
-```
-
-3. 如需先进行试运行，在任何命令后添加 `--dry-run`
-4. 输出位置：
+输出位置：
    - 技能：`viz/public/icons/<palette>/<domain>/<skill-id>.webp`
    - 代理：`viz/public/icons/<palette>/agents/<agent-id>.webp`
    - 团队：`viz/public/icons/<palette>/teams/<team-id>.webp`
@@ -317,7 +308,7 @@ cd viz && Rscript build-team-icons.R --only <team-id>
 
 ### 领域与实体调色板
 
-所有 58 个领域颜色（技能用）定义在 `viz/R/palettes.R` 中（唯一的真实数据来源）。代理和团队颜色也在 `palettes.R` 中管理。cyberpunk 调色板（手动调整的霓虹色）在 `get_cyberpunk_colors()` 中。Viridis 系列调色板通过 `viridisLite` 自动生成。
+所有领域颜色（技能用）定义在 `viz/R/palettes.R` 中（唯一的真实数据来源）。代理和团队颜色也在 `palettes.R` 中管理。cyberpunk 调色板（手动调整的霓虹色）在 `get_cyberpunk_colors()` 中。Viridis 系列调色板通过 `viridisLite` 自动生成。
 
 查找颜色：
 ```r
@@ -330,7 +321,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 添加新领域时，需在 `palettes.R` 的三个位置添加：
 1. `PALETTE_DOMAIN_ORDER`（按字母排序）
 2. `get_cyberpunk_colors()` 领域列表
-3. 运行 `Rscript generate-palette-colors.R` 重新生成 JSON + JS
+3. 运行 `bash viz/build.sh` 重新生成调色板、数据和清单
 
 ### 符号函数目录
 

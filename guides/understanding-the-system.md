@@ -128,7 +128,7 @@ A workflow is a code-driven orchestration script run by Claude Code's Workflow t
 - A pure-literal **`export const meta`** with `name` (equal to the filename stem), `description`, and `phases`.
 - An **async body** using the injected primitives `agent()`, `pipeline()`, `parallel()`, `phase()`, and `log()`, plus the `args` and `budget` globals.
 
-Claude Code discovers workflows from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or the `/<name>` slash command. The library ships two reviewed seeds — `review-changes` and `batch-generate-waves` — plus a `create-workflow` meta-skill; the full registry, CLI install, and registry-sync validation are deferred (Phase 2). See [Creating Workflows](creating-workflows.md).
+Claude Code discovers workflows from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or the `/<name>` slash command. The seeds that ship are listed in [the workflows README](../workflows/README.md); this sentence names neither a count nor a set, having already been corrected once when a second seed landed (#350). The number is derived into `SECURITY.md` by the README generator and pinned by `scripts/test/workflow-contract.test.js`. A `create-workflow` meta-skill ships alongside them; the full registry, CLI install, and registry-sync validation are deferred (Phase 2). See [Creating Workflows](creating-workflows.md).
 
 > **Teams vs Workflows.** Teams are declarative, model-driven coordination — the lead coordinates members at runtime by spawning them as subagents via the Agent tool and exchanging `SendMessage`. Workflows are code-driven orchestration with deterministic *control flow* — the `.mjs` script fixes the phases and fan-out via `agent()` / `pipeline()` / `phase()`. The control flow is deterministic and rereadable; the `agent()` outputs are not. Choose a team for adaptive, judgment-based coordination; choose a workflow for a repeatable, auditable, parameterized procedure.
 
@@ -305,7 +305,7 @@ Use this decision matrix to pick the right level of composition for your task:
 - [Creating Skills](creating-skills.md) -- how to author, evolve, and review skills
 - [Creating Agents and Teams](creating-agents-and-teams.md) -- how to design agent personas and compose teams
 - [Creating Workflows](creating-workflows.md) -- how to author code-driven orchestration workflows
-- [Workflows README](../workflows/README.md) -- the workflows directory overview and seed
+- [Workflows README](../workflows/README.md) -- the workflows directory overview and the seeds it ships
 - [Quick Reference](quick-reference.md) -- command cheat sheet for daily operations
 - [Skill Creation Meta-Skill](../skills/create-skill/SKILL.md) -- the skill that teaches you how to create skills
 - [Skills Library README](../skills/README.md) -- browsable catalog of all skills

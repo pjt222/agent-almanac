@@ -1,166 +1,443 @@
 ---
 name: validate-references
 description: >
-  BibTeX-Einträge auf Korrektheit, Vollständigkeit und Aktualität prüfen
-  durch DOI-Auflösung gegen Crossref, URL-Erreichbarkeitsprüfung, Validierung
-  erforderlicher Felder pro Eintragstyp und Zeichenkodierungskonsistenz.
-  Verwenden, wenn ein Literaturverzeichnis vor der Einreichung oder
-  Veröffentlichung auditiert werden soll.
+  Check BibTeX entries for completeness, DOI resolution, and broken links.
+  Verify required fields per entry type (article, book, inproceedings), resolve
+  and validate DOIs via the CrossRef API, check URL accessibility, and flag
+  duplicate entries, missing abstracts, and inconsistent formatting. Use when
+  preparing a manuscript bibliography for journal submission, auditing a shared
+  .bib file before a project milestone, after merging bibliographies from
+  multiple sources, when citations render incorrectly, or as a CI check on
+  version-controlled .bib files; not for agent-memory or documentation
+  cross-references — see repair-broken-references.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: citations
   complexity: intermediate
   language: R
-  tags: citations, validation, doi-resolution, url-checking, bibtex
+  tags: citations, validation, doi, bibtex, quality
   locale: de
   source_locale: en
-  source_commit: 6f65f316
-  translator: claude-sonnet-4-6
-  translation_date: 2026-03-16
+  source_commit: "5acca0f7a922638125995a359d1c50eb1d44537f"
+  fence_basis_commit: "5acca0f7a922638125995a359d1c50eb1d44537f"
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Referenzen validieren
+# Validate References
 
-BibTeX-Einträge auf Korrektheit, Vollständigkeit und Aktualität prüfen durch DOI-Auflösung, URL-Prüfung, Pflichtfeldvalidierung und Zeichenkodierungskonsistenz.
+Check BibTeX bibliography entries for completeness, accuracy, and consistency.
+This skill covers verifying required fields per entry type, resolving DOIs via
+the CrossRef API, checking URL accessibility, detecting duplicate entries, and
+producing a structured validation report that flags issues by severity. It
+ensures that .bib files are publication-ready before rendering.
 
-## Wann verwenden
+## When to Use
 
-- Auditierung eines Literaturverzeichnisses vor Zeitschrifteneinreichung
-- Überprüfung, ob alle DOIs auf die richtigen Artikel verweisen
-- Erkennung defekter URLs in Bibliographieeinträgen
-- Sicherstellung, dass alle BibTeX-Einträge die erforderlichen Felder für ihren Typ haben
-- Prüfung auf Zeichenkodierungsprobleme, die LaTeX-Kompilierungsfehler verursachen
-- Abgleich von BibTeX-Metadaten mit den tatsächlichen veröffentlichten Versionen
+- Preparing a manuscript bibliography for journal submission
+- Auditing a shared .bib file for quality before a project milestone
+- After merging bibliographies from multiple sources
+- When citations render incorrectly and you need to diagnose .bib issues
+- As a CI check on .bib files in version-controlled projects
 
-## Eingaben
+**Do NOT use** for agent-memory or documentation cross-references — see
+[`repair-broken-references`](../repair-broken-references/SKILL.md). This skill
+validates bibliographic entries and DOI resolution; the name collision with
+"references" in the link-checking sense is the only thing the two share. For the
+reachability and budget of a Claude Code memory directory, see
+[`verify-memory-integrity`](../verify-memory-integrity/SKILL.md).
 
-- **Erforderlich**: BibTeX-Datei (.bib) oder BibEntry-Objekt zur Validierung
-- **Erforderlich**: Validierungsumfang (Felder, DOIs, URLs oder alle)
-- **Optional**: Crossref-API-Schlüssel für höhere Abfragegrenzen
-- **Optional**: Zeitüberschreitung für URL-Prüfungen (Standard: 10 Sekunden)
-- **Optional**: Benutzerdefinierte Pflichtfelder über den BibTeX-Standard hinaus
-- **Optional**: Zulässige URL-Domänen (für das Herausfiltern institutioneller Proxy-URLs)
+## Inputs
 
-## Vorgehensweise
+- **Required**: Path to a .bib file
+- **Optional**: Validation level (`basic`, `standard`, `strict`; default: `standard`)
+- **Optional**: Whether to check DOI resolution online (default: `TRUE`)
+- **Optional**: Whether to check URL accessibility (default: `TRUE`)
+- **Optional**: Output report path (default: prints to console)
+- **Optional**: CrossRef API email for polite pool (recommended for large files)
 
-### Schritt 1: Bibliographie laden und Struktur analysieren
+## Procedure
 
-Die BibTeX-Datei parsen und die Zusammensetzung der Einträge katalogisieren:
+### Step 1: Install and Load Required Packages
 
-1. **Datei parsen**: `RefManageR::ReadBib()` verwenden, um die .bib-Datei zu laden. Parsing-Warnungen und -Fehler aufzeichnen.
-2. **Eintragstypen zählen**: Anzahl der Einträge nach Typ zusammenstellen (article, book, inproceedings, misc usw.).
-3. **Felder inventarisieren**: Für jeden Eintrag die vorhandenen und fehlenden Felder auflisten.
-4. **Zeichenkodierung prüfen**: Nicht-ASCII-Zeichen erkennen und verifizieren, dass sie korrekte LaTeX-Escapes verwenden.
+```r
+required_packages <- c("RefManageR", "httr2", "curl")
+missing <- required_packages[!vapply(required_packages, requireNamespace,
+                                     logical(1), quietly = TRUE)]
+if (length(missing) > 0) install.packages(missing)
 
-**Erwartet:** Alle Einträge werden erfolgreich geparst, mit einer Zusammenfassung der Eintragstypen und markierten Kodierungsproblemen.
+library(RefManageR)
+```
 
-**Bei Fehler:** Falls das Parsen fehlschlägt, den fehlerhaften Eintrag durch zeilenweise Isolierung lokalisieren. Häufige Ursachen: nicht-geschlossene Klammern, fehlende Kommas zwischen Feldern, ungültiges UTF-8.
+**Expected:** All packages load without errors.
 
-### Schritt 2: Pflichtfelder pro Eintragstyp validieren
+**On failure:** If httr2 is unavailable, install it with `install.packages("httr2")`.
+For systems without curl headers: `sudo apt install libcurl4-openssl-dev`.
 
-Jeden Eintrag gegen die BibTeX-Feldanforderungen prüfen:
+### Step 2: Parse and Inventory the Bibliography
 
-1. **Standardfelder prüfen**: Für jeden Eintragstyp die erforderlichen Felder validieren:
+```r
+bib <- RefManageR::ReadBib("references.bib", check = FALSE)
+message(sprintf("Loaded %d entries from references.bib", length(bib)))
 
-| Eintragstyp | Erforderliche Felder |
-|---|---|
-| article | author, title, journal, year, volume |
-| book | author/editor, title, publisher, year |
-| inproceedings | author, title, booktitle, year |
-| incollection | author, title, booktitle, publisher, year |
-| phdthesis | author, title, school, year |
-| mastersthesis | author, title, school, year |
-| techreport | author, title, institution, year |
-| misc | (keine streng erforderlich, aber author, title, year empfohlen) |
+# Inventory entry types
+entry_types <- vapply(bib, function(x) tolower(attr(x, "bibtype")), character(1))
+type_counts <- sort(table(entry_types), decreasing = TRUE)
+message("Entry types:")
+for (type in names(type_counts)) {
+  message(sprintf("  %s: %d", type, type_counts[[type]]))
+}
+```
 
-2. **Optionale Felder empfehlen**: Fehlende, aber empfohlene Felder markieren (pages, doi, url, abstract).
-3. **Benutzerdefinierte Anforderungen**: Falls angegeben, zusätzliche benutzerdefinierte Pflichtfelder prüfen.
-4. **Bericht erstellen**: Einen Validierungsbericht erstellen, der fehlende Felder nach Eintrag gruppiert auflistet.
+**Expected:** Summary of entry types (article, book, inproceedings, etc.) and total
+count matching the number of `@type{` blocks in the file.
 
-**Erwartet:** Jeder Eintrag hat alle erforderlichen Felder, oder ein Bericht listet die spezifischen Lücken auf.
+**On failure:** Parsing errors indicate malformed BibTeX. Check for unmatched braces,
+missing commas between fields, or invalid UTF-8 characters.
 
-**Bei Fehler:** Falls erforderliche Felder fehlen, versuchen, sie über DOI-Abfrage (Schritt 3) zu ergänzen. Falls kein DOI vorhanden ist, die Einträge für manuelle Ergänzung markieren.
+### Step 3: Validate Required Fields per Entry Type
 
-### Schritt 3: DOIs gegen Crossref validieren
+```r
+# BibTeX required fields by entry type
+required_fields <- list(
+  article       = c("author", "title", "journal", "year"),
+  book          = c("author", "title", "publisher", "year"),
+  inproceedings = c("author", "title", "booktitle", "year"),
+  incollection  = c("author", "title", "booktitle", "publisher", "year"),
+  phdthesis     = c("author", "title", "school", "year"),
+  mastersthesis = c("author", "title", "school", "year"),
+  techreport    = c("author", "title", "institution", "year"),
+  misc          = c("author", "title", "year"),
+  unpublished   = c("author", "title", "note")
+)
 
-Jeden DOI auflösen und die Metadaten mit dem BibTeX-Eintrag abgleichen:
+validate_fields <- function(bib) {
+  issues <- list()
+  for (i in seq_along(bib)) {
+    key <- names(bib)[i]
+    entry_type <- tolower(attr(bib[[i]], "bibtype"))
+    req <- required_fields[[entry_type]]
+    if (is.null(req)) {
+      issues[[length(issues) + 1]] <- list(
+        key = key, severity = "warning",
+        message = sprintf("Unknown entry type: %s", entry_type)
+      )
+      next
+    }
+    for (field in req) {
+      value <- bib[[i]][[field]]
+      if (is.null(value) || !nzchar(trimws(as.character(value)))) {
+        issues[[length(issues) + 1]] <- list(
+          key = key, severity = "error",
+          message = sprintf("Missing required field: %s (type: %s)", field, entry_type)
+        )
+      }
+    }
+  }
+  issues
+}
 
-1. **DOIs extrahieren**: DOI-Felder aus allen Einträgen sammeln. DOI-Format normalisieren (Präfixe wie „https://doi.org/" entfernen).
-2. **Crossref abfragen**: `rcrossref::cr_works(dois = doi_list)` oder die Crossref-REST-API verwenden, um die veröffentlichten Metadaten zu den einzelnen DOIs abzurufen.
-3. **Felder abgleichen**: Lokale BibTeX-Felder mit den von Crossref zurückgegebenen Daten vergleichen:
-   - **Titel**: Fuzzy-Abgleich (Groß-/Kleinschreibungs- und Interpunktionsunterschiede ignorieren)
-   - **Autoren**: Nachnamen und Initialen des ersten Autors vergleichen
-   - **Jahr**: Exakte Übereinstimmung
-   - **Journal**: Abgekürzte vs. ausgeschriebene Formen vergleichen
-   - **Volumen/Seiten**: Exakte Übereinstimmung falls vorhanden
-4. **Abweichungen markieren**: Einträge kennzeichnen, bei denen die lokalen Metadaten wesentlich von der Crossref-Version abweichen.
-5. **Einträge ohne DOI**: Als Einträge markieren, die nicht automatisch verifiziert werden können.
+field_issues <- validate_fields(bib)
+message(sprintf("Field validation: %d issues found", length(field_issues)))
+```
 
-**Erwartet:** Alle DOIs werden erfolgreich aufgelöst und die Metadaten stimmen mit den lokalen Einträgen überein, oder Abweichungen werden dokumentiert.
+**Expected:** A list of issues where required fields are missing. Zero issues for a
+well-maintained bibliography.
 
-**Bei Fehler:** Falls ein DOI nicht aufgelöst werden kann (HTTP 404), ist der DOI möglicherweise falsch. In Crossref nach dem Titel suchen, um den korrekten DOI zu finden. Falls die API-Abfragegrenze erreicht ist, mit einem API-Schlüssel (`mailto`-Parameter) authentifizieren.
+**On failure:** This step runs locally and should not fail. If it does, check that the
+.bib file parsed correctly in Step 2.
 
-### Schritt 4: URLs auf Erreichbarkeit prüfen
+### Step 4: Resolve and Validate DOIs
 
-Alle URL-Felder auf funktionale Erreichbarkeit testen:
+```r
+validate_dois <- function(bib, email = NULL) {
+  issues <- list()
 
-1. **URLs extrahieren**: URL- und URL-Felder aus allen Einträgen sammeln, einschließlich DOI-basierter URLs.
-2. **HTTP-HEAD-Anfragen**: HEAD-Anfrage an jede URL senden mit konfigurierter Zeitüberschreitung. Statuscode aufzeichnen.
-3. **Ergebnisse klassifizieren**:
-   - 200 OK: URL erreichbar
-   - 301/302 Umleitung: Finale URL aufzeichnen, prüfen ob inhaltlich korrekt
-   - 403/404: URL defekt oder zugriffsbeschränkt
-   - Zeitüberschreitung: Netzwerkproblem oder Server nicht erreichbar
-   - SSL-Fehler: Zertifikatsproblem
-4. **Bericht erstellen**: Defekte URLs mit vorgeschlagenen Korrekturen auflisten (z.B. aktualisierte URL nach Umleitung).
+  # Set polite API headers
+  headers <- list(`User-Agent` = "R-bibliography-validator/1.0")
+  if (!is.null(email)) {
+    headers[["mailto"]] <- email
+  }
 
-**Erwartet:** Alle URLs sind erreichbar oder defekte URLs sind dokumentiert mit Vorschlägen für Korrekturen.
+  for (i in seq_along(bib)) {
+    key <- names(bib)[i]
+    doi <- bib[[i]]$doi
+    if (is.null(doi) || !nzchar(doi)) {
+      issues[[length(issues) + 1]] <- list(
+        key = key, severity = "info",
+        message = "No DOI present"
+      )
+      next
+    }
 
-**Bei Fehler:** Falls viele URLs zugriffsbeschränkt sind (403), kann dies auf institutionellen Proxy-Zugriff hindeuten. Bekannte akademische Domains (Verlagswebsites) von der strikten Prüfung ausnehmen und nur auf 404-Fehler prüfen.
+    # Normalize DOI
+    doi <- gsub("^https?://doi\\.org/", "", doi)
+    doi <- gsub("^doi:", "", doi, ignore.case = TRUE)
+    doi <- trimws(doi)
 
-### Schritt 5: Validierungsbericht zusammenstellen
+    # Resolve via CrossRef
+    tryCatch({
+      resp <- httr2::request(sprintf("https://api.crossref.org/works/%s", doi)) |>
+        httr2::req_headers(!!!headers) |>
+        httr2::req_timeout(10) |>
+        httr2::req_perform()
 
-Alle Ergebnisse in einem umfassenden Bericht konsolidieren:
+      if (httr2::resp_status(resp) != 200) {
+        issues[[length(issues) + 1]] <- list(
+          key = key, severity = "error",
+          message = sprintf("DOI does not resolve: %s (HTTP %d)", doi,
+                            httr2::resp_status(resp))
+        )
+      }
+    }, error = function(e) {
+      issues[[length(issues) + 1]] <<- list(
+        key = key, severity = "warning",
+        message = sprintf("DOI check failed for %s: %s", doi, e$message)
+      )
+    })
 
-1. **Zusammenfassung**: Gesamtzahl geprüfter Einträge, Bestehensrate, Anzahl der Probleme nach Kategorie.
-2. **Detailbericht**: Jeden Eintrag mit Problemen auflisten:
-   - Fehlende Pflichtfelder
-   - DOI-Metadaten-Abweichungen
-   - Defekte URLs
-   - Zeichenkodierungsprobleme
-3. **Priorität**: Probleme nach Schweregrad ordnen (fehlende Pflichtfelder > falscher DOI > defekte URL > fehlende optionale Felder).
-4. **Korrekturen vorschlagen**: Wo möglich, automatische Korrekturen vorschlagen (z.B. DOI aus Crossref-Suche, aktualisierte URL nach Umleitung).
+    Sys.sleep(0.5)  # Rate limiting
+  }
+  issues
+}
 
-**Erwartet:** Ein vollständiger Validierungsbericht mit priorisierter Problemliste und vorgeschlagenen Korrekturen.
+# Only run online checks if requested
+doi_issues <- validate_dois(bib, email = "your.email@example.com")
+message(sprintf("DOI validation: %d issues found", length(doi_issues)))
+```
 
-**Bei Fehler:** Falls der Bericht zu viele Probleme enthält, nach Schweregrad filtern und auf die Pflichtfeld- und DOI-Korrekturen fokussieren, die für die Einreichung kritisch sind.
+**Expected:** Each DOI resolves successfully (HTTP 200 from CrossRef). Entries without
+DOIs are flagged as informational.
 
-## Validierung
+**On failure:** Network errors or rate limiting produce warnings rather than hard
+failures. Set the `email` parameter for higher rate limits from CrossRef's polite pool.
 
-- [ ] BibTeX-Datei ohne Fehler geparst
-- [ ] Alle Eintragstypen auf Pflichtfelder geprüft
-- [ ] DOIs gegen Crossref aufgelöst und Metadaten abgeglichen
-- [ ] DOI-Abweichungen dokumentiert mit Korrekturvorschlägen
-- [ ] URLs auf Erreichbarkeit getestet
-- [ ] Defekte URLs mit vorgeschlagenen Alternativen dokumentiert
-- [ ] Zeichenkodierungsprobleme identifiziert
-- [ ] Validierungsbericht mit priorisierter Problemliste erstellt
-- [ ] Einträge ohne DOI für manuelle Überprüfung markiert
+### Step 5: Check URL Accessibility
 
-## Häufige Fehler
+```r
+validate_urls <- function(bib) {
+  issues <- list()
 
-- **Crossref-API-Ratenlimit**: Ohne authentifizierte Anfragen (mit `mailto`-Parameter) liegt das Limit bei etwa 50 Anfragen pro Sekunde. Bei großen Bibliographien Anfragen drosseln oder einen API-Schlüssel verwenden.
-- **DOI-Format-Inkonsistenz**: DOIs können als `10.1234/example`, `doi:10.1234/example` oder `https://doi.org/10.1234/example` gespeichert sein. Vor dem Abgleich normalisieren.
-- **Zeitschriftennamen-Varianten**: Abgekürzte und ausgeschriebene Zeitschriftennamen können beim Abgleich als Abweichung erscheinen. Eine Zuordnungstabelle oder NLM-Katalogabfrage verwenden.
-- **URL-Prüfung bei institutionellem Proxy**: Viele akademische URLs sind hinter Anmeldeportalen zugänglich. HTTP-403-Fehler für bekannte Verlagsdomänen (Elsevier, Springer, Wiley) nicht als „defekt" melden.
-- **Falsch-positive beim Titelabgleich**: Sonderzeichen, Hochstellungen und mathematische Notation im Titel können den Fuzzy-Abgleich verfälschen. Immer die Ergebnisse manuell überprüfen.
-- **Veraltete DOIs**: Manche DOIs verweisen auf Preprints statt auf die finale veröffentlichte Version. Den DOI-Typ (Preprint vs. Verlagsversion) in den Crossref-Metadaten prüfen.
+  for (i in seq_along(bib)) {
+    key <- names(bib)[i]
+    url <- bib[[i]]$url
 
-## Verwandte Skills
+    if (is.null(url) || !nzchar(url)) next
 
-- `manage-bibliography` -- Bibliographiedateien erstellen und bereinigen vor der Validierung
-- `format-citations` -- Zitate formatieren nach Validierung der zugrundeliegenden Daten
-- `create-quarto-report` -- validierte Bibliographie in Quarto-Dokumente integrieren
+    tryCatch({
+      resp <- httr2::request(url) |>
+        httr2::req_method("HEAD") |>
+        httr2::req_timeout(10) |>
+        httr2::req_error(is_error = function(resp) FALSE) |>
+        httr2::req_perform()
+
+      status <- httr2::resp_status(resp)
+      if (status >= 400) {
+        issues[[length(issues) + 1]] <- list(
+          key = key, severity = "warning",
+          message = sprintf("URL returned HTTP %d: %s", status, url)
+        )
+      }
+    }, error = function(e) {
+      issues[[length(issues) + 1]] <<- list(
+        key = key, severity = "warning",
+        message = sprintf("URL unreachable: %s (%s)", url, e$message)
+      )
+    })
+
+    Sys.sleep(0.3)
+  }
+  issues
+}
+
+url_issues <- validate_urls(bib)
+message(sprintf("URL validation: %d issues found", length(url_issues)))
+```
+
+**Expected:** All URLs return HTTP 200 (or 301/302 redirects). Broken links flagged.
+
+**On failure:** Some servers block HEAD requests. Retry with GET for failed HEAD
+checks. Timeout errors are common for slow academic servers.
+
+### Step 6: Detect Duplicate Entries
+
+```r
+detect_duplicates <- function(bib) {
+  issues <- list()
+
+  # Check for duplicate DOIs
+  dois <- vapply(bib, function(x) {
+    d <- x$doi
+    if (is.null(d)) NA_character_ else tolower(trimws(d))
+  }, character(1))
+
+  doi_table <- table(dois[!is.na(dois)])
+  dup_dois <- names(doi_table[doi_table > 1])
+  for (d in dup_dois) {
+    keys <- names(bib)[which(dois == d)]
+    issues[[length(issues) + 1]] <- list(
+      key = paste(keys, collapse = ", "), severity = "error",
+      message = sprintf("Duplicate DOI %s in entries: %s", d,
+                        paste(keys, collapse = ", "))
+    )
+  }
+
+  # Check for duplicate titles (fuzzy)
+  titles <- vapply(bib, function(x) {
+    t <- x$title
+    if (is.null(t)) NA_character_ else tolower(gsub("[^a-z0-9 ]", "", tolower(t)))
+  }, character(1))
+
+  seen <- character(0)
+  for (i in seq_along(titles)) {
+    if (is.na(titles[i])) next
+    for (j in seen) {
+      if (identical(titles[i], titles[as.integer(j)])) {
+        issues[[length(issues) + 1]] <- list(
+          key = sprintf("%s, %s", names(bib)[as.integer(j)], names(bib)[i]),
+          severity = "warning",
+          message = sprintf("Possible duplicate titles: '%s'",
+                            substr(bib[[i]]$title, 1, 60))
+        )
+      }
+    }
+    seen <- c(seen, as.character(i))
+  }
+
+  issues
+}
+
+dup_issues <- detect_duplicates(bib)
+message(sprintf("Duplicate detection: %d issues found", length(dup_issues)))
+```
+
+**Expected:** Zero duplicates for a clean bibliography. Any detected duplicates are
+flagged with the specific entry keys involved.
+
+### Step 7: Generate Validation Report
+
+```r
+generate_report <- function(all_issues, bib, output_file = NULL) {
+  errors   <- Filter(function(x) x$severity == "error", all_issues)
+  warnings <- Filter(function(x) x$severity == "warning", all_issues)
+  infos    <- Filter(function(x) x$severity == "info", all_issues)
+
+  lines <- c(
+    "# Bibliography Validation Report",
+    "",
+    sprintf("**File**: references.bib"),
+    sprintf("**Entries**: %d", length(bib)),
+    sprintf("**Date**: %s", Sys.Date()),
+    "",
+    sprintf("## Summary: %d errors, %d warnings, %d info",
+            length(errors), length(warnings), length(infos)),
+    ""
+  )
+
+  if (length(errors) > 0) {
+    lines <- c(lines, "## Errors", "")
+    for (issue in errors) {
+      lines <- c(lines, sprintf("- **[%s]** %s", issue$key, issue$message))
+    }
+    lines <- c(lines, "")
+  }
+
+  if (length(warnings) > 0) {
+    lines <- c(lines, "## Warnings", "")
+    for (issue in warnings) {
+      lines <- c(lines, sprintf("- **[%s]** %s", issue$key, issue$message))
+    }
+    lines <- c(lines, "")
+  }
+
+  report_text <- paste(lines, collapse = "\n")
+
+  if (!is.null(output_file)) {
+    writeLines(report_text, output_file)
+    message(sprintf("Report written to %s", output_file))
+  }
+
+  cat(report_text)
+  invisible(all_issues)
+}
+
+all_issues <- c(field_issues, doi_issues, url_issues, dup_issues)
+generate_report(all_issues, bib, output_file = "validation-report.md")
+```
+
+**Expected:** A structured markdown report listing all issues grouped by severity.
+
+## Validation
+
+- [ ] All entries have required fields for their type (no errors in field check)
+- [ ] All DOIs resolve to valid CrossRef records
+- [ ] No duplicate DOIs exist in the bibliography
+- [ ] All URLs are accessible (HTTP 200 or redirect)
+- [ ] Validation report generated without R errors
+- [ ] Zero errors in report for a publication-ready bibliography
+
+## Common Pitfalls
+
+- **DOI format inconsistency**: DOIs may appear as `10.1234/...`,
+  `https://doi.org/10.1234/...`, or `doi:10.1234/...`. Normalize before comparing
+- **CrossRef rate limiting**: Unauthenticated requests are limited to ~50/second.
+  Always use the `email` parameter to join the polite pool for higher limits
+- **Transient URL failures**: Academic servers occasionally timeout. Retry failed
+  URLs once before flagging them as broken
+- **Entry type variations**: BibLaTeX uses `@online` where BibTeX uses `@misc`.
+  The validator should handle both
+- **False positive duplicates**: Entries like "Introduction" or "Methods" as titles
+  trigger fuzzy matching. Review flagged duplicates manually
+- **Missing DOIs for older works**: Pre-2000 publications often lack DOIs. Flag as
+  informational, not as errors
+- **Author names are separated by `and`, not commas**: BibTeX splits an `author`
+  or `editor` field on the word `and` surrounded by spaces and not enclosed in
+  braces. A comma delimits parts inside a single name (`von Last, First` or
+  `von Last, Jr, First`), so a comma-joined list collapses silently into one
+  author rather than several, and a trailing comma makes BibTeX complain that a
+  name ends with a comma
+- **Organizations as authors need an extra pair of braces**: An institution left
+  bare in an `author` field is dissected into First/von/Last like a personal
+  name, and any internal `and` splits it into two people. Wrap it in its own
+  braces: `author = {{National Aeronautics and Space Administration}}`
+- **One person under two spellings**: `Donald E. Knuth` in one entry and `D. E. Knuth`
+  in another alphabetize as two different authors. Settle on one form per person,
+  or write `D[onald] E. Knuth`, which BibTeX alphabetizes as if the brackets were
+  absent
+- **Journal name inconsistency**: One entry writes `Journal of the American Chemical
+  Society`, another writes `J. Am. Chem. Soc.`, and nothing above notices, because
+  Step 6 compares DOIs and article titles and never looks at the `journal` field. The
+  CrossRef record fetched in Step 4 carries the journal's `ISSN` and `container-title`,
+  and often its `short-container-title` (`J. Am. Chem. Soc.` for this journal), so
+  group entries by `ISSN` and flag any group whose `journal` values disagree. Flag
+  rather than normalize: ISO 4 governs title-word abbreviation through the LTWA
+  maintained by the ISSN International Centre, but NLM/MEDLINE strips the punctuation
+  from that assignment, so PubMed writes `J Am Chem Soc` for the same journal. Pick the
+  form the target journal's style requires
+- **A resolving DOI is not a matching DOI**: HTTP 200 confirms the DOI is
+  registered, not that it points at the entry's work. A wrong but registered DOI
+  resolves exactly like a correct one, so compare the CrossRef record Step 4
+  already fetched against the entry: `title` (an array), the `family` names in
+  `author`, and `issued.date-parts`. Normalize both sides first, or LaTeX escapes
+  and Unicode accents will manufacture mismatches
+- **False mismatches from CrossRef's own shape**: a year off by one need not be an
+  error, because `published-online` and `published-print` are separate fields that
+  can fall in different years. `10.1093/bioinformatics/btz848` is online 2019 and
+  print 2020, with `issued` following the online date. `short-container-title` is
+  sometimes an empty array, so a missing journal abbreviation is not a mismatch,
+  and a record paginated by article number can carry `article-number` with no
+  `page` field at all
+
+## Related Skills
+
+- `manage-bibliography` - fix issues found by this validator (dedup, add fields)
+- `format-citations` - format validated entries into styled citations
+- `repair-broken-references` - the correct destination for broken internal links,
+  dead URLs, stale imports, and orphaned files in documentation or agent memory
+- `verify-memory-integrity` - read-only reachability and budget check for a Claude
+  Code memory directory; not a bibliography tool despite the shared word
+- `../reporting/format-apa-report` - APA reports require complete, validated references
+- `../r-packages/write-vignette` - vignettes with citations need valid .bib entries

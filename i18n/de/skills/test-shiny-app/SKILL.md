@@ -1,17 +1,13 @@
 ---
 name: test-shiny-app
 description: >
-  Shiny-Anwendungen mit shinytest2 für End-to-End-Tests und testServer()
-  für Unit-Tests der Server-Logik testen. Behandelt Snapshot-Tests,
-  UI-Interaktionstests, Modul-Unit-Tests und CI-Integration. Verwenden,
-  wenn Shiny-App-Verhalten validiert, Regressionstests eingerichtet oder
-  Tests in CI/CD eingebunden werden sollen.
+  Test Shiny applications using shinytest2 for end-to-end browser tests
+  and testServer() for unit-testing module server logic. Covers snapshot
+  testing, CI integration, and mocking external services. Use when adding
+  tests to an existing Shiny application, setting up a testing strategy for
+  a new Shiny project, writing regression tests before refactoring Shiny
+  code, or integrating Shiny app tests into CI/CD pipelines.
 license: MIT
-locale: de
-source_locale: en
-source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
@@ -19,283 +15,231 @@ metadata:
   domain: shiny
   complexity: intermediate
   language: R
-  tags: shiny, testing, shinytest2, testthat, ci-cd
+  tags: shiny, testing, shinytest2, testServer, snapshot, CI
+  locale: de
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Shiny-App testen
+# Test Shiny App
 
-Shiny-Anwendungen mit shinytest2 (End-to-End) und testServer() (Unit-Tests) zuverlässig testen.
+Set up comprehensive testing for Shiny applications using shinytest2 (end-to-end) and testServer() (unit tests).
 
-## Wann verwenden
+## When to Use
 
-- Shiny-App-Verhalten vor dem Deployment validieren
-- Regressionstests für kritische User Journeys einrichten
-- Modul-Logik isoliert unit-testen
-- Shiny-Tests in GitHub Actions CI einbinden
+- Adding tests to an existing Shiny application
+- Setting up a testing strategy for a new Shiny project
+- Writing regression tests before refactoring Shiny code
+- Integrating Shiny app tests into CI/CD pipelines
 
-## Eingaben
+## Inputs
 
-- **Erforderlich**: Laufende Shiny-App (lokal oder remote)
-- **Optional**: Bestehende `tests/`-Verzeichnisstruktur
-- **Optional**: CI-Workflow für automatische Testausführung
+- **Required**: Path to the Shiny application
+- **Required**: Test scope (unit tests, end-to-end, or both)
+- **Optional**: Whether to use snapshot testing (default: yes for e2e)
+- **Optional**: CI platform (GitHub Actions, GitLab CI)
+- **Optional**: Modules to test in isolation
 
-## Vorgehensweise
+## Procedure
 
-### Schritt 1: shinytest2 installieren
-
-shinytest2 und seine Dependencies installieren.
+### Step 1: Install Testing Dependencies
 
 ```r
 install.packages("shinytest2")
 
-# Chromium-Browser für UI-Tests installieren (benötigt Netzwerkzugriff)
-shinytest2::install_chromium()
+# For golem apps, add as a Suggests dependency
+usethis::use_package("shinytest2", type = "Suggests")
 
-# Für CI (headless Chrome verwenden)
-# Chromium wird über chromote automatisch gefunden
+# Set up testthat infrastructure if not present
+usethis::use_testthat(edition = 3)
 ```
 
-In bestehende Teststruktur integrieren:
+**Expected:** shinytest2 installed and testthat directory structure in place.
+
+**On failure:** shinytest2 requires chromote (headless Chrome). Install Chrome/Chromium on the system. On WSL: `sudo apt install -y chromium-browser`. Verify with `chromote::find_chrome()`.
+
+### Step 2: Write testServer() Unit Tests for Modules
+
+Create `tests/testthat/test-mod_dashboard.R`:
 
 ```r
-# Tests-Verzeichnis einrichten (wenn noch nicht vorhanden)
-usethis::use_testthat()
+test_that("dashboard module filters data correctly", {
+  testServer(dataFilterServer, args = list(
+    data = reactive(iris),
+    columns = c("Species", "Sepal.Length")
+  ), {
+    # Set inputs
+    session$setInputs(column = "Species")
+    session$setInputs(value_select = "setosa")
+    session$setInputs(apply = 1)
 
-# shinytest2 in Testinfrastruktur integrieren
-shinytest2::use_shinytest2()
+    # Check output
+    result <- filtered()
+    expect_equal(nrow(result), 50)
+    expect_true(all(result$Species == "setosa"))
+  })
+})
+
+test_that("dashboard module handles empty data", {
+  testServer(dataFilterServer, args = list(
+    data = reactive(iris[0, ]),
+    columns = c("Species")
+  ), {
+    # Module should not error on empty data
+    expect_no_error(session$setInputs(column = "Species"))
+  })
+})
 ```
 
-**Erwartet:** shinytest2 installiert. `tests/testthat/setup-shinytest2.R` erstellt.
+Key patterns:
+- `testServer()` tests module server logic without a browser
+- Pass reactive arguments via the `args` list
+- Use `session$setInputs()` to simulate user interactions
+- Access reactive return values directly by name
+- Test edge cases: empty data, NULL inputs, invalid values
 
-**Bei Fehler:** Wenn Chromium-Installation fehlschlägt, systemweit installierten Chrome/Chromium verwenden: `shinytest2::install_chromium(force = TRUE)`.
+**Expected:** Module tests pass with `devtools::test()`.
 
-### Schritt 2: Ersten Snapshot-Test erstellen
+**On failure:** If `testServer()` errors with "not a module server function", ensure the function uses `moduleServer()` internally. If `session$setInputs()` doesn't trigger reactives, add `session$flushReact()` after setting inputs.
 
-shinytest2 im Record-Modus verwenden, um Test-Snapshots automatisch zu generieren.
+### Step 3: Write shinytest2 End-to-End Tests
 
-```r
-# Aufzeichnung starten (öffnet App + Test-Recorder)
-shinytest2::record_test(".")
-
-# Alternativ: Manuell ersten Test schreiben
-# tests/testthat/test-app.R
-```
-
-Aufgezeichnete Tests sehen aus wie:
+Create `tests/testthat/test-app-e2e.R`:
 
 ```r
-# tests/testthat/test-app.R
-library(shinytest2)
-
-test_that("app startet und UI rendert korrekt", {
+test_that("app loads and displays initial state", {
+  # For golem apps
   app <- AppDriver$new(
-    app_dir = system.file(package = "myapp"),  # oder "."
-    name = "app-startup-test"
+    app_dir = system.file(package = "myapp"),
+    name = "initial-load",
+    height = 800,
+    width = 1200
   )
+  on.exit(app$stop(), add = TRUE)
 
-  # Anfangs-Screenshot aufnehmen
-  app$expect_screenshot()
+  # Wait for app to load
+  app$wait_for_idle(timeout = 10000)
 
-  app$stop()
+  # Check that key elements exist
+  app$expect_values()
 })
-```
 
-**Erwartet:** Snapshot-Bilder in `tests/testthat/_snaps/` erstellt. Test läuft ohne Fehler.
+test_that("filter interaction updates the table", {
+  app <- AppDriver$new(
+    app_dir = system.file(package = "myapp"),
+    name = "filter-interaction"
+  )
+  on.exit(app$stop(), add = TRUE)
 
-**Bei Fehler:** Wenn App nicht startet, Konsolen-Output mit `app$get_logs()` prüfen. Wenn Screenshot-Vergleich fehlschlägt, Snapshots mit `shinytest2::snapshot_review()` aktualisieren.
+  # Interact with the app
+  app$set_inputs(`filter1-column` = "cyl")
+  app$wait_for_idle()
 
-### Schritt 3: UI-Interaktionstests schreiben
+  app$set_inputs(`filter1-apply` = "click")
+  app$wait_for_idle()
 
-Tests für spezifisches User-Verhalten schreiben.
-
-```r
-# tests/testthat/test-interactions.R
-library(shinytest2)
-
-test_that("Datensatz-Auswahl aktualisiert Tabelle", {
-  app <- AppDriver$new(".", name = "dataset-selection")
-
-  # Initialen Zustand prüfen
-  initial_value <- app$get_value(output = "table")
-  expect_true(length(initial_value$body) > 0)
-
-  # Input ändern
-  app$set_inputs(dataset = "mtcars")
+  # Snapshot the output values
   app$expect_values(output = "table")
-
-  app$stop()
-})
-
-test_that("Slider filtert Zeilenanzahl", {
-  app <- AppDriver$new(".", name = "slider-filter")
-
-  app$set_inputs(n_rows = 5)
-  app$click("apply")
-
-  # Wert aus Output extrahieren und prüfen
-  table_data <- app$get_value(output = "table")
-  expect_equal(nrow(table_data$body), 5)
-
-  app$stop()
 })
 ```
 
-**Erwartet:** Tests simulieren User-Interaktionen und prüfen Output-Änderungen.
+Key patterns:
+- `AppDriver$new()` launches the app in headless Chrome
+- Always use `on.exit(app$stop())` to clean up
+- Module input IDs use the format `"moduleId-inputId"`
+- `app$expect_values()` creates/compares snapshot files
+- `app$wait_for_idle()` ensures reactive updates complete
 
-**Bei Fehler:** Wenn `get_value()` unerwartete Struktur zurückgibt, `app$get_value(output = "table") |> str()` verwenden, um die tatsächliche Struktur zu untersuchen.
+**Expected:** End-to-end tests create snapshot files in `tests/testthat/_snaps/`.
 
-### Schritt 4: Server-Logik unit-testen
+**On failure:** If Chrome isn't found, set `CHROMOTE_CHROME` environment variable to the Chrome binary path. If snapshots fail on CI but pass locally, check for platform-dependent rendering differences — use `app$expect_values()` for data snapshots rather than `app$expect_screenshot()` for visual ones.
 
-Shiny-Server-Funktionen mit `testServer()` isoliert testen.
+### Step 4: Record a Test Interactively (Optional)
 
 ```r
-# tests/testthat/test-server.R
-library(shiny)
-library(testthat)
-
-test_that("server berechnet korrekten Mittelwert", {
-  testServer(app_server, {
-    # Inputs setzen
-    session$setInputs(dataset = "iris", n_rows = 10)
-
-    # Output prüfen
-    expect_s3_class(output$table$result, "data.frame")
-    expect_equal(nrow(output$table$result), 10)
-  })
-})
-
-test_that("reactive Werte aktualisieren korrekt", {
-  testServer(app_server, {
-    session$setInputs(multiplier = 2)
-
-    # Reaktiven Wert prüfen
-    result <- filtered_data()
-    expect_true(all(result$value > 0))
-  })
-})
+shinytest2::record_test("path/to/app")
 ```
 
-Für Modul-Tests:
+This opens the app in a browser with a recording panel. Interact with the app, then click "Save test" to auto-generate test code.
+
+**Expected:** A test file is generated in `tests/testthat/` with recorded interactions.
+
+**On failure:** If the recorder doesn't open, check that the app runs successfully with `shiny::runApp()` first. The recorder requires a working app.
+
+### Step 5: Set Up Snapshot Management
+
+For snapshot-based tests, manage expected values:
 
 ```r
-# tests/testthat/test-mod_data_filter.R
-test_that("data filter Modul filtert korrekt", {
-  test_data <- reactive({ head(iris, 100) })
+# Accept new/changed snapshots after review
+testthat::snapshot_accept("test-app-e2e")
 
-  testServer(
-    mod_data_filter_server,
-    args = list(data = test_data),
-    {
-      session$setInputs(n_rows = 5, apply = 1)
-
-      result <- session$returned()
-      expect_equal(nrow(result()), 5)
-    }
-  )
-})
+# Review snapshot differences
+testthat::snapshot_review("test-app-e2e")
 ```
 
-**Erwartet:** Server-Logik unabhängig von UI testbar. Reaktive Berechnungen verifizierbar.
+Add snapshot directories to version control:
 
-**Bei Fehler:** Wenn `testServer()` fehlschlägt mit "could not find function", sicherstellen, dass Server-Funktion exportiert oder im Paket-Namespace zugänglich ist.
-
-### Schritt 5: Edge Cases und Fehlerbehandlung testen
-
-Randfälle und Fehlerszenarien testen.
-
-```r
-# tests/testthat/test-edge-cases.R
-test_that("app behandelt leere Eingaben korrekt", {
-  testServer(app_server, {
-    session$setInputs(dataset = NULL, n_rows = 0)
-
-    # Sicherstellen dass App nicht abstürzt
-    expect_silent(output$table)
-  })
-})
-
-test_that("app zeigt Fehlermeldung bei ungültigen Eingaben", {
-  app <- AppDriver$new(".", name = "error-handling")
-
-  # Ungültige Eingabe erzwingen (z. B. via URL-Parameter)
-  app$set_inputs(n_rows = -1)
-  app$click("apply")
-
-  # Fehlermeldung prüfen
-  error_output <- app$get_value(output = "error_message")
-  expect_false(is.null(error_output))
-
-  app$stop()
-})
+```text
+tests/testthat/_snaps/    # Committed — contains expected values
 ```
 
-**Erwartet:** App behandelt edge cases ohne Absturz. Fehlermeldungen korrekt angezeigt.
+**Expected:** Snapshot files tracked in git for regression detection.
 
-**Bei Fehler:** Wenn Tests edge cases nicht abdecken, Fehlerbehandlung im Server mit `tryCatch()` oder `validate(need(...))` hinzufügen.
+**On failure:** If snapshots change unexpectedly, run `testthat::snapshot_review()` to see the diffs. Accept intentional changes with `testthat::snapshot_accept()`.
 
-### Schritt 6: CI-Integration
+### Step 6: Integrate with CI
 
-Tests in GitHub Actions CI einbinden.
+Add to `.github/workflows/R-CMD-check.yaml` or create a dedicated workflow:
 
 ```yaml
-# .github/workflows/test-shiny.yml
-name: Shiny Tests
+- name: Install system dependencies
+  run: |
+    sudo apt-get update
+    sudo apt-get install -y chromium-browser
 
-on:
-  push:
-    branches: [main]
-  pull_request:
+- name: Set Chrome path
+  run: echo "CHROMOTE_CHROME=$(which chromium-browser)" >> $GITHUB_ENV
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get install -y chromium-browser
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: shinytest2, testthat
-
-      - name: Run tests
-        run: |
-          Rscript -e "testthat::test_dir('tests/testthat')"
-        env:
-          CHROMOTE_CHROME_ARGS: "--no-sandbox"  # Für CI erforderlich
+- name: Run tests
+  run: |
+    Rscript -e 'devtools::test()'
 ```
 
-**Erwartet:** Tests in CI auf Push/PR ausgeführt. Fehlgeschlagene Tests blockieren Merge.
+For golem apps, ensure the app package is installed before testing:
 
-**Bei Fehler:** Wenn Chromium in CI nicht gefunden wird, `CHROMOTE_CHROME_ARGS="--no-sandbox --disable-gpu"` und sicherstellen, dass `chromium-browser` oder `google-chrome` installiert ist.
+```yaml
+- name: Install app package
+  run: Rscript -e 'devtools::install()'
+```
 
-## Validierung
+**Expected:** Tests pass in CI with headless Chrome.
 
-- [ ] shinytest2 installiert und Chromium verfügbar
-- [ ] Snapshots in `tests/testthat/_snaps/` erstellt
-- [ ] UI-Interaktionstests simulieren echte User-Workflows
-- [ ] Server-Unit-Tests via `testServer()` prüfen Logik isoliert
-- [ ] Edge Cases und Fehlerbehandlung getestet
-- [ ] Tests in CI laufen ohne Fehler
+**On failure:** Common CI issues: Chrome not installed (add the apt-get step), display server missing (shinytest2 uses headless mode by default so this usually isn't an issue), or timeout on slow runners (increase `timeout` in `AppDriver$new()`).
 
-## Haeufige Stolperfallen
+## Validation
 
-- **Nicht-deterministische Snapshots**: Animationen, Timestamps oder zufällige Daten verursachen Snapshot-Instabilität. `set.seed()` verwenden und dynamischen Inhalt mocken.
-- **Chromium fehlt in CI**: Immer `--no-sandbox`-Flag in CI-Umgebungen setzen. GitHub Actions braucht spezielle Chromium-Konfiguration.
-- **`testServer()` vs `AppDriver`**: `testServer()` testet Server-Logik isoliert (keine echten UI). `AppDriver` testet echte Browser-Interaktionen.
-- **Veraltete Snapshots**: Nach UI-Änderungen müssen Snapshots mit `shinytest2::snapshot_review()` oder `shinytest2::snapshot_update()` aktualisiert werden.
-- **Timing-Probleme**: Asynchrone Operationen (Plots, Downloads) benötigen `app$wait_for_idle()` nach auslösenden Aktionen.
-- **Modul-Tests ohne Reaktivität**: `testServer()` benötigt reaktive Inputs — immer `session$setInputs()` vor Assertions aufrufen.
+- [ ] `devtools::test()` runs all tests without errors
+- [ ] testServer() tests cover module server logic
+- [ ] shinytest2 tests cover key user workflows
+- [ ] Snapshot files are committed to version control
+- [ ] Tests pass in CI environment
+- [ ] Edge cases tested (empty data, NULL inputs, error states)
 
-## Verwandte Skills
+## Common Pitfalls
 
-- `scaffold-shiny-app` — Shiny-App vor dem Testen scaffolden
-- `build-shiny-module` — Module erstellen, die mit `testServer()` getestet werden
-- `deploy-shiny-app` — Getestete App deployen
-- `setup-github-actions-ci` — CI/CD-Workflows einrichten
+- **Testing UI rendering instead of logic**: Prefer `testServer()` for logic and `app$expect_values()` for data. Only use `app$expect_screenshot()` when visual appearance matters — screenshots are brittle across platforms.
+- **Module ID format in e2e tests**: When setting module inputs via AppDriver, use `"moduleId-inputId"` format (hyphen-separated), not `"moduleId.inputId"`.
+- **Flaky timing**: Always call `app$wait_for_idle()` after `app$set_inputs()`. Without it, assertions may run before reactive updates complete.
+- **Snapshot drift**: Don't commit snapshots generated on different platforms (Mac vs Linux). Standardize on the CI platform for snapshot generation.
+- **Missing Chrome on CI**: shinytest2 requires Chrome/Chromium. Always include the installation step in CI workflows.
+
+## Related Skills
+
+- `build-shiny-module` — create testable modules with clear interfaces
+- `scaffold-shiny-app` — set up app structure with testing infrastructure
+- `write-testthat-tests` — general testthat patterns for R packages
+- `setup-github-actions-ci` — CI/CD setup for R packages (golem apps)

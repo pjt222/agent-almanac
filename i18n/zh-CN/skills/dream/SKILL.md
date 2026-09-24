@@ -3,6 +3,7 @@ name: dream
 locale: zh-CN
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-sonnet-4-6
 translation_date: 2026-03-16
 description: >
@@ -18,7 +19,7 @@ metadata:
   domain: esoteric
   complexity: intermediate
   language: natural
-  tags: esoteric, dream, creativity, exploration, ideation, meta-cognition, ai-self-application
+  tags: esoteric, creativity, exploration, emergence, ideation, meta-cognition, ai-self-application
 ---
 
 # Dream（梦想）

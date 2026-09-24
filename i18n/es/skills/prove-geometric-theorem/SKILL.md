@@ -17,9 +17,9 @@ metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: geometry
-  complexity: intermediate
-  language: natural
-  tags: geometry, proofs, euclidean, theorems, reasoning
+  complexity: advanced
+  language: multi
+  tags: geometry, proof, theorem, euclidean, axiomatic, coordinate
 ---
 
 # Demostrar Teorema Geométrico

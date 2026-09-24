@@ -59,16 +59,15 @@ metadata:
 整个工作流的闸门是一份有书面记录的法律与伦理审查。跳过这一步是最大的危害
 来源。
 
-```python
-# Inputs to confirm before writing any code:
-# 1. Is the data public (no login required)?
-# 2. Does robots.txt permit the path?
-# 3. Does the site's ToS prohibit automated access? (read it)
-# 4. Would the scraping process personal data? If yes, what is the legal basis?
-# 5. Could this access circumvent geo-licensing, paywalls, or auth?
-# 6. Is there a public API or data dump that would make scraping unnecessary?
-# 7. Have you contacted the site owner if scope is large?
-```
+Inputs to confirm before writing any code:
+
+1. 数据是否公开（无需登录）？
+2. robots.txt 是否允许访问该路径？
+3. 站点的服务条款是否禁止自动化访问？（请通读）
+4. 抓取过程是否会处理个人数据？如果会，法律依据是什么？
+5. 此次访问是否会绕过地域授权、付费墙或身份认证？
+6. 是否存在公开 API 或数据转储，使抓取变得不必要？
+7. 如果范围较大，是否已与站点所有者联系？
 
 **Expected:** 每个问题都有可辩护的书面答案。出现第一个"否"或"未知"
 即停止流程，直到问题得到解决。

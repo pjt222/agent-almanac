@@ -17,9 +17,9 @@ metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: geometry
-  complexity: basic
-  language: natural
-  tags: geometry, constructions, compass, straightedge, euclidean
+  complexity: intermediate
+  language: multi
+  tags: geometry, construction, ruler-compass, euclidean, straightedge
 ---
 
 # Construir Figura Geométrica

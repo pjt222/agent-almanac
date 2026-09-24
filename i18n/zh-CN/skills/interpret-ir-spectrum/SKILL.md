@@ -17,7 +17,7 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, infrared, functional-groups, wavenumber, absorption
+  tags: spectroscopy, ir, infrared, functional-groups, absorption
 ---
 
 # 解读红外光谱

@@ -1,15 +1,12 @@
 ---
 name: deploy-searxng
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Desplegar una instancia auto-alojada de SearXNG con Docker Compose, proxy inverso Nginx,
-  y configuración personalizada de motores de búsqueda. Cubrir seguridad, rendimiento,
-  y personalización de la interfaz. Usar cuando se necesite un metabuscador privado,
-  búsqueda agregada sin rastreo, o una alternativa auto-alojada a buscadores comerciales.
+  Deploy a self-hosted SearXNG meta search engine via Docker Compose.
+  Covers settings.yml configuration, engine selection, result proxying,
+  Nginx frontend, persistence, and updates. Use when setting up a private
+  search engine without tracking, aggregating results from multiple providers,
+  running a shared search instance for a team or organisation, or replacing
+  reliance on a single search provider.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -17,56 +14,56 @@ metadata:
   version: "1.0"
   domain: containerization
   complexity: intermediate
-  language: multi
-  tags: searxng, search-engine, self-hosted, docker, privacy
+  language: Docker
+  tags: searxng, self-hosted, search-engine, privacy, docker-compose, meta-search
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Desplegar SearXNG
+# Deploy SearXNG
 
-Desplegar un metabuscador SearXNG auto-alojado con Docker y configuración personalizada.
+Deploy a self-hosted SearXNG meta search engine with Docker Compose and Nginx.
 
-## Cuándo Usar
+## When to Use
 
-- Necesitando un metabuscador privado sin rastreo
-- Queriendo agregar resultados de múltiples motores de búsqueda
-- Desplegando una alternativa auto-alojada a buscadores comerciales
-- Requiriendo búsqueda personalizable para un equipo u organización
-- Integrando búsqueda privada con otras herramientas (MCP, API)
+- Setting up a private, self-hosted search engine
+- Aggregating results from multiple search providers without tracking
+- Running a search instance for a team or organization
+- Replacing reliance on a single search provider
 
-## Entradas
+## Inputs
 
-- **Requerido**: Servidor con Docker y Docker Compose instalados
-- **Requerido**: Nombre de dominio (para acceso externo) o acceso localhost
-- **Opcional**: Certificados TLS para HTTPS
-- **Opcional**: Configuración de motores de búsqueda preferidos
-- **Opcional**: Personalización de interfaz (tema, idioma)
+- **Required**: Server or machine with Docker installed
+- **Optional**: Domain name for public access
+- **Optional**: SSL certificate or Let's Encrypt setup
+- **Optional**: Custom engine preferences
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Configurar Estructura del Proyecto
+### Step 1: Create Project Structure
 
 ```bash
-mkdir -p searxng/{config,data}
+mkdir -p searxng/{config,nginx}
 cd searxng
 ```
 
-Crear `docker-compose.yml`:
+### Step 2: Write Docker Compose File
+
+`docker-compose.yml`:
 
 ```yaml
-version: '3.8'
-
 services:
   searxng:
     image: searxng/searxng:latest
     container_name: searxng
-    ports:
-      - "8080:8080"
     volumes:
       - ./config:/etc/searxng:rw
-      - ./data:/var/log/searxng:rw
     environment:
-      - SEARXNG_BASE_URL=https://busqueda.ejemplo.com/
-      - SEARXNG_SECRET_KEY=clave_secreta_larga_y_aleatoria
+      - SEARXNG_BASE_URL=https://search.example.com/
     cap_drop:
       - ALL
     cap_add:
@@ -74,38 +71,55 @@ services:
       - SETGID
       - SETUID
     restart: unless-stopped
+    networks:
+      - searxng
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: searxng-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - searxng
+    restart: unless-stopped
+    networks:
+      - searxng
+
+networks:
+  searxng:
+    driver: bridge
 ```
 
-**Esperado:** Estructura de directorios creada, docker-compose.yml configurado.
+### Step 3: Configure SearXNG Settings
 
-**En caso de fallo:** Verificar permisos de escritura en los directorios, asegurar que Docker está instalado.
-
-### Paso 2: Configurar SearXNG
-
-Crear `config/settings.yml`:
+`config/settings.yml`:
 
 ```yaml
 use_default_settings: true
 
 general:
-  debug: false
-  instance_name: "Mi Buscador"
+  instance_name: "My SearXNG"
+  privacypolicy_url: false
+  contact_url: false
 
 search:
   safe_search: 0
   autocomplete: "google"
-  default_lang: "es"
+  default_lang: "en"
 
 server:
-  secret_key: "clave_secreta_larga_y_aleatoria"
-  bind_address: "0.0.0.0"
-  port: 8080
+  secret_key: "generate-a-random-secret-key-here"
   limiter: true
+  image_proxy: true
+  port: 8080
+  bind_address: "0.0.0.0"
 
 ui:
+  static_use_hash: true
   default_theme: simple
-  default_locale: es
-  query_in_title: true
+  infinite_scroll: true
 
 engines:
   - name: google
@@ -122,79 +136,156 @@ engines:
     engine: wikipedia
     shortcut: wp
     disabled: false
+
+  - name: github
+    engine: github
+    shortcut: gh
+    disabled: false
+
+  - name: stackoverflow
+    engine: stackoverflow
+    shortcut: so
+    disabled: false
+
+  - name: arxiv
+    engine: arxiv
+    shortcut: arx
+    disabled: false
 ```
 
-**Esperado:** SearXNG configurado con motores de búsqueda, idioma predeterminado, y seguridad.
+Generate a secret key:
 
-**En caso de fallo:** Validar sintaxis YAML, verificar que el secret_key es único y largo.
+```bash
+openssl rand -hex 32
+```
 
-### Paso 3: Configurar Proxy Inverso (Opcional)
+### Step 4: Configure Nginx Frontend
 
-Para acceso externo con HTTPS, configurar Nginx:
+`nginx/nginx.conf`:
 
 ```nginx
-server {
-    listen 443 ssl http2;
-    server_name busqueda.ejemplo.com;
+events {
+    worker_connections 1024;
+}
 
-    ssl_certificate /etc/ssl/certs/cert.pem;
-    ssl_certificate_key /etc/ssl/private/key.pem;
+http {
+    server {
+        listen 80;
 
-    location / {
-        proxy_pass http://localhost:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        location / {
+            proxy_pass http://searxng:8080;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Connection "";
+            proxy_buffering off;
+        }
 
-        # Limitar acceso (opcional)
-        # allow 192.168.0.0/16;
-        # deny all;
+        location /static/ {
+            proxy_pass http://searxng:8080/static/;
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
     }
 }
 ```
 
-**Esperado:** SearXNG accesible vía HTTPS a través de Nginx.
+### Step 5: Configure Rate Limiting
 
-**En caso de fallo:** Verificar certificados TLS, comprobar que Nginx puede resolver el upstream.
+`config/limiter.toml`:
 
-### Paso 4: Iniciar y Verificar
+```toml
+[botdetection.ip_limit]
+link_token = true
 
-```bash
-# Iniciar SearXNG
-docker compose up -d
-
-# Verificar estado
-docker compose ps
-docker compose logs searxng
-
-# Probar búsqueda
-curl "http://localhost:8080/search?q=test&format=json"
+[botdetection.ip_lists]
+block_ip = []
+pass_ip = ["127.0.0.1/8", "::1/128"]
+pass_searxng_org = false
 ```
 
-**Esperado:** SearXNG ejecutándose y respondiendo a consultas de búsqueda.
+### Step 6: Deploy and Verify
 
-**En caso de fallo:** Revisar logs del contenedor, verificar configuración de motores de búsqueda, comprobar conectividad de red.
+```bash
+# Start the stack
+docker compose up -d
 
-## Validación
+# Check logs
+docker compose logs -f searxng
 
-- [ ] SearXNG se inicia sin errores
-- [ ] La interfaz web es accesible y funcional
-- [ ] Las búsquedas devuelven resultados de múltiples motores
-- [ ] El idioma predeterminado es el configurado
-- [ ] Las capacidades de seguridad están limitadas (cap_drop: ALL)
-- [ ] HTTPS funciona a través del proxy inverso (si está configurado)
+# Verify it's running
+curl -s http://localhost:8080 | head -5
 
-## Errores Comunes
+# Test a search
+curl -s "http://localhost:8080/search?q=test&format=json" | head -20
+```
 
-- **Secret key débil o predeterminada**: Usar una clave aleatoria larga. SearXNG rechaza claves débiles.
-- **Rate limiting de motores**: Los motores de búsqueda pueden bloquear IPs con muchas solicitudes. Habilitar el limiter integrado.
-- **Motores deshabilitados silenciosamente**: Algunos motores requieren configuración adicional. Verificar en la página de preferencias.
-- **Permisos de directorio**: Los directorios montados deben ser escribibles por el usuario del contenedor.
-- **Base URL incorrecta**: Debe coincidir exactamente con la URL de acceso, incluyendo el protocolo y la barra final.
+**Expected:** SearXNG responds on port 8080 through Nginx. Search queries return aggregated results.
 
-## Habilidades Relacionadas
+**On failure:** Check `docker compose logs searxng` for config errors. Verify `settings.yml` YAML syntax.
 
-- `configure-nginx` - Configuración detallada de Nginx como proxy
-- `configure-reverse-proxy` - Patrones de proxy inverso con Traefik
-- `setup-compose-stack` - Stacks Docker Compose multi-servicio
+### Step 7: Add SSL (Production)
+
+For public deployments, add SSL termination. Update `docker-compose.yml`:
+
+```yaml
+services:
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx-ssl.conf:/etc/nginx/nginx.conf:ro
+      - certbot-certs:/etc/letsencrypt:ro
+      - certbot-webroot:/var/www/certbot:ro
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot-certs:/etc/letsencrypt
+      - certbot-webroot:/var/www/certbot
+
+volumes:
+  certbot-certs:
+  certbot-webroot:
+```
+
+See `configure-nginx` skill for the full SSL Nginx configuration.
+
+### Step 8: Updates and Maintenance
+
+```bash
+# Pull latest image
+docker compose pull searxng
+
+# Restart with new image
+docker compose up -d
+
+# Backup configuration
+cp -r config/ config-backup-$(date +%Y%m%d)/
+```
+
+## Validation
+
+- [ ] SearXNG starts without errors in logs
+- [ ] Search queries return results from configured engines
+- [ ] Image proxy works (images load through SearXNG)
+- [ ] Rate limiter blocks excessive requests
+- [ ] Configuration persists across container restarts
+- [ ] Nginx proxies requests correctly
+
+## Common Pitfalls
+
+- **Missing secret_key**: SearXNG will refuse to start without a `secret_key` in settings.yml.
+- **Config permissions**: SearXNG writes to the config directory. The volume must be `:rw` not `:ro`.
+- **Engine blocks**: Some engines may block requests from server IPs. Rotate engines or use image proxy.
+- **YAML indentation**: `settings.yml` is sensitive to indentation. Validate with a YAML linter before deploying.
+- **Base URL mismatch**: `SEARXNG_BASE_URL` must match the actual URL users access, including protocol and trailing slash.
+- **DNS resolution in Docker**: Engines that use Google/Bing may need host network or proper DNS. Default Docker DNS usually works.
+
+## Related Skills
+
+- `setup-compose-stack` - general Docker Compose patterns used here
+- `configure-nginx` - Nginx configuration for SSL and security headers
+- `configure-reverse-proxy` - advanced proxy patterns for the Nginx frontend

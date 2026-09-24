@@ -13,6 +13,7 @@ allowed-tools: Read Write Edit Bash Grep Glob
 locale: ja
 source_locale: en
 source_commit: 33b561c9
+fence_basis_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 metadata:
@@ -227,31 +228,21 @@ print(p)
 
 ### ステップ 5: レンダリング — アイコンの生成
 
-ビルドパイプラインを実行してWebPをレンダリングする。
+アイコンパイプラインを実行して新しいグリフをレンダリングする。エントリポイントには常に `build.sh` を使用する — プラットフォーム検出とRバイナリの選択を処理してくれる。フラグの完全なリファレンスとパイプラインの構成については [render-icon-pipeline](../render-icon-pipeline/SKILL.md) を参照。
 
-1. `viz/` ディレクトリに移動する
-2. エンティティタイプに基づいてレンダリングする:
-
-**スキルの場合:**
 ```bash
-cd viz && Rscript build-icons.R --only <domain>
-# Or skip existing: Rscript build-icons.R --only <domain> --skip-existing
+# From project root — renders all palettes, standard + HD, skips existing icons
+bash viz/build.sh --only <domain> --skip-existing          # skills
+bash viz/build.sh --type agent --only <id> --skip-existing # agents
+bash viz/build.sh --type team --only <id> --skip-existing  # teams
+
+# Dry run first:
+bash viz/build.sh --only <domain> --dry-run
 ```
 
-**エージェントの場合:**
-```bash
-cd viz && Rscript build-agent-icons.R --only <agent-id>
-# Or skip existing: Rscript build-agent-icons.R --only <agent-id> --skip-existing
-```
+`build.sh` はパイプライン全体（パレット → データ → マニフェスト → レンダリング → ターミナルグリフ）を実行する。レンダリング以外のステップで約10秒かかるが、すべてのデータが最新であることが保証される。
 
-**チームの場合:**
-```bash
-cd viz && Rscript build-team-icons.R --only <team-id>
-# Or skip existing: Rscript build-team-icons.R --only <team-id> --skip-existing
-```
-
-3. ドライランを先に行うには、任意のコマンドに `--dry-run` を追加する
-4. 出力先:
+出力先:
    - スキル: `viz/public/icons/<palette>/<domain>/<skill-id>.webp`
    - エージェント: `viz/public/icons/<palette>/agents/<agent-id>.webp`
    - チーム: `viz/public/icons/<palette>/teams/<team-id>.webp`
@@ -320,7 +311,7 @@ cd viz && Rscript build-team-icons.R --only <team-id>
 
 ### ドメインとエンティティのカラーパレット
 
-全58ドメインのカラー（スキル用）は `viz/R/palettes.R` で定義されている（唯一の信頼できるソース）。エージェントとチームのカラーも `palettes.R` で管理されている。cyberpunkパレット（手動調整されたネオンカラー）は `get_cyberpunk_colors()` に格納されている。viridisファミリーのパレットは `viridisLite` で自動生成される。
+全ドメインのカラー（スキル用）は `viz/R/palettes.R` で定義されている（唯一の信頼できるソース）。エージェントとチームのカラーも `palettes.R` で管理されている。cyberpunkパレット（手動調整されたネオンカラー）は `get_cyberpunk_colors()` に格納されている。viridisファミリーのパレットは `viridisLite` で自動生成される。
 
 カラーを参照するには:
 ```r
@@ -333,7 +324,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 新しいドメインを追加する場合は、`palettes.R` の3箇所に追加する:
 1. `PALETTE_DOMAIN_ORDER`（アルファベット順）
 2. `get_cyberpunk_colors()` のドメインリスト
-3. `Rscript generate-palette-colors.R` を実行してJSON + JSを再生成する
+3. `bash viz/build.sh` を実行してパレット、データ、マニフェストを再生成する
 
 ### グリフ関数カタログ
 

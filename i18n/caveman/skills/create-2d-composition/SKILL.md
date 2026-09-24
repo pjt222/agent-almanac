@@ -3,6 +3,7 @@ name: create-2d-composition
 locale: caveman
 source_locale: en
 source_commit: "75ded7a1"
+fence_basis_commit: 75ded7a1
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >

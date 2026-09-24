@@ -8,22 +8,45 @@
 //   separators : decorative table separator rows -> compact `|---|---|`
 //                (3 dashes/column, alignment colons preserved)
 //   fences     : untagged opening code fences    -> add a language tag
-//                (heuristic detection of bash/console/json/yaml/r/diff; `text` fallback)
+//                (`json` when the block actually parses as JSON, otherwise `text`)
+//
+// The tag heuristic infers ONLY json, deliberately — see guessLanguage below for why
+// prose-based inference of bash/yaml/r produces mostly false positives on this corpus.
+// This header previously advertised detection of bash/console/yaml/r/diff, which the
+// implementation has never done.
+//
+// It PREVIEWS by default and writes only when `--write` is passed (#490). The inverse —
+// write by default, `--dry` to preview — is what this file used to do, and it is the shape
+// #486 inverted in the i18n normalizer after a read-only probe agent typed the bare command
+// and silently rewrote 281 files. Every later measurement of that backlog was then wrong
+// and self-consistent. The blast radius here is larger, not smaller: `--scope all` is
+// skills/ agents/ teams/ guides/ i18n/, and the *default* scope is still every English
+// content file. The destructive mode must not be the one you get by typing the obvious
+// command.
+//
+// `--dry` is retained as an explicit no-op so old invocations keep working and keep
+// meaning what they meant. Passing both `--write` and `--dry` is an error rather than a
+// guess.
+//
+// Two further guards follow the same reasoning: it refuses to write into a dirty scope
+// (`git checkout --` is the only undo, and it would destroy uncommitted work), and it
+// announces the write on stderr before touching anything.
 //
 // Usage:
 //   node scripts/normalize-content-style.js --mode <separators|fences|both> --scope <english|all>
 //   node scripts/normalize-content-style.js --mode both --files a.md b.md ...
-//   add --dry to report changes without writing.
+//   node scripts/normalize-content-style.js --write            # apply; default is preview
 
-import { execSync } from "node:child_process";
+import { execSync, execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { isTemplate } from "./lib/content-paths.js";
 
 const CONTENT_GLOBS = ["skills/", "agents/", "teams/", "guides/", "i18n/"];
 const ENGLISH_GLOBS = ["skills/", "agents/", "teams/", "guides/"];
 
 function isContentFile(p) {
   if (!CONTENT_GLOBS.some((g) => p.startsWith(g))) return false;
-  if (p.includes("/_template")) return false;
+  if (isTemplate(p)) return false; // #672 — see check-content-style.js
   return p.endsWith(".md");
 }
 
@@ -164,22 +187,161 @@ function listFiles(scope) {
 
 // ── Main ────────────────────────────────────────────────────────────────────
 const argv = process.argv.slice(2);
-function flagVal(name) {
-  const i = argv.indexOf(name);
-  return i >= 0 ? argv[i + 1] : null;
+
+function usageError(msg) {
+  console.error(`ERROR: ${msg}`);
+  process.exit(2);
 }
-const mode = flagVal("--mode") || "both";
-const dry = argv.includes("--dry");
+
+/**
+ * One pass, default-deny, no `indexOf` lookups.
+ *
+ * The predecessor scanned with `argv.indexOf` and stopped validating after `--files`,
+ * which left three ways to get a run other than the one you asked for — all of them
+ * silent, and two of them in the destructive direction:
+ *
+ * - a trailing value flag (`--write --mode`) read `argv[i+1]` as `undefined`, and
+ *   `undefined || "both"` then passed the enum check, so a caller who narrowed the run to
+ *   one transform got both. This is the sibling tool's documented failure verbatim: "a run
+ *   the caller had narrowed to one locale silently covered all ten ... 281 files rewritten
+ *   where 63 were asked for".
+ * - `--files a.md --write b.md` dropped `b.md`, because the list stopped at the first flag
+ *   and nothing looked at what came after.
+ * - anything after `--files` skipped validation entirely, so `--files a.md --wrote`
+ *   previewed instead of erroring — the opposite of what the default-deny block claimed.
+ */
+const opts = { write: false, dry: false, mode: null, scope: null, files: null };
+for (let i = 0; i < argv.length; i += 1) {
+  const a = argv[i];
+  if (a === "--files") {
+    if (opts.files) usageError("--files given twice");
+    const list = [];
+    while (i + 1 < argv.length && !argv[i + 1].startsWith("--")) list.push(argv[++i]);
+    if (!list.length) usageError("--files requires at least one path");
+    opts.files = list;
+  } else if (a === "--write") {
+    opts.write = true;
+  } else if (a === "--dry") {
+    opts.dry = true;
+  } else if (a === "--mode" || a === "--scope") {
+    const v = argv[i + 1];
+    if (v === undefined || v.startsWith("--")) usageError(`${a} requires a value`);
+    opts[a.slice(2)] = v;
+    i += 1;
+  } else if (a.startsWith("--")) {
+    usageError(`unknown flag ${a}`);
+  } else {
+    usageError(`unexpected argument '${a}' — paths follow --files, which must come last`);
+  }
+}
+
+// Guessing which one the caller meant is how a preview becomes a write.
+if (opts.write && opts.dry) {
+  usageError("--write and --dry contradict each other. Pass one.");
+}
+if (opts.files && opts.scope) {
+  usageError("--files and --scope select the same thing two ways. Pass one.");
+}
+const WRITE = opts.write;
+
+const mode = opts.mode || "both";
+if (!["separators", "fences", "both"].includes(mode)) {
+  usageError(`--mode must be separators|fences|both (got '${mode}')`);
+}
 const doSep = mode === "separators" || mode === "both";
 const doFence = mode === "fences" || mode === "both";
 
 let files;
-const filesIdx = argv.indexOf("--files");
-if (filesIdx >= 0) {
-  files = argv.slice(filesIdx + 1).filter((a) => !a.startsWith("--"));
+let pathspec;
+if (opts.files) {
+  files = opts.files;
+  pathspec = files;
 } else {
-  const scope = flagVal("--scope") || "english";
+  const scope = opts.scope || "english";
+  if (!["english", "all"].includes(scope)) {
+    usageError(`--scope must be english|all (got '${scope}')`);
+  }
   files = listFiles(scope);
+  pathspec = scope === "english" ? ENGLISH_GLOBS : CONTENT_GLOBS;
+}
+
+// Refuse to write into a dirty scope. The only undo for a bad run is `git checkout --`,
+// which would also destroy whatever uncommitted work was already there.
+if (WRITE) {
+  // `--assume-unchanged` / `--skip-worktree` make git report a file clean no matter how
+  // far the worktree has diverged, so the status check below would lie. `mutation-check`
+  // refuses to run for the same reason, and `repo-guard` compares index flags for it.
+  let lsFlags = "";
+  try {
+    lsFlags = execFileSync("git", ["ls-files", "-v", "--", ...pathspec], {
+      encoding: "utf8",
+      maxBuffer: 128 * 1024 * 1024,
+    });
+  } catch (err) {
+    usageError(`could not read the git index: ${err.message}`);
+  }
+  const masked = lsFlags
+    .split("\n")
+    .filter((line) => line && line[0] !== "H")
+    .map((line) => `  ${line}`);
+  if (masked.length) {
+    console.error("ERROR: files in scope carry a git index flag (assume-unchanged or");
+    console.error("skip-worktree). git reports those clean regardless of their real");
+    console.error("contents, so the dirty check below cannot be trusted:");
+    for (const line of masked.slice(0, 10)) console.error(line);
+    if (masked.length > 10) console.error(`  ... and ${masked.length - 10} more`);
+    console.error("Clear with:  git update-index --no-skip-worktree --no-assume-unchanged -- <path>");
+    process.exit(2);
+  }
+
+  // An ignored path is the one input class where the undo below genuinely does not
+  // exist — git holds no copy at all — and it is exactly the class `git status
+  // --porcelain` omits by design. Reachable only through `--files`.
+  if (opts.files) {
+    // `git check-ignore` exits 1 when nothing matches — the common case — so a throw here
+    // is the success path, not an error. It also reports a tracked file as not ignored,
+    // which is the semantics wanted: a tracked file is recoverable whatever the rules say.
+    let ignored = "";
+    try {
+      ignored = execFileSync("git", ["check-ignore", "--", ...files], {
+        encoding: "utf8",
+        maxBuffer: 16 * 1024 * 1024,
+      }).trim();
+    } catch (err) {
+      if (err.status !== 1) usageError(`could not check ignore rules: ${err.message}`);
+    }
+    if (ignored) {
+      console.error("ERROR: refusing to write to a git-ignored path:");
+      for (const p of ignored.split("\n")) console.error(`  ${p}`);
+      console.error("git holds no copy of an ignored file, so this write would be unrecoverable.");
+      process.exit(2);
+    }
+  }
+
+  let status;
+  try {
+    status = execFileSync("git", ["status", "--porcelain", "--", ...pathspec], {
+      encoding: "utf8",
+      maxBuffer: 128 * 1024 * 1024,
+    });
+  } catch (err) {
+    usageError(`could not determine whether the scope is clean: ${err.message}`);
+  }
+  const lines = status.trim() ? status.trimEnd().split("\n") : [];
+  if (lines.length) {
+    console.error("ERROR: refusing to write into a dirty scope:");
+    for (const line of lines.slice(0, 10)) console.error(`  ${line}`);
+    if (lines.length > 10) console.error(`  ... and ${lines.length - 10} more`);
+    console.error("");
+    console.error("This tool rewrites files in place, and `git checkout --` is the only undo —");
+    // Stock "commit or stash" advice hands back a tree this guard still refuses, because
+    // plain `git stash` leaves untracked entries behind.
+    console.error(lines.some((l) => l.startsWith("??"))
+      ? "it would discard the changes above too. Commit them first, or stash them with\n`git stash -u` (plain `git stash` leaves the `??` entries behind)."
+      : "it would discard the changes above too. Commit or stash them first.");
+    process.exit(2);
+  }
+  console.error(`normalize-content-style: WRITING to ${files.length} scanned file(s) in scope.`);
 }
 
 let totalSep = 0;
@@ -200,11 +362,12 @@ for (const f of files) {
     fenceFiles++;
   }
   if (text !== original) {
-    if (!dry) writeFileSync(f, text);
+    if (WRITE) writeFileSync(f, text);
     written++;
   }
 }
-console.log(`normalize-content-style (mode=${mode}${dry ? ", DRY" : ""}):`);
+console.log(`normalize-content-style (mode=${mode}${WRITE ? "" : ", PREVIEW"}):`);
 if (doSep) console.log(`  separators compacted: ${totalSep} across ${sepFiles} files`);
 if (doFence) console.log(`  fences tagged:        ${totalFence} across ${fenceFiles} files`);
-console.log(`  files ${dry ? "to change" : "written"}: ${written} (of ${files.length} scanned)`);
+console.log(`  files ${WRITE ? "written" : "to change"}: ${written} (of ${files.length} scanned)`);
+if (!WRITE && written) console.log("  (preview only — pass --write to apply)");

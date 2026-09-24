@@ -17,7 +17,7 @@ metadata:
   domain: esoteric
   complexity: advanced
   language: natural
-  tags: esoteric, healing, guidance, wellness, somatic, emotional, cognitive, ai-self-application
+  tags: esoteric, healing, energy-work, reiki, herbalism, holistic, guidance
   locale: es
   source_locale: en
   source_commit: 6f65f316

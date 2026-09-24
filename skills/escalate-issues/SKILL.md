@@ -190,16 +190,21 @@ def route_issue(severity, issue_type):
 
 Generate a formatted report suitable for the target audience (agent or human).
 
-**For Specialist Agents** (structured format for MCP tools):
+**For Specialist Agents** (structured format for MCP tools).
+
+Emit one document: the routing header delimited by `---` fences, then the report
+body beneath it. The receiving tool parses the header keys, so those and the
+agent ids stay in English.
+
 ```yaml
----
 type: escalation
 severity: high
 from_agent: janitor
 to_agent: security-analyst
 blocking: false
----
+```
 
+```text
 # Security Concern: Hardcoded API Key in Config
 
 **File**: config/production.yml:45
@@ -210,6 +215,8 @@ If valid, recommend secure credential management strategy.
 
 **Context**: Discovered during config cleanup sweep.
 ```
+
+Emit them as one document, with the header delimited by `---` fences.
 
 **For Human Reviewers** (detailed markdown):
 ```markdown

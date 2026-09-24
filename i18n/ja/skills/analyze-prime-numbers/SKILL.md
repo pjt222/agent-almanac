@@ -10,8 +10,8 @@ metadata:
   version: "1.0"
   domain: number-theory
   complexity: intermediate
-  language: natural
-  tags: number-theory, primes, factorization, primality-testing, cryptography
+  language: multi
+  tags: number-theory, primes, primality, factorization, sieve
   locale: ja
   source_locale: en
   source_commit: 6f65f316

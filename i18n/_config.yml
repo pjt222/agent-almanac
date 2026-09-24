@@ -41,10 +41,3 @@ supported_locales:
     name: 文言文極
     name_en: Wenyan Ultra
     status: active
-content_types: [skills, agents, teams, guides]
-source_counts:
-  skills: 350
-  agents: 72
-  teams: 16
-  guides: 24
-  total: 462

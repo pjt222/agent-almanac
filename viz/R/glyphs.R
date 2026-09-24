@@ -128,7 +128,7 @@ SKILL_GLYPHS <- list(
   "prepare-soil"                       = "glyph_soil_layers",
   "read-garden"                        = "glyph_garden_eye",
 
-  # ── general (24) ───────────────────────────────────────────────────────
+  # ── general (25) ───────────────────────────────────────────────────────
   "setup-wsl-dev-environment"      = "glyph_terminal",
   "create-workflow"                = "glyph_workflow_scroll",
   "write-claude-md"                = "glyph_robot_doc",
@@ -144,6 +144,7 @@ SKILL_GLYPHS <- list(
   "argumentation"                  = "glyph_argument_scale",
   "manage-token-budget"            = "glyph_token_gauge",
   "prune-agent-memory"             = "glyph_memory_prune",
+  "verify-memory-integrity"        = "glyph_shelf_read",
   "circuit-breaker-pattern"        = "glyph_circuit_breaker",
   "verify-agent-output"            = "glyph_verify_checkmark",
   "write-continue-here"            = "glyph_continue_here",

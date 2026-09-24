@@ -1,54 +1,81 @@
 name: Validate Integrity
 on:
+  # No `paths:` filter, deliberately (#641). This job is a REQUIRED status check, and a
+  # required check that does not run is not "skipped" -- it sits on "Expected — waiting for
+  # status to be reported" and refuses the merge forever. Only an unfiltered workflow can be
+  # required, which is why `validate-line-endings.yml` was the only one that ever worked as one.
+  #
+  # The filter this replaces was a curated 19-entry list whose every addition was argued (see
+  # git history for the rationale of each). Every one of those arguments was a special case of
+  # "this job must run when X changes"; running on everything is the general case, and it also
+  # retires the whole class of bug where an input is added to a check and nobody adds its path
+  # here. A10d used to enforce that listing and now reads the absent filter as universal
+  # coverage -- see `wf_event_paths` in scripts/validate-integrity.sh.
+  #
+  # Cost measured on PR #646: this job takes ~1m to run. Unconditional is affordable.
   push:
     branches: [main]
-    paths:
-      - 'agents/**'
-      - 'teams/**'
-      - 'guides/**'
-      - 'skills/**'
-      - 'workflows/**'
-      - 'scripts/**'
-      - '.claude/**'
-      - '.github/workflows/update-readmes.yml'
-      # A8 derives its expected translation_status set from i18n/_config.yml and
-      # B6 reads i18n/*/ — without this, a new-locale PR bypasses both (#362).
-      - 'i18n/**'
-      - 'viz/R/glyphs.R'
-      - 'viz/R/agent_glyphs.R'
-      - 'viz/R/palettes.R'
-      - 'viz/domain-styles.yml'
-      - 'viz/agent-styles.yml'
-      - 'viz/team-styles.yml'
-      - 'viz/build-icon-manifest.js'
   pull_request:
-    paths:
-      - 'agents/**'
-      - 'teams/**'
-      - 'guides/**'
-      - 'skills/**'
-      - 'workflows/**'
-      - 'scripts/**'
-      - '.claude/**'
-      - '.github/workflows/update-readmes.yml'
-      - 'i18n/**'
-      - 'viz/R/glyphs.R'
-      - 'viz/R/agent_glyphs.R'
-      - 'viz/R/palettes.R'
-      - 'viz/domain-styles.yml'
-      - 'viz/agent-styles.yml'
-      - 'viz/team-styles.yml'
-      - 'viz/build-icon-manifest.js'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  validate:
+  # Job id is the status-check CONTEXT name. It was `validate`, which four workflows shared --
+  # integrity, skills, tests and translations -- so the four were one indistinguishable name and
+  # none of them could be required individually (#641).
+  integrity:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
+
+      # B13 shells out to node. The runner image ships one, but relying on
+      # that implicitly means a future image change turns the gate red (or,
+      # worse, makes it skippable) for reasons unrelated to the repo. No
+      # `npm ci`: every script this job runs is dependency-free, which is the
+      # constraint A8 documents and B13 was written to respect.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      # Runs BEFORE the gate it guards, deliberately. A bare `x=$(grep …)` under
+      # `set -euo pipefail` aborts the whole script with no diagnostic, so a regression here
+      # makes validate-integrity.sh exit early and look like an ordinary pass-with-fewer-lines.
+      # Checking first means the reason is on screen above the silence (#647).
+      #
+      # Blocking, not `--warn`: the corpus is at zero unguarded sites as of this commit, so
+      # there is no backlog to ratchet down and nothing to warn about. A gate introduced clean
+      # can ship blocking on day one -- see CLAUDE.md § Ratcheting a Warn-Only Gate for the
+      # case where that is not true.
+      #
+      # Invoked as `node …` rather than `npm run check:bare-substitutions` to honour the
+      # no-`npm ci` constraint stated above without depending on npm's behaviour with an
+      # absent node_modules. The npm alias exists for local use.
+      - name: Check for abort-capable command substitutions
+        run: node scripts/check-bare-substitutions.js
+
+      # Here rather than in validate-readmes.yml, and the reason is the whole point of the
+      # check (#618). This asserts that every module `update-readmes.yml`'s generators import
+      # appears in that workflow's `paths:` filter. Its subject is therefore a generator
+      # module or the healer's own filter -- and `validate-readmes.yml` triggers on its OUTPUT
+      # set (the ten generated files, deliberately: see its header). So a PR adding an import
+      # to `scripts/generate-readmes.js` and touching no README would never have run it.
+      #
+      # Measured on this branch before the move: the pull_request filter over there lists ten
+      # README paths and the workflow file itself, and no `scripts/` entry at all. PR #662 saw
+      # the check run only because it edits `validate-readmes.yml`. A gate that cannot fire on
+      # its own subject has no severity to argue about, which settles the placement question
+      # against the severity argument that first put it there.
+      #
+      # This workflow carries no `paths:` filter at all (#641), so the trigger question does
+      # not arise. Same no-`npm ci` constraint, so it is invoked as `node …`.
+      - name: Check healer trigger paths cover its generator inputs
+        run: node scripts/check-workflow-generator-inputs.js
 
       - name: Run integrity checks
         run: bash scripts/validate-integrity.sh

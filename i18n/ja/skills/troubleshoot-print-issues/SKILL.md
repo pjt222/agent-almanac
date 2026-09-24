@@ -156,25 +156,23 @@ Implement immediate solutions for common issues:
 ### Poor Bed Adhesion
 
 **Immediate fixes**:
-```bash
-# 1. Clean bed thoroughly
-# Glass/PEI: Isopropyl alcohol 90%+
-# BuildTak: Warm water and dish soap
+1. Clean bed thoroughly
+   Glass/PEI: Isopropyl alcohol 90%+
+   BuildTak: Warm water and dish soap
 
-# 2. Level bed (paper test at 4 corners + center)
-# Paper should drag slightly
+2. Level bed (paper test at 4 corners + center)
+   Paper should drag slightly
 
-# 3. Adjust Z-offset down (squish first layer more)
-# Start: -0.05mm increments until lines fuse
+3. Adjust Z-offset down (squish first layer more)
+   Start: -0.05mm increments until lines fuse
 
-# 4. Increase bed temperature +5°C
+4. Increase bed temperature +5°C
 
-# 5. Add adhesion aid:
-# - Glue stick (PLA/PETG)
-# - Hairspray (ABS)
-# - ABS juice (ABS) - ABS dissolved in acetone
-# - Magigoo/3D printing adhesive
-```
+5. Add adhesion aid:
+   - Glue stick (PLA/PETG)
+   - Hairspray (ABS)
+   - ABS juice (ABS) - ABS dissolved in acetone
+   - Magigoo/3D printing adhesive
 
 **Slicer settings**:
 - First layer height: 0.2-0.3mm (thicker = better squish)
@@ -196,7 +194,7 @@ Implement immediate solutions for common issues:
 ```
 
 **Retraction tuning**:
-```yaml
+```text
 # Direct drive extruder:
 retraction_distance: 1.0-2.0mm
 retraction_speed: 40-50mm/s
@@ -218,20 +216,18 @@ retraction_speed: 40-60mm/s
 ### Layer Shifts
 
 **Mechanical checks**:
-```bash
-# 1. Check belt tension (should twang like guitar string)
-# Tighten if loose
+1. Check belt tension (should twang like guitar string)
+   Tighten if loose
 
-# 2. Check pulley set screws (motor shafts)
-# Must align with flat on motor shaft
+2. Check pulley set screws (motor shafts)
+   Must align with flat on motor shaft
 
-# 3. Check for mechanical resistance
-# Manually move X/Y axes - should glide smoothly
-# Binding indicates dirty rods, worn bearings, or misalignment
+3. Check for mechanical resistance
+   Manually move X/Y axes - should glide smoothly
+   Binding indicates dirty rods, worn bearings, or misalignment
 
-# 4. Check stepper motor current (advanced)
-# Too low → skipping; too high → overheating
-```
+4. Check stepper motor current (advanced)
+   Too low → skipping; too high → overheating
 
 **Speed reduction**:
 ```yaml
@@ -249,7 +245,7 @@ jerk: 8mm/s (from 15)
 ### Warping
 
 **Thermal management**:
-```yaml
+```text
 # Increase bed temperature:
 PLA: 60°C → 65°C
 PETG: 80°C → 85°C
@@ -277,30 +273,26 @@ regular_fan: 25% max (ABS), 50% (PETG), 100% (PLA)
 ### Under-Extrusion
 
 **Quick fixes**:
-```bash
-# 1. Check for nozzle clog
-# Heat to print temp, manually push filament
-# Should extrude smoothly
+1. Check for nozzle clog
+   Heat to print temp, manually push filament
+   Should extrude smoothly
 
-# 2. Cold pull cleaning (if partial clog)
-# Heat to 220°C, push cleaning filament through
-# Cool to 90°C, pull sharply - should remove debris
+2. Cold pull cleaning (if partial clog)
+   Heat to 220°C, push cleaning filament through
+   Cool to 90°C, pull sharply - should remove debris
 
-# 3. Increase temperature +5-10°C
-# Higher temp = better flow
+3. Increase temperature +5-10°C
+   Higher temp = better flow
 
-# 4. Increase flow rate 2-5%
-# Slicer: Filament settings → Flow → 102-105%
-```
+4. Increase flow rate 2-5%
+   Slicer: Filament settings → Flow → 102-105%
 
 **E-steps calibration**:
-```bash
-# 1. Mark filament 120mm above extruder
-# 2. Extrude 100mm: G1 E100 F100
-# 3. Measure remaining distance to mark
-# 4. Calculate: new_steps = current_steps × (100 / actual_extruded)
-# 5. Set: M92 E<new_steps>; M500 (save to EEPROM)
-```
+1. Mark filament 120mm above extruder
+2. Extrude 100mm: G1 E100 F100
+3. Measure remaining distance to mark
+4. Calculate: new_steps = current_steps × (100 / actual_extruded)
+5. Set: `M92 E<new_steps>`; M500 (save to EEPROM)
 
 **期待結果:** Consistent extrusion with no gaps in perimeters or infill.
 
@@ -309,7 +301,7 @@ regular_fan: 25% max (ABS), 50% (PETG), 100% (PLA)
 ### Over-Extrusion
 
 **Flow rate reduction**:
-```yaml
+```text
 # Reduce flow in 2% increments:
 extrusion_multiplier: 0.98 → 0.96 → 0.94
 
@@ -320,13 +312,11 @@ extrusion_multiplier: 0.98 → 0.96 → 0.94
 ```
 
 **Dimensional accuracy test**:
-```bash
-# Print 20mm calibration cube
-# Measure with calipers:
-# X/Y dimensions should be 20.0mm ± 0.1mm
-# If consistently oversized → reduce flow
-# If undersized → increase flow
-```
+Print 20mm calibration cube
+Measure with calipers:
+X/Y dimensions should be 20.0mm ± 0.1mm
+If consistently oversized → reduce flow
+If undersized → increase flow
 
 **期待結果:** Accurate dimensions, smooth surfaces, no bulging.
 

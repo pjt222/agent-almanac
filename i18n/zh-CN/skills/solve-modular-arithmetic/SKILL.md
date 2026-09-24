@@ -11,8 +11,8 @@ metadata:
   version: "1.0"
   domain: number-theory
   complexity: intermediate
-  language: natural
-  tags: number-theory, modular-arithmetic, congruences, chinese-remainder-theorem, rsa
+  language: multi
+  tags: number-theory, modular-arithmetic, congruences, crt, euler
   locale: zh-CN
   source_locale: en
   source_commit: 6f65f316

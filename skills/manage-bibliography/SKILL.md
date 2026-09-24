@@ -123,6 +123,17 @@ message(sprintf("Merged: %d + %d = %d entries (before dedup)",
 
 **Expected:** A combined BibEntry object containing entries from both files.
 
+Regenerating keys after a merge is a separate job, and RefManageR gives you both
+halves: `names(bib)` returns the citation keys and `names(bib) <- new_keys` writes
+them back, so `names(bib)[1] <- "newkey"` renames a single entry. Do not assume the
+keys you assign survive verbatim — both `names<-` and `c()` push their result
+through `make.unique(keys, sep = ":")`, so a second `Smith2020` becomes
+`Smith2020:1`; `c()` therefore never drops an entry, but a collision you did not
+disambiguate yourself reaches the output .bib as a colon-suffixed key.
+Disambiguate first (`Smith2020a`/`Smith2020b`, a coauthor name, or a title word),
+then re-read `names(bib)` and keep the old-to-new pairing — every `@key` in an
+.Rmd or .qmd body still names the old key.
+
 ### Step 5: Deduplicate Entries
 
 ```r
@@ -206,8 +217,11 @@ supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
   balance before parsing large files
 - **DOI rate limiting**: CrossRef throttles unauthenticated requests. Set a polite
   email with `RefManageR::BibOptions(check.entries = FALSE)` and batch requests
-- **Key collisions**: Merging files with duplicate keys (e.g., both have `Smith2020`)
-  silently overwrites. Regenerate keys after merging
+- **Key collisions**: Merging files where both have `Smith2020` does not overwrite
+  either entry — `c.BibEntry` routes the combined keys through
+  `make.unique(keys, sep = ":")`, so the second becomes `Smith2020:1`. Nothing is
+  lost, but a colon-suffixed key you did not choose reaches the output `.bib` and
+  no longer matches the `@Smith2020` in your document. Disambiguate before merging
 - **LaTeX in titles**: Titles with `{DNA}` or `$\alpha$` need careful handling;
   RefManageR preserves these but downstream tools may strip them
 

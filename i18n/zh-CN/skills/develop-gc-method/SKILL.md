@@ -17,7 +17,7 @@ metadata:
   domain: chromatography
   complexity: advanced
   language: natural
-  tags: chromatography, gas-chromatography, column-selection, temperature-programming, detector
+  tags: chromatography, gc, gas-chromatography, method-development, separation
 ---
 
 # 开发气相色谱方法

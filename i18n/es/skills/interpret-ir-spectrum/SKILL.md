@@ -3,6 +3,7 @@ name: interpret-ir-spectrum
 locale: es
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-sonnet-4-6
 translation_date: 2026-03-16
 description: >
@@ -22,7 +23,7 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, ir, infrared, functional-groups, organic-chemistry
+  tags: spectroscopy, ir, infrared, functional-groups, absorption
 ---
 
 # Interpretar Espectro IR

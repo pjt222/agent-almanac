@@ -126,7 +126,7 @@ You are a [language] translator. Translate the following skills fully into [lang
 For each skill:
 1. Read the English source at skills/<name>/SKILL.md
 2. Create the translation at i18n/<locale>/skills/<name>/SKILL.md
-3. Add frontmatter: locale, source_locale, source_commit, translator, translation_date
+3. Add frontmatter: locale, source_locale, source_commit, fence_basis_commit, translator, translation_date
 4. Translate ALL prose: title, description, every paragraph, every bullet point,
    every Expected/On failure block, every validation item, every pitfall description
 5. Keep in English: name field, code blocks, tool names, tags, domain, file paths

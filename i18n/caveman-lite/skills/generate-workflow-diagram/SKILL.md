@@ -84,23 +84,24 @@ Each `node_type` also receives a corresponding CSS class (e.g., `class nodeId in
 
 Choose a theme appropriate for the target audience.
 
+List all available themes:
+
 ```r
-# List all available themes
 get_diagram_themes()
-
-# Standard themes
-# "light"   — Default, bright colors
-# "dark"    — For dark mode environments
-# "auto"    — GitHub-adaptive with solid colors
-# "minimal" — Grayscale, print-friendly
-# "github"  — Optimized for GitHub README files
-
-# Colorblind-safe themes (viridis family)
-# "viridis" — Purple→Blue→Green→Yellow, general accessibility
-# "magma"   — Purple→Red→Yellow, high contrast for print
-# "plasma"  — Purple→Pink→Orange→Yellow, presentations
-# "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
 ```
+
+Standard themes
+- "light"   — Default, bright colors
+- "dark"    — For dark mode environments
+- "auto"    — GitHub-adaptive with solid colors
+- "minimal" — Grayscale, print-friendly
+- "github"  — Optimized for GitHub README files
+
+Colorblind-safe themes (viridis family)
+- "viridis" — Purple→Blue→Green→Yellow, general accessibility
+- "magma"   — Purple→Red→Yellow, high contrast for print
+- "plasma"  — Purple→Pink→Orange→Yellow, presentations
+- "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
 
 Additional parameters:
 - `direction`: Diagram flow direction — `"TD"` (top-down, default), `"LR"` (left-right), `"RL"`, `"BT"`

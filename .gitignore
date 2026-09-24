@@ -18,8 +18,21 @@ Thumbs.db
 *.bak
 *.backup
 
-# Local continuation markers
-CONTINUE_HERE.md
+# Local continuation markers.
+#
+# THIS REPOSITORY'S CHOICE, not a rule the skill imposes. `write-continue-here`'s lifecycle step
+# states the tracked-vs-ignored trade-off and deliberately enforces neither (#775); an earlier
+# edition told every consumer to add this line, which ruled out the tracked lifecycle its own
+# complement supports. We ignore because handoffs here are scratch between two sessions and we
+# do not want their churn in the history — the cost being that consuming one is final, so an
+# edition worth keeping goes to the PARENT-level archive at ../misc/handoff-archive/<date>/
+# BEFORE it is deleted — that path is outside this repository, and read repo-relative it
+# resolves to nothing.
+#
+# The glob, not the bare name: the skill drafts to CONTINUE_HERE.draft.md and renames it only
+# after the verification round, so the bare name left every draft untracked-but-visible — and a
+# draft is the one edition most likely to be swept into an unrelated commit by a `git add -A`.
+CONTINUE_HERE*.md
 
 # Campfire state (local, not shared)
 .agent-almanac/
@@ -55,3 +68,19 @@ cli-rs/target/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 __pycache__/
+
+# Local secrets. `.env` holds API keys used while authoring content that documents a
+# third-party service (currently TYPESAFE_API_KEY); nothing in this repository's code or
+# gates reads it, and nothing ever should — a gate that needs a key cannot run for a
+# contributor who has none.
+#
+# The glob as well as the bare name, because `.env` alone does not match `.env.local` or
+# `.env.production`, and the negation because `.env.example` is the tracked template that
+# tells a contributor which names exist without ever carrying a value.
+#
+# Verify a new variant is actually covered before writing a secret into it:
+#   git check-ignore -v .env
+# An unignored `.env` is one `git add -A` away from a published credential.
+.env
+.env.*
+!.env.example

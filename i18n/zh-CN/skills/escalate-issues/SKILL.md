@@ -92,7 +92,7 @@ Is it purely cosmetic? → LOW
 为专家审查捕获所有相关上下文。
 
 **问题报告模板**：
-```markdown
+````markdown
 # Issue: [Brief Title]
 
 **Severity**: CRITICAL | HIGH | MEDIUM | LOW
@@ -136,7 +136,7 @@ Clear description of the problem in 2-3 sentences.
 
 - [Link to related documentation]
 - [Link to similar past issues]
-```text
+````
 
 **预期结果：** 问题已在 `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md` 中完整记录上下文
 
@@ -194,15 +194,20 @@ def route_issue(severity, issue_type):
 生成适合目标受众（代理或人工）的格式化报告。
 
 **面向专家代理**（MCP 工具的结构化格式）：
+Emit one document: the routing header delimited by `---` fences, then the report
+body beneath it. The receiving tool parses the header keys, so those and the
+agent ids stay in English.
+
 ```yaml
----
 type: escalation
 severity: high
 from_agent: janitor
 to_agent: security-analyst
 blocking: false
----
+```
 
+
+```text
 # Security Concern: Hardcoded API Key in Config
 
 **File**: config/production.yml:45

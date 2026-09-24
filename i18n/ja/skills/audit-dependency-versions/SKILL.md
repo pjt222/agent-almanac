@@ -198,11 +198,9 @@ cargo search serde --limit 1
 エコシステム固有のセキュリティ監査ツールを実行する:
 
 **R:**
-```r
-# No built-in audit tool; check manually
-# Cross-reference with https://www.r-project.org/security.html
-# Check GitHub advisories for each package
-```
+- No built-in audit tool; check manually
+- Cross-reference with https://www.r-project.org/security.html
+- Check GitHub advisories for each package
 
 **Node.js:**
 ```bash

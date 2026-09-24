@@ -15,7 +15,7 @@ metadata:
   domain: bushcraft
   complexity: intermediate
   language: natural
-  tags: bushcraft, fire, survival, wilderness, shelter
+  tags: bushcraft, fire, survival, wilderness, primitive-skills
   locale: de
   source_locale: en
   source_commit: 33b561c9

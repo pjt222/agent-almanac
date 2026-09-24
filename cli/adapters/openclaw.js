@@ -18,6 +18,8 @@ export class OpenClawAdapter extends FrameworkAdapter {
   static displayName = 'OpenClaw/NemoClaw';
   static strategy = 'symlink';
   static contentTypes = ['skill', 'agent'];
+  /** @type {Record<string, string[]>} #607: both land under ~/.openclaw/workspace/; projectDir never reaches a path. */
+  static scopes = { skill: ['global'], agent: ['global'] };
 
   async detect() {
     return existsSync(resolve(homedir(), '.openclaw/openclaw.json')) ||

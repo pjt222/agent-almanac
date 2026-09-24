@@ -12,7 +12,8 @@
  *     --test 'npm run test:cli'
  *
  * Exit 0 = mutant killed (the check works).
- * Exit 1 = mutant survived (the line is uncovered), or the run was inconclusive.
+ * Exit 1 = mutant survived (the line is uncovered), the run was inconclusive, or the kill was
+ *          SUSPECT — the mutant looks BROKEN rather than caught (#621).
  *
  * ── Why it is this defensive ─────────────────────────────────────
  *
@@ -28,7 +29,21 @@
  *     git has no copy of. Symlinks are now refused.
  *   - A mutation that merely broke JS parsing was reported as a kill, which is the
  *     exact false-confidence this tool exists to prevent. Mutants are now syntax
- *     checked, and a mutant that does not parse is INVALID, not killed.
+ *     checked, and a mutant that does not parse is INVALID, not killed. That guard
+ *     covered JavaScript ONLY until #758 — for every other extension it returned
+ *     `true` while `[3/5]` printed `it parses`, and a `.py` mutant with its `def`
+ *     colon removed scored `MUTANT KILLED by 1 failing test(s)`. The gate now runs a
+ *     checker per file type (`scripts/lib/mutation-parse.js`), names the checker it
+ *     ran, refuses a type it has no checker for before spending a baseline, and is
+ *     INCONCLUSIVE when the interpreter is absent or answered with no verdict.
+ *     Syntax-free types (`.md`, `.markdown`, `.txt`) proceed and say the INVALID
+ *     verdict cannot apply. `workflows/*.mjs` are checked in the Workflow dialect
+ *     (wrapped, so their top-level `return` is legal) — plain `node --check` refused
+ *     every one of them, unmutated. What stays JavaScript-only is the crash heuristic
+ *     one level up: `crashSuspicion` matches node runtime-error text, so a Python
+ *     `NameError` raised at import time by a mutant that PARSES (a deleted
+ *     assignment whose name is read at module scope, say) still reads as a kill.
+ *     That is the #621 trap for non-JS targets, disclosed rather than closed here.
  *   - spawnSync's 1 MiB default maxBuffer SIGTERMs the child and returns
  *     `status: null`; `?? 1` turned a genuinely GREEN run into "killed". Spawn
  *     errors and signals are now inspected and reported as inconclusive.
@@ -39,18 +54,27 @@
  */
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { dirname, extname, relative, resolve } from 'node:path';
+import { extname, relative, resolve } from 'node:path';
+import { parseFailCount, parsePassCount, crashSuspicion } from './lib/mutation-verdict.js';
+import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
 const USAGE = `Usage:
   node scripts/mutation-check.js --file <path> --test <cmd> (--delete-matching <str> | --replace <old>::<new>)
 
 Options:
   --file <path>             File to mutate. Must be tracked, unmodified, and a
-                            regular file (symlinks are refused).
+                            regular file (symlinks are refused). Syntax-checked
+                            types: ${CHECKED_EXTENSIONS.join(' ')}
+                            (workflows/*.mjs in the Workflow dialect);
+                            ${[...SYNTAX_FREE_EXTENSIONS].join(' ')} proceed with no
+                            syntax to check; any other type is refused (#758).
   --test <cmd>              Command whose red/green decides whether the mutant died
   --delete-matching <str>   Delete lines containing this literal substring
   --replace <old>::<new>    Replace literal <old> with <new>
+  --allow-broad             Accept a kill that fails a large share of the suite. Use when
+                            the mutated line genuinely is load-bearing for most of it.
+  --allow-crash-text        Accept crash text in the output. Use when the asserted property IS
+                            a load or runtime failure, so the test's own message quotes one.
   --allow-multiple          Permit a mutation affecting more than one site. Off by
                             default: a collateral site can produce a kill that gets
                             credited to the line you meant to test.
@@ -145,53 +169,9 @@ function inconclusiveReason(run) {
   return null;
 }
 
-/** Pull `fail N` out of node:test output; null if the format is not recognised. */
-function parseFailCount(output) {
-  const match = output.match(/^\s*\S*\s*fail\s+(\d+)\s*$/m);
-  return match ? Number(match[1]) : null;
-}
-
-/** The `type` of the nearest package.json above `dir`, defaulting to commonjs. */
-function packageType(dir, stopAt) {
-  let cur = dir;
-  for (;;) {
-    const manifest = resolve(cur, 'package.json');
-    if (existsSync(manifest)) {
-      try {
-        return JSON.parse(readFileSync(manifest, 'utf8')).type ?? 'commonjs';
-      } catch {
-        return 'commonjs';
-      }
-    }
-    if (cur === stopAt || dirname(cur) === cur) return 'commonjs';
-    cur = dirname(cur);
-  }
-}
-
-/**
- * JS mutants must still parse — otherwise a "kill" only means the file is broken.
- *
- * `node --check <file>.js` parses as CommonJS, so an ESM file mangled into invalid
- * syntax can still exit 0. Verified: a file containing a stray `}` checks clean as
- * `.js` and fails as `.mjs`. Since the extension drives the parser, the content is
- * probed through a temp file whose extension matches the package's actual module
- * type — otherwise this guard is dead for every `.js` file in an ESM package, which
- * is exactly the shape of defect it exists to catch.
- */
-function parses(filePath, content, repoRootDir) {
-  const ext = extname(filePath);
-  if (!['.js', '.mjs', '.cjs'].includes(ext)) return true;
-  const probeExt = ext !== '.js'
-    ? ext
-    : (packageType(dirname(filePath), repoRootDir) === 'module' ? '.mjs' : '.cjs');
-  const probe = resolve(tmpdir(), `mutation-check-probe-${process.pid}${probeExt}`);
-  try {
-    writeFileSync(probe, content);
-    return spawnSync(process.execPath, ['--check', probe]).status === 0;
-  } finally {
-    try { unlinkSync(probe); } catch { /* best effort */ }
-  }
-}
+// The syntax gate — one checker per file type, a verdict rather than a boolean — lives in
+// `scripts/lib/mutation-parse.js` (#758), where it can be tested without running a mutation.
+// It used to be a local `parses()` that returned `true` for every extension it did not know.
 
 // ── args ─────────────────────────────────────────────────────────
 
@@ -201,6 +181,8 @@ for (let i = 0; i < argv.length; i++) {
   const arg = argv[i];
   if (arg === '-h' || arg === '--help') opts.help = true;
   else if (arg === '--allow-multiple') opts.allowMultiple = true;
+  else if (arg === '--allow-broad') opts.allowBroad = true;
+  else if (arg === '--allow-crash-text') opts.allowCrashText = true;
   else if (arg === '--file') opts.file = argv[++i];
   else if (arg === '--test') opts.test = argv[++i];
   else if (arg === '--delete-matching') opts.deleteMatching = argv[++i];
@@ -279,6 +261,46 @@ if (dirty) {
   );
 }
 
+// ── syntax gate availability (#758) ──────────────────────────────
+//
+// A mutant that does not parse must be reported INVALID, so the tool has to be ABLE to reach
+// that verdict for this file type before it spends a baseline on it. Decided here, against the
+// unmutated content, so that a type with no checker is refused outright, a checker whose
+// interpreter is absent is INCONCLUSIVE now rather than after a multi-minute baseline, and an
+// original that already fails its own checker is not judged at all. Until #758 the gate
+// returned `true` for every extension it did not know and `[3/5]` printed `it parses` over a
+// file nobody had checked.
+
+const fileExt = extname(absFile);
+const syntaxProbe = await checkSyntax(absFile, readFileSync(absFile, 'utf8'), repoRoot);
+if (syntaxProbe.verdict === 'no-checker') {
+  fail(
+    `INCONCLUSIVE — ${syntaxProbe.detail}.\n` +
+    `  The INVALID verdict would be unreachable for ${relFile}, so a red result on a mutant could\n` +
+    '  mean "this file is broken" and would be reported as a kill. Refusing rather than guessing.\n' +
+    `  Checked types: ${CHECKED_EXTENSIONS.join(' ')}. Syntax-free types (${[...SYNTAX_FREE_EXTENSIONS].join(' ')})\n` +
+    '  proceed without a checker and say so.'
+  );
+}
+if (syntaxProbe.verdict === 'checker-missing') {
+  // `missing` separates "not installed" from "installed and did not answer" (EACCES, a
+  // signal, a parser that threw) — only the first deserves an install hint.
+  fail(
+    `INCONCLUSIVE — ${syntaxProbe.detail}.\n` +
+    '  A mutant that cannot be syntax-checked must not be scored.' +
+    (syntaxProbe.missing ? ' Install the interpreter or run\n  where it exists.' : '')
+  );
+}
+if (syntaxProbe.verdict === 'invalid') {
+  fail(
+    `${relFile} does not parse BEFORE mutation (${syntaxProbe.checker}):\n` +
+    `${syntaxProbe.detail.split('\n').map((line) => `    ${line}`).join('\n')}\n` +
+    '  A file that already fails its checker cannot have a mutant judged against it.\n' +
+    '  No override exists: a fixture that is broken on purpose has to be exercised by its own\n' +
+    '  test, not by mutating it further.'
+  );
+}
+
 // ── run ──────────────────────────────────────────────────────────
 
 console.log(`\nmutation-check: ${relFile}`);
@@ -297,9 +319,32 @@ if (baseline.status !== 0) {
     'surviving mutant means nothing when the suite is red to begin with.'
   );
 }
-console.log('      green.\n');
+const baselinePassCount = parsePassCount(baseline.output);
+console.log(`      green${baselinePassCount !== null ? ` (${baselinePassCount} passing)` : ''}.\n`);
 
 const original = readFileSync(absFile, 'utf8');
+
+// CRLF is safe, a LONE CR is not, and the difference took three passes to get right.
+//
+// CRLF: splitting on '\n' leaves the '\r' at the END of each line, so rejoining reproduces
+// every untouched line byte-for-byte — `"a\r\nX\r\nb\r\n"` deletes to `"a\r\nb\r\n"`. A
+// guard refusing all carriage returns was added here on the theory that rejoining rewrote
+// line endings; the theory was wrong and the guard only refused valid input.
+//
+// Lone CR (Classic-Mac line endings) is a different failure and a much worse one:
+// `"a\rTARGET\rb\r".split('\n')` is ONE line, so --delete-matching deletes the entire file.
+// `sites` still reports 1, which looks like a precise single-site mutation; the empty file
+// parses fine as JS; and the suite then fails because the module is gone. That is reported
+// as MUTANT KILLED — a fabricated kill, the exact false confidence this tool exists to
+// prevent. Refuse it rather than answer dishonestly.
+if (/\r(?!\n)/.test(original)) {
+  fail(
+    `${opts.file} contains a carriage return that is not part of a CRLF pair.\n` +
+    'Splitting on LF would treat the file as a single line, so a line-oriented mutation\n' +
+    'deletes everything and the resulting failure would be reported as a kill.\n' +
+    'Repair with `git add --renormalize` and re-run.'
+  );
+}
 
 // Build the mutant in memory. Comparing strings is how "did it land" is decided:
 // asking git would be blind to exactly the cases guarded against above.
@@ -352,7 +397,11 @@ process.on('SIGINT', () => { restore(); process.exit(130); });
 process.on('SIGTERM', () => { restore(); process.exit(143); });
 
 let verdict = null;
+let invalidDetail = null;
 let failCount = null;
+// Kept outside the try so the crash check can read it after `restore()` — the verdict block
+// needs the mutant's OUTPUT, not just its exit status.
+let mutantOutput = '';
 
 try {
   console.log('[2/5] writing backup and applying mutation ...');
@@ -362,11 +411,23 @@ try {
   console.log(`      ${sites} site(s) mutated; backup at ${relative(repoRoot, backupPath)}\n`);
 
   console.log('[3/5] checking the mutant still parses ...');
-  if (!parses(absFile, mutated, repoRoot)) {
+  const syntax = await checkSyntax(absFile, mutated, repoRoot);
+  if (syntax.verdict === 'invalid') {
     verdict = 'invalid';
-    console.log('      it does NOT parse.\n');
+    invalidDetail = syntax;
+    console.log(`      it does NOT parse (${syntax.checker}).\n`);
+  } else if (syntax.verdict !== 'ok' && syntax.verdict !== 'syntax-free') {
+    // The precondition gate already answered this on the original; reaching here means the
+    // interpreter vanished mid-run. Inconclusive, never a pass.
+    verdict = 'inconclusive';
+    console.log(`      inconclusive — ${syntax.detail}\n`);
   } else {
-    console.log('      it parses.\n');
+    // Say what was done. `it parses` over an unchecked file is the lie #758 removed.
+    if (syntax.verdict === 'syntax-free') {
+      console.log(`      no syntax to check (${fileExt}) — the INVALID verdict cannot apply here; proceeding.\n`);
+    } else {
+      console.log(`      it parses (${syntax.checker}).\n`);
+    }
 
     console.log('[4/5] running tests against the mutant (expect red) ...');
     const mutant = await runCommand(opts.test);
@@ -375,6 +436,7 @@ try {
       verdict = 'inconclusive';
       console.log(`      inconclusive — ${problem}\n`);
     } else {
+      mutantOutput = mutant.output;
       failCount = parseFailCount(mutant.output);
       verdict = mutant.status !== 0 ? 'killed' : 'survived';
       console.log(`      exit ${mutant.status}${failCount !== null ? `, ${failCount} failing` : ''}\n`);
@@ -389,7 +451,10 @@ try {
 // ── verdict ──────────────────────────────────────────────────────
 
 if (verdict === 'invalid') {
-  console.error('INVALID MUTANT — the mutated file does not parse.');
+  console.error(`INVALID MUTANT — the mutated file does not parse (${invalidDetail.checker}).`);
+  if (invalidDetail.detail) {
+    for (const line of invalidDetail.detail.split('\n')) console.error(`    ${line}`);
+  }
   console.error('  Any red result would mean "this file is broken", not "a test covers this line".');
   console.error('  Reporting that as a kill is the false confidence this tool exists to prevent.');
   console.error('  Mutate something that leaves valid syntax — a value, not a delimiter.');
@@ -421,6 +486,21 @@ if (opts.expectKilledBy !== undefined) {
     console.error('  coverage than you think. Both are worth understanding before trusting it.');
     process.exit(1);
   }
+}
+
+const suspicion = crashSuspicion(mutantOutput, failCount, baselinePassCount, opts.allowBroad, opts.allowCrashText);
+if (suspicion.length > 0) {
+  console.error(`SUSPECT KILL${failCount !== null ? ` — ${failCount} failing test(s)` : ''}, but the mutant looks BROKEN rather than caught.`);
+  for (const reason of suspicion) console.error(`  - ${reason}`);
+  console.error('');
+  console.error('  A crash proves the code is REACHED, not that its effect is asserted. The syntax');
+  console.error('  gate catches a mutant that does not parse; this is the same trap one level up,');
+  console.error('  where the mutant parses and then throws the moment the module runs.');
+  console.error('  Mutate a VALUE instead — invert a condition, weaken a comparison, change a');
+  console.error('  constant — so the module still runs to completion and only behaviour changes.');
+  console.error('  Then the failing count means "tests that assert this", which is the number');
+  console.error('  worth quoting.');
+  process.exit(1);
 }
 
 console.log(`MUTANT KILLED${failCount !== null ? ` by ${failCount} failing test(s)` : ''} — the check can fail.`);

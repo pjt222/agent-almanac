@@ -279,6 +279,15 @@ Zwei Dateien erstellen:
 }
 ```
 
+```markdown
+<!-- references/CITATIONS.md -->
+# Citations
+
+References underpinning the **skill-name** skill.
+
+1. Author, F., & Other, S. (2024). *Paper Title*. Journal Name. https://doi.org/10.xxxx/xxxxx
+```
+
 Zitate sind optional — hinzufuegen wenn die Herkunftsverfolgung wichtig ist (akademische Methoden, veroffentlichte Standards, Regulierungsrahmen).
 
 **Erwartet:** Beide Dateien existieren und `.bib` wird als gueltiges BibTeX geparst.

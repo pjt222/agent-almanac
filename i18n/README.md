@@ -4,12 +4,25 @@ This directory contains translations of agent-almanac content into multiple lang
 
 ## Supported Locales
 
-| Code | Language | Skills | Agents | Teams | Guides | Status |
-|---|---|---|---|---|---|---|
-| de | Deutsch (German) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
-| zh-CN | 简体中文 (Simplified Chinese) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
-| ja | 日本語 (Japanese) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
-| es | Español (Spanish) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
+<!-- AUTO:START:i18n-locales -->
+| Code | Language | Skills | Agents | Teams | Guides | Translated | Stale |
+|---|---|---|---|---|---|---|---|
+| de | Deutsch | 340/373 | 3/76 | 1/22 | 2/35 | 346/506 (68.4%) | 178 |
+| zh-CN | 简体中文 | 343/373 | 3/76 | 1/22 | 2/35 | 349/506 (69%) | 176 |
+| ja | 日本語 | 347/373 | 3/76 | 1/22 | 2/35 | 353/506 (69.8%) | 173 |
+| es | Español | 334/373 | 3/76 | 1/22 | 2/35 | 340/506 (67.2%) | 175 |
+| caveman-lite | Caveman Lite | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 310 |
+| caveman | Caveman | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 310 |
+| caveman-ultra | Caveman Ultra | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 310 |
+| wenyan-lite | 文言文輕 | 343/373 | 0/76 | 0/22 | 0/35 | 343/506 (67.8%) | 307 |
+| wenyan | 文言文 | 343/373 | 0/76 | 0/22 | 0/35 | 343/506 (67.8%) | 307 |
+| wenyan-ultra | 文言文極 | 345/373 | 0/76 | 0/22 | 0/35 | 345/506 (68.2%) | 306 |
+<!-- AUTO:END:i18n-locales -->
+
+Generated from `i18n/_config.yml` and each locale's `translation_status.yml` — the same
+source the root [README](../README.md#translations) table reads, so the two cannot disagree.
+`stale` counts translated files whose English source moved on; see [Status
+Reports](#status-reports) below for why a *falling* `stale` is not by itself progress.
 
 ## Directory Structure
 
@@ -84,17 +97,93 @@ Runs **warn-only** in CI until the backlog clears (#477), then flips to blocking
 
 ## Translation Frontmatter
 
-Every translated file includes these fields in its YAML frontmatter:
+Every translated file includes these fields in its YAML frontmatter, except that
+`fence_basis_commit` is carried only by files that can prove it — 3,415 of 3,644 as of the #552
+backfill. Its absence is meaningful rather than missing, as explained below:
 
 ```yaml
 locale: de                              # Content locale (IETF BCP 47)
 source_locale: en                       # Translated from
-source_commit: abc1234                  # Git short hash of source at translation time
-translator: "Claude + human review"     # Attribution
+source_commit: abc1234                  # English revision a HUMAN translated against
+fence_basis_commit: abc1234             # English revision the FENCES were verified against
+translator: "(untranslated stub)"       # Attribution; this is the scaffold value
 translation_date: "2026-03-15"          # ISO 8601
 ```
 
-These fields enable freshness tracking: when the English source changes after the `source_commit`, the translation is flagged as stale.
+`translator` is stamped with the value shown in the example above at scaffold time, because a
+scaffold is a copy of the English source: no translation and no review has happened, and the
+field must not claim otherwise (#545). Replace it with a real attribution — a model id, a person,
+or both — when the prose is translated. Stubs are *detected* by the verdicts of
+`generate-translation-status.js --verdicts` (`no-novel-lines` for Latin-script locales,
+`no-script` for CJK and wenyan ones), never by this field, so the value is a signal for humans,
+not a gate; what it buys is that "which translations has a human actually reviewed?" becomes a
+question the corpus can answer once the remaining scaffold defaults are replaced (#769).
+
+### Why there are two commit fields
+
+They answer different questions, and a mechanical repair pulls them apart (#552).
+
+`source_commit` records **the English revision a human translated against**. Staleness is
+measured from it: when the English source changes after that revision, the translation is
+flagged stale. A tool must never move it — bumping it asserts a translation event that never
+happened, which is precisely the lie `evolve-skill` was found telling in #405. The one carve-out
+is a mirror whose `translator` is still the scaffold value above: that file is an untranslated
+stub, no human claim exists to forge, and `tools/refresh-untranslated-stubs.mjs --stamp`
+maintains both commit fields on it (#798; first corpus run in #800). It refuses any other
+`translator` value, so a stub translated since the last run is never touched.
+
+`fence_basis_commit` records **the English revision this file's frozen fence bodies were last
+verified against**. `normalize-i18n-fences.js` moves it when it propagates English bytes into a
+mirror, because otherwise the frontmatter would contradict the body it just rewrote. The
+referent is a revision of the *English* source: any commit whose tree holds the English bytes
+the fences were checked against qualifies, which is what `--stamp` verifies before writing (the
+English file at that commit must equal the working tree's). The refresh recipe in `CLAUDE.md`
+stamps the commit that carries the refreshed mirror, so the sha a reader looks up shows both
+sides at once.
+
+`translation_date` on a stub is **the date the mirror was first scaffolded**. A refresh carries
+it unchanged — the tool copies the six fields verbatim — so a refreshed stub can show a
+`source_commit` newer than its `translation_date`. That pairing means "scaffolded, then
+mechanically refreshed"; it is not a translation event, and no human date exists to write. The
+field moves when a person translates the file and replaces `translator`.
+
+With one field the two are irreconcilable: after a mechanical fence repair, bumping it makes the
+first claim false and leaving it makes the second false. So there are two.
+
+They are equal at birth — a scaffold is a byte copy, so its fences trivially mirror the revision
+it copied — and they diverge from the first edit of either kind.
+
+**Absence of `fence_basis_commit` is not a defect.** Present means "these bytes were checked
+against that revision"; absent means "unverified". A commit is never stamped on an unverified
+file, because writing a false claim into the corpus to be corrected later is the exact class of
+problem this field exists to end.
+
+After the #552 backfill, 229 files have no claim, and the split is worth knowing because only
+one part of it is a defect:
+
+| | files | what it means |
+|---|---|---|
+| fence count differs from its `source_commit` | 148 | English gained or lost a fence since |
+| fence tag sequence differs | 45 | usually a retag |
+| a gated fence body differs | 36 | usually a translated code block |
+
+Only **31** of the 229 are genuinely divergent — fences matching *no* English revision, which is
+the #477 backlog. The other **198** are clean files that simply do not mirror the commit they
+name: `evolve-*` bumps `source_commit` without retranslating (#405, #616), so the recorded
+revision no longer describes the bytes. Those regain a claim automatically once #616 lands and
+the backfill is re-run; it is add-only and idempotent, so re-running is safe at any time.
+
+```bash
+npm run backfill:fence-basis                      # preview, writes nothing
+npm run backfill:fence-basis -- --write
+npm run backfill:fence-basis -- --verify --base <ref>   # audit a landed diff
+```
+
+**It never gates a comparison.** `check-i18n-fence-parity.js` compares fence bytes
+unconditionally. The field is read for reporting, and to catch the one thing bytes alone cannot
+say: a file that *claims* a verified basis while its fences diverge. That is reported as
+`stale-basis-claim` and is deliberately ungated — the divergence underneath it is already
+counted, so it can never change a verdict, only tell you a field is lying.
 
 ## Contributing a Translation
 
@@ -155,7 +244,69 @@ Per-locale status files are auto-generated:
 npm run translation:status
 ```
 
-Each `translation_status.yml` shows coverage percentages and stale counts per content type.
+Each `translation_status.yml` reports four numbers per content type, and they do not mean
+what a quick read suggests:
+
+| field | meaning |
+|---|---|
+| `total` | English sources of that type, from the registry |
+| `translated` | files that show evidence of translation |
+| `stubs` | files that show **none** — scaffolds, still word-for-word English |
+| `stale` | translated files whose English source changed after their `source_commit` |
+| `unjudged` | files whose fence structure matches no English revision — the frozen-region mask is wrong, so every count taken through it is void |
+
+Three things follow, and all have misled readers before:
+
+- **`stale` is measured only over `translated`.** A stub is never also stale, because the
+  scaffold verdict is reached first. So recognising a scaffold *lowers* `stale` with nothing
+  translated — a falling `stale` number is not by itself progress.
+- **`translated + stubs` is not `total`.** A locale that has never scaffolded an item has
+  neither, so the remainder is untouched content.
+- **`unjudged` is neither `translated` nor `stubs`, deliberately.** Both alternatives are
+  wrong in a way that costs something: counting such a file translated inflates coverage,
+  and calling it a stub routes a possibly fully-translated file into a remedy that *deletes*
+  it. The honest report is that it was not measured. `--verdicts` lists them.
+
+A file becomes `unjudged` when a stray fence opener inverts the document's fence phase: an
+added ```` ```bash ```` cannot close anything, but it opens, so the real opener is swallowed
+into its body and the real closer closes the stray fence. Prose silently becomes fence body.
+The fence *count* is unchanged, which is why the check compares the **shape** — the ordered
+list of info-string tags, which are keep-in-English in every locale and so must match some
+English revision. Fix the fence and the file is judged normally again.
+
+The shape counts **terminated** fences only. An unterminated fence is not frozen, so it
+describes nothing about the mask and must not perturb the shape. That is also why the check
+does not ask whether the mask *hid* anything: a stray ```` ```text ```` opener is localisable
+and hides nothing, yet it still flips the phase and **exposes** the real frozen body — whose
+keep-in-English lines then read as newly-translated prose. Corruption runs both ways.
+
+The root `README.md` coverage table renders these same numbers, and only these — it reads the
+status files rather than counting what exists on disk (#560). Its cells use two markers:
+
+| marker | meaning |
+|---|---|
+| `*` | file count, not a measurement — that locale has no `translation_status.yml` yet |
+| `-` | not measured (the `Stubs` column of a locale with no status file). Never `0`, which would read as "no stubs found" |
+
+`scripts/check-readme-translation-parity.js` (integrity check B13) fails if the two ever
+disagree. It parses both committed files rather than regenerating the table, so it still sees
+a generator that goes back to counting files.
+
+A file counts as a stub when every substantive prose line in it appeared verbatim in English
+at some point, or when its locale is written in a script the file contains none of. Frozen
+code fences are excluded from that comparison — they are keep-in-English in every locale by
+design, so counting them would make every genuine translation look like a scaffold.
+
+```bash
+# The per-file list behind the stub count -- read this before deleting anything
+npm run translation:status -- --verdicts
+
+# How close the closest genuine translations came to being called scaffolds
+npm run translation:status -- --margins
+```
+
+Use `--verdicts` before any bulk re-scaffold. A stub verdict is remediated by deleting the
+file, so a wrong one destroys real work, and an aggregate count cannot be reviewed.
 
 ## See Also
 

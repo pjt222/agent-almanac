@@ -262,7 +262,7 @@ bash viz/build.sh --only <domain> --dry-run
 
 ### 域與項色盤
 
-58 域色（技）定於 `viz/R/palettes.R`（唯真源）。代與團色亦理於 `palettes.R`。cyberpunk 色盤於 `get_cyberpunk_colors()`。
+域色（技）定於 `viz/R/palettes.R`（唯真源）。代與團色亦理於 `palettes.R`。cyberpunk 色盤於 `get_cyberpunk_colors()`。
 
 ```r
 source("viz/R/palettes.R")

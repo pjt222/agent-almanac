@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 369
+total_skills: 373
 
 domains:
   r-packages:
@@ -330,6 +330,11 @@ domains:
         complexity: basic
         language: multi
         description: Configure a Git repository with proper .gitignore and conventions
+      - id: coordinate-peer-sessions
+        path: coordinate-peer-sessions/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Coordinate with a peer interactive session sharing one git worktree — declare path scope before the first edit, survive a contended index lock, and read a guard slot you did not arm
       - id: commit-changes
         path: commit-changes/SKILL.md
         complexity: basic
@@ -398,7 +403,7 @@ domains:
         path: manage-memory/SKILL.md
         complexity: intermediate
         language: multi
-        description: Organize, extract, prune, and verify Claude Code persistent memory files
+        description: Organize and extract Claude Code memory under the dual 200-line / 25KB load cap, with a reachability gate on every index rewrite
       - id: create-skill
         path: create-skill/SKILL.md
         complexity: intermediate
@@ -454,6 +459,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Audit, classify, and selectively forget stored memories with retention policies
+      - id: verify-memory-integrity
+        path: verify-memory-integrity/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Verify memory reachability and dual-cap budget read-only, without modifying the store
       - id: circuit-breaker-pattern
         path: circuit-breaker-pattern/SKILL.md
         complexity: intermediate
@@ -502,6 +512,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Pick a delaySeconds value for ScheduleWakeup using the three-tier cache-aware decision, the [60,3600] clamp, and minute-boundary rounding
+      - id: consult-a-decision-oracle
+        path: consult-a-decision-oracle/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Add an external probabilistic classifier to a decision path without letting it take over — find the externally-graded rows you already log, measure the separation between the overrides that helped and the ones that harmed, choose an operating point the data licenses, fail open at the call site, and prove it offline with no API key
 
   citations:
     description: Academic and software citation management with R and BibTeX
@@ -2116,3 +2131,12 @@ domains:
         complexity: advanced
         language: Python
         description: Benchmark OCR/HTR engine candidates on shared labelled samples with raw and lenient CER, WER, and a critical name/date token diff
+
+  agent-commerce:
+    description: Agent payment protocols — testing, conformance, and settlement verification for x402 and related rails
+    skills:
+      - id: test-x402-payment-client
+        path: test-x402-payment-client/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Test an x402 payment client end to end against a live endpoint — drive the 402/PAYMENT-REQUIRED/sign/PAYMENT-SIGNATURE/verify/settle loop, confirm settlement on chain, and check offer/receipt conformance

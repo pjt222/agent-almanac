@@ -13,7 +13,7 @@ metadata:
   domain: geometry
   complexity: intermediate
   language: multi
-  tags: geometry, trigonometry, triangle-solving, identities, periodic-functions
+  tags: geometry, trigonometry, identities, triangle, sines, cosines
   locale: de
   source_locale: en
   source_commit: 6f65f316

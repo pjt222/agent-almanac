@@ -21,7 +21,7 @@ metadata:
   domain: chromatography
   complexity: advanced
   language: natural
-  tags: chromatography, validation, ICH, accuracy, precision, linearity
+  tags: chromatography, validation, ich-q2, accuracy, precision, linearity, regulatory
 ---
 
 # Analytische Methode validieren

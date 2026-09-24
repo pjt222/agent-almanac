@@ -3,6 +3,7 @@ name: install-putior
 locale: de
 source_locale: en
 source_commit: ecece0b7
+fence_basis_commit: ecece0b7
 translator: claude
 translation_date: "2026-03-17"
 description: >

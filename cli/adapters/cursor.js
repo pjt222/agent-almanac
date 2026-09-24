@@ -16,6 +16,8 @@ export class CursorAdapter extends FrameworkAdapter {
   static displayName = 'Cursor';
   static strategy = 'file-per-item';
   static contentTypes = ['skill'];
+  /** @type {Record<string, string[]>} #607: writes into projectDir/.cursor/. */
+  static scopes = { skill: ['project'] };
 
   async detect(projectDir) {
     return existsSync(resolve(projectDir, '.cursor')) ||

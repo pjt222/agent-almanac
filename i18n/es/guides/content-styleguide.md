@@ -8,6 +8,7 @@ skills: [create-skill, review-skill-format]
 locale: es
 source_locale: en
 source_commit: d82938a4
+fence_basis_commit: d82938a4
 translator: "Claude + human review"
 translation_date: "2026-06-04"
 ---

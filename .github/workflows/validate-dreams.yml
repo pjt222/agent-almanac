@@ -1,0 +1,46 @@
+name: Validate Dreams
+
+# `dreams/atlas.html` is generated, committed, and read as-is — the same shape as the
+# staleness defects #363 and #441, but with the backstop removed: no deploy step
+# regenerates it, so the committed blob is the only copy that exists. Without this job its
+# sole defence is the maintainer remembering to run the generator, and a PR that adds a
+# dream touches no other job's trigger paths — `validate-content-style` and
+# `validate-security` both scope to the content trees, which do not include `dreams/`.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dreams/**'
+      - 'scripts/build-dreams.js'
+      - '.github/workflows/validate-dreams.yml'
+  pull_request:
+    paths:
+      - 'dreams/**'
+      - 'scripts/build-dreams.js'
+      - '.github/workflows/validate-dreams.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dreams:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - run: npm ci
+
+      # Regenerates the page and byte-compares it against the committed file, so this is
+      # exhaustive over the output rather than a staleness heuristic. It also fails when
+      # any entry's frontmatter falls outside the documented vocabulary.
+      - name: Atlas matches the corpus
+        run: npm run check-dreams
+
+      - name: Generator behaviour
+        run: node --test scripts/test/build-dreams.test.js

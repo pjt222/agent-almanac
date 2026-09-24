@@ -17,7 +17,7 @@ metadata:
   domain: spectroscopy
   complexity: advanced
   language: natural
-  tags: spectroscopy, mass-spectrometry, fragmentation, molecular-ion, isotope-pattern
+  tags: spectroscopy, mass-spectrometry, fragmentation, molecular-ion, isotope
 ---
 
 # 解读质谱

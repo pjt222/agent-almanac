@@ -13,9 +13,9 @@ metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: bushcraft
-  complexity: basic
+  complexity: intermediate
   language: natural
-  tags: bushcraft, fire, survival, friction, flint-and-steel
+  tags: bushcraft, fire, survival, wilderness, primitive-skills
   locale: es
   source_locale: en
   source_commit: 33b561c9

@@ -1,16 +1,13 @@
 ---
 name: scaffold-mcp-server
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Generar la estructura de un nuevo servidor MCP desde plantillas, incluyendo
-  configuración del proyecto, definición de herramientas, manejo de transporte,
-  y configuración de testing. Soportar TypeScript, Python y R como lenguajes de
-  implementación. Usar cuando se inicie un nuevo proyecto de servidor MCP, se
-  necesite una estructura consistente, o se quiera acelerar el desarrollo inicial.
+  Scaffold a new MCP server from tool specifications using the official SDK
+  (TypeScript or Python), including transport configuration, tool handlers,
+  and test harness. Use when you have a tool specification and need a working
+  server, when starting a new MCP server project and want correct structure
+  from the start, when migrating an existing tool integration to the MCP
+  protocol, or when prototyping a tool surface to test with Claude Code before
+  full implementation.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -19,253 +16,378 @@ metadata:
   domain: mcp-integration
   complexity: intermediate
   language: multi
-  tags: mcp, scaffold, template, server, project-structure
+  tags: mcp, scaffold, sdk, typescript, python, server
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Crear Andamiaje de Servidor MCP
+# Scaffold MCP Server
 
-Generar la estructura de un nuevo proyecto de servidor MCP desde plantillas.
+Generate a complete, runnable MCP server project from a tool specification document, using the official MCP SDK for TypeScript or Python.
 
-## Cuándo Usar
+## When to Use
 
-- Iniciando un nuevo proyecto de servidor MCP
-- Necesitando una estructura de proyecto consistente y probada
-- Acelerando el desarrollo inicial con plantillas pre-configuradas
-- Estandarizando la creación de servidores MCP en un equipo
-- Prototipando rápidamente integraciones MCP
+- You have a tool specification (from `analyze-codebase-for-mcp` or written manually) and need a working server
+- Starting a new MCP server project and want correct structure from the start
+- Migrating an existing tool integration to the MCP protocol
+- Prototyping a tool surface to test with Claude Code before full implementation
+- Need both the server scaffold and a test harness for CI
 
-## Entradas
+## Inputs
 
-- **Requerido**: Nombre del servidor MCP
-- **Requerido**: Lenguaje de implementación (TypeScript, Python, R)
-- **Requerido**: Lista de herramientas a implementar
-- **Opcional**: Tipo de transporte (stdio, HTTP/SSE)
-- **Opcional**: Servicios externos a integrar
-- **Opcional**: Requisitos de autenticación
+- **Required**: Tool specification document (YAML or JSON with tool names, parameters, return types)
+- **Required**: Target language (`typescript` or `python`)
+- **Required**: Transport type (`stdio` or `sse`)
+- **Optional**: Output directory (default: current directory)
+- **Optional**: Package name and version
+- **Optional**: Authentication method (`none`, `bearer-token`, `api-key`)
+- **Optional**: Docker packaging (`true` or `false`, default: `false`)
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Crear Estructura del Proyecto (TypeScript)
+### Step 1: Select SDK Language and Transport
+
+1.1. Choose the implementation language based on project context:
+   - **TypeScript**: Best for Node.js ecosystems, web-adjacent tools, JSON-heavy workloads
+   - **Python**: Best for data science, ML, and scientific computing tool surfaces
+
+1.2. Choose the transport mechanism:
+   - **stdio**: Default for local tool execution. Claude Code launches the server as a subprocess.
+   - **SSE (Server-Sent Events)**: For remote/shared servers. Requires HTTP hosting.
+
+1.3. Determine authentication requirements:
+   - **none**: Local stdio servers (process-level trust)
+   - **bearer-token**: Remote SSE servers with static tokens
+   - **api-key**: Remote servers with per-client keys
+
+**Expected:** Clear language, transport, and auth choices documented.
+
+**On failure:** If requirements are ambiguous, default to TypeScript + stdio + no auth for fastest time-to-working-server.
+
+### Step 2: Initialize Project Structure
+
+2.1. Create the project directory and initialize:
+
+**TypeScript:**
 
 ```bash
-mkdir mi-mcp-server && cd mi-mcp-server
-
-# Inicializar proyecto
+mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
 npm init -y
 npm install @modelcontextprotocol/sdk zod
-npm install -D typescript @types/node tsx vitest
-
-# Configurar TypeScript
-npx tsc --init --outDir dist --rootDir src --strict true \
-  --module nodenext --moduleResolution nodenext --target es2022
+npm install -D typescript @types/node tsx
+npx tsc --init --target ES2022 --module nodenext --moduleResolution nodenext --outDir dist
 ```
 
-Estructura generada:
+**Python:**
+
+```bash
+mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
+python -m venv .venv
+source .venv/bin/activate
+pip install mcp pydantic
+```
+
+2.2. Create the standard directory structure:
+
 ```text
-mi-mcp-server/
+$PROJECT_NAME/
 ├── src/
-│   ├── index.ts          # Punto de entrada
-│   ├── server.ts         # Configuración del servidor
-│   ├── tools/            # Definiciones de herramientas
-│   │   ├── index.ts
-│   │   └── ejemplo.ts
-│   ├── resources/        # Definiciones de recursos
-│   │   └── index.ts
-│   └── utils/            # Utilidades compartidas
-│       └── logger.ts
-├── tests/
-│   └── tools.test.ts
-├── package.json
-├── tsconfig.json
+│   ├── index.ts|main.py      # Server entry point
+│   ├── tools/                 # One file per tool category
+│   │   ├── index.ts|__init__.py
+│   │   └── [category].ts|.py
+│   └── utils/                 # Shared utilities
+│       └── validation.ts|.py
+├── test/
+│   ├── harness.ts|.py         # MCP test harness
+│   └── tools/
+│       └── [category].test.ts|.py
+├── package.json|pyproject.toml
+├── tsconfig.json              # TypeScript only
+├── Dockerfile                 # If Docker requested
 └── README.md
 ```
 
-**Esperado:** Estructura del proyecto creada con todas las dependencias instaladas.
+2.3. Add a bin entry for npm (TypeScript) or entry point for Python:
 
-**En caso de fallo:** Verificar versión de Node.js (18+), comprobar acceso a npm.
+**TypeScript package.json:**
 
-### Paso 2: Implementar Servidor Base
-
-```typescript
-// src/server.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { registrarHerramientas } from "./tools/index.js";
-import { registrarRecursos } from "./resources/index.js";
-
-export async function iniciarServidor() {
-  const server = new McpServer({
-    name: "mi-mcp-server",
-    version: "1.0.0",
-  });
-
-  // Registrar herramientas y recursos
-  registrarHerramientas(server);
-  registrarRecursos(server);
-
-  // Conectar transporte
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-
-  console.error("Servidor MCP iniciado exitosamente");
+```json
+{
+  "name": "$PACKAGE_NAME",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": { "$PACKAGE_NAME": "./dist/index.js" },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "tsx test/harness.ts"
+  }
 }
 ```
 
-```typescript
-// src/index.ts
-import { iniciarServidor } from "./server.js";
-iniciarServidor().catch(console.error);
-```
+**Expected:** A buildable project skeleton with all dependencies installed.
 
-**Esperado:** Servidor base que inicia y acepta conexiones MCP.
+**On failure:** If npm/pip install fails, check network connectivity and registry access. For TypeScript, ensure Node.js >= 18. For Python, ensure Python >= 3.10.
 
-**En caso de fallo:** Verificar importaciones de módulos, comprobar configuración de TypeScript.
+### Step 3: Implement Tool Handlers from Spec
 
-### Paso 3: Definir Herramientas con Plantilla
+3.1. Parse the tool specification document and for each tool, generate a handler:
+
+**TypeScript handler template:**
 
 ```typescript
-// src/tools/ejemplo.ts
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-export function registrarHerramientaEjemplo(server: McpServer) {
+export function registerTools(server: McpServer): void {
   server.tool(
-    "ejemplo-saludo",
-    "Genera un saludo personalizado",
+    "tool_name",
+    "Tool description from spec",
     {
-      nombre: z.string().describe("Nombre de la persona a saludar"),
-      idioma: z.enum(["es", "en", "de"]).optional().default("es")
-        .describe("Idioma del saludo"),
+      param1: z.string().describe("Parameter description"),
+      param2: z.number().optional().default(10).describe("Optional param"),
     },
-    async ({ nombre, idioma }) => {
-      const saludos: Record<string, string> = {
-        es: `¡Hola, ${nombre}!`,
-        en: `Hello, ${nombre}!`,
-        de: `Hallo, ${nombre}!`,
-      };
-
-      return {
-        content: [{
-          type: "text",
-          text: saludos[idioma] ?? saludos.es,
-        }],
-      };
+    async ({ param1, param2 }) => {
+      try {
+        // TODO: Implement tool logic
+        const result = await performAction(param1, param2);
+        return {
+          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+      } catch (error) {
+        return {
+          content: [{ type: "text", text: `Error: ${(error as Error).message}` }],
+          isError: true,
+        };
+      }
     }
   );
 }
 ```
 
-```typescript
-// src/tools/index.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { registrarHerramientaEjemplo } from "./ejemplo.js";
+**Python handler template:**
 
-export function registrarHerramientas(server: McpServer) {
-  registrarHerramientaEjemplo(server);
-  // Agregar más herramientas aquí
+```python
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+from pydantic import BaseModel
+
+class ToolNameParams(BaseModel):
+    param1: str
+    param2: int = 10
+
+async def handle_tool_name(params: ToolNameParams) -> list[TextContent]:
+    try:
+        result = await perform_action(params.param1, params.param2)
+        return [TextContent(type="text", text=json.dumps(result, indent=2))]
+    except Exception as e:
+        return [TextContent(type="text", text=f"Error: {e}")]
+```
+
+3.2. Generate one handler file per tool category from the specification.
+
+3.3. Add input validation beyond type checking:
+   - String length limits
+   - Numeric range bounds
+   - Enum value constraints
+   - Required field enforcement
+
+3.4. Add structured error responses for all anticipated failure modes.
+
+**Expected:** A handler file per category with typed parameters and error handling.
+
+**On failure:** If the spec contains ambiguous types, default to `string` and add a TODO comment for manual refinement.
+
+### Step 4: Configure Transport
+
+4.1. Create the server entry point with the chosen transport:
+
+**stdio (TypeScript):**
+
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { registerTools } from "./tools/index.js";
+
+const server = new McpServer({
+  name: "$PACKAGE_NAME",
+  version: "1.0.0",
+});
+
+registerTools(server);
+
+const transport = new StdioServerTransport();
+await server.connect(transport);
+```
+
+**SSE (TypeScript):**
+
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { registerTools } from "./tools/index.js";
+
+const server = new McpServer({
+  name: "$PACKAGE_NAME",
+  version: "1.0.0",
+});
+
+registerTools(server);
+
+const transport = new SSEServerTransport("/messages", response);
+await server.connect(transport);
+```
+
+4.2. If authentication is required, add middleware:
+   - Bearer token: validate `Authorization` header
+   - API key: validate `X-API-Key` header
+
+4.3. Add a shebang line for stdio servers to enable direct execution:
+
+```typescript
+#!/usr/bin/env node
+```
+
+**Expected:** A working entry point that starts the MCP server on the configured transport.
+
+**On failure:** If the SDK version does not match the import paths, check the `@modelcontextprotocol/sdk` version and adjust imports. The SDK restructured paths between versions.
+
+### Step 5: Create Test Harness
+
+5.1. Build a test harness that validates every tool:
+
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+
+async function runTests(): Promise<void> {
+  const server = createServer();
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+  await server.connect(serverTransport);
+  const client = new Client({ name: "test-client", version: "1.0.0" });
+  await client.connect(clientTransport);
+
+  // Test: tools/list returns all expected tools
+  const tools = await client.listTools();
+  console.assert(tools.tools.length === EXPECTED_TOOL_COUNT);
+
+  // Test: each tool with valid input
+  for (const tool of tools.tools) {
+    const result = await client.callTool({
+      name: tool.name,
+      arguments: getTestInput(tool.name),
+    });
+    console.assert(!result.isError, `${tool.name} failed`);
+  }
+
+  // Test: each tool with invalid input returns isError
+  for (const tool of tools.tools) {
+    const result = await client.callTool({
+      name: tool.name,
+      arguments: getInvalidInput(tool.name),
+    });
+    console.assert(result.isError, `${tool.name} should reject invalid input`);
+  }
+
+  console.log("All tests passed");
 }
 ```
 
-**Esperado:** Herramientas definidas con esquemas claros, descripciones, y manejo de errores.
+5.2. Create test fixtures for each tool: valid inputs, invalid inputs, and edge cases.
 
-**En caso de fallo:** Verificar que los esquemas zod son válidos, comprobar que las descripciones son informativas.
+5.3. Add a `test` script to `package.json` or `pyproject.toml`.
 
-### Paso 4: Configurar Scripts y Testing
+**Expected:** A test harness that exercises every tool with both valid and invalid inputs.
+
+**On failure:** If `InMemoryTransport` is not available in the SDK version, fall back to spawning the server as a subprocess and communicating via stdio pipes.
+
+### Step 6: Generate Documentation and Configuration
+
+6.1. Generate a `README.md` with:
+   - Project description
+   - Installation instructions
+   - Claude Code configuration command
+   - Claude Desktop JSON configuration snippet
+   - Tool listing with descriptions and parameter schemas
+   - Development and testing instructions
+
+6.2. Generate Claude Code registration command:
+
+```bash
+# stdio transport
+claude mcp add $PACKAGE_NAME stdio "node" "dist/index.js"
+
+# SSE transport
+claude mcp add $PACKAGE_NAME -e API_KEY=your_key -- mcp-remote http://localhost:3000/mcp
+```
+
+6.3. Generate Claude Desktop configuration snippet:
 
 ```json
-// package.json (scripts)
 {
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "tsx src/index.ts",
-    "test": "vitest",
-    "lint": "tsc --noEmit"
+  "mcpServers": {
+    "$PACKAGE_NAME": {
+      "command": "node",
+      "args": ["path/to/dist/index.js"]
+    }
   }
 }
 ```
 
-```typescript
-// tests/tools.test.ts
-import { describe, it, expect } from "vitest";
+6.4. If Docker was requested, generate a `Dockerfile`:
 
-describe("Herramienta ejemplo-saludo", () => {
-  it("genera saludo en español por defecto", async () => {
-    // Implementar test de integración
-  });
-});
+```dockerfile
+FROM node:20-slim AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:20-slim
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json .
+ENTRYPOINT ["node", "dist/index.js"]
 ```
 
-```bash
-# Compilar y probar
-npm run build
-npm run start
+**Expected:** Complete documentation and configuration files for immediate use.
 
-# Agregar a Claude Code
-claude mcp add mi-mcp-server stdio node -- dist/index.js
-```
+**On failure:** If the generated README has placeholder values, search the project for actual values to substitute. If Docker build fails, verify the base image matches the Node.js/Python version used.
 
-**Esperado:** El servidor se compila, pruebas pasan, y se registra exitosamente en Claude Code.
+## Validation
 
-**En caso de fallo:** Revisar errores de compilación de TypeScript, verificar paths de importación.
+- [ ] Project builds without errors (`npm run build` or equivalent)
+- [ ] Server starts and responds to `tools/list` JSON-RPC request
+- [ ] Every tool from the specification is registered and discoverable
+- [ ] Test harness passes for all tools with valid inputs
+- [ ] Test harness confirms error responses for invalid inputs
+- [ ] Claude Code can connect via `claude mcp add` command
+- [ ] README includes working installation and configuration instructions
+- [ ] All generated code passes linting (if configured)
 
-### Paso 5: Crear Estructura Python (Alternativa)
+## Common Pitfalls
 
-```bash
-mkdir mi-mcp-server && cd mi-mcp-server
-python -m venv venv
-source venv/bin/activate
-pip install mcp pydantic pytest
-```
+- **SDK import path changes**: The `@modelcontextprotocol/sdk` package restructured its exports between versions. Always check the installed version's actual export paths.
+- **Forgetting the shebang**: stdio servers invoked directly need `#!/usr/bin/env node` as the first line to be executable.
+- **Blocking the event loop**: Tool handlers in TypeScript must be `async`. Synchronous operations block all other tool calls on the server.
+- **Missing `type: "module"` in package.json**: The MCP SDK uses ESM imports. Without `"type": "module"`, Node.js treats files as CommonJS and imports fail.
+- **Zod schema drift**: If the tool spec evolves but Zod schemas are not updated, validation mismatches cause silent failures. Generate schemas from a single source of truth.
+- **stdout pollution**: stdio transport uses stdout for JSON-RPC. Any `console.log` in tool handlers corrupts the protocol stream. Use `console.error` or a file logger instead.
 
-```python
-# src/server.py
-from mcp.server import Server
-from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
-import json
+## Related Skills
 
-app = Server("mi-mcp-server")
-
-@app.tool()
-async def ejemplo_saludo(nombre: str, idioma: str = "es") -> list[TextContent]:
-    """Genera un saludo personalizado."""
-    saludos = {"es": f"¡Hola, {nombre}!", "en": f"Hello, {nombre}!"}
-    return [TextContent(type="text", text=saludos.get(idioma, saludos["es"]))]
-
-async def main():
-    async with stdio_server() as (read_stream, write_stream):
-        await app.run(read_stream, write_stream)
-
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
-```
-
-**Esperado:** Servidor Python funcionando con herramientas registradas.
-
-**En caso de fallo:** Verificar versión de Python (3.10+), comprobar instalación de dependencias.
-
-## Validación
-
-- [ ] La estructura del proyecto sigue las convenciones del lenguaje
-- [ ] El servidor compila/ejecuta sin errores
-- [ ] Las herramientas están registradas y son accesibles
-- [ ] Los tests están configurados y ejecutan
-- [ ] El servidor se puede agregar a Claude Code exitosamente
-- [ ] La documentación del proyecto está incluida (README)
-
-## Errores Comunes
-
-- **Estructura desorganizada**: Separar herramientas, recursos, y utilidades en directorios distintos.
-- **Sin validación de entrada**: Siempre usar zod (TS) o pydantic (Python) para validar parámetros.
-- **Sin manejo de errores global**: Envolver el punto de entrada en try/catch para errores fatales.
-- **Descripción de herramientas faltante**: Cada herramienta necesita una descripción clara para que el modelo sepa cuándo usarla.
-- **No documentar la instalación**: Incluir instrucciones claras de setup en el README.
-
-## Habilidades Relacionadas
-
-- `build-custom-mcp-server` - Implementación detallada de servidores MCP
-- `configure-mcp-server` - Configurar el servidor en clientes MCP
-- `analyze-codebase-for-mcp` - Analizar código para decidir qué exponer
-- `containerize-mcp-server` - Contenerizar el servidor MCP resultante
+- `analyze-codebase-for-mcp` - generate the tool specification this skill consumes
+- `build-custom-mcp-server` - manual server implementation for complex cases
+- `configure-mcp-server` - connect the scaffolded server to Claude Code/Desktop
+- `troubleshoot-mcp-connection` - debug connectivity issues after deployment
+- `containerize-mcp-server` - package the server in Docker for distribution

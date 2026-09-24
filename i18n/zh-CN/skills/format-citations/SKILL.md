@@ -1,9 +1,14 @@
 ---
 name: format-citations
 description: >
-  使用 CSL（引文样式语言）和 citeproc 处理器将参考文献格式化为引文：选择
-  引文样式，解析 CSL 文件以理解格式规则，在文档中应用行内引文，生成格式化的
-  参考文献列表，并处理特殊情况如多作者缩写和同年作者消歧。
+  Format citations across academic styles (APA 7, Chicago, Vancouver, IEEE)
+  using CSL processors and R tooling. Convert between citation styles, generate
+  in-text citations and reference lists, and validate formatting against style
+  guides using citeproc, knitcitations, and Quarto's built-in citation engine.
+  Use when rendering a Quarto or R Markdown document with formatted citations,
+  converting a bibliography between citation styles, generating a standalone
+  reference list, or setting up citation infrastructure for a multi-document
+  project.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -11,150 +16,342 @@ metadata:
   version: "1.0"
   domain: citations
   complexity: intermediate
-  language: natural
-  tags: citations, csl, citeproc, formatting, reference-lists
+  language: R
+  tags: citations, formatting, csl, apa, academic
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
-  translator: claude-sonnet-4-6
-  translation_date: 2026-03-16
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# 格式化引文
+# Format Citations
 
-使用引文样式语言（CSL）和 citeproc 处理器选择引文样式、将行内引文应用于文档并生成格式化的参考文献列表。
+Format citations across academic styles using CSL (Citation Style Language)
+processors and R tooling. This skill covers converting BibTeX entries into
+properly formatted in-text citations and reference lists for APA 7, Chicago,
+Vancouver, IEEE, and custom styles. It leverages Pandoc's citeproc, the
+knitcitations package, and Quarto's native citation engine for reproducible
+document production.
 
-## 适用场景
+## When to Use
 
-- 为期刊投稿按特定引文样式格式化参考文献
-- 在不同引文样式之间转换（例如从 APA 到 IEEE）
-- 理解和自定义 CSL 样式文件
-- 排查引文格式问题（消歧、排序、标点）
-- 在 R Markdown 或 Quarto 文档中配置引文处理
+- Rendering an R Markdown or Quarto document with formatted citations
+- Converting a bibliography from one citation style to another
+- Generating a standalone reference list from a .bib file
+- Validating that in-text citations match a specific style guide
+- Setting up citation infrastructure for a multi-document project (book, thesis)
 
-## 输入
+## Inputs
 
-- **必需**：包含参考文献的参考文献数据源（`.bib` 文件、CSL JSON 或 YAML）
-- **必需**：目标引文样式（期刊名称、样式系列或 `.csl` 文件）
-- **可选**：需要格式化的行内引文（引用键列表）
-- **可选**：区域设置（用于日期格式和本地化术语如"等"/"et al."）
-- **可选**：文档格式（R Markdown、Quarto、LaTeX、纯文本）
+- **Required**: A .bib file (or other bibliography source recognized by Pandoc)
+- **Required**: Target citation style (e.g., `apa`, `chicago-author-date`, `ieee`)
+- **Optional**: CSL file path (default: uses Pandoc built-in styles)
+- **Optional**: Output format (`html`, `pdf`, `docx`; default: inferred from document)
+- **Optional**: Locale for language-specific formatting (default: `en-US`)
 
-## 步骤
+## Procedure
 
-### 第 1 步：选择和获取 CSL 样式
+### Step 1: Verify Citation Infrastructure
 
-确定正确的引文样式文件：
+```r
+# Check Pandoc availability (required for citeproc)
+pandoc_path <- Sys.which("pandoc")
+if (!nzchar(pandoc_path)) {
+  pandoc_path <- Sys.getenv("RSTUDIO_PANDOC")
+}
+stopifnot("Pandoc not found" = nzchar(pandoc_path))
+message(sprintf("Pandoc: %s", system2(pandoc_path, "--version", stdout = TRUE)[1]))
 
-1. **按期刊名称查找**：在 CSL 样式仓库 (https://github.com/citation-style-language/styles) 中按期刊名称搜索。大多数主要期刊都有可用的 CSL 文件。
-2. **样式系列**：识别所使用的通用样式系列：
-   - **作者-日期**：(Smith, 2024) — APA、Chicago 作者-日期、Harvard
-   - **数字编号**：[1] — IEEE、Vancouver、Nature
-   - **脚注**：上标或括号编号带脚注 — Chicago 注释
-   - **标签**：[Smi24] — 自定义标签，在学术出版中较少见
-3. **下载 CSL 文件**：从仓库获取 `.csl` 文件或使用区域变体（例如用于脚注样式的 `locale-zh-CN.xml`）。
-4. **验证样式**：检查 CSL 文件头部的 `<info>` 块中的标题、ISSN 和类别字段以确认是正确的样式。
-
-```yaml
-# R Markdown/Quarto 的 YAML 头部示例
-bibliography: references.bib
-csl: apa-7th-edition.csl
-lang: zh-CN
+# Check for citeproc support
+citeproc_ok <- any(grepl("citeproc", system2(pandoc_path, "--list-extensions", stdout = TRUE)))
+message(sprintf("Citeproc: %s", ifelse(citeproc_ok, "built-in", "external needed")))
 ```
 
-**预期结果：** 与目标期刊或样式系列匹配的已验证 CSL 文件。
+**Expected:** Pandoc version 2.11+ detected with built-in citeproc support.
 
-**失败处理：** 如果仓库中没有现成的 CSL 文件，找到最接近的样式（通常是同一出版商的另一期刊）并按第 2 步中的说明进行修改。
+**On failure:** Install Pandoc or set `RSTUDIO_PANDOC` in `.Renviron` to point to
+the RStudio-bundled Pandoc. Quarto also ships its own Pandoc.
 
-### 第 2 步：理解 CSL 样式结构
+### Step 2: Configure Document YAML for Citations
 
-解析 CSL 文件以理解格式规则：
+For R Markdown:
 
-1. **引文元素**（`<citation>`）：控制行内引文的外观。关键属性：
-   - `collapse`：多引文如何合并（例如 `[1-3]` 与 `[1, 2, 3]`）
-   - `disambiguate-add-year-suffix`：在同一作者同年的情况下添加 a/b 后缀
-   - `et-al-min` / `et-al-use-first`：何时缩写作者列表
-2. **参考文献列表元素**（`<bibliography>`）：控制参考文献列表格式。关键属性：
-   - `sort`：条目排序依据（作者、日期、引用顺序）
-   - `layout`：每个条目中元素的排列方式
-   - `second-field-align`：编号与文本的对齐方式
-3. **宏**（`<macro>`）：可复用的格式块（例如"author"宏定义作者姓名在所有位置的格式化方式）。
-4. **区域设置术语**：特定语言的词汇（"et al."、"编辑"/"editors"、"取自"/"retrieved from"），由 CSL locale 文件控制。
+```yaml
+---
+title: "My Document"
+bibliography: references.bib
+csl: apa.csl
+link-citations: true
+output:
+  html_document:
+    pandoc_args: ["--citeproc"]
+---
+```
 
-**预期结果：** 理解所选样式如何格式化行内引文和参考文献列表条目。
+For Quarto:
 
-**失败处理：** 如果样式行为出乎意料，在 CSL 可视化编辑器 (https://editor.citationstyles.org/) 中用示例引文测试，诊断哪个宏或属性需要调整。
+```yaml
+---
+title: "My Document"
+bibliography: references.bib
+csl: apa.csl
+link-citations: true
+cite-method: citeproc
+---
+```
 
-### 第 3 步：应用行内引文
+**Expected:** YAML header correctly references the .bib file and CSL style.
 
-在文档中插入正确格式化的引文：
+**On failure:** If the CSL file is not found, download it from the CSL repository
+(see Step 3) and place it in the project directory.
 
-1. **基本引文语法**（R Markdown/Quarto）：
-   - 括号引文：`[@smith2024]` → (Smith, 2024)
-   - 叙述性引文：`@smith2024` → Smith (2024)
-   - 多作者：`[@smith2024; @jones2023]` → (Jones, 2023; Smith, 2024)
-   - 带页码：`[@smith2024, p. 42]` → (Smith, 2024, p. 42)
-   - 抑制作者：`[-@smith2024]` → (2024)
-2. **特殊情况**：
-   - 同一作者同年的多篇文章使用年份后缀消歧：(Smith, 2024a) vs. (Smith, 2024b)
-   - 第一次引用使用完整作者列表（如果样式要求），后续引用缩写
-   - 组织作者名称不应被缩写
-3. **LaTeX/BibTeX 语法**：`\cite{smith2024}`、`\citep{smith2024}`、`\citet{smith2024}`，由 natbib 或 biblatex 处理。
+### Step 3: Obtain and Customize CSL Style Files
 
-**预期结果：** 所有行内引文格式正确，消歧后缀正确应用，多引文组正确排序。
+```r
+# Common CSL styles and their repository names
+csl_styles <- list(
+  apa         = "apa.csl",
+  chicago     = "chicago-author-date.csl",
+  vancouver   = "vancouver.csl",
+  ieee        = "ieee.csl",
+  nature      = "nature.csl",
+  harvard     = "harvard-cite-them-right.csl",
+  mla         = "modern-language-association.csl"
+)
 
-**失败处理：** 如果引文显示为 `???` 或 `[?]`，引用键与 `.bib` 文件中的条目不匹配。验证引用键拼写和文件路径。
+download_csl <- function(style, dest_dir = ".") {
+  base_url <- "https://raw.githubusercontent.com/citation-style-language/styles/master"
+  filename <- csl_styles[[style]]
+  if (is.null(filename)) stop(sprintf("Unknown style: %s", style))
+  dest <- file.path(dest_dir, filename)
+  utils::download.file(
+    url = sprintf("%s/%s", base_url, filename),
+    destfile = dest, quiet = TRUE
+  )
+  message(sprintf("Downloaded %s to %s", filename, dest))
+  dest
+}
 
-### 第 4 步：生成参考文献列表
+# Download APA 7 style
+download_csl("apa")
+```
 
-在文档末尾生成格式化的参考文献列表：
+A downloaded style is rarely the last word — journals routinely deviate from the
+canonical style in small ways, and the fix is to edit the `.csl` file rather than to
+post-process the rendered output.
 
-1. **自动生成**：在 R Markdown/Quarto 中，参考文献列表在文档末尾自动生成。在 LaTeX 中使用 `\bibliography{references}` 和 `\bibliographystyle{style}`。
-2. **排序**：验证条目排序是否与样式要求匹配（作者-日期样式按字母顺序，数字编号样式按引用顺序）。
-3. **格式检查**：核实：
-   - 作者姓名格式（名, 姓 vs 姓, 名首字母）
-   - 标题大小写（句首大写 vs 标题大写）
-   - 期刊名称（斜体 vs 正体，全称 vs 缩写）
-   - 卷号/期号格式（加粗卷号、括号中的期号）
-   - DOI/URL 格式和超链接
-4. **引用位置标记**：如果参考文献列表需要出现在特定位置（不在文档末尾），在 Quarto/R Markdown 中使用 `<div id="refs"></div>`。
+A CSL style is XML rooted in a `<style>` element that declares the CSL namespace as
+its default (`xmlns="http://purl.org/net/xbiblio/csl"`). Elements inside the file are
+therefore written **unprefixed** — `<citation>`, `<bibliography>`, `<sort>`. The CSL
+specification names the same elements as `cs:style`, `cs:citation` and so on; that
+prefix is the spec's notation for talking about them, not text you will find in
+`apa.csl`. Searching a downloaded style for `<cs:citation>` returns nothing.
 
-**预期结果：** 格式完整的参考文献列表，每个条目的所有元素符合目标样式。
+Four parts account for nearly every journal-specific tweak:
 
-**失败处理：** 如果格式偏离目标样式，将实际输出与样式指南逐项比较。常见问题：缺少 DOI（更新 `.bib` 条目）、标题大小写不正确（在 `.bib` 中用 `{}` 保护专有名词）、期刊缩写不正确（使用期刊缩写列表）。
+- **Where the two formats live.** `<citation>` is required and appears exactly once;
+  it controls the in-text citation or footnote. `<bibliography>` is optional and
+  controls the reference list. Changing how a citation looks in the text and changing
+  how it looks in the reference list are edits to *different* elements — this is the
+  most common source of "I changed it and nothing happened".
+- **Sort order.** Both `<citation>` and `<bibliography>` may carry a `<sort>` child,
+  which must appear *before* `<layout>` and must contain one or more `<key>`
+  elements. This is what switches a bibliography between author-alphabetical,
+  by-year, and citation-order.
+- **"et al." thresholds.** `et-al-min` and `et-al-use-first` together enable et-al
+  abbreviation: once the author count reaches `et-al-min`, the list truncates after
+  `et-al-use-first` names. Set them on `<name>`, or inherit them from `<style>`,
+  `<citation>`, or `<bibliography>`.
+- **Localization.** Set the `default-locale` attribute on the root `<style>` element
+  to translate style-generated terms ("and", "et al.", "eds."). The attribute is
+  `default-locale` — a bare `locale` attribute belongs on `<locale>` elements and
+  will not do this.
 
-### 第 5 步：处理特殊格式化场景
+Validate any edited style at <https://validator.citationstyles.org/>, which checks a
+file (by URL, upload, or paste) against the CSL schema and reports the offending line.
+Do this before rendering: Pandoc's failure mode for a malformed style is unhelpful.
 
-解决常见的引文格式化难题：
+**Expected:** CSL file downloaded to the project directory, and any journal-specific
+edits validate cleanly against the CSL schema.
 
-1. **同名同年消歧**：当两个条目有相同的作者和年份时，CSL 自动添加后缀（2024a、2024b）。验证后缀分配与参考文献列表排序一致。
-2. **组织作者**：使用 `{{国家统计局}}` 在 BibTeX 中（双花括号）防止缩写。
-3. **标题中的特殊字符**：在 BibTeX 中用 `{}` 保护大写字母和特殊字符：`{DNA}` 而非 `DNA`。
-4. **多语言参考文献**：为非英语来源使用 `langid` 字段触发正确的区域设置术语。
-5. **交叉引用**：使用 `crossref` 字段从合集/论文集条目继承字段到章节/论文条目。
+**On failure:** Check network connectivity. The CSL GitHub repository contains 10,000+
+styles. For offline use, bundle required CSL files in the project. If an edited style
+fails validation, the validator names the line — the usual causes are a `<sort>`
+placed after `<layout>` rather than before it, and a misspelled attribute, which the
+schema rejects rather than ignores.
 
-**预期结果：** 所有特殊情况正确处理，无格式异常。
+### Step 4: Write In-Text Citations
 
-**失败处理：** 如果 citeproc 产生非预期输出，隔离问题条目，在 CSL 编辑器中测试，然后修改条目数据或 CSL 文件。
+Use Pandoc citation syntax in your document body:
 
-## 验证清单
+```markdown
+<!-- Single citation -->
+According to @Smith2020, the method improves accuracy.
 
-- [ ] 选择的 CSL 样式与目标期刊/格式要求匹配
-- [ ] 所有行内引文解析正确（无 `???` 或缺失引文）
-- [ ] 同名同年的条目有正确的消歧后缀
-- [ ] 参考文献列表按样式要求排序
-- [ ] 作者姓名、标题大小写和期刊格式均符合样式规范
-- [ ] DOI/URL 正确显示并可点击（如适用）
-- [ ] 非英语参考文献使用正确的区域设置术语
+<!-- Parenthetical citation -->
+The method improves accuracy [@Smith2020].
 
-## 常见问题
+<!-- Multiple citations -->
+Several studies confirm this [@Smith2020; @Jones2021; @Lee2022].
 
-- **选择了错误的 CSL 变体**：许多样式有多个变体（例如 APA 第 6 版 vs 第 7 版、Chicago 作者-日期 vs 注释）。选错变体会导致整个参考文献列表格式不正确。务必验证特定的变体。
-- **BibTeX 中的大小写保护**：BibTeX 在格式化时会将标题转为小写。如果标题包含必须保持大写的词（专有名词、首字母缩略词），请用 `{}` 保护：`{Bayesian}` 而非 `Bayesian`。
-- **旧式 BibTeX vs. BibLaTeX**：它们的字段名不同（BibTeX 用 `journal`，BibLaTeX 用 `journaltitle`）。混用格式会导致字段缺失。
-- **忽略区域设置设置**：法语引文需要法语术语（"et" 代替 "and"、"dans" 代替 "in"）。如果不设置正确的区域设置，所有术语都会使用英语。
+<!-- Citation with page number -->
+As noted by @Smith2020 [p. 42], the results are significant.
 
-## 相关技能
+<!-- Suppress author name -->
+The results are significant [-@Smith2020].
 
-- `manage-bibliography` -- 创建和维护引文格式化使用的参考文献库
-- `validate-references` -- 验证参考文献的准确性后再格式化
+<!-- Citation with prefix -->
+[see @Smith2020, pp. 42-45; also @Jones2021, ch. 3]
+```
+
+**Expected:** Pandoc/Quarto renders these into properly formatted citations in the
+target style (e.g., `(Smith, 2020)` for APA, `(Smith 2020)` for Chicago).
+
+### Step 5: Generate Standalone Reference Lists with R
+
+```r
+# Using RefManageR to print formatted references
+library(RefManageR)
+BibOptions(style = "text", bib.style = "authoryear", sorting = "nyt")
+bib <- ReadBib("references.bib", check = FALSE)
+
+# Print all entries in text format
+print(bib)
+
+# Format specific entries
+print(bib[author = "Smith"])
+
+# Generate markdown reference list programmatically
+format_reference_list <- function(bib, style = "apa") {
+  BibOptions(style = "text", bib.style = "authoryear")
+  entries <- capture.output(print(bib))
+  entries <- entries[nzchar(trimws(entries))]
+  paste(sprintf("- %s", entries), collapse = "\n")
+}
+
+cat(format_reference_list(bib))
+```
+
+**Expected:** Formatted reference list printed to console or captured as character
+vector for further processing.
+
+### Step 6: Convert Between Citation Styles
+
+```r
+# Render the same document in different styles
+styles <- c("apa", "chicago", "ieee")
+
+for (style in styles) {
+  csl_file <- download_csl(style)
+  output_file <- sprintf("output_%s.html", style)
+
+  rmarkdown::render(
+    input = "document.Rmd",
+    output_file = output_file,
+    params = list(csl = csl_file),
+    quiet = TRUE
+  )
+  message(sprintf("Rendered %s with %s style", output_file, style))
+}
+```
+
+For Quarto:
+
+```bash
+quarto render document.qmd --metadata csl:apa.csl -o output_apa.html
+quarto render document.qmd --metadata csl:ieee.csl -o output_ieee.html
+```
+
+**Expected:** Multiple output files, each with the same content formatted in a
+different citation style.
+
+**On failure:** If rendering fails, check that all citation keys in the document body
+exist in the .bib file. Missing keys produce warnings but may break formatting.
+
+### Step 7: Validate Citation Formatting
+
+```r
+# Check for undefined citations in rendered output
+validate_citations <- function(rmd_file, bib_file) {
+  # Extract citation keys from document
+  doc_text <- readLines(rmd_file, warn = FALSE)
+  doc_keys <- unique(unlist(regmatches(
+    doc_text,
+    gregexpr("@([A-Za-z][A-Za-z0-9_:.#$%&+-?<>~/]*)", doc_text)
+  )))
+  doc_keys <- gsub("^@", "", doc_keys)
+  # Remove false positives (email-like patterns)
+  doc_keys <- doc_keys[!grepl("\\.", doc_keys)]
+
+  # Extract keys from .bib file
+  bib <- RefManageR::ReadBib(bib_file, check = FALSE)
+  bib_keys <- names(bib)
+
+  # Find mismatches
+  undefined <- setdiff(doc_keys, bib_keys)
+  unused <- setdiff(bib_keys, doc_keys)
+
+  list(
+    undefined = undefined,
+    unused = unused,
+    cited = intersect(doc_keys, bib_keys)
+  )
+}
+
+result <- validate_citations("document.Rmd", "references.bib")
+if (length(result$undefined) > 0) {
+  warning(sprintf("Undefined citation keys: %s",
+                  paste(result$undefined, collapse = ", ")))
+}
+if (length(result$unused) > 0) {
+  message(sprintf("Unused .bib entries: %s",
+                  paste(result$unused, collapse = ", ")))
+}
+```
+
+**Expected:** Report of undefined keys (cited but not in .bib), unused entries
+(in .bib but never cited), and valid citations.
+
+**On failure:** False positives may occur with email addresses or code containing `@`.
+Refine the regex or manually review flagged keys.
+
+## Validation
+
+- [ ] Document renders without citation warnings from Pandoc/citeproc
+- [ ] All `@key` references in the document resolve to .bib entries
+- [ ] Reference list appears at the end of the document (or in `div#refs`)
+- [ ] In-text citations match the target style format
+- [ ] Citation sorting follows style rules (alphabetical for APA, numbered for IEEE)
+- [ ] Hyperlinks from in-text citations to reference list entries work (if `link-citations: true`)
+
+## Common Pitfalls
+
+- **Missing CSL file**: Pandoc falls back to Chicago author-date if no CSL is
+  specified. Always set `csl:` explicitly for style consistency
+- **Citation key typos**: A misspelled key like `@Smtih2020` silently renders as
+  literal text. Enable Pandoc warnings with `--verbose` to catch these
+- **Locale-dependent formatting**: APA requires "and" between authors in English
+  but "und" in German. Set `lang:` in the YAML header to match
+- **nocite for uncited entries**: To include entries in the reference list without
+  citing them in text, add `nocite: '@*'` (all) or `nocite: '@key1, @key2'` to YAML
+- **CSL version mismatch**: Some older CSL 0.8 files are incompatible with modern
+  Pandoc. Always use CSL 1.0+ from the official repository
+- **Quarto vs R Markdown differences**: Quarto uses `cite-method: citeproc` by
+  default; R Markdown may need explicit `pandoc_args: ["--citeproc"]`
+- **Confusing CSL styles with LaTeX bibliography styles**: three separate formats
+  answer to "APA style" and none is interchangeable with the others. `.csl` drives
+  Pandoc, Quarto, and Zotero. Legacy BibTeX uses `.bst` files, selected with
+  `\bibliographystyle{}` and processed by the `bibtex` program. Modern biblatex uses
+  its own `.bbx`/`.cbx` styles, selected with `\usepackage[style=apa]{biblatex}` and
+  processed by `biber`. Putting a `.csl` filename in a `csl:` field is right; putting
+  one anywhere in a LaTeX preamble is not, and each of these tools fails on the
+  others' files in ways that do not name the cause
+
+## Related Skills
+
+- `manage-bibliography` - create and maintain the .bib files this skill consumes
+- `validate-references` - verify .bib entry completeness before formatting
+- `../reporting/format-apa-report` - full APA report formatting beyond citations
+- `../reporting/create-quarto-report` - Quarto document setup with citation support

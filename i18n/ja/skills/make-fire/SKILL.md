@@ -14,7 +14,7 @@ metadata:
   domain: bushcraft
   complexity: intermediate
   language: natural
-  tags: bushcraft, fire, survival, wilderness, friction-fire, ferro-rod
+  tags: bushcraft, fire, survival, wilderness, primitive-skills
   locale: ja
   source_locale: en
   source_commit: 33b561c9

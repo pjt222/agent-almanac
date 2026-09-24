@@ -1,17 +1,18 @@
 name: Validate Skill Content Security
 
 on:
+  # No `paths:` filter, deliberately. The scan covered `skills/` only, so the filter matched its
+  # scope. #407 added a privacy rule over seven trees, and the near-miss that motivated that rule
+  # landed in `tests/` — a path the old filter did not name, so the scan would not have run on the
+  # PR carrying it, before or after merge. A control that fires only when a PR happens to touch
+  # `skills/` certifies the tree it did not read.
+  #
+  # Dropping the filter rather than extending it also keeps this workflow eligible to become a
+  # required check: a path-filtered workflow does not report outside its filter, and a required
+  # check that never reports sits on "Expected" and refuses the merge forever (#641).
   push:
     branches: [main]
-    paths:
-      - 'skills/**'
-      - 'scripts/scan-skill-content.js'
-      - '.github/workflows/validate-security.yml'
   pull_request:
-    paths:
-      - 'skills/**'
-      - 'scripts/scan-skill-content.js'
-      - '.github/workflows/validate-security.yml'
   workflow_dispatch:
 
 permissions:

@@ -1,15 +1,13 @@
 ---
 name: create-multistage-dockerfile
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Crear Dockerfiles multi-etapa que separan las dependencias de compilación de la imagen
-  de producción para obtener imágenes más pequeñas, seguras y eficientes. Cubrir patrones
-  para Go, Rust, Java, Node.js y Python con compilación de artefactos, prueba, y
-  empaquetado final.
+  Create multi-stage Dockerfiles that separate build and runtime environments
+  for minimal production images. Covers builder/runtime stage separation,
+  artifact copying, scratch/distroless/alpine targets, and size comparison.
+  Use when production images are too large, when build tools are included in
+  the final image, when you need separate dev and prod images from one
+  Dockerfile, or when deploying to constrained environments like edge or
+  serverless.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -17,167 +15,215 @@ metadata:
   version: "1.0"
   domain: containerization
   complexity: intermediate
-  language: multi
-  tags: docker, multi-stage, build, optimization, security
+  language: Docker
+  tags: docker, multi-stage, distroless, alpine, scratch, optimization
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Crear Dockerfile Multi-Etapa
+# Create Multi-Stage Dockerfile
 
-Crear Dockerfiles multi-etapa para separar compilación de producción y obtener imágenes mínimas.
+Build multi-stage Dockerfiles that produce minimal production images by separating build tooling from runtime.
 
-## Cuándo Usar
+## When to Use
 
-- Las imágenes Docker de producción son demasiado grandes
-- Necesitando separar herramientas de compilación de la imagen final
-- Compilando binarios estáticos (Go, Rust) para imágenes minimales
-- Ejecutando pruebas en la compilación sin incluirlas en producción
-- Reduciendo la superficie de ataque eliminando herramientas innecesarias
+- Production images are too large (>500MB for compiled languages)
+- Build tools (compilers, dev headers) are included in the final image
+- Need separate images for development and production from one Dockerfile
+- Deploying to constrained environments (edge, serverless)
 
-## Entradas
+## Inputs
 
-- **Requerido**: Código fuente de la aplicación
-- **Requerido**: Proceso de compilación del proyecto
-- **Opcional**: Suite de pruebas para ejecutar durante la compilación
-- **Opcional**: Requisitos de imagen base para producción
+- **Required**: Existing Dockerfile or project to containerize
+- **Required**: Language and build system (npm, pip, go build, cargo, maven)
+- **Optional**: Target runtime base (slim, alpine, distroless, scratch)
+- **Optional**: Size budget for final image
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Diseñar las Etapas de Compilación
+### Step 1: Identify Build vs Runtime Dependencies
 
-Identificar las etapas necesarias según el lenguaje.
+| Category | Build Stage | Runtime Stage |
+|---|---|---|
+| Compilers | gcc, g++, rustc | Not needed |
+| Package managers | npm, pip, cargo | Sometimes (interpreted langs) |
+| Dev headers | `-dev` packages | Not needed |
+| Source code | Full source tree | Only compiled output |
+| Test frameworks | jest, pytest | Not needed |
 
-```dockerfile
-# Patrón general de 3 etapas
-# Etapa 1: Dependencias
-# Etapa 2: Compilación
-# Etapa 3: Producción (imagen final)
-```
+### Step 2: Structure the Multi-Stage Build
 
-**Esperado:** Separación clara entre etapas de compilación y producción.
-
-**En caso de fallo:** Comenzar con 2 etapas (compilación + producción) y agregar más si es necesario.
-
-### Paso 2: Implementar para Lenguajes Compilados (Go)
+The core pattern: build in a fat image, copy artifacts to a slim image.
 
 ```dockerfile
-# Etapa de compilación
-FROM golang:1.21-alpine AS builder
-RUN apk add --no-cache git ca-certificates
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
+# ---- Build Stage ----
+FROM <build-image> AS builder
+WORKDIR /src
+COPY <dependency-manifest> .
+RUN <install-dependencies>
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o /server .
+RUN <build-command>
 
-# Etapa de producción
-FROM scratch
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /server /server
-ENTRYPOINT ["/server"]
+# ---- Runtime Stage ----
+FROM <runtime-image>
+COPY --from=builder /src/<artifact> /<dest>
+EXPOSE <port>
+CMD [<entrypoint>]
 ```
 
-Para **Rust**:
+### Step 3: Apply Language-Specific Patterns
+
+#### Node.js (pruned node_modules)
 
 ```dockerfile
-FROM rust:1.74-alpine AS builder
-WORKDIR /app
-COPY Cargo.toml Cargo.lock ./
-RUN mkdir src && echo "fn main() {}" > src/main.rs
-RUN cargo build --release
-COPY src ./src
-RUN cargo build --release
-
-FROM alpine:3.18
-COPY --from=builder /app/target/release/myapp /usr/local/bin/myapp
-CMD ["myapp"]
-```
-
-**Esperado:** La imagen final contiene solo el binario y dependencias mínimas de runtime.
-
-**En caso de fallo:** Verificar que el binario es estáticamente enlazado (para `scratch`), incluir certificados SSL si se necesita HTTPS.
-
-### Paso 3: Implementar para Lenguajes Interpretados (Node.js)
-
-```dockerfile
-# Etapa de dependencias
-FROM node:20-alpine AS deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --production
-
-# Etapa de compilación
-FROM node:20-alpine AS builder
-WORKDIR /app
+FROM node:22-bookworm AS builder
+WORKDIR /src
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+RUN npm run build && npm prune --omit=dev
 
-# Etapa de producción
-FROM node:20-alpine
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+FROM node:22-bookworm-slim
+RUN groupadd -r app && useradd -r -g app app
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-COPY package.json .
-USER appuser
+COPY --from=builder /src/dist ./dist
+COPY --from=builder /src/node_modules ./node_modules
+COPY --from=builder /src/package.json .
+USER app
 EXPOSE 3000
 CMD ["node", "dist/index.js"]
 ```
 
-**Esperado:** La imagen final no contiene devDependencies, archivos fuente ni herramientas de compilación.
-
-**En caso de fallo:** Verificar que todos los archivos necesarios se copian desde las etapas correctas, probar la imagen final con todas las funcionalidades.
-
-### Paso 4: Agregar Etapa de Pruebas
+#### Python (virtualenv copy)
 
 ```dockerfile
-FROM node:20-alpine AS builder
-WORKDIR /app
+FROM python:3.12-bookworm AS builder
+WORKDIR /src
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN npm ci
-RUN npm run build
 
-# Etapa de pruebas (no produce imagen, pero falla la compilación si las pruebas fallan)
-FROM builder AS tester
-RUN npm test
-
-# Etapa de producción (solo se alcanza si las pruebas pasan)
-FROM node:20-alpine
-COPY --from=builder /app/dist ./dist
-CMD ["node", "dist/index.js"]
+FROM python:3.12-slim-bookworm
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+WORKDIR /app
+COPY --from=builder /src .
+RUN groupadd -r app && useradd -r -g app app
+USER app
+EXPOSE 8000
+CMD ["python", "app.py"]
 ```
+
+#### Go (static binary to scratch)
+
+```dockerfile
+FROM golang:1.23-bookworm AS builder
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /server ./cmd/server
+
+FROM scratch
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /server /server
+EXPOSE 8080
+ENTRYPOINT ["/server"]
+```
+
+#### Rust (static musl binary)
+
+```dockerfile
+FROM rust:1.82-bookworm AS builder
+RUN apt-get update && apt-get install -y musl-tools && rm -rf /var/lib/apt/lists/*
+RUN rustup target add x86_64-unknown-linux-musl
+WORKDIR /src
+COPY Cargo.toml Cargo.lock ./
+RUN mkdir src && echo "fn main() {}" > src/main.rs \
+    && cargo build --release --target x86_64-unknown-linux-musl \
+    && rm -rf src
+COPY . .
+RUN touch src/main.rs && cargo build --release --target x86_64-unknown-linux-musl
+
+FROM scratch
+COPY --from=builder /src/target/x86_64-unknown-linux-musl/release/myapp /myapp
+EXPOSE 8080
+ENTRYPOINT ["/myapp"]
+```
+
+**Expected:** Final image contains only the runtime and compiled artifacts.
+
+**On failure:** Check `COPY --from=builder` paths. Use `docker build --target builder` to debug the build stage.
+
+### Step 4: Choose Runtime Base
+
+| Base | Size | Shell | Use Case |
+|---|---|---|---|
+| `scratch` | 0 MB | No | Static Go/Rust binaries |
+| `gcr.io/distroless/static` | ~2 MB | No | Static binaries + CA certs |
+| `gcr.io/distroless/base` | ~20 MB | No | Dynamic binaries (libc) |
+| `*-slim` | 50-150 MB | Yes | Interpreted languages |
+| `alpine` | ~7 MB | Yes | When shell access needed |
+
+**Note:** Alpine uses musl libc. Some Python wheels and Node native modules may not work. Prefer `-slim` (glibc) for interpreted languages.
+
+### Step 5: Build Args Across Stages
+
+```dockerfile
+ARG APP_VERSION=0.0.0
+
+FROM golang:1.23 AS builder
+ARG APP_VERSION
+RUN go build -ldflags="-X main.version=${APP_VERSION}" -o /server .
+
+FROM gcr.io/distroless/static
+COPY --from=builder /server /server
+ENTRYPOINT ["/server"]
+```
+
+Build with: `docker build --build-arg APP_VERSION=1.2.3 .`
+
+**Note:** `ARG` before `FROM` is global. Each stage must re-declare `ARG` to use it.
+
+### Step 6: Compare Image Sizes
 
 ```bash
-# Compilar hasta la etapa de pruebas
-docker build --target tester -t mi-app:test .
+# Build both variants
+docker build -t myapp:fat --target builder .
+docker build -t myapp:slim .
 
-# Compilar imagen de producción (ejecuta pruebas automáticamente)
-docker build -t mi-app:latest .
+# Compare sizes
+docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep myapp
 ```
 
-**Esperado:** Las pruebas se ejecutan durante la compilación, la imagen de producción solo se crea si las pruebas pasan.
+**Expected:** Production image is 50-90% smaller than the build stage.
 
-**En caso de fallo:** Usar `--target` para compilar etapas individuales y depurar problemas.
+## Validation
 
-## Validación
+- [ ] `docker build` completes for all stages
+- [ ] Final image does not contain build tools (compilers, dev headers)
+- [ ] `docker run` works correctly from the slim image
+- [ ] Image size is significantly reduced vs single-stage
+- [ ] `COPY --from=builder` paths are correct
+- [ ] No source code leaks into the production image
 
-- [ ] La imagen final es significativamente más pequeña que una compilación de una sola etapa
-- [ ] No se incluyen herramientas de compilación en la imagen de producción
-- [ ] Las pruebas se ejecutan durante la compilación
-- [ ] La aplicación funciona correctamente en la imagen final
-- [ ] Las capas de caché funcionan eficientemente entre etapas
+## Common Pitfalls
 
-## Errores Comunes
+- **Missing runtime libraries**: Compiled code may need shared libraries (`libc`, `libssl`). Test the slim image thoroughly.
+- **Broken `COPY --from` paths**: The artifact path must match exactly. Use `docker build --target builder` then `docker run --rm builder ls /path` to debug.
+- **Alpine musl issues**: Native Node.js addons and some Python packages fail on Alpine. Use `-slim` instead.
+- **Global ARG scope**: An `ARG` declared before `FROM` is available to `FROM` lines only. Re-declare inside each stage that needs it.
+- **Forgetting CA certificates**: `scratch` has no certificates. Copy `/etc/ssl/certs/ca-certificates.crt` from the builder or use distroless.
 
-- **Copiar demasiado en la etapa final**: Solo copiar artefactos necesarios con `COPY --from=`.
-- **No separar dependencias de compilación**: Las devDependencies no deben estar en la imagen final.
-- **Olvidar certificados SSL**: Las imágenes `scratch` no tienen certificados; copiarlos explícitamente.
-- **Caché de dependencias ineficiente**: Copiar archivos de bloqueo antes del código fuente en cada etapa.
-- **No nombrar las etapas**: Usar `AS nombre` para referencia clara en lugar de índices numéricos.
+## Related Skills
 
-## Habilidades Relacionadas
-
-- `create-dockerfile` - Patrones base de Dockerfile
-- `optimize-docker-build-cache` - Estrategias avanzadas de caché
-- `create-r-dockerfile` - Dockerfiles específicos para R
+- `create-dockerfile` - single-stage general Dockerfiles
+- `create-r-dockerfile` - R-specific Dockerfiles with rocker images
+- `optimize-docker-build-cache` - layer caching and BuildKit features
+- `setup-compose-stack` - compose configurations using multi-stage images

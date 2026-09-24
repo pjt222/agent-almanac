@@ -289,13 +289,12 @@ for name, result in sorted(model_results.items(), key=lambda x: x[1]["bic"]):
 
 3. 標準的なガイドラインを使用してBIC差を解釈する：
 
-```python
-# BIC difference interpretation (Kass & Raftery, 1995):
-# 0-2:   Not worth mentioning
-# 2-6:   Positive evidence
-# 6-10:  Strong evidence
-# >10:   Very strong evidence
-```
+BIC difference interpretation (Kass & Raftery, 1995):
+
+- 0-2:   Not worth mentioning
+- 2-6:   Positive evidence
+- 6-10:  Strong evidence
+- `>10`:   Very strong evidence
 
 4. ベイズモデルではDICまたはWAICを使用する：
 

@@ -18,6 +18,8 @@ export class UniversalAdapter extends FrameworkAdapter {
   static displayName = 'Universal (.agents/)';
   static strategy = 'symlink';
   static contentTypes = ['skill'];
+  /** @type {Record<string, string[]>} #607: _targetBase() branches on scope. */
+  static scopes = { skill: ['project', 'global'] };
 
   async detect(projectDir) {
     return true;

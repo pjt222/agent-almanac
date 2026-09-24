@@ -31,10 +31,17 @@
 import { readFileSync, readdirSync, lstatSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, relative, resolve, sep } from 'node:path';
+import { findPrivateStoreSlugs } from './lib/store-slug.js';
+import { isSuppressed } from './lib/suppression.js';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, '..');
 const skillsDir = join(repoRoot, 'skills');
+// The privacy rule scans wider than the secret rules: a memory-store slug reaches a reader from
+// anywhere in the repo, and the near-miss that motivated it landed in tests/, not skills/.
+// KNOWN GAP, stated rather than implied: i18n/ is not walked. A leak in an English skill
+// propagates to its mirrors on the next scaffold, so this catches the source and not the copies.
+const PRIVACY_TREES = ['skills', 'agents', 'teams', 'guides', 'workflows', 'tests', 'scripts'];
 const jsonOut = process.argv.includes('--json');
 
 // ── secret shapes ────────────────────────────────────────────────────────────
@@ -129,12 +136,6 @@ function walk(dir, acc = []) {
   return acc;
 }
 
-function isSuppressed(lines, idx) {
-  const here = lines[idx] || '';
-  const above = lines[idx - 1] || '';
-  const re = /(?:<!--|#)\s*security-scan-ignore:\s*\S/;
-  return re.test(here) || re.test(above);
-}
 
 // join backslash line-continuations into logical lines, keeping the first line number
 function logicalLines(physical) {
@@ -204,6 +205,35 @@ for (const abs of walk(skillsDir)) {
   }
 }
 
+// ── privacy: private memory-store slugs ─────────────────────────────────────
+let privacyFilesScanned = 0;
+for (const tree of PRIVACY_TREES) {
+  for (const abs of walk(join(repoRoot, tree))) {
+    if (BINARY_EXT.test(abs)) continue;
+    const rel = relative(repoRoot, abs).split(sep).join('/');
+    let content;
+    try {
+      content = readFileSync(abs, 'utf8');
+    } catch {
+      continue;
+    }
+    privacyFilesScanned++;
+    const lines = content.split(/\r?\n/);
+    for (const { slug, line } of findPrivateStoreSlugs(content)) {
+      if (isSuppressed(lines, line - 1)) continue;
+      // The finding deliberately does NOT echo the slug: a CI log is as public as the file.
+      findings.push({
+        severity: 'HIGH',
+        kind: 'privacy',
+        rule: 'private-store-slug',
+        file: rel,
+        line,
+        detail: `${slug.length}-character slug, elided`,
+      });
+    }
+  }
+}
+
 const HINT = 'verify and remove; if it is a documented example use a placeholder marker (example, <placeholder>, YOUR_TOKEN) or an inline "security-scan-ignore: <reason>"';
 
 if (jsonOut) {
@@ -213,7 +243,7 @@ if (jsonOut) {
     console.error(`::error file=${f.file},line=${f.line}::[${f.severity}] ${f.kind} (${f.rule}) — ${HINT}`);
   }
   if (findings.length === 0) {
-    console.log(`scan-skill-content: OK — ${filesScanned} skill file(s) scanned, 0 findings`);
+    console.log(`scan-skill-content: OK — ${filesScanned} skill file(s) scanned for secrets and dangerous executables, ${privacyFilesScanned} file(s) across ${PRIVACY_TREES.length} trees scanned for private store slugs, 0 findings`);
   } else {
     console.error(`\nscan-skill-content: ${findings.length} finding(s) across ${filesScanned} files:`);
     for (const f of findings) console.error(`  - [${f.severity}] ${f.file}:${f.line} ${f.kind}/${f.rule}`);

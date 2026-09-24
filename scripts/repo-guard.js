@@ -6,6 +6,10 @@
  *   npm run guard:verify    # after it returns
  *   npm run guard:release   # ... and drop the snapshot
  *
+ * and, when the arming session itself moved HEAD for a reason it can name:
+ *
+ *   npm run guard:rebaseline -- --accept=<sha>
+ *
  * The npm scripts are the supported entrypoint, and every message this tool
  * prints names them rather than the raw `node scripts/repo-guard.js …` form:
  * advice that is not copy-pasteable at the moment something broke is advice that
@@ -72,6 +76,23 @@
  *   - `verify` KEEPS the snapshot unless `--release`. Consuming it by default
  *     silently disarms every later check — and a stale snapshot can only ever
  *     over-report, never under-report, so keeping is the safe direction.
+ *
+ * ## The legitimate mover (#688)
+ *
+ * Both rules above assume a moved HEAD is UNEXPLAINED. That is right for the
+ * case the tool exists for and wrong for the commonest event in any long run:
+ * the arming session merges its own branch, or switches branches, and then has
+ * nowhere to go but `snapshot --force` — which the text above warns against in
+ * the same breath, and which leaves a transcript indistinguishable from a
+ * careless rebaseline over an agent's commit.
+ *
+ * `rebaseline` is that exit. It costs exactly the three steps of judgement the
+ * honest sequence already required — enumerate the delta, confirm the commits
+ * are yours, record that you did — with the difference that the tool performs
+ * them instead of assuming them. It refuses without an `--accept=<sha>` equal to
+ * the current HEAD, and it refuses ANY worktree, content, or index-flag change,
+ * because "I moved HEAD deliberately" is a claim about history and says nothing
+ * about file contents.
  */
 
 import { readFileSync, writeFileSync, existsSync, unlinkSync, statSync } from 'node:fs';
@@ -89,6 +110,18 @@ const SNAPSHOT_NAME = 'repo-guard.json';
 const FORMAT_VERSION = 3;
 /** Sentinel for a repository with no commits yet. */
 const UNBORN = '(unborn)';
+// How the baseline reads the branch and the index flags, and so the commands the advice names for
+// each: a command the guard does not read with can print nothing where the guard found a change.
+// `git branch --show-current` prints nothing on a detached HEAD (#907 round 1), and this prints
+// `HEAD`. The legend sits on its own line so the command pastes bare: under zsh's default,
+// where interactive comments are off, a trailing `#` is not a comment, so its words became
+// arguments to the command and a `;` in it started a second one (measured on #907).
+const BRANCH_ARGS = ['rev-parse', '--abbrev-ref', 'HEAD'];
+const BRANCH_COMMAND = `git ${BRANCH_ARGS.join(' ')}`;
+const INDEX_FLAGS_ARGS = ['ls-files', '-v'];
+const INDEX_FLAGS_COMMAND = `git ${INDEX_FLAGS_ARGS.join(' ')}`;
+const INDEX_FLAGS_LEGEND = 'run at the repository root; a tag other than H: S is skip-worktree, ' +
+  'M is unmerged, lowercase is assume-unchanged';
 // Named in the npm form because `die()` appends this to every argument error,
 // and a usage block contradicting the rest of the tool's advice is how a caller
 // ends up running the one form that swallows its flags. Flags need `--` to cross
@@ -97,11 +130,18 @@ const USAGE = `Usage:
   npm run guard:snapshot              record HEAD, branch, status, contents, index flags
   npm run guard:verify                compare the repository against that record
   npm run guard:release               verify, then drop the snapshot if unchanged
+  npm run guard:rebaseline            re-arm after YOUR OWN run moved HEAD (a merge,
+                                      a branch switch), naming the commits it accepts
 
   npm run guard:snapshot -- --force   replace an existing snapshot (refused by default)
-  npm run guard:snapshot -- --quiet   suppress the success line (also valid on verify)
+  npm run guard:snapshot -- --quiet   suppress the success line (also valid on verify and rebaseline)
+  npm run guard:rebaseline -- --accept=<sha> [--reason="..."]
+                                      accept the printed move; <sha> must equal the
+                                      current HEAD, so the transcript records WHICH
+                                      move was accepted
 
-  (flags must follow \`--\`; npm swallows them otherwise)`;
+  (flags must follow \`--\`; npm swallows them otherwise. Valued flags use \`=\`, not a
+   space, so the value cannot be mistaken for the command.)`;
 
 function die(message, code = 2) {
   console.error(`repo-guard: ${message}`);
@@ -111,16 +151,41 @@ function die(message, code = 2) {
 // ── arguments: default-deny, and per-command, so a flag that means nothing to
 // this subcommand is an error rather than a silently narrower check.
 const argv = process.argv.slice(2);
-const FLAGS_FOR = { snapshot: ['--force', '--quiet'], verify: ['--release', '--quiet'] };
+const FLAGS_FOR = {
+  snapshot: ['--force', '--quiet'],
+  verify: ['--release', '--quiet'],
+  rebaseline: ['--quiet'],
+};
+/**
+ * Flags that take a value, spelled `--flag=value`.
+ *
+ * The `=` form is required rather than a space-separated one because the
+ * command is found with `argv.find(a => !a.startsWith('-'))`: a bare value would
+ * be a candidate for the command name, and `rebaseline --accept 255114999` would
+ * parse fine only by the accident of argument order.
+ */
+const VALUED_FLAGS_FOR = { rebaseline: ['--accept', '--reason'] };
 
 const command = argv.find((a) => !a.startsWith('-'));
 if (!command) die(`no command given.\n${USAGE}`);
 if (!FLAGS_FOR[command]) die(`unknown command '${command}'.\n${USAGE}`);
+const valued = VALUED_FLAGS_FOR[command] ?? [];
+const values = {};
 for (const arg of argv) {
   if (arg === command) continue;
-  if (!FLAGS_FOR[command].includes(arg)) {
-    die(`unknown argument '${arg}' for '${command}'.\n${USAGE}`);
+  if (FLAGS_FOR[command].includes(arg)) continue;
+  const named = valued.find((flag) => arg.startsWith(`${flag}=`));
+  if (named) {
+    values[named] = arg.slice(named.length + 1);
+    continue;
   }
+  // A valued flag given without its `=value` is its own message: the caller
+  // reached for the right flag and would otherwise be told only "unknown
+  // argument", which reads as "this flag does not exist".
+  if (valued.includes(arg)) {
+    die(`'${arg}' needs a value, spelled '${arg}=<value>'.\n${USAGE}`);
+  }
+  die(`unknown argument '${arg}' for '${command}'.\n${USAGE}`);
 }
 const QUIET = argv.includes('--quiet');
 
@@ -139,6 +204,22 @@ function git(args, { cwd = undefined, allowFailure = false } = {}) {
     die(`git ${args.join(' ')} failed (exit ${result.status}): ${(result.stderr || '').trim()}`);
   }
   return result.stdout;
+}
+
+/**
+ * Is `maybeAncestor` an ancestor of `descendant`? `true` / `false` / `'unknown'`.
+ *
+ * `git()` discards the exit status under `allowFailure`, so it cannot tell exit 1
+ * ("no") from exit >= 128 ("could not look"). Every other caller only needs the
+ * output; this one is the difference between a claim and a guess.
+ */
+function ancestry(maybeAncestor, descendant) {
+  const result = spawnSync('git', ['merge-base', '--is-ancestor', maybeAncestor, descendant],
+    { encoding: 'utf8', cwd: TOPLEVEL });
+  if (result.error) return 'unknown';
+  if (result.status === 0) return true;
+  if (result.status === 1) return false;
+  return 'unknown';
 }
 
 const TOPLEVEL = git(['rev-parse', '--show-toplevel']).trim();
@@ -199,8 +280,9 @@ function captureState() {
   // `git ls-files -v` marks anything not plainly cached with a tag other than
   // 'H'. 'S' is skip-worktree; a lowercase tag is assume-unchanged. Both make
   // git report a modified file as clean, so they must be part of the baseline —
-  // otherwise setting one is itself an undetectable change.
-  const indexFlags = atRoot(['ls-files', '-v'])
+  // otherwise setting one is itself an undetectable change. 'M' is an unmerged
+  // path, so a conflicted merge lands here too (#887).
+  const indexFlags = atRoot(INDEX_FLAGS_ARGS)
     .split('\n')
     .filter((line) => line && line[0] !== 'H')
     .sort();
@@ -209,7 +291,7 @@ function captureState() {
   // abbrev-ref for it. That is a legitimate state to snapshot, not an error —
   // dying here would make the guard unusable on a fresh fixture.
   const head = git(['rev-parse', 'HEAD'], { cwd: TOPLEVEL, allowFailure: true });
-  const branch = git(['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: TOPLEVEL, allowFailure: true });
+  const branch = git(BRANCH_ARGS, { cwd: TOPLEVEL, allowFailure: true });
 
   return {
     toplevel: TOPLEVEL,
@@ -231,19 +313,22 @@ function reportList(label, before, after) {
   return true;
 }
 
-if (command === 'snapshot') {
-  // Refusing to clobber is what stops a nested or concurrent run from
-  // rebaselining the outer run's damage as the new normal.
-  if (existsSync(SNAPSHOT_PATH) && !argv.includes('--force')) {
-    die(`a snapshot already exists at ${SNAPSHOT_NAME}.\n` +
-      'Another guarded run may be in progress — overwriting it would rebaseline its damage.\n' +
-      'Finish that run with `npm run guard:release`, or pass --force.');
-  }
-  const state = captureState();
+/**
+ * Write a baseline, failing closed if it cannot be recorded.
+ *
+ * `provenance` is merged into the file. `snapshot` records none; `rebaseline`
+ * records what it accepted, so a later reader can tell an arming from a
+ * re-arming — the distinction `--force` erases (#688).
+ */
+function writeSnapshot(state, provenance = {}) {
   try {
     writeFileSync(
       SNAPSHOT_PATH,
-      JSON.stringify({ formatVersion: FORMAT_VERSION, ...state, takenAt: new Date().toISOString() }, null, 2) + '\n',
+      JSON.stringify(
+        { formatVersion: FORMAT_VERSION, ...state, takenAt: new Date().toISOString(), ...provenance },
+        null,
+        2,
+      ) + '\n',
       'utf8',
     );
   } catch (error) {
@@ -253,6 +338,23 @@ if (command === 'snapshot') {
     die(`could not write the snapshot to ${SNAPSHOT_PATH}: ${error.message}\n` +
       'The run is NOT guarded. Fix this before fanning out.');
   }
+}
+
+if (command === 'snapshot') {
+  // Refusing to clobber is what stops a nested or concurrent run from
+  // rebaselining the outer run's damage as the new normal.
+  if (existsSync(SNAPSHOT_PATH) && !argv.includes('--force')) {
+    die(`a snapshot already exists at ${SNAPSHOT_NAME}.\n` +
+      'Another guarded run may be in progress — overwriting it would rebaseline its damage.\n' +
+      'It records no owner, so releasing it from here would drop that run\'s baseline as soon\n' +
+      'as the tree happened to compare clean. To inspect the slot without disarming it, run\n' +
+      '`npm run guard:verify` — but read the result as the other run\'s: clean means the tree\n' +
+      'has not moved, never that the run has finished, and a failure prints recovery advice\n' +
+      'addressed to whoever armed this snapshot.\n' +
+      'Let that run release its own, or `npm run guard:snapshot -- --force` if you know it is dead.');
+  }
+  const state = captureState();
+  writeSnapshot(state);
   if (!QUIET) {
     console.log(`repo-guard: snapshot at ${state.head.slice(0, 8)} on ${state.branch}` +
       ` (${state.status.length} pending change(s), ${state.indexFlags.length} index flag(s))`);
@@ -264,7 +366,13 @@ if (command === 'snapshot') {
 
 if (!existsSync(SNAPSHOT_PATH)) {
   die(`no snapshot at ${SNAPSHOT_NAME}. Run \`npm run guard:snapshot\` before the run.\n` +
-    'Refusing to report "unchanged" for a comparison that never happened.');
+    (command === 'rebaseline'
+      // Rebaselining without a baseline is just arming, and letting it silently
+      // become that would make `guard:rebaseline` a synonym for `guard:snapshot`
+      // — a second spelling of arming that no longer means "I accepted a move".
+      ? 'There is nothing to re-baseline FROM: `rebaseline` re-arms an existing baseline after\n' +
+        'you moved HEAD, and records what it accepted. To arm a fresh one, use `guard:snapshot`.'
+      : 'Refusing to report "unchanged" for a comparison that never happened.'));
 }
 
 let before;
@@ -284,10 +392,26 @@ for (const field of ['toplevel', 'head', 'branch', 'status', 'contents', 'indexF
 if (before.toplevel !== TOPLEVEL) {
   die(`snapshot was taken in ${before.toplevel}, but this is ${TOPLEVEL}.`);
 }
+// The rebaseline chain is spread at the write site, OUTSIDE writeSnapshot's try/catch.
+// A corrupt `{}` there throws an uncaught TypeError, which exits 1 — and 1 in this
+// tool's vocabulary is the verdict "the repository changed". A malformed snapshot is
+// uncertainty, which is 2. A string is worse: it spreads to its characters and writes
+// garbage history at exit 0.
+if (before.rebaselineHistory !== undefined && !Array.isArray(before.rebaselineHistory)) {
+  die(`snapshot has a malformed 'rebaselineHistory' (${typeof before.rebaselineHistory}) — ` +
+    'refusing to compare against a record this tool did not write.');
+}
 
 const after = captureState();
 let changed = false;
 let headMoved = false;
+let branchMoved = false;
+// null until a HEAD move sets it. It defaulted to 'created', the unborn-baseline value, so a
+// branch-only acceptance recorded "this history was created" for a commit that never moved
+// (#907 round 1).
+let fastForward = null;
+let addedCommits = [];
+let commitsEnumerated = true;
 
 if (before.head !== after.head) {
   changed = true;
@@ -295,20 +419,55 @@ if (before.head !== after.head) {
   console.error(`\n  HEAD moved: ${before.head.slice(0, 8)} -> ${after.head.slice(0, 8)}`);
   // The commits themselves are the actionable part: this is the case `git
   // status` cannot see, because a committed stray write leaves a clean tree.
-  const range = git(['log', '--format=  %h %an  %s', `${before.head}..${after.head}`],
+  const range = git(['log', '--format=  %h %an <%ae>  %s', `${before.head}..${after.head}`],
     { cwd: TOPLEVEL, allowFailure: true });
   if (range && range.trim()) {
     console.error('  commits added:');
     console.error(range.trimEnd());
   }
+  addedCommits = (range ?? '').trim().split('\n').filter(Boolean).map((l) => l.trim());
+
+  // Ancestry, printed because it is the one discriminator the tool can compute
+  // between the two readings of a moved HEAD. It is EVIDENCE, not a verdict —
+  // an agent's stray commit on the current branch is a descendant too. What it
+  // rules out is the other shape: a checkout that moved to unrelated history,
+  // where `git reset --mixed <snapshot>` would be destructive rather than
+  // merely wrong.
+  //
+  // Three-valued, because `--is-ancestor` exits 1 for "no" and >= 128 for "could
+  // not tell" — a pruned or corrupt snapshot commit, which is realistic in a tool
+  // whose whole subject is rebases. Collapsing those with `!== null` printed
+  // "history diverged or was replaced" over a question git declined to answer:
+  // a confident wrong claim, and the exact opposite of "evidence, not a verdict".
+  fastForward = before.head === UNBORN
+    ? 'created'
+    : ancestry(before.head, after.head);
+  console.error(`  ${{
+    true: 'the snapshot commit IS an ancestor of the new HEAD — history was added on top',
+    false: 'the snapshot commit is NOT an ancestor of the new HEAD — history diverged or was replaced',
+    created: 'the baseline had no commits, so this history was created, not moved',
+    unknown: 'git could NOT determine ancestry (a pruned or corrupt object?) — treat the reading below as unavailable, not as a "no"',
+  }[fastForward]}.`);
+
+  // The ENUMERATE leg of the acknowledgement rests on this list. If git could not
+  // produce it, `rebaseline` must not go on to accept an empty one — "read the
+  // commits above" printed over nothing, and `acceptedCommits: []` written into
+  // permanent provenance, is a record that says a review happened when none could.
+  commitsEnumerated = range !== null;
 }
 
 if (before.branch !== after.branch) {
   changed = true;
+  branchMoved = true;
   console.error(`\n  branch changed: ${before.branch} -> ${after.branch}`);
 }
 
-changed = reportList('working tree', before.status, after.status) || changed;
+// Tracked separately from `changed` because `rebaseline` may accept a HEAD move
+// and must NEVER accept a worktree move: a stray write is exactly what the guard
+// exists for, and "I merged my own branch" is not a claim about file contents.
+let worktreeMoved = false;
+
+worktreeMoved = reportList('working tree', before.status, after.status) || worktreeMoved;
 
 // Iterating `after` is sufficient ONLY because every status-listed path now gets
 // an entry — including the `(absent)` and `(not-a-regular-file)` sentinels. The
@@ -323,13 +482,152 @@ const contentChanged = Object.keys(after.contents)
   .filter((path) => before.contents[path] !== after.contents[path])
   .sort();
 if (contentChanged.length) {
-  changed = true;
+  worktreeMoved = true;
   console.error('\n  contents changed (file was already modified, so its status line did not move):');
   for (const path of contentChanged) console.error(`    ~ ${path}`);
 }
 
-changed = reportList('index flags (skip-worktree / assume-unchanged)',
-  before.indexFlags, after.indexFlags) || changed;
+// Kept apart from the file changes only so the advice can name a command that shows each: for a
+// flag-only change `git diff` and `git status` print nothing, which `repo-guard.test.js` asserts
+// (#887). `worktreeMoved` still covers both, because `rebaseline` refuses both.
+const filesMoved = worktreeMoved;
+const flagsMoved = reportList('index flags (skip-worktree / assume-unchanged / unmerged)',
+  before.indexFlags, after.indexFlags);
+worktreeMoved = filesMoved || flagsMoved;
+
+changed = changed || worktreeMoved;
+
+// ── rebaseline ───────────────────────────────────────────────────────────────
+//
+// The exit #688 was missing. `verify` and `release` both assume a moved HEAD is
+// UNEXPLAINED, which is right for the case they exist for and wrong for the
+// commonest case in any run of length: the arming session merges its own branch,
+// or switches branches, and then has nowhere to go but
+// `guard:snapshot -- --force` — a flag whose own text warns against itself.
+//
+// A caller who reaches for `--force` twice stops reading what it discards. That
+// converts a control into a ritual, which is the failure mode this whole tool is
+// an argument against. So the legitimate move gets a first-class command, and it
+// costs exactly the three steps of judgement the honest sequence already
+// required: enumerate the delta, confirm the commits are yours, record that you
+// did. The difference is that the tool now performs all three instead of
+// assuming them.
+if (command === 'rebaseline') {
+  if (!changed) {
+    if (!QUIET) {
+      console.log(`repo-guard: nothing moved — the baseline already matches ${after.head.slice(0, 8)}` +
+        ` on ${after.branch}. Snapshot left as it is.`);
+    }
+    process.exit(0);
+  }
+
+  // A worktree move is never re-baselineable. "I moved HEAD deliberately" is a
+  // claim about history; it says nothing about file contents, and accepting one
+  // as cover for the other would launder exactly the stray write (#493) the
+  // guard was built to catch. Refuse, and keep the baseline so the caller can
+  // still `guard:verify` after cleaning up.
+  if (worktreeMoved) {
+    console.error(`\nrepo-guard: the WORKING TREE moved${headMoved ? ', not just HEAD' : ''}.`);
+    console.error('`rebaseline` accepts a deliberate HEAD move and nothing else — a content, status');
+    console.error('or index-flag change is the case this guard exists for, and accepting it here');
+    console.error('would rebaseline a stray write as the new normal.');
+    console.error('\nInspect it first:');
+    if (filesMoved) console.error('  git status --porcelain -uall  /  git diff');
+    if (flagsMoved) console.error(`  for the index flags (${INDEX_FLAGS_LEGEND}):\n    ${INDEX_FLAGS_COMMAND}`);
+    console.error('The snapshot was KEPT, so `npm run guard:verify` still works after you clean up.');
+    process.exit(1);
+  }
+
+  if (!commitsEnumerated && before.head === UNBORN) {
+    // `git log '(unborn)..HEAD'` can never succeed, so the enumeration guard would brick
+    // rebaseline for an operator who armed an empty repository and then made their own
+    // first commits — sending them back to `--force`, the whole point of this command.
+    // Everything present arrived during the run, so enumerate without a range.
+    const all = git(['log', '--format=  %h %an <%ae>  %s'], { cwd: TOPLEVEL, allowFailure: true });
+    if (all && all.trim()) {
+      console.error('\n  the baseline had no commits, so every commit now present arrived during the run:');
+      console.error(all.trimEnd());
+      addedCommits = all.trim().split('\n').filter(Boolean).map((l) => l.trim());
+      commitsEnumerated = true;
+    }
+  }
+
+  if (!commitsEnumerated) {
+    console.error('\nrepo-guard: git could not list the commits between the baseline and HEAD.');
+    console.error('There is nothing to read, so there is nothing to acknowledge. Accepting here would');
+    console.error('write `acceptedCommits: []` into the record — provenance asserting a review that');
+    console.error('could not happen.');
+    console.error(`\n  git log --oneline ${before.head.slice(0, 8)}..HEAD   # to see why it failed`);
+    process.exit(2);
+  }
+
+  const accepted = values['--accept'];
+  if (!accepted && !headMoved) {
+    // Only the branch changed, at the same commit. #887 observed it with the baseline armed on a
+    // detached HEAD and `git checkout main` afterwards. The message below this one says HEAD
+    // moved and asks the caller to read the commits above, and there are none.
+    console.error('\nrepo-guard: only the branch changed. HEAD did not move, so no commit was added.');
+    console.error('Nothing has been accepted yet. Check that this is the checkout you made:');
+    console.error(`  ${BRANCH_COMMAND}`);
+    console.error('\nIf it is, re-run naming the HEAD it sits on:');
+    console.error(`  npm run guard:rebaseline -- --accept=${after.head}`);
+    process.exit(2);
+  }
+  if (!accepted) {
+    console.error('\nrepo-guard: HEAD moved. Nothing has been accepted yet.');
+    console.error('Read the commits above. Every one of them must be yours — a commit you did not');
+    console.error('make is the thing this guard is for, and accepting it here hides it permanently.');
+    console.error('\nIf they are all yours, re-run naming the HEAD you just read:');
+    console.error(`  npm run guard:rebaseline -- --accept=${after.head}`);
+    console.error('  npm run guard:rebaseline -- ' +
+      `--accept=${after.head} --reason="merged my own PR"`);
+    console.error('\nThe sha is required so an acknowledgement cannot be given by reflex, and so the');
+    console.error('transcript records WHICH move was accepted — which `--force` does not. It is a');
+    console.error('control against ACCIDENT, not against intent: anyone who wants to can substitute');
+    console.error('`$(git rev-parse HEAD)`. What it buys is that no red `guard:verify` ever prints a');
+    console.error('paste-ready override in its own output. Read the authors above — they may be');
+    console.error('IDENTICAL to yours, because a subagent commits through this repository\'s own');
+    console.error('git config. That is what happened in #493. The content is the test; the author');
+    console.error('is a hint.');
+    process.exit(2);
+  }
+
+  // Prefix match, minimum 7, so a caller may paste the abbreviated sha git
+  // itself printed. Shorter than 7 is not an acknowledgement of anything.
+  if (accepted.length < 7 || !after.head.startsWith(accepted)) {
+    die(`you accepted '${accepted}', but HEAD is ${after.head}.\n` +
+      (accepted.length < 7
+        ? 'A sha shorter than 7 characters is not specific enough to be an acknowledgement.\n'
+        : headMoved
+          ? 'HEAD moved again between reading it and accepting it, or the sha was mistyped.\n'
+          // Not moved since the snapshot, so HEAD is the sha the refusal printed (#907 round 1).
+          : 'HEAD has not moved since the snapshot, so the sha was mistyped.\n') +
+      'Re-run `npm run guard:rebaseline` with no --accept to see the current delta.');
+  }
+
+  writeSnapshot(after, {
+    rebaselinedFrom: {
+      head: before.head,
+      branch: before.branch,
+      takenAt: before.takenAt ?? null,
+      acceptedCommits: addedCommits,
+      fastForward,
+      reason: values['--reason'] ?? null,
+    },
+    // Preserved so a chain of re-armings stays visible rather than each one
+    // erasing the last. `--force` leaves no trace at all, which is finding 1.
+    rebaselineHistory: [...(before.rebaselineHistory ?? []),
+      { from: before.head, to: after.head, reason: values['--reason'] ?? null }],
+  });
+
+  if (!QUIET) {
+    console.log(`\nrepo-guard: re-baselined ${before.head.slice(0, 8)} -> ${after.head.slice(0, 8)}` +
+      ` on ${after.branch}, accepting ${addedCommits.length} commit(s)` +
+      `${values['--reason'] ? ` — ${values['--reason']}` : ''}.`);
+    console.log('The run is guarded again from here. `npm run guard:verify` compares against the new baseline.');
+  }
+  process.exit(0);
+}
 
 // Release only a CLEAN run. Dropping the baseline after a failure destroys the
 // evidence at the exact moment it is needed: you cannot re-verify after a
@@ -355,14 +653,67 @@ if (changed) {
     console.error('  git log --oneline');
     console.error('Inspect them before pushing; there is no earlier revision to reset to.');
   } else if (headMoved) {
-    console.error('Investigate before pushing. A stray commit is recoverable while unpushed:');
-    console.error(`  git log --oneline ${before.head.slice(0, 8)}..HEAD`);
-    console.error(`  git reset --mixed ${before.head.slice(0, 8)}   # keeps the files, drops the commit`);
+    // Two readings, and the tool cannot tell them apart — only the caller knows
+    // whether they made these commits. Printing one recovery command as though
+    // it could is what #688 finding 2 is about: `git reset --mixed` would undo a
+    // merge the operator intended, offered at the moment they are deciding what
+    // to trust. So both exits are named, and the discriminator (the author lines
+    // above) is stated rather than guessed at.
+    console.error('HEAD moved. Read every commit listed above and decide whether you made it —');
+    console.error('this tool cannot decide that for you. The author line is a HINT, not the test:');
+    console.error('a subagent commits through this repository\'s own git config, so in #493 the');
+    console.error('author was identical to the operator\'s. What the commit CONTAINS is the test.');
+    console.error(`\n  If a commit is NOT yours — the case this guard exists for` +
+      `${worktreeMoved ? '' : ' (the tree is otherwise clean, which is exactly how a committed stray write hides)'}:`);
+    console.error(`    git log --oneline ${before.head.slice(0, 8)}..HEAD`);
+    console.error(`    git reset --mixed ${before.head.slice(0, 8)}   # keeps the files, drops the commit`);
+    console.error('    Investigate BEFORE PUSHING — a stray commit is recoverable while unpushed.');
+    if (fastForward === false) {
+      console.error('    NOTE: the snapshot commit is not an ancestor of HEAD, so that reset would');
+      console.error('    move you onto different history. Inspect before running it.');
+    } else if (fastForward === 'unknown') {
+      // `'unknown'` is TRUTHY, so `if (!fastForward)` suppressed this warning in exactly
+      // the case the three-valued ancestry was introduced to surface — and printed a
+      // `git reset --mixed <sha>` whose target's existence is what 'unknown' doubts.
+      console.error('    NOTE: git could not tell whether that commit is an ancestor, so this reset');
+      console.error(`    may move you onto different history. Confirm it exists first:`);
+      console.error(`      git cat-file -t ${before.head.slice(0, 8)}`);
+    }
+    if (worktreeMoved) {
+      // Advising rebaseline here would advise a command that then refuses: it declines
+      // any worktree change. Incoherent advice at the moment of decision is the failure
+      // this file already fixed once, for the occupied-slot refusal.
+      console.error('\n  The working tree moved too, so `guard:rebaseline` would refuse. Settle that first.');
+    } else {
+      console.error('\n  If every commit IS yours — you merged, switched branches, or rebased:');
+      console.error('    npm run guard:rebaseline    # prints the delta and refuses; read it, then accept');
+      console.error('    (re-arms from here and RECORDS what it accepted, which --force does not)');
+    }
   } else {
     // `git reset --mixed` would unstage the caller's own work here, so it must
     // not be suggested when HEAD never moved.
-    console.error('HEAD did not move, so this is a worktree change — inspect it before assuming');
-    console.error('it was yours:  git diff  /  git status --porcelain -uall');
+    //
+    // A HEAD that did not move does not make this a worktree change. A checkout from a
+    // detached HEAD onto its branch moves only the branch, and `git diff` shows nothing for it
+    // (#887). So each finding gets the command that can show it, and only the findings made.
+    console.error('HEAD did not move. What moved, and the command that shows it:');
+    if (branchMoved) {
+      console.error(`  the branch (${before.branch} -> ${after.branch}):  ${BRANCH_COMMAND}`);
+    }
+    if (filesMoved) {
+      console.error('  the working tree:  git diff  /  git status --porcelain -uall');
+    }
+    if (flagsMoved) {
+      console.error(`  the index flags (${INDEX_FLAGS_LEGEND}):\n    ${INDEX_FLAGS_COMMAND}`);
+    }
+    if (worktreeMoved) {
+      console.error('Inspect it before assuming it was yours.');
+    } else if (branchMoved) {
+      // The command bare, for the reason in the comment above BRANCH_ARGS. The HEAD-moved advice
+      // above still carries the `#` form (#908).
+      console.error('\n  If you made this checkout, run this. It prints the delta and refuses; read it, then accept:');
+      console.error('    npm run guard:rebaseline');
+    }
   }
   if (argv.includes('--release')) {
     console.error('\nThe snapshot was KEPT despite --release, so you can re-verify after');

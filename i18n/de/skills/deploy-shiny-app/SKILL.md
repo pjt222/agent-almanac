@@ -1,17 +1,13 @@
 ---
 name: deploy-shiny-app
 description: >
-  Shiny-Anwendungen auf shinyapps.io, Posit Connect oder als Docker-Container
-  deployen. Behandelt Authentifizierung, Dependency-Management, Deployment-
-  Konfiguration und Post-Deployment-Verifikation. Verwenden, wenn eine Shiny-
-  App einem breiteren Publikum zugänglich gemacht oder eine reproduzierbare
-  Deployment-Pipeline eingerichtet werden soll.
+  Deploy Shiny applications to shinyapps.io, Posit Connect, or Docker
+  containers. Covers rsconnect configuration, manifest generation,
+  Dockerfile creation, and deployment verification. Use when publishing a
+  Shiny app for external or internal users, moving from local development to
+  a hosted environment, containerizing a Shiny app for Kubernetes or Docker
+  deployment, or setting up automated deployment pipelines.
 license: MIT
-locale: de
-source_locale: en
-source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
@@ -19,160 +15,250 @@ metadata:
   domain: shiny
   complexity: basic
   language: R
-  tags: shiny, deployment, shinyapps, posit-connect, docker
+  tags: shiny, deployment, shinyapps-io, posit-connect, docker, rsconnect
+  locale: de
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Shiny-App deployen
+# Deploy Shiny App
 
-Eine Shiny-App auf shinyapps.io, Posit Connect oder als Docker-Container für den Produktionseinsatz deployen.
+Deploy a Shiny application to shinyapps.io, Posit Connect, or a Docker container.
 
-## Wann verwenden
+## When to Use
 
-- Shiny-App einem breiteren Publikum zugänglich machen (nicht nur lokal)
-- Produktions-Deployment-Pipeline einrichten
-- App von einer Plattform auf eine andere migrieren
-- Deployment-Prozess für Updates automatisieren
+- Publishing a Shiny app for external or internal users
+- Moving from local development to a hosted environment
+- Containerizing a Shiny app for Kubernetes or Docker deployment
+- Setting up automated deployment pipelines
 
-## Eingaben
+## Inputs
 
-- **Erforderlich**: Laufende Shiny-App (lokal getestet)
-- **Erforderlich**: Deployment-Plattform: `shinyapps.io`, `posit-connect` oder `docker`
-- **Optional**: Benutzerdefinierte App-URL/Name
-- **Optional**: Ressource-Limits (RAM, CPU für Posit Connect)
+- **Required**: Path to the Shiny application
+- **Required**: Deployment target (shinyapps.io, Posit Connect, or Docker)
+- **Optional**: Account name and token (for shinyapps.io/Connect)
+- **Optional**: Instance size preference
+- **Optional**: Custom domain or URL path
 
-## Vorgehensweise
+## Procedure
 
-### Schritt 1: Dependencies verifizieren
+### Step 1: Prepare the Application
 
-Sicherstellen, dass alle App-Dependencies deklariert sind.
+Ensure the app is self-contained and deployable:
 
 ```r
-# Alle Packages die App verwendet auflisten
-renv::dependencies("app.R")
-# Oder für golem-Pakete:
-renv::dependencies(".")
+# Check for missing dependencies
+rsconnect::appDependencies("path/to/app")
 
-# renv-Lockfile erstellen/aktualisieren
-renv::snapshot()
+# For golem apps, ensure DESCRIPTION lists all Imports
+devtools::check()
+
+# Verify the app runs cleanly
+shiny::runApp("path/to/app")
 ```
 
-`DESCRIPTION`-Datei (für golem-Pakete) prüfen:
+Verify these files exist:
+- `app.R` (or `ui.R` + `server.R`)
+- `renv.lock` (recommended for reproducible deployments)
+- `.Rprofile` does NOT call `mcptools::mcp_session()` in production
+
+**Expected:** App runs locally without errors and all dependencies are captured.
+
+**On failure:** If `appDependencies()` reports missing packages, install them and update `renv.lock`. If the app uses system libraries (e.g., gdal, curl), note them for the Docker path.
+
+### Step 2a: Deploy to shinyapps.io
+
+```r
+# One-time account setup
+rsconnect::setAccountInfo(
+  name = "your-account",
+  token = Sys.getenv("SHINYAPPS_TOKEN"),
+  secret = Sys.getenv("SHINYAPPS_SECRET")
+)
+
+# Deploy
+rsconnect::deployApp(
+  appDir = "path/to/app",
+  appName = "my-app",
+  appTitle = "My Application",
+  account = "your-account",
+  forceUpdate = TRUE
+)
+```
+
+Store credentials in `.Renviron` (never in code):
+
+```bash
+# .Renviron
+SHINYAPPS_TOKEN=your_token_here
+SHINYAPPS_SECRET=your_secret_here
+```
+
+**Expected:** App deployed and accessible at `https://your-account.shinyapps.io/my-app/`.
+
+**On failure:** If authentication fails, regenerate tokens at shinyapps.io dashboard > Account > Tokens. If package installation fails on the server, check that all packages are available on CRAN — shinyapps.io cannot install from GitHub by default.
+
+### Step 2b: Deploy to Posit Connect
+
+```r
+# Register server (one-time)
+rsconnect::addServer(
+  url = "https://connect.example.com",
+  name = "production"
+)
+
+# Authenticate (one-time)
+rsconnect::connectApiUser(
+  account = "your-username",
+  server = "production",
+  apiKey = Sys.getenv("CONNECT_API_KEY")
+)
+
+# Deploy
+rsconnect::deployApp(
+  appDir = "path/to/app",
+  appName = "my-app",
+  server = "production",
+  account = "your-username"
+)
+```
+
+**Expected:** App deployed and accessible on the Posit Connect instance.
+
+**On failure:** If the server rejects the connection, verify the API key and server URL. If packages fail to install, check that Connect has access to the required repositories (CRAN, internal CRAN-like repos).
+
+### Step 2c: Deploy with Docker
+
+Create a `Dockerfile`:
+
+```dockerfile
+FROM rocker/shiny-verse:4.4.0
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install R packages
+RUN R -e "install.packages(c('shiny', 'bslib', 'DT', 'plotly'))"
+
+# Copy app
+COPY . /srv/shiny-server/myapp/
+
+# Configure Shiny Server
+COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
+
+# Expose port
+EXPOSE 3838
+
+# Run
+CMD ["/usr/bin/shiny-server"]
+```
+
+Create `shiny-server.conf`:
 
 ```text
-Imports:
-    shiny,
-    dplyr,
-    ggplot2
+run_as shiny;
+
+server {
+  listen 3838;
+
+  location / {
+    site_dir /srv/shiny-server/myapp;
+    log_dir /var/log/shiny-server;
+    directory_index on;
+  }
+}
 ```
 
-**Erwartet:** Alle Dependencies dokumentiert. `renv.lock` oder DESCRIPTION up-to-date.
+Build and run:
 
-**Bei Fehler:** Wenn fehlende Packages nach dem Deployment auftreten, `renv::dependencies()` erneut ausführen und fehlende Packages zur DESCRIPTION hinzufügen.
+```bash
+docker build -t myapp:latest .
+docker run -p 3838:3838 myapp:latest
+```
 
-### Schritt 2a: Auf shinyapps.io deployen
+**Expected:** App accessible at `http://localhost:3838`.
 
-rsconnect einrichten und auf shinyapps.io deployen.
+**On failure:** If the build fails on package installation, add missing system libraries to the `apt-get install` line. If the app doesn't load, check Shiny Server logs: `docker exec <container> cat /var/log/shiny-server/*.log`.
+
+### Step 3: Verify Deployment
 
 ```r
-install.packages("rsconnect")
+# Check the deployed URL responds
+response <- httr::GET("https://your-app-url/")
+httr::status_code(response)  # Should be 200
 
-# Authentifizierung (von shinyapps.io Dashboard kopieren)
-# Account → Tokens → Add Token → Show → Copy to Clipboard
-rsconnect::setAccountInfo(
-  name = "dein-account-name",
-  token = "DEIN_TOKEN",
-  secret = "DEIN_SECRET"
-)
-
-# Deployen
-rsconnect::deployApp(
-  appDir = ".",           # App-Verzeichnis
-  appName = "meine-app",  # URL-Name (muss eindeutig sein)
-  forceUpdate = TRUE      # Bestehende Deployment überschreiben
-)
+# For Docker
+response <- httr::GET("http://localhost:3838/")
+httr::status_code(response)
 ```
 
-App-URL nach Deployment: `https://dein-account-name.shinyapps.io/meine-app/`
+Manual verification checklist:
+1. App loads without errors
+2. All interactive elements respond
+3. Data connections work in the deployed environment
+4. Authentication/authorization works (if applicable)
 
-**Erwartet:** Deployment-Logs zeigen erfolgreiche Paket-Installation und App-Start. URL zugänglich im Browser.
+**Expected:** App responds with HTTP 200 and all features work.
 
-**Bei Fehler:** Wenn Deployment fehlschlägt mit "package not found", das fehlende Package zur App-Verzeichnis-renv.lock hinzufügen. Deployment-Logs für spezifische Package-Fehler prüfen.
+**On failure:** Check server logs for the specific deployment platform. Common issues: environment variables not set in production, database connections using localhost instead of production URLs, or file paths that only exist locally.
 
-### Schritt 3: Post-Deployment-Verifikation
+### Step 4: Configure Monitoring (Optional)
 
-Das erfolgreiche Deployment und App-Verhalten prüfen.
+#### shinyapps.io
+
+Monitor via the dashboard at `https://www.shinyapps.io/admin/#/applications`.
+
+#### Posit Connect
 
 ```r
-# Deployment-Status prüfen
-rsconnect::showLogs(appName = "meine-app")
-
-# App-Informationen abfragen
-rsconnect::appInfo(appName = "meine-app")
-```
-
-Manuell verifizieren:
-1. App-URL im Browser öffnen
-2. Alle interaktiven Elemente testen (Inputs, Buttons, Downloads)
-3. Browser-Konsole auf JavaScript-Fehler prüfen
-4. App-Logs im Plattform-Dashboard prüfen
-
-**Erwartet:** App läuft korrekt auf deployed URL. Keine Fehler in Logs.
-
-**Bei Fehler:** Bei Laufzeitfehlern in Deployment-Logs, fehlende Systembibliotheken oder R-Package-Versions-Konflikte prüfen. Lokale R-Version muss Deployment-Umgebung entsprechen.
-
-### Schritt 4: Deployment-Workflow dokumentieren
-
-Deployment-Prozess für zukünftige Updates dokumentieren.
-
-```r
-# deploy.R (Deployment-Skript)
-
-# Deployment-Konfiguration
-APP_NAME <- "meine-app"
-APP_DIR <- "."
-
-# Dependencies prüfen
-cat("Checking dependencies...\n")
-renv::status()
-
-# Auf shinyapps.io deployen
-cat("Deploying to shinyapps.io...\n")
-rsconnect::deployApp(
-  appDir = APP_DIR,
-  appName = APP_NAME,
-  forceUpdate = TRUE,
-  launch.browser = FALSE
+# Check deployment status via API
+connectapi::connect(
+  server = "https://connect.example.com",
+  api_key = Sys.getenv("CONNECT_API_KEY")
 )
-
-cat("Deployment complete!\n")
-cat(sprintf("URL: https://account.shinyapps.io/%s/\n", APP_NAME))
 ```
 
-**Erwartet:** `Rscript deploy.R` führt vollständiges Deployment aus.
+#### Docker
 
-**Bei Fehler:** Wenn Skript auf Authentifizierungsfehler stößt, rsconnect-Credentials über `rsconnect::setAccountInfo()` neu setzen.
+Add health check to Dockerfile:
 
-## Validierung
+```dockerfile
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD curl -f http://localhost:3838/ || exit 1
+```
 
-- [ ] Alle App-Dependencies in renv.lock oder DESCRIPTION dokumentiert
-- [ ] rsconnect-Authentifizierung erfolgreich konfiguriert
-- [ ] App-URL zugänglich und lädt korrekt
-- [ ] Alle interaktiven Features funktionieren auf deployed App
-- [ ] Logs zeigen keine Fehler
-- [ ] Deployment-Skript dokumentiert für zukünftige Updates
+**Expected:** Monitoring configured for the deployment target.
 
-## Haeufige Stolperfallen
+**On failure:** If health checks fail intermittently, increase timeout values. Shiny apps can be slow to respond during initial load.
 
-- **Nicht deklarierte Dependencies**: Packages müssen explizit in renv.lock oder DESCRIPTION aufgelistet sein — lokale Paket-Bibliothek wird nicht migriert.
-- **R-Versions-Mismatch**: shinyapps.io läuft auf bestimmten R-Versionen. Lokale R-Version abgleichen oder Kompatibilität prüfen.
-- **Secrets in Code**: API-Keys oder Passwörter niemals hardcoden. Umgebungsvariablen in Plattform-Dashboard setzen.
-- **App-Größenbeschränkungen**: shinyapps.io hat 1-GB-Limit pro App. Große Datendateien extern hosten (z. B. S3, Google Drive).
-- **Inaktivitäts-Timeout**: Auf kostenlosem shinyapps.io-Tier gehen Apps nach Inaktivität schlafen. Für produktive Apps upgraden.
-- **Gleichzeitige Verbindungen**: Kostenloser Tier erlaubt 5 gleichzeitige Verbindungen. Für mehr Traffic Paid-Plan erforderlich.
+## Validation
 
-## Verwandte Skills
+- [ ] App deploys without errors
+- [ ] Deployed URL responds with HTTP 200
+- [ ] All interactive features work in production
+- [ ] Environment variables/secrets are configured (not hardcoded)
+- [ ] Credentials stored in `.Renviron` or CI secrets, not in code
+- [ ] renv.lock committed for reproducible dependency resolution
 
-- `scaffold-shiny-app` — App scaffolden vor Deployment
-- `test-shiny-app` — App testen vor Deployment
-- `deploy-shinyproxy` — Multi-App-Hosting mit Docker und ShinyProxy
-- `optimize-shiny-performance` — Performance vor Deployment optimieren
+## Common Pitfalls
+
+- **Hardcoded file paths**: Replace absolute paths with `system.file()` (for package data) or environment variables (for external resources).
+- **Development-only dependencies**: Don't deploy `.Rprofile` that loads `mcptools::mcp_session()` or `devtools`. Use conditional loading or separate profiles.
+- **Missing system libraries in Docker**: R packages like sf, curl, and xml2 need system libraries. Add them to the Dockerfile's `apt-get install`.
+- **CRAN-only packages on shinyapps.io**: shinyapps.io only installs from CRAN by default. GitHub-only packages need the `remotes` package and explicit installation in the deployment.
+- **Forgotten environment variables**: Database credentials, API keys, and other secrets must be configured in the deployment environment separately from code.
+
+## Related Skills
+
+- `scaffold-shiny-app` — create app structure before deployment
+- `create-r-dockerfile` — detailed Docker configuration for R projects
+- `setup-docker-compose` — multi-container setups for Shiny with databases
+- `setup-github-actions-ci` — CI/CD including automated deployment
+- `optimize-shiny-performance` — performance tuning before deploying to production

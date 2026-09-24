@@ -10,9 +10,9 @@ metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: geometry
-  complexity: basic
-  language: natural
-  tags: geometry, construction, compass-straightedge, euclidean, classical
+  complexity: intermediate
+  language: multi
+  tags: geometry, construction, ruler-compass, euclidean, straightedge
   locale: zh-CN
   source_locale: en
   source_commit: 6f65f316

@@ -17,7 +17,7 @@ metadata:
   domain: spectroscopy
   complexity: advanced
   language: natural
-  tags: spectroscopy, nmr, structure-elucidation, chemical-shift, coupling-constant
+  tags: spectroscopy, nmr, chemical-shift, coupling, structure-elucidation
 ---
 
 # 解读核磁共振谱

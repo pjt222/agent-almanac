@@ -1,0 +1,231 @@
+# Debt ratchet — #591
+#
+# A warn-only gate cannot fail, so every commit under it is locally legal and nothing forbids the
+# backlog from growing. CLAUDE.md calls warn "a temporary state with a named exit"; the exit is
+# named but not forced. This file is what forces it: a ratcheted class may not gain a member, and
+# may not lose one without this file moving in the same commit.
+#
+# Checked by `npm run ratchet` (`scripts/check-debt-ratchet.js`), blocking in CI. Read that
+# script's header for why the key is `file` + `kind` and never `file` + `tag`.
+#
+# THE RULE ABOUT WHAT MAY GO IN HERE
+#
+# A class may be ratcheted only once every member has been READ. A ratchet over unread members
+# turns "do not add debt" into "pay down debt of unknown validity", and the number now carries an
+# authority nobody checked. That is why the body-divergence class sits under `unratcheted` below
+# rather than in a slice: it is #477's backlog and nobody has been through it.
+#
+# Counts are deliberately absent from `unratcheted` and `advisory_gates`. A number no tool reads
+# is documentation drift, which this repo treats as a P1 bug — quote the gate, not this file.
+
+version: 1
+
+slices:
+  # The #481 retag escape and the tag drift beside it, split by `isRetagEscape` in #598.
+  #
+  # Ratchetable because all nine members were individually read, catalogued in #598 and re-checked
+  # here: 3 escapes (a 4-backtick ````markdown opener degraded to 3, swallowing the following
+  # python fence) and 6 that do not block. Both kinds are ratcheted, including the one that does
+  # not block — non-blocking is the reason it needs a ratchet, not a reason to leave it unwatched.
+  #
+  # Re-checking changed one of #598's diagnoses, which is the argument for requiring members to be
+  # read: it called the six "partial-update drift on stale files", and two of them are not stale.
+  # They are grouped below by what a repair would actually be.
+  - id: i18n-fence-tag-structure
+    gate_argv: [scripts/check-i18n-fence-parity.js]
+    kinds: [tag-sequence, tag-drift]
+    # Anti-vacuity floor, NOT a count: a run that scanned fewer files than this cannot have seen
+    # the corpus, and would report an empty observed set for the wrong reason. It is well under
+    # the real 3,644 so that adding or removing translations never touches this file.
+    scanned_field: filesCompared
+    min_scanned: 3000
+    source: node scripts/check-i18n-fence-parity.js --json
+    as_of: 2026-08-17
+    triage: "#598"
+    members:
+      # tag-drift — every position stays frozen, so no fence left the body check and the gate
+      # still compares all of them. Detection is structural and lives only in the fence gate,
+      # which is why the class is reported there and enforced here.
+      #
+      # The STALE (4) members — `de`, `es`, `ja`, `zh-CN` of `harden-github-repo-security` — were
+      # removed in the #768 fix. #598 read them as "the translation took some English changes and
+      # not others", which assumed a translation existed. There was none. Measured against the
+      # English revision the mirrors themselves named (`84a3c915`): PROSE-ONLY similarity 0.97836,
+      # zero CJK in `ja` and `zh-CN` across 12,606 bytes of prose, zero diacritics in `de` and
+      # `es`. The drift was a swallowed fence in an English body, and refreshing from English
+      # cleared the finding. Same shape elsewhere in the corpus: #769 (the four
+      # `reverse-engineering-a-cli-harness` guides) and #770 (six caveman/wenyan
+      # `setup-putior-ci` tiers).
+      #
+      # Method note, because it will mislead whoever next measures a member of this class.
+      # A first pass here quoted 0.99901, computed with fence BODIES included. A frozen fence body
+      # is byte-identical in any legitimate translation by the keep-code-in-English rule, so
+      # including it measures that rule rather than the file. Exclude fence bodies. The confound
+      # has NO consistent direction: fences are 27% of this file and excluding them sends its
+      # similarity DOWN (0.99901 → 0.97836), while on the #770 files the injected #475 corruption
+      # lives inside the fences, so excluding them sends similarity UP (0.991 → 0.99982). Script
+      # evidence — CJK, diacritics — is the load-bearing half in both directions.
+      # FRESH (2), and #598 called these stale drift too — they are not. `source_commit: 33b561c9`
+      # with ZERO English commits since, so English has not moved and the divergence is the
+      # translation's own: Step 3's **Block comment syntax** subsection, javascript and typescript
+      # fences included, sits appended after Step 5 and still in English. Remedy is a translation
+      # edit rather than a retranslation, which is why it is #626 rather than repaired in the PR
+      # that ratcheted it.
+      - { file: i18n/ja/skills/annotate-source-files/SKILL.md, kind: tag-drift }
+      - { file: i18n/zh-CN/skills/annotate-source-files/SKILL.md, kind: tag-drift }
+      # tag-sequence — the #481 escape proper: a frozen tag became localisable, so the fence left
+      # the body check entirely and nothing else in the repo can see it.
+      #
+      # ZERO MEMBERS: any escape the gate can SEE is added debt. The three that it saw —
+      # `escalate-issues` in wenyan, wenyan-lite and zh-CN, all the same defect, a ````markdown
+      # opener degraded to ```markdown so that it closed early and swallowed the following python
+      # fence into a text block — were repaired in the commit that removed them from here. That is
+      # the ratchet's own workflow, exercised once on the branch that introduced it: paying debt
+      # down fails until this file moves too.
+      #
+      # "Any escape the gate can see" is narrower than "any escape", and the gap is not small.
+      # `compareTagSequence` returns `unalignable` when no English revision has the file's fence
+      # COUNT, and a swallowed opener usually changes the count — so the same corruption lands in
+      # the 60-file unjudged pool and produces no finding of any kind. The three above were caught
+      # because their degradation happened to PRESERVE the count. Measured while triaging this
+      # list: 7 `write-vignette` mirrors carry a 4-backtick delimiter count English never had, all
+      # sitting in that pool, none reported (#628). An empty member list here is therefore a
+      # strong claim about a class, not about the corpus.
+
+  # Node-set parity between the viz PUT annotations and the committed diagram (#590).
+  #
+  # Ratchetable on the strictest reading of the rule above: the class has ONE member and it has
+  # been read. `viz/js/campfire.js` annotates `mode_campfire`; `viz/public/data/workflow.mmd` was
+  # last generated before campfire.js existed and the deploy job never regenerates it. The repair
+  # is a regeneration, which #601 says the lockfile cannot currently produce — so this is debt with
+  # a named external exit rather than debt nobody has looked at.
+  #
+  # `file` carries `<path>::<node>` rather than a bare path, because the finding's identity is the
+  # NODE. Two missing nodes in one source file would otherwise collapse into one member under the
+  # `file` + `kind` key, and repairing either would leave the other silently covered. The ratchet
+  # validates `file` only as a string, so the encoding needs no change here; the durable fix is an
+  # optional `member` key field, tracked in #638.
+  #
+  # The consequence to know before adding a PUT annotation: until #601 unblocks regeneration, a new
+  # annotation adds a `missing-node` finding and this list must gain a line in the same commit.
+  # That friction is the mechanism, not a side effect of it.
+  #
+  # The named exit is enforced socially, not mechanically, and that is worth saying out loud. The
+  # gate compares node SETS, not provenance: hand-adding a `mode_campfire` node to the generated
+  # `.mmd` and deleting the member below leaves every check green, while "do not edit manually" in
+  # the file's own header is the only thing standing against it. Paying this member down means
+  # regenerating under #601, not editing the artifact until the gate stops complaining.
+  - id: viz-diagram-node-parity
+    gate_argv: [scripts/check-workflow-diagram-nodes.js]
+    kinds: [missing-node, orphan-node]
+    # Anti-vacuity floor over the source enumeration, well under the 72 files the generator's own
+    # pattern selects today, so adding or removing a viz source never touches this file. A run
+    # below it cannot have seen `viz/`.
+    scanned_field: sourceFilesScanned
+    min_scanned: 40
+    source: node scripts/check-workflow-diagram-nodes.js --json
+    as_of: 2026-08-17
+    triage: "#590"
+    members:
+      - { file: "viz/js/campfire.js::mode_campfire", kind: missing-node }
+
+unratcheted:
+  # Classes the gate reports that this file deliberately does not enforce, each with the reason
+  # and the condition that would change it.
+  - kind: diverged
+    gate: node scripts/check-i18n-fence-parity.js
+    reason: >-
+      The #477 backlog. Its members have not been read — half the affected files are mixed-tag
+      content forks needing re-translation, some of it regulated (#478) — so ratcheting it would
+      force payment on debt of unknown validity. It is the one class where "do not add" cannot be
+      separated from "pay down", because a legitimate English fence edit that IS propagated to all
+      ten mirrors adds nothing, while one that is not adds ten at once.
+    exit: "#477 clears the backlog and flips the gate itself to blocking, at which point this
+      class needs no ratchet."
+  - kind: stale-basis-claim
+    gate: node scripts/check-i18n-fence-parity.js
+    reason: >-
+      Derived, not independent. A claim fires only where a divergence or a structural mismatch
+      already exists, so ratcheting it would count the same defect twice. Note this does NOT mean
+      its count moves only when a ratcheted or unratcheted class moves: `claimedBasis && unalignable`
+      also fires it, and `unalignable` is not a finding at all, so a claimed file that gains a
+      fence moves this number on its own. That is the intended behaviour — the claim question is
+      supposed to be current by construction — but it is a third mover, not two.
+    exit: >-
+      None needed while it stays at zero, which it is — `staleBasisClaims: 0` across 3,415 live
+      claims, from the same `--json` run that produced the member list above. It can only rise
+      with its cause.
+
+advisory_gates:
+  # Every warn-only or advisory CI step, with the workflow that runs it and its named exit.
+  #
+  # This list is CHECKED, not merely written: `check-debt-ratchet.js` asserts each `command` still
+  # appears in its `workflow`, and — the direction that matters — that every `--warn` invocation
+  # across `.github/workflows/` is listed here, MATCHED ON BOTH the workflow and the command. A
+  # new warn-only gate therefore cannot be added silently, and neither can an entry be deleted:
+  # the two `check-translation-freshness.js --warn` entries below differ only in workflow, and
+  # under command-only matching either one covered the other's line.
+  #
+  # `token` is descriptive, read by humans and by nothing else. It records WHY a step is or is not
+  # reachable by the reverse sweep; it does not select the sweep's pattern.
+  #
+  # Steps that are advisory without carrying a token (an inline `exit 0`, a script that
+  # simply never fails) have `token: none` and are covered only by the forward assertion.
+  - id: i18n-fence-parity
+    workflow: .github/workflows/validate-skills.yml
+    command: node scripts/check-i18n-fence-parity.js --warn
+    token: "--warn"
+    exit: "#477 — flips to blocking in the PR that clears the final divergence batch."
+    ratcheted: partially — see the `i18n-fence-tag-structure` slice above.
+  - id: viz-diagram-node-parity
+    workflow: .github/workflows/validate-skills.yml
+    command: node scripts/check-workflow-diagram-nodes.js --warn
+    token: "--warn"
+    exit: >-
+      "#601" — the gate flips to blocking once a working putior can regenerate
+      `viz/public/data/workflow.mmd`. Unlike the fence gate's exit, this one is not a repair
+      campaign: the single finding is repaired BY the regeneration.
+    ratcheted: true — see the `viz-diagram-node-parity` slice above.
+  - id: translation-freshness-skills
+    workflow: .github/workflows/validate-skills.yml
+    command: node scripts/check-translation-freshness.js --warn
+    token: "--warn"
+    exit: unnamed — "#625"
+    ratcheted: false
+  - id: translation-freshness-translations
+    workflow: .github/workflows/validate-translations.yml
+    command: node scripts/check-translation-freshness.js --warn
+    token: "--warn"
+    exit: unnamed — "#625"
+    ratcheted: false
+  - id: orphan-translations
+    workflow: .github/workflows/validate-translations.yml
+    command: "orphan translation i18n/"
+    token: none
+    exit: unnamed — "#625"
+    ratcheted: false
+  - id: content-style-repo-wide
+    workflow: .github/workflows/validate-content-style.yml
+    command: node scripts/check-content-style.js --all
+    token: none
+    exit: >-
+      none needed. The pull-request counterpart (`--added`) blocks, so this run is a push-time
+      backstop rather than deferred debt. Recorded so the judgement is on the record (#625).
+    ratcheted: false
+  - id: skill-eval-coverage
+    workflow: .github/workflows/validate-tests.yml
+    command: node scripts/eval-coverage.js
+    token: none
+    exit: >-
+      "#424" — the machine-scored eval runner. `--min <pct>` raises a floor once coverage climbs.
+      Repointed from #435, which shipped this report and closed.
+    ratcheted: false
+  - id: translated-skill-line-length-allowlist
+    workflow: .github/workflows/validate-skills.yml
+    command: OVERRUN_ALLOWLIST=()
+    token: none
+    exit: >-
+      The allowlist is the debt and it is currently empty, so the WARN branch is unreachable. The
+      exit is keeping it that way; prefer extracting to references/EXAMPLES.md over adding an
+      entry. Listed because an empty allowlist is a state, not an absence.
+    ratcheted: false

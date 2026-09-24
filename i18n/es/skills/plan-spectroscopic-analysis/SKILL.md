@@ -23,7 +23,7 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, analysis-planning, structure-elucidation, analytical-strategy
+  tags: spectroscopy, analytical-planning, technique-selection, sample-preparation
 ---
 
 # Planificar el Análisis Espectroscópico

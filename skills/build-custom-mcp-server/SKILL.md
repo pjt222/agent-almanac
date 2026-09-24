@@ -3,8 +3,9 @@ name: build-custom-mcp-server
 description: >
   Build a custom MCP (Model Context Protocol) server that exposes
   domain-specific tools to AI assistants. Covers server implementation
-  in Node.js or R, tool definitions, transport configuration, and testing
-  with Claude Code. Use when you need to expose custom functionality beyond
+  in Node.js or R, tool definitions, the resources and prompts primitives,
+  transport configuration, and testing with Claude Code. Use when you need
+  to expose custom functionality beyond
   what mcptools provides, when building specialized domain-specific AI
   integrations, or when wrapping existing APIs or services as MCP tools.
 license: MIT
@@ -167,7 +168,70 @@ mcptools::mcp_server()
 
 **On failure:** Ensure `mcptools` is installed from GitHub (`remotes::install_github("posit-dev/mcptools")`). Check that the handler function signatures match the parameter definitions.
 
-### Step 4: Set Up Project Structure
+### Step 4: Decide Whether You Also Need Resources or Prompts
+
+Tools are one of three server-side primitives, and reaching for a tool when the
+protocol already has the right shape is the most common design mistake here. The
+three differ by *who decides to invoke them*, and that difference is the whole
+basis for choosing:
+
+- **Tools** are model-controlled. The model decides to call one, usually to *do*
+  something with side effects. Everything above this step.
+- **Resources** are application-driven. The host application decides what to pull
+  into context — through a picker, a search, or its own heuristics. The spec's
+  examples are files, database schemas, and application-specific data. If your
+  "tool" only reads and returns data with no side effect, it probably wants to be
+  a resource.
+- **Prompts** are user-controlled: "exposed from servers to clients with the
+  intention of the user being able to explicitly select them", typically surfaced
+  as slash commands. A reusable instruction template belongs here, not in a tool.
+
+Each must be declared as a capability during initialization or the client will
+never call it, and this is the usual reason a correctly implemented handler is
+never reached. Add `resources` and `prompts` alongside `tools` in the capabilities
+object. Both take optional `listChanged`, meaning the server will notify when its
+list changes; `resources` additionally takes `subscribe`, for per-resource change
+notifications. Declaring neither is valid — an empty `resources: {}` means the
+feature is supported with no optional extras.
+
+**For resources**, implement `resources/list` and `resources/read`. A resource is
+identified by a `uri` and carries a `name`, plus optional `title`, `description`,
+`mimeType` and `size`. `resources/read` returns a `contents` array whose entries
+carry either `text` or a base64 `blob` — never both, and binary data must be
+base64-encoded. For parameterized access add `resources/templates/list`, returning
+entries with a `uriTemplate` in RFC 6570 syntax such as `file:///{path}`. If you
+declared `listChanged`, emit `notifications/resources/list_changed`; if you
+declared `subscribe`, honour `resources/subscribe` and emit
+`notifications/resources/updated`. Return `-32002` for a URI you do not recognise,
+which is a resource-specific code rather than the generic invalid-params one.
+
+**For prompts**, implement `prompts/list` and `prompts/get`. A prompt has a `name`
+and an optional `arguments` list whose entries carry `name`, `description` and
+`required`. `prompts/get` returns a `messages` array; each message has a `role` of
+`user` or `assistant` — note there is no `system` role — and a `content` object of
+type `text`, `image`, `audio`, or `resource` for embedding server-managed content
+directly. Validate arguments before processing and return `-32602` for both an
+unknown prompt name and a missing required argument.
+
+Both list operations support cursor pagination, so return `nextCursor` when your
+list is long and accept `cursor` in the request.
+
+**Expected:** The capabilities object names every primitive the server actually
+implements, and a client's `resources/list` or `prompts/list` returns entries
+rather than a method-not-found error.
+
+**On failure:**
+- Handler never invoked — the capability was not declared at initialization;
+  capability negotiation happens once, before any request
+- Client shows a resource but reading it fails — check the URI is valid per
+  RFC 3986 and that you return `-32002` rather than an empty result for unknown
+  URIs
+- Binary resource renders as garbage — `blob` must be base64, and `mimeType` must
+  be set; a binary payload placed in `text` will not be decoded
+- A prompt renders with the roles collapsed — `system` is not a valid role; fold
+  system-level instruction into the first `user` message
+
+### Step 5: Set Up Project Structure
 
 ```text
 my-mcp-server/
@@ -186,7 +250,7 @@ my-mcp-server/
 
 **On failure:** If the directory structure doesn't match your implementation language, adjust accordingly. R servers may use `R/` instead of `tools/` and `tests/testthat/` instead of `test/`.
 
-### Step 5: Test the Server
+### Step 6: Test the Server
 
 **Manual testing with stdio**:
 
@@ -208,7 +272,7 @@ Start a Claude Code session and check that custom tools are listed and functiona
 
 **On failure:** If `tools/list` returns an empty array, the tools were not registered before `server.connect()`. If Claude Code cannot find the server, verify the command path in `claude mcp add` is absolute and the binary is executable.
 
-### Step 6: Add Error Handling
+### Step 7: Add Error Handling
 
 ```javascript
 server.tool("risky_operation", "...", schema, async (params) => {
@@ -230,7 +294,7 @@ server.tool("risky_operation", "...", schema, async (params) => {
 
 **On failure:** If the server still crashes on bad input, check that the try/catch wraps the entire handler body including any async operations. Ensure promises are awaited within the try block.
 
-### Step 7: Package for Distribution
+### Step 8: Package for Distribution
 
 Create a `package.json` with a bin entry:
 

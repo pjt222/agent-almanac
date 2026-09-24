@@ -1,16 +1,13 @@
 ---
 name: configure-reverse-proxy
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Configurar patrones de proxy inverso con Nginx y Traefik para enrutamiento de tráfico,
-  terminación TLS, descubrimiento de servicios, y balanceo de carga. Cubrir configuración
-  estática y dinámica, middleware, y patrones de despliegue. Usar cuando se necesite
-  exponer múltiples servicios bajo un único dominio, implementar enrutamiento basado en
-  paths, o automatizar la gestión de certificados TLS.
+  Configure reverse proxy patterns across multiple tools including Nginx,
+  Traefik, and ShinyProxy. Covers WebSocket proxying, path-based and
+  host-based routing, SSL termination, and Docker label auto-discovery.
+  Use when routing multiple services behind a single entry point, proxying
+  WebSocket connections (Shiny, Socket.IO), auto-discovering Docker services
+  with Traefik labels, or adding SSL termination to services that don't
+  handle TLS natively.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -19,92 +16,155 @@ metadata:
   domain: containerization
   complexity: intermediate
   language: multi
-  tags: nginx, traefik, reverse-proxy, tls, service-discovery, load-balancing
+  tags: reverse-proxy, traefik, nginx, websocket, routing, shinyproxy, ssl
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Configurar Proxy Inverso
+# Configure Reverse Proxy
 
-Configurar patrones de proxy inverso con Nginx y Traefik para enrutamiento y seguridad.
+Set up reverse proxy patterns for routing traffic to backend services using Nginx, Traefik, or ShinyProxy.
 
-## Cuándo Usar
+## When to Use
 
-- Exponiendo múltiples servicios bajo un único dominio con enrutamiento por paths
-- Necesitando terminación TLS automática con Let's Encrypt
-- Implementando descubrimiento dinámico de servicios con Docker
-- Balanceando carga entre múltiples instancias de un servicio
-- Configurando middleware para autenticación, rate limiting, o redirecciones
+- Routing multiple services behind a single entry point
+- Proxying WebSocket connections (Shiny, Socket.IO, live reload)
+- Auto-discovering Docker services with Traefik labels
+- Path-based or host-based routing to different backends
+- Adding SSL termination to services that don't handle TLS
 
-## Entradas
+## Inputs
 
-- **Requerido**: Servicios backend con sus puertos y paths
-- **Requerido**: Nombres de dominio para enrutamiento
-- **Opcional**: Certificados TLS o configuración de Let's Encrypt
-- **Opcional**: Reglas de middleware (autenticación, rate limiting)
-- **Opcional**: Configuración de healthchecks para upstreams
+- **Required**: Backend services to proxy (host:port)
+- **Required**: Routing strategy (path-based, host-based, or both)
+- **Optional**: Proxy tool preference (Nginx, Traefik)
+- **Optional**: Domain name(s) for host-based routing
+- **Optional**: WebSocket endpoints to proxy
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Elegir entre Nginx y Traefik
+### Step 1: Choose Proxy Tool
 
-**Nginx**: Mejor para configuración estática, alto rendimiento, flexibilidad total.
-**Traefik**: Mejor para descubrimiento dinámico con Docker, certificados automáticos, dashboard integrado.
+| Feature | Nginx | Traefik |
+|---|---|---|
+| Configuration | Static files | Docker labels / dynamic |
+| Auto-discovery | No (manual) | Yes (Docker provider) |
+| Let's Encrypt | Via certbot | Built-in ACME |
+| Dashboard | No (3rd party) | Built-in |
+| WebSocket | Manual config | Automatic |
+| Best for | Static config, high traffic | Dynamic Docker environments |
 
-**Esperado:** Proxy seleccionado según los requisitos del proyecto.
-
-**En caso de fallo:** Comenzar con Nginx si se necesita control total, Traefik si se prioriza la automatización.
-
-### Paso 2: Configurar Nginx como Proxy Inverso
+### Step 2: Nginx — Path-Based Routing
 
 ```nginx
-# Enrutamiento basado en paths
 server {
-    listen 443 ssl http2;
-    server_name api.ejemplo.com;
+    listen 80;
 
-    ssl_certificate /etc/ssl/certs/cert.pem;
-    ssl_certificate_key /etc/ssl/private/key.pem;
-
-    # API principal
-    location /api/v1/ {
-        proxy_pass http://api-service:8000/;
+    location /api/ {
+        proxy_pass http://api:8000/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
 
-    # Servicio de autenticación
-    location /auth/ {
-        proxy_pass http://auth-service:8001/;
+    location /app/ {
+        proxy_pass http://webapp:3000/;
         proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
     }
 
-    # WebSocket
-    location /ws/ {
-        proxy_pass http://ws-service:8002/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
+    location / {
+        root /usr/share/nginx/html;
+        try_files $uri $uri/ /index.html;
     }
 }
 ```
 
-**Esperado:** Las solicitudes se enrutan al servicio correcto basándose en el path.
+**Note:** Trailing `/` on `proxy_pass` strips the location prefix. `proxy_pass http://api:8000/;` with `location /api/` forwards `/api/users` as `/users`.
 
-**En caso de fallo:** Verificar barras finales en `proxy_pass` (afectan el reescritura de paths), comprobar resolución DNS de upstreams.
+### Step 3: Nginx — Host-Based Routing
 
-### Paso 3: Configurar Traefik con Docker
+```nginx
+server {
+    listen 80;
+    server_name api.example.com;
+
+    location / {
+        proxy_pass http://api:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+server {
+    listen 80;
+    server_name app.example.com;
+
+    location / {
+        proxy_pass http://webapp:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+### Step 4: Nginx — WebSocket Proxying
+
+WebSockets require upgrade headers. Essential for Shiny, Socket.IO, and live reload:
+
+```nginx
+location /ws/ {
+    proxy_pass http://app:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_read_timeout 86400;
+}
+```
+
+For Shiny apps specifically:
+
+```nginx
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+server {
+    location / {
+        proxy_pass http://shiny:3838;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host $host;
+        proxy_read_timeout 86400;
+        proxy_buffering off;
+    }
+}
+```
+
+**Expected:** WebSocket connections establish and persist.
+
+**On failure:** Check `proxy_http_version 1.1` is set. Verify `Upgrade` and `Connection` headers.
+
+### Step 5: Traefik — Docker Label Auto-Discovery
+
+`docker-compose.yml`:
 
 ```yaml
-# docker-compose.yml
 services:
   traefik:
-    image: traefik:v3.0
+    image: traefik:v3.2
     command:
-      - "--api.dashboard=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencrypt.acme.email=admin@ejemplo.com"
+      - "--certificatesresolvers.letsencrypt.acme.email=admin@example.com"
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
     ports:
@@ -115,58 +175,92 @@ services:
       - letsencrypt:/letsencrypt
 
   api:
-    image: mi-api:latest
+    image: myapi:latest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`api.ejemplo.com`)"
+      - "traefik.http.routers.api.rule=Host(`api.example.com`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=letsencrypt"
       - "traefik.http.services.api.loadbalancer.server.port=8000"
+
+  webapp:
+    image: myapp:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webapp.rule=Host(`app.example.com`)"
+      - "traefik.http.routers.webapp.entrypoints=websecure"
+      - "traefik.http.routers.webapp.tls.certresolver=letsencrypt"
+      - "traefik.http.services.webapp.loadbalancer.server.port=3000"
 
 volumes:
   letsencrypt:
 ```
 
-**Esperado:** Traefik descubre automáticamente servicios Docker, genera certificados TLS con Let's Encrypt.
+**Expected:** Traefik auto-discovers services via labels, provisions SSL certificates.
 
-**En caso de fallo:** Verificar acceso al socket de Docker, comprobar que las etiquetas son correctas, revisar el dashboard de Traefik.
+### Step 6: Traefik — Path-Based Routing with Labels
 
-### Paso 4: Verificar y Probar
-
-```bash
-# Probar enrutamiento
-curl -v https://api.ejemplo.com/api/v1/health
-curl -v https://api.ejemplo.com/auth/status
-
-# Verificar certificados TLS
-openssl s_client -connect api.ejemplo.com:443 -servername api.ejemplo.com
-
-# Probar balanceo de carga
-for i in $(seq 1 10); do curl -s https://api.ejemplo.com/api/v1/instance; done
+```yaml
+services:
+  api:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`example.com`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api.middlewares=strip-api"
+      - "traefik.http.middlewares.strip-api.stripprefix.prefixes=/api"
+      - "traefik.http.services.api.loadbalancer.server.port=8000"
 ```
 
-**Esperado:** Las solicitudes se enrutan correctamente, TLS funciona, el balanceo de carga distribuye tráfico.
+### Step 7: Traefik — Rate Limiting and Headers
 
-**En caso de fallo:** Revisar logs del proxy, verificar resolución DNS, comprobar reglas de firewall.
+```yaml
+labels:
+  - "traefik.http.middlewares.ratelimit.ratelimit.average=100"
+  - "traefik.http.middlewares.ratelimit.ratelimit.burst=50"
+  - "traefik.http.middlewares.security.headers.stsSeconds=63072000"
+  - "traefik.http.middlewares.security.headers.contentTypeNosniff=true"
+  - "traefik.http.middlewares.security.headers.frameDeny=true"
+  - "traefik.http.routers.app.middlewares=ratelimit,security"
+```
 
-## Validación
+### Step 8: Verify Proxy Configuration
 
-- [ ] Las solicitudes se enrutan al servicio correcto por path/host
-- [ ] TLS funciona con certificados válidos
-- [ ] El balanceo de carga distribuye tráfico entre instancias
-- [ ] Las cabeceras de proxy se pasan correctamente al backend
-- [ ] WebSocket funciona a través del proxy
-- [ ] Los healthchecks detectan backends no disponibles
+```bash
+# Nginx: test config
+docker compose exec nginx nginx -t
 
-## Errores Comunes
+# Check routing
+curl -H "Host: api.example.com" http://localhost/health
 
-- **Barras finales en proxy_pass**: `proxy_pass http://backend/` (con barra) reescribe el path; sin barra no lo reescribe.
-- **WebSocket sin upgrade headers**: Requiere `proxy_http_version 1.1` y cabeceras Upgrade/Connection.
-- **Timeout de conexión**: Backends lentos causan 504. Aumentar `proxy_read_timeout` y `proxy_connect_timeout`.
-- **Socket Docker expuesto sin protección**: El socket Docker da acceso root. Usar modo lectura (`:ro`) y considerar Docker socket proxy.
-- **Certificados Let's Encrypt fallando**: Verificar que el puerto 80 es accesible desde Internet para el desafío HTTP.
+# Check WebSocket (needs wscat: npm install -g wscat)
+wscat -c ws://localhost/ws/
 
-## Habilidades Relacionadas
+# Traefik dashboard (if enabled)
+# http://localhost:8080/dashboard/
+```
 
-- `configure-nginx` - Configuración detallada de Nginx como servidor web
-- `setup-compose-stack` - Integrar proxy en stacks Docker Compose
-- `configure-ingress-networking` - Ingress controllers en Kubernetes
+**Expected:** Requests route to correct backends. WebSocket upgrades succeed.
+
+## Validation
+
+- [ ] HTTP requests route to the correct backend based on path or host
+- [ ] WebSocket connections establish and maintain
+- [ ] SSL termination works (if configured)
+- [ ] Backend services receive correct `Host`, `X-Real-IP`, `X-Forwarded-For` headers
+- [ ] Traefik auto-discovers new services via labels (if using Traefik)
+- [ ] Configuration survives `docker compose restart`
+
+## Common Pitfalls
+
+- **Trailing slash mismatch**: `proxy_pass http://app/` vs `http://app` behaves differently with path stripping in Nginx.
+- **WebSocket timeout**: Default `proxy_read_timeout` is 60s. Long-lived WebSocket connections need `86400` (24h).
+- **Docker socket security**: Mounting `/var/run/docker.sock` in Traefik gives it full Docker access. Use `ro` mount and consider socket proxy.
+- **DNS resolution**: Nginx resolves upstreams at startup. Use `resolver 127.0.0.11` for Docker's internal DNS with dynamic services.
+- **Missing `proxy_buffering off`**: Shiny and SSE endpoints need `proxy_buffering off` for real-time streaming.
+
+## Related Skills
+
+- `configure-nginx` - detailed Nginx configuration with SSL and security headers
+- `deploy-shinyproxy` - ShinyProxy for containerized Shiny app hosting
+- `setup-compose-stack` - compose stack that uses a reverse proxy
+- `configure-api-gateway` - API gateway patterns with Kong and Traefik

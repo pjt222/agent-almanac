@@ -1,9 +1,33 @@
 name: Release
 
+# `workflow_dispatch` is here because the 1.9.0 publish failed and the only way to exercise the
+# publish path was to push another tag — the operation you least want to repeat while diagnosing
+# a failed publish (#681). A dry run rehearses everything the real publish does except the PUT,
+# so the path can be ASKED A QUESTION rather than only fired at a tag and observed.
+#
+# Two limits of that recovery story, both found in review and both worth knowing BEFORE you need
+# them, because they bite under incident pressure:
+#
+#   1. `workflow_dispatch` runs the workflow file AT THE DISPATCHED REF. Tags created before this
+#      change carry a release.yml with no `workflow_dispatch` trigger, so dispatching from one is
+#      refused outright (HTTP 422). The recovery path exists for tags cut after this merges — for
+#      anything older, the honest options are a new tag or a manual publish.
+#   2. Re-running a completed dispatch REPLAYS its inputs. Re-running a `dry_run: false` recovery
+#      therefore attempts a second publish; npm rejects the duplicate version, so the cost is a
+#      confusing red run rather than a bad publish.
 on:
   push:
     tags:
       - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        # `default: true` is LOAD-BEARING, not cosmetic. GitHub's default for a boolean input with
+        # no `default:` is `false`, so deleting this line makes an API dispatch that omits the
+        # input publish for real. It is the difference between failing safe and failing open.
+        description: 'Rehearse the publish — authenticate and pack, but do not publish or release'
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -22,15 +46,113 @@ jobs:
 
       - run: npm ci
 
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
+
       - name: Run tests
         run: npm test
 
+      # WHO ARE WE, asked before we try to write. `npm publish` failing with E404 on a PUT is
+      # npm's deliberate response to an unauthorised write — it returns 404 rather than 403 so
+      # the response cannot be used to probe which private packages exist.
+      #
+      # What this actually separates, stated at its real width rather than the flattering one:
+      # token-DEAD from token-ALIVE. An expired, revoked, or empty `NODE_AUTH_TOKEN` yields
+      # ENEEDAUTH here. A read-only token, and a granular token whose package list omits this
+      # package, are both perfectly valid credentials for a READ — so `whoami` prints a healthy
+      # username and the PUT still 404s. No npm command short of publishing tests write access,
+      # and that is the permanent boundary of what this step can diagnose.
+      #
+      # `continue-on-error` is CONDITIONAL, and the condition is the whole point. On the tag path
+      # a hard failure here would turn a diagnostic into a new failure mode — a transient registry
+      # hiccup would refuse a release that would otherwise have succeeded — so it stays advisory.
+      # On the dispatch path there is no release to refuse: the run exists precisely to answer
+      # "would a release work?", and re-dispatching after a hiccup costs nothing. An unconditional
+      # `true` here made a dry run against a dead token conclude SUCCESS with the ENEEDAUTH folded
+      # away in a collapsed log — reporting green over the exact fault class this file was built
+      # to surface.
+      - name: Who is the runner (advisory on a tag, a gate on a dry run)
+        continue-on-error: ${{ github.event_name == 'push' }}
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # `npm publish --dry-run`, NOT `npm pack --dry-run`, and the difference is the whole value of
+      # the rehearsal. Measured: `pack --dry-run` runs `prepack` alone, while `publish --dry-run`
+      # runs `prepublishOnly` and then `prepack`. `prepublishOnly` is where the CLI suite lives on
+      # the real publish path, so packing alone would have rehearsed a strictly weaker path and
+      # called it a rehearsal — green here, dead at the next tag, which is the failure this file
+      # exists to stop happening twice.
+      #
+      # Dispatch only: on the tag path the real `npm publish` follows immediately and does all of
+      # this itself, so running it here would only spend the CLI suite a third time.
+      - name: Rehearse the publish (everything the real publish does except the PUT)
+        if: github.event_name == 'workflow_dispatch'
+        run: npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # THE TAG IS NOT THE VERSION. `npm publish` takes the version from package.json and never
+      # looks at the ref; `gh release create` takes its title from the ref and never looks at the
+      # manifest. Nothing downstream compares them, so a mismatch is not merely unguarded — it is
+      # SILENT AND GREEN. Tagging `v1.9.1` against a manifest still reading `1.9.0` would publish
+      # 1.9.0 (a free version, so the PUT succeeds), title the GitHub Release "Release v1.9.1",
+      # and leave `npm i agent-almanac@1.9.1` returning E404 for good. A version number does not
+      # come back.
+      #
+      # `pretest:cli` -> `prepublishOnly` was the only pre-PUT hook and it checks CLI-suite naming,
+      # nothing about versions.
+      #
+      # Tag path only. On `workflow_dispatch` from a branch there is no version claim to check,
+      # and the publish arm cannot arm from a branch anyway.
+      #
+      # A tag push runs the workflow file AT THE TAGGED REF, so this protects tags cut at or after
+      # the commit that adds it — never a tag that already exists.
+      - name: The tag must match the manifest
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          PKG="$(node -p 'require("./package.json").version')"
+          if [ "v$PKG" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match package.json version $PKG."
+            echo "Publishing would put $PKG on npm under a release titled $GITHUB_REF_NAME."
+            exit 1
+          fi
+          echo "tag $GITHUB_REF_NAME matches package.json $PKG"
+
+      # The dispatch arm is spelled with an explicit `github.event_name` test rather than leaning
+      # on `inputs.dry_run` alone. On any non-dispatch event `inputs` is empty, `inputs.dry_run` is
+      # null, and GitHub casts both null and false to 0 — so `inputs.dry_run == false` is TRUE on
+      # every such event. That is harmless while `push` is the only other trigger, because its own
+      # disjunct is already true; add a third trigger and the publish step arms itself on it with
+      # nobody having touched this line.
+      #
+      # `startsWith(github.ref, 'refs/tags/')` is not about privilege — anyone who can dispatch can
+      # already push a tag. It is about EVIDENCE. A tag-push publish anchors the published bytes to
+      # a tag and a release; a dispatch publish from a branch leaves a version on the registry
+      # corresponding to no ref marker at all, and this repo's stated threat model is the
+      # agent-driven accident, where a stray `-f dry_run=false` is one flag against a deliberate
+      # multi-step tag push.
       - name: Publish to npm
+        if: >-
+          github.event_name == 'push' ||
+          (github.event_name == 'workflow_dispatch' &&
+          !inputs.dry_run &&
+          startsWith(github.ref, 'refs/tags/'))
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_2 }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      # Same condition as the publish, deliberately. Guarding this on `push` alone meant the exact
+      # scenario the dispatch was built for — tag pushed, tests green, publish died, token fixed,
+      # re-run — ended with the package on npm and no GitHub release, and nothing red to say so.
+      # A recovery that completes half the release is not a recovery.
       - name: Create GitHub Release
+        if: >-
+          github.event_name == 'push' ||
+          (github.event_name == 'workflow_dispatch' &&
+          !inputs.dry_run &&
+          startsWith(github.ref, 'refs/tags/'))
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

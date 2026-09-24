@@ -3,6 +3,7 @@ name: enhance-glyph
 locale: zh-CN
 source_locale: en
 source_commit: 33b561c9
+fence_basis_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -144,22 +145,11 @@ Glyph Quality Dimensions:
 
 1. 根据实体类型重新渲染：
 
-   **技能：**
    ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-icons.R --only <domain> --no-cache
-   ```
-
-   **代理：**
-   ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-agent-icons.R --only <agent-id> --no-cache
-   ```
-
-   **团队：**
-   ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-team-icons.R --only <team-id> --no-cache
+   # From project root — use --no-cache to force re-render of modified glyph
+   bash viz/build.sh --only <domain> --no-cache          # skills
+   bash viz/build.sh --type agent --only <id> --no-cache # agents
+   bash viz/build.sh --type team --only <id> --no-cache  # teams
    ```
 
 2. 验证每个调色板的输出文件存在于预期路径

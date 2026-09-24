@@ -13,9 +13,9 @@ metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: bushcraft
-  complexity: basic
+  complexity: intermediate
   language: natural
-  tags: bushcraft, water, survival, filtration, purification
+  tags: bushcraft, water, purification, survival, wilderness, filtration
   locale: es
   source_locale: en
   source_commit: 6f65f316

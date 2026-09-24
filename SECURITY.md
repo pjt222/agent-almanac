@@ -6,10 +6,17 @@ This repository is provided under the [MIT License](LICENSE) — use it at your 
 
 ## What This Repository Contains
 
-- **Skills, agents, teams, guides**: Markdown and YAML documentation. ~60% of skills (177 of 297) include `Bash` in their allowed-tools, meaning they instruct AI agents to execute shell commands when followed. Review any skill before letting an agent execute it.
+<!-- AUTO:START:security-surface -->
+**Which artifact this describes.** Everything below is derived from **the repository at this revision**, whose `package.json` declares version `1.9.1`. That is not necessarily what `npm install agent-almanac` installs — the published version can lag this tree, and has. Check with `npm view agent-almanac version`. What ships, from `package.json`'s own `files`: `cli/adapters/`, `cli/lib/`, `cli/index.js`, `cli/README.md`, `skills/`, `agents/`, `teams/`, `guides/`, `LICENSE`, `README.md`. `package.json` ships too — npm always includes it — and it declares no `preinstall`/`install`/`postinstall` hooks, so nothing here executes on install. It does declare `prepack`, which runs in the PUBLISHER's tree when the package is packed and never in a consumer's; it refuses a pack carrying files the published commit does not (#876). Everything else described below (`viz/`, `scripts/`, `workflows/`, `.claude/`) exists only in the repository. A vulnerability report against an npm-installed copy is in scope for the shipped list, and may be against older code than this document describes.
+
+- **Skills, Agents, Teams, Guides**: mostly Markdown and YAML, plus **18 files that are not** (.bib, .json, .py, .webp) — 2 of them executable scripts: `skills/consult-a-decision-oracle/references/separation.py`, `skills/verify-web-app-runtime/scripts/verify_runtime.py`. All of it ships — counted from the index, which is what the next commit will contain and what a release is packed from; a local `npm pack` packs the working tree instead and can include files this count excludes. 231 of 373 skills (~62%) declare `Bash` in their `allowed-tools`, meaning they instruct AI agents to execute shell commands when followed. Review any skill before letting an agent execute it.
 - **Visualization pipeline** (`viz/`): A containerized R + Node.js + Vite build system with a Dockerfile, shell scripts, and an icon rendering pipeline. The Docker entrypoint serves content via a Python HTTP server.
-- **Scripts** (`scripts/`): A Node.js script for README generation from registries.
+- **Scripts** (`scripts/`): 42 top-level Node.js and shell tools — registry validation, README and translation generation, i18n gates, and a small number that deliberately mutate the working tree or run repository commands (`normalize-i18n-fences.js`, `mutation-check.js`, `gate-envelope.js`). Maintainer-invoked; `scripts/` is not in `package.json`'s `files` array, so none of it ships in the published package.
+- **CLI** (`cli/`): The entry point `npx` executes (`bin` -> `cli/index.js`), and the only component that writes outside this repository. 13 adapters install content into other tools' configuration directories, at global (home) or PROJECT scope depending on the adapter and the `--scope` flag, using append-to-file, distill, file-per-item and symlink. Adapters: ai-edge, aider, claude-code, codex, copilot, cursor, gemini, hermes, openclaw, opencode, universal, vibe, windsurf.
+- **Workflows** (`workflows/`): 3 executable orchestration scripts. They are not auto-installed and do not ship in the published package; the documented way to use one is to COPY its `.mjs` into `.claude/workflows/` by hand, after which Claude Code's Workflow tool runs it and it may spawn subagents with whatever tools those agents carry. Read one before copying it — that instruction is the whole security boundary.
+- **Tools** (`tools/`): 19 operator utilities (7 shell, 7 Python, 5 Node.js) catalogued in `tools/_registry.yml`, none shipped in the published package and none a merge gate. Each carries a self-test: 17 run in the non-required `tools-verify` job, 2 skipped there with the reason recorded in the registry. 4 act beyond this checkout (the tool itself makes a network request or opens a listening socket; a path the caller names is the caller's reach): `wirecap.py` stands up a local HTTP endpoint to capture a session's request body; `merge-dependabot.sh` merges pull requests through `gh`; `watch-checks.sh` reads check results from the GitHub API through `gh`; and `merge-pr.sh` merges a pull request and deletes its remote branch through `gh` and `git push`.
 - **Claude Code configuration** (`.claude/`): Agent discovery symlinks and permission settings.
+<!-- AUTO:END:security-surface -->
 
 ## Reporting Issues
 
@@ -17,5 +24,42 @@ If you find a security issue, open a [GitHub issue](https://github.com/pjt222/ag
 
 ## Automated Scanning
 
-- CodeQL is configured to run on every push and on a daily schedule
+- CodeQL uses GitHub's **server-managed default setup**, which commits no workflow YAML — so
+  grepping `.github/workflows/` for it finds nothing. It runs on a **weekly** schedule and on
+  pushes and pull requests against the default branch.
+- **Fork pull requests reported nothing, and the setting that caused it has since changed.**
+  Measured on 2026-08-19: our first external contribution (PR #589) reported *no checks at all* —
+  0 workflow runs, 0 check-runs, 0 check-suites — while a same-day pull request from a local
+  branch reported ten. The LIKELY cause is the fork-PR approval policy rather than CodeQL
+  specifically — but that is a mechanism we inferred, not one we measured: the setting was not
+  API-readable at the time, and the approval queue showed zero `action_required` runs, meaning
+  GitHub never engaged Actions on that commit at all. If the attribution is wrong, loosening the
+  policy will not have fixed the silence, which is the other reason the measurement below
+  matters.
+  On 2026-08-20 that policy was changed to its loosest value,
+  `first_time_contributors_new_to_github` (#689). **Measured on 2026-09-02 on #763**, the
+  second fork PR and the first since the change: on the contributor's first commit each
+  workflow run's `created_at` equals its `run_started_at` — nothing waited between the run
+  being created and being started. The runs began three seconds after the PR was opened, an
+  interval no human approval fits inside, and seven hours before the maintainer's first
+  comment. Every check context the changed paths trigger reported, one run each — two of them
+  red on content rules, which is the gate working — where #589 above had reported none at all.
+  What the measurement cannot say is which side of the policy's own gate that contributor
+  fell on: the account was a month old, and GitHub does not publish the age at which an account
+  stops being "new". So "will my PR report checks?" reads *yes* on the one case measured, and a
+  contributor who sees an empty check list should say so in the thread rather than read it as a
+  pass (`CONTRIBUTING.md`). The live setting is at
+  `gh api repos/pjt222/agent-almanac/actions/permissions/fork-pr-contributor-approval`, though
+  that endpoint needs admin rights — an external reader gets `401`/`403`, so ask us rather than
+  assuming this paragraph has gone stale.
+- **CodeQL default setup separately does not run on fork pull requests**, independently of the
+  approval policy above — its PR scanning covers pull requests against the default or protected
+  branches, [excluding those from forks](https://docs.github.com/code-security/code-scanning/enabling-code-scanning/configuring-default-setup-for-code-scanning).
+  So even once validators report on your PR, expect no code-scanning result from it; ours runs
+  on the weekly schedule and on the merge commit. (Scoped to *default setup* deliberately: a
+  committed `codeql.yml` would be a different mechanism with different event coverage.)
+- The exact event coverage is GitHub's to define and ours only to read. Prefer the live
+  configuration over this file: `gh api repos/pjt222/agent-almanac/code-scanning/default-setup`
+  (needs `security-events` access, so an external reader will likely get a 403 — the schedule and
+  the two fork exclusions above are the parts that affect you)
 - Dependabot is configured to monitor GitHub Actions and npm dependencies for known vulnerabilities

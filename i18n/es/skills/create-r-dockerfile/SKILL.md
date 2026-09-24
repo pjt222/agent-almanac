@@ -1,87 +1,79 @@
 ---
 name: create-r-dockerfile
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Crear un Dockerfile para aplicaciones R utilizando imágenes base rocker, gestión de
-  dependencias con renv, y mejores prácticas para compilación reproducible. Usar cuando
-  se necesite contenerizar un paquete R, una aplicación Shiny, o un pipeline de análisis
-  para despliegue reproducible.
+  Create a Dockerfile for R projects using rocker base images. Covers
+  system dependency installation, R package installation, renv
+  integration, and optimized layer ordering for fast rebuilds. Use when
+  containerizing an R application or analysis, creating reproducible R
+  environments, deploying R-based services (Shiny, Plumber, MCP server),
+  or setting up consistent development environments across machines.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: containerization
-  complexity: basic
-  language: multi
-  tags: docker, r, rocker, renv, containerization
+  complexity: intermediate
+  language: Docker
+  tags: docker, r, rocker, container, reproducibility
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Crear R Dockerfile
+# Create R Dockerfile
 
-Crear un Dockerfile para aplicaciones R con imágenes base rocker y gestión de dependencias reproducible.
+Build a Dockerfile for R projects using rocker base images with proper dependency management.
 
-## Cuándo Usar
+## When to Use
 
-- Contenerizando un paquete R para despliegue reproducible
-- Desplegando una aplicación Shiny en Docker
-- Creando pipelines de análisis reproducibles
-- Compartiendo entornos R con miembros del equipo
-- Integrando código R en pipelines CI/CD
+- Containerizing an R application or analysis
+- Creating reproducible R environments
+- Deploying R-based services (Shiny, Plumber, MCP server)
+- Setting up consistent development environments
 
-## Entradas
+## Inputs
 
-- **Requerido**: Código fuente R (paquete, script o aplicación Shiny)
-- **Requerido**: Lista de dependencias R (DESCRIPTION o renv.lock)
-- **Opcional**: Requisitos de paquetes del sistema (libcurl, libxml2, etc.)
-- **Opcional**: Archivos de configuración (.Renviron, .Rprofile)
-- **Opcional**: Restricciones de imagen base (versión de rocker, variante)
+- **Required**: R project with dependencies (DESCRIPTION or renv.lock)
+- **Required**: Purpose (development, production, or service)
+- **Optional**: R version (default: latest stable)
+- **Optional**: Additional system libraries needed
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Seleccionar Imagen Base Rocker
+### Step 1: Choose Base Image
 
-Elegir la imagen rocker apropiada según las necesidades del proyecto.
+| Use Case | Base Image | Size |
+|---|---|---|
+| Minimal R runtime | `rocker/r-ver:4.5.0` | ~800MB |
+| With tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
+| With RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |
+| Shiny server | `rocker/shiny-verse:4.5.0` | ~2GB |
 
-```dockerfile
-# Para scripts R y paquetes
-FROM rocker/r-ver:4.4.0
+**Expected:** A base image is selected that matches the project's requirements without unnecessary bloat.
 
-# Para aplicaciones Shiny
-FROM rocker/shiny-verse:4.4.0
+**On failure:** If unsure which image to use, start with `rocker/r-ver` (minimal) and add packages as needed. Check [rocker-org](https://github.com/rocker-org/rocker-versioned2) for the full image catalog.
 
-# Para desarrollo con RStudio
-FROM rocker/rstudio:4.4.0
-
-# Para ciencia de datos con tidyverse
-FROM rocker/tidyverse:4.4.0
-```
-
-Criterios de selección de imagen:
-- `rocker/r-ver` — R base mínimo (más pequeña, para producción)
-- `rocker/tidyverse` — Incluye tidyverse y dependencias del sistema
-- `rocker/shiny` — Incluye Shiny Server
-- `rocker/shiny-verse` — Shiny + tidyverse
-- `rocker/rstudio` — Incluye RStudio Server
-
-**Esperado:** Imagen base seleccionada coincide con los requisitos del proyecto, la versión de R anclada para reproducibilidad.
-
-**En caso de fallo:** Verificar versiones disponibles en Docker Hub (`docker search rocker`), asegurar que la versión de R coincide con el desarrollo local, considerar restricciones de tamaño de imagen.
-
-### Paso 2: Instalar Dependencias del Sistema
-
-Agregar bibliotecas del sistema requeridas por los paquetes R.
+### Step 2: Write Dockerfile
 
 ```dockerfile
-RUN apt-get update && apt-get install -y --no-install-recommends \
+FROM rocker/r-ver:4.5.0
+
+# Install system dependencies
+# Group by purpose for clarity
+RUN apt-get update && apt-get install -y \
+    # HTTP/SSL
     libcurl4-openssl-dev \
     libssl-dev \
+    # XML processing
     libxml2-dev \
+    # Git integration
     libgit2-dev \
+    libssh2-1-dev \
+    # Graphics
     libfontconfig1-dev \
     libharfbuzz-dev \
     libfribidi-dev \
@@ -89,114 +81,125 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev \
     libtiff5-dev \
     libjpeg-dev \
+    # Utilities
+    git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
-```
 
-**Esperado:** Todas las dependencias del sistema instaladas, la capa limpia no tiene archivos de caché.
+# Install R packages
+# Order: least-changing first for cache efficiency
+RUN R -e "install.packages(c( \
+    'remotes', \
+    'devtools', \
+    'renv' \
+    ), repos='https://cloud.r-project.org/')"
 
-**En caso de fallo:** Identificar bibliotecas faltantes desde errores de instalación de paquetes R (`install.packages()` mostrará qué falta), buscar el nombre del paquete Debian para la biblioteca requerida.
+# Set working directory
+WORKDIR /workspace
 
-### Paso 3: Configurar Gestión de Dependencias con renv
-
-Usar renv para la instalación reproducible de paquetes.
-
-```dockerfile
-# Instalar renv
-RUN R -e "install.packages('renv', repos='https://cloud.r-project.org')"
-
-# Copiar archivos de bloqueo primero (caché de capas Docker)
-WORKDIR /app
+# Copy renv files first (cache layer)
 COPY renv.lock renv.lock
-COPY .Rprofile .Rprofile
 COPY renv/activate.R renv/activate.R
-COPY renv/settings.json renv/settings.json
 
-# Restaurar paquetes desde lockfile
+# Restore packages from lockfile
 RUN R -e "renv::restore()"
 
-# Copiar código de la aplicación (después de paquetes para mejor caché)
+# Copy project files
 COPY . .
+
+# Default command
+CMD ["R"]
 ```
 
-Sin renv (alternativa):
+**Expected:** Dockerfile builds successfully with `docker build -t myproject .`
 
-```dockerfile
-RUN R -e "install.packages(c('shiny', 'dplyr', 'ggplot2'), repos='https://cloud.r-project.org')"
+**On failure:** If the build fails during `apt-get install`, check package names for the target distro (Debian). If `renv::restore()` fails, ensure `renv.lock` and `renv/activate.R` are copied before the restore step.
+
+### Step 3: Create .dockerignore
+
+```text
+.git
+.Rproj.user
+.Rhistory
+.RData
+renv/library
+renv/cache
+renv/staging
+docs/
+*.tar.gz
 ```
 
-**Esperado:** Paquetes R instalados de forma reproducible desde renv.lock, caché de capas Docker funciona en compilaciones subsecuentes.
+**Expected:** `.dockerignore` excludes Git history, IDE files, local renv library, and build artifacts from the Docker context.
 
-**En caso de fallo:** Ejecutar `renv::snapshot()` localmente antes de compilar, verificar que renv.lock está actualizado, asegurar que la versión de R en Docker coincide con la versión de renv.lock.
+**On failure:** If the Docker build still copies unwanted files, verify `.dockerignore` is in the same directory as the Dockerfile and uses correct glob patterns.
 
-### Paso 4: Configurar Punto de Entrada
+### Step 4: Build and Test
 
-Definir cómo se ejecuta la aplicación.
-
-Para una aplicación Shiny:
-
-```dockerfile
-EXPOSE 3838
-CMD ["R", "-e", "shiny::runApp('/app', host='0.0.0.0', port=3838)"]
+```bash
+docker build -t r-project:latest .
+docker run --rm -it r-project:latest R -e "sessionInfo()"
 ```
 
-Para un script R:
+**Expected:** Container starts with correct R version and all packages available. `sessionInfo()` output confirms the expected R version.
+
+**On failure:** Check build logs for system dependency errors. Add missing `-dev` packages to the `apt-get install` layer.
+
+### Step 5: Optimize for Production
+
+For production deployments, use multi-stage builds:
 
 ```dockerfile
+# Build stage
+FROM rocker/r-ver:4.5.0 AS builder
+RUN apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev
+COPY renv.lock .
+RUN R -e "install.packages('renv'); renv::restore()"
+
+# Runtime stage
+FROM rocker/r-ver:4.5.0
+COPY --from=builder /usr/local/lib/R/site-library /usr/local/lib/R/site-library
+COPY . /app
+WORKDIR /app
 CMD ["Rscript", "main.R"]
 ```
 
-Para un paquete R (ejecución de tests):
+**Expected:** Multi-stage build produces a smaller final image. Runtime stage contains only compiled R packages, not build tools.
 
-```dockerfile
-CMD ["R", "CMD", "check", "--no-manual", "."]
-```
+**On failure:** If packages fail to load in the runtime stage, ensure the library path in `COPY --from=builder` matches where R installed packages. Check with `R -e ".libPaths()"` in both stages.
 
-**Esperado:** El contenedor se inicia y ejecuta la aplicación R correctamente, los puertos expuestos coinciden con la configuración de la aplicación.
+## Validation
 
-**En caso de fallo:** Verificar que la aplicación se ejecuta localmente primero, comprobar los logs del contenedor (`docker logs <container>`), asegurar que los paths de los archivos dentro del contenedor son correctos.
+- [ ] `docker build` completes without errors
+- [ ] Container starts and R session works
+- [ ] All required packages are available
+- [ ] `.dockerignore` excludes unnecessary files
+- [ ] Image size is reasonable for the use case
+- [ ] Rebuilds are fast when only code changes (layer caching works)
 
-### Paso 5: Compilar y Probar
+## Common Pitfalls
 
-Compilar la imagen Docker y verificar que funciona.
+- **Missing system dependencies**: R packages with compiled code need `-dev` libraries. Check error messages during `install.packages()`
+- **Layer cache invalidation**: Copying all files before installing packages invalidates cache on every code change. Copy lockfile first.
+- **Large images**: Use `rm -rf /var/lib/apt/lists/*` after `apt-get install`. Consider multi-stage builds.
+- **Timezone issues**: Add `ENV TZ=UTC` or install `tzdata` for timezone-aware operations
+- **Running as root**: Add a non-root user for production: `RUN useradd -m appuser && USER appuser`
+
+## Examples
 
 ```bash
-# Compilar imagen
-docker build -t mi-app-r:latest .
+# Development container with mounted source
+docker run --rm -it -v $(pwd):/workspace r-project:latest R
 
-# Ejecutar contenedor
-docker run -p 3838:3838 mi-app-r:latest
+# Plumber API service
+docker run -d -p 8000:8000 r-api:latest
 
-# Ejecutar con variables de entorno
-docker run -e MI_VARIABLE=valor -p 3838:3838 mi-app-r:latest
-
-# Ejecutar interactivamente para depuración
-docker run -it mi-app-r:latest R
+# Shiny app
+docker run -d -p 3838:3838 r-shiny:latest
 ```
 
-**Esperado:** La imagen se compila exitosamente, el contenedor se ejecuta sin errores, la aplicación es accesible en el puerto configurado.
+## Related Skills
 
-**En caso de fallo:** Revisar la salida de compilación para errores de instalación de paquetes, verificar la disponibilidad de puertos, comprobar la asignación de memoria del contenedor (R puede necesitar más RAM).
-
-## Validación
-
-- [ ] La imagen Docker se compila sin errores
-- [ ] El contenedor se inicia y ejecuta la aplicación correctamente
-- [ ] Las dependencias R coinciden con el entorno de desarrollo local
-- [ ] La caché de capas Docker funciona (recompilaciones rápidas cuando solo cambia el código)
-- [ ] El tamaño de la imagen es razonable (considerar compilación multi-etapa para producción)
-- [ ] Las variables de entorno se manejan correctamente
-
-## Errores Comunes
-
-- **Imagen demasiado grande**: Usar compilación multi-etapa o imagen base más pequeña. Limpiar cachés de apt en la misma capa RUN.
-- **renv.lock desactualizado**: Siempre ejecutar `renv::snapshot()` localmente antes de compilar la imagen Docker.
-- **Fallo de instalación de paquetes**: Generalmente causado por dependencias del sistema faltantes. Revisar mensajes de error para identificar la biblioteca requerida.
-- **Caché de capas no funciona**: Copiar archivos de dependencias antes del código fuente. COPY de renv.lock antes de COPY del código de la aplicación.
-- **Inconsistencia de versión de R**: Anclar la versión de R en la imagen base para coincidir con el entorno de desarrollo.
-
-## Habilidades Relacionadas
-
-- `setup-docker-compose` - Orquestar contenedores R con servicios de base de datos
-- `optimize-docker-build-cache` - Mejorar tiempos de compilación Docker para proyectos R
-- `containerize-mcp-server` - Contenerizar servidores MCP basados en R
-- `create-dockerfile` - Patrones generales de Dockerfile para otros lenguajes
+- `setup-docker-compose` - orchestrate multiple containers
+- `containerize-mcp-server` - special case for MCP R servers
+- `optimize-docker-build-cache` - advanced caching strategies
+- `manage-renv-dependencies` - renv.lock feeds into Docker builds

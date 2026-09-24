@@ -3,6 +3,7 @@ name: interpret-raman-spectrum
 locale: es
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-sonnet-4-6
 translation_date: 2026-03-16
 description: >
@@ -23,7 +24,7 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, raman, vibrational, carbon-materials, SERS, symmetry
+  tags: spectroscopy, raman, polarizability, vibrational, complementary-ir
 ---
 
 # Interpretar Espectro Raman

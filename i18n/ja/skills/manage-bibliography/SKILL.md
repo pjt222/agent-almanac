@@ -1,152 +1,239 @@
 ---
 name: manage-bibliography
 description: >
-  BibTeXファイルの作成・管理・保守を行う。エントリの追加、フィールドの検証、
-  重複の検出、引用キーの標準化、およびRのrefmanager/bibtexパッケージを使用した
-  参考文献データベースの管理を含む。
+  Create, merge, and deduplicate BibTeX bibliography files using R packages
+  (RefManageR, bibtex). Parse .bib files into structured R objects, merge
+  multiple bibliographies with deduplication by DOI or title similarity,
+  generate entries from DOI/ISBN/arXiv ID, and export clean sorted .bib files.
+  Use when creating a new .bib file for an R Markdown or Quarto project,
+  merging bibliographies from multiple collaborators, deduplicating a .bib
+  that has grown through copy-paste accumulation, or generating BibTeX entries
+  programmatically from DOIs or other identifiers.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: citations
-  complexity: basic
-  language: multi
-  tags: citations, bibtex, bibliography, reference-management, r-packages
+  complexity: intermediate
+  language: R
+  tags: citations, bibliography, bibtex, R, RefManageR
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
-  translator: claude-sonnet-4-6
-  translation_date: 2026-03-16
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# 参考文献の管理
+# Manage Bibliography
 
-BibTeX参考文献データベースの作成、検証、保守を行う。エントリの追加、必須フィールドの検証、重複の検出と解決、引用キーの標準化、およびRパッケージ（RefManageR、bibtex）を用いたプログラム的な操作を含む。
+Create, merge, and deduplicate BibTeX bibliography files using R. This skill
+covers the full lifecycle of bibliography management: parsing existing .bib
+files into structured R objects, generating new entries from identifiers (DOI,
+ISBN, arXiv ID), merging multiple bibliographies with intelligent deduplication,
+and exporting clean, consistently formatted .bib output.
 
-## 使用タイミング
+## When to Use
 
-- 研究プロジェクト用の新しいBibTeXデータベースをゼロから作成する場合
-- DOI、PubMed ID、またはISBNからエントリを追加する場合
-- 既存の`.bib`ファイルの重複エントリや不整合を検出する場合
-- 引用キーの命名規則を標準化する場合
-- 複数の`.bib`ファイルを一つの統合データベースに結合する場合
-- RのRefManageRまたはbibtexパッケージを使用してプログラム的に参考文献を操作する場合
+- Creating a new .bib file for an R Markdown or Quarto project
+- Merging bibliographies from multiple collaborators or sources
+- Deduplicating a .bib file that has grown through copy-paste accumulation
+- Generating BibTeX entries programmatically from DOIs or other identifiers
+- Cleaning and standardizing an existing .bib file (consistent keys, sorted fields)
 
-## 入力
+## Inputs
 
-- **必須**: BibTeXデータベースファイルのパス（既存の`.bib`ファイルまたは新規作成先パス）
-- **必須**: 操作内容（エントリの追加、検証、重複検出、キーの標準化、またはファイルの結合）
-- **任意**: DOI、PubMed ID、またはISBNのリスト（エントリ追加時）
-- **任意**: 引用キーの命名規則（例：`AuthorYear`、`Author_Year_Journal`）
-- **任意**: 検証するBibTeXフィールドのリスト
+- **Required**: Path to one or more .bib files, or a list of DOIs/ISBNs/arXiv IDs
+- **Optional**: Output .bib file path (default: `references.bib`)
+- **Optional**: Deduplication strategy (`doi`, `title`, `both`; default: `both`)
+- **Optional**: Sort order (`author`, `year`, `key`; default: `key`)
+- **Optional**: Key generation pattern (default: `AuthorYear`)
 
-## 手順
+## Procedure
 
-### ステップ1: BibTeXファイルの読み込みと検査
-
-既存のデータベースの読み込みまたは新規データベースの初期化を行う：
-
-1. **ファイルの読み込み**: RのRefManageRパッケージの`ReadBib()`またはbibtexパッケージの`read.bib()`を使用して`.bib`ファイルを読み込む。
-2. **エントリタイプの分布**: エントリタイプ（article、book、inproceedingsなど）ごとの数を集計する。
-3. **フィールドの完全性**: 各エントリタイプの必須フィールドが存在するか確認する。
-4. **エンコーディング**: ファイルのエンコーディングがUTF-8であることを確認する。LaTeXの特殊文字エスケープ（`{\"o}`、`{\ss}`など）とUnicode文字の混在をチェックする。
-5. **統計の記録**: 総エントリ数、エントリタイプ別内訳、不完全なエントリの数を記録する。
+### Step 1: Install and Load Required Packages
 
 ```r
+required_packages <- c("RefManageR", "bibtex", "stringdist")
+missing <- required_packages[!vapply(required_packages, requireNamespace,
+                                     logical(1), quietly = TRUE)]
+if (length(missing) > 0) install.packages(missing)
+
 library(RefManageR)
-bib <- ReadBib("references.bib", check = "warn")
-summary(bib)
 ```
 
-**期待結果：** BibTeXデータベースが正常に読み込まれ、エントリの概要統計が生成される。
+**Expected:** All packages load without errors.
 
-**失敗時：** パースエラーが発生した場合は、対応する行番号を確認する。一般的なエラーには、括弧の不一致、フィールド値の引用符の欠落、エントリ間のカンマの欠落がある。
+**On failure:** If RefManageR fails to install, check that `curl` and `xml2` system
+libraries are available. On Ubuntu: `sudo apt install libcurl4-openssl-dev libxml2-dev`.
 
-### ステップ2: エントリの追加と拡充
-
-新しい参考文献エントリをデータベースに追加する：
-
-1. **DOIからの追加**: `GetBibEntryWithDOI()`を使用してCrossref APIからメタデータを取得する。
-2. **PubMedからの追加**: `ReadPubMed()`を使用してPubMedからメタデータを取得する。
-3. **手動追加**: 必須フィールドを含むBibTeXエントリを手動で作成する。
-4. **フィールドの検証**: 追加された各エントリが該当するエントリタイプの必須フィールドをすべて含んでいることを確認する。
-5. **引用キーの割り当て**: 指定された命名規則に従って引用キーを生成する。
+### Step 2: Parse Existing .bib Files
 
 ```r
-# DOIからエントリを追加
-new_entry <- GetBibEntryWithDOI("10.1234/example.2024")
-bib <- c(bib, new_entry)
+bib <- RefManageR::ReadBib("references.bib", check = FALSE)
+message(sprintf("Parsed %d entries from references.bib", length(bib)))
+
+# Inspect structure
+print(bib[1:3])
+
+# Access fields programmatically
+keys <- names(bib)
+years <- vapply(bib, function(x) x$year %||% NA_character_, character(1))
 ```
 
-**期待結果：** 新しいエントリが完全なメタデータと標準化された引用キーでデータベースに追加される。
+**Expected:** A `BibEntry` object containing all entries from the file. Entry count
+matches the number of `@article{`, `@book{`, etc. blocks in the file.
 
-**失敗時：** DOIの解決に失敗した場合は、DOIの正確性を確認する。APIレート制限に達した場合は、リクエスト間に遅延を入れるか、手動でエントリを作成する。
+**On failure:** If parsing fails, check for unmatched braces or invalid UTF-8 in the
+.bib file. Run `bibtex::read.bib()` as a fallback with stricter parsing.
 
-### ステップ3: 重複の検出と解決
-
-重複エントリを特定して解決する：
-
-1. **完全一致**: DOI、タイトル、または著者＋年の組み合わせで完全一致を検索する。
-2. **あいまい一致**: タイトルの類似度（レーベンシュタイン距離、コサイン類似度）を用いてほぼ重複を検出する。
-3. **引用キーの衝突**: 同じ引用キーを持つ異なるエントリを特定する。
-4. **解決**: 重複が確認されたペアについて、より完全なエントリを保持するか、フィールドをマージする。
-5. **記録**: 削除または統合されたエントリをログに記録する。
-
-**期待結果：** すべての重複が特定され、解決方法（保持、マージ、削除）が文書化される。
-
-**失敗時：** あいまい一致で偽陽性が多い場合は、類似度の閾値を上げる。同じタイトルで異なるバージョン（プレプリントと出版版）の場合は、両方を保持して注記を追加する。
-
-### ステップ4: 引用キーの標準化
-
-すべての引用キーを一貫した命名規則に統一する：
-
-1. **現在のキーの分析**: 既存の引用キーのパターンを分析する。
-2. **命名規則の適用**: 指定された命名規則（例：`AuthorYear`→`Smith2024`、`Author_Year_Short`→`Smith_2024_NatComm`）を適用する。
-3. **衝突の回避**: 同じキーが生成される場合は、サフィックス（a、b、c）を追加する。
-4. **参照の更新**: `.tex`ファイル内の`\cite{}`コマンドも同時に更新する（提供されている場合）。
-
-**期待結果：** すべての引用キーが一貫した命名規則に従い、衝突がない。
-
-**失敗時：** 関連する`.tex`ファイルが提供されていない場合は、引用キーの変更マッピングを出力し、ユーザーに手動更新を依頼する。
-
-### ステップ5: データベースの書き出しと検証
-
-更新されたデータベースを保存し、最終検証を行う：
-
-1. **書き出し**: `WriteBib()`を使用して更新された`.bib`ファイルを書き出す。
-2. **再読み込みテスト**: 書き出されたファイルを再度読み込み、エラーが発生しないことを確認する。
-3. **差分の確認**: 元のファイルとの差分を確認し、意図しない変更がないことを検証する。
-4. **バックアップ**: 元のファイルのバックアップを作成する。
+### Step 3: Generate Entries from Identifiers
 
 ```r
-WriteBib(bib, file = "references_updated.bib")
-bib_check <- ReadBib("references_updated.bib", check = "error")
+# From DOI
+entry_doi <- RefManageR::GetBibEntryWithDOI("10.1093/bioinformatics/btz848")
+
+# From a vector of DOIs
+dois <- c("10.1093/bioinformatics/btz848", "10.1038/s41586-020-2649-2")
+entries <- do.call(c, lapply(dois, function(d) {
+  tryCatch(
+    RefManageR::GetBibEntryWithDOI(d),
+    error = function(e) {
+      warning(sprintf("Failed to fetch DOI %s: %s", d, e$message))
+      NULL
+    }
+  )
+}))
+entries <- Filter(Negate(is.null), entries)
 ```
 
-**期待結果：** 更新されたBibTeXファイルがエラーなく書き出され、再読み込みで正常に検証される。
+**Expected:** BibEntry objects with complete metadata (title, author, journal, year,
+DOI) for each successfully resolved identifier.
 
-**失敗時：** 書き出し時にエンコーディングエラーが発生した場合は、UTF-8エンコーディングを明示的に指定する。再読み込み時にエラーが発生した場合は、書き出されたファイルの該当箇所を手動で確認する。
+**On failure:** DOI resolution depends on the CrossRef API. If requests fail, check
+network connectivity and whether the DOI is valid. Rate limiting may apply for
+large batches; add `Sys.sleep(1)` between requests.
 
-## バリデーション
+### Step 4: Merge Multiple Bibliographies
 
-- [ ] BibTeXファイルが正常に読み込まれ、パースエラーがない
-- [ ] 各エントリタイプの必須フィールドがすべて存在する
-- [ ] 重複エントリが検出され、解決されている
-- [ ] 引用キーが一貫した命名規則に従っている
-- [ ] 引用キーの衝突がない
-- [ ] ファイルのエンコーディングがUTF-8である
-- [ ] 更新されたファイルが再読み込みで正常に検証される
+```r
+bib1 <- RefManageR::ReadBib("project_a.bib", check = FALSE)
+bib2 <- RefManageR::ReadBib("project_b.bib", check = FALSE)
 
-## よくある落とし穴
+# Simple merge
+merged <- c(bib1, bib2)
+message(sprintf("Merged: %d + %d = %d entries (before dedup)",
+                length(bib1), length(bib2), length(merged)))
+```
 
-- **LaTeXエスケープとUnicodeの混在**: 同じファイル内で`{\"o}`と`ö`を混在させると、一部のツールで問題が発生する。どちらか一方に統一すること。
-- **必須フィールドの欠落**: `article`タイプには`author`、`title`、`journal`、`year`が必須。これらが欠けるとLaTeXコンパイル時に警告が出る。
-- **引用キーの特殊文字**: 引用キーにスペース、日本語文字、特殊記号を使用しないこと。英数字、ハイフン、アンダースコアのみを使用する。
-- **DOI APIのレート制限**: 大量のDOIを一度に解決しようとするとAPIレート制限に達する可能性がある。バッチ処理時は遅延を入れること。
-- **バックアップの忘れ**: 大規模な変更を行う前に必ず元のファイルをバックアップすること。
+**Expected:** A combined BibEntry object containing entries from both files.
 
-## 関連スキル
+Regenerating keys after a merge is a separate job, and RefManageR gives you both
+halves: `names(bib)` returns the citation keys and `names(bib) <- new_keys` writes
+them back, so `names(bib)[1] <- "newkey"` renames a single entry. Do not assume the
+keys you assign survive verbatim — both `names<-` and `c()` push their result
+through `make.unique(keys, sep = ":")`, so a second `Smith2020` becomes
+`Smith2020:1`; `c()` therefore never drops an entry, but a collision you did not
+disambiguate yourself reaches the output .bib as a colon-suffixed key.
+Disambiguate first (`Smith2020a`/`Smith2020b`, a coauthor name, or a title word),
+then re-read `names(bib)` and keep the old-to-new pairing — every `@key` in an
+.Rmd or .qmd body still names the old key.
 
-- `format-citations` -- BibTeXデータベースを使用した引用のフォーマット
-- `validate-references` -- 参考文献の整合性と正確性の検証
+### Step 5: Deduplicate Entries
+
+```r
+deduplicate_bib <- function(bib, method = "both") {
+  n_before <- length(bib)
+  keys_to_remove <- c()
+
+  for (i in seq_along(bib)) {
+    if (names(bib)[i] %in% keys_to_remove) next
+    for (j in seq(i + 1, length(bib))) {
+      if (j > length(bib)) break
+      if (names(bib)[j] %in% keys_to_remove) next
+
+      is_dup <- FALSE
+      if (method %in% c("doi", "both")) {
+        doi_i <- bib[[i]]$doi %||% ""
+        doi_j <- bib[[j]]$doi %||% ""
+        if (nzchar(doi_i) && nzchar(doi_j) && tolower(doi_i) == tolower(doi_j)) {
+          is_dup <- TRUE
+        }
+      }
+      if (!is_dup && method %in% c("title", "both")) {
+        title_i <- tolower(gsub("[^a-z0-9 ]", "", tolower(bib[[i]]$title %||% "")))
+        title_j <- tolower(gsub("[^a-z0-9 ]", "", tolower(bib[[j]]$title %||% "")))
+        if (nzchar(title_i) && nzchar(title_j)) {
+          sim <- 1 - stringdist::stringdist(title_i, title_j, method = "jw")
+          if (sim > 0.95) is_dup <- TRUE
+        }
+      }
+      if (is_dup) keys_to_remove <- c(keys_to_remove, names(bib)[j])
+    }
+  }
+
+  if (length(keys_to_remove) > 0) {
+    bib <- bib[!names(bib) %in% keys_to_remove]
+  }
+  message(sprintf("Deduplication: %d -> %d entries (%d duplicates removed)",
+                  n_before, length(bib), n_before - length(bib)))
+  bib
+}
+
+merged <- deduplicate_bib(merged, method = "both")
+```
+
+**Expected:** Duplicate entries removed. Count of removed duplicates printed.
+
+**On failure:** If title comparison is too aggressive (removing non-duplicates), raise
+the similarity threshold above 0.95 or switch to `method = "doi"` only.
+
+### Step 6: Sort and Export
+
+```r
+# Sort by citation key
+sorted_bib <- sort(merged, sorting = "nyt")  # name-year-title
+
+# Export to .bib file
+RefManageR::WriteBib(sorted_bib, file = "references.bib", biblatex = FALSE)
+message(sprintf("Wrote %d entries to references.bib", length(sorted_bib)))
+```
+
+**Expected:** A clean .bib file written to disk with consistent formatting, one entry
+per block, sorted alphabetically by citation key.
+
+**On failure:** If WriteBib produces encoding issues, ensure the R session locale
+supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
+
+## Validation
+
+- [ ] Output .bib file parses without errors: `RefManageR::ReadBib("references.bib")`
+- [ ] Entry count matches expectations (input count minus duplicates)
+- [ ] No duplicate DOIs remain: all DOIs in output are unique
+- [ ] All entries have a citation key
+- [ ] Required fields present per entry type (author, title, year at minimum)
+- [ ] File is valid BibTeX (test with `bibtex::read.bib()`)
+
+## Common Pitfalls
+
+- **Encoding issues**: .bib files with Latin-1 accents break UTF-8 parsers. Convert
+  encoding first: `iconv -f ISO-8859-1 -t UTF-8 old.bib > new.bib`
+- **Unmatched braces**: A single missing `}` silently drops entries. Validate brace
+  balance before parsing large files
+- **DOI rate limiting**: CrossRef throttles unauthenticated requests. Set a polite
+  email with `RefManageR::BibOptions(check.entries = FALSE)` and batch requests
+- **Key collisions**: Merging files where both have `Smith2020` does not overwrite
+  either entry — `c.BibEntry` routes the combined keys through
+  `make.unique(keys, sep = ":")`, so the second becomes `Smith2020:1`. Nothing is
+  lost, but a colon-suffixed key you did not choose reaches the output `.bib` and
+  no longer matches the `@Smith2020` in your document. Disambiguate before merging
+- **LaTeX in titles**: Titles with `{DNA}` or `$\alpha$` need careful handling;
+  RefManageR preserves these but downstream tools may strip them
+
+## Related Skills
+
+- `format-citations` - format the bibliography entries into styled citations
+- `validate-references` - verify completeness and DOI resolution of .bib entries
+- `../reporting/format-apa-report` - generate APA-formatted reports using bibliographies
+- `../r-packages/write-vignette` - create package vignettes that cite references

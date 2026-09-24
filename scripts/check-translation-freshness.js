@@ -15,6 +15,8 @@ import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
 import { resolve, dirname, basename, join } from 'path';
 import { fileURLToPath } from 'url';
 import { assertNotShallow, createFreshnessChecker, buildLatestCommitMap } from './lib/git-freshness.js';
+import { CONTENT_TYPES } from './lib/content-types.js';
+import { SOURCE_COMMIT_FIELD, readFrontmatterField } from './lib/provenance.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -23,22 +25,24 @@ const WARN_ONLY = process.argv.includes('--warn');
 
 /**
  * Extract source_commit from a translated file's frontmatter.
+ *
+ * The shared reader (#552). The regex this replaces was line-anchored but not
+ * FRONTMATTER-anchored, so a `source_commit:` at column 0 inside a ```yaml fence — the shape
+ * `i18n/README.md` itself documents — read as this file's own metadata. Measured across the
+ * corpus at the swap: 2,571 stale before and after.
+ *
+ * This is the last of three hand-rolled copies of this reader, each with a different regex and
+ * a different bug. That there were three is why `source_commit` could be read one way by the
+ * staleness gate and another by the status generator without anything noticing.
  */
 function extractSourceCommit(filePath) {
-  const content = readFileSync(filePath, 'utf8');
-  const match = content.match(/^\s*source_commit:\s*["']?([a-f0-9]+)["']?/m);
-  return match ? match[1] : null;
+  return readFrontmatterField(readFileSync(filePath, 'utf8'), SOURCE_COMMIT_FIELD);
 }
 
-/**
- * Extract locale from a translated file's frontmatter.
- */
-function extractLocale(filePath) {
-  const content = readFileSync(filePath, 'utf8');
-  const match = content.match(/^  locale:\s*["']?([a-zA-Z-]+)["']?/m)
-    || content.match(/^locale:\s*["']?([a-zA-Z-]+)["']?/m);
-  return match ? match[1] : null;
-}
+// `extractLocale` used to sit here: a fourth hand-rolled frontmatter reader, not anchored to the
+// frontmatter block, and called by nothing — the locale comes from the directory walk below.
+// Deleted rather than routed through the shared reader (#552), because an unused reader is a
+// waiting inconsistency: the next person to need a locale would have found two of them.
 
 // A shallow clone would make every translation read as fresh (#279/#362).
 assertNotShallow(ROOT);
@@ -66,7 +70,7 @@ function resolveSourcePath(locale, contentType, itemPath) {
 
 // ── Main ─────────────────────────────────────────────────────────
 
-const contentTypes = ['skills', 'agents', 'teams', 'guides'];
+const contentTypes = CONTENT_TYPES;
 let staleCount = 0;
 let checkedCount = 0;
 let orphanCount = 0;

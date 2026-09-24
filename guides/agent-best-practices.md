@@ -258,6 +258,54 @@ Every agent declares an `intent`: `advisory` (reviews, plans, analyzes — no `W
 
 Historically the review agents (security-analyst, senior-software-developer, etc.) were kept deliberately read-only to enforce a hard review/implementation split. That convention was retired (#285): in practice a reviewer that cannot even write its own findings, summary, or the fix it just recommended created more friction than separation. Those agents are now `implementing` — they default to proposing and reviewing first, but can apply changes and author their own outputs.
 
+The same reasoning retired the *execution* split for `advocatus-diaboli` (#614). A reviewer without `Bash` cannot run the gate it is reviewing, so it reports "this test may not discriminate the fix from the bug" where it could report a measured count of failures after reverting the fix (the figure in #614 is from that issue's own investigation, not re-run here). This repository's own standard is executable — CLAUDE.md § Proving a Gate Can Fail says a green check is evidence about the *check* — and a reviewer that cannot break the subject cannot apply it.
+
+**Which reviewer, when a finding needs execution.** Use `advocatus-diaboli` as the default PR reviewer; it now carries `Bash`, so ask it for a measured verdict rather than an inference. Three things follow:
+
+- **A finding that names an experiment is worth less than one carrying its result.** If the reviewer had the tools and still reports an inference, push back in the review round — but still re-run what it *did* measure. A measured verdict is a self-report from the one actor that can now shape what it measures, so it names the command, quotes the output verbatim, and states the sha it ran at; `tools/fact-sheet.sh` is that shape.
+- **The PR body is not in the repository.** A review of the files alone cannot catch overclaiming that lives only in the description, which is where the claim reaches a human. Either let the reviewer fetch it with `gh`, or put it in the bundle — `tools/review-bundle.sh --body` exists for this.
+- **The spawner still checks.** A worktree-isolated reviewer sees `main`, not your branch, and a bundle cut at a named sha deliberately hides the working tree. Say which situation applies in the brief; otherwise the reviewer reasons about code it cannot reach.
+
+**Spawning a reviewer that carries Bash.** The benefit and the hazard are the same
+configuration: a worktree-isolated reviewer sees `main`, so the only spawn shape in which it
+can actually run the gate on your change is the shared checkout — or a worktree the spawner
+prepares on the PR branch by hand (`git worktree add <path> <branch>`). Say which the brief
+uses. In the shared checkout, four things are not optional:
+
+1. **Bracket the spawn with the guard** — `npm run guard:snapshot` before, `npm run
+   guard:verify` after, per CLAUDE.md § Guarding a Multi-Agent Run. `git status` cannot see a
+   subagent that committed.
+2. **Measure and restore.** Commands that leave the tree as they found it: the suite,
+   `npm run mutation-check` (which restores from an in-memory buffer), `gh pr view`. A
+   `--write` flag does not restore, and `git stash` / `checkout` / `reset` are off the table
+   in a tree someone else is editing — a read-only probe agent once typed a bare normalizer
+   command and silently rewrote 281 files (#486).
+3. **`gh` read verbs only.** A Bash spawn inherits the caller's `gh` auth, which in this
+   repository is the maintainer with `bypass_actors`. The verdict reaches a human through the
+   report, never through `merge`, `review --approve`, `comment` or `close` — the reviewer is
+   the actor that decides "reviewed", so it must not also be the actor that acts on it.
+4. **Carry the `REPO_SAFETY` preamble** from `workflows/_template.mjs`, all of it: `mktemp -d`
+   rather than a shared path; `cd "${DIR:?}" || exit 1`; a braced absolute path under that
+   directory in every destructive command (`rm -rf "${DIR:?}/fixtures"`, never
+   `rm -rf fixtures` and never a bare `"$DIR/fixtures"`); a braced `git rev-parse
+   --show-toplevel` assertion (`= "${DIR:?}"`, because outside any repository the unbraced form
+   compares `""` to `""` and passes) before `git add`, `git commit`, or a tool run with a write
+   flag; and never
+   `git commit`, `git update-index` or `git checkout --` against the repository itself.
+
+   The scope of that assertion is the reason the absolute-path rule is needed at all. It
+   guards the `git` and write-flag steps, which is narrower than "anything destructive" — an
+   `rm` is outside it. So before this rule, `cd "$DIR" || exit 1` — unbraced, as it then was —
+   really was the sole control standing between a sandbox and the repository for every `rm` an
+   agent ran, and it is weaker than it looks, since `cd ""` returns 0 without moving. And
+   agents do write relative `rm`s there, sized and graded in
+   `tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md` (quote the counts from that file,
+   not from here). The brace closes the
+   hole the fix would otherwise open: `cd ""` returns 0 without moving, so an unset `DIR`
+   leaves the agent in the repository and expands the unbraced form to `/fixtures`.
+
+Withholding execution is still legitimate **per use**: `teams/empirical-disclosure.md` spawns `advocatus-diaboli` without `Bash` for its Gate A, because that gate's whole point is re-derivation from an already-captured artifact. That constraint now lives in the team's CONFIG block, where a reader can see it, rather than in the absence of a tool.
+
 You still control the review/implementation boundary per *use*, not per *agent*. When you want domain expertise to inform work that a different worker carries out, use one of these patterns:
 
 ### Pattern 1: Expert Brief + General Implementer (Recommended)
@@ -287,7 +335,7 @@ The agent has Write/Edit access AND domain knowledge from the prompt.
 
 For frequently needed combinations, create a dedicated agent (e.g., `security-implementer`) with `tools: [Read, Write, Edit, Bash, Grep, Glob]` and the same skills as the review agent. Only do this when Pattern 1 creates friction in repeated workflows.
 
-Pattern 1 is preferred because it maintains the review/implementation separation and avoids agent proliferation.
+Pattern 1 is preferred because it maintains the review/implementation separation. That is not in tension with the reviewer carrying `Bash`: the split to preserve is **implementation**, and Bash is for **measurement** — commands that leave the tree as they found it. Measure with the reviewer; implement through Pattern 1 and avoids agent proliferation.
 
 ## Quality Assurance
 

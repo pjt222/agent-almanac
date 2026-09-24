@@ -18,7 +18,7 @@ metadata:
   domain: esoteric
   complexity: advanced
   language: natural
-  tags: esoteric, heal, self-repair, subsystem-assessment, meta-cognition, ai-self-application
+  tags: esoteric, healing, self-assessment, meta-cognition, subsystem-check
 ---
 
 # Heal（自我修复）

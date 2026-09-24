@@ -84,23 +84,24 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 
 依目標受眾擇題。
 
+List all available themes:
+
 ```r
-# List all available themes
 get_diagram_themes()
-
-# Standard themes
-# "light"   — Default, bright colors
-# "dark"    — For dark mode environments
-# "auto"    — GitHub-adaptive with solid colors
-# "minimal" — Grayscale, print-friendly
-# "github"  — Optimized for GitHub README files
-
-# Colorblind-safe themes (viridis family)
-# "viridis" — Purple→Blue→Green→Yellow, general accessibility
-# "magma"   — Purple→Red→Yellow, high contrast for print
-# "plasma"  — Purple→Pink→Orange→Yellow, presentations
-# "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
 ```
+
+Standard themes
+- "light"   — Default, bright colors
+- "dark"    — For dark mode environments
+- "auto"    — GitHub-adaptive with solid colors
+- "minimal" — Grayscale, print-friendly
+- "github"  — Optimized for GitHub README files
+
+Colorblind-safe themes (viridis family)
+- "viridis" — Purple→Blue→Green→Yellow, general accessibility
+- "magma"   — Purple→Red→Yellow, high contrast for print
+- "plasma"  — Purple→Pink→Orange→Yellow, presentations
+- "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
 
 他參：
 - `direction`：圖向——`"TD"`（上下，默）、`"LR"`（左右）、`"RL"`、`"BT"`

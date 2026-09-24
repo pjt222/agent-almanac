@@ -1,18 +1,11 @@
 name: CI Scripts
 on:
+  # No `paths:` filter, deliberately (#641): a REQUIRED status check that does not run sits on
+  # "Expected — waiting for status to be reported" and refuses the merge forever, so only an
+  # unfiltered workflow can be required.
   push:
     branches: [main]
-    paths:
-      - 'scripts/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/ci-scripts.yml'
   pull_request:
-    paths:
-      - 'scripts/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/ci-scripts.yml'
   workflow_dispatch:
 
 permissions:
@@ -23,10 +16,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
+
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'npm'
+      # memory-blocks.test.js EXECUTES the python blocks the memory skills ship, rather than
+      # reading them. The runner image happens to carry a python3, but a suite whose subject is
+      # "this fenced code actually runs" must not depend on which interpreter the image ships
+      # this month — and the test refuses to skip when python3 is absent, so an implicit
+      # dependency would go red rather than quiet.
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
       - run: npm ci
       # These tests build their own throwaway git repos, so they need neither
       # the corpus nor full history — `fetch-depth: 0` would only slow them.

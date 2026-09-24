@@ -17,6 +17,7 @@ metadata:
 locale: zh-CN
 source_locale: en
 source_commit: ecece0b7
+fence_basis_commit: ecece0b7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 ---

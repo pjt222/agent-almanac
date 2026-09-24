@@ -1,15 +1,13 @@
 ---
 name: configure-nginx
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Configurar Nginx como servidor web y proxy inverso con terminación TLS, balanceo de
-  carga, caché, y cabeceras de seguridad. Cubrir la configuración de hosts virtuales,
-  upstreams, rate limiting, y optimización de rendimiento. Usar cuando se necesite servir
-  contenido estático, hacer proxy de aplicaciones backend, o configurar HTTPS.
+  Configure Nginx as a web server and reverse proxy. Covers static file
+  serving, reverse proxy to upstream services, SSL/TLS termination with
+  Let's Encrypt, location blocks, load balancing, rate limiting, and
+  security headers. Use when serving static files in production, reverse
+  proxying to backend services (Node.js, Python, R/Shiny), terminating
+  SSL/TLS, load balancing across instances, or adding rate limiting and
+  security headers to harden an endpoint.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -18,208 +16,275 @@ metadata:
   domain: containerization
   complexity: intermediate
   language: multi
-  tags: nginx, web-server, reverse-proxy, tls, load-balancing
+  tags: nginx, reverse-proxy, ssl, tls, lets-encrypt, web-server, security-headers
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Configurar Nginx
+# Configure Nginx
 
-Configurar Nginx como servidor web y proxy inverso con mejores prácticas de seguridad y rendimiento.
+Set up Nginx as a web server and reverse proxy with SSL termination and security hardening.
 
-## Cuándo Usar
+## When to Use
 
-- Sirviendo contenido estático con alto rendimiento
-- Configurando proxy inverso para aplicaciones backend
-- Habilitando terminación TLS/HTTPS
-- Implementando balanceo de carga entre múltiples instancias
-- Configurando rate limiting y cabeceras de seguridad
-- Haciendo proxy de aplicaciones WebSocket
+- Serving static files (HTML, CSS, JS) in production
+- Reverse proxying to backend services (Node.js, Python, Go, R/Shiny)
+- Terminating SSL/TLS with Let's Encrypt certificates
+- Load balancing across multiple backend instances
+- Adding rate limiting and security headers
 
-## Entradas
+## Inputs
 
-- **Requerido**: Servicios backend a los que hacer proxy (direcciones y puertos)
-- **Requerido**: Nombres de dominio para hosts virtuales
-- **Opcional**: Certificados TLS (o usar Let's Encrypt)
-- **Opcional**: Reglas de caché para contenido estático
-- **Opcional**: Configuración de rate limiting
+- **Required**: Deployment target (Docker container or bare metal)
+- **Required**: Backend service(s) to proxy (host:port)
+- **Optional**: Domain name for SSL
+- **Optional**: Static file directory
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Instalar y Configurar Nginx Base
+### Step 1: Basic Reverse Proxy
 
-```bash
-# Instalar Nginx
-sudo apt-get update && sudo apt-get install -y nginx
-
-# O usar Docker
-docker run -d -p 80:80 -p 443:443 \
-  -v ./nginx.conf:/etc/nginx/nginx.conf:ro \
-  -v ./ssl:/etc/nginx/ssl:ro \
-  nginx:1.25-alpine
-```
-
-Configuración principal (`/etc/nginx/nginx.conf`):
+`nginx.conf`:
 
 ```nginx
-user nginx;
-worker_processes auto;
-error_log /var/log/nginx/error.log warn;
-pid /var/run/nginx.pid;
-
 events {
     worker_connections 1024;
-    multi_accept on;
 }
 
 http {
-    include /etc/nginx/mime.types;
-    default_type application/octet-stream;
+    upstream app {
+        server app:3000;
+    }
 
-    # Logging
-    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
-                    '$status $body_bytes_sent "$http_referer" '
-                    '"$http_user_agent"';
-    access_log /var/log/nginx/access.log main;
+    server {
+        listen 80;
+        server_name example.com;
 
-    # Rendimiento
-    sendfile on;
-    tcp_nopush on;
-    tcp_nodelay on;
-    keepalive_timeout 65;
-    gzip on;
-    gzip_types text/plain text/css application/json application/javascript;
-
-    # Incluir configuraciones de sitios
-    include /etc/nginx/conf.d/*.conf;
+        location / {
+            proxy_pass http://app;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
 }
 ```
 
-**Esperado:** Nginx instalado y ejecutándose, configuración base optimizada para rendimiento.
+Docker Compose service:
 
-**En caso de fallo:** Validar configuración con `nginx -t`, revisar logs de error.
+```yaml
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+```
 
-### Paso 2: Configurar Proxy Inverso
+**Expected:** Requests to port 80 are forwarded to the app service.
+
+### Step 2: Static File Serving
 
 ```nginx
-# /etc/nginx/conf.d/app.conf
-upstream backend {
-    server app1:8000;
-    server app2:8000;
-    server app3:8000;
-}
-
 server {
     listen 80;
-    server_name ejemplo.com www.ejemplo.com;
+    root /usr/share/nginx/html;
+    index index.html;
 
-    # Redirigir HTTP a HTTPS
-    return 301 https://$server_name$request_uri;
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$ {
+        expires 6M;
+        add_header Cache-Control "public";
+    }
+}
+```
+
+### Step 3: SSL/TLS with Let's Encrypt
+
+Using certbot with the webroot method:
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
 }
 
 server {
-    listen 443 ssl http2;
-    server_name ejemplo.com www.ejemplo.com;
+    listen 443 ssl;
+    server_name example.com;
 
-    # TLS
-    ssl_certificate /etc/nginx/ssl/cert.pem;
-    ssl_certificate_key /etc/nginx/ssl/key.pem;
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
     ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
 
-    # Cabeceras de seguridad
-    add_header X-Frame-Options DENY;
-    add_header X-Content-Type-Options nosniff;
-    add_header X-XSS-Protection "1; mode=block";
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-
-    # Proxy al backend
     location / {
-        proxy_pass http://backend;
+        proxy_pass http://app;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
-
-    # Contenido estático
-    location /static/ {
-        alias /var/www/static/;
-        expires 30d;
-        add_header Cache-Control "public, immutable";
-    }
 }
 ```
 
-**Esperado:** El proxy inverso enruta tráfico al backend, TLS configurado, cabeceras de seguridad presentes.
+Docker Compose with certbot:
 
-**En caso de fallo:** Verificar resolución DNS de upstreams, comprobar certificados TLS, probar con `curl -v`.
+```yaml
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - certbot-webroot:/var/www/certbot:ro
+      - certbot-certs:/etc/letsencrypt:ro
 
-### Paso 3: Configurar Rate Limiting
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot-webroot:/var/www/certbot
+      - certbot-certs:/etc/letsencrypt
+
+volumes:
+  certbot-webroot:
+  certbot-certs:
+```
+
+Initial certificate:
+
+```bash
+docker compose run --rm certbot certonly \
+  --webroot -w /var/www/certbot \
+  -d example.com --email admin@example.com --agree-tos
+```
+
+**Expected:** HTTPS works with valid Let's Encrypt certificate.
+
+**On failure:** Check DNS points to the server. Verify port 80 is open for ACME challenges.
+
+### Step 4: Security Headers
+
+```nginx
+server {
+    # ... SSL config above ...
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';" always;
+
+    # Hide Nginx version
+    server_tokens off;
+}
+```
+
+### Step 5: Rate Limiting
 
 ```nginx
 http {
-    # Definir zonas de rate limit
+    # Define rate limit zones
     limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
     limit_req_zone $binary_remote_addr zone=login:10m rate=1r/s;
 
     server {
-        # Rate limiting general para API
         location /api/ {
             limit_req zone=api burst=20 nodelay;
-            proxy_pass http://backend;
+            proxy_pass http://app;
         }
 
-        # Rate limiting estricto para login
-        location /api/login {
+        location /login {
             limit_req zone=login burst=5;
-            proxy_pass http://backend;
+            proxy_pass http://app;
         }
     }
 }
 ```
 
-**Esperado:** Los rate limits protegen el backend de abuso, las respuestas 429 se envían cuando se excede el límite.
+### Step 6: Load Balancing
 
-**En caso de fallo:** Ajustar tasas según el tráfico real, monitorizar respuestas 429 en logs.
-
-### Paso 4: Verificar Configuración
-
-```bash
-# Validar sintaxis
-sudo nginx -t
-
-# Recargar configuración (sin tiempo de inactividad)
-sudo nginx -s reload
-
-# Verificar respuesta
-curl -I https://ejemplo.com
-
-# Verificar cabeceras de seguridad
-curl -sI https://ejemplo.com | grep -E "X-Frame|X-Content|Strict"
+```nginx
+upstream app {
+    least_conn;
+    server app1:3000;
+    server app2:3000;
+    server app3:3000 backup;
+}
 ```
 
-**Esperado:** Nginx valida y recarga sin errores, las cabeceras de seguridad están presentes.
+| Method | Directive | Behavior |
+|---|---|---|
+| Round robin | (default) | Equal distribution |
+| Least connections | `least_conn` | Routes to least busy |
+| IP hash | `ip_hash` | Sticky sessions |
+| Weighted | `server app:3000 weight=3` | Proportional |
 
-**En caso de fallo:** Revisar logs de error (`/var/log/nginx/error.log`), verificar permisos de archivos.
+### Step 7: Test Configuration
 
-## Validación
+```bash
+# Test config syntax
+docker compose exec nginx nginx -t
 
-- [ ] Nginx inicia sin errores (`nginx -t` pasa)
-- [ ] El proxy inverso enruta correctamente al backend
-- [ ] TLS/HTTPS funciona con certificados válidos
-- [ ] Las cabeceras de seguridad están presentes en las respuestas
-- [ ] El rate limiting funciona según la configuración
-- [ ] El contenido estático se sirve con caché adecuada
-- [ ] Los logs capturan solicitudes y errores
+# Reload without downtime
+docker compose exec nginx nginx -s reload
 
-## Errores Comunes
+# Check response headers
+curl -I https://example.com
+```
 
-- **Olvidar `proxy_set_header Host`**: El backend no recibe el hostname correcto. Siempre establecer cabeceras de proxy.
-- **Certificados TLS expirados**: Configurar renovación automática con Let's Encrypt/certbot.
-- **Rate limiting demasiado agresivo**: Usuarios legítimos bloqueados. Comenzar conservador y ajustar.
-- **No habilitar gzip**: El tráfico de texto sin comprimir desperdicia ancho de banda. Habilitar gzip.
-- **Resolver DNS de upstreams al inicio**: Usar `resolver` para DNS dinámico con servicios en contenedores.
+**Expected:** `nginx -t` reports syntax OK. Headers include security headers.
 
-## Habilidades Relacionadas
+## Validation
 
-- `configure-reverse-proxy` - Patrones avanzados de proxy inverso con Traefik
-- `setup-compose-stack` - Integrar Nginx en stacks Docker Compose
-- `deploy-searxng` - Ejemplo práctico de Nginx como proxy para SearXNG
+- [ ] `nginx -t` reports configuration is valid
+- [ ] HTTP redirects to HTTPS (if SSL enabled)
+- [ ] Backend service is reachable through the proxy
+- [ ] Security headers present in response
+- [ ] Rate limiting triggers on excessive requests
+- [ ] SSL Labs test gives A+ rating (if public)
+
+## Common Pitfalls
+
+- **Missing `proxy_set_header Host`**: Backend receives wrong host header, breaking virtual hosts and redirects.
+- **`location` order matters**: Nginx uses the most specific match. Exact (`=`) > prefix (`^~`) > regex (`~`) > general prefix.
+- **SSL certificate renewal**: Set up a cron or timer to run `certbot renew` and reload Nginx.
+- **Large request bodies**: Default `client_max_body_size` is 1MB. Increase for file uploads: `client_max_body_size 50m;`.
+- **WebSocket proxying**: Requires additional headers. See `configure-reverse-proxy` for the pattern.
+
+## Related Skills
+
+- `configure-reverse-proxy` - multi-tool proxy patterns including WebSocket and Traefik
+- `setup-compose-stack` - compose stack that includes Nginx
+- `deploy-searxng` - uses Nginx as frontend for SearXNG
+- `configure-ingress-networking` - Kubernetes ingress (NGINX Ingress Controller)

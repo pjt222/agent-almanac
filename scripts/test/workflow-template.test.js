@@ -8,8 +8,19 @@
  * new workflow would start broken, before its author had written a line.
  *
  * The recipe is duplicated in four places (the template, the guide, the skill,
- * and workflows/README.md), so this test pins the template against the recipe
- * rather than against any one copy of it.
+ * and workflows/README.md). This test pins the TEMPLATE against the recipe as
+ * executed here; the transform itself is pinned byte for byte in
+ * `mutation-parse.test.js`, where `wrapWorkflow` now lives. What nothing checks
+ * is those four prose copies against that function, or any of them against the
+ * runtime — stated so the gap is not mistaken for coverage.
+ *
+ * The WRAP itself is imported from `scripts/lib/mutation-parse.js` rather than
+ * re-implemented here (#758 review S-C): the mutation gate checks workflow
+ * mutants with the same transform, and a second copy is how two copies drift.
+ * The COMMAND stays the documented one — bare `node --check -`, the CommonJS
+ * goal — because this test's subject is the recipe an author is told to run.
+ * The gate deliberately uses the stricter module goal; that difference is
+ * argued in mutation-parse.js and is a property of the gate, not of the recipe.
  */
 
 import { test } from 'node:test';
@@ -18,14 +29,14 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { wrapWorkflow } from '../lib/mutation-parse.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const WORKFLOWS = join(ROOT, 'workflows');
 
 /** The documented check: strip `export` from meta, wrap, and parse. */
 function wrapCheck(file) {
-  const source = readFileSync(file, 'utf8').replace(/^\s*export const meta/m, 'const meta');
-  const wrapped = `(async()=>{\n${source}\n})()`;
+  const wrapped = wrapWorkflow(readFileSync(file, 'utf8'));
   const r = spawnSync(process.execPath, ['--check', '-'], { input: wrapped, encoding: 'utf8' });
   return { ok: r.status === 0, stderr: r.stderr || '' };
 }

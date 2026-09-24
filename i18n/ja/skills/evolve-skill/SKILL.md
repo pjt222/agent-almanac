@@ -102,7 +102,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 |---|---|---|
 | スキルID | 変更なし | 新しいID: `<skill>-advanced` |
 | ファイルパス | 同じSKILL.md | 新しいディレクトリ |
-| バージョンバンプ | パッチまたはマイナー | 1.0から開始 |
+| バージョンバンプ | マイナー（破壊的変更の場合のみメジャー） | 1.0から開始 |
 | 複雑度 | 増加する場合がある | 元よりも高い |
 | レジストリ | 新しいエントリなし | 新しいエントリを追加 |
 | シンリンク | 変更なし | 新しいシンリンクが必要 |
@@ -122,14 +122,12 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 
 既存のSKILL.mdを直接編集する:
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- 編集のために開く
+- 手順ステップを追加/改訂する
+- Expected/On failureペアを強化する
+- テーブルや例を追加する
+- 使用タイミングのトリガーを更新する
+- スコープが変わった場合、入力を改訂する
 
 これらの編集ルールに従う:
 - 既存のすべてのセクションを保持する — コンテンツを追加し、セクションを削除しない
@@ -176,15 +174,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. 現在のソースコミットハッシュを取得する:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 各翻訳ファイルのフロントマターで `source_commit` を更新する:
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 影響を受けるロケールをコミットメッセージに含めて、再翻訳のためにファイルにフラグを立てる:
@@ -216,12 +213,12 @@ npm run translation:status
 
 ### ステップ5: バージョンとメタデータを更新する
 
-semver規則に従ってフロントマターの `version` フィールドをバンプする:
+フロントマターの `version` フィールドをバンプする:
 
 | 変更タイプ | バージョンバンプ | 例 |
 |---|---|---|
-| タイポ修正、言い回しの明確化 | パッチ: 1.0 → 1.1 | ステップ3の不明確な文を修正 |
-| 新しいステップ、新しいピットフォール、新しいテーブル | マイナー: 1.0 → 2.0 | エッジケース処理のためのステップ7を追加 |
+| タイポ修正、言い回しの明確化 | マイナー: 1.0 → 1.1 | ステップ3の不明確な文を修正 |
+| 新しいステップ、新しいピットフォール、新しいテーブル | マイナー: 1.0 → 1.1 | エッジケース処理のためのステップ7を追加 |
 | 手順の再構築、入力の変更 | メジャー: 1.0 → 2.0 | 5ステップから8ステップへの再編成 |
 
 また以下も更新する:

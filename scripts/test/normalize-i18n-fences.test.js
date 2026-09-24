@@ -16,11 +16,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, cpSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { rmTree } from './_tmp.js';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SCRIPT = 'scripts/normalize-i18n-fences.js';
@@ -60,7 +61,7 @@ function translatedSkill(sourceCommit) {
  */
 function makeFixture(t) {
   const dir = mkdtempSync(join(tmpdir(), 'norm-fences-'));
-  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  t.after(() => rmTree(dir));
 
   mkdirSync(join(dir, 'scripts'), { recursive: true });
   cpSync(join(REPO, SCRIPT), join(dir, SCRIPT));
@@ -946,4 +947,268 @@ test('--fork-threshold refuses a whitespace value instead of coercing it to 0', 
     assert.equal(r.status, 2, `'${value}' was accepted: ${r.stdout}`);
     assert.match(r.stderr, /must be a decimal in \[0, 1\]/);
   }
+});
+
+test('a template in the skills tree is not a target either', async (t) => {
+  // The arm above proves the property for the FLAT trees only, while its comment claims
+  // it generally. It did not hold for `skills/`, which is the tree holding most of the
+  // corpus: `contentKey` applied the `_`-prefix exclusion in the flat branch alone, so
+  // `skills/_template/SKILL.md` keyed to `skills/_template` and the English history index
+  // carried it. Unreachable in the real corpus only because no locale happens to carry a
+  // translated template — which is ambient state, not a guarantee (#519).
+  const { dir } = makeFixture(t);
+
+  const english = [
+    '---', 'name: skill-name', 'description: Template.', '---', '',
+    '# Template', '', '## Procedure', '',
+    '```bash', 'echo english', '```', '',
+  ].join('\n');
+  mkdirSync(join(dir, 'skills', '_template'), { recursive: true });
+  writeFileSync(join(dir, 'skills', '_template', 'SKILL.md'), english, 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'add a template to the skills tree']);
+
+  const translated = join(dir, 'i18n', 'de', 'skills', '_template', 'SKILL.md');
+  mkdirSync(dirname(translated), { recursive: true });
+  writeFileSync(
+    translated,
+    ['---', 'name: skill-name', 'locale: de', '---', '', '# Vorlage', '',
+      '```bash', 'echo uebersetzt', '```', ''].join('\n'),
+    'utf8',
+  );
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'add a translated template']);
+
+  const r = run(dir, ['--tree', 'skills', '--write']);
+
+  assert.equal(r.status, 0, r.stderr);
+  // Positive control, as the flat arm has: without it both assertions below pass vacuously
+  // if `--write` stopped writing at all. `demo-skill` is divergent and must still be repaired.
+  assert.match(r.stdout, /files changed: 1/);
+  const after = readFileSync(translated, 'utf8');
+  assert.ok(after.includes('echo uebersetzt'), 'the skills template was treated as content');
+  // Not a target, not merely unwritten — same distinction the flat arm asserts.
+  assert.doesNotMatch(r.stdout, /_template/, 'the skills template reached the skipped list');
+});
+
+// ── #674: the splice gate's alignment fold ──────────────────────────────────
+
+/**
+ * A fixture built for `--root`, not for `cwd`.
+ *
+ * Every other fixture in this file COPIES `scripts/` into the temp repo, because the tool
+ * resolved its root from `__dirname/..` and there was no other way to point it at a corpus you
+ * constructed. #674 gave it `--root`, so this one runs the REAL script against a fixture — which
+ * is the whole reason the defect below could not be demonstrated end to end when it was filed.
+ */
+function braceFixture(t) {
+  const dir = mkdtempSync(join(tmpdir(), 'norm-brace-'));
+  t.after(() => rmTree(dir));
+
+  git(dir, ['init', '-b', 'main']);
+  git(dir, ['config', 'user.email', 'test@example.invalid']);
+  git(dir, ['config', 'user.name', 'Fixture']);
+
+  // English carries a LOCALISABLE `text` fence at ordinal 1.
+  mkdirSync(join(dir, 'skills', 'demo-skill'), { recursive: true });
+  writeFileSync(join(dir, 'skills', 'demo-skill', 'SKILL.md'), [
+    '---', 'name: demo-skill', 'description: A demo skill.', '---', '',
+    '# Demo Skill', '', '## Procedure', '',
+    '```text', 'fill this in', '```', '',
+  ].join('\n'), 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'english source']);
+
+  // The mirror carries a FROZEN brace-info fence at the same ordinal, with a body English has
+  // never held. Under the local `alignmentTag` both folded to `text`, the file passed the
+  // alignment guard, and the brace fence — gated, divergent — became eligible for a splice
+  // whose source is the localisable `text` block's prose.
+  const translated = join(dir, 'i18n', 'de', 'skills', 'demo-skill', 'SKILL.md');
+  mkdirSync(dirname(translated), { recursive: true });
+  writeFileSync(translated, [
+    '---', 'name: demo-skill', 'description: Eine Demo-Fertigkeit.',
+    'locale: de', 'source_locale: en', '---', '',
+    '# Demo-Fertigkeit', '', '## Ablauf', '',
+    '```{r}', 'x <- 1', '```', '',
+  ].join('\n'), 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'de translation with a brace fence']);
+
+  return dir;
+}
+
+test('a brace fence facing a text basis is SKIPPED, not spliced (#674)', (t) => {
+  const dir = braceFixture(t);
+  const r = spawnSync(process.execPath, [join(REPO, SCRIPT), '--root', dir, '--basis', 'head'],
+    { encoding: 'utf8' });
+
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /tag sequence diverges at fence 1 \(\{ vs text\)/,
+    'reported, and reported with the FOLDED tokens — `untagged vs text` would send whoever '
+    + 'does the manual repair hunting for an untagged fence that is not in the file');
+  assert.match(r.stdout, /files to change: 0/,
+    'and nothing may be planned for that file');
+  assert.doesNotMatch(r.stdout, /would restore/,
+    'a splice into a frozen fence from a localisable block is the defect itself');
+});
+
+test('the same fixture with matching tags IS repaired — the non-vacuity control', (t) => {
+  // Without this, the assertions above are satisfied by a normalizer that refuses everything.
+  // Same shapes, same ordinal, tags agreeing: the tool must still do its job.
+  const dir = mkdtempSync(join(tmpdir(), 'norm-brace-ok-'));
+  t.after(() => rmTree(dir));
+  git(dir, ['init', '-b', 'main']);
+  git(dir, ['config', 'user.email', 'test@example.invalid']);
+  git(dir, ['config', 'user.name', 'Fixture']);
+  mkdirSync(join(dir, 'skills', 'demo-skill'), { recursive: true });
+  writeFileSync(join(dir, 'skills', 'demo-skill', 'SKILL.md'), [
+    '---', 'name: demo-skill', 'description: A demo skill.', '---', '',
+    '# Demo Skill', '', '## Procedure', '',
+    '```{r}', 'x <- 1', '```', '',
+  ].join('\n'), 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'english source']);
+  const translated = join(dir, 'i18n', 'de', 'skills', 'demo-skill', 'SKILL.md');
+  mkdirSync(dirname(translated), { recursive: true });
+  writeFileSync(translated, [
+    '---', 'name: demo-skill', 'description: Eine Demo-Fertigkeit.',
+    'locale: de', 'source_locale: en', '---', '',
+    '# Demo-Fertigkeit', '', '## Ablauf', '',
+    '```{r}', 'y <- 2', '```', '',
+  ].join('\n'), 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'de translation, brace fence, divergent body']);
+
+  const r = spawnSync(process.execPath, [join(REPO, SCRIPT), '--root', dir, '--basis', 'head'],
+    { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /would restore/, 'a matching-tag divergence is still repairable');
+  assert.match(r.stdout, /files to change: 1/);
+});
+
+// ── #677: the scope guards, through the shared predicate ────────────────────
+
+/** A fixture whose `i18n/` carries a locale DIRECTORY with no translated file in it. */
+function emptyLocaleFixture(t) {
+  const dir = mkdtempSync(join(tmpdir(), 'norm-scope-'));
+  t.after(() => rmTree(dir));
+  git(dir, ['init', '-b', 'main']);
+  git(dir, ['config', 'user.email', 'test@example.invalid']);
+  git(dir, ['config', 'user.name', 'Fixture']);
+
+  mkdirSync(join(dir, 'skills', 'demo-skill'), { recursive: true });
+  writeFileSync(join(dir, 'skills', 'demo-skill', 'SKILL.md'), englishSkill(), 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'english source']);
+  const sourceCommit = git(dir, ['rev-parse', 'HEAD']);
+
+  // `de` is real and populated.
+  const translated = join(dir, 'i18n', 'de', 'skills', 'demo-skill', 'SKILL.md');
+  mkdirSync(dirname(translated), { recursive: true });
+  writeFileSync(translated, translatedSkill(sourceCommit), 'utf8');
+
+  // `fr` has the directory shape and nothing in it. `scannableLocales` — directory-based,
+  // pre-scan — says yes; `localesReached` — content-based, post-scan — says no. That gap is
+  // the behaviour change #677 is about, and it is why converting the guard was not a rename.
+  mkdirSync(join(dir, 'i18n', 'fr', 'skills'), { recursive: true });
+
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'de translation']);
+  return dir;
+}
+
+const runAt = (dir, ...args) =>
+  spawnSync(process.execPath, [join(REPO, SCRIPT), '--root', dir, ...args], { encoding: 'utf8' });
+
+test('a locale whose directory exists but holds no translation is REFUSED (#677)', (t) => {
+  const dir = emptyLocaleFixture(t);
+  const r = runAt(dir, '--locale', 'fr', '--basis', 'head');
+  // Exit 2 and not merely non-zero: 1 would be a finding, and this is a refusal.
+  assert.equal(r.status, 2, r.stdout + r.stderr);
+  assert.match(r.stderr, /--locale 'fr' matched no translated content/);
+  assert.doesNotMatch(r.stdout, /files to change/,
+    'the run must not reach a summary it would report as a clean zero');
+});
+
+test('an unknown --tree names the known trees, rather than only "unreachable" (#677)', (t) => {
+  const dir = emptyLocaleFixture(t);
+  const r = runAt(dir, '--tree', 'recipes', '--basis', 'head');
+  assert.equal(r.status, 2, r.stdout + r.stderr);
+  assert.match(r.stderr, /--tree names no such content tree: recipes/);
+  assert.match(r.stderr, /Known trees:/,
+    'the hand-rolled guard this replaces could only say "unreachable", which reads as '
+    + '"correct name, empty corpus" for what is actually a typo');
+});
+
+test('a --tree list with a typo AND an unreached tree names both, in one message', (t) => {
+  // Regression for the #690 review's finding 2. The unknown-name arm used to `return` early, so
+  // `--tree recipes,guides` reported only `recipes`; the caller fixed the typo, reran, and
+  // learned about `guides` on the next round trip. The hand-rolled guard this replaced named
+  // both, and a shared predicate that is worse than the copy it replaces is not a consolidation.
+  const dir = emptyLocaleFixture(t);
+  const r = runAt(dir, '--tree', 'recipes,guides', '--basis', 'head');
+  assert.equal(r.status, 2, r.stdout + r.stderr);
+  assert.match(r.stderr, /names no such content tree: recipes/);
+  assert.match(r.stderr, /matched no translated content.*guides/,
+    'the real-but-unreached tree must be reported in the SAME run as the typo');
+});
+
+test('a --locale/--tree pair that is individually valid but jointly empty is refused', (t) => {
+  // The composition the hand-rolled guard was written for, kept as a regression: `de` is real
+  // and `skills` is real, but `de` carries no `guides`.
+  const dir = emptyLocaleFixture(t);
+  const r = runAt(dir, '--locale', 'de', '--tree', 'guides', '--basis', 'head');
+  assert.equal(r.status, 2, r.stdout + r.stderr);
+  assert.match(r.stderr, /--tree matched no translated content in locale 'de': guides/);
+});
+
+test('a scope that DOES reach something still runs — the non-vacuity control', (t) => {
+  const dir = emptyLocaleFixture(t);
+  const r = runAt(dir, '--locale', 'de', '--basis', 'head');
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /would restore/, 'the tool must still do its job for a live scope');
+});
+
+test('a corpus of orphan mirrors refuses rather than reporting a clean zero (#677)', (t) => {
+  // A REACHABLE CASE for the backstop — not "the" one, which is how this comment first read.
+  // The backstop fires whenever the walk collects zero targets under no `--locale`/`--tree`, and
+  // the #690 review enumerated at least four shapes that do it: a missing English source (this
+  // fixture), content-tree directories that are all empty, mirrors whose names `contentKey`
+  // rejects, and a mirror entry that is a directory named `*.md`. One class, so one
+  // representative is adequate coverage; the wording claimed more than the fixture shows.
+  //
+  // It took constructing to find. With no `--locale` and no
+  // `--tree`, `validateScope` has nothing to validate and returns clean — so the only thing
+  // between an all-orphan corpus and `files to change: 0` at exit 0 is the empty-targets check.
+  //
+  // `scannableLocales` says `de` is scannable (the directory shape is there), and
+  // `collectI18nTargets` drops the file because its English source does not exist. Two
+  // predicates, one directory-based and one content-based, disagreeing exactly as documented.
+  //
+  // Written because a mutation deleting the backstop survived all 39 tests: the guard was
+  // belt-and-braces with no belt.
+  const dir = mkdtempSync(join(tmpdir(), 'norm-orphan-'));
+  t.after(() => rmTree(dir));
+  git(dir, ['init', '-b', 'main']);
+  git(dir, ['config', 'user.email', 'test@example.invalid']);
+  git(dir, ['config', 'user.name', 'Fixture']);
+
+  // A real English source, so the repo is not empty and the walk has something to do.
+  mkdirSync(join(dir, 'skills', 'demo-skill'), { recursive: true });
+  writeFileSync(join(dir, 'skills', 'demo-skill', 'SKILL.md'), englishSkill(), 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'english source']);
+
+  // The only mirror is an ORPHAN — no `skills/ghost/SKILL.md` exists.
+  const orphan = join(dir, 'i18n', 'de', 'skills', 'ghost', 'SKILL.md');
+  mkdirSync(dirname(orphan), { recursive: true });
+  writeFileSync(orphan, translatedSkill('0'.repeat(40)), 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-m', 'an orphan mirror']);
+
+  const r = runAt(dir, '--basis', 'head');
+  assert.equal(r.status, 2, r.stdout + r.stderr);
+  assert.match(r.stderr, /this scope selected no translated files/);
+  assert.doesNotMatch(r.stdout, /files to change: 0/,
+    'a run that examined nothing must not print the same summary as a run that found nothing');
 });

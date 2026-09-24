@@ -1,203 +1,235 @@
 ---
 name: setup-docker-compose
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Configurar Docker Compose para entornos R con servicios de base de datos, volúmenes
-  persistentes y redes. Usar cuando se necesite ejecutar aplicaciones R junto con
-  PostgreSQL, Redis u otros servicios, o cuando se gestionen entornos de desarrollo
-  multi-contenedor.
+  Configure Docker Compose for multi-container R development environments.
+  Covers service definitions, volume mounts, networking, environment
+  variables, and development vs production configurations. Use when running
+  R alongside other services (databases, APIs), setting up a reproducible
+  R development environment, orchestrating an R-based MCP server container,
+  or managing environment variables and volume mounts for R projects.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: containerization
-  complexity: basic
-  language: multi
-  tags: docker-compose, r, multi-container, orchestration
+  complexity: intermediate
+  language: Docker
+  tags: docker-compose, orchestration, development, volumes
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Configurar Docker Compose
+# Set Up Docker Compose
 
-Configurar Docker Compose para orquestar entornos R multi-contenedor con servicios y redes.
+Configure Docker Compose for R development and deployment environments.
 
-## Cuándo Usar
+## When to Use
 
-- Ejecutando aplicaciones R con servicios de base de datos (PostgreSQL, MySQL)
-- Configurando entornos de desarrollo con múltiples contenedores
-- Orquestando aplicaciones Shiny con servicios de soporte
-- Creando pipelines de análisis reproducibles con dependencias externas
-- Gestionando servicios interconectados para proyectos de ciencia de datos
+- Running R alongside other services (databases, APIs)
+- Setting up a reproducible development environment
+- Orchestrating an R-based MCP server container
+- Managing environment variables and volume mounts
 
-## Entradas
+## Inputs
 
-- **Requerido**: Dockerfile para la aplicación R
-- **Requerido**: Lista de servicios necesarios (base de datos, caché, etc.)
-- **Opcional**: Archivos de configuración para cada servicio
-- **Opcional**: Esquemas de base de datos o scripts de inicialización
-- **Opcional**: Variables de entorno específicas por servicio
+- **Required**: Dockerfile for the R service
+- **Required**: Project directory to mount
+- **Optional**: Additional services (database, cache, web server)
+- **Optional**: Environment variable configuration
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Crear Estructura del Proyecto
-
-Organizar archivos del proyecto para Docker Compose.
-
-```bash
-mkdir -p mi-proyecto/{app,db/init,config}
-cd mi-proyecto
-
-# Estructura:
-# mi-proyecto/
-#   docker-compose.yml
-#   app/
-#     Dockerfile
-#     renv.lock
-#     app.R
-#   db/
-#     init/
-#       01-schema.sql
-#   config/
-#     .Renviron
-```
-
-**Esperado:** Estructura de directorios creada con separación clara entre servicios.
-
-**En caso de fallo:** Verificar permisos de escritura, asegurar que los paths no contienen caracteres especiales.
-
-### Paso 2: Escribir docker-compose.yml
-
-Definir servicios, redes y volúmenes.
+### Step 1: Create docker-compose.yml
 
 ```yaml
 version: '3.8'
 
 services:
-  app:
+  r-dev:
     build:
-      context: ./app
+      context: .
       dockerfile: Dockerfile
-    ports:
-      - "3838:3838"
-    environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=mibase
-      - DB_USER=postgres
-      - DB_PASSWORD=secreto
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - ./app:/app
-      - r-libs:/usr/local/lib/R/site-library
-    networks:
-      - app-network
+    container_name: r-dev
+    image: r-dev:latest
 
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: mibase
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secreto
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
+      - .:/workspace
+      - renv-cache:/workspace/renv/cache
+
+    stdin_open: true
+    tty: true
+
+    environment:
+      - TERM=xterm-256color
+      - R_LIBS_USER=/workspace/renv/library
+      - RENV_PATHS_CACHE=/workspace/renv/cache
+
+    command: R
+
+    restart: unless-stopped
 
 volumes:
-  postgres-data:
-  r-libs:
+  renv-cache:
+    driver: local
+```
+
+**Expected:** A `docker-compose.yml` file exists with the R service defined, including volume mounts for the project directory and renv cache, and environment variables for R library paths.
+
+**On failure:** If YAML syntax is invalid, validate with `docker compose config`. Ensure indentation uses spaces (not tabs) and all string values with special characters are quoted.
+
+### Step 2: Add Additional Services (If Needed)
+
+```yaml
+services:
+  r-dev:
+    # ... as above
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+
+  postgres:
+    image: postgres:16
+    container_name: r-postgres
+    environment:
+      POSTGRES_DB: analysis
+      POSTGRES_USER: ruser
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  renv-cache:
+  pgdata:
+```
+
+**Expected:** The additional service (e.g., PostgreSQL) is defined with its own volume, environment variables, and port mapping. The R service has `depends_on` referencing the new service.
+
+**On failure:** If the database service fails to start, check `docker compose logs postgres` for initialization errors. Verify that environment variables like `POSTGRES_PASSWORD_FILE` point to valid secrets or switch to `POSTGRES_PASSWORD` for development.
+
+### Step 3: Configure Networking
+
+For services that need localhost access (e.g., MCP servers):
+
+```yaml
+services:
+  r-dev:
+    network_mode: "host"
+```
+
+For isolated networking:
+
+```yaml
+services:
+  r-dev:
+    networks:
+      - app-network
+    ports:
+      - "3000:3000"
 
 networks:
   app-network:
     driver: bridge
 ```
 
-**Esperado:** Los servicios se definen con dependencias claras, healthchecks configurados, volúmenes para persistencia.
+**Expected:** Networking is configured appropriately: `host` mode for services needing localhost access (MCP servers), or bridge networking with explicit port mappings for isolated services.
 
-**En caso de fallo:** Validar sintaxis YAML, verificar que las imágenes existen en Docker Hub, comprobar que los puertos no están en uso.
+**On failure:** If services cannot communicate, verify they are on the same network. With bridge networking, use service names as hostnames (e.g., `postgres` not `localhost`). With host mode, use `localhost` and ensure ports do not conflict.
 
-### Paso 3: Configurar Variables de Entorno
+### Step 4: Manage Environment Variables
 
-Usar archivos `.env` para configuración sensible.
+Create `.env` file (git-ignored):
 
-```bash
-# .env (gitignored)
-POSTGRES_PASSWORD=mi_secreto_seguro
-DB_NAME=mibase
-SHINY_PORT=3838
+```text
+R_VERSION=4.5.0
+GITHUB_PAT=your_token_here
 ```
+
+Reference in compose:
 
 ```yaml
-# docker-compose.yml - referenciar variables
 services:
-  db:
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  r-dev:
+    build:
+      args:
+        R_VERSION: ${R_VERSION}
+    env_file:
+      - .env
 ```
 
-**Esperado:** Variables de entorno separadas del código, archivo .env excluido de Git.
+**Expected:** A `.env` file exists (git-ignored) with project-specific variables, and `docker-compose.yml` references it via `env_file` or variable interpolation (`${VAR}`).
 
-**En caso de fallo:** Verificar que .env está en .gitignore, comprobar sintaxis de variables con `docker compose config`.
+**On failure:** If variables are not resolving, ensure the `.env` file is in the same directory as `docker-compose.yml`. Run `docker compose config` to see the resolved configuration with all variables expanded.
 
-### Paso 4: Iniciar y Verificar Servicios
-
-Compilar y ejecutar todos los servicios.
+### Step 5: Build and Run
 
 ```bash
-# Compilar e iniciar
-docker compose up -d --build
+# Build images
+docker compose build
 
-# Verificar estado
-docker compose ps
+# Start services
+docker compose up -d
 
-# Ver logs
-docker compose logs -f app
+# Attach to R session
+docker compose exec r-dev R
 
-# Verificar conectividad de red
-docker compose exec app R -e "DBI::dbConnect(RPostgres::Postgres(), host='db', dbname='mibase')"
+# View logs
+docker compose logs -f r-dev
 
-# Detener servicios
+# Stop services
 docker compose down
-
-# Detener y eliminar volúmenes
-docker compose down -v
 ```
 
-**Esperado:** Todos los servicios en estado saludable, la aplicación R se conecta a la base de datos, los logs no muestran errores.
+**Expected:** All services start. R session accessible.
 
-**En caso de fallo:** Revisar logs de servicios individuales (`docker compose logs db`), verificar healthchecks, comprobar resolución DNS entre contenedores.
+**On failure:** Check `docker compose logs` for startup errors. Common: port conflicts, missing environment variables.
 
-## Validación
+### Step 6: Create Override for Development
 
-- [ ] `docker compose up` inicia todos los servicios sin errores
-- [ ] La aplicación R se conecta exitosamente a los servicios dependientes
-- [ ] Los volúmenes persisten datos entre reinicios
-- [ ] Los healthchecks reportan servicios saludables
-- [ ] Las variables de entorno se inyectan correctamente
-- [ ] La red permite comunicación entre servicios
+Create `docker-compose.override.yml` for local development settings:
 
-## Errores Comunes
+```yaml
+services:
+  r-dev:
+    volumes:
+      - /path/to/local/packages:/extra-packages
+    environment:
+      - DEBUG=true
+```
 
-- **Orden de inicio incorrecto**: Usar `depends_on` con `condition: service_healthy` en lugar de solo `depends_on`.
-- **Datos perdidos al detener**: Usar volúmenes nombrados, no binds anónimos, para datos persistentes.
-- **Conexión rechazada entre servicios**: Usar nombres de servicio como hostnames, no `localhost`.
-- **Puerto ya en uso**: Verificar puertos disponibles antes de iniciar, usar puertos alternativos si es necesario.
-- **Credenciales en repositorio**: Nunca commit de archivos .env con secretos reales.
+This is automatically merged with `docker-compose.yml`.
 
-## Habilidades Relacionadas
+**Expected:** A `docker-compose.override.yml` file exists with development-specific settings (extra volumes, debug flags) that are automatically applied when running `docker compose up`.
 
-- `create-r-dockerfile` - Crear Dockerfiles base para aplicaciones R
-- `setup-compose-stack` - Stacks Docker Compose generales multi-servicio
-- `optimize-docker-build-cache` - Optimizar tiempos de compilación Docker
+**On failure:** If overrides are not taking effect, verify the filename is exactly `docker-compose.override.yml`. Run `docker compose config` to confirm the merge. For explicit override files, use `docker compose -f docker-compose.yml -f custom-override.yml up`.
+
+## Validation
+
+- [ ] `docker compose build` completes without errors
+- [ ] `docker compose up` starts all services
+- [ ] Volume mounts correctly share files between host and container
+- [ ] Environment variables are available inside containers
+- [ ] Services can communicate with each other
+- [ ] `docker compose down` cleanly stops everything
+
+## Common Pitfalls
+
+- **Volume mount permissions**: Linux containers may create files as root. Use `user:` directive or fix permissions.
+- **Port conflicts**: Check for services already using the same ports on the host
+- **Docker Desktop vs CLI**: `docker compose` (v2) vs `docker-compose` (v1). Use v2.
+- **WSL path mounts**: Use `/mnt/c/...` paths when mounting Windows directories from WSL
+- **Named volumes vs bind mounts**: Named volumes persist across rebuilds; bind mounts reflect host changes immediately
+
+## Related Skills
+
+- `create-r-dockerfile` - create the Dockerfile that compose references
+- `containerize-mcp-server` - compose configuration for MCP servers
+- `optimize-docker-build-cache` - speed up compose builds

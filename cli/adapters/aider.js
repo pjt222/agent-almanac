@@ -16,6 +16,8 @@ export class AiderAdapter extends FrameworkAdapter {
   static displayName = 'Aider';
   static strategy = 'append-to-file';
   static contentTypes = ['skill'];
+  /** @type {Record<string, string[]>} #607: appends to projectDir/CONVENTIONS.md. */
+  static scopes = { skill: ['project'] };
 
   async detect(projectDir) {
     return existsSync(resolve(projectDir, '.aider.conf.yml')) ||

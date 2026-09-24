@@ -21,7 +21,7 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, analysis-planning, method-selection, characterization
+  tags: spectroscopy, analytical-planning, technique-selection, sample-preparation
 ---
 
 # Spektroskopische Analyse planen

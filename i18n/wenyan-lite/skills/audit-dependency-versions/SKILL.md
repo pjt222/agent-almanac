@@ -199,11 +199,9 @@ cargo search serde --limit 1
 執行生態對應之安全審計工具：
 
 **R：**
-```r
-# No built-in audit tool; check manually
-# Cross-reference with https://www.r-project.org/security.html
-# Check GitHub advisories for each package
-```
+- No built-in audit tool; check manually
+- Cross-reference with https://www.r-project.org/security.html
+- Check GitHub advisories for each package
 
 **Node.js：**
 ```bash

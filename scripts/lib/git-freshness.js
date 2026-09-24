@@ -26,6 +26,7 @@
  */
 
 import { execFileSync } from 'child_process';
+import { CONTENT_TYPES } from './content-types.js';
 
 const GIT_BUFFER = 256 * 1024 * 1024;
 
@@ -52,7 +53,7 @@ export function assertNotShallow(root) {
  * Create a staleness checker rooted at a git work tree.
  * `pathspecs` bounds every git walk to the content trees that matter.
  */
-export function createFreshnessChecker(root, pathspecs = ['skills', 'agents', 'teams', 'guides']) {
+export function createFreshnessChecker(root, pathspecs = CONTENT_TYPES) {
   // source_commit -> Set(relative paths changed since it) | null (unresolvable)
   const changedSince = new Map();
 
@@ -102,7 +103,7 @@ export function createFreshnessChecker(root, pathspecs = ['skills', 'agents', 't
  * One streaming pass over history: repo-relative path -> latest short hash.
  * First occurrence in `git log` order (newest first) wins.
  */
-export function buildLatestCommitMap(root, pathspecs = ['skills', 'agents', 'teams', 'guides']) {
+export function buildLatestCommitMap(root, pathspecs = CONTENT_TYPES) {
   const out = execFileSync('git',
     ['log', '--name-only', '--format=%x00%h', '--', ...pathspecs],
     { cwd: root, encoding: 'utf8', maxBuffer: GIT_BUFFER });

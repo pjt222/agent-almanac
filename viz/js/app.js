@@ -1,7 +1,7 @@
 // app.js - Bootstrap: load data, init subsystems, bind controls
 // put id:"fetch_data", label:"Fetch skills.json data", node_type:"input", output:"skills_data"
 // put id:"init_ui", label:"Init filter panel, detail panel, graph", input:"skills_data", output:"ui_ready"
-// put id:"bind_modes", label:"Bind mode switching (2D/3D/Hive/Chord/Flow)", input:"ui_ready", output:"mode_bindings"
+// put id:"bind_modes", label:"Bind mode switching (2D/3D/Hive/Chord/Flow/Campfire)", input:"ui_ready", output:"mode_bindings"
 // put id:"lazy_load", label:"Lazy-load mode modules on demand", input:"mode_bindings", output:"active_module"
 // put id:"render_mode", label:"Render active mode with current filters", node_type:"output", input:"active_module"
 
@@ -536,7 +536,7 @@ async function main() {
     logBtn.addEventListener('click', () => downloadLog());
   }
 
-  // ── Layout buttons (radio group: 2D / 3D / Hive / Chord / Flow) ──
+  // ── Layout buttons (radio group: 2D / 3D / Hive / Chord / Flow / Fire) ──
   for (const [modeName, btnId] of Object.entries(MODE_BUTTON_IDS)) {
     document.getElementById(btnId).addEventListener('click', async () => {
       if (switching || currentMode === modeName) return;

@@ -15,6 +15,8 @@ export class CopilotAdapter extends FrameworkAdapter {
   static displayName = 'GitHub Copilot';
   static strategy = 'append-to-file';
   static contentTypes = ['skill'];
+  /** @type {Record<string, string[]>} #607: appends to projectDir/.github/copilot-instructions.md. */
+  static scopes = { skill: ['project'] };
 
   async detect(projectDir) {
     return existsSync(resolve(projectDir, '.github/copilot-instructions.md'));

@@ -7,6 +7,7 @@ description: >
 locale: zh-CN
 source_locale: en
 source_commit: befb7ac1 # stale — source updated for teams infrastructure fix
+fence_basis_commit: befb7ac1
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

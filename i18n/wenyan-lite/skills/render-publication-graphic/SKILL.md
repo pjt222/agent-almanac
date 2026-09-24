@@ -53,7 +53,7 @@ metadata:
 
 辨識目標出版之技術規範：
 
-```yaml
+```text
 # Common publication requirements
 
 academic_journal:

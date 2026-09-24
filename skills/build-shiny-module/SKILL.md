@@ -200,6 +200,8 @@ server <- function(input, output, session) {
 
 **On failure:** If the module UI doesn't render, verify the `id` string matches between UI and server calls. If the returned reactive is NULL, check that the server function actually returns a value.
 
+Sibling modules communicate through the parent, not directly with each other. Capture the first module's returned reactive and pass it as an argument into the second module's server call — `filtered_data <- dataFilterServer("filter1", data = raw_data, columns = cols)`, then `summaryServer("summary1", data = filtered_data)`. Pass the reactive itself, not `filtered_data()`: the receiving module has to re-run when the value changes, so it needs the reactive, not whatever value it happened to hold at the moment of the call. Reactive expressions are the most portable format for moving reactive information between modules — a module that takes a plain reactive argument works under any parent that can produce one.
+
 ### Step 5: Compose Nested Modules (Optional)
 
 For modules that contain other modules:

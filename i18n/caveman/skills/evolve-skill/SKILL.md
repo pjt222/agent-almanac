@@ -101,7 +101,7 @@ Use this pick matrix to decide refine in-place or make variant:
 |---|---|---|
 | Skill ID | Unchanged | New ID: `<skill>-advanced` |
 | File path | Same SKILL.md | New directory |
-| Version bump | Patch or minor | Starts at 1.0 |
+| Version bump | Minor (major only if breaking) | Starts at 1.0 |
 | Complexity | May increase | Higher than original |
 | Registry | No new entry | New entry added |
 | Symlinks | No change | New symlinks needed |
@@ -121,14 +121,12 @@ Use this pick matrix to decide refine in-place or make variant:
 
 Edit existing SKILL.md direct:
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- Open for editing
+- Add/revise procedure steps
+- Strengthen Expected/On failure pairs
+- Add tables or examples
+- Update When to Use triggers
+- Revise Inputs if scope changed
 
 Follow these edit rules:
 - Keep all existing sections — add content, do not remove sections
@@ -175,15 +173,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. Get current source commit hash:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. Update `source_commit` in each translated file frontmatter:
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. Flag files for re-translation by adding affected locales in commit msg:
@@ -215,12 +212,12 @@ Wait translation of new variants until variant stabilizes (1-2 versions). Transl
 
 ### Step 5: Update Version and Metadata
 
-Bump `version` field in frontmatter by semver:
+Bump `version` field in frontmatter:
 
 | Change Type | Version Bump | Example |
 |---|---|---|
-| Typo fix, wording clarification | Patch: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
-| New step, new pitfall, new table | Minor: 1.0 → 2.0 | Added Step 7 for edge case handling |
+| Typo fix, wording clarification | Minor: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
+| New step, new pitfall, new table | Minor: 1.0 → 1.1 | Added Step 7 for edge case handling |
 | Restructured procedure, changed inputs | Major: 1.0 → 2.0 | Reorganized from 5 to 8 steps |
 
 Also update:

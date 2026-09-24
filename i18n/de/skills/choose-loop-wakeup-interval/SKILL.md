@@ -17,10 +17,11 @@ metadata:
   domain: general
   complexity: intermediate
   language: multi
-  tags: loop, wakeup, cache, scheduling, delay, decision
+  tags: loop, wakeup, cache, scheduling, delay, general
   locale: de
   source_locale: en
   source_commit: 9c546edf
+  fence_basis_commit: 9c546edf
   translator: "Claude + human review"
   translation_date: "2026-05-03"
 ---

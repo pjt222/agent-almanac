@@ -53,16 +53,14 @@ metadata:
 以適合列印之格式匯出 3D 模型：
 
 **FDM/SLA 用**：
-```bash
-# If starting from CAD (Fusion 360, SolidWorks)
-# Export as: STL (binary) or 3MF
-# Resolution: High (triangle count sufficient for detail)
-# Units: mm (verify scale)
+If starting from CAD (Fusion 360, SolidWorks)
+Export as: STL (binary) or 3MF
+Resolution: High (triangle count sufficient for detail)
+Units: mm (verify scale)
 
-# Example export settings:
-# STL: Binary format, refinement 0.1mm
-# 3MF: Include color/material data if using multi-material printer
-```
+Example export settings:
+STL: Binary format, refinement 0.1mm
+3MF: Include color/material data if using multi-material printer
 
 **預期：** 以適切解析度匯出之模型檔（機械件用 0.1mm 弦容差，有機形用 0.05mm）。
 
@@ -129,16 +127,14 @@ meshlab model.stl
 | SLA (engineering) | 0.6mm | 1.2mm | 2.5mm+ |
 | SLS (nylon) | 0.7mm | 1.0mm | 2.0mm+ |
 
-```bash
-# Check wall thickness visually in slicer:
-# - Import model
-# - Enable "Thin walls" detection
-# - Slice with 0 infill to see wall structure
+Check wall thickness visually in slicer:
+- Import model
+- Enable "Thin walls" detection
+- Slice with 0 infill to see wall structure
 
-# For precise measurement, use CAD software:
-# - Measure distance between parallel surfaces
-# - Check in critical load-bearing areas
-```
+For precise measurement, use CAD software:
+- Measure distance between parallel surfaces
+- Check in critical load-bearing areas
 
 **預期：** 各壁皆達所擇製程之最小厚。薄壁標記以便檢視。
 
@@ -210,15 +206,13 @@ If part experiences:
 - 減少表面痕
 - 略易拆
 
-```bash
-# In slicer (PrusaSlicer example):
-# Print Settings → Support material
-# - Generate support material: Yes
-# - Overhang threshold: 45° (FDM) / 30° (SLA)
-# - Pattern: Rectilinear / Tree (auto)
-# - Interface layers: 3
-# - Interface pattern spacing: 0.2mm
-```
+In slicer (PrusaSlicer example):
+Print Settings → Support material
+- Generate support material: Yes
+- Overhang threshold: 45° (FDM) / 30° (SLA)
+- Pattern: Rectilinear / Tree (auto)
+- Interface layers: 3
+- Interface pattern spacing: 0.2mm
 
 **預期：** 已為超出門檻之懸垂生成支撐，預覽顯示無浮空幾何。
 
@@ -274,17 +268,15 @@ retract_speed: 150-180mm/min
 
 檢視切片之 G-code：
 
-```bash
-# In slicer:
-# - Slice model
-# - Use layer preview slider to inspect each layer
-# - Check for:
-#   * Gaps in perimeters (indicates thin walls)
-#   * Floating regions (missing supports)
-#   * Excessive stringing paths (reduce travel)
-#   * First layer: proper squish and adhesion
-#   * Top layers: sufficient solid infill
-```
+In slicer:
+- Slice model
+- Use layer preview slider to inspect each layer
+- Check for:
+  * Gaps in perimeters (indicates thin walls)
+  * Floating regions (missing supports)
+  * Excessive stringing paths (reduce travel)
+  * First layer: proper squish and adhesion
+  * Top layers: sufficient solid infill
 
 **預覽中之警訊**：
 - **實體區出現白色縫隙**：壁過薄不及當前線寬

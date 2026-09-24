@@ -18,7 +18,7 @@ metadata:
   domain: defensive
   complexity: intermediate
   language: natural
-  tags: defensive, centering, balance, meta-cognition, ai-self-application
+  tags: defensive, centering, reasoning-balance, cognitive-load, meta-cognition, ai-self-application
   locale: de
   source_locale: en
   source_commit: 6f65f316

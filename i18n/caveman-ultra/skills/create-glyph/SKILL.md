@@ -3,6 +3,7 @@ name: create-glyph
 locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
+fence_basis_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -302,7 +303,7 @@ Out:
 
 ### Domain + Entity Palettes
 
-All 58 domain colors (skills) in `viz/R/palettes.R` (single truth). Agent/team colors same. Cyberpunk (hand-tuned neon) in `get_cyberpunk_colors()`. Viridis auto via `viridisLite`.
+All domain colors (skills) in `viz/R/palettes.R` (single truth). Agent/team colors same. Cyberpunk (hand-tuned neon) in `get_cyberpunk_colors()`. Viridis auto via `viridisLite`.
 
 Lookup:
 ```r

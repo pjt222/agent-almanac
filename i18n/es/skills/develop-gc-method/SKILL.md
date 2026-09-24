@@ -3,6 +3,7 @@ name: develop-gc-method
 locale: es
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-sonnet-4-6
 translation_date: 2026-03-16
 description: >
@@ -19,9 +20,9 @@ metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: chromatography
-  complexity: intermediate
+  complexity: advanced
   language: natural
-  tags: chromatography, gc, gas-chromatography, method-development, volatile-analysis
+  tags: chromatography, gc, gas-chromatography, method-development, separation
 ---
 
 # Desarrollar Método GC

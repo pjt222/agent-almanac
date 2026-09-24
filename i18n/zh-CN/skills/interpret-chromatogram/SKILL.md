@@ -17,7 +17,7 @@ metadata:
   domain: chromatography
   complexity: intermediate
   language: natural
-  tags: chromatography, peak-integration, resolution, tailing-factor, system-suitability
+  tags: chromatography, peak-analysis, resolution, integration, system-suitability
 ---
 
 # 解读色谱图

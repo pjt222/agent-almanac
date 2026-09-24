@@ -21,6 +21,8 @@ export class AiEdgeAdapter extends FrameworkAdapter {
   static displayName = 'Google AI Edge';
   static strategy = 'distill';
   static contentTypes = ['skill', 'agent', 'team'];
+  /** @type {Record<string, string[]>} #607: all three distill into projectDir; no global location exists. */
+  static scopes = { skill: ['project'], agent: ['project'], team: ['project'] };
 
   async detect(projectDir) {
     // Detect AI Edge Gallery project or .ai-edge/ directory

@@ -104,40 +104,25 @@
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from 'child_process';
-import { extractFences, toLines, isGated } from './lib/fences.js';
+import { extractFences, toLines, isGated, foldedTagSequence } from './lib/fences.js';
+import { parseArgs, usageExit } from './lib/parse-args.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const GIT_BUFFER = 512 * 1024 * 1024;
 
-// ---- arguments: default-deny, same shape as normalize-i18n-fences.js ----
-const BOOL_FLAGS = new Set(['--json', '--compare']);
-const VALUE_FLAGS = new Set(['--base', '--head']);
-
-function usageError(message) {
-  console.error(`ERROR: ${message}`);
-  console.error(`Usage: ${[...BOOL_FLAGS, ...VALUE_FLAGS].join(' ')}`);
-  process.exit(2);
-}
-
-const opts = { json: false, compare: false, base: 'HEAD~1', head: 'HEAD' };
-const argv = process.argv.slice(2);
-for (let i = 0; i < argv.length; i++) {
-  const arg = argv[i];
-  const eq = arg.indexOf('=');
-  const name = eq >= 0 ? arg.slice(0, eq) : arg;
-  if (BOOL_FLAGS.has(name)) {
-    if (eq >= 0) usageError(`${name} takes no value (got '${arg}')`);
-    opts[name.slice(2)] = true;
-  } else if (VALUE_FLAGS.has(name)) {
-    const value = eq >= 0 ? arg.slice(eq + 1) : argv[++i];
-    if (value === undefined || value === '' || (eq < 0 && value.startsWith('--'))) {
-      usageError(`${name} requires a value`);
-    }
-    opts[name.slice(2)] = value;
-  } else {
-    usageError(`unknown argument '${arg}'`);
-  }
-}
+// ---- arguments: default-deny, shared parser (#619) ----
+//
+// This was a line-identical COPY of the loop in normalize-i18n-fences.js, which is the third
+// copy the extraction exists to prevent. Its defaults were seeded inside the opts literal --
+// the pattern the shared parser cannot carry, since a default living in a parser used by six
+// scripts is invisible from the call site -- so they are applied here with `??`.
+const ARG_SPEC = { bool: ['--json', '--compare'], value: ['--base', '--head'] };
+const parsed = parseArgs(process.argv.slice(2), ARG_SPEC, usageExit(ARG_SPEC));
+const opts = {
+  ...parsed,
+  base: parsed.base ?? 'HEAD~1',
+  head: parsed.head ?? 'HEAD',
+};
 
 function git(args) {
   const r = spawnSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: GIT_BUFFER });
@@ -383,13 +368,23 @@ for (const path of changed) {
   // a `text` -> `yaml` retag keeps the count and makes a translated table the
   // "before body" of a frozen fence. The sibling normalizer validates the tag
   // sequence before trusting the ordinal; so does this.
-  const alignmentTag = (f) => (f.lang === '' ? 'text' : f.lang);
-  const misaligned = headFences.findIndex((f, i) => alignmentTag(f) !== alignmentTag(baseFences[i]));
+  //
+  // Through `foldedTagSequence` since #674, and the comment above is the reason the local copy
+  // survived this long: "so does this" was true of the check and false of the FOLD. The copy
+  // here collapsed a brace-info fence to `text` exactly like an untagged one, so a base->head
+  // retag between those two shapes was not reported as a divergence and the comparison went on
+  // to trust an ordinal it had not established.
+  const headSeq = foldedTagSequence(headFences);
+  const baseSeq = foldedTagSequence(baseFences);
+  const misaligned = headSeq.findIndex((tag, i) => tag !== baseSeq[i]);
   if (misaligned >= 0) {
     skippedFiles.push({
       path,
+      // Folded tokens, for the reason the sibling normalizer's label carries (#674): a brace
+      // fence would otherwise be reported as `untagged`, which is not a thing the reader can
+      // find in the file.
       reason: `tag sequence diverges at fence ${misaligned + 1} `
-        + `(${baseFences[misaligned].lang || 'untagged'} -> ${headFences[misaligned].lang || 'untagged'})`,
+        + `(${baseSeq[misaligned]} -> ${headSeq[misaligned]})`,
     });
     continue;
   }

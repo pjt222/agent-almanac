@@ -15,6 +15,8 @@ export class WindsurfAdapter extends FrameworkAdapter {
   static displayName = 'Windsurf';
   static strategy = 'file-per-item';
   static contentTypes = ['skill'];
+  /** @type {Record<string, string[]>} #607: writes into projectDir/.windsurf/. */
+  static scopes = { skill: ['project'] };
 
   async detect(projectDir) {
     return existsSync(resolve(projectDir, '.windsurf')) ||

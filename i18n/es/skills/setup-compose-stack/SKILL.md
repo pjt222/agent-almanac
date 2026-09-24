@@ -1,15 +1,13 @@
 ---
 name: setup-compose-stack
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Configurar stacks Docker Compose multi-servicio de propósito general con redes,
-  volúmenes, healthchecks, y perfiles de entorno. Cubrir patrones para aplicaciones
-  web con bases de datos, colas de mensajes, cachés, y proxies inversos. Usar cuando
-  se necesite orquestar múltiples servicios interconectados para desarrollo o producción.
+  Configure general-purpose Docker Compose stacks for common application
+  patterns. Covers web app + database + cache + worker services, named
+  volumes, networks, health checks, depends_on, environment management,
+  and profiles. Use when running a web app with a database or cache,
+  setting up a development environment with multiple services,
+  orchestrating background workers alongside an API, or creating
+  reproducible multi-service environments across teams.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -17,259 +15,290 @@ metadata:
   version: "1.0"
   domain: containerization
   complexity: intermediate
-  language: multi
-  tags: docker-compose, stack, multi-service, orchestration, networking
+  language: Docker
+  tags: docker-compose, orchestration, postgres, redis, multi-service, health-checks
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Configurar Stack Compose
+# Set Up Compose Stack
 
-Configurar stacks Docker Compose multi-servicio con redes, volúmenes y healthchecks.
+Configure Docker Compose for multi-service application stacks with databases, caches, and workers.
 
-## Cuándo Usar
+## When to Use
 
-- Orquestando aplicaciones web con bases de datos y servicios de soporte
-- Configurando entornos de desarrollo que replican producción
-- Gestionando stacks con colas de mensajes, cachés y proxies
-- Necesitando reproducibilidad en entornos multi-servicio
-- Creando entornos de demostración o staging locales
+- Running a web app with a database and/or cache
+- Setting up a development environment with multiple services
+- Orchestrating background workers alongside an API
+- Needing reproducible multi-service environments across teams
 
-## Entradas
+## Inputs
 
-- **Requerido**: Lista de servicios y sus relaciones
-- **Requerido**: Dockerfiles o imágenes para cada servicio
-- **Opcional**: Esquemas de base de datos para inicialización
-- **Opcional**: Archivos de configuración por servicio
-- **Opcional**: Certificados TLS para HTTPS local
+- **Required**: Application service (language, port, entry point)
+- **Required**: Supporting services needed (database, cache, queue, etc.)
+- **Optional**: Development vs production configuration
+- **Optional**: Existing Dockerfiles for custom services
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Diseñar la Arquitectura del Stack
-
-Mapear servicios, dependencias y redes.
+### Step 1: Define Core Stack
 
 ```yaml
-# Arquitectura típica:
-# frontend -> api -> database
-#                 -> cache (Redis)
-#                 -> queue (RabbitMQ)
-# proxy (nginx) -> frontend, api
-```
-
-**Esperado:** Diagrama claro de servicios y sus interacciones.
-
-**En caso de fallo:** Comenzar con los servicios mínimos necesarios y agregar más iterativamente.
-
-### Paso 2: Escribir docker-compose.yml Completo
-
-```yaml
-version: '3.8'
-
 services:
-  proxy:
-    image: nginx:1.25-alpine
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-    depends_on:
-      frontend:
-        condition: service_healthy
-      api:
-        condition: service_healthy
-    networks:
-      - frontend-net
-    restart: unless-stopped
-
-  frontend:
-    build:
-      context: ./frontend
-      target: production
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-    networks:
-      - frontend-net
-    restart: unless-stopped
-
-  api:
-    build:
-      context: ./api
+      - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://user:pass@db:5432/mydb
-      - REDIS_URL=redis://cache:6379
-      - RABBITMQ_URL=amqp://user:pass@queue:5672
+      DATABASE_URL: postgres://appuser:apppass@postgres:5432/appdb
+      REDIS_URL: redis://redis:6379
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
-      cache:
+      redis:
         condition: service_started
-      queue:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-    networks:
-      - frontend-net
-      - backend-net
     restart: unless-stopped
 
-  db:
-    image: postgres:16-alpine
+  postgres:
+    image: postgres:16
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: appdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - backend-net
-    restart: unless-stopped
-
-  cache:
-    image: redis:7-alpine
-    volumes:
-      - redis-data:/data
-    networks:
-      - backend-net
-    restart: unless-stopped
-
-  queue:
-    image: rabbitmq:3.12-management-alpine
-    environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: pass
-    ports:
-      - "15672:15672"
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
-    networks:
-      - backend-net
-    restart: unless-stopped
-
-volumes:
-  postgres-data:
-  redis-data:
-  rabbitmq-data:
-
-networks:
-  frontend-net:
-    driver: bridge
-  backend-net:
-    driver: bridge
-```
-
-**Esperado:** Todos los servicios definidos con healthchecks, redes segmentadas, y volúmenes para persistencia.
-
-**En caso de fallo:** Validar sintaxis con `docker compose config`, verificar que las imágenes existen.
-
-### Paso 3: Configurar Entornos Múltiples
-
-```yaml
-# docker-compose.override.yml (desarrollo - se aplica automáticamente)
-services:
-  api:
-    volumes:
-      - ./api/src:/app/src
-    environment:
-      - DEBUG=true
-    command: ["npm", "run", "dev"]
-
-  db:
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+volumes:
+  pgdata:
+  redisdata:
 ```
+
+**Expected:** `docker compose up` starts all services with the app waiting for a healthy database.
+
+### Step 2: Add Health Checks
+
+Health checks enable `depends_on` with `condition: service_healthy`:
 
 ```yaml
-# docker-compose.prod.yml
 services:
-  api:
+  postgres:
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+```
+
+### Step 3: Configure Networks
+
+```yaml
+services:
+  app:
+    networks:
+      - frontend
+      - backend
+
+  postgres:
+    networks:
+      - backend
+
+  nginx:
+    networks:
+      - frontend
+    ports:
+      - "80:80"
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+```
+
+This isolates the database from direct external access while the app bridges both networks.
+
+### Step 4: Manage Environment Variables
+
+Create `.env` file (git-ignored):
+
+```text
+POSTGRES_PASSWORD=secure_password_here
+APP_SECRET=your_secret_key
+```
+
+Reference in compose:
+
+```yaml
+services:
+  postgres:
     environment:
-      - NODE_ENV=production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  app:
+    env_file:
+      - .env
+```
+
+Create `.env.example` (committed to git):
+
+```text
+POSTGRES_PASSWORD=changeme
+APP_SECRET=changeme
+```
+
+### Step 5: Add Worker Services
+
+```yaml
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["node", "src/worker.js"]
+    environment:
+      DATABASE_URL: postgres://appuser:apppass@postgres:5432/appdb
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
     deploy:
-      replicas: 3
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
+      replicas: 2
+```
+
+### Step 6: Use Profiles for Optional Services
+
+```yaml
+services:
+  app:
+    # always starts
+    build: .
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    profiles:
+      - dev
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    profiles:
+      - dev
 ```
 
 ```bash
-# Desarrollo (usa override automáticamente)
+# Start core services only
 docker compose up
 
-# Producción
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# Start with dev tools
+docker compose --profile dev up
 ```
 
-**Esperado:** Los archivos de override permiten configuración específica por entorno sin duplicar la configuración base.
+### Step 7: Create Override for Development
 
-**En caso de fallo:** Verificar el orden de precedencia de archivos con `docker compose config`.
+`docker-compose.override.yml` is auto-merged:
 
-### Paso 4: Gestionar Ciclo de Vida
+```yaml
+services:
+  app:
+    build:
+      target: dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+      DEBUG: "app:*"
+    command: ["npm", "run", "dev"]
+```
+
+### Step 8: Build and Run
 
 ```bash
-# Iniciar todos los servicios
+# Build all images
+docker compose build
+
+# Start in background
 docker compose up -d
 
-# Ver estado y logs
+# View logs
+docker compose logs -f app
+
+# Check service status
 docker compose ps
-docker compose logs -f api
 
-# Escalar un servicio
-docker compose up -d --scale api=3
+# Stop and remove
+docker compose down
 
-# Reiniciar un servicio específico
-docker compose restart api
-
-# Detener sin eliminar datos
-docker compose stop
-
-# Detener y eliminar todo (incluyendo volúmenes)
+# Stop and remove volumes (full reset)
 docker compose down -v
 ```
 
-**Esperado:** Los servicios se gestionan de forma independiente, los datos persisten entre reinicios.
+**Expected:** All services start, health checks pass, app connects to database and cache.
 
-**En caso de fallo:** Revisar logs de servicios individuales, verificar healthchecks, comprobar uso de recursos.
+**On failure:** Check `docker compose logs <service>`. Common issues: port conflicts, missing environment variables, health check timeouts.
 
-## Validación
+## Validation
 
-- [ ] Todos los servicios inician y alcanzan estado saludable
-- [ ] Las redes segmentan correctamente el tráfico (backend no accesible desde frontend)
-- [ ] Los volúmenes persisten datos entre reinicios
-- [ ] Los healthchecks detectan servicios no saludables
-- [ ] Las variables de entorno se inyectan correctamente
-- [ ] Los archivos de override funcionan para cada entorno
+- [ ] `docker compose up` starts all services without errors
+- [ ] Health checks pass for database and cache
+- [ ] Application connects to all dependent services
+- [ ] Named volumes persist data across restarts
+- [ ] `.env` is git-ignored; `.env.example` is committed
+- [ ] `docker compose down` cleanly stops everything
+- [ ] Profiles separate dev tools from production services
 
-## Errores Comunes
+## Common Pitfalls
 
-- **Red plana sin segmentación**: Segmentar frontend y backend en redes separadas para seguridad.
-- **Healthchecks faltantes**: Sin healthchecks, `depends_on` no espera a que los servicios estén listos.
-- **Volúmenes anónimos**: Usar volúmenes nombrados para persistencia predecible.
-- **Credenciales hardcodeadas**: Usar archivos .env o Docker secrets para credenciales.
-- **No usar restart policy**: Agregar `restart: unless-stopped` para recuperación automática.
-- **Puertos innecesariamente expuestos**: Solo exponer puertos al host cuando sea necesario.
+- **No health checks**: `depends_on` without `condition: service_healthy` only waits for container start, not readiness.
+- **Hardcoded passwords in compose**: Use `.env` files or Docker secrets. Never commit passwords.
+- **Volume mount overwrites**: Mounting `.:/app` overwrites `node_modules` built in the image. Use an anonymous volume: `/app/node_modules`.
+- **Port conflicts**: Check `docker compose ps` and `lsof -i :<port>` for conflicts.
+- **`version:` key**: Compose V2 ignores the `version:` key. Omit it for modern setups.
+- **WSL path issues**: Use `/mnt/c/...` paths when mounting Windows directories from WSL.
 
-## Habilidades Relacionadas
+## Related Skills
 
-- `setup-docker-compose` - Docker Compose para entornos R específicos
-- `configure-nginx` - Configuración detallada de Nginx como proxy
-- `configure-reverse-proxy` - Patrones de proxy inverso con Nginx/Traefik
-- `create-dockerfile` - Crear Dockerfiles para cada servicio del stack
+- `setup-docker-compose` - R-specific Docker Compose configurations
+- `create-dockerfile` - write the Dockerfile that compose references
+- `create-multistage-dockerfile` - build optimized images for the stack
+- `configure-nginx` - add an Nginx reverse proxy to the stack

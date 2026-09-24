@@ -15,6 +15,8 @@ export class CodexAdapter extends FrameworkAdapter {
   static displayName = 'OpenAI Codex';
   static strategy = 'append-to-file';
   static contentTypes = ['skill', 'agent'];
+  /** @type {Record<string, string[]>} #607: appends to projectDir/AGENTS.md. */
+  static scopes = { skill: ['project'], agent: ['project'] };
 
   async detect(projectDir) {
     return existsSync(resolve(projectDir, 'AGENTS.md'));

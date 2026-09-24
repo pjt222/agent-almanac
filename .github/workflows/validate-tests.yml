@@ -14,7 +14,11 @@ permissions:
   contents: read
 
 jobs:
-  validate:
+  # Renamed off the shared `validate` context (#641). This job keeps its paths filter and is
+  # deliberately NOT a required check: it reports on too few PRs to be required without an
+  # unfiltered trigger, and unfiltering it was not in scope. The rename is still needed so the
+  # PR page names it, and so it CAN be required later without renaming under a live ruleset.
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -118,5 +122,11 @@ jobs:
 
       - name: Report skill eval coverage (informational)
         # Report-only: coverage is low by design today, so this never fails the build.
-        # Surfaces covered/total and the delta; raise a floor with `--min` once coverage climbs (#435).
+        # Surfaces covered/total and the delta; raise a floor with `--min` once coverage climbs.
+        #
+        # The named exit is #424, the machine-scored eval runner with uplift-vs-baseline. It was
+        # #435 until that closed on 2026-07-24 having shipped this very step — so the pointer named
+        # a finished issue, and an advisory gate whose exit is already closed reads as permanent
+        # policy rather than deferred debt. Listed in `debt-ratchet.yml` under `advisory_gates`,
+        # which asserts this command still appears in this file (#591).
         run: node scripts/eval-coverage.js

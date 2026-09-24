@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 34
+total_guides: 35
 version: "1.0"
 last_updated: "2026-07-16"
 
@@ -55,6 +55,15 @@ guides:
     agents: [code-reviewer, security-analyst]
     teams: []
     skills: [review-codebase, review-pull-request]
+
+  - id: coordinate-peer-sessions
+    path: guides/coordinate-peer-sessions.md
+    title: "Coordinating Peer Sessions"
+    description: "Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, and what the guard cannot see"
+    category: workflow
+    agents: []
+    teams: []
+    skills: [coordinate-peer-sessions, commit-changes, create-pull-request]
 
   - id: running-a-code-review
     path: guides/running-a-code-review.md

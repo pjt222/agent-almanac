@@ -17,7 +17,7 @@ metadata:
   domain: chromatography
   complexity: advanced
   language: natural
-  tags: chromatography, hplc, column-chemistry, mobile-phase, gradient-design
+  tags: chromatography, hplc, liquid-chromatography, method-development, separation
 ---
 
 # 开发 HPLC 方法

@@ -21,7 +21,7 @@ metadata:
   domain: spectroscopy
   complexity: advanced
   language: natural
-  tags: spectroscopy, nmr, structure-elucidation, chemical-shift, coupling
+  tags: spectroscopy, nmr, chemical-shift, coupling, structure-elucidation
 ---
 
 # NMR-Spektrum interpretieren

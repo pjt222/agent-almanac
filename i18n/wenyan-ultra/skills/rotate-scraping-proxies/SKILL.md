@@ -53,16 +53,15 @@ metadata:
 
 文錄之法倫察為閘。略此為害源。
 
-```python
-# Inputs to confirm before writing any code:
-# 1. Is the data public (no login required)?
-# 2. Does robots.txt permit the path?
-# 3. Does the site's ToS prohibit automated access? (read it)
-# 4. Would the scraping process personal data? If yes, what is the legal basis?
-# 5. Could this access circumvent geo-licensing, paywalls, or auth?
-# 6. Is there a public API or data dump that would make scraping unnecessary?
-# 7. Have you contacted the site owner if scope is large?
-```
+Inputs to confirm before writing any code:
+
+1. Is the data public (no login required)?
+2. Does robots.txt permit the path?
+3. Does the site's ToS prohibit automated access? (read it)
+4. Would the scraping process personal data? If yes, what is the legal basis?
+5. Could this access circumvent geo-licensing, paywalls, or auth?
+6. Is there a public API or data dump that would make scraping unnecessary?
+7. Have you contacted the site owner if scope is large?
 
 得：諸問皆有可辯之答。首「否」/「未知」即停。
 

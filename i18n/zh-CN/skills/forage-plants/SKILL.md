@@ -13,7 +13,7 @@ metadata:
   domain: bushcraft
   complexity: advanced
   language: natural
-  tags: bushcraft, foraging, plants, survival, wilderness, identification
+  tags: bushcraft, foraging, plants, edible, survival, wilderness, botany
   locale: zh-CN
   source_locale: en
   source_commit: 6f65f316

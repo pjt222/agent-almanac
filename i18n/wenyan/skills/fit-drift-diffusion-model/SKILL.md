@@ -291,13 +291,12 @@ for name, result in sorted(model_results.items(), key=lambda x: x[1]["bic"]):
 
 3. 以標則釋 BIC 差：
 
-```python
-# BIC difference interpretation (Kass & Raftery, 1995):
-# 0-2:   Not worth mentioning
-# 2-6:   Positive evidence
-# 6-10:  Strong evidence
-# >10:   Very strong evidence
-```
+BIC difference interpretation (Kass & Raftery, 1995):
+
+- 0-2:   Not worth mentioning
+- 2-6:   Positive evidence
+- 6-10:  Strong evidence
+- `>10`:   Very strong evidence
 
 4. 貝葉斯模用 DIC 或 WAIC：
 

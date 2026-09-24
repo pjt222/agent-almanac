@@ -1,33 +1,38 @@
 locale: caveman-ultra
-last_updated: '2026-08-10'
+last_updated: '2026-09-18'
 coverage:
   skills:
-    translated: 350
-    total: 369
-    pct: 94.9
-    stale: 308
-    stubs: 2
+    translated: 346
+    total: 373
+    pct: 92.8
+    stale: 310
+    stubs: 5
+    unjudged: 1
   agents:
     translated: 0
-    total: 75
+    total: 76
     pct: 0
     stale: 0
     stubs: 0
+    unjudged: 0
   teams:
     translated: 0
     total: 22
     pct: 0
     stale: 0
     stubs: 0
+    unjudged: 0
   guides:
     translated: 0
-    total: 34
+    total: 35
     pct: 0
     stale: 0
     stubs: 0
+    unjudged: 0
   total:
-    translated: 350
-    total: 500
-    pct: 70
-    stale: 308
-    stubs: 2
+    translated: 346
+    total: 506
+    pct: 68.4
+    stale: 310
+    stubs: 5
+    unjudged: 1

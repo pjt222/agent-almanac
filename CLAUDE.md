@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 <!-- AUTO:START:overview -->
-A documentation-first repository containing 34 guides, a skills library of 369 agentic skills, 75 agent definitions, 22 team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained `.mjs` scripts run by Claude Code's Workflow tool.
+A documentation-first repository containing 35 guides, a skills library of 373 agentic skills, 76 agent definitions, 22 team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained `.mjs` scripts run by Claude Code's Workflow tool.
 
 The guides serve as the human entry point to the agentic system: practical walkthroughs explaining when, why, and how to interact with agents, teams, skills, and workflows through Claude Code.
 <!-- AUTO:END:overview -->
@@ -22,20 +22,48 @@ The guides serve as the human entry point to the agentic system: practical walkt
 
 4. **Teams** (`teams/` directory): Predefined multi-agent compositions for complex workflows. Each team is a markdown file with YAML frontmatter (`name`, `description`, `lead`, `members[]`, `coordination`) and an embedded machine-readable configuration block. Teams define *who works together* — coordinated groups of agents with assigned roles and a defined coordination pattern.
 
-5. **Workflows** (`workflows/` directory): Code-driven orchestration scripts run by Claude Code's Workflow tool. Each workflow is a self-contained `workflows/<name>.mjs` file with a top-of-file sidecar frontmatter comment block (the catalog source of truth, the analogue of the other types' YAML frontmatter), a pure-literal `export const meta`, and an async body using the injected `agent()` / `pipeline()` / `parallel()` / `phase()` / `log()` primitives. Where a **team** is a declarative roster the lead coordinates at runtime, a **workflow** fixes its phases and fan-out in code — its *control flow* is deterministic and rereadable, while the `agent()` outputs remain nondeterministic. Discovered from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or `/<name>`. The library ships two reviewed seeds (`review-changes`, `batch-generate-waves`) and a `create-workflow` meta-skill; the `workflows/_registry.yml`, CLI install, and registry-sync validation remain deferred (Phase 2).
+5. **Workflows** (`workflows/` directory): Code-driven orchestration scripts run by Claude Code's Workflow tool. Each workflow is a self-contained `workflows/<name>.mjs` file with a top-of-file sidecar frontmatter comment block (the catalog source of truth, the analogue of the other types' YAML frontmatter), a pure-literal `export const meta`, and an async body using the injected `agent()` / `pipeline()` / `parallel()` / `phase()` / `log()` primitives. Where a **team** is a declarative roster the lead coordinates at runtime, a **workflow** fixes its phases and fan-out in code — its *control flow* is deterministic and rereadable, while the `agent()` outputs remain nondeterministic. Discovered from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or `/<name>`. The seeds that ship are listed in `workflows/README.md`; their number is derived by `scripts/generate-readmes.js` into `SECURITY.md` and pinned by `scripts/test/workflow-contract.test.js:413`, so this sentence states neither a count nor a set — both have gone stale here before (#350, #826). A `create-workflow` meta-skill ships beside them; the `workflows/_registry.yml`, CLI install, and registry-sync validation remain deferred (Phase 2).
 
 These five types complement each other: skills define *how* (procedure, validation, recovery), agents define *who* (persona, tools, style), teams define *who works together* (composition, roles, coordination), workflows define *how work is orchestrated* (code-driven control flow), and guides provide the background knowledge all draw from.
 
 ### Registries
 
 <!-- AUTO:START:registries -->
-- `skills/_registry.yml` is the machine-readable catalog of all 369 skills across 66 domains: r-packages (10), jigsawr (5), containerization (10), reporting (5), compliance (17), mcp-integration (6), web-dev (5), git (10), general (24), citations (3), data-serialization (2), review (11), bushcraft (4), esoteric (29), design (6), defensive (6), project-management (6), devops (13), observability (13), edge-computing (1), mlops (12), workflow-visualization (6), swarm (9), morphic (7), alchemy (4), tcg (3), intellectual-property (4), web-scraping (2), gardening (5), shiny (7), animal-training (2), mycology (2), prospecting (2), crafting (1), library-science (3), linguistics (1), travel (6), relocation (3), a2a-protocol (3), geometry (3), number-theory (3), stochastic-processes (3), theoretical-science (3), diffusion (4), hildegard (5), maintenance (5), blender (3), visualization (5), 3d-printing (3), lapidary (4), entomology (5), versioning (4), spectroscopy (6), chromatography (5), gpu-optimization (2), digital-logic (4), electromagnetism (4), levitation (3), i18n (1), synoptic (4), tensegrity (1), cli (4), open-source (2), investigation (9), memex (5), ocr (1).
-- `agents/_registry.yml` is the machine-readable catalog of all 75 agents.
+- `skills/_registry.yml` is the machine-readable catalog of all 373 skills across 67 domains: r-packages (10), jigsawr (5), containerization (10), reporting (5), compliance (17), mcp-integration (6), web-dev (5), git (11), general (26), citations (3), data-serialization (2), review (11), bushcraft (4), esoteric (29), design (6), defensive (6), project-management (6), devops (13), observability (13), edge-computing (1), mlops (12), workflow-visualization (6), swarm (9), morphic (7), alchemy (4), tcg (3), intellectual-property (4), web-scraping (2), gardening (5), shiny (7), animal-training (2), mycology (2), prospecting (2), crafting (1), library-science (3), linguistics (1), travel (6), relocation (3), a2a-protocol (3), geometry (3), number-theory (3), stochastic-processes (3), theoretical-science (3), diffusion (4), hildegard (5), maintenance (5), blender (3), visualization (5), 3d-printing (3), lapidary (4), entomology (5), versioning (4), spectroscopy (6), chromatography (5), gpu-optimization (2), digital-logic (4), electromagnetism (4), levitation (3), i18n (1), synoptic (4), tensegrity (1), cli (4), open-source (2), investigation (9), memex (5), ocr (1), agent-commerce (1).
+- `agents/_registry.yml` is the machine-readable catalog of all 76 agents.
 - `teams/_registry.yml` is the machine-readable catalog of all 22 teams.
-- `guides/_registry.yml` is the machine-readable catalog of all 34 guides across 5 categories.
+- `guides/_registry.yml` is the machine-readable catalog of all 35 guides across 5 categories.
 
 When adding or removing skills, agents, teams, or guides, the corresponding registry must be updated to stay in sync.
 <!-- AUTO:END:registries -->
+
+### Tools
+
+`tools/` is not one of the five content types, which is how a session forgets it exists. The list below is keyed by what you are trying to do, because a session that has lost a tool's name to a compaction still remembers that (§ Adding a Tool).
+
+<!-- AUTO:START:tools -->
+`tools/_registry.yml` catalogues 19 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in three directions — a file without a row, a row without a file, anything under `tools/` that is not a plain file — inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).
+
+- Packaging a diff and its changed files for an adversarial or subagent reviewer, stamped with the commit it was cut at (BUNDLE_SHA, BUNDLE_STATUS) so a mismatch is refused instead of graded (not for reading a review round's output back in — that is review-findings.mjs or agent-report.mjs) → `tools/review-bundle.sh`
+- Recovering a subagent's report that a truncated notification lost, or waiting for and extracting round N of a continued reviewer (GATE: lines) (not for a Workflow panel's structured output — that is review-findings.mjs) → `tools/agent-report.mjs`
+- Turning a Workflow review panel's JSON result (the tasks/<id>.output the notification truncates) into a findings file and a verdict table (not for a single reviewer's text report — that is agent-report.mjs) → `tools/review-findings.mjs`
+- Repairing a translator: field that claims a translation on a scaffolded (byte-copy) mirror, or listing the mirrors whose attribution needs a human call (not for rewriting a stub's body to current English — that is refresh-untranslated-stubs.mjs) → `tools/translator-stamp.mjs`
+- Resetting untranslated stub mirrors to byte-identical English after a source edit (refresh, commit, --stamp <sha>, commit), or asking which stubs lag English (--verify) (not for a mirror whose translator: is not the scaffold literal — the tool refuses it; a translated file is normalize-i18n-fences.js's job) → `tools/refresh-untranslated-stubs.mjs`
+- Editing a provenance field across many mirrors after propagating frozen-fence bytes by hand, when the normalizer will not fire and a column-0 substitution would silently no-op on every file nesting provenance under metadata: (not for deciding WHETHER a field should move — that is the evolve-* skills' Step 4.5 and scripts/lib/provenance.js; normalize-i18n-fences.js, which stamps fence_basis_commit itself when IT does the propagating; backfill-fence-basis.js, which stamps only where a mirror is verifiable against its own source_commit) → `tools/provenance-field.mjs`
+- Deriving or checking a published auto-memory index-cap figure from the recorded probe arms → `tools/capgeom.py`
+- Capturing the literal request body a session sent (what is in the context), when the session's self-report cannot be trusted → `tools/wirecap.py`
+- Proving that a correction to a dated record only APPENDED, so an Addendum and its end-of-line pointers can be shown to have left the body untouched, rather than merely showing that no word was deleted (not for the --word-diff removal count published in #828, which is blind to a mid-sentence insertion where this tool is not, and which flags an append that changes the last token where this tool does not (it reports that number beside its own verdict); patch-literal.py, which proves one edit landed and not that nothing else moved) → `tools/append-only.py`
+- Measuring a TABLE of mutants for a review round or a PR body, every row under the command CI runs rather than under whatever was convenient per row (not for scripts/mutation-check.js itself, which proves ONE line and is the right unit for that; a merge gate — this mutates the working tree, takes minutes, and needs a green baseline) → `tools/mutation-envelope.sh`
+- Building a redaction transform, when the verification step must be a post-condition on your own output rather than a scanner over somebody's tree (not for scanning a draft you did not transform — that is check-redaction.sh; a corpus of terms to deny, which it deliberately does not ship) → `tools/redaction-lib.py`
+- Redacting one markdown, HTML, mermaid or text artifact for disclosure, with the verification inlined so unverified output cannot be handed back (not for auditing a tree nobody transformed (no tool here does that, by design); check-redaction.sh, whose subject is a draft it did not produce) → `tools/redact-artifact.py`
+- Scanning a draft for third-party internals and secrets before it is posted or published outside this machine (not for the repository's own credential gate, npm run validate:security) → `tools/check-redaction.sh`
+- Merging a queue of open Dependabot PRs without the shared-lockfile conflicts a batch merge produces → `tools/merge-dependabot.sh`
+- Validating a built Hermes profile distribution against Hermes's own installer before it is published → `tools/validate-hermes-distribution.py`
+- Waiting for the checks on a PR head or a merge commit to settle, each context printed once as it settles and the exit code a verdict (not for gh pr checks --watch, which prints every result twice, has no commit mode, and whose exit code is no verdict (with --json it exited 0 with every context pending)) → `tools/watch-checks.sh`
+- Merging a pull request whose reviewed head sha and green checks are confirmed, in the seat-branch form that survives a main held by a worktree, with the verdict read from the API and the branches cleaned up (not for gh pr merge --delete-branch, whose exit code describes its local checkout, not the merge (#792); a queue of Dependabot PRs is merge-dependabot.sh) → `tools/merge-pr.sh`
+- Patching files by literal replacement where every needle must occur exactly the expected number of times (default once) before anything is written, with a diff preview, a forbidden-residue check and a byte-identical read-back (not for sed -i or perl -pi, which no-op on the NTFS mount and cannot refuse a needle that matched nothing; the Edit tool for one interactive edit; scripts/mutation-check.js, which patches and then RESTORES for a test verdict) → `tools/patch-literal.py`
+- Recording the measurements behind a handoff, a PR body or a review reply as a fact sheet, each labelled fact naming the command that produced it and quoting its output verbatim, so that every number, sha and status line a draft cites traces to a line a verifier can re-run (not for the probe file of a review round (the reviewers' experiments run against two heads, a bash file per round); filling a draft's placeholders from the sheet, which is patch-literal.py; scanning the sheet before it is posted, which is check-redaction.sh) → `tools/fact-sheet.sh`
+<!-- AUTO:END:tools -->
 
 ### Plugin Packaging
 
@@ -53,25 +81,112 @@ Guides, skills, agents, and teams are cross-referenced. The parent project `CLAU
 - Guides use GitHub-flavored markdown with code blocks for all commands
 - All R examples use `::` for package-qualified calls (e.g., `devtools::check()`) rather than `library()` calls
 
+## Excluding a Template, a README, or a Non-Shipped File
+
+Three questions look like one and are not. Picking the wrong predicate has shipped a bug in
+each direction, so choose by the QUESTION, never by which import is already in the file:
+
+| Ask | Use | Where |
+|---|---|---|
+| is this author scaffolding? | `isTemplate(path)` / `isTemplateSegment(name)` | `scripts/lib/content-paths.js` |
+| is this non-content? (`_`-prefix **or** `README` — a superset) | `isExcludedId(id)` | `scripts/lib/content-paths.js` |
+| does npm ship it? | `isExcludedFromPackage(path, shippedEntries(root).negations)` — that array only; any other throws (#882) | `scripts/lib/skills-inventory.js` |
+
+`isExcludedId` is wrong for the package question — its `_`-prefix rule would skip
+`skills/_experimental/tool.py`, which ships. A name test is wrong too, in the other direction:
+npm's `files` negations are **root-anchored**, so `skills/<id>/_template/helper.py` also ships,
+and a depth-agnostic `includes('_template')` was measured wrong against `npm pack` and reverted.
+`isTemplate` is root-anchored for the same reason (an `i18n/<locale>/` prefix is stripped first,
+so a mirror anchors like its English source). Do not collapse the three.
+
+`_template` exists in **three spellings** — `_template`, `_template.md`, `_template.mjs` — across
+six paths in six trees, two of which (`tests/`, `workflows/`) are not `CONTENT_TYPES`. The set is
+EXACT, not a `_template*` prefix: a prefix silently absorbs a new spelling, which would make the
+drift check unable to fail at all.
+
+That set exists **twice**, because a bash script cannot import an ES module:
+
+```
+scripts/lib/content-paths.js   TEMPLATE_SEGMENTS   the JS half
+scripts/lib/template-names.sh  TEMPLATE_NAMES      the shell half, sourced by
+                                                   validate-integrity.sh,
+                                                   sync-discovery-symlinks.sh
+                                                   and validate-skills.yml
+```
+
+**Adding a spelling means editing both, in the same commit.** `template-predicate.test.js`
+asserts set equality in both directions and separately drives the shell function name by name,
+so a one-sided edit fails naming the other side. `templateSpellingDrift` checks the sets against
+what is actually tracked, also in both directions — a spelling on disk the predicate misses, and
+a declared member no path uses.
+
+A `run:` block in a workflow is bash executing in the checkout and can `source` that file; "a
+workflow cannot import" is an assumption, not a constraint. What genuinely cannot be routed is a
+`find -not -path` prune, whose anchor is tree-specific — those two sites carry their reason
+inline.
+
 ## Skill Validation
 
-- SKILL.md files must stay under 500 lines; extract extended examples to `references/EXAMPLES.md` using the progressive disclosure pattern
+- SKILL.md files must stay under 500 lines; extract extended examples to `references/EXAMPLES.md` using the progressive disclosure pattern. **The gate walks the mirrors too, so 500 is not the ceiling that binds an English file.** A refreshed stub is English's body plus six provenance frontmatter fields (`locale`, `source_locale`, `source_commit`, `fence_basis_commit`, `translator`, `translation_date`), so English at exactly 500 puts every stub at 506 and reddens `skills` — a required context — plus `translations`. For a skill with scaffolded mirrors the English ceiling is **494**. `validate-skills.yml` names the remedy in its own comment and keeps `OVERRUN_ALLOWLIST` empty: extract, do not allowlist (#843)
 - The `references/` subdirectory pattern follows [agentskills.io progressive disclosure](https://agentskills.io/specification) — large code blocks (>15 lines), full configs, and multi-variant examples go in `references/EXAMPLES.md` with cross-references from the main SKILL.md
-- CI enforces validation on all PRs touching `skills/` (`.github/workflows/validate-skills.yml`): frontmatter fields, required sections, line counts, and registry sync
+- CI enforces validation on every PR (`.github/workflows/validate-skills.yml`): frontmatter fields, required sections, line counts, and registry sync. It ran only on PRs touching `skills/` until #641 removed the path filter so the job could become a required status check — a required check that does not report never goes green, it waits forever
 - CI also runs a repo-wide line-endings gate (`.github/workflows/validate-line-endings.yml`) that fails any PR whose committed blobs contain CRLF. Check locally with `npm run validate:line-endings` (reads the index, non-mutating). Repair: `git add --renormalize .` — and if a new file type is flagged, declare it in `.gitattributes` as `text eol=lf`
+- `npm test` is the release gate, and it runs **four** things: `validate:integrity`,
+  `check-readmes`, `test:scripts` and `test:cli`. It ran only the first two until #680, so
+  `release.yml`'s step named "Run tests" published to npm having executed neither suite. The CLI
+  surface was covered anyway — by `prepublishOnly`, npm's own lifecycle hook, which still runs
+  the CLI suite independently and must not be removed in favour of the step. `test:scripts` was
+  genuinely ungated
 - Changes under `scripts/` run `npm run test:scripts` (`.github/workflows/ci-scripts.yml`), the node:test suite in `scripts/test/`. Its `pretest:scripts` hook fails when the suite is empty — `node --test` exits 0 reporting `tests 0` when its glob matches nothing, so without that hook a rename or deletion leaves the job green having run nothing (#486)
+- A suite tears its fixture down with `rmTree(dir)` from `scripts/test/_tmp.js`, never a bare `rmSync(dir, { recursive: true, force: true })` — `tmp-helper.test.js` fails naming any site that does; its scanner counts parentheses, so nesting of any depth inside the call is seen, and a call whose parentheses never close is reported under its own name. A concurrent writer under the fixture makes the bare call throw `ENOTEMPTY`, which reddened the required `scripts-test` context with 818 of 819 passing (#791), and `node:fs`'s `maxRetries` is not the fix: measured on Node 22.16 it fails 20 of 20 with `maxRetries: 3` and, as a control, with `maxRetries: 10` at over a second of delay, while re-invoking `rmSync` — which re-walks the tree — succeeds; so the difference is what is re-attempted, not for how long, and why 22's option re-attempts less was not read from Node's source. `rmTree` re-invokes the whole removal (`tests/results/2026-09-07-rmsync-enotempty-probe/`)
 - To validate locally before committing:
   ```bash
-  # Check a single skill
-  lines=$(wc -l < skills/<skill-name>/SKILL.md)
-  [ "$lines" -le 500 ] && echo "OK ($lines lines)" || echo "FAIL ($lines lines > 500)"
+  # One skill AND its mirrors. Checking the English file alone is what let a
+  # 500-line file pass locally and fail CI on four mirrors at 506 (#843).
+  ID="<skill-name>"
+  LIST=$(find skills i18n -type f -name SKILL.md -path "*/$ID/SKILL.md")
+  if [ -z "$LIST" ]; then
+    echo "REFUSED: no SKILL.md matches $ID — a typo scans nothing and looks clean"
+  else
+    echo "$LIST" | while IFS= read -r f; do
+      n=$(wc -l < "$f")
+      case "$n" in ''|*[!0-9]*) echo "UNREADABLE: $f ($n)"; continue ;; esac
+      [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
+    done
+    echo "checked $ID: $(echo "$LIST" | wc -l) file(s), English plus every mirror"
+  fi
 
-  # Check all skills
-  for f in skills/*/SKILL.md; do
-    lines=$(wc -l < "$f")
-    [ "$lines" -gt 500 ] && echo "OVER: $f ($lines lines)"
-  done
+  # Whole corpus, same predicate, same two guards.
+  ALL=$(find skills i18n -type f -name SKILL.md 2>/dev/null)
+  if [ -z "$ALL" ]; then
+    echo "REFUSED: no SKILL.md found — run this from the repository root"
+  else
+    echo "$ALL" | while IFS= read -r f; do
+      n=$(wc -l < "$f")
+      case "$n" in ''|*[!0-9]*) echo "UNREADABLE: $f ($n)"; continue ;; esac
+      [ "$n" -gt 500 ] && echo "OVER: $f ($n lines)"
+    done
+    echo "cap scan complete: $(echo "$ALL" | wc -l) file(s), no OVER line above means nothing is over"
+  fi
   ```
+
+  Two guards **in each half**, because the reassuring line is the dangerous part
+  of a scan like this — and the corpus half shipped without either until an
+  adversarial round measured it printing `cap scan complete` at exit 0 having
+  scanned nothing, and again while skipping `i18n/` entirely with an `OVER` line
+  already on screen. `find` writes its complaint to stderr, so a reader following
+  the instruction to read the last line sees a pass. That is why the count is now
+  *inside* the reassuring line: a scan that reports `0 file(s)` refutes itself,
+  and one that reports a plausible number has earned the sentence.
+  `[ "$n" -gt 500 ] && echo` is **fail-open**: a non-numeric `$n` makes `[`
+  exit 2 (measured on bash 5.2.21 and zsh 5.9), `&&` short-circuits, and the file
+  passes in silence — so the `case` runs first and reports `UNREADABLE` instead.
+  Note this is the opposite of #842's `if [ … -le … ]` shape, where exit 2 reads
+  as false and *skips* the fail arm; which way a bad operand falls depends on the
+  construct, not on the operator, so re-derive it at each site. The `REFUSED`
+  branch exists because `find` with a mistyped `$ID` prints nothing and the loop
+  runs zero times — the unknown-scope trap `check-i18n-fence-parity.js` closed in
+  #634, in a place with no tool to enforce it.
 
 ## Proving a Gate Can Fail
 
@@ -91,15 +206,149 @@ Exit 0 means the mutant was killed and the check works. Exit 1 means it survived
 
 The tool refuses to guess. It requires a green baseline, backs the file up on disk before touching it, restores from an in-memory buffer (never `git checkout --`, which restores from the *index*), and reports `INCONCLUSIVE` rather than a kill whenever the test command could not be interpreted. It declines to run at all on a symlink, on an `--assume-unchanged`/`--skip-worktree` file, on a file with uncommitted changes, on a mutation matching more than one site without `--allow-multiple`, or while a stale `.mutation-check.bak` is present.
 
-Three traps it exists to catch, all of which have shipped here:
+The traps it exists to catch, all of which have shipped here:
 
 - **A mutation that silently matched nothing** makes the exercise pass vacuously while looking correct. In-place `sed`/`perl -0pi` no-op on the NTFS mount, and bare `grep` resolves to ugrep locally but GNU grep in CI — which is why the tool is Node and compares content in memory rather than trusting the edit.
-- **A mutation that merely breaks parsing is not coverage.** Deleting a line carrying a brace makes the file fail to load, and node:test reports that as one failing test — indistinguishable from a real kill. Mutants are syntax-checked first and reported `INVALID` if they do not parse. Note `node --check` parses a `.js` file as CommonJS, so the check is done through a temp file whose extension matches the package's module type; without that this guard is dead for every `.js` file in an ESM package.
+- **A mutation that merely breaks parsing is not coverage.** Deleting a line carrying a brace makes the file fail to load, and node:test reports that as one failing test — indistinguishable from a real kill. Mutants are syntax-checked first and reported `INVALID` if they do not parse. Note `node --check` parses a `.js` file as CommonJS, so the check is done through a temp file whose extension matches the package's module type; without that this guard is dead for every `.js` file in an ESM package. Until #758 that guard covered JavaScript **only**: for every other extension it returned true while `[3/5]` printed `it parses`, and a `.py` mutant with its `def` colon removed scored `MUTANT KILLED by 1 failing test(s)`. The gate now runs one checker per type (`scripts/lib/mutation-parse.js`: `node --check`, `python3 compile()` — not `ast.parse`, which accepts a `return` outside any function — `bash -n`, `Rscript --vanilla parse()`, js-yaml, `JSON.parse`), names the checker on the pass path, refuses a type it has no checker for **before** spending a baseline, and reports `INCONCLUSIVE` when the interpreter is absent or answered with no verdict. `.md`, `.markdown` and `.txt` have no syntax to check; the tool proceeds on them and says the `INVALID` verdict cannot apply, so a doc-gate proof (a path typo in a SKILL.md, say) still runs. `workflows/*.mjs` are checked in the Workflow dialect (wrapped the way the runtime wraps them), because plain `node --check` refuses their top-level `return` unmutated — the first #773 proof reported `INVALID MUTANT` on an original for exactly that reason. What this gate does **not** cover is the next bullet's trap for non-JS targets: `crashSuspicion` matches node runtime-error text, so a Python `NameError` at import time from a mutant that parses still reads as a kill.
+- **A mutation that parses and then CRASHES is not coverage either** (#621), and it is the quieter half of the same trap because the syntax gate waves it through. Deleting `const stamped = …` leaves `if (stamped !== null)` referencing an undeclared binding, so every test that reaches the module throws `ReferenceError`. Measured on `normalize-i18n-fences.js`: that reported `MUTANT KILLED by 15 failing test(s)`, while the honest instrument for the same line — weakening a condition, which parses *and* runs to completion — died to exactly **1** test, the one written for it. Same line, same tool, 15 versus 1, and only the 1 means anything. The count gets quoted as evidence of coverage strength, where bigger reads as stronger; here it was precisely inverted. Such a mutant is now reported `SUSPECT KILL` on either of two signals: a runtime-error signature in the output, or a failure count taking a large share of the suite. **Both are heuristics and both are waivable** — `--allow-crash-text` and `--allow-broad`. That is a deliberate retreat from a stricter first design which held that a crash signature is never legitimate and so never waivable. True of a crash; false of a *signature*, which matches text. Two shapes here render identically and both are an `AssertionError` whose message embeds a subprocess crash: `dependency-free.test.js` asserting that a module acquires no package dependency (a perfect kill, one failing test) and `fence-basis-stamp.test.js` catching the #621 crash (15 failing). Separating them by the failures' error type was written, shipped and removed — what divides them is whether the crash *is* the asserted property, which no transcript records. So SUSPECT names a doubt for a human to resolve rather than a verdict the tool cannot justify.
 - **A manual break-and-check proves the feature, not the coverage.** Running the CLI by hand and seeing the right behaviour is a demo; "removing this line fails these N tests" is coverage. In #458 the exit code was verified end to end by hand and written up in the commit, while deleting the fix line still left all 101 tests green.
-- **A suite that discovers nothing reports success.** `node --test <glob>` prints `tests 0` and exits 0 when the glob matches no files, so a renamed or moved suite leaves its CI job green having run nothing. `test:scripts` guards this with a `pretest:scripts` hook; `test:cli` instead names its file, which fails loudly on rename but silently skips any *newly added* file. Whichever you pick, know which silence you bought (#486).
+- **A suite that discovers nothing reports success.** `node --test <glob>` prints `tests 0` and exits 0 when the glob matches no files, so a renamed or moved suite leaves its CI job green having run nothing. `test:scripts` guards this with a `pretest:scripts` hook; `test:cli` instead names its file, which fails loudly on rename but silently skips any *newly added* file. Whichever you pick, know which silence you bought (#486). Since #697 `test:cli` buys that silence back: `pretest:cli` compares the named set against the discovered set **in both directions**, so a file added beside `cli.test.js` is reported rather than skipped. Naming is now the strictly better trade of the two, and `test:scripts` still globs.
 - **A guard must test the accept-rule itself, not a proxy for it.** `--locale` on the fence normalizer was validated with `existsSync('i18n/' + value)` while the scan accepted only directories carrying a `skills/` subtree. `de/skills`, `..` and `glossaries` all passed the guard and scanned nothing — the vacuous result the guard existed to reject. Hoist the consumer's own predicate into one list and validate membership in it, so the two cannot drift.
 
 The same asymmetry applies to the *subject* of a check: a green gate proves something about the gate, and an unexplained **stale generated file** proves something about the corpus. `check-readmes` going stale is how a stray fixture commit was caught after `git status` read clean — investigate such staleness before regenerating it away.
+
+## Ratcheting a Warn-Only Gate
+
+A warn-only gate cannot fail, so every commit under it is locally legal and nothing forbids its backlog from rising. "Warn is a temporary state with a named exit" names the exit without forcing any move toward it. `debt-ratchet.yml` is what forces it:
+
+```bash
+npm run ratchet
+```
+
+It records a **member list** per ratcheted class and fails on any difference in either direction — a finding the list does not name is added debt, and a member the gate no longer reports means the file must move in the same commit. Exact-set, never `observed <= declared`: a `<=` ratchet is green when one member is repaired and a different one appears, and "matches some earlier state" is the shape that keeps deletions green forever.
+
+The key is `file` + `kind`, **never** `file` + `tag`. A tag-sequence finding's tag is rebuilt from the count-matched English revision differing in the fewest positions, so an English-only edit rewrites the key and the member leaves the list silently.
+
+**A class may be ratcheted only once every member has been read.** Otherwise "do not add debt" becomes "pay down debt of unknown validity", and the number carries an authority nobody checked. The tag-structure findings triaged in #598 are ratcheted; the body-divergence class of #477 is listed under `unratcheted` with the reason. Quote the counts from the gate, never from here or from the ratchet file.
+
+Reading them is not ceremony. It corrected two diagnoses that had already been written down: #598 had called two fresh files stale (#626), and the empty escape-class member list turned out to mean "no escape the gate can *see*" — a swallowed opener usually changes the fence count, which lands it in the unjudged `unalignable` pool and produces no finding at all (#628).
+
+The file also carries the **advisory-gate inventory**, checked rather than written down: each listed gate's command must still appear in the workflow it names, and every `--warn` invocation across `.github/workflows/` must be listed, so a new warn-only gate cannot be added silently. Counts are deliberately absent from the unratcheted entries — a number no tool reads is documentation drift. Its blind spot is stated in the file: a step advisory because it simply never exits non-zero carries no token to sweep for.
+
+Negative evidence is `scripts/envelopes/debt-ratchet.mjs` (`npm run gate-envelope`), which mutates the real corpus against `npm run ratchet` — the command CI runs, not the inner script. Its `expect: null` case pins the scope boundary as a measurement: a new body divergence must **not** move the ratchet.
+
+## Merging With a Red Check
+
+A red check is not one situation. **The tool found something** and **the tool could not run** need
+opposite responses, and only the second is ever a merge-anyway case. Until #643 that distinction
+was unwritten, and PR #640 was merged at `UNSTABLE` on four judgements made in the moment, none
+of them recorded where a later session would find them.
+
+The rule, in the order it must be applied:
+
+1. **Is it one of the five required contexts** — `line-endings`, `integrity`, `skills`,
+   `scripts-test`, `cli-test`? Then it is not a judgement call — **fix it or re-run it (step 3);
+   it is never a merge-anyway case.** All five are ordinary retriable workflows, so an
+   infrastructure red there clears with `gh run rerun --failed`; there is no situation in which
+   the right answer is to merge past one. The merge is refused for everyone except the
+   `bypass_actors` maintainer, and bypassing a red required check is outside the standing
+   allowance. (That allowance, stated here because it was previously only in an operator's
+   session memory and a rule may not cite an authority its reader cannot open: a PR whose
+   checks are green AND which has been reviewed may be merged without asking. Green but
+   unreviewed is not covered, and neither is anything in this section.)
+2. **Did the tool fail, or did it find something?** Read the log, not the conclusion. A
+   dependency install that 503s, a runner that dies, an API that is down — that is the tool
+   failing. Anything the check *reports about the diff* is a finding, and a finding is never
+   merged past.
+
+   There is a third case the dichotomy hides: a failure that REPRODUCES on retry but is
+   environmental — a flake, or a live dependency of the *test* being down. The runner ran and
+   the install succeeded, so it is not the tool failing; it says nothing about the diff, so it
+   is not a finding. It is a defect in the CHECK. Fix the check; do not merge past it and do
+   not file it as a tool failure.
+3. **If the tool failed: can it be re-run?** Prefer re-running to reasoning. Every check in
+   `.github/workflows/` is retriable with `gh run rerun --failed` — for 30 days, after which a
+   stale PR's failed run needs a new commit like any other. **CodeQL default setup is not
+   retriable at all** — its runs are `event: dynamic` and `gh run rerun` refuses them, bare or
+   `--failed`. A transient red there clears only with a new commit, or *reportedly* a PR
+   close/reopen (asserted, never measured — try it, do not plan around it).
+
+   **Try the escape before reasoning about the exception.** Step 4 is for when the escape is
+   unavailable too, which is the case #640 actually was: the outage that reddened the check was
+   still running, so the paths that would have cleared it were failing in the same window.
+4. **If it cannot be re-run: record the four facts before merging**, on the PR, in these words —
+   which log line shows the failure is the tool's; that the check is not required; that every
+   repo-owned workflow is green on the same SHA; and how the check will be re-exercised
+   afterwards (for CodeQL, it re-runs on `main`, and the merge commit's own result is the
+   confirmation).
+
+### The merge itself, once green and reviewed
+
+The rule first, because it holds by hand as much as through the tool: **the exit code of
+`gh pr merge` never answers "did it merge"; `gh pr view --json state,mergeCommit` does.** In
+this repository `main` is held by a linked worktree, so `gh pr merge --delete-branch` merges
+the PR and then fails its local checkout: exit 1 with the merge done and neither branch
+deleted (#792, where all three local states were measured; a detached HEAD fails one step
+earlier, a named branch that is not the PR's head is silent). The recipe is
+`bash tools/merge-pr.sh <n> --head <reviewed sha>`: it merges from a throwaway seat branch,
+reads the verdict from the API, refuses a head that is not the sha you name, a check context
+that is not green, a **required** context of the base branch that is missing or not `pass`, or
+a `mergeStateStatus` other than `CLEAN`/`HAS_HOOKS`, passes `--match-head-commit` (measured to
+be honoured: a stale sha is refused and the PR stays OPEN), and deletes the branches
+afterwards. The required set is read from `gh api repos/<o>/<n>/rules/branches/<base>` on every
+run. That check exists because the maintainer merges as a ruleset bypass actor, so GitHub
+would not stop a merge whose required workflows never started; "every context green" can hold
+with all five required contexts absent (#896). Its exit 3 means merged
+but not cleaned up, which is not "not merged": read the lines, then `guard:rebaseline`. One
+trap for a hand-written probe, measured 2026-09-08 on #810: `gh pr merge` given an EMPTY PR
+argument acts on the checked-out branch's pull request, so a script that has lost its number
+fires at the PR it is standing on; validate the number before every `gh pr` call, as the tool
+does.
+
+**`git branch -d` is not a merge check** (#865). It asks whether the branch's tip is in its
+upstream when one resolves, and in the HEAD of the worktree it runs in otherwise (`git help
+branch`, git 2.43). That reference is often not the one that means "merged". Three cases were
+measured on 2026-09-23 in a throwaway repository:
+
+- **It deletes an unmerged branch, silently.** A branch pushed with `-u` and with nothing
+  unpushed has its tip in its upstream, so `-d` deletes it even if it never reached `main`. It
+  exits 0 with one warning on stderr, which a `2>/dev/null` wrapper throws away.
+- **It refuses a merged branch.** A merged PR's remote branch is usually deleted, and
+  `git push --delete` drops the local tracking ref with it. With the upstream gone, HEAD
+  answers, and a stale local `main` does not contain the tip: `error: … not fully merged`,
+  exit 1.
+- **It refuses a merged branch even when HEAD contains it.** An upstream that resolves but lags
+  behind the tip (the push came from another clone) is still the reference asked:
+  `not yet merged to 'refs/remotes/origin/<b>', even though it is merged to HEAD`, exit 1.
+
+The check that means "merged" is ancestry against the merge commit the API reports. Fetch the
+base first, so that commit is present locally, or the ancestry test fails for want of the
+object. After that check, `-D` is the right tool, not a shortcut:
+
+```bash
+git fetch origin <base>
+oid=$(gh pr view <n> --json mergeCommit --jq .mergeCommit.oid)
+git merge-base --is-ancestor <branch> "$oid" && git branch -D <branch>
+```
+
+`tools/merge-pr.sh` does exactly this for the PR's head branch. When the local tip is not in the
+merge, it keeps the branch and exits 3: that is a commit never pushed, or a branch someone
+force-pushed over while its tracking ref went stale (#896).
+
+**`CodeQL: neutral` is not evidence that code scanning passed.** The aggregate check by that name
+comes from the `github-advanced-security` app and reports `neutral` while the per-language
+`Analyze (…)` runs — a different app, `github-actions` — report `failure`. A reader checking "is
+CodeQL green" sees the wrong one. Read the `Analyze (…)` runs:
+
+```bash
+gh api --paginate repos/pjt222/agent-almanac/commits/SHA/check-runs \
+  --jq '.check_runs[] | select(.name|test("Analyze")) | "\(.name)\t\(.conclusion)"'
+```
+
+Deliberately still open on #643: whether default setup stays at all. A committed `codeql.yml`
+produces retriable runs and removes step 3's exception; default setup is lower maintenance and
+commits no workflow YAML into a repo that auto-commits. That is a maintainer trade, not a
+technical one, and the rule above holds under either answer — only step 3's exception changes.
 
 ## Guarding a Multi-Agent Run
 
@@ -111,22 +360,45 @@ npm run guard:verify     # after — exit 1 if anything moved
 npm run guard:release    # when the run is genuinely over
 ```
 
+**When your own run moves HEAD** — you merge your branch, switch branches, rebase — `verify` reports it as a change, because from the outside a merge and an agent's stray commit look identical. That is correct and it used to have no exit but `guard:snapshot -- --force`, a flag whose own text warns against itself. Reaching for `--force` twice is how a control becomes a ritual, so the legitimate move has its own command (#688):
+
+```bash
+npm run guard:rebaseline                       # prints the commits; refuses, exit 2
+npm run guard:rebaseline -- --accept=<sha>     # re-arms, recording what it accepted
+```
+
+Read every commit it prints and decide whether you made it. The **author line is a hint, not the test** — a subagent commits through this repository's own git config, so in #493 the author was identical to the operator's; what the commit *contains* is the test. The `<sha>` must equal the current HEAD, and the new snapshot records the accepted commits and reason where `--force` leaves no trace. It **refuses** any worktree, content, or index-flag change: "I moved HEAD deliberately" is a claim about history and says nothing about file contents.
+
+The sha requirement is a control against **accident, not intent** — anyone can type `$(git rev-parse HEAD)`. What it buys is that a red `guard:verify` never carries a paste-ready override in its own output, so the green path is not one paste away from the failure it is reporting. `verify` therefore names the command without the sha, and refuses to name it at all when the working tree also moved, since `rebaseline` would then decline.
+
 It compares HEAD, branch, worktree status, **the content of every changed or untracked file**, and index flags. Content is load-bearing: overwriting a file that was already modified leaves its ` M path` status line byte-identical, and this repo is usually mid-edit. Index flags are included because `git update-index --skip-worktree` makes git report a modified file as clean from that point on, disarming every later check.
 
 It fails closed — a missing, unreadable, or foreign snapshot exits 2 rather than reporting success, and exit 2 must never be read as a pass. `snapshot` refuses to overwrite and `verify` keeps the snapshot until `guard:release`, so a nested run cannot rebaseline the outer run's damage into a green. **Ignored paths are out of scope** (walking them means hashing `node_modules`), so a stray write to `CONTINUE_HERE.md` would not be seen (#493).
 
-Agents that may run shell commands should also carry the `REPO_SAFETY` preamble from `workflows/_template.mjs` — `mktemp -d` rather than a shared path, `cd "$DIR" || exit 1`, and a `git rev-parse --show-toplevel` assertion before anything destructive. The preamble is documentation; the guard is the control.
+**A peer session may share this worktree**, and two limits follow. The snapshot records **no owner** — "foreign" above means only a different repository or format version — so `guard:release` from a second session in this repo drops the incumbent's baseline as soon as the tree compares clean: never release a slot you did not arm, and read a verify you did not arm as reporting tree movement, not run liveness. And the guard cannot see a peer who was already working when you arrived, because no baseline predates their edits. An occupied worktree is therefore a case for agreeing on path scope before your first *edit*, not for inspecting harder. The rules and their rationale: [Sharing the worktree with a peer session](guides/creating-workflows.md#sharing-the-worktree-with-a-peer-session).
+
+Agents that may run shell commands should also carry the `REPO_SAFETY` preamble from `workflows/_template.mjs` — `mktemp -d` rather than a shared path, `cd "${DIR:?}" || exit 1`, a **braced absolute path under that directory in every destructive command** (`rm -rf "${DIR:?}/fixtures"`, never `rm -rf fixtures` and never a bare `"$DIR/fixtures"`), a `git rev-parse --show-toplevel` assertion before `git add`, `git commit`, or a tool run with a write flag — braced too (`= "${DIR:?}"`), because outside any repository `git rev-parse` prints nothing and the unbraced form compares `""` to `""` and passes — and never `git commit` / `git update-index` / `git checkout --` against the repository itself. That rule is about DELETING, and its reason is a mechanism, not a headcount:
+
+```bash
+# after a cd that failed, in a shell that did not abort
+rm -rf fixtures              # resolves against the repository — gone
+rm -rf "${DIR:?}/fixtures"   # resolves against $DIR, or refuses if unset — repository untouched
+```
+
+So `cd "${DIR:?}" || exit 1` stops being a single point of failure. A real population of relative `rm` calls does run in agent sandboxes, and it is sized, graded and re-derivable in `tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md` — **quote the counts from that file, never from here.** They have been restated twice in two days and its § "The corpus moves while it is being measured" says why they will move again. Do not repeat "zero risky absolute paths" from any older text: that figure came from an instrument that read 14% of its own corpus, and the true count is not zero. The brace is what stops the fix from opening a worse hole than it closes: `cd ""` returns 0 without moving, so an unset `DIR` leaves the agent standing in the repository *and* expands the unbraced form to `/fixtures` (measured, bash 5.2.21 and zsh 5.9). Separately, and about WRITING, their prompt should name an absolute path they may write under and rule out the repository root: one sentence, and the one control that reaches an agent nobody expected to write at all. The prompt prevents a compliant agent from writing where it stands, worktree isolation contains a stage you expected to write, and the guard detects what neither caught — it is the control that still works when instruction fails.
 
 ## Adding a New Skill
 
-1. Create `skills/<skill-name>/SKILL.md` following the format of existing skills
-2. Add the entry to `skills/_registry.yml` under the appropriate domain
-3. Update `total_skills` count in `_registry.yml`
-4. Symlink into `.claude/skills/`: `ln -s ../../skills/<skill-name> .claude/skills/<skill-name>`
-5. Reference related skills in the new skill's "Related Skills" section
-6. Run `npm run update-readmes` (or let CI auto-commit on push to main)
-7. **Scaffold translations** (required — do not skip): `for locale in de zh-CN ja es; do npm run translate:scaffold -- skills <skill-name> "$locale"; done && npm run translation:status`
-8. The meta-skill at `skills/create-skill/SKILL.md` documents this process in detail
+The contributor's half — `SKILL.md` from the template with its six sections, the registry entry
+with its `total_skills` bump, the `.claude/skills/` symlink, and the local checks — lives in
+[CONTRIBUTING.md](CONTRIBUTING.md) § Adding a skill and is deliberately not repeated here (#765).
+Follow it first, whether the author is an external contributor or this session. What follows is
+the maintainer's half, run at merge and never asked of a contributor:
+
+1. Run `npm run update-readmes` (or let CI auto-commit on push to main)
+2. **Scaffold translations** (required — do not skip, and do not run early): `for locale in de zh-CN ja es; do npm run translate:scaffold -- skills <skill-name> "$locale"; done && npm run translation:status`. A scaffold copies the English bytes at the moment it runs, so it is made once, after the English is committed and final — on an external PR that means after merge, never while the PR is still being revised (#765 finding 2)
+3. For a new domain, the viz wiring — palette, glyph, icon, `skills.json` — becomes its own issue (#781 is the shape)
+4. The meta-skill at `skills/create-skill/SKILL.md` documents the full authoring procedure in detail
 
 ## Adding a New Agent
 
@@ -159,9 +431,33 @@ Note: Teams are **not** auto-discovered like agents (from `.claude/agents/`). Do
 4. Add the entry to `guides/_registry.yml` and update `total_guides` count
 5. Run `npm run update-readmes` (or let CI auto-commit on push to main)
 
+## Adding a Tool
+
+`tools/` holds operator utilities — the arithmetic behind an investigation, a probe helper, a
+review-bundle cutter — run by a person or a session, repeatedly, and never a gate
+(`tools/README.md`). The rule that fills it: a snippet typed a second time in a session becomes
+a file here, not a third heredoc.
+
+1. Write `tools/<id>.<ext>` with a `--verify` mode that re-derives its own claims and exits
+   non-zero when one stops holding (a node:test suite that names the path is the alternative)
+2. Add its row to `tools/_registry.yml`, every field on one line. `need` is a need-first
+   sentence ("Doing X when Y.") — § Tools above is keyed by it, so a session that remembers
+   the procedure and has lost the name can still find the file. `not_for` names the tool or
+   gate it is most confused with. `verify_in_ci: false` requires a `verify_skip_reason`
+3. Run `npm run check:tools-registry` — parity in three directions (a file without a row, a
+   row without a file, anything under `tools/` that is not a plain file) plus the schema, the
+   required half, inside `validate:integrity` — then `npm run update-readmes`: § Tools and the
+   table in `tools/README.md` are generated from the row, so a hand edit to either is stale by
+   definition. `check:tools-registry -- --verify` runs every self-test the registry allows in
+   CI; the non-required `tools-verify` job runs the same thing
+4. Retire a tool with `status: deprecated` and `superseded_by`; the row stays so a reader of
+   an old handoff finds the successor, the index drops it, the table marks it
+
 ## README Automation
 
-Dynamic sections in README files are auto-generated from the registries. Sections between `<!-- AUTO:START:name -->` and `<!-- AUTO:END:name -->` markers are replaced by `scripts/generate-readmes.js`. Three files (`guides/README.md`, `viz/README.md`, `teams/README.md`) are fully generated.
+Dynamic sections in README files are auto-generated from the registries. Sections between `<!-- AUTO:START:name -->` and `<!-- AUTO:END:name -->` markers are replaced by `scripts/generate-readmes.js`. Four files (`guides/README.md`, `viz/README.md`, `teams/README.md`, `tests/README.md`) are fully generated — they carry no markers, so any hand edit to them is stale by definition. The other eight are marker-based, and **deleting a marker pair is fatal** (exit 2), not stale: regenerating cannot restore a section that has nowhere to go.
+
+`npm run check-readmes` runs on every PR touching a generated file, and on a daily schedule (`.github/workflows/validate-readmes.yml`). The schedule is not redundant — it is what catches drift when the auto-commit healer itself fails.
 
 ```bash
 # Update all READMEs from registries
@@ -175,7 +471,12 @@ CI auto-commits README updates when registry files change on `main` (`.github/wo
 
 ## Viz Deploy Model
 
-The visualization deploys to GitHub Pages from `.github/workflows/deploy-pages.yml`, which regenerates `viz/public/data/skills.json` before `vite build`. A registry change therefore reaches the page only through `build-data.js`, which reads three registries — `skills`, `agents`, `teams` — and every `skills/<id>/SKILL.md` body, from which it derives the node title, `metadata.tags`, and the entire skill-to-skill link set. The trigger paths therefore include `skills/*/SKILL.md` (#451). They deliberately exclude `guides/_registry.yml`, which no deploy step reads (#452), `skills/_template/SKILL.md`, which has no registry entry, and `agents/*.md` / `teams/*.md`, whose bodies `build-data.js` never opens.
+**Every generated-and-committed artifact in this repository, and what reads each one, is
+enumerated in `generated-artifacts.yml` and checked by `npm run check:generated-artifacts`
+(#590).** The rows below are the viz-specific detail; that file is the list, and it is the one
+thing a new generator cannot be added without touching.
+
+The visualization deploys to GitHub Pages from `.github/workflows/deploy-pages.yml`, which regenerates `viz/public/data/skills.json` before `vite build`. A registry change therefore reaches the page only through `build-data.js`, which has **nine** inputs, not the four usually cited: the three registries `skills` / `agents` / `teams`; every `skills/<id>/SKILL.md` body, from which it derives the node title, `metadata.tags` and the entire skill-to-skill link set; `i18n/_config.yml`; the three `i18n/<locale>/{skills,agents,teams}` directory scans; and `viz/js/title-case.js`. The i18n inputs are load-bearing rather than incidental — `_config.yml` supplies `meta.supportedLocales`, and the scans put a `locales` field on **every** node, so scaffolding one translated skill changes the published graph. That is why `i18n/**` is a trigger path, and it is the one pattern in `deploy-pages.yml` carrying no comment explaining itself. The trigger paths therefore include `skills/*/SKILL.md` (#451). They deliberately exclude `guides/_registry.yml`, which no deploy step reads (#452), `skills/_template/SKILL.md`, which has no registry entry, and `agents/*.md` / `teams/*.md`, whose bodies `build-data.js` never opens.
 
 The site makes three kinds of runtime fetch, and only the first is CI-derived:
 
@@ -187,7 +488,23 @@ The site makes three kinds of runtime fetch, and only the first is CI-derived:
 
 `data/workflow.mmd` is the same staleness shape #363 fixed for `skills.json`: generated, committed, runtime-fetched, and not regenerated by the deploy job. Regenerate it locally when the PUT annotations in `viz/` change.
 
-The icon manifests (`icon-manifest.json`, `agent-icon-manifest.json`, `team-icon-manifest.json`) are *not* fetched at runtime at all. They are inputs to the R renderers in `viz/build.sh`, which produce committed PNGs. Regenerate them locally when glyphs change, via the full pipeline:
+Since #590 it has a reader:
+
+```bash
+npm run check:diagram-nodes
+```
+
+It compares the `put id:"…"` ids in `viz/` against the node ids in the committed diagram, both directions, and nothing else — labels, `node_type`, edges and source-side annotation staleness are all invisible to it. Runs `--warn` in `validate-skills.yml`, ratcheted in `debt-ratchet.yml` at its one known member: `mode_campfire` is annotated and has no node, because the diagram predates `viz/js/campfire.js`. The exit is #601, since the repair is a regeneration and the lockfile cannot currently produce one.
+
+Adding a PUT annotation therefore also means adding a member line in `debt-ratchet.yml` in the same commit, until #601 lands. And check the ruler before believing a count from a variant of this check: anchoring the diagram scan on `[` alone reports five missing nodes where one is real, because `node_type:"input"` renders as `id(["…"])`; skipping the generator's own `exclude` adds two more; walking the filesystem instead of asking git scans 7,177 files instead of 72 and reaches the annotated examples vendored into `viz/renv/library/`.
+
+The icon manifests — all three under `viz/public/data/`, not `viz/` and not `viz/data/`, both of which appear in older prose and in the generator's own docstring — are *not* fetched at runtime at all. `viz/js/icons.js` derives icon URLs purely by convention, so a missing render is a silent 404 and no manifest lookup exists that could catch it.
+
+They are inputs to the R renderers in `viz/build.sh` **and outputs of them**: `build-icons.R`, `build-agent-icons.R` and `build-team-icons.R` each `write_manifest(...)` back. So `bash viz/build.sh` dirties the manifests BY DESIGN, and any regenerate-and-diff gate over them must account for that or it can never come out clean.
+
+What the renderers produce is **WebP** — 8,280 committed across `viz/public/icons/` and `icons-hd/`. PNG exists only as a `tempdir()` intermediate that is deleted before the manifest write-back. The committed `.png` files are favicons and wordmarks from `build-favicon.R` / `build-wordmark.R`, which `build.sh` never invokes at all.
+
+Regenerate the manifests locally when glyphs change, via the full pipeline:
 
 ```bash
 cd viz && bash build.sh          # never call Rscript directly
@@ -195,7 +512,9 @@ cd viz && bash build.sh          # never call Rscript directly
 
 Note that `npm run build-manifest` builds skill manifests only — `build-icon-manifest.js` defaults to `['skill']`, and `build.sh` passes `--type all`.
 
-`viz/public/data/skills.json` stays committed for local `npm run dev` and the Docker image. Because CI regenerates it on deploy, a stale committed copy no longer reaches the published site, but it can still drift from the registries in-tree; refresh it with `npm run build-data` in the same commit as the content change.
+`viz/public/data/skills.json` stays committed for local `npm run dev` and for `npm run build-manifest` run standalone — **not** for the Docker image, which is what this said before. `viz/docker-entrypoint.sh` runs `node build-data.js` on every container start, overwriting the copy baked in by the Dockerfile. (And that regeneration is degraded: `viz/Dockerfile` copies `skills/` and `agents/` but never `teams/` or `i18n/`, and `build-data.js` only *warns* when those are absent — so the container serves a graph with zero teams and empty locales.)
+
+Because CI regenerates it on deploy, a stale committed copy no longer reaches the published site, but it can still drift from the registries in-tree; refresh it with `node viz/build-data.js` from the repository root (`build-data` is a script in `viz/package.json`, not the root one — the root `npm run build-data` reports a missing script) in the same commit as the content change. Note `build-data.js` stamps `meta.generated`, so any staleness gate must compare with that key removed.
 
 ## Internationalization (i18n)
 
@@ -219,7 +538,8 @@ i18n/
 
 - Translate prose sections (descriptions, headings, pitfalls, validation text)
 - Keep in English: `name` (=ID), code blocks, tool names, tags, domain, file paths, config values
-- Every translated file has frontmatter fields: `locale`, `source_locale`, `source_commit`, `translator`, `translation_date`
+- Every translated file has frontmatter fields: `locale`, `source_locale`, `source_commit`, `translator`, `translation_date`, and — where the file can prove it — `fence_basis_commit` (3,415 of 3,644 after the #552 backfill; absence means unverified, not missing)
+- `source_commit` and `fence_basis_commit` are **not** duplicates (#552). The first is the English revision a *human* translated against — staleness reads it, and a tool must never move it, with one carve-out: a mirror whose `translator` is still the scaffolder's literal is treated as an untranslated stub with no human claim to forge — the field, not the content, is what the tool reads; the harmless mislabel (a translated file whose field is wrong) is measured in 1,041 files (#801), and the dangerous one (a translated file still carrying the scaffold literal) has not been measured at all — and there `refresh-untranslated-stubs.mjs --stamp` maintains both fields (the recipe below; #800 was the first corpus run). The second is the revision this file's *frozen fences* were verified against — `normalize-i18n-fences.js` moves it when it propagates English bytes. One field could not record both: after a mechanical fence repair, bumping it makes the first claim false and leaving it makes the second false. Absence of `fence_basis_commit` means "unverified", which is honest and is the state of most of the corpus until the backfill lands; it is never stamped on a file whose fences diverge. Full rationale in `i18n/README.md`.
 - Translated SKILL.md files must stay under 500 lines
 
 #### Which code fences are frozen
@@ -288,6 +608,140 @@ Runs **warn-only** in CI until the backlog clears (#477), then flips to blocking
 Warn is a temporary state with a named exit, not the design. Quote the current
 count from the checker rather than from here — it was 1,307 at introduction and
 drops with each batch.
+
+**"Blocking" means the job exits non-zero. Whether that refuses a merge is a
+separate fact, and the two were conflated everywhere until #641.** Merge
+refusal is branch-protection configuration, not anything a script can assert
+about itself. Since #641 the ruleset `require-core-checks` requires five
+contexts — `line-endings`, `integrity`, `skills`, `scripts-test`, `cli-test` —
+so a red one of those does refuse the merge. Every other *gate* in
+`.github/workflows/` is job-blocking only: `readmes`, `tests`, `translations`,
+`content-style`, `yaml-fences`, `banned-invocations`, `content-security`,
+`dreams`, `locales-json` and `tools-verify` all go red visibly on a PR and none stops a merge.
+Four further jobs are neither, because they never report on a PR at all —
+`deploy`, `publish`, `release` and `update` trigger on push-to-main or on a tag. And the
+CodeQL analyses are not jobs in `.github/workflows/` in the first place: default
+setup is server-managed and commits no workflow YAML, which is why grepping that
+directory for them finds nothing (`guides/protecting-github-repositories.md`).
+That is 19 job ids across 17 files, five required and fourteen not — counted, not
+recalled: the sentence said 17 across 15 while `publish` existed and nobody had re-run
+the count (the one-liner: load every `.github/workflows/*.yml` and list `jobs` keys).
+
+The ratchet runs inside `skills`, so it is merge-blocking; the fence gate beside
+it runs `--warn`, so its *findings* cannot redden the job — which is the whole
+reason the ratchet exists. Its *refusals* still can, and the distinction is
+deliberate: `assertNotShallow` hard-exits 1 on a shallow clone even for a
+`--warn` caller, on the stated argument that a warn-only run there would not warn
+less, it would lie. "Warn-only" describes what a gate does with what it finds,
+never what it does when it cannot measure at all.
+
+Two constraints that decide what *can* be required, both learned the expensive
+way. A **path-filtered** workflow cannot be: it does not report on PRs outside
+its filter, and a required check that never reports sits on "Expected" and
+refuses the merge forever — so the five required workflows carry no `paths:`.
+And the job id **is** the context name, so two jobs sharing an id cannot be
+required separately; four workflows were all named `validate` until #641.
+
+`pjt222` remains a `bypass_actors` entry with `bypass_mode: always`, so the
+required checks bind everyone except the maintainer — deliberate for a
+single-maintainer repo, and the reason "required" here means "refuses an
+accidental or agent-driven merge", not "refuses every merge".
+
+Read the live state before quoting any of this — and note it takes two calls,
+because the branch-rules endpoint returns the rules in effect *without* their
+bypass lists. It answers which rules bind `main`; it cannot answer who bypasses
+them:
+
+```bash
+gh api repos/pjt222/agent-almanac/rules/branches/main                  # which rules bind main
+gh api repos/pjt222/agent-almanac/rulesets --jq '.[] | "\(.id) \(.name)"'
+gh api repos/pjt222/agent-almanac/rulesets/<id> --jq '.bypass_actors'  # ... and who bypasses them
+```
+
+Warn-only does not mean unbounded, though it did until #591. The gate's
+tag-structure findings are ratcheted in `debt-ratchet.yml` and `npm run ratchet`
+blocks on a rise — see § Ratcheting a Warn-Only Gate. The body-divergence class
+is deliberately outside that, because its members have not been read.
+
+The tag-structure classes are two, split by `isRetagEscape` (#598). A
+**tag-sequence** finding is the #481 escape — a frozen tag became localisable, so
+the fence left the body check entirely — and it blocks. A **tag-drift** finding
+changes tags without freeing any fence, so the body check still covers every one
+of them; it is reported, ratcheted, and does not block. Its cause varies by
+member: read the file rather than assuming staleness.
+
+#### Editing a frozen fence in English
+
+The gate accepts a body from **any** English revision, so it cannot tell you
+whether your edit reached the mirrors. Measured on `write-helm-chart` (#551):
+editing the English fence and propagating to **zero** mirrors leaves
+`--id write-helm-chart` reporting `violations: 0`, before and after the commit.
+A mistyped id no longer hides inside that: since #634 the gate refuses a scope it
+did not reach, so an unknown id, an unknown locale, a real-but-untranslated id
+and a `--locale`/`--id` pair that is individually valid but jointly empty all
+exit 2 instead of printing `OK` over zero files. The guard asks REACHED, never
+EXISTS — `existsSync('skills/' + id)` would pass for a skill nobody has
+translated and still compare nothing. What licenses dropping the old "read
+`filesCompared`" advice is that a *reached* id cannot then compare zero files
+either: `walkEnglishHistory` feeds the working tree into the pool, so every
+English file that survived the target walk has a history entry and the orphan
+path is unreachable for it. A valid `--id` now either refuses or compares at
+least one file.
+`check-translation-freshness.js` adds nothing — those mirrors were already
+`STALE`, so the edit moved no signal at all. Both gates are green either way.
+
+Propagate to all ten mirrors in the same commit, then verify by **bytes**:
+
+```bash
+npm run check:fence-propagation -- --id write-helm-chart
+```
+
+It compares whole frozen-fence bodies at their ordinal against English in the
+working tree. Whole bodies, never the line you inserted — a mirror can carry your
+insertion and still differ elsewhere in the same fence, because it may have
+matched a different historical revision to begin with. That is not theoretical:
+the #551 propagation turned up a second, pre-existing lag in the same file on the
+tool's first run.
+
+It is deliberately id-scoped, has no default for `--id`, and is **not** in CI —
+corpus-wide it reports a population nobody has read, which is the state #631
+exists to change. Do not ratchet it before its members are read.
+
+For a mirror that is an **untranslated stub** the propagation is mechanical, and
+since #789 it is a tool rather than a scratchpad script carried through four
+commits (#788) and then five more (#793):
+
+```bash
+npm run refresh:stubs -- skills <id> --verify          # which stubs lag English, and at which line
+npm run refresh:stubs -- skills <id>                   # rewrite them: English's frontmatter plus the six, English's body
+git commit -m 'chore(i18n): refresh <id> stubs' -- i18n/   # stage only what the refresh touched
+npm run refresh:stubs -- skills <id> --stamp <sha>     # then record a commit in source_commit and fence_basis_commit
+```
+
+`--stamp` accepts any commit at which the English source is byte-identical to the working
+tree and which carries the file; it checks both before touching a mirror. For a pure refresh
+(English unchanged on the branch) the branch's base commit qualifies too, so one commit would
+do; the two-commit shape above is the general one — English edited on the same branch, then
+its stubs refreshed — and #800 followed it for a pure refresh so the stamped sha is the commit
+that carries the refreshed mirrors. A refresh carries `translation_date` unchanged: for a stub
+that field is the date it was first scaffolded, so a stub can show a `source_commit` newer than
+its `translation_date`, which means "scaffolded, then mechanically refreshed", never a
+translation event (`i18n/README.md`).
+
+It reads `translator:` from the mirror at the moment it writes and refuses any
+value other than the scaffolder's literal, so a stub that was hand-translated
+since the last run cannot be overwritten by a re-run for an unrelated reason.
+That refusal is the kind of guard that survives a rewrite as a comment while
+quietly ceasing to be a check, which is why it is pinned by a test and proven
+with a mutant. A refresh also drops `fence_basis_commit` from any stub it
+changes — the bytes it writes are the working tree's, which no commit carries
+yet — and `--stamp` writes it back. `translate:scaffold` cannot do this (it SKIPs
+an existing target, correctly) and `normalize-i18n-fences.js` cannot either (no
+`--id` scope, and it restores from `source_commit`, the revision *before* the
+edit). Its first `--verify` over the twenty skills whose four mirrors are all
+stubs found four lagging English in every locale — a description rewritten, a
+`version` bumped, prose edited after the scaffold — which is the population the
+scaffold-then-forget path produces.
 
 ### Translation Workflow
 

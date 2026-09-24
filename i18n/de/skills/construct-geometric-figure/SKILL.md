@@ -14,7 +14,7 @@ metadata:
   domain: geometry
   complexity: intermediate
   language: multi
-  tags: geometry, euclidean-construction, compass-straightedge, classical-geometry
+  tags: geometry, construction, ruler-compass, euclidean, straightedge
   locale: de
   source_locale: en
   source_commit: 6f65f316

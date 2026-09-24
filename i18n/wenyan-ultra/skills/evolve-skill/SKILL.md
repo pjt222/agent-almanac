@@ -101,7 +101,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 |---|---|---|
 | Skill ID | Unchanged | New ID: `<skill>-advanced` |
 | File path | Same SKILL.md | New directory |
-| Version bump | Patch or minor | Starts at 1.0 |
+| Version bump | Minor (major only if breaking) | Starts at 1.0 |
 | Complexity | May increase | Higher than original |
 | Registry | No new entry | New entry added |
 | Symlinks | No change | New symlinks needed |
@@ -121,14 +121,12 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 
 直編舊 SKILL.md：
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- Open for editing
+- Add/revise procedure steps
+- Strengthen Expected/On failure pairs
+- Add tables or examples
+- Update When to Use triggers
+- Revise Inputs if scope changed
 
 循此編則：
 - 保諸節——加容，勿去節
@@ -175,15 +173,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. 取現源 commit 雜：
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 於諸譯文 frontmatter 中更 `source_commit`：
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 旗待重譯之地入 commit 信：
@@ -215,12 +212,12 @@ npm run translation:status
 
 ### 五：更版與元
 
-依 semver 升 frontmatter `version`：
+升 frontmatter `version`：
 
 | Change Type | Version Bump | Example |
 |---|---|---|
-| Typo fix, wording clarification | Patch: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
-| New step, new pitfall, new table | Minor: 1.0 → 2.0 | Added Step 7 for edge case handling |
+| Typo fix, wording clarification | Minor: 1.0 → 1.1 | Fixed unclear sentence in Step 3 |
+| New step, new pitfall, new table | Minor: 1.0 → 1.1 | Added Step 7 for edge case handling |
 | Restructured procedure, changed inputs | Major: 1.0 → 2.0 | Reorganized from 5 to 8 steps |
 
 亦更：

@@ -43,14 +43,20 @@ done
 # exact string, so a checkout reached via a different path than a link was baked
 # with will read as external and be left alone — fail-safe (never wrong-deletes),
 # but such links won't be cleaned until re-linked from the current path.
-ALMANAC_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+ALMANAC_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd) # abort-ok: cd into this script's own parent; failure means the script was deleted mid-run
 cd "$ALMANAC_ROOT"
+
+# shellcheck source=lib/template-names.sh
+source "$ALMANAC_ROOT/scripts/lib/template-names.sh"
 
 REG="skills/_registry.yml"
 [ -f "$REG" ] || { echo "FATAL: $REG not found (run from the almanac repo)" >&2; exit 2; }
 
-# Registered skill ids (skip the _template guard defensively; it is not in the registry).
-mapfile -t SKILL_IDS < <(grep '^      - id: ' "$REG" | sed 's/.*- id: //' | tr -d '\r ' | grep -v '^_template$' | sort -u)
+# Registered skill ids (skip the template guard defensively; it is not in the registry).
+# `strip_template_ids` replaces a `grep -v '^_template$'` that was maintained identically
+# here and at validate-integrity.sh B12 -- the same expression in two files, agreeing by
+# convention (#672).
+mapfile -t SKILL_IDS < <(grep '^      - id: ' "$REG" | sed 's/.*- id: //' | tr -d '\r ' | strip_template_ids | sort -u)
 
 # (F1) The orphan cleanup below DELETES owned global links. Never let a short or
 # failed registry parse (a YAML re-indent, a changed generator) make every owned
@@ -60,7 +66,7 @@ if [ "${#SKILL_IDS[@]}" -eq 0 ]; then
   echo "FATAL: 0 skills parsed from $REG — registry format changed? Refusing to run." >&2
   exit 2
 fi
-disk_skill_dirs=$(find skills -mindepth 1 -maxdepth 1 -type d ! -name '_template' | wc -l | tr -d ' ')
+disk_skill_dirs=$(find skills -mindepth 1 -maxdepth 1 -type d "${TEMPLATE_FIND_PRUNE[@]}" | wc -l | tr -d ' ') # abort-ok: find over skills/, whose absence is a broken checkout and is caught above
 stale_cleanup_safe=1
 if [ "${#SKILL_IDS[@]}" -lt "$disk_skill_dirs" ]; then
   stale_cleanup_safe=0
@@ -75,7 +81,7 @@ missing=0 wrong=0 broken=0 stale=0 fixed=0
 ensure_link() {
   local link="$1" target="$2" label="$3"
   if [ -L "$link" ]; then
-    local cur; cur=$(readlink "$link")
+    local cur; cur=$(readlink "$link") # abort-ok: guarded by the `[ -L "$link" ]` test one line up
     if [ "$cur" = "$target" ]; then
       if [ ! -e "$link" ]; then
         # Correct target but dangling — the skills/<id>/ dir is missing (a
@@ -130,7 +136,7 @@ if [ -d "$HOME/.claude" ]; then
       while IFS= read -r name; do
         local_link="$HOME/.claude/skills/$name"
         [ -L "$local_link" ] || continue
-        tgt=$(readlink "$local_link")
+        tgt=$(readlink "$local_link") # abort-ok: guarded by the `[ -L "$local_link" ] || continue` two lines up
         case "$tgt" in
           "$ALMANAC_ROOT"/skills/*)
             if [ -z "${REGISTERED[$name]:-}" ]; then

@@ -19,6 +19,7 @@ skills:
 locale: de
 source_locale: en
 source_commit: 33b561c9
+fence_basis_commit: 33b561c9
 translator: claude-opus-4-6
 translation_date: 2026-03-13
 ---

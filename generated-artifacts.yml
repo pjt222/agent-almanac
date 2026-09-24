@@ -1,0 +1,356 @@
+# Generated-and-committed artifacts, and what reads each edge — #590
+#
+# Nearly every gate in this repository validates a TILE: frontmatter fields, line counts, banned
+# strings, fence tags, YAML shape. Nearly every failure that has actually shipped here was an
+# EDGE: a registry disagreeing with the disk, a translation disagreeing with its `source_commit`,
+# a generated artifact disagreeing with the source beneath it. The edge gates that exist were
+# each added AFTER the corresponding edge failed, and they were never enumerated as a class — so
+# there was no way to answer "which edges are undecorated?"
+#
+# This file is that enumeration. It is CHECKED, not merely written:
+# `npm run check:generated-artifacts` (`scripts/check-generated-artifacts.js`).
+#
+# ## Why this file keys on GENERATORS and not on artifacts
+#
+# The obvious enforcement is "grep what scripts write, require each destination to be listed".
+# Measured on this tree, that is impossible: 171 source files, 253 write sites, and **zero**
+# whose destination is a bare string literal — every one composes the path (`join(ROOT, …)`,
+# `resolve(…)`, a variable). The first ruler used for that measurement was itself broken
+# (`[^,)]+` truncates at the comma inside `join(dir, 'x')`), so it was re-derived with a direct
+# grep for `write(File)?Sync\(\s*['"` + "`" + `]`, which also returns 0.
+#
+# Generators, by contrast, ARE enumerable. So the reverse sweep binds them, exactly as
+# `debt-ratchet.yml`'s `advisory_gates` binds every `--warn` invocation across the workflows.
+#
+# ## What the checker asserts
+#
+# FORWARD, per entry: every `paths` glob matches at least one TRACKED file; the `generator` file
+# exists; and a declared `gate.command` actually appears in the `gate.where` it names.
+#
+# REVERSE: every generator reachable from the three enumerable sources below must appear here, or
+# be listed under `generators_without_committed_output` with a reason. A new generator therefore
+# cannot be added silently.
+#
+#   1. npm scripts in `package.json` and `viz/package.json`
+#   2. commands invoked by `viz/build.sh`
+#   3. steps in `.github/workflows/` that commit output back to the repository
+#
+# Whatever those reach is filtered by the GENERATOR'S OWN FILENAME — `build*`, `generate*`,
+# `update*`. Keying on the filename rather than the npm alias matters twice: source 3 would
+# otherwise sweep every script a committing workflow runs, including checkers, and the alias rule
+# had a live blind spot — `translation:status` runs `scripts/generate-translation-status.js`, a
+# real generator of a committed artifact that no alias-keyed sweep could see.
+#
+# An earlier revision of this header advertised three sources while the checker implemented TWO,
+# which left four of the five exemptions below unable to match anything — written for a design the
+# code did not have. An adversarial review caught the file whose banner is "CHECKED, not merely
+# written" making an unchecked claim about its own enforcement. Source 3 is now implemented, and
+# an exemption that could never match is itself a finding.
+#
+# Source 2 is load-bearing and was almost omitted. `viz/package.json` has NO script for
+# `build-wordmark.R` or `build-terminal-glyphs.js`, so an npm-script-only sweep would miss two
+# generators — including the one feeding `cli/lib/glyph-data.json`, which SHIPS TO NPM.
+#
+# ## The blind spots, stated rather than discovered later
+#
+# ADDING a generator is loud only if it is reachable from one of the three sources AND its
+# filename carries one of the three prefixes. A `postprocess-thing.js` invoked from a fourth
+# place is invisible, covered only by the forward assertion — the way `debt-ratchet.yml` marks
+# `token: none`.
+#
+# DELETING a row is the unstated half, and it is quieter. A row whose generator the sweep cannot
+# reach loses its forward protection with no signal at all. TWO rows are in that position today:
+# `docs-wordmark` (no npm script, no build.sh line, no committing workflow) and
+# `discovery-symlinks` (a `.sh`, outside the extension set). `translation-status` was a third
+# until the sweep began keying on the generator's filename, which made
+# `generate-translation-status.js` discoverable.
+#
+# ## Two constraints any regenerate-and-diff gate here must respect
+#
+#   - `viz/public/data/*icon-manifest.json` are INPUT AND OUTPUT. The R renderers write back to
+#     them (`build-icons.R:379`, `build-agent-icons.R:315`, `build-team-icons.R:315`), so
+#     `bash viz/build.sh` dirties the manifests BY DESIGN and a naive diff can never be clean.
+#   - `viz/public/data/skills.json` carries `meta.generated` (an ISO timestamp, `build-data.js`).
+#     A gate must compare with that key removed, or it fails on every run.
+
+version: 1
+
+# Measured claims in the `unread_edge` prose below — counts, timestamps, "currently stale" — are
+# a SNAPSHOT of 2026-08-26 and no tool reads them. They are here because an unread edge is not
+# actionable without knowing what it is costing right now. They will go stale: #714's palette and
+# icon regeneration would falsify several of them in one commit. Re-derive before quoting, and
+# treat a disagreement between this prose and the corpus as this file being out of date rather
+# than as a finding.
+as_of: 2026-08-26
+
+artifacts:
+
+  # ── Gated: regenerate-and-diff, and both proven able to fail ──────────────────────────────
+  #
+  # Measured rather than assumed, by planting and restoring:
+  #   check-dreams   artifact-side plant -> exit 1;  source-side plant -> exit 1;  restored -> 0
+  #   check-readmes  artifact-side plant -> exit 1;                                restored -> 0
+
+  - id: readme-family
+    # TWELVE paths, and three of them are not READMEs. Naming this row "the README family" is how
+    # the enumeration hid the fact that this repo's own instruction file is machine-written in
+    # part. The list is `MANAGED` in the generator.
+    paths:
+      - README.md
+      - CLAUDE.md
+      - SECURITY.md
+      - guides/quick-reference.md
+      - skills/README.md
+      - agents/README.md
+      - teams/README.md
+      - guides/README.md
+      - viz/README.md
+      - tests/README.md
+      - i18n/README.md
+      - tools/README.md
+    generator: scripts/generate-readmes.js
+    gate:
+      kind: regenerate-and-diff
+      command: npm run check-readmes
+      # The WORKFLOW, not package.json. A package.json needle proves the npm alias exists and
+      # nothing about whether CI runs it — so unwiring the gate would have been invisible.
+      where: .github/workflows/validate-readmes.yml
+    also: package.json
+    notes: >-
+      The daily schedule in validate-readmes.yml is not redundant with the per-PR run: it is what
+      catches drift when the auto-commit healer itself fails.
+
+  - id: dreams-atlas
+    paths: [dreams/atlas.html]
+    generator: scripts/build-dreams.js
+    gate:
+      kind: regenerate-and-diff
+      command: npm run check-dreams
+      where: .github/workflows/validate-dreams.yml
+    also: package.json
+
+  # ── Regenerated on deploy, so the PUBLISHED copy is safe; the committed copy is unread ─────
+
+  - id: viz-skills-json
+    paths: [viz/public/data/skills.json]
+    generator: viz/build-data.js
+    gate:
+      kind: regenerated-before-publish
+      command: npm run build-data
+      where: .github/workflows/deploy-pages.yml
+    unread_edge: >-
+      The COMMITTED copy has no reader. Local `npm run dev` serves it verbatim, and
+      `viz/build-icon-manifest.js` consumes it when run standalone, so a stale committed copy is
+      observable off-CI. Any gate must exclude `meta.generated`.
+    inputs_note: >-
+      NINE inputs, not the four commonly cited: skills/_registry.yml; each skills/<id>/SKILL.md;
+      agents/_registry.yml; teams/_registry.yml; i18n/_config.yml; the three
+      i18n/<locale>/{skills,agents,teams} directory scans; and viz/js/title-case.js. The i18n
+      inputs are load-bearing — _config.yml supplies meta.supportedLocales, and the scans put a
+      `locales` field on EVERY node.
+    latent_hole: >-
+      deploy-pages.yml triggers on the single-level glob `skills/*/SKILL.md`, while build-data.js
+      resolves `meta.path` from the registry. All 371 registry paths are exactly `<id>/SKILL.md`
+      today, so the trigger is currently exhaustive — a property of the flat layout, not of the
+      trigger. content-paths.js documents that the nested `skills/<domain>/<id>/SKILL.md` shape is
+      historically real (~42% of blobs) and still keys to the same id, so re-nesting one skill
+      would silently stop firing the deploy for it.
+
+  # ── Unread edges ───────────────────────────────────────────────────────────────────────────
+
+  - id: viz-workflow-diagram
+    paths: [viz/public/data/workflow.mmd]
+    generator: viz/build-workflow.R
+    gate:
+      kind: partial
+      command: node scripts/check-workflow-diagram-nodes.js --warn
+      where: .github/workflows/validate-skills.yml
+    unread_edge: >-
+      The node-parity check compares NODE IDS only, in both directions, and is warn-only. It is
+      blind to labels, node_type, edges, and source-side annotation staleness. Live proof: the
+      committed diagram says "Bind mode switching (2D/3D/Hive/Chord/Flow)" while viz/js/app.js
+      annotates six modes including Campfire — and the gate is green, because `bind_modes` exists
+      on both sides. Runtime-fetched by viz/js/workflow.js, and deploy-pages.yml does NOT
+      regenerate it, so the stale copy reaches users.
+    blocked_by: >-
+      "#601" — a staleness gate is not feasible today. Regeneration is R-only and requires putior,
+      which is ABSENT FROM viz/renv.lock ENTIRELY (not a broken pin — no entry at all), so
+      renv::restore() can never produce the generator. "#637" must also settle what a regeneration
+      would ingest, since putior is passed no exclusion for renv/ or node_modules/.
+
+  - id: viz-icon-manifests
+    paths:
+      - viz/public/data/icon-manifest.json
+      - viz/public/data/agent-icon-manifest.json
+      - viz/public/data/team-icon-manifest.json
+    generator: viz/build-icon-manifest.js
+    gate:
+      kind: none
+    unread_edge: >-
+      Not fetched at runtime — viz/js/icons.js derives icon URLs purely by convention, so a
+      missing render is a silent 404 with no manifest lookup that could catch it. Currently stale:
+      369/371 skills, 73/75 agents, 18/22 teams. `status` is hardcoded 'pending' in all three
+      builders, so it cannot serve as a render record; `path` omits the palette segment.
+    constraint: >-
+      INPUT AND OUTPUT — the R renderers write back to these files, so any regenerate-and-diff
+      gate must account for that or it can never come out clean.
+
+  - id: viz-rendered-icons
+    paths:
+      - viz/public/icons/**/*.webp
+      - viz/public/icons-hd/**/*.webp
+    generator: viz/build-all-icons.R
+    gate:
+      kind: coverage-only
+      command: bash scripts/validate-integrity.sh
+      where: .github/workflows/validate-integrity.yml
+    unread_edge: >-
+      WebP, not PNG — 8,280 committed across the two trees. The integrity checks are warn-only and
+      compare REGISTRY vs GLYPH MAPPING, never registry vs rendered file: B8 skills glyphs, B9
+      agent glyphs, B10 DOMAIN_STYLES. There is NO TEAM CHECK AT ALL — `team_glyphs` appears zero
+      times in validate-integrity.sh — so all four team gaps are structurally invisible. Nothing
+      anywhere asserts that a .webp exists for a node the site will render.
+    live_defect: >-
+      460 rendered per palette against 468 skills.json nodes = 8 missing. Seven are glyph gaps;
+      the eighth, `verify-memory-integrity`, HAS a glyph (viz/R/glyphs.R:147) so the glyph checks
+      report OK, has zero renders in all 9 palettes and both trees, and IS a node in the
+      regenerated skills.json. The published site renders its node and 404s its icon, and every
+      gate is green.
+
+  - id: translation-status
+    paths: ["i18n/*/translation_status.yml"]
+    generator: scripts/generate-translation-status.js
+    gate:
+      kind: none
+    unread_edge: >-
+      No --check mode under any alias — --check/--verify/--dry-run/--diff/--help all exit 2
+      against a default-deny parser whose whole flag set is --verdicts --margins --write --root.
+      The self-healing argument does NOT cover this file: generate-readmes.js builds the README
+      table FROM the status files, so a stale status file regenerates an identical README and
+      check-readmes agrees with the staleness by construction; integrity check B13 compares README
+      against status file, two artifacts downstream of the same stale source; and
+      validate-readmes.yml's paths are the OUTPUT set, which does not include this file. So
+      push-to-main is the ONLY thing that ever recomputes it, and if the healer fails nothing
+      notices, ever.
+    also: >-
+      B13's field compare covers translated/total (plus pct/stubs/unjudged on the totals row).
+      `stale` and `last_updated` have no parity partner anywhere, and a hand-edit matches no
+      update-readmes.yml trigger path, so it does not self-heal either.
+
+  - id: cli-glyph-data
+    paths: [cli/lib/glyph-data.json]
+    generator: viz/build-terminal-glyphs.js
+    gate:
+      kind: none
+    ships_to_npm: true
+    unread_edge: >-
+      The highest-consequence unread edge: package.json `files:` includes cli/lib/, so this is
+      PUBLISHED. Consumed at runtime by cli/lib/sprites.js. Currently STALE — 73 agents / 18 teams
+      against registries of 75 / 22. The staleness is downstream, not independent: the generator
+      reads viz/public/icons/cyberpunk/agents/*.webp, so it carries whatever the icon set carries.
+    reachable_from: viz/build.sh step 5 only — there is no npm script for it.
+
+  - id: viz-palette-data
+    paths:
+      - viz/public/data/palette-colors.json
+      - viz/js/colors-generated.js
+    generator: viz/generate-palette-colors.R
+    gate:
+      kind: none
+    unread_edge: >-
+      Both currently STALE — generated 2026-07-22, carrying agent_count 73 / team_count 18.
+      colors-generated.js is imported by viz/js/colors.js, so vite BUNDLES it, and deploy-pages.yml
+      regenerates skills.json but NOT this — the deployed site ships stale colour data.
+
+  - id: viz-favicons
+    paths:
+      - viz/public/favicon*
+      - viz/public/apple-touch-icon.png
+      - viz/public/favicons/**
+      # `logo*` was missing while `build-favicon.R` writes all five — an adversarial review found
+      # five committed outputs of an ALREADY-LISTED generator sitting outside the inventory,
+      # which is the failure mode a row-shaped table has and a path-shaped one does not.
+      - viz/public/logo*
+    generator: viz/build-favicon.R
+    gate:
+      kind: none
+    unread_edge: >-
+      Reachable only via `npm run build-favicon`; viz/build.sh never invokes it and no workflow
+      calls it. These are the source of essentially all committed .png — which is why "the
+      committed PNGs" attached to the icon-manifest row was wrong: the icon renders are .webp and
+      build*-icons.R produces no PNG at all.
+
+  - id: docs-wordmark
+    paths: ["docs/logos/wordmark/*.svg"]
+    generator: viz/build-wordmark.R
+    gate:
+      kind: none
+    unread_edge: >-
+      Fully orphaned: no build.sh step, no npm script, no workflow. The only generator writing
+      OUTSIDE viz/, which is why a viz-scoped sweep misses it. Note that
+      docs/logos/wordmark/preview.html and docs/logos/preview.html are NOT written by it — those
+      are hand-authored.
+
+  - id: discovery-symlinks
+    paths:
+      - .claude/agents
+      - .claude/skills
+    generator: scripts/sync-discovery-symlinks.sh
+    gate:
+      kind: coverage-only
+      command: bash scripts/validate-integrity.sh
+      where: .github/workflows/validate-integrity.yml
+    unread_edge: >-
+      Script-produced and committed (tracked as mode-120000 symlink blobs), so it meets the
+      definition. Integrity checks assert registry -> symlink existence in one direction only;
+      B12's global-hub check is warn-only and SKIPs in CI. No regenerate-and-diff.
+
+# Generators that legitimately produce no committed artifact. Listed so the reverse sweep has an
+# explicit answer for each rather than silently passing over it.
+generators_without_committed_output:
+  - id: viz-build
+    command: vite build
+    matches_nothing_by_design: true
+    reason: >-
+      Writes viz/dist/, which .gitignore excludes. Documentation rather than an exemption: `vite`
+      is not a `node`/`Rscript` invocation, so the sweep can never discover it and this entry can
+      never be what lets it through.
+  - id: viz-build-data-in-container
+    command: docker-entrypoint.sh
+    matches_nothing_by_design: true
+    reason: >-
+      Regenerates inside the container image, not the repository. NOTE a real defect found while
+      enumerating this: viz/Dockerfile copies skills/ and agents/ but NEVER teams/ or i18n/, and
+      build-data.js only warns on their absence, so the container serves a graph with 0 teams and
+      empty locales.
+  - id: cli-adapters
+    command: cli/adapters/*
+    matches_nothing_by_design: true
+    reason: >-
+      Writes into the USER's project or home directory, never this repository. A glob, so it
+      names no concrete path the sweep could match — documentation, not an exemption.
+  - id: coverage-matrix
+    command: node scripts/coverage-matrix.js
+    reason: writes only when `--out <path>` is passed; no committed output exists and no workflow passes it.
+  - id: update-readmes-healer
+    command: .github/workflows/update-readmes.yml
+    matches_nothing_by_design: true
+    reason: >-
+      The only workflow that commits back INTO THIS REPOSITORY. What it commits is the
+      readme-family and translation-status artifacts already listed above, so it is a
+      re-invocation of listed generators rather than a generator of its own.
+      (publish-hermes-profile.yml also matches the committing-workflow sweep — it pushes to
+      another repository; see the entry below.)
+  - id: hermes-profile-distribution
+    command: node scripts/build-hermes-distribution.js
+    reason: >-
+      Writes a SEPARATE repository, pjt222/agent-almanac-hermes-profile, never this one: the
+      output is a Hermes profile distribution (companion #78) and Hermes copies every top-level
+      entry of the cloned tree into the consumer's profile, so it cannot live here. The edge is
+      decorated twice — `npm run check:hermes-distribution` in validate-skills.yml (required)
+      builds from this tree and runs every output gate; and
+      .github/workflows/publish-hermes-profile.yml, on every release tag, regenerates a clone of
+      that repository in place (`--out`, which writes nothing unless every gate passed) and
+      stages and diffs it with `git diff --cached` before pushing. `--check --against <dir>` is
+      the manual regenerate-and-diff over such a clone; it is not wired into any workflow.
+      Output is deterministic, so that diff needs no content exclusions.

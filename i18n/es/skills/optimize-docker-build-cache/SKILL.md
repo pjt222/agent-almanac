@@ -1,15 +1,12 @@
 ---
 name: optimize-docker-build-cache
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Optimizar la caché de compilación de Docker para reducir tiempos de compilación y tamaños
-  de imagen. Cubrir el orden de capas, compilaciones multi-etapa, BuildKit, y estrategias
-  de caché para diferentes lenguajes. Usar cuando las compilaciones Docker son lentas,
-  las imágenes son innecesariamente grandes, o cuando se necesita optimizar pipelines CI/CD.
+  Optimize Docker build times using layer caching, multi-stage builds,
+  BuildKit features, and dependency-first copy patterns. Applicable to R,
+  Node.js, and Python projects. Use when Docker builds are slow due to
+  repeated package installations, when rebuilds reinstall all dependencies
+  on every code change, when image sizes are unnecessarily large, or when
+  CI/CD pipeline builds are a bottleneck.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -17,159 +14,228 @@ metadata:
   version: "1.0"
   domain: containerization
   complexity: intermediate
-  language: multi
-  tags: docker, build-cache, optimization, multi-stage, buildkit
+  language: Docker
+  tags: docker, cache, optimization, multi-stage, buildkit
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Optimizar Caché de Compilación Docker
+# Optimize Docker Build Cache
 
-Optimizar las compilaciones Docker con estrategias de caché de capas, compilaciones multi-etapa y BuildKit.
+Reduce Docker build times through effective layer caching and build optimization.
 
-## Cuándo Usar
+## When to Use
 
-- Las compilaciones Docker son lentas (>5 minutos para cambios de código)
-- Las imágenes Docker son innecesariamente grandes (>1GB)
-- Los pipelines CI/CD gastan mucho tiempo en compilaciones Docker
-- Recompilando dependencias sin cambios cada vez
-- Necesitando optimizar costos de infraestructura CI/CD
+- Docker builds are slow due to repeated package installations
+- Rebuilds reinstall all dependencies on every code change
+- Image sizes are unnecessarily large
+- CI/CD pipeline builds are a bottleneck
 
-## Entradas
+## Inputs
 
-- **Requerido**: Dockerfile existente a optimizar
-- **Requerido**: Conocimiento de los patrones de cambio del proyecto (qué cambia frecuentemente)
-- **Opcional**: Infraestructura CI/CD utilizada (GitHub Actions, GitLab CI, etc.)
-- **Opcional**: Registry de imágenes para caché remota
+- **Required**: Existing Dockerfile to optimize
+- **Optional**: Target build time improvement
+- **Optional**: Target image size reduction
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Ordenar Capas por Frecuencia de Cambio
+### Step 1: Order Layers by Change Frequency
 
-Organizar las instrucciones del Dockerfile de menos a más frecuentemente cambiadas.
+Place least-changing layers first:
 
 ```dockerfile
-# CORRECTO: Dependencias antes del código
-FROM node:20-alpine
+# 1. Base image (rarely changes)
+FROM rocker/r-ver:4.5.0
 
-# 1. Dependencias del sistema (cambian raramente)
-RUN apk add --no-cache python3 make g++
+# 2. System dependencies (change occasionally)
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# 2. Archivos de dependencias (cambian ocasionalmente)
+# 3. Dependency files only (change when deps change)
+COPY renv.lock renv.lock
+COPY renv/activate.R renv/activate.R
+RUN R -e "renv::restore()"
+
+# 4. Source code (changes frequently)
+COPY . .
+```
+
+**Key principle**: Docker caches each layer. When a layer changes, all subsequent layers are rebuilt. Dependency installation should come before source code copy.
+
+**Expected:** The Dockerfile layers are ordered from least-changing (base image, system deps) to most-changing (source code), with dependency lockfiles copied before the full source.
+
+**On failure:** If builds still reinstall dependencies on every code change, verify that `COPY . .` comes after the dependency installation `RUN` command, not before.
+
+### Step 2: Separate Dependency Installation from Code
+
+**Bad** (rebuilds packages on every code change):
+
+```dockerfile
+COPY . .
+RUN R -e "renv::restore()"
+```
+
+**Good** (only rebuilds packages when lockfile changes):
+
+```dockerfile
+COPY renv.lock renv.lock
+RUN R -e "renv::restore()"
+COPY . .
+```
+
+Same pattern for Node.js:
+
+```dockerfile
 COPY package.json package-lock.json ./
-RUN npm ci --production
-
-# 3. Código fuente (cambia frecuentemente)
+RUN npm ci
 COPY . .
-
-# 4. Compilación (depende del código)
-RUN npm run build
 ```
 
-```dockerfile
-# INCORRECTO: Todo junto (invalida caché en cada cambio)
-FROM node:20-alpine
-COPY . .
-RUN npm ci && npm run build
-```
+**Expected:** Dependency lockfile (`renv.lock`, `package-lock.json`, `requirements.txt`) is copied and installed in a separate layer before the full source code `COPY . .`.
 
-**Esperado:** Las recompilaciones solo reejecutarán las capas afectadas por los cambios, no todas las capas.
+**On failure:** If the lockfile copy fails, ensure the file exists in the build context and is not excluded by `.dockerignore`.
 
-**En caso de fallo:** Analizar qué archivos cambian frecuentemente con `git log --stat`, reestructurar COPY para separar archivos estables de los que cambian.
+### Step 3: Use Multi-Stage Builds
 
-### Paso 2: Usar Compilaciones Multi-Etapa
-
-Separar las dependencias de compilación de la imagen final.
+Separate build dependencies from runtime:
 
 ```dockerfile
-# Etapa de compilación
-FROM golang:1.21 AS builder
+# Build stage - includes dev tools
+FROM rocker/r-ver:4.5.0 AS builder
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev libssl-dev build-essential
+COPY renv.lock .
+RUN R -e "install.packages('renv'); renv::restore()"
+
+# Runtime stage - minimal image
+FROM rocker/r-ver:4.5.0
+RUN apt-get update && apt-get install -y \
+    libcurl4 libssl3 \
+    && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /usr/local/lib/R/site-library /usr/local/lib/R/site-library
+COPY . /app
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 go build -o server .
-
-# Etapa de producción
-FROM alpine:3.18
-RUN apk add --no-cache ca-certificates
-COPY --from=builder /app/server /usr/local/bin/server
-CMD ["server"]
+CMD ["Rscript", "main.R"]
 ```
 
-**Esperado:** La imagen final contiene solo el binario y dependencias de runtime, reduciendo significativamente el tamaño.
+**Expected:** The Dockerfile has a builder stage with dev tools and a runtime stage with only production dependencies. The final image is significantly smaller than a single-stage build.
 
-**En caso de fallo:** Verificar que todos los archivos necesarios se copian desde la etapa de compilación, probar la imagen final exhaustivamente.
+**On failure:** If `COPY --from=builder` fails to find libraries, verify the install path matches between stages. Use `docker build --target builder .` to debug the build stage independently.
 
-### Paso 3: Habilitar BuildKit
+### Step 4: Combine RUN Commands
 
-Usar BuildKit para caché avanzada y compilaciones paralelas.
+Each `RUN` creates a layer. Combine related commands:
 
-```bash
-# Habilitar BuildKit
-export DOCKER_BUILDKIT=1
-
-# O en docker compose
-COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose build
-
-# Compilar con caché de montaje (para gestores de paquetes)
-```
+**Bad** (3 layers, apt cache persists):
 
 ```dockerfile
-# syntax=docker/dockerfile:1
-FROM python:3.11-slim
-
-# Caché de pip con montaje
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install -r requirements.txt
+RUN apt-get update
+RUN apt-get install -y curl git
+RUN rm -rf /var/lib/apt/lists/*
 ```
 
-**Esperado:** BuildKit habilitado, las compilaciones usan caché de montaje para gestores de paquetes, compilaciones paralelas cuando es posible.
+**Good** (1 layer, clean cache):
 
-**En caso de fallo:** Verificar versión de Docker (BuildKit requiere 18.09+), agregar `# syntax=docker/dockerfile:1` al inicio del Dockerfile.
+```dockerfile
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+```
 
-### Paso 4: Configurar Caché Remota para CI/CD
+**Expected:** Related `apt-get` or package install commands are combined into single `RUN` instructions, each ending with cache cleanup (`rm -rf /var/lib/apt/lists/*`).
 
-Usar caché de registry para persistir la caché entre compilaciones CI.
+**On failure:** If a combined `RUN` command fails midway, temporarily split it to identify the failing command, then recombine after fixing.
+
+### Step 5: Use .dockerignore
+
+Prevent unnecessary files from entering the build context:
+
+```text
+.git
+.Rproj.user
+.Rhistory
+.RData
+renv/library
+renv/cache
+node_modules
+docs/
+*.tar.gz
+.env
+```
+
+**Expected:** A `.dockerignore` file exists in the project root excluding `.git`, `node_modules`, `renv/library`, build artifacts, and environment files. Build context size is noticeably smaller.
+
+**On failure:** If needed files are missing in the container, check `.dockerignore` for overly broad patterns. Use `docker build` verbose output to verify which files are sent to the daemon.
+
+### Step 6: Enable BuildKit
 
 ```bash
-# Compilar con caché en registry
-docker buildx build \
-  --cache-from type=registry,ref=myregistry.com/myapp:cache \
-  --cache-to type=registry,ref=myregistry.com/myapp:cache,mode=max \
-  -t myapp:latest .
+DOCKER_BUILDKIT=1 docker build -t myimage .
 ```
+
+Or in `docker-compose.yml`:
 
 ```yaml
-# GitHub Actions
-- name: Build and push
-  uses: docker/build-push-action@v5
-  with:
-    cache-from: type=gha
-    cache-to: type=gha,mode=max
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
 ```
 
-**Esperado:** La caché persiste entre ejecuciones CI/CD, las compilaciones subsecuentes son significativamente más rápidas.
+With `COMPOSE_DOCKER_CLI_BUILD=1` and `DOCKER_BUILDKIT=1` environment variables.
 
-**En caso de fallo:** Verificar permisos del registry, comprobar que la caché se descarga correctamente, monitorizar el tamaño de la caché.
+BuildKit enables:
+- Parallel stage builds
+- Better cache management
+- `--mount=type=cache` for persistent package caches
 
-## Validación
+**Expected:** Builds run with BuildKit enabled (indicated by `#1 [internal] load build definition` style output). Multi-stage builds execute stages in parallel where possible.
 
-- [ ] Las compilaciones con cambios solo de código no reinstalan dependencias
-- [ ] Las compilaciones multi-etapa producen imágenes significativamente más pequeñas
-- [ ] BuildKit está habilitado y la caché de montaje funciona
-- [ ] La caché CI/CD reduce los tiempos de compilación en >50%
-- [ ] Las imágenes de producción no contienen herramientas de compilación
+**On failure:** If BuildKit is not active, verify the environment variables are exported before the build command. On older Docker versions, upgrade Docker Engine to 18.09+ for BuildKit support.
 
-## Errores Comunes
+### Step 7: Use Cache Mounts for Package Managers
 
-- **COPY . . antes de dependencias**: Invalida la caché de dependencias en cada cambio de código. Siempre copiar archivos de bloqueo primero.
-- **No usar .dockerignore**: Archivos innecesarios (node_modules, .git) invalidan la caché. Crear .dockerignore apropiado.
-- **Caché no persiste en CI**: Las compilaciones CI comienzan limpias. Usar caché de registry o caché específica del CI.
-- **Imagen final demasiado grande**: Olvidar la compilación multi-etapa. Nunca instalar compiladores en la imagen final.
-- **Capas RUN separadas innecesarias**: Combinar comandos relacionados con `&&` para reducir capas.
+```dockerfile
+# R packages with persistent cache
+RUN --mount=type=cache,target=/usr/local/lib/R/site-library \
+    R -e "install.packages('dplyr')"
 
-## Habilidades Relacionadas
+# npm with persistent cache
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
+```
 
-- `create-dockerfile` - Crear Dockerfiles generales con mejores prácticas
-- `create-r-dockerfile` - Optimización específica para proyectos R
-- `build-ci-cd-pipeline` - Integrar compilaciones Docker optimizadas en CI/CD
-- `create-multistage-dockerfile` - Patrones avanzados de compilación multi-etapa
+**Expected:** Subsequent builds reuse cached packages from the mount, dramatically reducing install times even when the layer is invalidated. Cache persists across builds.
+
+**On failure:** If `--mount=type=cache` is not recognized, ensure BuildKit is enabled (`DOCKER_BUILDKIT=1`). The syntax requires BuildKit and is not supported by the legacy builder.
+
+## Validation
+
+- [ ] Rebuilds after code-only changes are significantly faster
+- [ ] Dependency installation layer is cached when lockfile hasn't changed
+- [ ] `.dockerignore` excludes unnecessary files
+- [ ] Image size is reduced compared to unoptimized build
+- [ ] Multi-stage build (if used) separates build and runtime dependencies
+
+## Common Pitfalls
+
+- **Copying all files before installing deps**: Invalidates the dependency cache on every code change
+- **Forgetting `.dockerignore`**: Large build contexts slow down every build
+- **Too many layers**: Each `RUN`, `COPY`, `ADD` creates a layer. Combine where logical.
+- **Not cleaning apt cache**: Always end apt-get installs with `&& rm -rf /var/lib/apt/lists/*`
+- **Platform-specific caches**: Cache layers are platform-specific. CI runners may not benefit from local caches.
+- **No cache between CI runs**: Ephemeral runners start with an empty local cache, so every run rebuilds from scratch. Export the cache to a registry with `--cache-to type=registry,ref=<registry>/<cache-image>,mode=max` and import it on the next run with `--cache-from type=registry,ref=<registry>/<cache-image>`; `mode=max` also caches layers from intermediate stages, where the default `mode=min` caches only layers present in the final image. Neither this backend nor the GitHub Actions one (`type=gha`) is available on the default `docker` driver without extra setup (`type=registry` requires the containerd image store enabled), so create a dedicated builder first with `docker buildx create --driver docker-container --use`.
+
+## Related Skills
+
+- `create-r-dockerfile` - initial Dockerfile creation
+- `setup-docker-compose` - compose build configuration
+- `containerize-mcp-server` - apply optimizations to MCP server builds

@@ -98,7 +98,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 |---|---|---|
 | 技能 ID | 不变 | 新 ID：`<skill>-advanced` |
 | 文件路径 | 同一 SKILL.md | 新目录 |
-| 版本更新 | 补丁或次要 | 从 1.0 开始 |
+| 版本更新 | 次要（仅在破坏性变更时为主要） | 从 1.0 开始 |
 | 复杂度 | 可能提高 | 高于原版 |
 | 注册表 | 无新条目 | 添加新条目 |
 | 符号链接 | 无变化 | 需要新符号链接 |
@@ -118,14 +118,12 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 
 直接编辑现有 SKILL.md：
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- 打开编辑
+- 添加/修改步骤
+- 强化 Expected/On failure 对
+- 添加表格或示例
+- 更新 When to Use 触发条件
+- 若范围改变则修改 Inputs
 
 遵循以下编辑规则：
 - 保留所有现有章节——添加内容，不删除章节
@@ -172,15 +170,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. 获取当前源提交哈希：
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 更新每个已翻译文件前置元数据中的 `source_commit`：
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：
@@ -212,12 +209,12 @@ npm run translation:status
 
 ### 第 5 步：更新版本和元数据
 
-按语义版本规范更新前置元数据中的 `version` 字段：
+更新前置元数据中的 `version` 字段：
 
 | 更改类型 | 版本更新 | 示例 |
 |---|---|---|
-| 修正错别字、措辞澄清 | 补丁：1.0 → 1.1 | 修正第 3 步中不清晰的句子 |
-| 新步骤、新问题、新表格 | 次要：1.0 → 2.0 | 添加了第 7 步处理边界情况 |
+| 修正错别字、措辞澄清 | 次要：1.0 → 1.1 | 修正第 3 步中不清晰的句子 |
+| 新步骤、新问题、新表格 | 次要：1.0 → 1.1 | 添加了第 7 步处理边界情况 |
 | 重构流程、更改输入 | 主要：1.0 → 2.0 | 从 5 步重组为 8 步 |
 
 同时更新：

@@ -80,23 +80,24 @@ Each → CSS class (`class nodeId input;`) for theme styling.
 
 ### Step 2: Select theme + options
 
+List all available themes:
+
 ```r
-# List all available themes
 get_diagram_themes()
-
-# Standard themes
-# "light"   — Default, bright colors
-# "dark"    — For dark mode environments
-# "auto"    — GitHub-adaptive with solid colors
-# "minimal" — Grayscale, print-friendly
-# "github"  — Optimized for GitHub README files
-
-# Colorblind-safe themes (viridis family)
-# "viridis" — Purple→Blue→Green→Yellow, general accessibility
-# "magma"   — Purple→Red→Yellow, high contrast for print
-# "plasma"  — Purple→Pink→Orange→Yellow, presentations
-# "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
 ```
+
+Standard themes
+- "light"   — Default, bright colors
+- "dark"    — For dark mode environments
+- "auto"    — GitHub-adaptive with solid colors
+- "minimal" — Grayscale, print-friendly
+- "github"  — Optimized for GitHub README files
+
+Colorblind-safe themes (viridis family)
+- "viridis" — Purple→Blue→Green→Yellow, general accessibility
+- "magma"   — Purple→Red→Yellow, high contrast for print
+- "plasma"  — Purple→Pink→Orange→Yellow, presentations
+- "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
 
 Extra params:
 - `direction`: `"TD"` (top-down, default), `"LR"`, `"RL"`, `"BT"`

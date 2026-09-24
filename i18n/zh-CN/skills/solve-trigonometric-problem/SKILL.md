@@ -11,8 +11,8 @@ metadata:
   version: "1.0"
   domain: geometry
   complexity: intermediate
-  language: natural
-  tags: geometry, trigonometry, identities, triangles, equations
+  language: multi
+  tags: geometry, trigonometry, identities, triangle, sines, cosines
   locale: zh-CN
   source_locale: en
   source_commit: 6f65f316

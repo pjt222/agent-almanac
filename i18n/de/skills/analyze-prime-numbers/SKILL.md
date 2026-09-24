@@ -13,7 +13,7 @@ metadata:
   domain: number-theory
   complexity: intermediate
   language: multi
-  tags: number-theory, prime-numbers, factorization, primality-testing, sieve
+  tags: number-theory, primes, primality, factorization, sieve
   locale: de
   source_locale: en
   source_commit: 6f65f316

@@ -679,11 +679,12 @@ Escalate **proactively** if:
 #### CDN Provider (e.g., Cloudflare)
 - **Critical**: +1-888-XXX-XXXX
 - **Account**: CF-67890
+- **Support Portal**: https://support.cloudflare.com
 ````
 
 ## Step 5: Complete Communication Templates
 
-### Internal Communication Templates (All Variants)
+### Communication Templates (Internal and External)
 
 ````markdown
 ## Communication Templates

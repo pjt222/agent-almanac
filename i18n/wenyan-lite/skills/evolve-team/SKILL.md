@@ -3,6 +3,7 @@ name: evolve-team
 locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
+fence_basis_commit: 854ad675f
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-24"
 description: >
@@ -200,15 +201,14 @@ ls i18n/*/teams/<team-name>.md 2>/dev/null
 1. 取當前源 commit hash：
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 更各譯文 frontmatter 中之 `source_commit`：
 
 ```bash
-for locale_file in i18n/*/teams/<team-name>.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <team-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 於 commit 訊息中納受影響語言以旗標檔供重譯：

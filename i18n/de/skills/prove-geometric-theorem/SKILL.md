@@ -13,7 +13,7 @@ metadata:
   domain: geometry
   complexity: advanced
   language: multi
-  tags: geometry, proofs, euclidean-axioms, coordinate-proofs, vector-proofs
+  tags: geometry, proof, theorem, euclidean, axiomatic, coordinate
   locale: de
   source_locale: en
   source_commit: 6f65f316

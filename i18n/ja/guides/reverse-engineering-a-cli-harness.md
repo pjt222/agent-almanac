@@ -8,6 +8,7 @@ skills: [audit-dependency-versions, security-audit-codebase]
 locale: ja
 source_locale: en
 source_commit: f74b59bd
+fence_basis_commit: f74b59bd
 translator: "Claude + human review"
 translation_date: "2026-04-13"
 ---

@@ -21,6 +21,7 @@ metadata:
   locale: es
   source_locale: en
   source_commit: b4dd42cd # stale — source updated for teams infrastructure fix
+  fence_basis_commit: b4dd42cd
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---

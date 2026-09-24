@@ -1,181 +1,239 @@
 ---
 name: manage-bibliography
 description: >
-  Gestionar colecciones bibliográficas en formato BibTeX/BibLaTeX: importar
-  referencias desde DOI, CrossRef o entradas manuales, detectar y fusionar
-  duplicados, validar campos requeridos por estilo de cita, organizar con
-  palabras clave y grupos, y exportar bibliotecas limpias compatibles con
-  LaTeX, R Markdown y Quarto.
+  Create, merge, and deduplicate BibTeX bibliography files using R packages
+  (RefManageR, bibtex). Parse .bib files into structured R objects, merge
+  multiple bibliographies with deduplication by DOI or title similarity,
+  generate entries from DOI/ISBN/arXiv ID, and export clean sorted .bib files.
+  Use when creating a new .bib file for an R Markdown or Quarto project,
+  merging bibliographies from multiple collaborators, deduplicating a .bib
+  that has grown through copy-paste accumulation, or generating BibTeX entries
+  programmatically from DOIs or other identifiers.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: citations
-  complexity: basic
-  language: r
-  tags: citations, bibtex, bibliography, reference-management, deduplication
+  complexity: intermediate
+  language: R
+  tags: citations, bibliography, bibtex, R, RefManageR
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Gestionar Bibliografía
+# Manage Bibliography
 
-Crear, mantener y depurar una colección bibliográfica BibTeX/BibLaTeX mediante importación automatizada de metadatos, detección de duplicados, validación de campos requeridos por el estilo de cita objetivo, y exportación de un archivo `.bib` limpio listo para LaTeX, R Markdown o Quarto.
+Create, merge, and deduplicate BibTeX bibliography files using R. This skill
+covers the full lifecycle of bibliography management: parsing existing .bib
+files into structured R objects, generating new entries from identifiers (DOI,
+ISBN, arXiv ID), merging multiple bibliographies with intelligent deduplication,
+and exporting clean, consistently formatted .bib output.
 
-## Cuándo Usar
+## When to Use
 
-- Iniciar una nueva bibliografía de proyecto e importar referencias desde DOIs o bases de datos
-- Fusionar múltiples archivos `.bib` de diferentes colaboradores o proyectos
-- Detectar y resolver entradas duplicadas antes de la publicación
-- Validar que cada entrada tenga todos los campos requeridos por un estilo de cita dado (APA, Chicago, Vancouver, etc.)
-- Organizar referencias con palabras clave, grupos o categorías para facilitar la recuperación
-- Exportar un subconjunto de referencias para un manuscrito, capítulo o presentación específicos
+- Creating a new .bib file for an R Markdown or Quarto project
+- Merging bibliographies from multiple collaborators or sources
+- Deduplicating a .bib file that has grown through copy-paste accumulation
+- Generating BibTeX entries programmatically from DOIs or other identifiers
+- Cleaning and standardizing an existing .bib file (consistent keys, sorted fields)
 
-## Entradas
+## Inputs
 
-- **Requerido**: Fuente de referencias (DOIs, archivo `.bib` existente, resultados de búsqueda de base de datos o entradas manuales)
-- **Requerido**: Estilo de cita objetivo (APA, Chicago, Vancouver, IEEE, personalizado `.csl`)
-- **Opcional**: Estructura organizativa deseada (palabras clave, grupos, carpetas)
-- **Opcional**: Archivo `.bib` existente para fusionar
-- **Opcional**: Requisitos de formato de clave de cita (p.ej., `autorAño`, `autor:año:titulo`)
+- **Required**: Path to one or more .bib files, or a list of DOIs/ISBNs/arXiv IDs
+- **Optional**: Output .bib file path (default: `references.bib`)
+- **Optional**: Deduplication strategy (`doi`, `title`, `both`; default: `both`)
+- **Optional**: Sort order (`author`, `year`, `key`; default: `key`)
+- **Optional**: Key generation pattern (default: `AuthorYear`)
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Importar y Normalizar Referencias
-
-Recopilar metadatos de referencia y convertir al formato BibTeX canónico:
-
-1. **Importación por DOI**: Para cada DOI, consultar la API de CrossRef o usar `rcrossref::cr_works()` en R para obtener metadatos estructurados. Convertir la respuesta JSON a una entrada BibTeX con todos los campos disponibles.
-2. **Importación desde archivo**: Analizar archivos `.bib` existentes con `bibtex::read.bib()` o `RefManageR::ReadBib()`. Registrar advertencias de análisis para entradas malformadas.
-3. **Entrada manual**: Para fuentes sin DOI (libros, informes, sitios web), crear entradas BibTeX manualmente asegurando que los campos requeridos para el tipo de entrada estén presentes.
-4. **Normalizar tipos de entrada**: Mapear tipos no estándar a tipos BibTeX estándar (`@article`, `@book`, `@inproceedings`, `@incollection`, `@phdthesis`, `@techreport`, `@misc`).
-5. **Generar claves de cita**: Asignar claves de cita consistentes según la convención elegida. Las claves comunes incluyen `apellidoAño` (p.ej., `miller2024`) o `apellido:año:palabraTitulo`.
-6. **Estandarizar codificación**: Asegurar codificación UTF-8 en todo el archivo. Convertir acentos LaTeX (`{\"u}`) a Unicode (`ü`) o viceversa, según los requisitos del flujo de trabajo.
+### Step 1: Install and Load Required Packages
 
 ```r
+required_packages <- c("RefManageR", "bibtex", "stringdist")
+missing <- required_packages[!vapply(required_packages, requireNamespace,
+                                     logical(1), quietly = TRUE)]
+if (length(missing) > 0) install.packages(missing)
+
 library(RefManageR)
-library(rcrossref)
-
-# Importar desde DOI
-doi_metadata <- cr_works(dois = c("10.1234/example.2024"))
-bib_entry <- as.BibEntry(doi_metadata$data)
-
-# Importar desde archivo existente
-existing_bib <- ReadBib("references.bib", check = FALSE)
-
-# Fusionar
-combined <- c(existing_bib, bib_entry)
 ```
 
-**Esperado:** Una colección unificada de entradas BibTeX con claves de cita consistentes, tipos de entrada normalizados y codificación estandarizada.
+**Expected:** All packages load without errors.
 
-**En caso de fallo:** Si la búsqueda por DOI falla (DOI no encontrado, API no disponible), intentar buscar por título a través de CrossRef o registrar la entrada para creación manual. Si el análisis de un archivo `.bib` falla, aislar la entrada malformada y corregir la sintaxis (corchetes sin cerrar, comas faltantes) antes de reintentar.
+**On failure:** If RefManageR fails to install, check that `curl` and `xml2` system
+libraries are available. On Ubuntu: `sudo apt install libcurl4-openssl-dev libxml2-dev`.
 
-### Paso 2: Detectar y Resolver Duplicados
-
-Identificar y fusionar entradas duplicadas para evitar citas inconsistentes:
-
-1. **Coincidencia por DOI**: Las entradas con DOI idénticos son duplicados definitivos. Fusionarlas conservando la entrada con campos más completos.
-2. **Coincidencia por título**: Normalizar títulos (minúsculas, eliminar puntuación, reducir espacios en blanco) y calcular similitud. Títulos con similitud > 90% son probables duplicados.
-3. **Coincidencia por autor+año**: Comparar autores normalizados (solo apellido) y año de publicación. Las coincidencias son candidatos a duplicados que requieren verificación por título.
-4. **Revisión manual**: Para cada par duplicado candidato, presentar ambas entradas lado a lado. El usuario confirma si son verdaderos duplicados o publicaciones distintas (p.ej., preprint vs. versión publicada, parte I vs. parte II).
-5. **Estrategia de fusión**: Al fusionar, preferir campos de la entrada con más metadatos. Nunca sobrescribir un campo con un valor vacío. Conservar la clave de cita más informativa.
-6. **Registrar**: Documentar todos los duplicados encontrados y cómo se resolvieron para auditoría.
+### Step 2: Parse Existing .bib Files
 
 ```r
-# Detectar duplicados potenciales por título
-titles <- sapply(combined, function(x) tolower(x$title))
-dups <- which(duplicated(titles) | duplicated(titles, fromLast = TRUE))
+bib <- RefManageR::ReadBib("references.bib", check = FALSE)
+message(sprintf("Parsed %d entries from references.bib", length(bib)))
+
+# Inspect structure
+print(bib[1:3])
+
+# Access fields programmatically
+keys <- names(bib)
+years <- vapply(bib, function(x) x$year %||% NA_character_, character(1))
 ```
 
-**Esperado:** Una biblioteca sin duplicados donde cada publicación única aparece exactamente una vez, con el registro más completo conservado.
+**Expected:** A `BibEntry` object containing all entries from the file. Entry count
+matches the number of `@article{`, `@book{`, etc. blocks in the file.
 
-**En caso de fallo:** Si la deduplicación automatizada produce falsos positivos (p.ej., publicaciones genuinamente diferentes con títulos similares), refinar los umbrales de coincidencia o requerir coincidencia tanto de autor+año como de título. Si produce falsos negativos (duplicados no detectados), agregar coincidencia por DOI como verificación prioritaria.
+**On failure:** If parsing fails, check for unmatched braces or invalid UTF-8 in the
+.bib file. Run `bibtex::read.bib()` as a fallback with stricter parsing.
 
-### Paso 3: Validar Campos Requeridos
-
-Verificar que cada entrada tenga todos los campos necesarios para el estilo de cita objetivo:
-
-1. **Definir campos requeridos por tipo y estilo**:
-
-| Tipo | Campos Siempre Requeridos | Campos APA Adicionales | Campos Vancouver Adicionales |
-|---|---|---|---|
-| @article | author, title, journal, year | volume, pages, doi | volume, issue, pages |
-| @book | author/editor, title, publisher, year | address | address |
-| @inproceedings | author, title, booktitle, year | pages, doi | pages |
-| @phdthesis | author, title, school, year | -- | -- |
-
-2. **Ejecutar validación**: Para cada entrada, verificar la presencia de cada campo requerido. Registrar los campos faltantes con la clave de cita y el nombre del campo.
-3. **Intentar autocompletar**: Para campos faltantes, intentar obtenerlos:
-   - DOI faltante: buscar en CrossRef por título+autor
-   - Páginas faltantes: consultar los metadatos del DOI
-   - Volumen/número faltantes: consultar la API de la revista
-4. **Informar los vacíos restantes**: Listar todas las entradas con campos requeridos que faltan después del intento de autocompletar, para corrección manual.
-
-**Esperado:** Cada entrada pasa la validación para el estilo de cita objetivo, o los campos faltantes están documentados con instrucciones claras para resolución.
-
-**En caso de fallo:** Si no se pueden obtener campos requeridos (p.ej., artículo antiguo sin DOI, proceedings sin páginas), documentar la excepción. Algunos estilos de cita permiten valores de respaldo (p.ej., "n.p." para páginas, "s.f." para fecha). Consultar el manual del estilo de cita para los formatos de respaldo permitidos.
-
-### Paso 4: Organizar y Anotar
-
-Estructurar la colección para facilitar la recuperación y el uso:
-
-1. **Asignar palabras clave**: Agregar el campo `keywords` a cada entrada con términos descriptivos. Usar vocabulario controlado cuando sea posible (p.ej., términos MeSH para literatura médica).
-2. **Agrupar por tema**: Organizar entradas en grupos lógicos (p.ej., por capítulo, por tema de revisión de literatura, por tipo de método). Implementar como campos `groups` en JabRef o como archivos `.bib` separados.
-3. **Agregar anotaciones**: Usar el campo `annote` o `annotation` para notas breves sobre la relevancia de cada referencia para el proyecto actual.
-4. **Marcar entradas clave**: Identificar las 5-10 referencias fundamentales y marcarlas para fácil identificación.
-5. **Ordenar entradas**: Ordenar el archivo `.bib` alfabéticamente por clave de cita para facilitar la búsqueda manual y los diffs de control de versiones.
-
-**Esperado:** Una colección bibliográfica bien organizada con palabras clave consistentes, agrupación lógica y anotaciones que ayuden a la recuperación.
-
-**En caso de fallo:** Si el vocabulario de palabras clave se vuelve inconsistente (sinónimos, variaciones ortográficas), crear una lista de autoridad de términos permitidos y validar contra ella. Si los grupos se superponen excesivamente, reevaluar la taxonomía.
-
-### Paso 5: Exportar y Verificar
-
-Producir el archivo `.bib` final y confirmar que funciona con el flujo de trabajo objetivo:
-
-1. **Exportar a `.bib`**: Escribir la colección limpia y validada en un archivo `.bib`. Usar `RefManageR::WriteBib()` o exportación equivalente con codificación UTF-8.
-2. **Compilación de prueba**: Compilar un documento de prueba (LaTeX, R Markdown o Quarto) que cite cada entrada. Verificar que:
-   - Cada cita se resuelve sin errores "cita indefinida"
-   - El formato de las citas coincide con el estilo objetivo
-   - La bibliografía se renderiza correctamente con todos los campos visibles
-3. **Verificación cruzada**: Comparar el conteo de entradas exportadas con el conteo original de importación. Asegurar que no se perdieron ni duplicaron entradas durante el procesamiento.
-4. **Control de versiones**: Hacer commit del archivo `.bib` en el control de versiones con un mensaje descriptivo. Los archivos `.bib` son texto plano y funcionan bien con diff de Git.
+### Step 3: Generate Entries from Identifiers
 
 ```r
-WriteBib(combined, file = "references_clean.bib", biblatex = TRUE)
+# From DOI
+entry_doi <- RefManageR::GetBibEntryWithDOI("10.1093/bioinformatics/btz848")
+
+# From a vector of DOIs
+dois <- c("10.1093/bioinformatics/btz848", "10.1038/s41586-020-2649-2")
+entries <- do.call(c, lapply(dois, function(d) {
+  tryCatch(
+    RefManageR::GetBibEntryWithDOI(d),
+    error = function(e) {
+      warning(sprintf("Failed to fetch DOI %s: %s", d, e$message))
+      NULL
+    }
+  )
+}))
+entries <- Filter(Negate(is.null), entries)
 ```
 
-**Esperado:** Un archivo `.bib` limpio que compila sin errores, produce citas correctamente formateadas y está bajo control de versiones.
+**Expected:** BibEntry objects with complete metadata (title, author, journal, year,
+DOI) for each successfully resolved identifier.
 
-**En caso de fallo:** Si LaTeX reporta errores "cita indefinida", verificar que la clave de cita en el documento coincide exactamente con la clave en el archivo `.bib` (sensible a mayúsculas). Si el formato de las citas es incorrecto, verificar que se está usando el archivo `.csl` o el paquete BibTeX/BibLaTeX correcto.
+**On failure:** DOI resolution depends on the CrossRef API. If requests fail, check
+network connectivity and whether the DOI is valid. Rate limiting may apply for
+large batches; add `Sys.sleep(1)` between requests.
 
-## Validación
+### Step 4: Merge Multiple Bibliographies
 
-- [ ] Todas las fuentes de referencia están importadas y convertidas a formato BibTeX
-- [ ] Las claves de cita siguen una convención de nomenclatura consistente
-- [ ] Los duplicados están detectados y resueltos con decisiones documentadas
-- [ ] Cada entrada tiene todos los campos requeridos para el estilo de cita objetivo
-- [ ] Las palabras clave y la agrupación están aplicadas de manera consistente
-- [ ] El archivo `.bib` exportado compila sin errores en un documento de prueba
-- [ ] Las citas se renderizan correctamente en el estilo objetivo
-- [ ] El archivo `.bib` está bajo control de versiones
+```r
+bib1 <- RefManageR::ReadBib("project_a.bib", check = FALSE)
+bib2 <- RefManageR::ReadBib("project_b.bib", check = FALSE)
 
-## Errores Comunes
+# Simple merge
+merged <- c(bib1, bib2)
+message(sprintf("Merged: %d + %d = %d entries (before dedup)",
+                length(bib1), length(bib2), length(merged)))
+```
 
-- **Claves de cita inconsistentes**: Mezclar convenciones (p.ej., `Miller2024` y `miller:2024:neural`) en el mismo proyecto causa confusión y dificulta la búsqueda de entradas. Elegir una convención y aplicarla en todas las entradas.
-- **Campos de autor malformados**: BibTeX requiere `{Apellido, Nombre and Apellido2, Nombre2}` con `and` literal (no `&` ni `,`) entre autores. Autores con nombres compuestos necesitan protección con llaves: `{Van der Berg, Jan}`.
-- **Problemas de codificación**: Mezclar caracteres acentuados LaTeX (`{\'e}`) con Unicode (`é`) en el mismo archivo causa errores de compilación. Estandarizar a una codificación.
-- **Ignorar la protección de títulos**: BibTeX convierte títulos a minúsculas en la mayoría de los estilos. Proteger acrónimos y nombres propios con llaves: `title = {Análisis de {RNA} en cáncer de {Hodgkin}}`.
-- **No verificar contra el estilo objetivo**: Un archivo `.bib` válido para APA puede faltar campos requeridos por Vancouver. Siempre validar contra el estilo específico que se usará.
-- **Ignorar preprints y versiones**: Un artículo puede tener un preprint de arXiv y una versión publicada. Decidir cuál citar y asegurar que no ambas permanezcan como duplicados.
+**Expected:** A combined BibEntry object containing entries from both files.
 
-## Habilidades Relacionadas
+Regenerating keys after a merge is a separate job, and RefManageR gives you both
+halves: `names(bib)` returns the citation keys and `names(bib) <- new_keys` writes
+them back, so `names(bib)[1] <- "newkey"` renames a single entry. Do not assume the
+keys you assign survive verbatim — both `names<-` and `c()` push their result
+through `make.unique(keys, sep = ":")`, so a second `Smith2020` becomes
+`Smith2020:1`; `c()` therefore never drops an entry, but a collision you did not
+disambiguate yourself reaches the output .bib as a colon-suffixed key.
+Disambiguate first (`Smith2020a`/`Smith2020b`, a coauthor name, or a title word),
+then re-read `names(bib)` and keep the old-to-new pairing — every `@key` in an
+.Rmd or .qmd body still names the old key.
 
-- `format-citations` -- aplicar formato CSL a las referencias gestionadas en este flujo de trabajo
-- `validate-references` -- verificación profunda de la integridad bibliográfica más allá de la validación de campos
-- `manage-renv-dependencies` -- gestión de dependencias R que complementa la gestión bibliográfica
+### Step 5: Deduplicate Entries
+
+```r
+deduplicate_bib <- function(bib, method = "both") {
+  n_before <- length(bib)
+  keys_to_remove <- c()
+
+  for (i in seq_along(bib)) {
+    if (names(bib)[i] %in% keys_to_remove) next
+    for (j in seq(i + 1, length(bib))) {
+      if (j > length(bib)) break
+      if (names(bib)[j] %in% keys_to_remove) next
+
+      is_dup <- FALSE
+      if (method %in% c("doi", "both")) {
+        doi_i <- bib[[i]]$doi %||% ""
+        doi_j <- bib[[j]]$doi %||% ""
+        if (nzchar(doi_i) && nzchar(doi_j) && tolower(doi_i) == tolower(doi_j)) {
+          is_dup <- TRUE
+        }
+      }
+      if (!is_dup && method %in% c("title", "both")) {
+        title_i <- tolower(gsub("[^a-z0-9 ]", "", tolower(bib[[i]]$title %||% "")))
+        title_j <- tolower(gsub("[^a-z0-9 ]", "", tolower(bib[[j]]$title %||% "")))
+        if (nzchar(title_i) && nzchar(title_j)) {
+          sim <- 1 - stringdist::stringdist(title_i, title_j, method = "jw")
+          if (sim > 0.95) is_dup <- TRUE
+        }
+      }
+      if (is_dup) keys_to_remove <- c(keys_to_remove, names(bib)[j])
+    }
+  }
+
+  if (length(keys_to_remove) > 0) {
+    bib <- bib[!names(bib) %in% keys_to_remove]
+  }
+  message(sprintf("Deduplication: %d -> %d entries (%d duplicates removed)",
+                  n_before, length(bib), n_before - length(bib)))
+  bib
+}
+
+merged <- deduplicate_bib(merged, method = "both")
+```
+
+**Expected:** Duplicate entries removed. Count of removed duplicates printed.
+
+**On failure:** If title comparison is too aggressive (removing non-duplicates), raise
+the similarity threshold above 0.95 or switch to `method = "doi"` only.
+
+### Step 6: Sort and Export
+
+```r
+# Sort by citation key
+sorted_bib <- sort(merged, sorting = "nyt")  # name-year-title
+
+# Export to .bib file
+RefManageR::WriteBib(sorted_bib, file = "references.bib", biblatex = FALSE)
+message(sprintf("Wrote %d entries to references.bib", length(sorted_bib)))
+```
+
+**Expected:** A clean .bib file written to disk with consistent formatting, one entry
+per block, sorted alphabetically by citation key.
+
+**On failure:** If WriteBib produces encoding issues, ensure the R session locale
+supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
+
+## Validation
+
+- [ ] Output .bib file parses without errors: `RefManageR::ReadBib("references.bib")`
+- [ ] Entry count matches expectations (input count minus duplicates)
+- [ ] No duplicate DOIs remain: all DOIs in output are unique
+- [ ] All entries have a citation key
+- [ ] Required fields present per entry type (author, title, year at minimum)
+- [ ] File is valid BibTeX (test with `bibtex::read.bib()`)
+
+## Common Pitfalls
+
+- **Encoding issues**: .bib files with Latin-1 accents break UTF-8 parsers. Convert
+  encoding first: `iconv -f ISO-8859-1 -t UTF-8 old.bib > new.bib`
+- **Unmatched braces**: A single missing `}` silently drops entries. Validate brace
+  balance before parsing large files
+- **DOI rate limiting**: CrossRef throttles unauthenticated requests. Set a polite
+  email with `RefManageR::BibOptions(check.entries = FALSE)` and batch requests
+- **Key collisions**: Merging files where both have `Smith2020` does not overwrite
+  either entry — `c.BibEntry` routes the combined keys through
+  `make.unique(keys, sep = ":")`, so the second becomes `Smith2020:1`. Nothing is
+  lost, but a colon-suffixed key you did not choose reaches the output `.bib` and
+  no longer matches the `@Smith2020` in your document. Disambiguate before merging
+- **LaTeX in titles**: Titles with `{DNA}` or `$\alpha$` need careful handling;
+  RefManageR preserves these but downstream tools may strip them
+
+## Related Skills
+
+- `format-citations` - format the bibliography entries into styled citations
+- `validate-references` - verify completeness and DOI resolution of .bib entries
+- `../reporting/format-apa-report` - generate APA-formatted reports using bibliographies
+- `../r-packages/write-vignette` - create package vignettes that cite references

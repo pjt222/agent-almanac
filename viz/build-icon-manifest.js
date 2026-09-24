@@ -236,6 +236,7 @@ function skillKeywords(id, title) {
     'evaluate-levitation-mechanism': 'comparison table, levitation methods, tradeoff',
     'manage-token-budget':           'token gauge, budget meter, cost cap',
     'prune-agent-memory':            'memory cards, pruning shears, forget policy',
+    'verify-memory-integrity':       'shelf of spines, shelf marker, uncatalogued item',
     'circuit-breaker-pattern':       'circuit switch, break gap, fault tolerance',
     'verify-agent-output':           'verification stamp, evidence chain, checkmark',
     'bootstrap-agent-identity':      'identity rings, cold start, loading anchor',

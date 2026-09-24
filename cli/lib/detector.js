@@ -8,6 +8,7 @@
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 import { homedir } from 'os';
+import { resolveHermesHome } from './hermes-home.js';
 
 /** @typedef {{ id: string, displayName: string, marker: string, scope: string }} Detection */
 
@@ -46,8 +47,9 @@ const RULES = [
 const GLOBAL_RULES = [
   // OpenClaw (global only)
   { id: 'openclaw', displayName: 'OpenClaw/NemoClaw', check: () => existsSync(resolve(homedir(), '.openclaw/openclaw.json')) || existsSync(resolve(homedir(), '.nemoclaw')), marker: '~/.openclaw/', scope: 'global' },
-  // Hermes (global only)
-  { id: 'hermes', displayName: 'Hermes Agent', check: () => existsSync(resolve(homedir(), '.hermes/config.yaml')), marker: '~/.hermes/', scope: 'global' },
+  // Hermes (global only) — home per resolveHermesHome() (#604): $HERMES_HOME,
+  // Windows-native default (%LOCALAPPDATA%\hermes), then ~/.hermes.
+  { id: 'hermes', displayName: 'Hermes Agent', check: () => existsSync(resolve(resolveHermesHome(), 'config.yaml')), marker: '~/.hermes/ (or HERMES_HOME)', scope: 'global' },
 ];
 
 /**

@@ -84,23 +84,24 @@ workflow <- put_merge("./src/", merge_strategy = "supplement")
 
 擇合目標讀者之主題。
 
+列所有可用主題:
+
 ```r
-# List all available themes
 get_diagram_themes()
-
-# Standard themes
-# "light"   — Default, bright colors
-# "dark"    — For dark mode environments
-# "auto"    — GitHub-adaptive with solid colors
-# "minimal" — Grayscale, print-friendly
-# "github"  — Optimized for GitHub README files
-
-# Colorblind-safe themes (viridis family)
-# "viridis" — Purple→Blue→Green→Yellow, general accessibility
-# "magma"   — Purple→Red→Yellow, high contrast for print
-# "plasma"  — Purple→Pink→Orange→Yellow, presentations
-# "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
 ```
+
+標準主題
+- "light"   — 預設，明色
+- "dark"    — 暗模式環境
+- "auto"    — GitHub 自適應實色
+- "minimal" — 灰階，宜列印
+- "github"  — 為 GitHub README 優化
+
+色盲安全主題（viridis 家族）
+- "viridis" — 紫→藍→綠→黃，通用可及性
+- "magma"   — 紫→紅→黃，列印高對比
+- "plasma"  — 紫→粉→橙→黃，簡報
+- "cividis" — 藍→灰→黃，最大可及性（無紅綠）
 
 附加參數：
 - `direction`：圖流向——`"TD"`（上下，預設）、`"LR"`（左右）、`"RL"`、`"BT"`

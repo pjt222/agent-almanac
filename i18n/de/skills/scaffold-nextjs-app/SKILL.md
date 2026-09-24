@@ -1,17 +1,13 @@
 ---
 name: scaffold-nextjs-app
 description: >
-  Next.js-Anwendung mit App Router, TypeScript, ESLint und optionalem
-  Tailwind CSS erstellen. Behandelt Projektstruktur, Routing-Konventionen,
-  Umgebungsvariablen und lokale Entwicklungsverifikation. Verwenden, wenn
-  ein neues Next.js-Projekt mit modernen Konventionen gestartet wird oder
-  eine bestehende Pages-Router-App auf App Router migriert werden soll.
+  Scaffold a new Next.js application with App Router, TypeScript,
+  and modern defaults. Covers project creation, directory structure,
+  routing setup, and initial configuration. Use when starting a new web
+  application project, creating a React-based frontend with server-side
+  rendering, building a full-stack application with API routes, or setting
+  up a TypeScript web project from scratch.
 license: MIT
-locale: de
-source_locale: en
-source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
@@ -19,238 +15,199 @@ metadata:
   domain: web-dev
   complexity: basic
   language: TypeScript
-  tags: nextjs, react, typescript, app-router, web-dev
+  tags: nextjs, react, typescript, app-router, scaffold
+  locale: de
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Next.js-App scaffolden
+# Scaffold Next.js App
 
-Eine neue Next.js-Anwendung mit App Router, TypeScript und modernen Konventionen scaffolden, bereit für die Entwicklung.
+Create a new Next.js application with App Router, TypeScript, and production-ready defaults.
 
-## Wann verwenden
+## When to Use
 
-- Start eines neuen Next.js-Projekts mit modernen Konventionen
-- Migration einer bestehenden Pages-Router-App auf App Router
-- Einrichten eines standardisierten Next.js-Projekts für ein Team
-- Schnelles Prototypen einer React-Web-App
+- Starting a new web application project
+- Creating a React-based frontend with server-side rendering
+- Building a full-stack application with API routes
+- Setting up a TypeScript web project
 
-## Eingaben
+## Inputs
 
-- **Erforderlich**: Projektname (z. B. `my-app`)
-- **Optional**: Paketmanager (npm, yarn, pnpm — Standard: npm)
-- **Optional**: Ob Tailwind CSS eingebunden werden soll (Standard: ja)
-- **Optional**: Quellverzeichnis (`src/`-Layout — Standard: ja)
+- **Required**: Application name
+- **Required**: Package manager preference (npm, yarn, pnpm)
+- **Optional**: Whether to include Tailwind CSS (default: yes)
+- **Optional**: Whether to include ESLint (default: yes)
+- **Optional**: src/ directory structure (default: yes)
 
-## Vorgehensweise
+## Procedure
 
-### Schritt 1: Next.js-Projekt erstellen
-
-Das offizielle Create-Next-App-Tool ausführen.
+### Step 1: Create Project
 
 ```bash
 npx create-next-app@latest my-app \
   --typescript \
-  --eslint \
   --tailwind \
-  --src-dir \
+  --eslint \
   --app \
+  --src-dir \
   --import-alias "@/*"
 ```
 
-Wenn interaktive Prompts erscheinen:
-- TypeScript: Yes
-- ESLint: Yes
-- Tailwind CSS: Yes (wenn gewünscht)
-- `src/`-Verzeichnis: Yes
-- App Router: Yes
-- Import-Alias: `@/*` (Standard)
+Answer prompts or use flags to set all options non-interactively.
 
-**Erwartet:** Projektverzeichnis `my-app/` mit vollständiger Struktur erstellt. Keine Fehler während der Installation.
+**Expected:** Project directory created with all dependencies installed.
 
-**Bei Fehler:** Wenn `npx` nicht verfügbar ist, Node.js (>= 18) installieren. Wenn Netzwerkfehler auftreten, erneut versuchen oder `--use-npm` explizit angeben.
+**On failure:** Check Node.js version (`node --version`, must be >= 18.17). Ensure `npx` is available. If the command hangs on prompts, add the `--use-npm` flag (or `--use-pnpm`/`--use-yarn`) to skip the package manager prompt.
 
-### Schritt 2: Projektstruktur überprüfen
-
-Sicherstellen, dass das Scaffold die erwartete App-Router-Struktur erzeugt hat.
+### Step 2: Verify Project Structure
 
 ```text
 my-app/
 ├── src/
-│   └── app/
-│       ├── layout.tsx       # Root-Layout (erforderlich)
-│       ├── page.tsx         # Startseite (/)
-│       ├── globals.css      # Globale Stile
-│       └── favicon.ico
-├── public/                  # Statische Assets
-├── next.config.js           # Next.js-Konfiguration
-├── tailwind.config.ts       # Tailwind-Konfiguration (wenn aktiviert)
-├── tsconfig.json            # TypeScript-Konfiguration
+│   ├── app/
+│   │   ├── layout.tsx        # Root layout
+│   │   ├── page.tsx          # Home page
+│   │   ├── globals.css       # Global styles
+│   │   └── favicon.ico
+│   └── lib/                  # Shared utilities (create manually)
+├── public/                   # Static assets
+├── next.config.ts            # Next.js configuration
+├── tailwind.config.ts        # Tailwind configuration
+├── tsconfig.json             # TypeScript configuration
 ├── package.json
 └── .eslintrc.json
 ```
 
-**Erwartet:** Alle aufgelisteten Dateien vorhanden. `src/app/layout.tsx` enthält Root-RootLayout-Komponente mit HTML- und Body-Tags.
+**Expected:** All listed directories and files are present.
 
-**Bei Fehler:** Wenn das `src/`-Verzeichnis fehlt, wurde `--src-dir` möglicherweise nicht gesetzt. Manuell `src/app/` erstellen und Dateien dorthin verschieben.
+**On failure:** If `src/` directory is missing, the `--src-dir` flag was not passed. Re-run `create-next-app` with the flag, or move files manually into `src/app/`.
 
-### Schritt 3: Root-Layout und Metadaten konfigurieren
+### Step 3: Configure Next.js
 
-`src/app/layout.tsx` mit geeignetem Titel und Metadaten aktualisieren.
+Edit `next.config.ts` for project needs:
 
 ```typescript
-// src/app/layout.tsx
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+import type { NextConfig } from "next";
 
-const inter = Inter({ subsets: ['latin'] })
+const nextConfig: NextConfig = {
+  // Enable React strict mode
+  reactStrictMode: true,
+
+  // Image optimization domains
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "example.com",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+**Expected:** `next.config.ts` saved without TypeScript errors.
+
+**On failure:** If the file uses `.js` extension instead of `.ts`, rename it. Ensure `NextConfig` type is imported from `"next"`.
+
+### Step 4: Set Up Directory Conventions
+
+Create common directories:
+
+```bash
+mkdir -p src/app/api
+mkdir -p src/components
+mkdir -p src/lib
+mkdir -p src/types
+```
+
+**Expected:** All four directories created under `src/`.
+
+**On failure:** If `src/` does not exist, create it first or adjust paths to match the project structure (non-src layout uses `app/` at the root).
+
+### Step 5: Create Base Layout
+
+Edit `src/app/layout.tsx`:
+
+```tsx
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'My App',
-  description: 'Generated by create next app',
-}
+  title: "My Application",
+  description: "Application description",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
     </html>
-  )
+  );
 }
 ```
 
-**Erwartet:** Layout kompiliert ohne TypeScript-Fehler. Metadaten-Objekt hat `title` und `description`.
+**Expected:** Layout renders with the Inter font and wraps all pages.
 
-**Bei Fehler:** Wenn Font-Imports fehlschlagen, die Font-Importe entfernen und zu Standard-System-Fonts wechseln: `<body className="font-sans">`.
+**On failure:** If font fails to load, check network access. Replace `Inter` with a system font fallback as a temporary workaround.
 
-### Schritt 4: Startseite einrichten
+### Step 6: Add Example API Route
 
-`src/app/page.tsx` durch eine saubere Startseite ersetzen.
+Create `src/app/api/health/route.ts`:
 
 ```typescript
-// src/app/page.tsx
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">Welcome to My App</h1>
-      <p className="mt-4 text-lg text-gray-600">
-        Get started by editing{' '}
-        <code className="font-mono text-blue-600">src/app/page.tsx</code>
-      </p>
-    </main>
-  )
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  return NextResponse.json({ status: "ok", timestamp: new Date().toISOString() });
 }
 ```
 
-**Erwartet:** Seite rendert ohne Fehler. Tailwind-Klassen werden angewendet (wenn Tailwind aktiviert ist).
+**Expected:** File created at `src/app/api/health/route.ts`.
 
-**Bei Fehler:** Wenn Tailwind-Klassen nicht angewendet werden, `tailwind.config.ts` überprüfen — `content`-Array muss `./src/**/*.{ts,tsx}` enthalten.
+**On failure:** Ensure the `api/health/` directory exists. The file must export named HTTP method handlers (`GET`, `POST`, etc.), not a default export.
 
-### Schritt 5: Umgebungsvariablen konfigurieren
-
-Umgebungsvariablen-Dateien für verschiedene Umgebungen erstellen.
-
-```bash
-# .env.local — lokale Entwicklung (git-ignoriert)
-NEXT_PUBLIC_API_URL=http://localhost:3001
-
-# .env.example — Template (ins Repository einchecken)
-NEXT_PUBLIC_API_URL=https://api.example.com
-```
-
-`.gitignore` aktualisieren:
-
-```gitignore
-# Umgebungsvariablen
-.env.local
-.env.*.local
-```
-
-Next.js-Konventionen für Umgebungsvariablen:
-- `NEXT_PUBLIC_*` — im Browser zugänglich
-- Kein Präfix — nur serverseitig
-
-**Erwartet:** `.env.local` existiert (git-ignoriert). `.env.example` ist eingecheckt als Dokumentation.
-
-**Bei Fehler:** Wenn Variablen im Browser undefiniert sind, sicherstellen, dass sie mit `NEXT_PUBLIC_` beginnen und der Entwicklungsserver neu gestartet wurde.
-
-### Schritt 6: Entwicklungsserver verifizieren
-
-Den Entwicklungsserver starten und prüfen, ob er läuft.
+### Step 7: Run Development Server
 
 ```bash
 cd my-app
 npm run dev
 ```
 
-Erwartete Ausgabe:
-```text
-▲ Next.js 14.x.x
-- Local:        http://localhost:3000
-- Environments: .env.local
+**Expected:** Application running at http://localhost:3000.
 
-✓ Ready in Xms
-```
+**On failure:** Check Node.js version (>= 18.17). Run `npm install` if dependencies are missing.
 
-```bash
-# In einem separaten Terminal verifizieren
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
-# Erwartet: 200
-```
+## Validation
 
-**Erwartet:** Server startet auf Port 3000. HTTP 200 auf Startseite. Keine Kompilierungsfehler.
+- [ ] `npm run dev` starts without errors
+- [ ] Home page loads at localhost:3000
+- [ ] TypeScript compilation succeeds
+- [ ] Tailwind CSS classes are applied
+- [ ] API route responds at /api/health
+- [ ] ESLint runs without errors (`npm run lint`)
 
-**Bei Fehler:** Wenn Port 3000 belegt ist, mit `npm run dev -- --port 3001` starten. Wenn TypeScript-Fehler auftreten, `tsconfig.json` überprüfen — `strict: true` erfordert explizite Typen überall.
+## Common Pitfalls
 
-### Schritt 7: Seitenrouting testen
+- **Node.js version**: Next.js requires Node.js >= 18.17. Check with `node --version`.
+- **Port conflicts**: Default port 3000 may be in use. Use `npm run dev -- -p 3001`.
+- **Import alias confusion**: `@/*` maps to `src/*`. Don't confuse with node_modules imports.
+- **Pages vs App Router**: Ensure you're using App Router (`src/app/`) not Pages Router (`src/pages/`).
 
-Zusätzliche Routen erstellen, um das App-Router-System zu verifizieren.
+## Related Skills
 
-```typescript
-// src/app/about/page.tsx
-export default function About() {
-  return (
-    <main className="p-24">
-      <h1 className="text-4xl font-bold">About</h1>
-      <p className="mt-4">About page content here.</p>
-    </main>
-  )
-}
-```
-
-```bash
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/about
-# Erwartet: 200
-```
-
-**Erwartet:** `/about`-Route gibt HTTP 200 zurück und rendert Seiteninhalt.
-
-**Bei Fehler:** Wenn 404 erscheint, sicherstellen, dass die Datei unter `src/app/about/page.tsx` (nicht `src/app/about.tsx`) liegt — App Router erfordert `page.tsx` in Verzeichnissen.
-
-## Validierung
-
-- [ ] Projektverzeichnis mit vollständiger App-Router-Struktur existiert
-- [ ] `src/app/layout.tsx` mit Root-Layout-Komponente vorhanden
-- [ ] `src/app/page.tsx` ohne TypeScript-Fehler
-- [ ] Entwicklungsserver startet und gibt HTTP 200 zurück
-- [ ] Tailwind CSS-Klassen werden angewendet (wenn aktiviert)
-- [ ] Umgebungsvariablen-Template (`.env.example`) ins Repository eingecheckt
-- [ ] Zusätzliche Routen als Verzeichnisse mit `page.tsx` funktionieren
-
-## Haeufige Stolperfallen
-
-- **Pages Router vs App Router**: App Router verwendet Verzeichnisse mit `page.tsx`; Pages Router verwendet `pages/`-Verzeichnis direkt. Nicht mischen.
-- **Client vs Server Components**: Standardmäßig sind alle Komponenten Server Components. Für Hooks (useState, useEffect) `'use client'` am Anfang der Datei hinzufügen.
-- **`NEXT_PUBLIC_`-Präfix**: Ohne dieses Präfix sind Umgebungsvariablen auf dem Server undefiniert, wenn clientseitig zugegriffen wird.
-- **Import-Alias**: `@/*` wird auf `src/` aufgelöst. `@/components/Button` importiert aus `src/components/Button.tsx`.
-- **Großschreibung von Routennamen**: Next.js-Routen spiegeln die Verzeichnisstruktur wider (lowercase wird empfohlen). `/About` und `/about` sind identisch in production, aber nicht in development auf case-sensitiven Dateisystemen.
-- **Font-Optimierung**: `next/font` optimiert automatisch Fonts. Direkte `<link>`-Tags für Google Fonts vermeiden.
-
-## Verwandte Skills
-
-- `setup-tailwind-typescript` — Tailwind CSS + TypeScript in einem Next.js-Projekt konfigurieren
-- `deploy-to-vercel` — Next.js-Apps auf Vercel deployen
-- `use-graphql-api` — GraphQL-API in Next.js-Apps integrieren
+- `setup-tailwind-typescript` - detailed Tailwind and TypeScript configuration
+- `deploy-to-vercel` - deploy the scaffolded app
+- `configure-git-repository` - version control setup

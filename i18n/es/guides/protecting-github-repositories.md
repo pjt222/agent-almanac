@@ -7,9 +7,10 @@ teams: []
 skills: [assess-github-repo-security, harden-github-repo-security]
 locale: es
 source_locale: en
-source_commit: 84a3c915
-translator: "Claude + human review"
-translation_date: "2026-07-16"
+source_commit: 6dc5eeaf9
+fence_basis_commit: 6dc5eeaf9
+translator: "(untranslated stub)"
+translation_date: "2026-09-02"
 ---
 
 # Protecting GitHub Repositories
@@ -38,7 +39,7 @@ The running example throughout is the concrete case that trips most people up: a
 The order matters. Hardening blind is how you break the bot or lock yourself out.
 
 1. **Assess** — inventory the current state with [`assess-github-repo-security`](../skills/assess-github-repo-security/SKILL.md): existing rules, token defaults, enabled security features, and how CI pushes.
-2. **Apply the zero-downside baseline** — the essential tier below hardens the repo *without* touching anything the bot depends on.
+2. **Apply the no-regret baseline** — the essential tier below hardens the repo *without* breaking the bot.
 3. **Decide on required checks / required PR** — this is the fork in the road. It is the single control most in tension with a direct-push bot; if you want it, you must first provision a bypass identity for the bot (see the bypass matrix).
 4. **Harden the automation path** — swap the bot to a GitHub App token and add the App as a ruleset bypass actor, or route it through a pull request.
 5. **Verify** — re-run the assessment; confirm the bot still pushes and humans/forks are still gated.
@@ -111,9 +112,9 @@ Inspect what exists before and after: `gh api /repos/OWNER/REPO/rulesets` and `g
 
 ## The Tiered Hardening Checklist
 
-Apply top to bottom. The **essential** tier is zero-downside and does not break the auto-commit bot; **recommended** introduces the bot-bypass decision; **advanced** is high-friction or niche.
+Apply top to bottom. The **essential** tier is no-regret — every bullet is either a control you will not want to undo or a decision you will not want to have skipped — and does not break the auto-commit bot; **recommended** introduces the bot-bypass decision; **advanced** is high-friction or niche.
 
-### Essential (zero-downside baseline)
+### Essential (no-regret baseline)
 
 - **Force-push + deletion protection** via a default-branch ruleset (`non_fast_forward` + `deletion`). The cheapest, no-downside hardening; safe for a direct-push bot.
 - **Set the default `GITHUB_TOKEN` to read-only** and disable token PR approval. This is a *default*, not a hard cap, for same-repo push events — so it does not break the bot **provided the committing job grants `contents: write` back** (the next bullet). If your workflow has no explicit `permissions:` block and relied on the ambient write default, add that grant *first* or the `git-auto-commit-action` push `403`s.
@@ -126,7 +127,72 @@ Apply top to bottom. The **essential** tier is zero-downside and does not break 
   ```yaml
   - uses: stefanzweifel/git-auto-commit-action@<40-char-sha>  # v6.x.x
   ```
-- **Leave fork-PR approval at the public-repo default** ("Require approval for first-time contributors"). Fork `pull_request` runs already get a read-only token and no secrets.
+- **Decide fork-PR approval deliberately; the default has a cost this guide used to omit.** The public-repo default is "Require approval for first-time contributors", and fork `pull_request` runs already get a read-only token and no secrets — so the default is safe. What it also does is run **nothing at all** on a first-time contributor's PR until a maintainer clicks approve, and if nobody notices, the contributor sees a PR with no checks and no signal. Measured on this repo's first external PR: 0 workflow runs, 0 check-runs, 0 check-suites.
+
+  The setting is readable *and writable* over the API — it is not web-UI-only, an error worth naming because it sends people designing around a constraint that does not exist:
+
+  ```bash
+  gh api repos/OWNER/REPO/actions/permissions/fork-pr-contributor-approval
+  gh api -X PUT repos/OWNER/REPO/actions/permissions/fork-pr-contributor-approval \
+    -f approval_policy=first_time_contributors_new_to_github
+  ```
+
+  Three values, loosest to strictest: `first_time_contributors_new_to_github`, `first_time_contributors`, `all_external_contributors`. **This repository runs the loosest**, chosen against a measured blast radius rather than by default (#689).
+
+  **The predicate is fork-REACHABILITY, not "does this repo have secrets".** Getting that wrong in either direction is the usual mistake, so measure it:
+
+  ```bash
+  # 1. workflows a fork PR can trigger. ANCHORED, and both extensions — see the trap below
+  rg -l '^\s*pull_request:|^\s*on:.*\bpull_request\b|^\s*-\s*pull_request\s*$' \
+     -g '*.yml' -g '*.yaml' .github/workflows/
+  # 2. triggers an OUTSIDER can fire that run base-context code WITH secrets.
+  #    Any hit and step 1 is not the answer for this repo.
+  rg -n 'pull_request_target|workflow_run|issue_comment' .github/workflows/
+  # 3. workflows that carry secrets, including inherited ones
+  rg -l 'secrets\.|secrets:\s*inherit' -g '*.yml' -g '*.yaml' .github/workflows/
+  # 4. the high-severity question, asked WITHOUT relying on the census above
+  rg -n 'self-hosted' .github/workflows/
+  ```
+
+  **Check the ruler before believing it.** The obvious first command, `rg '^\s*pull_request'`,
+  is wrong in both directions and both are false-SAFE. It matches `pull_request_target:` —
+  the one trigger that runs in the **base-repo context with secrets and a write token**, which
+  this guide names two sections up as the documented privilege-escalation pattern — so an
+  unanchored scan files your most dangerous workflow among the read-only validators. And it
+  misses `on: [push, pull_request]` and `on: pull_request` entirely, because neither puts the
+  word at the start of a line.
+
+  Two more rulers to check, both learned by tripping them. Pass the directory with `-g`
+  filters rather than shell globs: under **zsh**, `.github/workflows/*.yaml` matching nothing
+  *skips the whole command* with `no matches found`, which reads at a glance like a clean scan.
+  And these greps are heuristics for the common YAML styles — a block sequence (`on:` then
+  `- pull_request` on its own line) is covered by the third alternation above, but a multi-line
+  flow sequence is not. **Parse rather than grep to settle it**: `yq '.on' <file>`, or
+  `actionlint`.
+
+  Which is why command 4 exists and does not depend on the census at all. Self-hosted runners
+  are the high-severity case, so ask that question directly on the whole directory instead of
+  inheriting whatever the trigger scan missed.
+
+  Command 2 is not optional, and the list in it is **not closed**. The principle it samples:
+  *any trigger an outsider can fire runs base-context code with secrets, and the question is
+  whether attacker-controlled payload reaches a shell or a checkout.* `pull_request_target` is
+  privileged regardless of the approval policy; `workflow_run` chained off a PR-triggered
+  workflow extends reachability *with* secrets (the pwn-request escalation); and
+  `issue_comment` fires on **any** user's comment on any issue or PR, which makes the
+  comment-body-into-`run:` and `ok-to-test`-checkout patterns the most-exploited of the class.
+  `issues`, `fork` and `watch` are the exotic tail. Any hit and the reachability argument below
+  does not apply to your repo.
+
+  Two that look like members and are not, stated so the list is not padded:
+  `repository_dispatch` needs a token with repo write, which an outsider does not have, and
+  `merge_group` fires from a maintainer-controlled queue.
+
+  Here that returns twelve `pull_request`-triggered workflows, every one a read-only validator; **zero** `pull_request_target` or `workflow_run` workflows; and two secret-bearing ones (`release.yml`, `update-readmes.yml`) plus the Pages deploy — **none of which carries a `pull_request` trigger at all**. So this repo does touch secrets and does deploy; a fork PR simply cannot reach any of it.
+
+  One caveat that only matters once command 2 is clean: a composite action or reusable workflow reaching for a secret is not a hole in a fork `pull_request` run, because on a public repo secrets are not provisioned to it at all — there is nothing to reach. Inside a `pull_request_target` workflow it is a hole, which is why that command comes first.
+
+  Which is why "we have no secrets" is the wrong test, in both directions. A repo whose deploy runs only on push-to-main is not endangered by loosening this, because a fork PR cannot trigger it and the platform withholds secrets from fork runs regardless. A repo whose `pull_request` validators run on **self-hosted runners** should keep the gate strict even with no secret anywhere — arbitrary code execution on your own hardware, resource abuse and cache-poisoning are what the approval gate is actually for, and none of them is "touches secrets".
 - **Enable Dependabot alerts + security updates + a `.github/dependabot.yml`.** Alerts and fixes are *separate* toggles — enable both, or you detect vulnerabilities and fix nothing. Include a `github-actions` ecosystem block to keep action SHAs fresh.
   ```bash
   gh api -X PUT repos/OWNER/REPO/vulnerability-alerts      # alerts + dependency graph
@@ -144,7 +210,17 @@ Apply top to bottom. The **essential** tier is zero-downside and does not break 
 - **Add `required_status_checks`** to the ruleset with `do_not_enforce_on_create=true` and `strict_required_status_checks_policy=true`. **Critical:** this blocks the bot's direct push unless you provision a bypass (next item), *and* the checks must run on `push`, not only `pull_request`, or they never report and the push is permanently blocked.
 - **Add a `pull_request` rule** if you want a review surface. On a solo repo keep `required_approving_review_count: 0` — you cannot approve your own PR, and `>= 1` is an unsatisfiable self-lockout.
 - **Provision a GitHub App bypass for the bot** (Contents: read/write) via `actions/create-github-app-token`, pass the token to checkout + `git-auto-commit-action`, and add the App as an `Integration` bypass actor with `bypass_mode: always`. This is the correct realization of "let the bot through" once required checks/PR are on.
-- **Enable CodeQL "default setup"** (server-managed) rather than advanced setup, so no extra workflow YAML is committed into a repo that auto-commits.
+- **Enable CodeQL "default setup"** (server-managed) rather than advanced setup, so no extra workflow YAML is committed into a repo that auto-commits. Two consequences to accept with it, both learned the expensive way (#643):
+
+  - **Its runs cannot be retried.** Default setup produces `event: dynamic` runs, and `gh run rerun` refuses them — both bare and `--failed`. A transient GitHub-side failure (#640 recorded a 503) therefore pins a red check that no re-run can clear. The only ways forward are a new commit or, *reportedly*, a PR close/reopen — the new-commit path is measured (#640's merge commit healed on `main`); the close/reopen path is not, and whether a `reopened` event re-fires a dynamic analysis on an unchanged head SHA is unrecorded. Try it, but do not plan around it. A committed `codeql.yml` produces retriable runs and would remove this entirely; that is the trade.
+  - **`CodeQL: neutral` is not evidence that code scanning passed.** The aggregate check named `CodeQL` comes from the `github-advanced-security` app and reports `neutral` even while the per-language `Analyze (…)` runs — from the `github-actions` app — report `failure`. Anything asserting code-scanning health, human or automated, must read the `Analyze (…)` runs:
+
+    ```bash
+    gh api --paginate repos/OWNER/REPO/commits/SHA/check-runs \
+      --jq '.check_runs[] | select(.name|test("Analyze")) | "\(.name)\t\(.conclusion)"'
+    ```
+
+  Neither is a reason against default setup. They are the reasons to know which one you chose.
 - **Set merge-method toggles to match policy** (e.g. merge-commits-only: `allow_squash_merge=false`, `allow_rebase_merge=false`) and auto-delete head branches on merge.
 - **Restrict the allowed-actions policy** to GitHub-owned + an explicit allow-list that *includes* `stefanzweifel/git-auto-commit-action` (it is not GitHub-owned; omitting it silently fails the workflow).
 
@@ -174,7 +250,7 @@ So to let trusted automation through, you must give it a *real* bypass-eligible 
 | Admin/fine-grained **PAT** + `Repository admin` role in bypass | **No** | 5 | Worst. Role-wide hole — exempts *all* admin actions including your own interactive pushes, not just automation. A leaked PAT = admin bypass-write. |
 | Add the default **`GITHUB_TOKEN`** to the bypass list | — | 6 | **Impossible.** Not a selectable actor by design; the push `403`s. |
 
-> **Verify the bypass-actor picker before you commit to this.** Historically the ruleset bypass-actor UI did **not** appear on user-owned (personal) repositories — the exact repo class this guide centers on. Before you build the App and flip on required checks / require-a-PR for real, open **Settings > Rules > Rulesets > (your ruleset) > Bypass list > Add bypass** and confirm the App is actually selectable. If it is not, the required-checks / required-PR combination is **unsatisfiable** on a personal repo — the bot's direct push cannot be let through by any means — and GitHub's documented workaround is to move the repo under a (free) **organization**, where App and role bypass actors are reliably available. This is version-dependent, so check your own repo rather than assuming the App route works.
+> **The bypass mechanism works on personal repos — via the REST API even when the web picker is finicky.** The ruleset bypass-actor *picker* in the web UI (**Settings > Rules > Rulesets > Bypass list > Add bypass**) has historically been unreliable on user-owned (personal) repositories, which led to advice that required-checks + a direct-push bot is *unsatisfiable* there. That is not the case. The REST API accepts `bypass_actors` of type `Integration` (App), `DeployKey`, `User`, and `RepositoryRole` on a **free personal public repo** — verified empirically on exactly this repo class. If the web picker will not add the actor, add it with `gh api ... /rulesets` (shown below) instead. Moving the repo under a (free) **organization** is a last resort, not the default path.
 
 The **GitHub App** route (rank 2) is the recommended default *once you have confirmed the App is addable as a bypass actor*. Mint the token at runtime and wire it through the bot:
 
@@ -211,6 +287,50 @@ JSON
 
 Two follow-ups once an App token or PAT is in play: (1) the crown-jewel secret is now the **App private key** — store it as an Actions secret, scope the App install to the single repo, and rotate; (2) unlike the default `GITHUB_TOKEN` (which suppresses downstream triggers), an App/PAT push **re-triggers** `on: push` workflows, so add a loop guard (`if: github.actor != '<app>[bot]'`, `paths-ignore`, or `[skip ci]`).
 
+### Bypass is whole-ruleset — split rulesets to keep some rules universal
+
+A `bypass_actor` is exempt from the **entire ruleset**, not from one rule — there is no per-rule bypass. So the single-ruleset example above lets the App skip `deletion` and `non_fast_forward` too, not only the required check: a bypass actor could force-push or delete the branch.
+
+If you want force-push/deletion protection to stay **universal** (applying even to the bot and to yourself) while exempting only the required *check* for the automation, split the rules across two stacked rulesets. Rulesets aggregate — a push must satisfy every applicable ruleset (most-restrictive-wins), and bypass is scoped per ruleset:
+
+```bash
+# A — ref protection for EVERYONE (no bypass): nobody can force-push/delete the branch
+gh api --method POST /repos/OWNER/REPO/rulesets --input - <<'JSON'
+{ "name": "protect-default-refs", "target": "branch", "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] } },
+  "bypass_actors": [],
+  "rules": [ { "type": "deletion" }, { "type": "non_fast_forward" } ] }
+JSON
+
+# B — required check, bypassed ONLY by the automation (add your own User id here
+#     too if you want to keep your personal direct-push; bypass_mode: always)
+gh api --method POST /repos/OWNER/REPO/rulesets --input - <<'JSON'
+{ "name": "require-checks", "target": "branch", "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] } },
+  "bypass_actors": [ { "actor_id": <APP_OR_KEY_ID>, "actor_type": "Integration", "bypass_mode": "always" } ],
+  "rules": [ { "type": "required_status_checks", "parameters": { "strict_required_status_checks_policy": false, "do_not_enforce_on_create": true, "required_status_checks": [ { "context": "build" } ] } } ] }
+JSON
+```
+
+### Deploy-key wiring (the narrow single-repo bypass)
+
+The deploy-key route (matrix rank 3) needs no App. Register a **write** deploy key, store its private half as a secret, and point checkout at it so `git-auto-commit-action` pushes over SSH as that identity:
+
+```yaml
+- uses: actions/checkout@<sha>
+  with:
+    ssh-key: ${{ secrets.DEPLOY_KEY }}   # remote becomes SSH, authed by the deploy key
+- uses: stefanzweifel/git-auto-commit-action@<sha>   # inherits the SSH remote
+```
+
+```bash
+# register the public half with write access, then add it as a DeployKey bypass actor
+gh api repos/OWNER/REPO/keys -f title="ci-bot" -f key="$(cat key.pub)" -F read_only=false
+# ruleset bypass_actors entry: { "actor_type": "DeployKey", "bypass_mode": "always" }
+```
+
+Quirk: GitHub stores a `DeployKey` bypass with `actor_id: null` — it matches **any** write deploy key on the repo, so keep the deploy-key list minimal. A successful bypassed push prints `remote: Bypassed rule violations for refs/heads/<branch>: … Required status check "<name>" is expected` and lands.
+
 ## Common False-Security Traps
 
 These are the beliefs that feel like security but are not.
@@ -219,6 +339,7 @@ These are the beliefs that feel like security but are not.
 - **"Convert the bot from push to a PR to satisfy the rules."** A PR opened by the default `GITHUB_TOKEN` does **not** trigger `pull_request`/`push` workflows, so required checks never run and the PR sits on "expected/pending" forever. The PR must be created with an App token or PAT.
 - **"Required status checks mean nothing unreviewed lands."** Without a *required-PR* rule, anyone with write can still push directly if a check reports on push; and in classic BP admins bypass by default unless `enforce_admins=true`. Rulesets differ — they do not auto-exempt admins — so porting the classic mental model silently changes who is gated.
 - **"Branch protection protects the repo from a malicious collaborator."** It protects one ref. A write collaborator can push to unprotected branches, add a malicious workflow, or move tags. Scope, allowed-actions policy, and fork approval matter as much.
+- **"Fork-PR approval is a Settings-only toggle."** It is at `/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval`, readable and writable, with three values. Designing a manual procedure around the belief that it is web-UI-only is wasted work — verify the premise before designing around it.
 - **"Public-repo secret scanning stops leaks."** Alerts fire *after* the commit; push protection blocks at push time but the auto-commit bot cannot click the interactive web bypass, so a CI-committed secret just fails the job — treat it as a real finding, not a flake. The free tier also covers provider patterns only, not every generic secret.
 - **"Require signed commits is free hardening."** It blocks the bot, which pushes unsigned via git CLI. Keeping both requires an API-based commit action.
 - **"Swap `GITHUB_TOKEN` for a broad PAT to get past protection."** A PAT is long-lived and account-wide — a strict privilege escalation over the ephemeral repo-scoped token. Prefer an App or deploy key.
@@ -229,7 +350,8 @@ These are the beliefs that feel like security but are not.
 | Problem | Cause | Solution |
 |---|---|---|
 | Bot push `403`s after enabling required checks / require-PR | The default `GITHUB_TOKEN` cannot be a bypass actor and cannot push to a protected branch | Provision a GitHub App token (or deploy key) and add that identity to the ruleset `bypass_actors`; pass the token to checkout + `git-auto-commit-action` |
-| Cannot add the App (or any actor) to the ruleset bypass list on a personal repo | The bypass-actor picker historically did not appear on user-owned repos; without it, required-checks/required-PR + a direct-push bot is unsatisfiable | Verify the picker under Settings > Rules > Rulesets > Bypass list; if it is absent, move the repo under a free organization (GitHub's documented workaround) or keep the default branch at the essential-tier baseline only |
+| Web UI won't let you add a bypass actor on a personal repo | The ruleset bypass-actor *picker* is unreliable on user-owned repos — but the REST API is not | Add the actor with `gh api --method PUT /repos/OWNER/REPO/rulesets/ID` carrying a `bypass_actors` entry (`Integration`/`DeployKey`/`User`/`RepositoryRole`); confirmed working on free personal public repos. The org move is a last resort, not the fix |
+| A bypass actor can force-push or delete the protected branch | `bypass_mode` exempts the actor from the *entire* ruleset, not one rule | Split rules into two stacked rulesets — put `deletion`/`non_fast_forward` in a no-bypass ruleset and the required check in a separate bypassed one (see "Bypass is whole-ruleset") |
 | PR opened by the bot is stuck on a check that shows "expected"/pending forever | A PR created with the default `GITHUB_TOKEN` does not trigger `pull_request`/`push` workflows, so checks never run | Create the PR with a GitHub App token (or PAT), which fires both event types; then the checks actually run and can gate the merge |
 | Solo maintainer cannot merge own PR | `required_approving_review_count >= 1` (or `require_code_owner_review`) — you cannot approve your own PR, and a ruleset does not auto-exempt you as admin | Set `required_approving_review_count: 0`, or add a second reviewer / a second trusted App as a bypass path |
 | New branch cannot be created; "required status check is expected" | Required checks block branch *creation* — CI cannot have run on a branch that does not exist (catch-22); or checks only trigger on `pull_request` and never report on a push | Set `do_not_enforce_on_create: true` on the `required_status_checks` rule, and make the check run on `push`, not only `pull_request` |

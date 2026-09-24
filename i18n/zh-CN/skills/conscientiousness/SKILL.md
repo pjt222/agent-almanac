@@ -18,7 +18,7 @@ metadata:
   domain: esoteric
   complexity: intermediate
   language: natural
-  tags: esoteric, conscientiousness, thoroughness, reliability, meta-cognition, ai-self-application
+  tags: esoteric, conscientiousness, diligence, thoroughness, verification, meta-cognition
 ---
 
 # Conscientiousness（尽责性）

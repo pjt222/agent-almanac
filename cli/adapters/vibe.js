@@ -15,6 +15,8 @@ export class VibeAdapter extends FrameworkAdapter {
   static displayName = 'Mistral Vibe';
   static strategy = 'symlink';
   static contentTypes = ['skill', 'agent'];
+  /** @type {Record<string, string[]>} #607: _skillsBase() branches on scope; _agentsBase() takes no scope and is always ~/.vibe/agents. */
+  static scopes = { skill: ['project', 'global'], agent: ['global'] };
 
   async detect(projectDir) {
     return existsSync(resolve(projectDir, '.vibe'));

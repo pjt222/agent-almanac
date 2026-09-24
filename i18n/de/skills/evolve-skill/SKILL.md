@@ -103,7 +103,7 @@ Diese Entscheidungsmatrix verwenden, um zu bestimmen, ob direkt verfeinert oder 
 |---|---|---|
 | Skill-ID | Unveraendert | Neue ID: `<skill>-advanced` |
 | Dateipfad | Dieselbe SKILL.md | Neues Verzeichnis |
-| Versions-Bump | Patch oder Minor | Beginnt bei 1.0 |
+| Versions-Bump | Minor (Major nur bei Breaking Change) | Beginnt bei 1.0 |
 | Komplexitaet | Kann steigen | Hoeher als das Original |
 | Registry | Kein neuer Eintrag | Neuer Eintrag hinzugefuegt |
 | Symlinks | Keine Aenderung | Neue Symlinks benoetigt |
@@ -123,14 +123,12 @@ Diese Entscheidungsmatrix verwenden, um zu bestimmen, ob direkt verfeinert oder 
 
 Die bestehende SKILL.md direkt bearbeiten:
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- Zur Bearbeitung oeffnen
+- Verfahrensschritte hinzufuegen/ueberarbeiten
+- Expected/On-failure-Paare staerken
+- Tabellen oder Beispiele hinzufuegen
+- Ausloser fuer "When to Use" aktualisieren
+- Inputs ueberarbeiten, falls sich Umfang geaendert hat
 
 Diese Bearbeitungsregeln befolgen:
 - Alle bestehenden Abschnitte erhalten — Inhalte hinzufuegen, keine Abschnitte entfernen
@@ -177,15 +175,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. Aktuellen Quell-Commit-Hash ermitteln:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. `source_commit` im Frontmatter jeder uebersetzten Datei aktualisieren:
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. Dateien zur Neu-Uebersetzung markieren, indem betroffene Locales in der Commit-Nachricht aufgefuehrt werden:
@@ -217,12 +214,12 @@ Die Uebersetzung neuer Varianten aufschieben, bis sich die Variante stabilisiert
 
 ### Schritt 5: Version und Metadaten aktualisieren
 
-Das Feld `version` im Frontmatter gemaess Semver-Konventionen erhoehen:
+Das Feld `version` im Frontmatter erhoehen:
 
 | Aenderungstyp | Versions-Bump | Beispiel |
 |---|---|---|
-| Tippfehler, Formulierungspraezisierung | Patch: 1.0 -> 1.1 | Unklaren Satz in Schritt 3 korrigiert |
-| Neuer Schritt, neuer Fallstrick, neue Tabelle | Minor: 1.0 -> 2.0 | Schritt 7 fuer Randfaelle hinzugefuegt |
+| Tippfehler, Formulierungspraezisierung | Minor: 1.0 -> 1.1 | Unklaren Satz in Schritt 3 korrigiert |
+| Neuer Schritt, neuer Fallstrick, neue Tabelle | Minor: 1.0 -> 1.1 | Schritt 7 fuer Randfaelle hinzugefuegt |
 | Verfahren umstrukturiert, Eingaben geaendert | Major: 1.0 -> 2.0 | Von 5 auf 8 Schritte umorganisiert |
 
 Auch aktualisieren:

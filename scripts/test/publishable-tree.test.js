@@ -1,0 +1,813 @@
+/**
+ * publishable-tree.test.js — the `prepack` guard that refuses a divergent pack (#876).
+ *
+ * The property under test is not "git status works". It is that a path npm WOULD pack and the
+ * release would NOT contain makes this check refuse. npm packs the working tree under a `files`
+ * array — it does not honour `.gitignore` — so an ignored `__pycache__` or an untracked scratch
+ * file under `skills/` ships from a local `npm publish` and does not ship from CI, which packs a
+ * commit.
+ *
+ * Every fixture is a real git repository, because the subject is git's own classification.
+ */
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtempSync, mkdirSync, writeFileSync, unlinkSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, dirname } from 'node:path';
+import { rmTree } from './_tmp.js';
+import { initRepo, isolateGitEnv } from './_git-fixture.js';
+import { shippedPaths, divergentPaths, report } from '../check-publishable-tree.js';
+
+// The subject spawns git with `process.env`, so a developer's own global excludes could
+// otherwise decide a verdict here (#874 review, S4).
+isolateGitEnv();
+
+function write(dir, files) {
+  for (const [rel, content] of Object.entries(files)) {
+    mkdirSync(dirname(join(dir, rel)), { recursive: true });
+    writeFileSync(join(dir, rel), content);
+  }
+}
+
+/** A package whose `files` ships `skills/` and nothing else interesting. */
+function pkg(t, extra = {}) {
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-'));
+  t.after(() => rmTree(dir));
+  write(dir, {
+    // `version` is required for `npm pack --dry-run` to run at all — without it npm exits 1 with
+    // `Invalid package, must have name and version`, which made the "measured on this exact tree"
+    // provenance line in the two-column test false as written (#883 review, N3).
+    'package.json': JSON.stringify({ name: 'fixture', version: '1.0.0', files: ['skills/', '!skills/_template/'] }),
+    '.gitignore': '__pycache__/\n*.log\n',
+    'skills/real/SKILL.md': '# real\n',
+    'skills/real/references/helper.py': 'print(1)\n',
+    ...extra,
+  });
+  initRepo(dir);
+  return dir;
+}
+
+/**
+ * The path lines of one REFUSED block, as `<code> <path>` strings in report order, or `null`
+ * when the report has no such block.
+ *
+ * Asserting a block's COUNT is what let two mutants of the STAGED-BUT-GONE predicate survive
+ * all 938 tests: swapping its `'A'` for `'T'` moves `AD` into ABSENT-OR-RETYPED and `T ` into
+ * STAGED-BUT-GONE, and both counts stay exactly where they were (#883 round 2, SF-1). A count
+ * is preserved by a swap; membership is not. It is the same reason the codes map is asserted
+ * with `deepEqual` rather than by length.
+ *
+ * `report` truncates a block at 20 paths and appends `  … and N more`, which starts with the
+ * same two spaces as a path line. Folding that into the membership fails closed — a
+ * `deepEqual` against real paths cannot pass with a phantom entry — but it would report a
+ * member that does not exist, so the loop stops there instead (#883 round 3, N-1). The helper
+ * has its own unit test below, because it is a parser and the file already unit-tests `say()`'s
+ * truncation.
+ */
+function refusedBlock(lines, label) {
+  const all = lines.split('\n');
+  const start = all.findIndex((line) => line.startsWith('REFUSED: ') && line.includes(` ${label} path(s) `));
+  if (start === -1) return null;
+  const out = [];
+  for (const line of all.slice(start + 1)) {
+    if (!line.startsWith('  ') || line.startsWith('  … and ')) break;
+    out.push(line.slice(2));
+  }
+  return out;
+}
+
+test('refusedBlock reads one block, and not the truncation line', () => {
+  const twoBlocks = [
+    'REFUSED: 1 IGNORED path(s) under a shipped directory would be packed and are not in the commit — remove them:',
+    '  !! skills/real/debug.log',
+    'REFUSED: 3 STAGED-BUT-GONE path(s) under a shipped directory so the pack lacks a file:',
+    '  AD skills/real/added.md',
+    '  AT skills/real/addsym.md',
+    // A SPACE-leading code, because the offset is the thing being pinned: `line.slice(2)` and
+    // `line.trim()` are indistinguishable over two-character codes, and `trim()` survived this
+    // test until this member existed (#883 round 4, N-3). `report` emits ` T`, ` D` and ` M`.
+    '   T skills/real/retyped.md',
+    '',
+    'npm packs the WORKING TREE under a `files` array — it does not honour .gitignore —',
+  ].join('\n');
+  assert.deepEqual(refusedBlock(twoBlocks, 'IGNORED'), ['!! skills/real/debug.log'],
+    'a block ahead of another one ends where the next REFUSED line starts');
+  assert.deepEqual(refusedBlock(twoBlocks, 'STAGED-BUT-GONE'),
+    ['AD skills/real/added.md', 'AT skills/real/addsym.md', ' T skills/real/retyped.md'],
+    'the space-leading code survives the slice — `trim()` would silently eat it');
+  assert.equal(refusedBlock(twoBlocks, 'MODIFIED'), null, 'an absent block is null, not []');
+
+  // The real thing, so the truncation shape is `report`'s and not a hand-written guess.
+  const many = Object.fromEntries(
+    Array.from({ length: 21 }, (_, i) => [`skills/real/f${String(i).padStart(2, '0')}.md`, 'AD']),
+  );
+  const truncated = report({ ignored: [], untracked: [], modified: Object.keys(many), codes: many }).join('\n');
+  assert.match(truncated, /… and 1 more/, 'the fixture is vacuous unless report actually truncates');
+  // The label is read back from the output rather than hardcoded, and that is the whole point:
+  // hardcoding `'STAGED-BUT-GONE'` made this test fail under every mutation of a BUCKET
+  // predicate — the paths moved to another label, `refusedBlock` returned null and `.length`
+  // threw a TypeError. Three rows of the mutant table were then reported as `KILLED by 2` with
+  // the second failure being a crash in a test that is not about them, which is the shape #621
+  // says not to read as coverage. This test is about the PARSER: whatever bucket 21 `AD` paths
+  // land in, the block has 20 members and the last is a path.
+  const label = truncated.match(/^REFUSED: \d+ (\S+) path\(s\) /m)?.[1];
+  assert.ok(label, 'report emitted no REFUSED block at all — the fixture is vacuous');
+  const block = refusedBlock(truncated, label);
+  assert.ok(block, `refusedBlock found no block for the label report itself printed: ${label}`);
+  assert.equal(block.length, 20);
+  assert.equal(block.at(-1), 'AD skills/real/f19.md', 'the last member is a path, never the `… and N more` line');
+});
+
+test('a clean tree passes, and the negation is not mistaken for a shipped path', async (t) => {
+  const dir = pkg(t);
+
+  assert.deepEqual(shippedPaths(dir), { included: ['skills/'], negations: ['skills/_template/'] },
+    'both halves are needed: the negation is not a path to scan, and not a path to forget');
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
+  assert.match(report(divergentPaths(dir))[0], /^OK: /);
+});
+
+test('an IGNORED artefact under a shipped directory is refused — the #876 case', async (t) => {
+  const dir = pkg(t);
+  // Exactly what importing a Python asset leaves behind, which is how #872 and #868 were both
+  // produced. `git status` reads clean; `npm pack` ships it.
+  write(dir, { 'skills/real/references/__pycache__/helper.cpython-312.pyc': 'x' });
+
+  const found = divergentPaths(dir);
+
+  assert.equal(found.ignored.length, 1, `expected one ignored path, got ${JSON.stringify(found)}`);
+  assert.match(found.ignored[0], /__pycache__/);
+  assert.deepEqual(found.untracked, []);
+  const lines = report(found);
+  assert.ok(lines.some((l) => l.startsWith('REFUSED: 1 IGNORED')), lines.join('\n'));
+  assert.ok(lines.some((l) => l.includes('does not honour .gitignore')), 'the message must say WHY');
+});
+
+test('the reported path is the FILE, not a directory an operator would search in vain', async (t) => {
+  // `-uall` is what buys this, and it is asserted rather than assumed — a surviving mutant
+  // showed that swapping `--ignored=matching` for plain `--ignored` changed no test, because
+  // with `-uall` the two agree. Without `-uall` an untracked file collapses to its directory,
+  // which still refuses while naming the wrong thing to delete.
+  const dir = pkg(t);
+  write(dir, {
+    'skills/real/debug.log': 'noise\n',
+    'skills/fresh/new.md': 'x\n',
+  });
+
+  const found = divergentPaths(dir);
+
+  assert.deepEqual(found.ignored, ['skills/real/debug.log'], 'an ignored file in a tracked directory');
+  assert.deepEqual(found.untracked, ['skills/fresh/new.md'], 'the FILE, not `skills/fresh/`');
+});
+
+test('an UNTRACKED file under a shipped directory is refused, and named as its own class', async (t) => {
+  const dir = pkg(t);
+  write(dir, { 'skills/real/scratch.md': 'notes\n' });
+
+  const found = divergentPaths(dir);
+
+  // Same mechanism, different fix — commit it or remove it — so the report names the classes
+  // separately rather than reporting a count.
+  assert.deepEqual(found.ignored, []);
+  assert.deepEqual(found.untracked, ['skills/real/scratch.md']);
+  assert.ok(report(found).some((l) => l.startsWith('REFUSED: 1 UNTRACKED')));
+});
+
+test('divergence OUTSIDE the shipped paths is ignored — the check is scoped, not a tree gate', async (t) => {
+  const dir = pkg(t);
+  // `scripts/` is not in `files`, so nothing here reaches a pack. A check that refused this
+  // would block every publish from a working checkout and be disabled within a week.
+  write(dir, { 'scripts/local-probe.js': '1\n', 'scripts/debug.log': 'noise\n' });
+
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
+});
+
+test('a MODIFIED tracked file is refused — npm packs the working bytes, not the committed ones', async (t) => {
+  const dir = pkg(t);
+  // The OK line used to say "a pack here matches the commit" while this state packed 14 bytes
+  // against 7 committed (#879 review, S1). Same divergence as the other two classes, different
+  // remedy, so it gets its own list rather than a count.
+  writeFileSync(join(dir, 'skills/real/SKILL.md'), '# real, edited after the commit\n');
+
+  const found = divergentPaths(dir);
+
+  assert.deepEqual(found.modified, ['skills/real/SKILL.md']);
+  assert.deepEqual(found.ignored, []);
+  assert.deepEqual(found.untracked, []);
+  assert.ok(report(found).some((l) => l.startsWith('REFUSED: 1 MODIFIED')));
+});
+
+test('content under a NEGATED files entry is not refused — npm never packs it', async (t) => {
+  const dir = pkg(t);
+  // `files` carves `skills/_template/` back out, so nothing under it can reach the tarball.
+  // Refusing here would block a publish over a file that cannot ship (#879 review, S2). A
+  // pathspec cannot express this — `:(exclude)` does not drop the ignored-directory entry —
+  // so the filtering happens on the results.
+  write(dir, {
+    'skills/_template/scratch.md': 'x\n',
+    'skills/_template/__pycache__/a.pyc': 'x',
+  });
+
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
+
+  // …and the same shapes OUTSIDE the negation are still refused, so this is a carve-out and
+  // not a hole.
+  write(dir, { 'skills/real/scratch.md': 'x\n' });
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/scratch.md']);
+});
+
+test('an injected `shipped` with hand-built negations is refused, not answered (#882)', (t) => {
+  // `divergentPaths` takes `shipped` as a parameter, which makes it the one public door past
+  // `shippedEntries`. A hand-built negations array never went through `assertInterpretable`,
+  // so the matcher must refuse it rather than carve paths out on its say-so.
+  const dir = pkg(t);
+  write(dir, { 'skills/real/scratch.md': 'x\n' });
+
+  // Positive control: the same tree through the validated path is answered.
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/scratch.md']);
+  assert.throws(
+    () => divergentPaths(dir, { included: ['skills/'], negations: ['skills/_template/'] }),
+    /did not come from shippedEntries/,
+  );
+});
+
+test('a git failure THROWS rather than reporting a clean tree', async (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-bare-'));
+  t.after(() => rmTree(dir));
+  write(dir, { 'package.json': JSON.stringify({ name: 'x', files: ['skills/'] }), 'skills/a.md': 'x' });
+
+  // Not a repository. An empty answer here would read as "nothing would be packed that should
+  // not be", which is precisely the publish this check exists to refuse.
+  assert.throws(() => divergentPaths(dir), /Refusing to report a clean tree/);
+});
+
+test('the report distinguishes both classes at once, and truncates a long list', async (t) => {
+  const dir = pkg(t);
+  const many = {};
+  for (let i = 0; i < 25; i += 1) many[`skills/real/scratch-${i}.md`] = 'x';
+  write(dir, { ...many, 'skills/real/__pycache__/a.pyc': 'x' });
+
+  const lines = report(divergentPaths(dir));
+
+  assert.ok(lines.some((l) => l.startsWith('REFUSED: 1 IGNORED')));
+  assert.ok(lines.some((l) => l.startsWith('REFUSED: 25 UNTRACKED')));
+  assert.ok(lines.some((l) => l.includes('and 5 more')), lines.join('\n'));
+});
+
+test('`prepack` is wired, and it is deliberately NOT an install hook', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { resolve, dirname } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const { INSTALL_HOOKS } = await import('../lib/skills-inventory.js');
+
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+  const scripts = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')).scripts ?? {};
+
+  assert.equal(scripts.prepack, 'node scripts/check-publishable-tree.js', 'the guard must be wired to prepack');
+  // The distinction SECURITY.md's sentence rests on: `prepack` runs in the publisher's tree when
+  // packing, never in a consumer's on install. If it ever joined this list, that sentence would
+  // become false and `assertInventoryClaims` would throw — which is the behaviour wanted, and is
+  // why this asserts the membership rather than trusting the prose.
+  assert.ok(!INSTALL_HOOKS.includes('prepack'), 'prepack is not an install-time hook');
+  for (const hook of INSTALL_HOOKS) {
+    assert.equal(scripts[hook], undefined, `package.json must declare no ${hook} script`);
+  }
+});
+
+test('the main-module guard fires at a path npm percent-encodes — the #879 fail-open', async (t) => {
+  const { execFileSync } = await import('node:child_process');
+  const { copyFileSync, cpSync } = await import('node:fs');
+  const { resolve, dirname } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+  const base = mkdtempSync(join(tmpdir(), 'publishable-url-'));
+  t.after(() => rmTree(base));
+
+  // A space is enough: `import.meta.url` percent-encodes it, `process.argv[1]` does not, and a
+  // `file://${process.argv[1]}` comparison therefore never matches — the script would exit 0
+  // having checked nothing, which is a guard failing OPEN. Measured before the fix: exit 0 with
+  // a gitignored `.pyc` staged to ship.
+  for (const name of ['plain', 'with space']) {
+    const dir = join(base, name);
+    mkdirSync(join(dir, 'skills/real/references/__pycache__'), { recursive: true });
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'x', version: '1.0.0', files: ['skills/'] }));
+    writeFileSync(join(dir, '.gitignore'), '__pycache__/\n');
+    writeFileSync(join(dir, 'skills/real/SKILL.md'), '# real\n');
+    writeFileSync(join(dir, 'skills/real/references/__pycache__/contaminant.pyc'), 'x');
+    // `scripts/`, not the fixture root: the module resolves ROOT as its own parent directory, so
+    // a script at `<fixture>/check.mjs` makes ROOT the fixture's PARENT, which has no
+    // package.json — `readFileSync` throws ENOENT and the process exits 1 having checked
+    // nothing. Both arms then "pass" on a crash, and the plain arm passes with the OLD guard
+    // too (#879 round 2, S2). The assertion on stderr is what makes the exit code mean refusal.
+    mkdirSync(join(dir, 'scripts'), { recursive: true });
+    cpSync(join(root, 'scripts/lib'), join(dir, 'scripts/lib'), { recursive: true });
+    copyFileSync(join(root, 'scripts/check-publishable-tree.js'), join(dir, 'scripts/check.mjs'));
+    initRepo(dir);
+
+    const run = () => {
+      try {
+        const stdout = execFileSync(process.execPath, ['scripts/check.mjs'], { cwd: dir, encoding: 'utf8', stdio: 'pipe' });
+        return { status: 0, stdout, stderr: '' };
+      } catch (error) {
+        return { status: error.status, stdout: String(error.stdout ?? ''), stderr: String(error.stderr ?? '') };
+      }
+    };
+
+    const result = run();
+    assert.equal(result.status, 1, `the guard must refuse at "${name}" — exit 0 there is the fail-open`);
+    assert.match(result.stderr, /REFUSED: 1 IGNORED/,
+      `exit 1 must be a refusal at "${name}", not a crash: ${result.stderr.slice(0, 200)}`);
+
+    // The arm a crash can never produce: remove the contaminant and the same invocation must
+    // exit 0 with the OK line on stdout. Without it, "exit 1" is the only thing observed and a
+    // broken script satisfies the whole test.
+    rmTree(join(dir, 'skills/real/references/__pycache__'));
+    const clean = run();
+    assert.equal(clean.status, 0, `a clean tree must pass at "${name}": ${clean.stderr.slice(0, 200)}`);
+    assert.match(clean.stdout, /^OK: /);
+  }
+});
+
+test('a negation without a trailing slash is an EXACT path, not a prefix', async (t) => {
+  // npm's negations are root-anchored and this module models them the way
+  // `skills-inventory.js` does: trailing slash means prefix, otherwise exact. A mutant that
+  // made every pattern a prefix survived the suite, which means nothing distinguished the two
+  // (#879 review, follow-up). Prefix-matching a file negation would carve out every sibling
+  // whose name merely STARTS with it, and those do pack.
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-neg-'));
+  t.after(() => rmTree(dir));
+  write(dir, {
+    'package.json': JSON.stringify({ name: 'fixture', files: ['skills/', '!skills/real/SKILL.md'] }),
+    '.gitignore': '__pycache__/\n',
+    'skills/real/SKILL.md': '# real\n',
+  });
+  initRepo(dir);
+  // Shares the negated path as a prefix, and npm packs it.
+  write(dir, { 'skills/real/SKILL.md.bak': 'x\n' });
+
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/SKILL.md.bak'],
+    'a `.bak` beside an exactly-negated file still ships, so it must still be refused');
+});
+
+test('an absent `files` array REFUSES — it is the configuration where only this check can see', async (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-nofiles-'));
+  t.after(() => rmTree(dir));
+  write(dir, {
+    'package.json': JSON.stringify({ name: 'fixture', version: '1.0.0' }),
+    '.gitignore': '__pycache__/\n',
+    'skills/real/SKILL.md': '# real\n',
+  });
+  initRepo(dir);
+  write(dir, { 'skills/real/scratch.md': 'x\n' });
+
+  // Measured in the #879 review (N7): with no `files` array npm honours the root .gitignore for
+  // the IGNORED class but still packs UNTRACKED files — three of them, while this check returned
+  // "OK … a pack here matches the commit". An empty inclusion list must not read as a clean tree.
+  assert.throws(() => divergentPaths(dir), /declares no .files. array/);
+});
+
+test('npm’s own default excludes are not reported as "would be packed"', async (t) => {
+  const dir = pkg(t);
+  // Measured: with these present, `npm pack --dry-run --json` does not list them, so refusing
+  // them is a false statement that blocks a publish over a Finder dropping (#879 review, N2).
+  write(dir, {
+    'skills/real/.DS_Store': 'x',
+    'skills/real/.npmrc': 'x',
+    'skills/real/notes.orig': 'x',
+    // Nine further names the #879 re-grade measured refused-but-never-packed.
+    'skills/real/.npmignore': 'x',
+    'skills/real/._resourcefork': 'x',
+    'skills/real/.SKILL.md.swp': 'x',
+    'skills/real/npm-debug.log': 'x',
+    'skills/real/.lock-wscript': 'x',
+    'skills/real/.wafpickle-7': 'x',
+    'skills/real/CVS/Root': 'x',
+    'skills/real/.svn/entries': 'x',
+    'skills/real/.hg/store': 'x',
+  });
+
+  assert.deepEqual(divergentPaths(dir), { ignored: [], untracked: [], modified: [], codes: {} });
+
+  // …but the things npm DOES pack must still refuse. Measured packed, so correctly refused:
+  // a nested lockfile, and a nested node_modules.
+  write(dir, { 'skills/real/package-lock.json': '{}\n' });
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/package-lock.json'],
+    'a nested lockfile IS packed, so it is not a default exclude');
+
+  // …and a nested node_modules under a shipped directory IS packed, so it must still refuse —
+  // the same review measured `skills/real/node_modules/dep/index.js` in the listing, which is
+  // why that name is deliberately NOT in the default-excludes set.
+  write(dir, { 'skills/real/node_modules/dep/index.js': 'x' });
+  assert.deepEqual(divergentPaths(dir).untracked, [
+    'skills/real/node_modules/dep/index.js',
+    'skills/real/package-lock.json',
+  ]);
+});
+
+test('a path carrying a space or a non-ASCII byte is reported unquoted', async (t) => {
+  const dir = pkg(t);
+  // Porcelain quotes both, and the quoting reached the report verbatim before `-z`
+  // (#879 review, N5): `"skills/real/umlaut-\303\244.md"`.
+  write(dir, { 'skills/real/has space.md': 'x\n', 'skills/real/umlaut-ä.md': 'x\n' });
+
+  assert.deepEqual(divergentPaths(dir).untracked,
+    ['skills/real/has space.md', 'skills/real/umlaut-ä.md']);
+});
+
+test('a rename OUT of a negated directory refuses the new file', async (t) => {
+  const dir = pkg(t);
+  const { execFileSync } = await import('node:child_process');
+  const run = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  // Reachable with this repository's OWN files array: `!skills/_template/` is a directory
+  // negation, so seeding a skill from the template is a rename whose old side is carved out.
+  // Tested against the old side, the whole record disappears and the new file ships unrefused
+  // (#879 round 2, B1).
+  run('mv', 'skills/real/SKILL.md', 'skills/real/renamed.md');
+
+  const found = divergentPaths(dir);
+
+  const all = [...found.ignored, ...found.untracked, ...found.modified];
+  assert.ok(all.includes('skills/real/renamed.md'), `the new path must be reported, got ${JSON.stringify(found)}`);
+});
+
+test('the module can be IMPORTED where there is no script path', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { resolve, dirname } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+  // `pathToFileURL(undefined)` THROWS rather than returning a non-match, so a main-module guard
+  // without the `process.argv[1] &&` half turns an importable module into one that crashes on
+  // import from `node -e`, a REPL or a loader. A commit here typed exactly that variant.
+  const out = execFileSync(process.execPath, [
+    '--input-type=module', '-e',
+    `import { report } from ${JSON.stringify(`${root}/scripts/check-publishable-tree.js`)};`
+    + 'console.log(report({ ignored: [], untracked: [], modified: [], codes: {} })[0]);',
+  ], { encoding: 'utf8' });
+
+  assert.match(out, /^OK: /);
+});
+
+test('the pack-hook sentence is DERIVED — a manifest without the hook yields nothing', async () => {
+  const { packHookSentence } = await import('../lib/skills-inventory.js');
+
+  // The point of extracting it. Its previous guard was `check-readmes`, a SNAPSHOT gate, and a
+  // snapshot cannot tell a derivation from a literal rendering the same bytes: reverting the
+  // derivation to a hardcoded `['prepack']` regenerated SECURITY.md byte-identically and the
+  // mutant SURVIVED (#879 round 2, S3). Here the absent-hook manifest is an argument.
+  assert.equal(packHookSentence({ scripts: {} }), '');
+  assert.equal(packHookSentence({}), '');
+  assert.equal(packHookSentence(undefined), '');
+  assert.match(packHookSentence({ scripts: { prepack: 'node x.js' } }), /It does declare `prepack`/);
+
+  // `postpack` alone is NOT described as refusing a pack — a cleanup step does not refuse
+  // anything, and the sentence would be false of it (N9).
+  assert.equal(packHookSentence({ scripts: { postpack: 'node x.js' } }), '');
+});
+
+test('assertInterpretable refuses the directory-order and re-include shapes npm and this matcher disagree about', async (t) => {
+  const { shippedEntries } = await import('../lib/skills-inventory.js');
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-files-'));
+  t.after(() => rmTree(dir));
+  const manifest = (files) => {
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'x', files }));
+    return () => shippedEntries(dir);
+  };
+
+  // Measured: npm ignores a DIRECTORY negation placed before the inclusion it carves from and
+  // packs the whole directory, while this matcher goes on excluding it — the silent direction.
+  assert.throws(manifest(['!skills/_template/', 'skills/']), /DIRECTORY negation placed before/);
+  // Measured: npm packs a path re-included under a negated directory; this matcher carves it out.
+  assert.throws(manifest(['skills/', '!skills/_template/', 'skills/_template/SKILL.md']), /re-includes a path under a negated directory/);
+
+  // The real shape, and a FILE negation before its inclusion — measured honoured by npm, so
+  // refusing it would refuse a correct array.
+  assert.deepEqual(manifest(['skills/', '!skills/_template/'])(), { included: ['skills/'], negations: ['skills/_template/'] });
+  assert.deepEqual(manifest(['!agents/_template.md', 'agents/'])(), { included: ['agents/'], negations: ['agents/_template.md'] });
+});
+
+test('a rename WITHIN a shipped directory reports both sides — what --no-renames buys', async (t) => {
+  const dir = pkg(t);
+  const { execFileSync } = await import('node:child_process');
+  execFileSync('git', ['-C', dir, 'mv', 'skills/real/SKILL.md', 'skills/real/renamed.md'], { encoding: 'utf8' });
+
+  const found = divergentPaths(dir);
+
+  // With rename detection ON, git emits ONE record carrying only the new path, so the pack's
+  // loss of the old file goes unreported. `--no-renames` emits `D old` + `A new`, and both are
+  // real divergences: the pack lacks a file the commit has, and gains one it does not.
+  assert.deepEqual(found.modified, ['skills/real/SKILL.md', 'skills/real/renamed.md']);
+});
+
+test('the remedy matches what git reported — a deletion is not "packed with its working bytes"', async (t) => {
+  const dir = pkg(t);
+  const { execFileSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  writeFileSync(join(dir, 'skills/real/SKILL.md'), '# edited after the commit\n');
+  git('rm', '-q', 'skills/real/references/helper.py');
+
+  const found = divergentPaths(dir);
+  const lines = report(found).join('\n');
+
+  // The pack LACKS helper.py; it does not carry it with working-tree bytes. Stamping ` M` on it
+  // and telling the reader to "commit or revert" described the wrong failure (#879 round 2, S5).
+  assert.match(lines, /REFUSED: 1 ABSENT-OR-RETYPED path\(s\).*the pack LACKS a file the commit has/s);
+  assert.match(lines, /REFUSED: 1 MODIFIED path\(s\).*WORKING-TREE bytes/s);
+  assert.match(lines, /D {2}skills\/real\/references\/helper\.py/);
+  assert.equal(found.codes['skills/real/SKILL.md'], ' M');
+});
+
+test('a rename INTO a negated directory reports the file the pack now LACKS', async (t) => {
+  const dir = pkg(t);
+  const { execFileSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  write(dir, { 'skills/real/a.md': '# a\n', 'skills/_template/SKILL.md': '# tpl\n' });
+  git('add', '-A');
+  git('commit', '-qm', 'a file that will be moved out of the shipped set');
+  git('mv', 'skills/real/a.md', 'skills/_template/a.md');
+
+  // The direction that produces a WRONG ANSWER rather than a weaker one. Under `-z` alone git
+  // emits `R  skills/_template/a.md\0skills/real/a.md\0`: the new path is carved out by the
+  // negation, the origin record is dropped by the parser, and the guard reports OK while the
+  // pack no longer carries a file the commit has. `--no-renames` splits it into `A ` + `D `, and
+  // the `D ` side is a real divergence under a shipped path (#879 re-grade, SF1).
+  const found = divergentPaths(dir);
+
+  assert.deepEqual(found.modified, ['skills/real/a.md']);
+  assert.equal(found.codes['skills/real/a.md'], 'D ');
+  assert.match(report(found).join('\n'), /ABSENT-OR-RETYPED[\s\S]*the pack LACKS a file the commit has/);
+});
+
+test('a TWO-COLUMN code is read at the WORKTREE column, and an `A?` path is not one the commit has', async (t) => {
+  // The two extra files are committed BY pkg(), not by a `git commit` inside this test: an
+  // earlier revision committed them mid-fixture and swept the staged `AD`/`MD` into the commit,
+  // turning both into ` D` and deleting the very shapes under test.
+  const dir = pkg(t, { 'skills/real/staged.md': '# staged\n', 'skills/real/retyped.md': '# retyped\n' });
+  const { execFileSync, spawnSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  // `AD`: staged add, then removed from the worktree. `MD`: staged edit, then removed. Both
+  // were filed under MODIFIED — "packed with their WORKING-TREE bytes" — because the old
+  // predicate trimmed the pair and compared it whole, so it only ever matched a single-column
+  // code (#879 round 3, SF1).
+  write(dir, { 'skills/real/added.md': '# added\n' });
+  git('add', 'skills/real/added.md');
+  unlinkSync(join(dir, 'skills/real/added.md'));
+  writeFileSync(join(dir, 'skills/real/SKILL.md'), '# edited\n');
+  git('add', 'skills/real/SKILL.md');
+  unlinkSync(join(dir, 'skills/real/SKILL.md'));
+  // ` T`: a tracked regular file replaced by a symlink. The half of this class that had no
+  // fixture at all — `--delete-matching` on the `T` arm survived its mutant because the only
+  // deletion test `git rm`s, which produces `D ` (#879 round 3, SF2).
+  unlinkSync(join(dir, 'skills/real/references/helper.py'));
+  // Pointed at a REGULAR file, not /dev/null, so the pack assertion below can see npm start
+  // following symlinks: a followed /dev/null is a character device, which npm-packlist drops
+  // anyway, so that target would keep the listing unchanged under exactly the premise change
+  // the assertion exists for. The code stays ` T` either way (#886).
+  symlinkSync(join(dir, 'package.json'), join(dir, 'skills/real/references/helper.py'));
+  // `T `: the SAME retype, staged. The index column, which the ` T` case above leaves untested —
+  // weakening `gone(raw(path)[0])` to `raw(path)[0] === 'D'` survived all 937 tests (#883
+  // review, SF-C). Fixing "the T half has no fixture" for one column and leaving the other in
+  // that state is the same class-closure failure one level up.
+  unlinkSync(join(dir, 'skills/real/staged.md'));
+  symlinkSync('/dev/null', join(dir, 'skills/real/staged.md'));
+  git('add', 'skills/real/staged.md');
+  // `MT`: staged edit, then retyped. Routes through the same `code[1] === 'T'` arm; measured
+  // independently by the #879 reviewer and again here — npm packed neither it nor `MD`/`AD`.
+  writeFileSync(join(dir, 'skills/real/retyped.md'), '# edited\n');
+  git('add', 'skills/real/retyped.md');
+  unlinkSync(join(dir, 'skills/real/retyped.md'));
+  symlinkSync('/dev/null', join(dir, 'skills/real/retyped.md'));
+  // `AT`: staged add, then the added file retyped to a symlink. The half of the `A?` class the
+  // round-2 fix left untested — narrowing the STAGED-BUT-GONE arm to `AD` alone survived all
+  // 938 tests, because nothing built an `AT` to move (#883 round 2, SF-1).
+  write(dir, { 'skills/real/addsym.md': '# addsym\n' });
+  git('add', 'skills/real/addsym.md');
+  unlinkSync(join(dir, 'skills/real/addsym.md'));
+  symlinkSync('/dev/null', join(dir, 'skills/real/addsym.md'));
+  // `A ` and `AM`: a staged add still on disk, and one edited after staging. They are here to
+  // pin what the STAGED-BUT-GONE arm must EXCLUDE, which membership over the codes it includes
+  // does not reach. Dropping `worktreeAbsent(path) &&` from the arm survived all 938 tests and
+  // filed both under "the pack lacks a file the NEXT commit would have" — while the pack
+  // carries both, and the `git restore <path>` it recommends is an exit-0 no-op on `A `
+  // (#883 round 3, SF-1). These are the commonest divergence a maintainer actually produces.
+  write(dir, { 'skills/real/new.md': '# new\n', 'skills/real/new2.md': '# new2\n' });
+  git('add', 'skills/real/new.md', 'skills/real/new2.md');
+  writeFileSync(join(dir, 'skills/real/new2.md'), '# new2 edited\n');
+
+  const found = divergentPaths(dir);
+  assert.deepEqual(found.codes, {
+    'skills/real/SKILL.md': 'MD',
+    'skills/real/added.md': 'AD',
+    'skills/real/addsym.md': 'AT',
+    'skills/real/new.md': 'A ',
+    'skills/real/new2.md': 'AM',
+    'skills/real/references/helper.py': ' T',
+    'skills/real/retyped.md': 'MT',
+    'skills/real/staged.md': 'T ',
+  }, 'the fixture is vacuous unless git reports all eight shapes — assert the codes, not the count');
+
+  const lines = report(found).join('\n');
+  // `AD` and `AT` are STAGED-BUT-GONE, not ABSENT-OR-RETYPED: HEAD carries neither path, so the
+  // pack matches the commit for both and "a file the commit has" would be false of them (SF-B).
+  //
+  // MEMBERSHIP on both blocks, not their counts. The count assertions this replaces were
+  // preserved by a swap: mutating the arm's `raw(path)[0] === 'A'` to `=== 'T'` puts `AD` in
+  // ABSENT and `T ` in STAGED-BUT-GONE, leaving 4 and 1 intact, and it survived all 938 tests
+  // (#883 round 2, SF-1). Sorted path order, which is what `report` prints.
+  assert.deepEqual(refusedBlock(lines, 'STAGED-BUT-GONE'), [
+    'AD skills/real/added.md',
+    'AT skills/real/addsym.md',
+  ]);
+  assert.deepEqual(refusedBlock(lines, 'ABSENT-OR-RETYPED'), [
+    'MD skills/real/SKILL.md',
+    ' T skills/real/references/helper.py',
+    'MT skills/real/retyped.md',
+    'T  skills/real/staged.md',
+  ]);
+  assert.match(lines, /STAGED-BUT-GONE path\(s\)[\s\S]*the NEXT commit would have/);
+  // The remedy is per-code, and naming one restore form uniformly is wrong in both directions:
+  // plain restore errors on `D `, is a silent exit-0 no-op on `T ` — which this fixture carries
+  // — and on `MD`/`MT` the two-flag form DISCARDS the staged edit (#883 round 2, SF-2).
+  assert.match(lines, /ABSENT-OR-RETYPED[\s\S]*silent no-op on `T `/);
+  // The third block, and the one the arm must NOT swallow. "Packed with their WORKING-TREE
+  // bytes" is true of exactly these two and false of all six absences, which the `npm pack`
+  // assertions closing this test check against npm itself, on this tree (#886).
+  assert.deepEqual(refusedBlock(lines, 'MODIFIED'), [
+    'A  skills/real/new.md',
+    'AM skills/real/new2.md',
+  ]);
+
+  // The premise under all three blocks, asserted rather than measured by hand: npm packs an
+  // on-disk REGULAR file and drops a symlink or an absence, whatever git's code says. The code
+  // does not decide it — `new.md` staged as a symlink still reads `A ` and leaves every block
+  // above unchanged while npm drops it — so the expected listing is a literal. Derived from the
+  // report it would move with the guard; derived from lstat it would move with the fixture,
+  // which is the change it exists to catch (#886).
+  //
+  // npm's environment is isolated the way `cleanEnv` isolates git's: by prefix, not by the keys
+  // anyone thought of. Every `npm_*` key goes, in either case — `npm run test:scripts` hands its
+  // child the caller's cache, userconfig and user-config values in lower case, and setup-node's
+  // `registry-url` exports `NPM_CONFIG_USERCONFIG`, which npm honours too (release.yml runs this
+  // suite under it). Overriding without stripping is not enough: when both cases are present npm
+  // takes whichever comes later in the environment, so the result would depend on key order
+  // (measured on npm 11.13.0 and 11.19.0: `npm config get` returns the later of
+  // `NPM_CONFIG_X` and `npm_config_x`, and honours the upper case alone).
+  // `--dry-run` still writes the tarball into the cache, so the cache lives in a directory this
+  // test removes. The update notifier is the only network this command makes, and the compile
+  // cache is npm's own write into TMPDIR (#885's control row). `--ignore-scripts` because
+  // `--dry-run` still runs `prepack`, whose output would corrupt `--json` (measured on npm
+  // 11.13.0: a `prepack` echoing to stdout makes JSON.parse fail on its first line).
+  // `--no-workspaces` because npm walks up from the fixture looking for a workspace root: under
+  // a TMPDIR inside a root whose `workspaces` glob covers the fixture, it adopted that root and
+  // probed its `.npmrc`, a project config outside the sandbox (#902 review, N-1).
+  const npmSandbox = mkdtempSync(join(tmpdir(), 'npm-pack-'));
+  t.after(() => rmTree(npmSandbox));
+  mkdirSync(join(npmSandbox, 'home'));
+  const npmEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^npm_/i.test(key)));
+  Object.assign(npmEnv, {
+    HOME: join(npmSandbox, 'home'),
+    npm_config_cache: join(npmSandbox, 'cache'),
+    npm_config_userconfig: join(npmSandbox, 'npmrc'),
+    npm_config_globalconfig: join(npmSandbox, 'npmrc-global'),
+    npm_config_update_notifier: 'false',
+    NODE_DISABLE_COMPILE_CACHE: '1',
+  });
+  const packResult = spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts', '--no-workspaces'], {
+    cwd: dir, env: npmEnv, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 60_000,
+  });
+  // Never a skip: a required context that skips this reports green having checked nothing.
+  // `ifError` first, because an absent npm or a timeout leaves `status` null and the status
+  // assertion alone would say only `null !== 0`.
+  assert.ifError(packResult.error);
+  assert.equal(packResult.status, 0, `npm pack --dry-run failed: ${packResult.stderr}`);
+  const packed = JSON.parse(packResult.stdout)[0].files;
+  assert.deepEqual(packed.map((file) => file.path).sort(), [
+    'package.json',
+    'skills/real/new.md',
+    'skills/real/new2.md',
+  ], 'npm packs the two regular files and none of the six absences');
+  // And with their WORKING-TREE bytes, which is what the MODIFIED block says: `new2.md`'s
+  // staged blob is `# new2\n` (7 bytes) and its working tree `# new2 edited\n` (14), so a pack
+  // read from the index would show 7. `package.json`'s size is left out: whether it is stable
+  // across npm versions was not measured.
+  const sizeOf = (path) => packed.find((file) => file.path === path).size;
+  assert.deepEqual([sizeOf('skills/real/new.md'), sizeOf('skills/real/new2.md')], [6, 14],
+    'npm packs the working-tree bytes, not the staged blob');
+});
+
+test('the four unmerged codes the rename/rename fixture cannot reach', async (t) => {
+  // `UU`, `AA`, `UD` and `DU` each survived deletion from UNMERGED_CODES against all 937 tests,
+  // because the rename/rename conflict reaches only `DD`/`UA`/`AU` (#883 review, N1). The
+  // comment says "every unmerged code"; negative evidence covered three of seven.
+  const dir = pkg(t);
+  const { spawnSync, execFileSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+  const merge = (ref) => spawnSync('git', ['-C', dir, 'merge', ref], { encoding: 'utf8' });
+
+  // Both sides edit one file (`UU`), both sides add a different file at one path (`AA`), and
+  // one side edits while the other deletes (`UD`/`DU`, direction depending on which side is HEAD).
+  write(dir, { 'skills/real/both.md': '# base\n' });
+  git('add', '-A');
+  git('commit', '-qm', 'base for the conflict');
+  git('switch', '-qc', 'theirs');
+  write(dir, {
+    'skills/real/both.md': '# theirs\n',
+    'skills/real/added.md': '# theirs\n',
+    'skills/real/references/helper.py': 'print(2)\n',
+  });
+  git('add', '-A');
+  git('rm', '-q', 'skills/real/SKILL.md');
+  git('commit', '-qm', 'theirs');
+  git('switch', '-q', 'main');
+  // `SKILL.md` must be MODIFIED here, not left alone: a delete on one side with no change on
+  // the other merges cleanly and reports `D `, which is not a conflict at all — the first run
+  // of this fixture asserted `UD` and measured `D `.
+  write(dir, {
+    'skills/real/both.md': '# ours\n',
+    'skills/real/added.md': '# ours\n',
+    'skills/real/SKILL.md': '# ours\n',
+  });
+  git('add', '-A');
+  git('rm', '-q', 'skills/real/references/helper.py');
+  git('commit', '-qm', 'ours');
+  assert.notEqual(merge('theirs').status, 0, 'the fixture needs a CONFLICT; a clean merge asserts nothing');
+
+  // Both directions of modify/delete, because `UD` and `DU` are separate members of the set and
+  // each survived its own deletion mutant.
+  const found = divergentPaths(dir);
+  assert.deepEqual(found.codes, {
+    'skills/real/SKILL.md': 'UD',
+    'skills/real/added.md': 'AA',
+    'skills/real/both.md': 'UU',
+    'skills/real/references/helper.py': 'DU',
+  });
+
+  const lines = report(found).join('\n');
+  assert.match(lines, /REFUSED: 4 UNMERGED path\(s\)/);
+  // `UU` and `AA` pack markers; `UD`/`DU`/`UA`/`AU` pack one side's version with none, and `DD`
+  // packs nothing. The old sentence asserted markers for all seven (SF-D).
+  assert.match(lines, /as it sits on disk — with markers, as one side's version, or not at all/);
+  assert.doesNotMatch(lines, /ABSENT-OR-RETYPED|STAGED-BUT-GONE|MODIFIED path\(s\)/);
+});
+
+test('every unmerged code is UNMERGED, `DD` included', async (t) => {
+  const dir = pkg(t);
+  const { spawnSync, execFileSync } = await import('node:child_process');
+  const git = (...args) => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' });
+
+  // A rename/rename conflict, because it is the reachable shape that emits `DD` — measured on
+  // git 2.43, this tree reports `DD` for the original and `UA`/`AU` for the two destinations.
+  // `DD` matched none of the old predicate's four arms and fell through to MODIFIED, which
+  // tells an operator to "commit or revert" a path that is mid-conflict (#879 round 3).
+  git('switch', '-qc', 'left');
+  git('mv', 'skills/real/SKILL.md', 'skills/real/left.md');
+  git('commit', '-qm', 'left');
+  git('switch', '-q', 'main');
+  git('switch', '-qc', 'right');
+  git('mv', 'skills/real/SKILL.md', 'skills/real/right.md');
+  git('commit', '-qm', 'right');
+  const merge = spawnSync('git', ['-C', dir, 'merge', 'left'], { encoding: 'utf8' });
+  assert.notEqual(merge.status, 0, 'the fixture needs a CONFLICT; a clean merge asserts nothing');
+
+  const found = divergentPaths(dir);
+  assert.deepEqual(found.codes, {
+    'skills/real/SKILL.md': 'DD',
+    'skills/real/left.md': 'UA',
+    'skills/real/right.md': 'AU',
+  });
+
+  const lines = report(found).join('\n');
+  assert.match(lines, /REFUSED: 3 UNMERGED path\(s\)[\s\S]*resolve it/);
+  assert.doesNotMatch(lines, /ABSENT-OR-RETYPED|MODIFIED path\(s\)/,
+    'a conflicted path is not an absence and not an edit — the remedy is to resolve it');
+});
+
+test('a directory negation is a prefix on a SEGMENT boundary, not on bytes', async (t) => {
+  const { shippedEntries } = await import('../lib/skills-inventory.js');
+  const dir = mkdtempSync(join(tmpdir(), 'publishable-segment-'));
+  t.after(() => rmTree(dir));
+  const manifest = (files) => {
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ name: 'x', files }));
+    return () => shippedEntries(dir);
+  };
+
+  // `lib` carves nothing from `lib-extra/x/` — npm packs neither path from the other — so
+  // refusing this array rejected a manifest that is interpretable (#879 round 3, Q1).
+  assert.deepEqual(manifest(['!lib-extra/x/', 'lib'])(),
+    { included: ['lib'], negations: ['lib-extra/x/'] });
+  // The refusal itself must survive the fix, with and without the inclusion's trailing slash.
+  assert.throws(manifest(['!skills/_template/', 'skills/']), /DIRECTORY negation placed before/);
+  assert.throws(manifest(['!skills/_template/', 'skills']), /DIRECTORY negation placed before/);
+
+  // A `./`-prefixed entry is the one shape the segment fix does NOT make safe: npm normalises
+  // it and packs the directory; this module compares literal paths and matches nothing, so a
+  // negation beside it goes dead too (#883 review, N5). Refused in both spellings.
+  assert.throws(manifest(['!lib/x/', './lib']), /begins with "\.\/" or "\/"/);
+  assert.throws(manifest(['/lib']), /begins with "\.\/" or "\/"/);
+  assert.throws(manifest(['lib', '!./lib/x/']), /begins with "\.\/" or "\/"/);
+});

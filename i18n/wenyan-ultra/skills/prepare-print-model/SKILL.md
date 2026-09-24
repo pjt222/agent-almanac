@@ -53,16 +53,14 @@ metadata:
 出 3D 模於合印之式：
 
 **FDM/SLA**：
-```bash
-# If starting from CAD (Fusion 360, SolidWorks)
-# Export as: STL (binary) or 3MF
-# Resolution: High (triangle count sufficient for detail)
-# Units: mm (verify scale)
+If starting from CAD (Fusion 360, SolidWorks)
+Export as: STL (binary) or 3MF
+Resolution: High (triangle count sufficient for detail)
+Units: mm (verify scale)
 
-# Example export settings:
-# STL: Binary format, refinement 0.1mm
-# 3MF: Include color/material data if using multi-material printer
-```
+Example export settings:
+STL: Binary format, refinement 0.1mm
+3MF: Include color/material data if using multi-material printer
 
 得：模出含合解（機件 0.1mm 弦差、有機 0.05mm）。
 
@@ -129,16 +127,14 @@ meshlab model.stl
 | SLA (engineering) | 0.6mm | 1.2mm | 2.5mm+ |
 | SLS (nylon) | 0.7mm | 1.0mm | 2.0mm+ |
 
-```bash
-# Check wall thickness visually in slicer:
-# - Import model
-# - Enable "Thin walls" detection
-# - Slice with 0 infill to see wall structure
+Check wall thickness visually in slicer:
+- Import model
+- Enable "Thin walls" detection
+- Slice with 0 infill to see wall structure
 
-# For precise measurement, use CAD software:
-# - Measure distance between parallel surfaces
-# - Check in critical load-bearing areas
-```
+For precise measurement, use CAD software:
+- Measure distance between parallel surfaces
+- Check in critical load-bearing areas
 
 得：諸壁達擇程之最小。薄壁標察。
 
@@ -210,15 +206,13 @@ If part experiences:
 - 減面痕
 - 略易除
 
-```bash
-# In slicer (PrusaSlicer example):
-# Print Settings → Support material
-# - Generate support material: Yes
-# - Overhang threshold: 45° (FDM) / 30° (SLA)
-# - Pattern: Rectilinear / Tree (auto)
-# - Interface layers: 3
-# - Interface pattern spacing: 0.2mm
-```
+In slicer (PrusaSlicer example):
+Print Settings → Support material
+- Generate support material: Yes
+- Overhang threshold: 45° (FDM) / 30° (SLA)
+- Pattern: Rectilinear / Tree (auto)
+- Interface layers: 3
+- Interface pattern spacing: 0.2mm
 
 得：支生於諸過限懸、覽無浮幾何。
 
@@ -274,17 +268,15 @@ retract_speed: 150-180mm/min
 
 察切 G-code 為事：
 
-```bash
-# In slicer:
-# - Slice model
-# - Use layer preview slider to inspect each layer
-# - Check for:
-#   * Gaps in perimeters (indicates thin walls)
-#   * Floating regions (missing supports)
-#   * Excessive stringing paths (reduce travel)
-#   * First layer: proper squish and adhesion
-#   * Top layers: sufficient solid infill
-```
+In slicer:
+- Slice model
+- Use layer preview slider to inspect each layer
+- Check for:
+  * Gaps in perimeters (indicates thin walls)
+  * Floating regions (missing supports)
+  * Excessive stringing paths (reduce travel)
+  * First layer: proper squish and adhesion
+  * Top layers: sufficient solid infill
 
 **覽紅旗**：
 - **實區白缺**：壁過薄於今線寬

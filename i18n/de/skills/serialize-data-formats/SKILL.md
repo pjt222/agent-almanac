@@ -17,6 +17,7 @@ metadata:
   locale: de
   source_locale: en
   source_commit: 6f65f316
+  fence_basis_commit: 6f65f316
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---

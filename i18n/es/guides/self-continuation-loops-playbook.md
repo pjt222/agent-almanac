@@ -8,7 +8,8 @@ skills: [choose-loop-wakeup-interval, read-continue-here, write-continue-here, m
 locale: es
 source_locale: en
 source_commit: 33b561c9
-translator: "Claude + human review"
+fence_basis_commit: 33b561c9
+translator: "(untranslated stub)"
 translation_date: "2026-04-13"
 ---
 

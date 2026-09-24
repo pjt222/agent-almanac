@@ -101,7 +101,7 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 |---|---|---|
 | 技能 ID | 不變 | 新 ID：`<skill>-advanced` |
 | 檔路徑 | 同 SKILL.md | 新目錄 |
-| 版本升 | Patch 或 minor | 起於 1.0 |
+| 版本升 | Minor（僅破壞則 Major） | 起於 1.0 |
 | 複雜 | 或增 | 高於原 |
 | Registry | 無新項 | 加新項 |
 | Symlinks | 無變 | 需新 symlink |
@@ -121,14 +121,12 @@ grep -oP '`[\w-]+`' skills/<skill-name>/SKILL.md | sort -u
 
 直接編既有 SKILL.md：
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- Open for editing
+- Add/revise procedure steps
+- Strengthen Expected/On failure pairs
+- Add tables or examples
+- Update When to Use triggers
+- Revise Inputs if scope changed
 
 遵此編輯規：
 - 保所有既有節——加內容，勿移節
@@ -175,15 +173,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. 取當前源 commit hash：
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. 更各譯文 frontmatter 中之 `source_commit`：
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. 於 commit 訊息中納受影響語言以旗標檔供重譯：
@@ -215,12 +212,12 @@ npm run translation:status
 
 ### 步驟五：更版與元數據
 
-升 frontmatter 之 `version` 欄，循 semver 之規：
+升 frontmatter 之 `version` 欄：
 
 | 改類 | 版升 | 例 |
 |---|---|---|
-| 錯字修、措詞釐清 | Patch：1.0 → 1.1 | 修 Step 3 中不明之句 |
-| 新步、新陷阱、新表 | Minor：1.0 → 2.0 | 加 Step 7 處邊緣情 |
+| 錯字修、措詞釐清 | Minor：1.0 → 1.1 | 修 Step 3 中不明之句 |
+| 新步、新陷阱、新表 | Minor：1.0 → 1.1 | 加 Step 7 處邊緣情 |
 | 重構程、改輸入 | Major：1.0 → 2.0 | 自 5 步重組為 8 步 |
 
 亦更：

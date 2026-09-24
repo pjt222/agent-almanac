@@ -53,16 +53,15 @@ metadata:
 
 全程繫於書面之法德審。略此者，害之最大源也。
 
-```python
-# Inputs to confirm before writing any code:
-# 1. Is the data public (no login required)?
-# 2. Does robots.txt permit the path?
-# 3. Does the site's ToS prohibit automated access? (read it)
-# 4. Would the scraping process personal data? If yes, what is the legal basis?
-# 5. Could this access circumvent geo-licensing, paywalls, or auth?
-# 6. Is there a public API or data dump that would make scraping unnecessary?
-# 7. Have you contacted the site owner if scope is large?
-```
+Inputs to confirm before writing any code:
+
+1. Is the data public (no login required)?
+2. Does robots.txt permit the path?
+3. Does the site's ToS prohibit automated access? (read it)
+4. Would the scraping process personal data? If yes, what is the legal basis?
+5. Could this access circumvent geo-licensing, paywalls, or auth?
+6. Is there a public API or data dump that would make scraping unnecessary?
+7. Have you contacted the site owner if scope is large?
 
 得：每問皆有可辯之書答。一遇「否」或「未知」則止，俟其解。
 

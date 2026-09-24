@@ -21,6 +21,8 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
   static displayName = 'Claude Code';
   static strategy = 'symlink';
   static contentTypes = ['skill', 'agent', 'team'];
+  /** @type {Record<string, string[]>} #607: _targetBase() branches on scope for every content type. */
+  static scopes = { skill: ['project', 'global'], agent: ['project', 'global'], team: ['project', 'global'] };
 
   async detect(projectDir) {
     return existsSync(resolve(projectDir, '.claude'));

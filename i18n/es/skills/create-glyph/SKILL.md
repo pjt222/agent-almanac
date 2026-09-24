@@ -3,6 +3,7 @@ name: create-glyph
 locale: es
 source_locale: en
 source_commit: 33b561c9
+fence_basis_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -228,31 +229,21 @@ Registrar el icono en el archivo de manifiesto correspondiente.
 
 ### Paso 5: Renderizar — Generar el Icono
 
-Ejecutar el pipeline de construccion para renderizar el WebP.
+Ejecutar el pipeline de iconos para renderizar el nuevo glifo. Usar siempre `build.sh` como punto de entrada — se encarga de la deteccion de plataforma y de la seleccion del binario de R. Ver [render-icon-pipeline](../render-icon-pipeline/SKILL.md) para la referencia completa de opciones y la arquitectura del pipeline.
 
-1. Navegar al directorio `viz/`
-2. Renderizar segun el tipo de entidad:
-
-**Para habilidades:**
 ```bash
-cd viz && Rscript build-icons.R --only <domain>
-# O saltar existentes: Rscript build-icons.R --only <domain> --skip-existing
+# From project root — renders all palettes, standard + HD, skips existing icons
+bash viz/build.sh --only <domain> --skip-existing          # skills
+bash viz/build.sh --type agent --only <id> --skip-existing # agents
+bash viz/build.sh --type team --only <id> --skip-existing  # teams
+
+# Dry run first:
+bash viz/build.sh --only <domain> --dry-run
 ```
 
-**Para agentes:**
-```bash
-cd viz && Rscript build-agent-icons.R --only <agent-id>
-# O saltar existentes: Rscript build-agent-icons.R --only <agent-id> --skip-existing
-```
+`build.sh` ejecuta el pipeline completo (paleta → datos → manifiesto → renderizado → glifos de terminal). Los pasos que no son de renderizado agregan unos 10 segundos, pero garantizan que todos los datos esten actualizados.
 
-**Para equipos:**
-```bash
-cd viz && Rscript build-team-icons.R --only <team-id>
-# O saltar existentes: Rscript build-team-icons.R --only <team-id> --skip-existing
-```
-
-3. Para una ejecucion en seco primero, agregar `--dry-run` a cualquier comando
-4. Ubicaciones de salida:
+Ubicaciones de salida:
    - Habilidades: `viz/public/icons/<palette>/<domain>/<skill-id>.webp`
    - Agentes: `viz/public/icons/<palette>/agents/<agent-id>.webp`
    - Equipos: `viz/public/icons/<palette>/teams/<team-id>.webp`
@@ -272,7 +263,7 @@ Comprobar que la salida renderizada cumple los estandares de calidad.
 1. Verificar que el archivo existe y tiene un tamano razonable:
    ```bash
    ls -la viz/public/icons/cyberpunk/<type-path>/<entity-id>.webp
-   # Esperado: rango tipico de 15-80 KB
+   # Expected: 15-80 KB typical range
    ```
 
 2. Abrir el WebP en un visor de imagenes para comprobar:
@@ -321,7 +312,7 @@ Realizar ajustes y re-renderizar.
 
 ### Paletas de Color por Dominio y Entidad
 
-Los 58 colores de dominio (para habilidades) estan definidos en `viz/R/palettes.R` (la unica fuente de verdad). Los colores de agentes y equipos tambien se gestionan en `palettes.R`. La paleta cyberpunk (colores neon ajustados manualmente) esta en `get_cyberpunk_colors()`. Las paletas de la familia viridis se generan automaticamente via `viridisLite`.
+Los colores de dominio (para habilidades) estan definidos en `viz/R/palettes.R` (la unica fuente de verdad). Los colores de agentes y equipos tambien se gestionan en `palettes.R`. La paleta cyberpunk (colores neon ajustados manualmente) esta en `get_cyberpunk_colors()`. Las paletas de la familia viridis se generan automaticamente via `viridisLite`.
 
 Para buscar un color:
 ```r
@@ -334,7 +325,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 Al agregar un nuevo dominio, agregarlo en tres lugares de `palettes.R`:
 1. `PALETTE_DOMAIN_ORDER` (alfabeticamente)
 2. Lista de dominios en `get_cyberpunk_colors()`
-3. Ejecutar `Rscript generate-palette-colors.R` para regenerar JSON + JS
+3. Ejecutar `bash viz/build.sh` para regenerar paletas, datos y manifiestos
 
 ### Catalogo de Funciones de Glyph
 

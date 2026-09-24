@@ -14,7 +14,7 @@ metadata:
   domain: esoteric
   complexity: intermediate
   language: natural
-  tags: esoteric, honesty, humility, transparency, calibration, meta-cognition, ai-self-application
+  tags: esoteric, honesty, humility, epistemic, calibration, transparency, meta-cognition
   locale: zh-CN
   source_locale: en
   source_commit: 6f65f316

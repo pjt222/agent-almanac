@@ -4,13 +4,13 @@
 # Usage: bash scripts/bulk-scaffold-caveman.sh [--dry-run]
 
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)" # abort-ok: cd into this script's own parent; failure means the script was deleted mid-run
 cd "$ROOT"
 
 DRY_RUN=0
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=1
 
-SOURCE_COMMIT=$(git log -1 --format=%h)
+SOURCE_COMMIT=$(git log -1 --format=%h) # abort-ok: `git log -1` fails only in a repo with no commits, which is a broken invocation rather than drift
 TODAY=$(date +%Y-%m-%d)
 LOCALES=(caveman-lite caveman caveman-ultra wenyan-lite wenyan wenyan-ultra)
 CREATED=0
@@ -55,6 +55,11 @@ for locale in "${LOCALES[@]}"; do
         print "locale: " locale
         print "source_locale: en"
         print "source_commit: " commit
+        # #552: equal to source_commit at birth, because a scaffold is a byte copy of
+        # English, so its frozen fences do mirror this revision. The two fields diverge
+        # afterwards -- a human bumps source_commit by retranslating, the fence
+        # normalizer bumps fence_basis_commit by propagating bytes.
+        print "fence_basis_commit: " commit
         print "translator: \"Julius Brussee homage \342\200\224 caveman\""
         print "translation_date: \"" date "\""
         next

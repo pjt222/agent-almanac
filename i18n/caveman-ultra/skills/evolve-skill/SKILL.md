@@ -101,7 +101,7 @@ Decision matrix:
 |---|---|---|
 | Skill ID | Unchanged | `<skill>-advanced` |
 | File path | Same SKILL.md | New dir |
-| Version bump | Patch/minor | Starts 1.0 |
+| Version bump | Minor (major only if breaking) | Starts 1.0 |
 | Complexity | May increase | Higher than original |
 | Registry | No new entry | New entry |
 | Symlinks | No change | New symlinks |
@@ -121,14 +121,12 @@ If err: unsure → default refinement. Extract variant later easier than merge b
 
 Edit existing SKILL.md directly:
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- Open for editing
+- Add/revise procedure steps
+- Strengthen Expected/On failure pairs
+- Add tables or examples
+- Update When to Use triggers
+- Revise Inputs if scope changed
 
 Editing rules:
 - Preserve all sections — add not remove
@@ -175,15 +173,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. Current source commit:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. Update `source_commit` each translated:
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. Flag → re-translation in commit msg:
@@ -215,12 +212,12 @@ If err: `sed` fails match field → translated file non-standard. Open manually,
 
 ### Step 5: Version + Metadata
 
-Bump `version` semver:
+Bump `version`:
 
 | Change | Bump | Example |
 |---|---|---|
-| Typo/wording | Patch: 1.0 → 1.1 | Fixed unclear sentence |
-| New step/pitfall/table | Minor: 1.0 → 2.0 | Added Step 7 edge case |
+| Typo/wording | Minor: 1.0 → 1.1 | Fixed unclear sentence |
+| New step/pitfall/table | Minor: 1.0 → 1.1 | Added Step 7 edge case |
 | Restructured, inputs changed | Major: 1.0 → 2.0 | Reorganized 5 → 8 steps |
 
 Also update:

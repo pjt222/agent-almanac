@@ -18,7 +18,7 @@ metadata:
   domain: esoteric
   complexity: intermediate
   language: natural
-  tags: esoteric, intrinsic, motivation, autonomy, competence, purpose, meta-cognition, ai-self-application
+  tags: esoteric, intrinsic-motivation, self-determination, flow, engagement, meta-cognition
 ---
 
 # Intrinsic（内在动机）

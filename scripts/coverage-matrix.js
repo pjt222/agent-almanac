@@ -24,6 +24,7 @@
  */
 
 import { readFileSync, readdirSync, existsSync, writeFileSync } from 'fs';
+import { isTemplateSegment } from './lib/content-paths.js';
 import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import * as yaml from 'js-yaml';
@@ -69,8 +70,14 @@ export function buildCoverageMatrix() {
   const workflowsDir = resolve(ROOT, 'workflows');
   const workflowSkills = {};
   if (existsSync(workflowsDir)) {
+    // `!name.startsWith('_')` before #672. Byte-identical to the filter `generate-readmes.js`
+    // used to enumerate the same directory, so converting only that one would have left two
+    // enumerations of `workflows/` disagreeing about a future `workflows/_draft.mjs` -- the
+    // #546 pair-shape recreated one level over. An adversarial review caught it filed under
+    // #740 as a content-id question; it is the template question. No-op today: `_template.mjs`
+    // is the only `_`-prefixed entry in `workflows/`.
     for (const file of readdirSync(workflowsDir).filter(
-      (name) => name.endsWith('.mjs') && !name.startsWith('_')
+      (name) => name.endsWith('.mjs') && !isTemplateSegment(name)
     )) {
       const body = readFileSync(join(workflowsDir, file), 'utf8');
       workflowSkills[file.replace(/\.mjs$/, '')] = allSkillIds.filter((id) => body.includes(id));

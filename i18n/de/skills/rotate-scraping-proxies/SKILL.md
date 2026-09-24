@@ -74,16 +74,15 @@ Machen Sie den gesamten Arbeitsablauf von einer dokumentierten rechtlichen
 und ethischen Prüfung abhängig. Das Überspringen dieses Schritts ist die mit
 Abstand größte Schadensquelle.
 
-```python
-# Inputs to confirm before writing any code:
-# 1. Is the data public (no login required)?
-# 2. Does robots.txt permit the path?
-# 3. Does the site's ToS prohibit automated access? (read it)
-# 4. Would the scraping process personal data? If yes, what is the legal basis?
-# 5. Could this access circumvent geo-licensing, paywalls, or auth?
-# 6. Is there a public API or data dump that would make scraping unnecessary?
-# 7. Have you contacted the site owner if scope is large?
-```
+Vor dem Schreiben jeglichen Codes zu bestätigende Eingaben:
+
+1. Sind die Daten öffentlich (kein Login erforderlich)?
+2. Erlaubt robots.txt den Pfad?
+3. Verbieten die AGB der Website automatisierten Zugriff? (lesen!)
+4. Würden beim Scraping personenbezogene Daten verarbeitet? Wenn ja, welche rechtliche Grundlage?
+5. Könnte dieser Zugriff Geo-Lizenzierung, Paywalls oder Authentifizierung umgehen?
+6. Gibt es eine öffentliche API oder einen Daten-Dump, der Scraping überflüssig macht?
+7. Haben Sie den Website-Betreiber kontaktiert, falls der Umfang groß ist?
 
 **Expected:** Jede Frage hat eine verteidigungsfähige schriftliche Antwort.
 Das erste „Nein" oder „Unbekannt" stoppt das Vorgehen, bis es geklärt ist.

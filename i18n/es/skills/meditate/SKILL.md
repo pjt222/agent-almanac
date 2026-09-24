@@ -23,6 +23,7 @@ metadata:
   locale: es
   source_locale: en
   source_commit: 6a868d56
+  fence_basis_commit: 6a868d56
   translator: Claude Opus 4.6
   translation_date: 2026-03-13
 ---

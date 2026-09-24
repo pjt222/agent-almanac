@@ -51,7 +51,7 @@ Produce pub-ready graphics meeting tech req for journals, books, presentations, 
 
 ID tech specs for target pub:
 
-```yaml
+```text
 # Common publication requirements
 
 academic_journal:

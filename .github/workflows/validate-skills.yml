@@ -1,17 +1,20 @@
 name: Validate Skills
 on:
+  # No `paths:` filter, deliberately (#641): a REQUIRED status check that does not run sits on
+  # "Expected — waiting for status to be reported" and refuses the merge forever, so only an
+  # unfiltered workflow can be required.
   push:
     branches: [main]
-    paths: ['skills/**', 'i18n/**', 'agents/**', 'teams/**', 'guides/**', 'scripts/**', 'package.json', 'package-lock.json', '.github/workflows/validate-skills.yml']
   pull_request:
-    paths: ['skills/**', 'i18n/**', 'agents/**', 'teams/**', 'guides/**', 'scripts/**', 'package.json', 'package-lock.json', '.github/workflows/validate-skills.yml']
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  validate:
+  # Job id is the status-check CONTEXT name. It was `validate`, shared by four workflows, so
+  # none of them could be required individually (#641).
+  skills:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -21,6 +24,10 @@ jobs:
           # source_commit is unresolvable so every translation reads as fresh
           # (stale: 0) and the warn step below is vacuously green — see #279/#362.
           fetch-depth: 0
+
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
 
       - uses: actions/setup-python@v7
         with:
@@ -38,9 +45,13 @@ jobs:
 
       - name: Validate all skills
         run: |
+          # One definition of "is this scaffolding", shared with validate-integrity.sh and
+          # sync-discovery-symlinks.sh (#672). A `run:` block is bash in the checkout, so it
+          # sources like any other script -- it is not the import-less case.
+          source scripts/lib/template-names.sh
           failed=0
           for dir in skills/*/; do
-            [ "$(basename "$dir")" = "_template" ] && continue
+            is_template "$(basename "$dir")" && continue
             if [ -f "$dir/SKILL.md" ]; then
               if ! skills-ref validate "$dir"; then
                 failed=1
@@ -56,20 +67,25 @@ jobs:
       - name: Check required sections
         run: node scripts/audit-skill-sections.js --missing
 
-      - name: Check line counts
-        run: |
-          failed=0
-          for f in skills/*/SKILL.md; do
-            lines=$(wc -l < "$f")
-            if [ "$lines" -gt 500 ]; then
-              echo "FAIL: $f ($lines lines > 500)"
-              failed=1
-            fi
-          done
-          exit $failed
+      # The English ceiling is not the flat 500 the mirror check below enforces: a scaffolded
+      # translation adds provenance frontmatter on top of English's body, so English needs
+      # headroom for mirrors that may not exist yet (#855). scripts/check-skill-line-ceiling.js
+      # derives that ceiling from scripts/lib/provenance.js's own field list rather than a
+      # hand-typed number, and runs on every English source regardless of whether it has been
+      # scaffolded — the case #843 had no protection for.
+      - name: Check line counts (derived English ceiling)
+        run: node scripts/check-skill-line-ceiling.js
 
       - name: Verify registry count
         run: |
+          # NOT routed through TEMPLATE_FIND_PRUNE, deliberately (#672 AC4). That array holds
+          # `-not -name` predicates over basenames; this is an anchored `-not -path` whose
+          # generic form `*/_template/*` would be depth-agnostic -- the direction
+          # content-paths.js records as measured-wrong, since a nested `_template/` WOULD ship.
+          # (No nested `_template/` exists on this tree; it is a fact about npm's root-anchored
+          # negations, pinned by a fixture in skills-inventory.test.js, not a fact about the
+          # corpus. An earlier wording read as the latter.)
+          # A new spelling is caught by templateSpellingDrift, not by this line.
           disk_count=$(find skills -name SKILL.md -not -path "skills/_template/*" | wc -l)
           reg_count=$(grep 'total_skills:' skills/_registry.yml | tr -d '\r' | awk '{print $2}')
           if [ "$disk_count" != "$reg_count" ]; then
@@ -122,15 +138,94 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # #434. Agent frontmatter vs `agents/_registry.yml`, on `skills` and `tools`.
+      #
+      # Nothing compared them, which is how #398 survived from an agent's creation commit
+      # (`apa-specialist`: 1 skill in the file, 3 in the registry) and why #403 §2a re-synced
+      # four agents BY HAND. A hand-sync with no gate behind it is a repair, not a fix.
+      #
+      # BLOCKING: measured clean at introduction — 75 files, 75 entries, 0 drift, and 150 of 150
+      # field comparisons populated on BOTH sides. The second number is the load-bearing one: two
+      # empty lists compare equal, so "0 drift" over absent fields would assert nothing, and the
+      # checker fails on an empty side rather than passing quietly.
+      #
+      # HERE and not in `validate-integrity.yml`, which is the better semantic fit and is also
+      # required: that job deliberately runs no `npm ci`, and this checker imports `js-yaml`.
+      # Placing it there would need a dependency-free YAML reader — a second parser to disagree
+      # with the first.
+      - name: Check agent file vs registry parity (#434)
+        run: npm run validate:agent-parity
+
+      # Generated-and-committed artifact inventory (#590).
+      #
+      # Nearly every gate here validates a TILE — frontmatter, line counts, fence tags. Nearly
+      # every failure that has shipped was an EDGE: a generated artifact disagreeing with the
+      # source beneath it. The edge gates that exist were each added AFTER the corresponding edge
+      # failed, and were never enumerated as a class, so "which edges are undecorated?" had no
+      # answer. `generated-artifacts.yml` is that enumeration and this is what keeps it true.
+      #
+      # BLOCKING, and it is an inventory-consistency check rather than a debt gate — there is no
+      # backlog to ratchet down. It asserts FORWARD that every declared path still matches a
+      # tracked file, every generator exists and every claimed gate still appears where the row
+      # says; and REVERSE that every generator reachable from npm scripts, from `viz/build.sh`,
+      # or from a workflow that commits output back is listed, so a new one cannot be added
+      # without naming its reader. What those three sources reach is filtered by the GENERATOR'S
+      # OWN FILENAME, not by the npm alias.
+      #
+      # Negative evidence: `scripts/envelopes/generated-artifacts.mjs`, 7 killed / 1 documented
+      # survivor of 8 cases. The survivor pins the sweep's stated blind spot — it keys on the
+      # generator's file basename — as a measurement rather than a promise.
+      #
+      # HERE for the same reason as the step above: `js-yaml`.
+      - name: Check generated-artifact inventory (#590)
+        run: npm run check:generated-artifacts
+
+      # Hermes profile distribution build-gates (companion #78).
+      #
+      # `hermes profile install <git-url>` copies every top-level entry of a cloned repository
+      # into a consumer's profile, filters any directory at ANY depth named `cache`, `bin`,
+      # `logs`, `memories` (37 names) silently before v0.17.0, rejects symlinks from v0.15.0, and
+      # counts skills by `rglob("SKILL.md")`. So the distribution is a separate, generated
+      # repository, and THIS step builds it into a temp dir from the current tree and runs every
+      # output gate — user-owned and Hermes-excluded names at any depth, `_`/`.`-prefixed
+      # DIRECTORIES (a dot-file inside a skill is not gated: that is a repository matter, not a
+      # Hermes one), symlinks, one SKILL.md per skill at its root, count == registry ==
+      # description, the four secret literals and the fabricated constant in every emitted file,
+      # and the manifest re-parsed from disk, every field.
+      #
+      # BLOCKING, in this required job, and deliberately NOT warn-only + ratcheted as the
+      # 2026-08-19 thread first decided: that decision was for an in-place layout where the
+      # count could not be made exact until `skills/_template/` moved. Built from registry ids,
+      # the count is exact by construction, the gate is green today, and any red is a real fact
+      # about this tree (a stray `bin/`, a symlink, a secret) that the same PR can fix.
+      #
+      # Negative evidence: scripts/test/build-hermes-distribution.test.js breaks each gate once
+      # on a synthetic tree. HERE for the same reason as the two steps above: `js-yaml`.
+      - name: Check the Hermes distribution builds clean from this tree (#78)
+        run: npm run check:hermes-distribution
+
       - name: Check translation freshness (warn only)
         run: node scripts/check-translation-freshness.js --warn
 
-      # Keep-in-English frontmatter parity (#371). Ships BLOCKING, not warn-only:
-      # the corpus was verified clean at introduction (39-file catch-up in the
-      # same PR), so the issue's promotion precondition was already met, and a
-      # warn stream nobody watches would reproduce the root cause (#371 = two
-      # months of silent drift). Deterministic exact comparison, unlike the
-      # heuristic warn-only A9. Local `npm run validate:i18n-parity` matches.
+      # Keep-in-English frontmatter parity (#371, widened by #485). Ships BLOCKING,
+      # not warn-only: the corpus is verified clean at introduction — a 39-file
+      # catch-up in #371's PR, and an 88-field catch-up across 61 files in #485's —
+      # so the promotion precondition is met each time, and a warn stream nobody
+      # watches would reproduce the root cause (#371 = two months of silent drift;
+      # #485 = four). Deterministic exact comparison, unlike the heuristic
+      # warn-only A9. Local `npm run validate:i18n-parity` matches.
+      #
+      # #485 widened it from allowed-tools alone to every keep-in-English field.
+      # `version` is compared on DIRECTION rather than equality: a translation pins
+      # the English version it was made from, so all 317 of its divergences lag and
+      # are correct — but 0 run ahead, and a translation claiming a version its
+      # source never reached can only have authored it, so that case blocks.
+      #
+      # The step prints a field-comparison count (21,456 today). Read it: a
+      # column-anchored implementation compares only the one top-level field and
+      # still reports OK, and the count is the only thing that distinguishes the
+      # two. NOTE it is printed, not asserted — nothing here fails on a low count,
+      # so it is a diagnostic for a human, not a gate. See the follow-up issue.
       - name: Check i18n frontmatter parity
         run: node scripts/check-i18n-frontmatter-parity.js
 
@@ -158,3 +253,84 @@ jobs:
       # rather than passing vacuously (#279/#362).
       - name: Check i18n code-fence parity (warn only until #477)
         run: node scripts/check-i18n-fence-parity.js --warn
+
+      # #629. BLOCKING, unlike the two warn-only gates below it, and the difference is that this
+      # one shipped on a clean corpus: 558 English content files, 0 untagged openers, templates
+      # included. A gate that ships clean can block; one that ships dirty needs a ratchet first.
+      #
+      # What it protects: `foldedTagSequence` folds an untagged English fence to `text`. Under
+      # default-deny an untagged fence is FROZEN, so the fold means a translation may replace an
+      # untagged English fence with a localised ```text one and produce an IDENTICAL folded
+      # sequence -- no tag-sequence finding, no tag-drift finding, and the body check skips it
+      # because gating is read off the translated file. That is the #481 escape surviving through
+      # the check built to close it.
+      #
+      # The fold is not the bug and must stay (removing it makes every untagged-vs-`text` pairing
+      # from `normalize-content-style.js --mode fences` read as a retag -- the false-positive
+      # class that stranded 169 repairable fences across 73 files). The bug is that the fold's
+      # safety rested on a REMEMBERED measurement in a comment. This is that measurement, checked.
+      #
+      # It lives in this workflow, not validate-content-style.yml, because that workflow is
+      # path-filtered and a path-filtered workflow cannot be a required check -- it does not
+      # report outside its filter, so a required context would sit on "Expected" forever. This
+      # job is one of the five required contexts and carries no `paths:`.
+      - name: Check for untagged code fences in the English trees (#629)
+        run: npm run validate:untagged-fences
+
+      # Node-set parity between the viz PUT annotations and the committed
+      # `viz/public/data/workflow.mmd` (#590, dependency-free slice).
+      #
+      # It lives in THIS workflow rather than a viz-shaped one because the step
+      # below is what gives it teeth: `--warn` suppresses finding-exits, so no
+      # parity finding can turn THIS step red, and the ratchet is what a new one
+      # turns red instead. A warn-only gate whose ratchet runs in a different
+      # workflow is a ratchet that does not run on the changes it ratchets, so
+      # the trigger paths at the top of this file were widened for the same
+      # reason. (`--warn` does not suppress a REFUSAL: the script exits 2 on a
+      # question it cannot answer honestly, and this step goes red on those.)
+      #
+      # WARN-ONLY, and the reason is not a backlog this time — it is one node.
+      # `mode_campfire` is annotated in `viz/js/campfire.js` and has no node in
+      # the diagram, and the repair is to regenerate, which #601 says the
+      # lockfile cannot currently do. So the exit condition is #601, not a
+      # cleanup campaign. Meanwhile the single member is ratcheted below, which
+      # is what stops a second missing node from joining it in silence.
+      #
+      # Read what a clean run does NOT claim before quoting one: labels,
+      # node_type, edges and source-side annotation staleness are all invisible
+      # to it. `bind_modes` READ "(2D/3D/Hive/Chord/Flow)" while Campfire was the
+      # sixth bound mode; the source annotation was fixed in #702 and the
+      # committed diagram still carries the old text, because repairing that
+      # means regenerating (#601). This gate was green through the defect and is
+      # green through the divergence — it compares ids, and `bind_modes` was
+      # never missing from either side. scripts/test/viz-mode-label.test.js covers
+      # the SOURCE label against the code; nothing gates the diagram's COPY of it,
+      # which is the divergence #601 closes.
+      - name: Check viz diagram node parity (warn only until #601)
+        run: node scripts/check-workflow-diagram-nodes.js --warn
+
+      # The debt ratchet (#591). BLOCKING, and it is the reason both warn-only steps above — the
+      # fence gate and the diagram node-parity gate — can stay warn.
+      #
+      # A warn-only gate cannot fail, so nothing stops its backlog from rising and "temporary
+      # state with a named exit" has no mechanism behind it. This gives the gate teeth before the
+      # backlog reaches zero, which is the hardest possible precondition and the whole difficulty.
+      #
+      # It ratchets only the classes whose members have been READ — the tag-structure findings
+      # triaged in #598 — never the body divergences of #477, because forcing payment
+      # on unread debt is worse than warn-only: the number acquires an authority nobody checked.
+      # `debt-ratchet.yml` records that split with the reasoning.
+      #
+      # It runs the fence walk a SECOND time rather than reading a JSON file the step above could
+      # have written, which buys the absence of a stale-input vacuous pass in the one tool whose
+      # entire job is to make a silent gate loud.
+      #
+      # The cost is near zero HERE and is not near zero everywhere. Measured on this runner, both
+      # the step above and this one walk 22,970 fences across 3,644 files in under a second; the
+      # same walk takes about two minutes on a WSL/NTFS checkout, where every git object read
+      # crosses a filesystem boundary. Quote the runner when arguing about the price.
+      #
+      # `debt-ratchet.yml` is in this workflow's trigger paths, so editing the ratchet re-runs the
+      # check that reads it.
+      - name: Ratchet the warn-only fence-gate debt (#591)
+        run: npm run ratchet

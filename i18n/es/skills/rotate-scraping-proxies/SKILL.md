@@ -71,16 +71,15 @@ zapatillas / piratería de contenidos.
 Condicione todo el flujo de trabajo a una revisión legal y ética documentada.
 Saltarse este paso es, con diferencia, la mayor fuente de daños.
 
-```python
-# Inputs to confirm before writing any code:
-# 1. Is the data public (no login required)?
-# 2. Does robots.txt permit the path?
-# 3. Does the site's ToS prohibit automated access? (read it)
-# 4. Would the scraping process personal data? If yes, what is the legal basis?
-# 5. Could this access circumvent geo-licensing, paywalls, or auth?
-# 6. Is there a public API or data dump that would make scraping unnecessary?
-# 7. Have you contacted the site owner if scope is large?
-```
+Datos a confirmar antes de escribir una sola linea de codigo:
+
+1. ¿Son publicos los datos (sin requerir login)?
+2. ¿Permite robots.txt la ruta?
+3. ¿Prohiben los terminos del servicio el acceso automatizado? (leelos)
+4. ¿Procesaria el scraping datos personales? Si es asi, ¿cual es la base legal?
+5. ¿Podria este acceso eludir licencias geograficas, muros de pago o autenticacion?
+6. ¿Existe una API publica o volcado de datos que haga innecesario el scraping?
+7. ¿Has contactado con el propietario del sitio si el alcance es grande?
 
 **Expected:** Cada pregunta tiene una respuesta escrita defendible. El primer
 "no" o "desconocido" detiene el procedimiento hasta que se resuelva.

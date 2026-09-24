@@ -1,17 +1,13 @@
 ---
 name: design-shiny-ui
 description: >
-  Moderne, zugängliche Shiny-Benutzeroberflächen mit bslib-Themes, responsivem
-  Layout und Barrierefreiheits-Best-Practices gestalten. Behandelt Bootstrap-
-  5-Theming, layout_columns(), Cards und WCAG-Konformität. Verwenden, wenn
-  eine Shiny-App professionell wirken soll, ein Marken-Theme konsistent
-  angewendet oder die Zugänglichkeit für alle Nutzer verbessert werden soll.
+  Design Shiny application UIs using bslib for theming, layout_columns
+  for responsive grids, value boxes, cards, and custom CSS/SCSS.
+  Covers page layouts, accessibility, and brand consistency. Use when
+  building a new Shiny app UI from scratch, modernizing an existing app from
+  fluidPage to bslib, applying brand theming, making a Shiny app responsive
+  across screen sizes, or improving accessibility of a Shiny application.
 license: MIT
-locale: de
-source_locale: en
-source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
@@ -19,326 +15,321 @@ metadata:
   domain: shiny
   complexity: intermediate
   language: R
-  tags: shiny, ui, bslib, theming, accessibility, bootstrap
+  tags: shiny, bslib, ui, theming, layout, css, accessibility, responsive
+  locale: de
+  source_locale: en
+  source_commit: 6a2d3e87d
+  fence_basis_commit: 6a2d3e87d
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Shiny-UI gestalten
+# Design Shiny UI
 
-Moderne, zugängliche und visuell ansprechende Shiny-Benutzeroberflächen mit bslib und Bootstrap 5 erstellen.
+Design responsive, accessible Shiny application interfaces using bslib theming, modern layout primitives, and custom CSS.
 
-## Wann verwenden
+## When to Use
 
-- Shiny-App professionell und markenkonform gestalten
-- Responsives Layout für verschiedene Bildschirmgrößen einrichten
-- Zugänglichkeit (WCAG 2.1 AA) sicherstellen
-- Konsistentes Design über mehrere Apps implementieren
+- Building a new Shiny app UI from scratch
+- Modernizing an existing Shiny app from fluidPage to bslib
+- Applying brand theming (colors, fonts) to a Shiny app
+- Making a Shiny app responsive across screen sizes
+- Improving accessibility of a Shiny application
 
-## Eingaben
+## Inputs
 
-- **Erforderlich**: Shiny-App (scaffolded oder bestehend)
-- **Optional**: Markenfarben und Typografie (Hex-Codes, Schriftarten)
-- **Optional**: Design-System oder Style-Guide
-- **Optional**: Zugänglichkeits-Anforderungen
+- **Required**: Application purpose and target audience
+- **Required**: Layout type (sidebar, navbar, fillable, dashboard)
+- **Optional**: Brand colors and fonts
+- **Optional**: Whether to use custom CSS/SCSS (default: bslib only)
+- **Optional**: Accessibility requirements (WCAG level)
 
-## Vorgehensweise
+## Procedure
 
-### Schritt 1: bslib installieren und Bootstrap 5 aktivieren
+### Step 1: Choose the Page Layout
 
-bslib für modernes Bootstrap-5-Theming einrichten.
-
-```r
-install.packages("bslib")
-
-# Grundlegendes bslib-Setup in app.R oder app_ui.R
-library(shiny)
-library(bslib)
-
-ui <- page_sidebar(  # Modernes Layout mit bslib
-  title = "Meine App",
-  sidebar = sidebar(
-    selectInput("dataset", "Datensatz:", choices = c("iris", "mtcars"))
-  ),
-  # Hauptinhalt
-  card(
-    card_header("Datenübersicht"),
-    tableOutput("table")
-  )
-)
-```
-
-**Erwartet:** App verwendet Bootstrap 5. Modernes, responsives Grundlayout.
-
-**Bei Fehler:** Wenn bslib und shiny Version inkompatibel sind, `packageVersion("bslib")` und `packageVersion("shiny")` prüfen — bslib >= 0.5.0 für volle Bootstrap-5-Unterstützung.
-
-### Schritt 2: Custom Theme erstellen
-
-Markenspezifisches Bootstrap-5-Theme konfigurieren.
+bslib provides several page constructors:
 
 ```r
-# Marken-Theme definieren
-mein_theme <- bs_theme(
-  version = 5,
-
-  # Grundlegende Markenfarben
-  bg = "#FFFFFF",           # Hintergrund
-  fg = "#212529",           # Vordergrund (Text)
-  primary = "#0066CC",      # Primärfarbe
-  secondary = "#6C757D",    # Sekundärfarbe
-  success = "#28A745",
-  warning = "#FFC107",
-  danger = "#DC3545",
-
-  # Typografie
-  base_font = font_google("Inter"),
-  heading_font = font_google("Inter", wght = 600),
-  code_font = font_google("JetBrains Mono"),
-
-  # Benutzerdefinierte Sass-Variablen
-  "border-radius" = "0.5rem",
-  "box-shadow" = "0 2px 4px rgba(0,0,0,0.1)"
-)
-
-# Theme in App verwenden
+# Sidebar layout — most common for data apps
 ui <- page_sidebar(
-  theme = mein_theme,
-  title = "Meine App",
-  # ...
+  title = "My App",
+  sidebar = sidebar("Controls here"),
+  "Main content here"
 )
-```
 
-Theme live im Browser anpassen:
-
-```r
-# Interaktiver Theme-Editor (nur Entwicklung)
-bs_themer()  # Fügt Theming-Widget zur App hinzu
-```
-
-**Erwartet:** App zeigt benutzerdefinierte Farben und Typografie. `bs_themer()` zeigt interaktive Theme-Kontrollen.
-
-**Bei Fehler:** Wenn Google Fonts nicht laden (kein Internet), `font_google()` durch `font_collection("system-ui", "sans-serif")` ersetzen.
-
-### Schritt 3: Responsives Layout mit Cards und Columns
-
-Flexibles, responsives Layout mit bslib-Komponenten erstellen.
-
-```r
-ui <- page_sidebar(
-  theme = mein_theme,
-  title = "Dashboard",
-
-  sidebar = sidebar(
-    width = 300,  # Sidebar-Breite in Pixeln
-    bg = "#f8f9fa",
-    selectInput("dataset", "Datensatz:", choices = c("iris", "mtcars")),
-    sliderInput("rows", "Zeilen:", min = 5, max = 50, value = 10),
-    hr(),
-    actionButton("refresh", "Aktualisieren", class = "btn-primary w-100")
-  ),
-
-  # Responsives 2-Spalten-Layout
-  layout_columns(
-    col_widths = c(8, 4),  # 8/12 + 4/12 Bootstrap-Spalten
-
-    card(
-      full_screen = TRUE,  # Vollbild-Erweiterungsbutton
-      card_header(
-        "Hauptdiagramm",
-        class = "bg-primary text-white"
-      ),
-      plotOutput("main_plot", height = "400px")
-    ),
-
-    layout_columns(
-      col_widths = c(12, 12),  # Gestapelte Cards auf rechter Seite
-
-      value_box(
-        title = "Datenpunkte",
-        value = textOutput("n_points"),
-        showcase = bsicons::bs_icon("bar-chart"),
-        theme = "primary"
-      ),
-
-      card(
-        card_header("Zusammenfassung"),
-        tableOutput("summary_table")
-      )
-    )
-  )
-)
-```
-
-**Erwartet:** Responsives 2-Spalten-Layout auf Desktop. Gestapelt auf Mobile.
-
-**Bei Fehler:** Wenn Spalten nicht korrekt brechen, `col_widths` überprüfen — Summe muss 12 oder weniger ergeben (Bootstrap-12-Spalten-Grid).
-
-### Schritt 4: Interaktionselemente gestalten
-
-Moderne UI-Komponenten mit Bootstrap-5-Styling hinzufügen.
-
-```r
-# Navigation mit Tabs
-page_navbar(
-  theme = mein_theme,
-  title = "Meine App",
-  nav_panel(
-    "Übersicht",
-    icon = bsicons::bs_icon("house"),
-    # Inhalt der Übersichtsseite
-  ),
-  nav_panel(
-    "Analyse",
-    icon = bsicons::bs_icon("graph-up"),
-    # Analyseinhalt
-  ),
+# Navbar layout — for multi-page apps
+ui <- page_navbar(
+  title = "My App",
+  nav_panel("Tab 1", "Content 1"),
+  nav_panel("Tab 2", "Content 2"),
   nav_spacer(),
-  nav_item(
-    tags$a(href = "https://docs.example.com", "Dokumentation",
-           target = "_blank")
+  nav_item(actionButton("help", "Help"))
+)
+
+# Fillable layout — content fills available space
+ui <- page_fillable(
+  card(
+    full_screen = TRUE,
+    plotOutput("plot")
   )
 )
 
-# Gestylte Buttons
-fluidRow(
-  actionButton("primary_btn", "Primär", class = "btn-primary"),
-  actionButton("outline_btn", "Umriss", class = "btn-outline-secondary ms-2"),
-  downloadButton("download", "Herunterladen", class = "btn-success ms-2")
-)
-
-# Tooltips und Popovers
-tags$button(
-  class = "btn btn-info",
-  `data-bs-toggle` = "tooltip",
-  `data-bs-placement` = "top",
-  title = "Hilfreiche Erklärung",
-  bsicons::bs_icon("question-circle")
+# Dashboard layout — grid of value boxes and cards
+ui <- page_sidebar(
+  title = "Dashboard",
+  sidebar = sidebar(open = "closed", "Filters"),
+  layout_columns(
+    fill = FALSE,
+    value_box("Revenue", "$1.2M", theme = "primary"),
+    value_box("Users", "4,521", theme = "success"),
+    value_box("Uptime", "99.9%", theme = "info")
+  ),
+  layout_columns(
+    card(plotOutput("chart1")),
+    card(plotOutput("chart2"))
+  )
 )
 ```
 
-**Erwartet:** Moderne UI-Elemente mit korrektem Bootstrap-5-Styling.
+**Expected:** Page layout matches the application's navigation and content needs.
 
-**Bei Fehler:** Wenn Tooltips nicht erscheinen, Bootstrap-5-JavaScript muss aktiviert sein. `bs_dependency_defer()` oder manuelle JS-Initialisierung verwenden.
+**On failure:** If the layout doesn't look right, check that you're using `page_sidebar()` / `page_navbar()` (bslib) not `fluidPage()` / `navbarPage()` (base shiny). The bslib versions have better defaults and theming support.
 
-### Schritt 5: Zugänglichkeit sicherstellen
-
-WCAG 2.1 AA-Konformität für alle Nutzer implementieren.
+### Step 2: Configure the bslib Theme
 
 ```r
-# Semantisches HTML mit ARIA-Labels
+my_theme <- bslib::bs_theme(
+  version = 5,                      # Bootstrap 5
+  bootswatch = "flatly",            # Optional preset theme
+  bg = "#ffffff",                   # Background color
+  fg = "#2c3e50",                   # Foreground (text) color
+  primary = "#2c3e50",              # Primary brand color
+  secondary = "#95a5a6",            # Secondary color
+  success = "#18bc9c",
+  info = "#3498db",
+  warning = "#f39c12",
+  danger = "#e74c3c",
+  base_font = bslib::font_google("Source Sans Pro"),
+  heading_font = bslib::font_google("Source Sans Pro", wght = 600),
+  code_font = bslib::font_google("Fira Code"),
+  "navbar-bg" = "#2c3e50"
+)
+
 ui <- page_sidebar(
-  theme = mein_theme,
+  theme = my_theme,
+  title = "Themed App",
+  # ...
+)
+```
 
-  # Skip-Navigation-Link
-  tags$a(
-    href = "#main-content",
-    class = "visually-hidden-focusable",
-    "Zum Hauptinhalt springen"
-  ),
+Use the interactive theme editor during development:
 
+```r
+bslib::bs_theme_preview(my_theme)
+```
+
+**Expected:** App renders with consistent brand colors, fonts, and Bootstrap 5 components.
+
+**On failure:** If fonts don't load, check internet access (Google Fonts requires it) or switch to system fonts: `font_collection("system-ui", "-apple-system", "Segoe UI")`. If theme variables don't apply, check that you're passing `theme` to the page function.
+
+### Step 3: Build the Layout with Cards and Columns
+
+```r
+ui <- page_sidebar(
+  theme = my_theme,
+  title = "Analysis Dashboard",
   sidebar = sidebar(
-    # Label für Seitenleiste
-    tags$div(
-      role = "region",
-      `aria-label` = "Filteroptionen",
-      selectInput("dataset", "Datensatz auswählen:", choices = c("iris", "mtcars"))
+    width = 300,
+    title = "Filters",
+    selectInput("dataset", "Dataset", choices = c("iris", "mtcars")),
+    sliderInput("sample", "Sample %", 10, 100, 100, step = 10),
+    hr(),
+    actionButton("refresh", "Refresh", class = "btn-primary w-100")
+  ),
+
+  # KPI row — non-filling
+  layout_columns(
+    fill = FALSE,
+    col_widths = c(4, 4, 4),
+    value_box(
+      title = "Observations",
+      value = textOutput("n_obs"),
+      showcase = bsicons::bs_icon("table"),
+      theme = "primary"
+    ),
+    value_box(
+      title = "Variables",
+      value = textOutput("n_vars"),
+      showcase = bsicons::bs_icon("columns-gap"),
+      theme = "info"
+    ),
+    value_box(
+      title = "Missing",
+      value = textOutput("n_missing"),
+      showcase = bsicons::bs_icon("exclamation-triangle"),
+      theme = "warning"
     )
   ),
 
-  tags$main(
-    id = "main-content",
-    role = "main",
-    `aria-label` = "Hauptinhalt",
-
-    # Beschreibende Alt-Texte für Plots
-    plotOutput(
-      "main_plot",
-      alt = "Streudiagramm der ausgewählten Datensatz-Variablen"
+  # Main content row
+  layout_columns(
+    col_widths = c(8, 4),
+    card(
+      card_header("Distribution"),
+      full_screen = TRUE,
+      plotOutput("main_plot")
     ),
-
-    # Tabellen mit Überschriften
-    tags$div(
-      role = "region",
-      `aria-label` = "Datentabelle",
-      tableOutput("data_table")
+    card(
+      card_header("Summary"),
+      tableOutput("summary_table")
     )
   )
 )
 ```
 
-Farbkontrast prüfen:
+Key layout primitives:
+- `layout_columns()` — responsive grid with `col_widths`
+- `card()` — content container with optional header/footer
+- `value_box()` — KPI display with icon and theme
+- `layout_sidebar()` — nested sidebar within cards
+- `navset_card_tab()` — tabbed cards
+
+**Expected:** Responsive grid layout that adapts to screen size.
+
+**On failure:** If columns stack unexpectedly on wide screens, check `col_widths` sum equals 12 (Bootstrap grid). If cards overlap, ensure `fill = FALSE` on non-filling rows.
+
+### Step 4: Add Dynamic UI Elements
 
 ```r
-# Kontrastverhältnisse verifizieren (WCAG AA: min 4.5:1 für normalen Text)
-# Externes Tool: https://webaim.org/resources/contrastchecker/
+server <- function(input, output, session) {
+  output$dynamic_filters <- renderUI({
+    data <- current_data()
+    tagList(
+      selectInput("col", "Column", choices = names(data)),
+      if (is.numeric(data[[input$col]])) {
+        sliderInput("range", "Range",
+          min = min(data[[input$col]], na.rm = TRUE),
+          max = max(data[[input$col]], na.rm = TRUE),
+          value = range(data[[input$col]], na.rm = TRUE)
+        )
+      } else {
+        selectInput("values", "Values",
+          choices = unique(data[[input$col]]),
+          multiple = TRUE
+        )
+      }
+    )
+  })
 
-# Farbenblindheitssichere Paletten
-colorblind_palette <- c(
-  "#E69F00", "#56B4E9", "#009E73",
-  "#F0E442", "#0072B2", "#D55E00", "#CC79A7"
-)
+  # Conditional panels (no server round-trip)
+  # In UI:
+  # conditionalPanel(
+  #   condition = "input.show_advanced == true",
+  #   numericInput("alpha", "Alpha", 0.05)
+  # )
+}
 ```
 
-**Erwartet:** App navigierbar mit Tastatur. Screen Reader-Nutzer können Inhalt verstehen. Farben haben ausreichenden Kontrast.
+**Expected:** UI elements update dynamically based on user selections and data.
 
-**Bei Fehler:** Wenn ARIA-Labels nicht erkannt werden, HTML-Ausgabe mit `view_ui <- function(ui) htmltools::html_print(ui)` untersuchen.
+**On failure:** If dynamic UI flickers, use `conditionalPanel()` (CSS-based) instead of `renderUI()` where possible. If dynamic inputs lose their values on re-render, add `session$sendInputMessage()` to restore state.
 
-### Schritt 6: Theme über Apps hinweg wiederverwenden
+### Step 5: Add Custom CSS/SCSS (Optional)
 
-Theme in R-Paket oder shared Skript packen.
+For styles beyond bslib theme variables:
 
 ```r
-# R/theme.R (in golem-Paket oder gemeinsames Skript)
-#' Unternehmensspezifisches bslib-Theme
-#' @export
-get_company_theme <- function() {
-  bs_theme(
-    version = 5,
-    primary = "#0066CC",
-    base_font = font_google("Inter"),
-    heading_font = font_google("Inter", wght = 600)
-  )
-}
-
-# In jeder App verwenden
+# Inline CSS
 ui <- page_sidebar(
-  theme = get_company_theme(),
+  theme = my_theme,
+  tags$head(tags$style(HTML("
+    .sidebar { border-right: 2px solid var(--bs-primary); }
+    .card-header { font-weight: 600; }
+    .value-box .value { font-size: 2.5rem; }
+  "))),
   # ...
 )
 
-# CSS-Überschreibungen für app-spezifische Anpassungen
+# External CSS file (place in www/ directory)
 ui <- page_sidebar(
-  theme = bs_theme_update(
-    get_company_theme(),
-    # App-spezifische Überschreibungen
-    "sidebar-bg" = "#f0f4f8"
+  theme = my_theme,
+  tags$head(tags$link(rel = "stylesheet", href = "custom.css")),
+  # ...
+)
+```
+
+For SCSS integration with bslib:
+
+```r
+my_theme <- bslib::bs_theme(version = 5) |>
+  bslib::bs_add_rules(sass::sass_file("www/custom.scss"))
+```
+
+**Expected:** Custom styles applied without breaking bslib theming.
+
+**On failure:** If custom CSS conflicts with bslib, use Bootstrap CSS variables (`var(--bs-primary)`) instead of hardcoded colors. This ensures theme changes propagate to custom styles.
+
+### Step 6: Ensure Accessibility
+
+```r
+# Add ARIA labels to inputs
+selectInput("category", "Category",
+  choices = c("A", "B", "C")
+) |> tagAppendAttributes(`aria-describedby` = "category-help")
+
+# Add alt text to plots
+output$plot <- renderPlot({
+  plot(data(), main = "Distribution of Values")
+}, alt = "Histogram showing the distribution of selected values")
+
+# Ensure sufficient color contrast in theme
+my_theme <- bslib::bs_theme(
+  version = 5,
+  bg = "#ffffff",      # White background
+  fg = "#212529"       # Dark text — 15.4:1 contrast ratio
+)
+
+# Use semantic HTML
+tags$main(
+  role = "main",
+  tags$h1("Dashboard"),
+  tags$section(
+    `aria-label` = "Key Performance Indicators",
+    layout_columns(
+      # value boxes...
+    )
   )
 )
 ```
 
-**Erwartet:** Konsistentes Design über alle Unternehmens-Apps. Theme in einzelner Datei wartbar.
+**Expected:** App meets WCAG 2.1 AA standards for color contrast, keyboard navigation, and screen reader compatibility.
 
-**Bei Fehler:** Wenn Theme-Überschreibungen nicht wirken, CSS-Spezifität prüfen — bslib-Sass-Variablen haben Vorrang vor Bootstrap-Defaults.
+**On failure:** Test with browser dev tools accessibility audit (Lighthouse). Check color contrast ratios with WebAIM's contrast checker. Ensure all interactive elements are keyboard-focusable.
 
-## Validierung
+## Validation
 
-- [ ] App verwendet Bootstrap 5 via bslib
-- [ ] Custom Theme mit Markenfarben und Typografie konfiguriert
-- [ ] Responsives Layout bricht korrekt auf mobilen Bildschirmen
-- [ ] Navigation mit Tastatur vollständig möglich
-- [ ] Farb-Kontrastverhältnisse erfüllen WCAG 2.1 AA (4.5:1)
-- [ ] ARIA-Labels für nicht-textuelle Elemente vorhanden
-- [ ] Theme in wiederverwendbarer Funktion oder Paket
+- [ ] Page layout renders correctly on desktop and mobile widths
+- [ ] bslib theme applies consistently to all components
+- [ ] Value boxes display with correct themes and icons
+- [ ] Cards resize properly in the responsive grid
+- [ ] Custom CSS uses Bootstrap variables, not hardcoded values
+- [ ] All plots have alt text for screen readers
+- [ ] Color contrast meets WCAG AA (4.5:1 for text)
+- [ ] Interactive elements are keyboard accessible
 
-## Haeufige Stolperfallen
+## Common Pitfalls
 
-- **Bootstrap-Version-Mischung**: Nicht Bootstrap 4 und 5 mischen. bslib-Themes erfordern konsistente Bootstrap-Version.
-- **Inline-CSS vs Sass-Variablen**: Inline-CSS kann bslib-Theming überschreiben. Sass-Variablen über `bs_theme()` bevorzugen.
-- **Google Fonts in Offline-Umgebungen**: `font_google()` benötigt Internet. Für Offline-Einsatz lokale Schriften in `www/fonts/` verwenden.
-- **Kontrast-Checker für Markenfarben**: Markenfarben erfüllen nicht immer WCAG-Kontrastverhältnisse. Immer mit Tool prüfen.
-- **Cards und full_screen**: `full_screen = TRUE` erfordert Inhalt mit definierten Höhen, sonst unbegrenzte Ausdehnung.
-- **value_box in Modulen**: `value_box()` IDs über `ns()` korrekt namespace.
+- **Mixing old and new Shiny UI**: Don't mix `fluidPage()` with bslib components. Use `page_sidebar()`, `page_navbar()`, or `page_fillable()` exclusively.
+- **Hardcoded colors in CSS**: Use `var(--bs-primary)` instead of `#2c3e50`. Hardcoded colors break when the theme changes.
+- **Missing `fill = FALSE` on non-filling rows**: Value box rows and summary rows usually shouldn't stretch to fill available space. Set `fill = FALSE`.
+- **Google Fonts in offline environments**: If the app deploys to an air-gapped network, use system fonts or self-hosted font files instead of `font_google()`.
+- **Ignoring mobile**: Test with the browser responsive mode. `layout_columns` automatically stacks on narrow screens, but custom CSS may not.
 
-## Verwandte Skills
+## Related Skills
 
-- `scaffold-shiny-app` — App vor UI-Design scaffolden
-- `build-shiny-module` — Modulstruktur für wiederverwendbare UI-Komponenten
-- `optimize-shiny-performance` — Performance nach UI-Fertigstellung optimieren
+- `scaffold-shiny-app` — initial app setup including theme configuration
+- `build-shiny-module` — create modular UI components
+- `optimize-shiny-performance` — performance-conscious rendering
+- `review-web-design` — visual design review for layout, typography, and colour
+- `review-ux-ui` — usability and accessibility review

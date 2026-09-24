@@ -25,8 +25,25 @@
 // source of truth — the analogue of YAML frontmatter on the other four content
 // types. It mirrors the runtime `export const meta` literal so the existing
 // grep+count tooling can read the metadata without a JS parser. Keep the two in
-// agreement: same name, same description, and the sidecar `phases:` list ⊇ every
-// title passed to phase().
+// agreement: same name, same description, and the sidecar `phases:` list EQUAL
+// to the meta.phases[] titles, which in turn equal the titles the body uses via
+// phase() and the per-call `phase:` option (integrity check A7b holds all three
+// to an exact set, both directions — #773).
+//
+// If any stage MUTATES artifacts (targets an implementing agentType such as
+// `general-purpose`, or uses `isolation: 'worktree'`), add a sidecar line naming
+// those phases:
+//     // implementing-phases: Generate
+// Each agent() call must carry its `agentType` as a plain string in a LITERAL options
+// object. A shared base spread across spawns (`agent(p, { ...base })`) is reported, because
+// a spread defeats the per-spawn classification A7b performs.
+// A7b requires a spawn targeting an implementing type to sit in a listed phase,
+// and requires a listed phase to contain at least one such spawn. A phase MAY
+// mix a read-only scout with a writer; what it may not do is mutate without
+// saying so. This template has no mutating stage, so the line is absent — absent
+// means none, and a workflow that forgets it and spawns `general-purpose` fails
+// loudly rather than quietly widening a read-only stage into a writing one.
+// (A7b does not read this file: the template is scaffolding, not a workflow.)
 //
 // HARD CONSTRAINTS (the runtime enforces these — violating them breaks the run):
 //   • Plain JavaScript only. NO TypeScript (no `: string[]`, interfaces, generics).
@@ -73,7 +90,35 @@ const items =
 // The prompt in that run already said "build fixtures under /tmp", and the agent
 // complied with it. These lines are mechanical instead: they remove the shared
 // path, make the failed `cd` fatal, and assert the target before anything
-// destructive. Bracket the whole run with `npm run guard:snapshot`, then
+// destructive.
+//
+// The absolute-path rule was added 2026-09-16 after auditing agent runs. Its
+// reason is a mechanism, demonstrable directly and unchanged since:
+//
+//   after a cd that failed, in a shell that did not abort —
+//     rm -rf fixtures                -> resolved against the repo; repo/fixtures GONE
+//     rm -rf "${WORK:?}/fixtures"    -> resolved against $WORK;    repo/fixtures SURVIVED
+//   and with WORK itself unset, which is what the brace is for —
+//     rm -rf "$WORK/fixtures"        -> expands to /fixtures
+//     rm -rf "${WORK:?}/fixtures"    -> refused; the block aborts
+//
+// Agents really do write the first form inside what they believe is their own
+// directory — `rm -rf t`, `rm -f err.tmp`, `rm -rf nobin`. The population is
+// sized, graded and re-derivable in the RESULT.md cited below; quote counts from
+// there, not from this comment, because they have moved twice already. One was
+// `rm -f CONTINUE_HERE.md docs/CONTINUE_HERE.md`, run by a reviewer WHILE
+// exercising that skill's cleanup block — the shipped block is
+// `rm -- "$CONTINUE_FILE"`, already absolute and guarded, so the relative form
+// was the reviewer's own teardown and not the block. Had its `cd` failed it
+// would have taken this repository's live handoff, and `docs/` exists here.
+// Nothing was lost. The point is that one control was carrying all of it.
+// Method, the graded risky rows, and what the classifier CANNOT measure — it
+// cannot tell `"$DIR/x"` from `"${DIR:?}/x"`, so it cannot score compliance with
+// the rule it supports: tests/results/2026-09-17-repo-safety-rm-audit/RESULT.md.
+// Quote that file, and read its instrument-failure section before quoting any
+// `rm` figure: the first re-derivation read 14% of its corpus and published
+// "zero risky absolute paths" off the remainder.
+// Bracket the whole run with `npm run guard:snapshot`, then
 // `npm run guard:verify` and `npm run guard:release` — the HEAD comparison is the
 // only check that catches a stray COMMIT, since `git status` reads clean once a
 // stray write has been committed. Release is part of the loop, not a tidy-up:
@@ -88,14 +133,47 @@ because parallel agents pick the same obvious filename and clobber each other.
 Start every shell block that touches files with exactly this:
 
     DIR="$(mktemp -d)" || exit 1
-    cd "$DIR" || exit 1
+    cd "\${DIR:?}" || exit 1
 
 - The \`|| exit 1\` on \`cd\` is load-bearing: a bare \`cd\` that fails does NOT stop
   the script, and every relative path after it resolves against the repository.
-- Before any \`git add\`, \`git commit\`, or a tool run with a write flag, assert:
-    [ "$(git rev-parse --show-toplevel)" = "$DIR" ] || exit 1
+  The brace matters for the same reason it does below — \`cd ""\` returns 0 without
+  moving, so an unset \`DIR\` leaves you wherever you started and the \`|| exit 1\`
+  never fires. Every \`$DIR\` in this preamble is braced; do not copy one of these
+  lines on its own and drop it.
+- Name an ABSOLUTE path under \`$DIR\` in every destructive command, braced so an
+  unset variable refuses instead of expanding: \`rm -rf "\${DIR:?}/fixtures"\`,
+  never \`rm -rf fixtures\` and never a bare \`"$DIR/fixtures"\`. The \`cd\` above
+  is one control; a relative \`rm\` makes it the only one, so the single failure it
+  guards against becomes repository damage instead of a wasted command. An
+  absolute path trades the dependency on the working directory for a dependency on
+  \`$DIR\` being set, and that one bites: \`cd ""\` succeeds without moving, so an
+  unset \`DIR\` leaves you standing in the repository AND expands
+  \`"$DIR/fixtures"\` to \`/fixtures\`. The \`:?\` refuses both cases, unset and
+  empty alike, on bash 5.2 and zsh 5.9. It aborts the enclosing shell at top
+  level; inside \`( )\` or \`$( )\` it aborts only that subshell, so keep
+  destructive commands at top level. It checks non-emptiness, not absoluteness —
+  a relative \`TMPDIR\` makes \`mktemp -d\` return a relative path, which is no
+  worse than the unbraced form but is not protected by it either.
+- Before any \`git add\`, \`git commit\`, or a tool run with a write flag, assert —
+  braced for the same reason as the rule above, since OUTSIDE any repository
+  \`git rev-parse\` prints nothing and an unset \`DIR\` makes this compare "" to ""
+  and PASS:
+    [ "$(git rev-parse --show-toplevel)" = "\${DIR:?}" ] || exit 1
 - Never run \`git commit\`, \`git update-index\`, or \`git checkout --\` against the
   repository itself, and never invoke a repo tool with a write flag there.`
+
+// WRITE LOCATION — the other half of containment, and the one control that
+// reaches a stage nobody classified as writing. The preamble above gives a shell
+// block a private directory; this line names where the stage's output belongs and
+// rules out the repository root, and it covers files produced by any tool, not
+// only by a shell block. Fill in the directory and append it to the prompt of
+// every Bash-capable stage — the read-only-by-intent ones included, since an
+// agent that never meant to write to the repository still inherits it as its
+// working directory:
+//
+// const WRITE_LOCATION = `Write every file you produce under <ABSOLUTE PATH>;
+// write nothing under the repository root.`;
 
 // A JSON Schema turns agent() into structured output: the subagent is forced to
 // call StructuredOutput and agent() returns the validated object (no parsing).

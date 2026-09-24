@@ -17,7 +17,7 @@ metadata:
   domain: esoteric
   complexity: intermediate
   language: natural
-  tags: esoteric, meditation, guidance, mindfulness, awareness, meta-cognition, ai-self-application
+  tags: esoteric, meditation, mindfulness, shamatha, vipassana, breathwork, guidance
   locale: es
   source_locale: en
   source_commit: 6f65f316

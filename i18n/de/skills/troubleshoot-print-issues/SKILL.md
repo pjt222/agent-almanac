@@ -156,25 +156,23 @@ Sofortloesungen fuer gaengige Probleme umsetzen:
 ### Schlechte Betthaftung
 
 **Sofortkorrekturen**:
-```bash
-# 1. Clean bed thoroughly
-# Glass/PEI: Isopropyl alcohol 90%+
-# BuildTak: Warm water and dish soap
+1. Bett gruendlich reinigen
+   Glas/PEI: Isopropylalkohol 90%+
+   BuildTak: Warmes Wasser und Spuelmittel
 
-# 2. Level bed (paper test at 4 corners + center)
-# Paper should drag slightly
+2. Bett nivellieren (Papiertest an 4 Ecken + Mitte)
+   Papier sollte leicht schleifen
 
-# 3. Adjust Z-offset down (squish first layer more)
-# Start: -0.05mm increments until lines fuse
+3. Z-Offset nach unten anpassen (erste Schicht staerker anpressen)
+   Start: -0.05mm Schritte bis Linien verschmelzen
 
-# 4. Increase bed temperature +5°C
+4. Betttemperatur +5 Grad C erhoehen
 
-# 5. Add adhesion aid:
-# - Glue stick (PLA/PETG)
-# - Hairspray (ABS)
-# - ABS juice (ABS) - ABS dissolved in acetone
-# - Magigoo/3D printing adhesive
-```
+5. Haftmittel hinzufuegen:
+   - Klebestift (PLA/PETG)
+   - Haarspray (ABS)
+   - ABS-Saft (ABS) - ABS in Aceton aufgeloest
+   - Magigoo/3D-Druck-Haftmittel
 
 **Slicer-Einstellungen**:
 - Erstschichthoehe: 0.2-0.3mm (dicker = bessere Anpressung)
@@ -196,7 +194,7 @@ Sofortloesungen fuer gaengige Probleme umsetzen:
 ```
 
 **Einzugs-Tuning**:
-```yaml
+```text
 # Direct drive extruder:
 retraction_distance: 1.0-2.0mm
 retraction_speed: 40-50mm/s
@@ -218,20 +216,18 @@ retraction_speed: 40-60mm/s
 ### Schichtversatz
 
 **Mechanische Pruefungen**:
-```bash
-# 1. Check belt tension (should twang like guitar string)
-# Tighten if loose
+1. Riemenspannung pruefen (sollte wie Gitarrensaite schwingen)
+   Nachspannen wenn locker
 
-# 2. Check pulley set screws (motor shafts)
-# Must align with flat on motor shaft
+2. Riemenscheiben-Madenschrauben pruefen (Motorwellen)
+   Muessen auf der Abflachung der Motorwelle sitzen
 
-# 3. Check for mechanical resistance
-# Manually move X/Y axes - should glide smoothly
-# Binding indicates dirty rods, worn bearings, or misalignment
+3. Auf mechanischen Widerstand pruefen
+   X/Y-Achsen manuell bewegen - sollten leichtgaengig gleiten
+   Klemmen deutet auf verschmutzte Stangen, abgenutzte Lager oder Fehlausrichtung hin
 
-# 4. Check stepper motor current (advanced)
-# Too low → skipping; too high → overheating
-```
+4. Schrittmotorstrom pruefen (fortgeschritten)
+   Zu niedrig → Schritte ueberspringen; zu hoch → Ueberhitzung
 
 **Geschwindigkeitsreduzierung**:
 ```yaml
@@ -249,7 +245,7 @@ jerk: 8mm/s (from 15)
 ### Verzug
 
 **Waermemanagement**:
-```yaml
+```text
 # Increase bed temperature:
 PLA: 60°C → 65°C
 PETG: 80°C → 85°C
@@ -277,30 +273,26 @@ regular_fan: 25% max (ABS), 50% (PETG), 100% (PLA)
 ### Unterextrusion
 
 **Schnellkorrekturen**:
-```bash
-# 1. Check for nozzle clog
-# Heat to print temp, manually push filament
-# Should extrude smoothly
+1. Auf Duesenverstopfung pruefen
+   Auf Drucktemperatur aufheizen, Filament manuell durchschieben
+   Sollte gleichmaessig extrudieren
 
-# 2. Cold pull cleaning (if partial clog)
-# Heat to 220°C, push cleaning filament through
-# Cool to 90°C, pull sharply - should remove debris
+2. Cold-Pull-Reinigung (bei teilweiser Verstopfung)
+   Auf 220 Grad C aufheizen, Reinigungsfilament durchschieben
+   Auf 90 Grad C abkuehlen, ruckartig ziehen - sollte Ablagerungen entfernen
 
-# 3. Increase temperature +5-10°C
-# Higher temp = better flow
+3. Temperatur +5-10 Grad C erhoehen
+   Hoehere Temperatur = besserer Durchfluss
 
-# 4. Increase flow rate 2-5%
-# Slicer: Filament settings → Flow → 102-105%
-```
+4. Durchflussrate 2-5% erhoehen
+   Slicer: Filament-Einstellungen → Durchfluss → 102-105%
 
 **E-Steps-Kalibrierung**:
-```bash
-# 1. Mark filament 120mm above extruder
-# 2. Extrude 100mm: G1 E100 F100
-# 3. Measure remaining distance to mark
-# 4. Calculate: new_steps = current_steps × (100 / actual_extruded)
-# 5. Set: M92 E<new_steps>; M500 (save to EEPROM)
-```
+1. Filament 120mm ueber Extruder markieren
+2. 100mm extrudieren: G1 E100 F100
+3. Verbleibende Distanz zur Markierung messen
+4. Berechnen: neue_steps = aktuelle_steps × (100 / tatsaechlich_extrudiert)
+5. Setzen: `M92 E<neue_steps>`; M500 (im EEPROM speichern)
 
 **Erwartet:** Konsistente Extrusion ohne Luecken in Perimetern oder Fuellung.
 
@@ -309,7 +301,7 @@ regular_fan: 25% max (ABS), 50% (PETG), 100% (PLA)
 ### Ueberextrusion
 
 **Durchflussraten-Reduzierung**:
-```yaml
+```text
 # Reduce flow in 2% increments:
 extrusion_multiplier: 0.98 → 0.96 → 0.94
 
@@ -320,13 +312,11 @@ extrusion_multiplier: 0.98 → 0.96 → 0.94
 ```
 
 **Massgenauigkeitstest**:
-```bash
-# Print 20mm calibration cube
-# Measure with calipers:
-# X/Y dimensions should be 20.0mm ± 0.1mm
-# If consistently oversized → reduce flow
-# If undersized → increase flow
-```
+20mm Kalibrierwuerfel drucken
+Mit Messschieber messen:
+X/Y-Masse sollten 20.0mm ± 0.1mm sein
+Wenn konsistent uebergross → Durchfluss reduzieren
+Wenn untergross → Durchfluss erhoehen
 
 **Erwartet:** Genaue Masse, glatte Oberflaechen, keine Woelbungen.
 

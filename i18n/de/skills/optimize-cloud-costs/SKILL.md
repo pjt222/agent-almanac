@@ -217,6 +217,17 @@ jq '.data[] | select(.totalRecommendedSavings > 10) | {
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
+**Auslastungs-Dashboard erstellen:**
+```yaml
+# grafana-utilization-dashboard.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: utilization-dashboard
+  namespace: monitoring
+# ... (see EXAMPLES.md for complete configuration)
+```
+
 **Erwartet:** Klare Uebersicht ueber aktuelle Ressourcenanforderungen vs tatsaechliche Nutzung. Identifikation von Pods mit <30% Auslastung (ueberbereitgestellt). Liste von Optimierungsmoeglichkeiten mit geschaetzten Einsparungen.
 
 **Bei Fehler:**

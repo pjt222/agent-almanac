@@ -101,7 +101,7 @@ cite-method: citeproc
 **On failure:** If the CSL file is not found, download it from the CSL repository
 (see Step 3) and place it in the project directory.
 
-### Step 3: Obtain CSL Style Files
+### Step 3: Obtain and Customize CSL Style Files
 
 ```r
 # Common CSL styles and their repository names
@@ -132,10 +132,49 @@ download_csl <- function(style, dest_dir = ".") {
 download_csl("apa")
 ```
 
-**Expected:** CSL file downloaded to the project directory.
+A downloaded style is rarely the last word — journals routinely deviate from the
+canonical style in small ways, and the fix is to edit the `.csl` file rather than to
+post-process the rendered output.
+
+A CSL style is XML rooted in a `<style>` element that declares the CSL namespace as
+its default (`xmlns="http://purl.org/net/xbiblio/csl"`). Elements inside the file are
+therefore written **unprefixed** — `<citation>`, `<bibliography>`, `<sort>`. The CSL
+specification names the same elements as `cs:style`, `cs:citation` and so on; that
+prefix is the spec's notation for talking about them, not text you will find in
+`apa.csl`. Searching a downloaded style for `<cs:citation>` returns nothing.
+
+Four parts account for nearly every journal-specific tweak:
+
+- **Where the two formats live.** `<citation>` is required and appears exactly once;
+  it controls the in-text citation or footnote. `<bibliography>` is optional and
+  controls the reference list. Changing how a citation looks in the text and changing
+  how it looks in the reference list are edits to *different* elements — this is the
+  most common source of "I changed it and nothing happened".
+- **Sort order.** Both `<citation>` and `<bibliography>` may carry a `<sort>` child,
+  which must appear *before* `<layout>` and must contain one or more `<key>`
+  elements. This is what switches a bibliography between author-alphabetical,
+  by-year, and citation-order.
+- **"et al." thresholds.** `et-al-min` and `et-al-use-first` together enable et-al
+  abbreviation: once the author count reaches `et-al-min`, the list truncates after
+  `et-al-use-first` names. Set them on `<name>`, or inherit them from `<style>`,
+  `<citation>`, or `<bibliography>`.
+- **Localization.** Set the `default-locale` attribute on the root `<style>` element
+  to translate style-generated terms ("and", "et al.", "eds."). The attribute is
+  `default-locale` — a bare `locale` attribute belongs on `<locale>` elements and
+  will not do this.
+
+Validate any edited style at <https://validator.citationstyles.org/>, which checks a
+file (by URL, upload, or paste) against the CSL schema and reports the offending line.
+Do this before rendering: Pandoc's failure mode for a malformed style is unhelpful.
+
+**Expected:** CSL file downloaded to the project directory, and any journal-specific
+edits validate cleanly against the CSL schema.
 
 **On failure:** Check network connectivity. The CSL GitHub repository contains 10,000+
-styles. For offline use, bundle required CSL files in the project.
+styles. For offline use, bundle required CSL files in the project. If an edited style
+fails validation, the validator names the line — the usual causes are a `<sort>`
+placed after `<layout>` rather than before it, and a misspelled attribute, which the
+schema rejects rather than ignores.
 
 ### Step 4: Write In-Text Citations
 
@@ -295,6 +334,14 @@ Refine the regex or manually review flagged keys.
   Pandoc. Always use CSL 1.0+ from the official repository
 - **Quarto vs R Markdown differences**: Quarto uses `cite-method: citeproc` by
   default; R Markdown may need explicit `pandoc_args: ["--citeproc"]`
+- **Confusing CSL styles with LaTeX bibliography styles**: three separate formats
+  answer to "APA style" and none is interchangeable with the others. `.csl` drives
+  Pandoc, Quarto, and Zotero. Legacy BibTeX uses `.bst` files, selected with
+  `\bibliographystyle{}` and processed by the `bibtex` program. Modern biblatex uses
+  its own `.bbx`/`.cbx` styles, selected with `\usepackage[style=apa]{biblatex}` and
+  processed by `biber`. Putting a `.csl` filename in a `csl:` field is right; putting
+  one anywhere in a LaTeX preamble is not, and each of these tools fails on the
+  others' files in ways that do not name the cause
 
 ## Related Skills
 

@@ -17,7 +17,7 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, analytical-planning, technique-selection, structure-elucidation
+  tags: spectroscopy, analytical-planning, technique-selection, sample-preparation
 ---
 
 # 规划谱学分析方案

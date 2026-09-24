@@ -198,15 +198,20 @@ def route_issue(severity, issue_type):
 Einen formatierten Bericht erstellen der fuer die Zielgruppe geeignet ist (Agent oder Mensch).
 
 **Fuer Spezialisten-Agenten** (strukturiertes Format fuer MCP-Tools):
+Emit one document: the routing header delimited by `---` fences, then the report
+body beneath it. The receiving tool parses the header keys, so those and the
+agent ids stay in English.
+
 ```yaml
----
 type: escalation
 severity: high
 from_agent: janitor
 to_agent: security-analyst
 blocking: false
----
+```
 
+
+```text
 # Security Concern: Hardcoded API Key in Config
 
 **File**: config/production.yml:45

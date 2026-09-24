@@ -3,6 +3,7 @@ name: create-glyph
 locale: de
 source_locale: en
 source_commit: 33b561c9
+fence_basis_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -228,31 +229,21 @@ Das Icon im passenden Manifest registrieren.
 
 ### Schritt 5: Rendern — Icon generieren
 
-Die Build-Pipeline ausfuehren, um das WebP zu rendern.
+Die Icon-Pipeline ausfuehren, um die neue Glyphe zu rendern. Immer `build.sh` als Einstiegspunkt verwenden — es uebernimmt die Plattformerkennung und die Auswahl der R-Binary. Siehe [render-icon-pipeline](../render-icon-pipeline/SKILL.md) fuer die vollstaendige Flag-Referenz und die Pipeline-Architektur.
 
-1. Zum `viz/`-Verzeichnis navigieren
-2. Basierend auf dem Entitaetstyp rendern:
-
-**Fuer Skills:**
 ```bash
-cd viz && Rscript build-icons.R --only <domain>
-# Or skip existing: Rscript build-icons.R --only <domain> --skip-existing
+# From project root — renders all palettes, standard + HD, skips existing icons
+bash viz/build.sh --only <domain> --skip-existing          # skills
+bash viz/build.sh --type agent --only <id> --skip-existing # agents
+bash viz/build.sh --type team --only <id> --skip-existing  # teams
+
+# Dry run first:
+bash viz/build.sh --only <domain> --dry-run
 ```
 
-**Fuer Agents:**
-```bash
-cd viz && Rscript build-agent-icons.R --only <agent-id>
-# Or skip existing: Rscript build-agent-icons.R --only <agent-id> --skip-existing
-```
+`build.sh` fuehrt die vollstaendige Pipeline aus (Palette → Daten → Manifest → Rendering → Terminal-Glyphen). Die Schritte ausserhalb des Renderings kosten etwa 10 Sekunden, stellen aber sicher, dass alle Daten aktuell sind.
 
-**Fuer Teams:**
-```bash
-cd viz && Rscript build-team-icons.R --only <team-id>
-# Or skip existing: Rscript build-team-icons.R --only <team-id> --skip-existing
-```
-
-3. Fuer einen Probelauf zuerst `--dry-run` an einen beliebigen Befehl anhaengen
-4. Ausgabeorte:
+Ausgabeorte:
    - Skills: `viz/public/icons/<palette>/<domain>/<skill-id>.webp`
    - Agents: `viz/public/icons/<palette>/agents/<agent-id>.webp`
    - Teams: `viz/public/icons/<palette>/teams/<team-id>.webp`
@@ -321,7 +312,7 @@ Anpassungen vornehmen und erneut rendern.
 
 ### Domaenen- und Entitaetsfarbpaletten
 
-Alle 58 Domaenenfarben (fuer Skills) sind in `viz/R/palettes.R` definiert (die einzige Quelle der Wahrheit). Agent- und Team-Farben werden ebenfalls in `palettes.R` verwaltet. Die Cyberpunk-Palette (handabgestimmte Neonfarben) ist in `get_cyberpunk_colors()`. Viridis-Familienpaletten werden automatisch ueber `viridisLite` generiert.
+Alle Domaenenfarben (fuer Skills) sind in `viz/R/palettes.R` definiert (die einzige Quelle der Wahrheit). Agent- und Team-Farben werden ebenfalls in `palettes.R` verwaltet. Die Cyberpunk-Palette (handabgestimmte Neonfarben) ist in `get_cyberpunk_colors()`. Viridis-Familienpaletten werden automatisch ueber `viridisLite` generiert.
 
 Zum Nachschlagen einer Farbe:
 ```r
@@ -334,7 +325,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 Beim Hinzufuegen einer neuen Domaene an drei Stellen in `palettes.R` eintragen:
 1. `PALETTE_DOMAIN_ORDER` (alphabetisch)
 2. `get_cyberpunk_colors()` Domaenenliste
-3. `Rscript generate-palette-colors.R` ausfuehren, um JSON + JS zu regenerieren
+3. `bash viz/build.sh` ausfuehren, um Paletten, Daten und Manifeste zu regenerieren
 
 ### Glyphen-Funktionskatalog
 

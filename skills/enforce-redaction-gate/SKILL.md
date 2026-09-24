@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.4"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -61,7 +61,7 @@ Each row becomes one deny-list entry: a human-readable **label** plus a **regex*
 
 **On failure:** If a shape resists a clean regex (entangled with legitimate content), defer it to the structure-aware tier (Step 3) rather than writing a broad regex that floods false positives.
 
-### Step 2: Build the Shape-Tier Scanner (exit code = leak count)
+### Step 2: Build the Shape-Tier Scanner
 
 Maintain the patterns in one executable that lives in the private repo and runs against the target. The output names only the **label** — never the regex — so the gate's own logs do not become a finding catalog.
 
@@ -69,7 +69,9 @@ Maintain the patterns in one executable that lives in the private repo and runs 
 #!/usr/bin/env bash
 set -uo pipefail
 TARGET="${1:?target path required}"
+[ -r "$TARGET" ] || { echo "cannot read: $TARGET" >&2; exit 2; }   # FAIL CLOSED, never read as a pass
 SEARCH=$(command -v rg >/dev/null && echo rg || echo grep)
+command -v "$SEARCH" >/dev/null || { echo "cannot find $SEARCH" >&2; exit 2; }   # FAIL CLOSED
 LEAKS=0
 
 # "label|regex" — one entry per SHAPE. Patterns stay private; only labels print.
@@ -81,20 +83,31 @@ PATTERNS=(
 )
 
 for entry in "${PATTERNS[@]}"; do
-  label="${entry%%|*}"; pat="${entry##*|}"
+  # Split on the FIRST pipe only: label is everything before it, pattern is everything after —
+  # so a regex MAY contain its own alternation ('a|b'), which Step 1's own table and the pitfall
+  # below both use as the worked example. Splitting on the LAST pipe instead silently drops every
+  # alternative but the final one and still prints a correct-looking label (measured, #860 review).
+  label="${entry%%|*}"; pat="${entry#*|}"
   if [ "$SEARCH" = rg ]; then
-    hit=$(rg -l "$pat" --glob '!.git' --glob '!node_modules' "$TARGET" 2>/dev/null | head -1)
+    # -uuu (--no-ignore --hidden --binary): the plain `rg -l` this replaced does not scan
+    # dotfiles, .gitignore'd paths, or files it detects as binary, so it silently missed 3 of 4
+    # seeded leaks (a .env, a NUL-containing bundle, a gitignored dist/) that the grep fallback
+    # below caught — the verdict depended on which tool happened to be on PATH (measured, #860
+    # review). --glob still excludes .git/ and node_modules/ explicitly under -uuu.
+    hit=$(rg -uuu -l "$pat" --glob '!.git' --glob '!node_modules' "$TARGET" 2>/dev/null); rc=$?
   else
-    hit=$(grep -rlE "$pat" --exclude-dir=.git --exclude-dir=node_modules "$TARGET" 2>/dev/null | head -1)
+    hit=$(grep -rlE "$pat" --exclude-dir=.git --exclude-dir=node_modules "$TARGET" 2>/dev/null); rc=$?
   fi
+  [ "$rc" -le 1 ] || { echo "cannot scan: $TARGET (tool error)" >&2; exit 2; }   # FAIL CLOSED — $SEARCH's own exit status, captured immediately as $?
   if [ -n "$hit" ]; then echo "  LEAK: $label"; LEAKS=$((LEAKS+1)); fi
 done
-exit "$LEAKS"
+[ "$LEAKS" -gt 0 ] && exit 1
+exit 0
 ```
 
-The exit code equals the number of leaking shapes; a clean run exits 0. That contract is what makes it composable — a transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero.
+The exit code is 0 clean / 1 any findings (the count is in the printed `LEAK:` lines, never the exit status) / 2 could not run — two fail-closed checks make this composable, not a raw leak count: the `TARGET` readability check at the top, and the per-pattern check that the search tool's own exit status — captured immediately as `rc=$?`, with no pipeline in the way to obscure it — never exceeds 1, so a scanner that errors mid-scan reports could-not-run rather than a false clean. Binding the exit code directly to a count collides with the reserved could-not-run state the moment exactly two shapes leak, and gives a genuinely crashed scanner nowhere to signal from but "zero", which a `scanner && ok || echo CLEAN`-shaped wrapper reads as clean — the trap these two checks close. `hit` collects every matching file, never just the first: the check only asks *whether* a pattern matched, and an earlier `| head -1` here took a SIGPIPE (141, misread by the guard above as a scan failure) the moment `head` exited before the search tool's next stdout flush — which needs only a few kilobytes of output, intermittently from about 27 matching files here on this machine and reliably above roughly 30, far below the 64 KiB pipe capacity a reader might otherwise assume is the threshold — fixed by dropping the pipe rather than bounding the read, since nothing downstream uses more than `[ -n "$hit" ]` (#858). `grep -q`/`rg -q` would also drop the pipe and terminate faster, but both change the exit-code contract this gate depends on: GNU grep's `-q` returns 0 whenever a line was selected, even if an error occurred elsewhere in the same scan (ordering is irrelevant — measured both ways, #860 review), so a permission-denied file sitting beside a real leak would report LEAK (1) instead of the honest could-not-run (2). The full-scan `-l` form costs little in practice (under 0.1s over 5,000 files on this machine) and keeps the contract exact. A transform skill ends with `gate "$OUT" || exit 1`, and CI fails on non-zero. `tools/check-redaction.sh` in this repository ships exactly this contract as a working reference implementation of Steps 1-3 — more patterns, a `--verify` self-test that seeds every one of them, `--labels` — read its own header before building a second one from scratch.
 
-**Expected:** Running the scanner on a known-clean tree exits 0; seeding a deliberate test token makes it exit non-zero and print the matching label only.
+**Expected:** Running the scanner on a known-clean tree exits 0; seeding a deliberate test token makes it exit 1 and print the matching label only; pointing it at an unreadable or missing target, or at a tree the search tool errors on mid-scan (a permission-denied file, say — even one sitting beside genuinely leaking content), exits 2 either way, never a false clean.
 
 **On failure:** If `rg` is unavailable, the `grep -rE` fallback above runs (slower). If a pattern floods every run, it is too broad — narrow it in Step 5, do not suppress.
 
@@ -132,10 +145,24 @@ The structure tier also validates *redaction's own output* — the redacted arti
 The gate must be safe to run repeatedly and trivial to call from anything. Re-running on a clean tree is a no-op that exits 0. Transform skills call it as their final verification step; CI calls the identical script.
 
 ```bash
-# In a transform skill, after writing redacted output:
-bash tools/enforce-redaction-gate.sh "$OUT_DIR" || {
+# Your gate, built from Steps 1-3, called as a transform skill's final step.
+bash tools/your-redaction-gate.sh "$OUT_DIR" || {
   echo "redaction gate FAILED — output still leaks; extend patterns"; exit 1; }
 ```
+
+**This repository ships the post-condition half rather than a tree gate, and #853 records why.**
+A scanner asking "is this whole tree clean?" needs a corpus of real internal identifiers to be
+right about, and such a corpus is private by definition — a 1507-line candidate built here fired
+49 findings on the repository's own tooling in one round and missed an 86-character token in the
+next. What ships instead is `tools/redact-artifact.py`, which asserts over output **it produced**,
+using terms **its caller supplied**:
+
+```bash
+python3 tools/redact-artifact.py --type md --mapping map.tsv IN.md -o OUT.md
+```
+
+Read it as the reference implementation of Steps 1-3 at the scope where they are decidable. Build
+a tree gate only if you hold the corpus that makes one meaningful.
 
 **Expected:** The same gate invocation succeeds locally and in CI with no environment-specific branches. Two consecutive runs on a clean tree both exit 0.
 
@@ -157,7 +184,20 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ripgrep jq
       - name: Fetch private scanner
         env: { GH_TOKEN: "${{ secrets.PRIVATE_REPO_TOKEN }}" }
-        run: gh api repos/<org>/<private>/contents/tools/enforce-redaction-gate.sh --jq .content | base64 -d > gate.sh
+        # The path names YOUR gate in YOUR private repository. This repository ships no tree
+        # gate (#853) — fetching one from a private repo is precisely how a gate gets the corpus
+        # that makes it meaningful, which is the argument for keeping it private rather than
+        # publishing it.
+        # `shell: bash` is not decoration: GitHub's UNSPECIFIED default on Linux is `bash -e
+        # {0}` with NO pipefail, so a failing `gh api` here (an expired token, a renamed path,
+        # a rate limit) would let `base64 -d` succeed on empty stdin, write a 0-byte gate.sh,
+        # and exit 0 — the step reports success having fetched nothing (measured, #860 review).
+        # `[ -s gate.sh ]` catches that even under the safer shell: an empty file is still a
+        # successful write.
+        shell: bash
+        run: |
+          gh api repos/<org>/<private>/contents/tools/your-redaction-gate.sh --jq .content | base64 -d > gate.sh
+          [ -s gate.sh ] || { echo "scanner fetch failed: gate.sh is empty" >&2; exit 2; }
       - run: bash gate.sh .
 ```
 
@@ -181,7 +221,7 @@ A token allowlist may be *derived from vendor documentation* — scan for anythi
 
 ## Validation
 
-- [ ] The gate exits 0 on a clean tree and non-zero on a tree seeded with a deliberate test token
+- [ ] The gate exits 0 on a clean tree, exits **1 specifically** (not merely non-zero — 2 is could-not-run, not a finding) on a tree seeded with a deliberate test token, and exits 2 on an unreadable/missing target or a search-tool error mid-scan
 - [ ] Output prints only labels, never the regexes or the sensitive values
 - [ ] The structure tier catches at least one leak class the shape tier misses (documented)
 - [ ] The redacted artifact re-parses cleanly with its own parser, and self-references (lookups, edges) still resolve with structural counts matching the source

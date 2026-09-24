@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -23,7 +23,7 @@ metadata:
 
 # Redact Wire Capture
 
-A wire capture is the highest-density leak surface in any investigation: a single `.jsonl` from a proxied session can carry the bearer token, the account email, the device hash, and the home path all in one request frame. This skill scrubs those in place with class-preserving substitutions — keeping enough of each secret's *shape* to stay analytically useful (`Bearer sk-vendor-oat01-<REDACTED>` still reads as "an OAuth bearer") — runs idempotently so re-redaction is a no-op, and finishes by verifying the directory through `enforce-redaction-gate`.
+A wire capture is the highest-density leak surface in any investigation: a single `.jsonl` from a proxied session can carry the bearer token, the account email, the device hash, and the home path all in one request frame. This skill scrubs those in place with class-preserving substitutions — keeping enough of each secret's *shape* to stay analytically useful (`Bearer sk-vendor-oat01-<REDACTED>` still reads as "an OAuth bearer") — runs idempotently so re-redaction is a no-op, and finishes by asserting per file that no secret survived.
 
 ## When to Use
 
@@ -37,7 +37,7 @@ A wire capture is the highest-density leak surface in any investigation: a singl
 - **Required**: A capture directory containing text-mode artifacts
 - **Required**: The secret-class list (token prefixes, id formats, the personal identifiers to scrub) — kept private
 - **Optional**: An allow-list of public identifiers (marketplace/skill names, public usernames) that must be left intact
-- **Optional**: The redaction gate (`enforce-redaction-gate`) for the verification step
+- **Required**: `tools/redact-artifact.py` for the per-file scrub-and-assert step (there is no directory-wide gate; #853 records why)
 
 ## Procedure
 
@@ -96,14 +96,27 @@ Not everything that looks like an identifier is a secret. Public marketplace nam
 
 ### Step 4: Verify Through the Redaction Gate
 
-Re-run a verification pass that greps each secret shape and fails on any non-`REDACTED` hit, then hand the directory to `enforce-redaction-gate` for the structure-aware tier (a token nested in a JSON body that a flat grep skipped).
+Re-run a verification pass over each scrubbed file. There is no tree-wide gate to hand the
+directory to, and #853 records why: a scanner asking "is this tree clean?" has no corpus to be
+right about, so the verification belongs inside the transform that produced the file. Redact each
+file through `redact-artifact`, which refuses to return output in which a listed term survives.
 
 ```bash
-bash tools/enforce-redaction-gate.sh "$CAP" || {
-  echo "capture still leaks; extend the secret-class list"; exit 1; }
+# One `source<TAB>replacement` pair per secret you are scrubbing, plus --also-deny for any
+# encoding of it your mapping does not spell. The tool exits 1 if a term survives and 2 if it
+# cannot run at all, so a `|| exit` is a real gate rather than a hopeful one.
+for f in "$CAP"/*.json; do
+  python3 tools/redact-artifact.py --type text --mapping "$CAP/../secrets.tsv" \
+    --also-deny "$BEARER_B64" "$f" --in-place || {
+      echo "capture still leaks at $f; extend the secret-class list"; exit 1; }
+done
 ```
 
-**Expected:** Both the inline verification and `enforce-redaction-gate` exit 0 on the scrubbed directory.
+**Expected:** Every file exits 0. A non-zero exit is the gate working, and the two codes mean
+different things: **1** is a finding — a listed term survived the mapping. **2** is
+could-not-measure — an empty mapping, an unreadable or non-UTF-8 file, or markup whose structure
+tier examined nothing — and it must never be reported to an operator as a leak. The `||` branch
+below says "still leaks", so treat it as covering 1 only; on 2, fix the input and re-run.
 
 **On failure:** A surviving hit means a secret class is unhandled — add it to Step 1/Step 2, re-run the scrub from the private source, and re-verify. Never delete the offending line by hand; the next capture will reproduce it.
 
@@ -113,7 +126,7 @@ bash tools/enforce-redaction-gate.sh "$CAP" || {
 - [ ] The scrub is idempotent — a second run changes nothing
 - [ ] Public allow-list identifiers are intact
 - [ ] No UUID, token, email, home path, or device hash survives outside a `<REDACTED-…>` form
-- [ ] `enforce-redaction-gate` exits 0 on the scrubbed directory, including the structure-aware tier
+- [ ] `tools/redact-artifact.py` exits 0 on every file. On the FIRST run over an unscrubbed capture the summary shows a non-zero matched count; on a re-run it shows `OUTPUT UNCHANGED`, which is the idempotence above rather than a failure
 - [ ] The redacted capture is reproducible from the private source (re-running yields the same result)
 
 ## Common Pitfalls
@@ -127,7 +140,7 @@ bash tools/enforce-redaction-gate.sh "$CAP" || {
 
 ## Related Skills
 
-- `enforce-redaction-gate` — the verification step this skill ends on; supplies the structure-aware tier for tokens nested in request/response bodies
+- `enforce-redaction-gate` — how to build a redaction boundary when you hold the deny-list; it teaches the two-tier design this skill's per-file assertion implements the decidable half of
 - `conduct-empirical-wire-capture` — produces the captures this skill scrubs; redaction is the mandatory step between capture and any public reference
 - `redact-for-public-disclosure` — the methodology umbrella governing what may be referenced publicly at all
 - `redact-visualization-for-disclosure` — the sibling transform for rendered diagrams rather than wire dumps

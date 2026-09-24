@@ -3,6 +3,7 @@ name: create-glyph
 locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
+fence_basis_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-19"
 description: >
@@ -310,7 +311,7 @@ bash viz/build.sh --only <domain> --dry-run
 
 ### 領域與實體色板
 
-所有 58 領域色（技能用）於 `viz/R/palettes.R` 定義（單一真源）。代理與團隊之色亦於 `palettes.R` 管。cyberpunk 色板（手調霓虹色）於 `get_cyberpunk_colors()`。viridis 系色板自 `viridisLite` 生。
+所有領域色（技能用）於 `viz/R/palettes.R` 定義（單一真源）。代理與團隊之色亦於 `palettes.R` 管。cyberpunk 色板（手調霓虹色）於 `get_cyberpunk_colors()`。viridis 系色板自 `viridisLite` 生。
 
 查色：
 ```r

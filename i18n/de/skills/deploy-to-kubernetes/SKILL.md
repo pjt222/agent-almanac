@@ -11,6 +11,7 @@ description: >
 locale: de
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: c4e023322
 translator: claude-sonnet-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -233,7 +234,7 @@ metadata:
     app: myapp
     version: v1.0.0
 spec:
-  replicas: 3
+  # no replicas: here — the HPA in Step 5 owns the count
   strategy:
     type: RollingUpdate
     rollingUpdate:

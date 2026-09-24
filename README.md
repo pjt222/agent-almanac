@@ -9,17 +9,18 @@
 [![Update READMEs](https://github.com/pjt222/agent-almanac/actions/workflows/update-readmes.yml/badge.svg)](https://github.com/pjt222/agent-almanac/actions/workflows/update-readmes.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Sponsor](https://img.shields.io/github/sponsors/pjt222?style=flat&logo=GitHub-Sponsors&logoColor=%23EA4AAA&label=Sponsor)](https://github.com/sponsors/pjt222)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/pjt222/agent-almanac)
 
 A library of executable skills, specialist agents, and pre-built teams for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and compatible AI tools. Define repeatable engineering procedures once and have AI agents execute them with built-in validation and error recovery. Compose specialists into review teams that catch issues a single reviewer would miss. Built on the [Agent Skills open standard](https://agentskills.io).
 
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **369 skills** across 66 domains — structured, executable procedures
-- **75 agents** — specialized Claude Code personas covering development, review, compliance, and more
+- **373 skills** across 67 domains — structured, executable procedures
+- **76 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **22 teams** — predefined multi-agent compositions for complex workflows
-- **34 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 369 R-generated skill icons and 9 color themes
+- **35 guides** — human-readable documentation across workflow, infrastructure, reference, design, and investigation
+- **Interactive visualization** — force-graph explorer with 373 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -81,10 +82,14 @@ claude plugin install agent-almanac@local
 ```
 
 <!-- AUTO:START:plugin-discovery -->
-Auto-discovers all 369 skills and 75 agents. To use a team, read its definition in `teams/<name>.md` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (`subagent_type`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 373 skills and 76 agents. To use a team, read its definition in `teams/<name>.md` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (`subagent_type`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 <!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
+
+**Requires Node.js 22.12.0 or newer.** The floor was raised when the CLI moved to commander 15.
+`npm install` only *warns* on an engine mismatch rather than failing, so on Node 18 or 20 the
+install appears to succeed and the CLI then cannot start — check with `node --version` first.
 
 ```bash
 npm install -g agent-almanac
@@ -119,10 +124,10 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          369 executable procedures across 66 domains
-  agents/          75 specialist personas
+  skills/          373 executable procedures across 67 domains
+  agents/          76 specialist personas
   teams/           22 multi-agent compositions with 8 coordination patterns
-  guides/          34 human-readable reference docs
+  guides/          35 human-readable reference docs
   viz/             Interactive force-graph explorer with R-generated icons
   tests/           30 test scenarios for validation
   i18n/            Translations (10 locales: de, zh-CN, ja, es, caveman-lite, caveman, caveman-ultra, wenyan-lite, wenyan, wenyan-ultra)
@@ -143,6 +148,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Creating Skills](guides/creating-skills.md) — Authoring, evolving, and reviewing skills following the agentskills.io standard
 - [Creating Agents and Teams](guides/creating-agents-and-teams.md) — Designing agent personas, composing teams, and choosing coordination patterns
 - [Creating Workflows](guides/creating-workflows.md) — Authoring code-driven orchestration workflows — the meta contract, the agent/parallel/pipeline/phase primitives, and the capability rule
+- [Coordinating Peer Sessions](guides/coordinate-peer-sessions.md) — Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, and what the guard cannot see
 - [Running a Code Review](guides/running-a-code-review.md) — Multi-agent code review using review teams for R packages and web projects
 - [Managing a Scrum Sprint](guides/managing-a-scrum-sprint.md) — Running Scrum sprints with the scrum-team: planning, dailies, review, and retro
 - [Visualizing Workflows with putior](guides/visualizing-workflows-with-putior.md) — End-to-end putior workflow visualization from annotation to themed Mermaid diagrams
@@ -181,23 +187,27 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Epigenetics-Inspired Activation Control](guides/epigenetics-activation-control.md) — Runtime activation profiles controlling which agents, skills, and teams are expressed, grounded in molecular epigenetics
 - [Understanding the Synoptic Mind](guides/understanding-the-synoptic-mind.md) — The adaptic concept — panoramic synthesis through simultaneous multi-domain awareness, theoretical foundations, and practical use
 - [Agent Memory Hygiene](guides/agent-memory-hygiene.md) — Three-layer model — weights, retrieval, behavior — for diagnosing what kind of forgetting a memory problem actually needs and applying the right tool
+
+**Investigation**
+
+- [Reverse-Engineering a CLI Harness](guides/reverse-engineering-a-cli-harness.md) — Five-phase methodology for legitimate integration research against a closed-source CLI harness — baseline, flag discovery, dark-launch detection, wire capture, redaction discipline
 <!-- AUTO:END:guides -->
 
 ## Translations
 
 <!-- AUTO:START:translations -->
-| Locale | Language | Skills | Agents | Teams | Guides | Total |
-|---|---|---|---|---|---|---|
-| de | Deutsch | 366/369 | 6/75 | 6/22 | 5/34 | 383/500 (76.6%) |
-| zh-CN | 简体中文 | 366/369 | 6/75 | 6/22 | 5/34 | 383/500 (76.6%) |
-| ja | 日本語 | 366/369 | 6/75 | 6/22 | 5/34 | 383/500 (76.6%) |
-| es | Español | 366/369 | 6/75 | 6/22 | 5/34 | 383/500 (76.6%) |
-| caveman-lite | Caveman Lite | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
-| caveman | Caveman | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
-| caveman-ultra | Caveman Ultra | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
-| wenyan-lite | 文言文輕 | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
-| wenyan | 文言文 | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
-| wenyan-ultra | 文言文極 | 352/369 | 0/75 | 0/22 | 0/34 | 352/500 (70.4%) |
+| Locale | Language | Skills | Agents | Teams | Guides | Total | Stubs | Unjudged |
+|---|---|---|---|---|---|---|---|---|
+| de | Deutsch | 340/373 | 3/76 | 1/22 | 2/35 | 346/506 (68.4%) | 41 | 1 |
+| zh-CN | 简体中文 | 343/373 | 3/76 | 1/22 | 2/35 | 349/506 (69%) | 32 | 7 |
+| ja | 日本語 | 347/373 | 3/76 | 1/22 | 2/35 | 353/506 (69.8%) | 32 | 3 |
+| es | Español | 334/373 | 3/76 | 1/22 | 2/35 | 340/506 (67.2%) | 46 | 2 |
+| caveman-lite | Caveman Lite | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 5 | 1 |
+| caveman | Caveman | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 5 | 1 |
+| caveman-ultra | Caveman Ultra | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 5 | 1 |
+| wenyan-lite | 文言文輕 | 343/373 | 0/76 | 0/22 | 0/35 | 343/506 (67.8%) | 5 | 4 |
+| wenyan | 文言文 | 343/373 | 0/76 | 0/22 | 0/35 | 343/506 (67.8%) | 5 | 4 |
+| wenyan-ultra | 文言文極 | 345/373 | 0/76 | 0/22 | 0/35 | 345/506 (68.2%) | 5 | 2 |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
@@ -209,8 +219,8 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 <!-- AUTO:START:plugin-table -->
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 369 |
-| Agents | `agents/*.md` | 75 |
+| Skills | `skills/*/SKILL.md` | 373 |
+| Agents | `agents/*.md` | 76 |
 | Teams | Bundled but not auto-discovered | 22 |
 <!-- AUTO:END:plugin-table -->
 
@@ -220,14 +230,17 @@ For step-by-step plugin install (POSIX + Windows + macOS variants, prereqs, veri
 
 ## Contributing
 
-Contributions welcome! Each content type has its own guide:
+Contributions welcome! Start with [CONTRIBUTING.md](CONTRIBUTING.md) — what the library accepts,
+the skill checklist, which steps are yours and which are the maintainer's at merge, and what to
+expect once a PR is open. Each content type also has its own guide:
 
 - **Skills** — [skills/README.md](skills/README.md) for format and consumption
 - **Agents** — [agents/README.md](agents/README.md) for template and best practices
 - **Teams** — [teams/README.md](teams/README.md) for coordination patterns
 - **Guides** — [guides/README.md](guides/README.md) for categories and template
 
-Update the relevant `_registry.yml` when adding content, then run `npm run update-readmes`.
+Update the relevant `_registry.yml` when adding content; the generated README sections are rebuilt
+by CI on `main` (`npm run update-readmes` locally, if you want to see them first).
 
 ## Support
 

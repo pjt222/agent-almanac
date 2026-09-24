@@ -196,15 +196,20 @@ def route_issue(severity, issue_type):
 生適標眾之格式報（agent 或人）。
 
 **予專 agent**（MCP 工具之結構）：
+Emit one document: the routing header delimited by `---` fences, then the report
+body beneath it. The receiving tool parses the header keys, so those and the
+agent ids stay in English.
+
 ```yaml
----
 type: escalation
 severity: high
 from_agent: janitor
 to_agent: security-analyst
 blocking: false
----
+```
 
+
+```text
 # Security Concern: Hardcoded API Key in Config
 
 **File**: config/production.yml:45

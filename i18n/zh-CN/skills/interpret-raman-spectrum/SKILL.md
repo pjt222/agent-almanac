@@ -17,7 +17,7 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, raman, selection-rules, polarizability, mutual-exclusion
+  tags: spectroscopy, raman, polarizability, vibrational, complementary-ir
 ---
 
 # 解读拉曼光谱

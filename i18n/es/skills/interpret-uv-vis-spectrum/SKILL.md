@@ -3,6 +3,7 @@ name: interpret-uv-vis-spectrum
 locale: es
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-sonnet-4-6
 translation_date: 2026-03-16
 description: >
@@ -21,7 +22,7 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, uv-vis, chromophore, beer-lambert, woodward-fieser
+  tags: spectroscopy, uv-vis, chromophore, beer-lambert, electronic-transitions
 ---
 
 # Interpretar Espectro UV-Vis

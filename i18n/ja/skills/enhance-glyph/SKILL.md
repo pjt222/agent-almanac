@@ -12,6 +12,7 @@ allowed-tools: Read Write Edit Bash Grep Glob
 locale: ja
 source_locale: en
 source_commit: 33b561c9
+fence_basis_commit: 33b561c9
 translator: claude
 translation_date: "2026-03-18"
 metadata:
@@ -146,22 +147,11 @@ Glyph Quality Dimensions:
 
 1. エンティティタイプに基づいて再レンダリングする:
 
-   **スキルの場合:**
    ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-icons.R --only <domain> --no-cache
-   ```
-
-   **エージェントの場合:**
-   ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-agent-icons.R --only <agent-id> --no-cache
-   ```
-
-   **チームの場合:**
-   ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-team-icons.R --only <team-id> --no-cache
+   # From project root — use --no-cache to force re-render of modified glyph
+   bash viz/build.sh --only <domain> --no-cache          # skills
+   bash viz/build.sh --type agent --only <id> --no-cache # agents
+   bash viz/build.sh --type team --only <id> --no-cache  # teams
    ```
 
 2. 各パレットの想定パスに出力ファイルが存在することを確認する

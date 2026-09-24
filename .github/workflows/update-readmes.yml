@@ -25,11 +25,118 @@ on:
       - '!teams/README.md'
       - '!guides/README.md'
       - '!guides/quick-reference.md'
+      # i18n/README.md became a generated output in #569, and it matches the `i18n/**/*.md`
+      # trigger above — so without this negation the auto-commit re-triggers this workflow.
+      - '!i18n/README.md'
       # Generator changes must regenerate committed output at the causing
       # commit, not fail check-readmes at the next release (#362).
       - 'scripts/generate-readmes.js'
+      # The tools catalogue feeds CLAUDE.md § Tools and tools/README.md's table (its reader is a
+      # generator import, which check-workflow-generator-inputs.js requires here too). No
+      # `!tools/README.md` negation: no positive pattern above reaches tools/, so the healer's
+      # auto-commit of that output cannot re-trigger this workflow, and a negation that excludes
+      # nothing is the dead kind A8 cannot see (#807 round-1 N8).
+      - 'tools/_registry.yml'
+      - 'scripts/lib/tools-registry.js'
       - 'scripts/generate-translation-status.js'
       - 'scripts/lib/git-freshness.js'
+      # The stub verdict itself. Extracted to a lib in #553, but never added
+      # here -- so a change to what counts as an untranslated scaffold did not
+      # regenerate the counts it decides. Load-bearing since #560, because the
+      # README table now derives from those counts too.
+      - 'scripts/lib/translation-status.js'
+      # Same reason, and the same mistake waiting to be repeated (#566): the pure half of
+      # generate-readmes.js now lives here, so a change to how a section RENDERS must
+      # regenerate the sections it decides. Nothing would catch the omission — A8 validates
+      # file_pattern and the negations, never generator-input triggers.
+      - 'scripts/lib/readme-sections.js'
+      - 'scripts/lib/content-types.js'
+      # `scripts/*` above is a SINGLE star matching the generator's non-recursive readdirSync
+      # scope, so it does not reach `scripts/lib/`. Every module under it is therefore listed
+      # by hand — which is why `check:generator-inputs` exists, and why it caught this one on
+      # the PR that added it (#691).
+      - 'scripts/lib/skills-inventory.js'
+      # The enumerator all three walkers now ask instead of the filesystem (#872/#868/#830). It
+      # decides which files exist as far as every generated count is concerned, so a change to
+      # its accept rule moves SECURITY.md's figures and both translation tables at once. Listed
+      # because `check:generator-inputs` refused the commit that added it without this line —
+      # the guard working as #691 intended, rather than a list maintained by memory.
+      - 'scripts/lib/git-files.js'
+      # The three directory counts SECURITY.md and the translation tables publish. Extracted
+      # from the generator in #874 so a fixture can assert the NUMBERS: a source scan standing
+      # in for that test was measured green with the #872 defect restored.
+      - 'scripts/lib/tree-counts.js'
+      # The middle of the chain, and it was skipped while BOTH endpoints were listed:
+      #   generate-translation-status.js -> lib/translation-status.js -> lib/fences.js
+      # fences.js is not a passive re-exporter — extractFences, isGated, contentKey,
+      # fenceShape and hasSwallowedOpener decide stub classification, which sets the
+      # translated/stubs figures the README renders verbatim. A push touching only this file
+      # changed generated output while matching no trigger path.
+      - 'scripts/lib/fences.js'
+      # Fourth time this list has been extended for the same reason, so state the rule rather
+      # than the instance: EVERY module generate-translation-status.js imports is an input,
+      # because the counts it writes are what the README table renders. provenance.js owns the
+      # frontmatter reader that resolves `source_commit`, and staleness is computed from that
+      # value -- a change to how it is parsed moves the stale counts with no content file
+      # touched. Added at the commit that introduced the import (#552), which is the whole
+      # lesson of the three comments above.
+      - 'scripts/lib/provenance.js'
+      # Fifth, sixth and seventh entries of the same class, and the last three added by hand:
+      # `npm run check:generator-inputs` now derives this list from the job's own `run:` steps
+      # and refuses when a reachable module is unlisted, so the next omission is a red check
+      # rather than a note in a comment. It found all three below, two of which #618 named and
+      # one of which nobody had:
+      #
+      #   english-history.js   the shared English-history walk whose collectors set the
+      #                        stub/translated/unjudged verdicts the README table renders
+      #   content-paths.js     resolves the paths that walk and the status generator enumerate
+      #   guide-categories.js  decides which guide categories are rendered at all -- extracted
+      #                        three days earlier in #646, unlisted from the moment it existed
+      - 'scripts/lib/english-history.js'
+      - 'scripts/lib/content-paths.js'
+      - 'scripts/lib/guide-categories.js'
+      # Not a generator: this job also RUNS the parity validator, and a change to it changes
+      # whether the job succeeds. Listed because the derived check's rule is "everything this
+      # job runs", which a reader can apply without a second list of which steps write files.
+      - 'scripts/check-readme-translation-parity.js'
+      # Added because `npm run check:generator-inputs` refused the commit that introduced the
+      # import (#619) -- which is the gate from #618 doing exactly its job, one PR later, on a
+      # module its author had not thought about. The list is no longer maintained by memory.
+      - 'scripts/lib/parse-args.js'
+      # Second time the derived check has refused a commit that added an import (#587, after
+      # #619). Both were modules their author had not considered; neither would have been
+      # noticed by the four hand-maintained rounds that preceded #618.
+      - 'scripts/lib/git-batch.js'
+      # THIRD refusal by the derived check, and the first that reaches outside `scripts/` (#600).
+      # SECURITY.md's CLI bullet is generated from `listAdapters()` rather than hand-listed —
+      # the hand-written version named 5 of the 13 adapters and described all of them as
+      # symlinking into home directories, when four install strategies exist and several install
+      # at project scope. Deriving it puts the whole adapter tree on this job's import graph, so
+      # a new adapter, a renamed one, or a changed `strategy` now moves generated output.
+      #
+      # Which is the argument for deriving it, arriving as a red check: the reviewer who proposed
+      # `listAdapters()` predicted this gate would start guarding the adapters "without anyone
+      # remembering to", and it refused the commit that made it true.
+      - 'cli/adapters/*'
+      - 'cli/lib/*'
+      # NOT import-graph inputs, and that is exactly why they need listing by hand (#691).
+      # `generateSecuritySurface` COUNTS these two directories with `readdirSync`, so adding a
+      # script or a workflow moves generated output — and `check:generator-inputs` cannot see it,
+      # because it derives the input set from imports and a directory listing is not an import.
+      #
+      # Single star, matching the non-recursive `readdirSync` scope, and it fires on deletions
+      # too. Without these, the drift lands at some later unrelated commit and surfaces as the
+      # daily schedule going red with nothing to auto-repair it — the failure this workflow's own
+      # header says it exists to prevent.
+      - 'scripts/*'
+      - 'workflows/*'
+      # The toolchain is an input too. generate-readmes.js parses YAML with js-yaml, so a
+      # Dependabot bump that changes `yaml.load` behaviour changes generated output while
+      # touching no content file and no generator -- nothing here matched, so the healer never
+      # ran, and the drift sat until an unrelated push healed it or a release went red. Same
+      # rationale as #362 listing the generators: heal at the causing commit.
+      - 'package.json'
+      - 'package-lock.json'
   workflow_dispatch:
 
 jobs:
@@ -56,10 +163,19 @@ jobs:
           node-version: '24'
           cache: 'npm'
       - run: npm ci
-      - run: node scripts/generate-readmes.js
+      # Order is load-bearing (#560): the README translations table now reads
+      # i18n/*/translation_status.yml, so the status files must be regenerated
+      # FIRST. Run the other way round and the table renders last cycle's
+      # numbers while the same commit overwrites the file it read -- the two
+      # surfaces disagree again, one cycle behind, and both land in one commit.
       - run: npm run translation:status
+      - run: node scripts/generate-readmes.js
+      # Fails the job if the two committed surfaces disagree, rather than
+      # auto-committing a contradiction. Parses both artifacts independently;
+      # it never calls the generator.
+      - run: npm run validate:readme-parity
       # SHA-pinned: https://github.com/stefanzweifel/git-auto-commit-action/releases/tag/v7
       - uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d
         with:
           commit_message: "docs: auto-update README statistics and translation status"
-          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md guides/quick-reference.md viz/README.md tests/README.md i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml i18n/caveman-lite/translation_status.yml i18n/caveman/translation_status.yml i18n/caveman-ultra/translation_status.yml i18n/wenyan-lite/translation_status.yml i18n/wenyan/translation_status.yml i18n/wenyan-ultra/translation_status.yml"
+          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md guides/quick-reference.md viz/README.md tests/README.md i18n/README.md SECURITY.md tools/README.md i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml i18n/caveman-lite/translation_status.yml i18n/caveman/translation_status.yml i18n/caveman-ultra/translation_status.yml i18n/wenyan-lite/translation_status.yml i18n/wenyan/translation_status.yml i18n/wenyan-ultra/translation_status.yml"

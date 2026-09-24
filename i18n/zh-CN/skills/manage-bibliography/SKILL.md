@@ -1,146 +1,239 @@
 ---
 name: manage-bibliography
 description: >
-  使用 BibTeX 和 R 的 RefManageR 包管理学术参考文献库：创建、验证和去重
-  文献条目，按自定义规则排序，并以多种引用格式导出。
+  Create, merge, and deduplicate BibTeX bibliography files using R packages
+  (RefManageR, bibtex). Parse .bib files into structured R objects, merge
+  multiple bibliographies with deduplication by DOI or title similarity,
+  generate entries from DOI/ISBN/arXiv ID, and export clean sorted .bib files.
+  Use when creating a new .bib file for an R Markdown or Quarto project,
+  merging bibliographies from multiple collaborators, deduplicating a .bib
+  that has grown through copy-paste accumulation, or generating BibTeX entries
+  programmatically from DOIs or other identifiers.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: citations
-  complexity: basic
-  language: natural
-  tags: citations, bibliography, bibtex, refmanager, reference-management
+  complexity: intermediate
+  language: R
+  tags: citations, bibliography, bibtex, R, RefManageR
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
-  translator: claude-sonnet-4-6
-  translation_date: 2026-03-16
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# 管理参考文献库
+# Manage Bibliography
 
-使用 BibTeX 格式和 R 的 RefManageR 包创建、验证、去重和导出学术参考文献条目。
+Create, merge, and deduplicate BibTeX bibliography files using R. This skill
+covers the full lifecycle of bibliography management: parsing existing .bib
+files into structured R objects, generating new entries from identifiers (DOI,
+ISBN, arXiv ID), merging multiple bibliographies with intelligent deduplication,
+and exporting clean, consistently formatted .bib output.
 
-## 适用场景
+## When to Use
 
-- 为研究论文或书籍建立新的参考文献库
-- 将多个 `.bib` 文件合并为单一规范化数据库
-- 验证现有条目中缺失或格式不正确的字段
-- 对参考文献按作者、年份或自定义方案排序后导出
-- 从 DOI 或标题搜索中检索文献元数据
+- Creating a new .bib file for an R Markdown or Quarto project
+- Merging bibliographies from multiple collaborators or sources
+- Deduplicating a .bib file that has grown through copy-paste accumulation
+- Generating BibTeX entries programmatically from DOIs or other identifiers
+- Cleaning and standardizing an existing .bib file (consistent keys, sorted fields)
 
-## 输入
+## Inputs
 
-- **必需**：`.bib` 文件路径或要添加的参考文献列表（DOI、标题或手动条目）
-- **可选**：输出格式（BibTeX、BibLaTeX、YAML、data.frame）
-- **可选**：排序方案（按年份、作者、引用键）
-- **可选**：去重规则（精确匹配与模糊匹配阈值）
-- **可选**：必填字段的验证规则
+- **Required**: Path to one or more .bib files, or a list of DOIs/ISBNs/arXiv IDs
+- **Optional**: Output .bib file path (default: `references.bib`)
+- **Optional**: Deduplication strategy (`doi`, `title`, `both`; default: `both`)
+- **Optional**: Sort order (`author`, `year`, `key`; default: `key`)
+- **Optional**: Key generation pattern (default: `AuthorYear`)
 
-## 步骤
+## Procedure
 
-### 第 1 步：加载或创建参考文献库
-
-建立工作中的参考文献集合：
-
-1. **从文件加载**：使用 `RefManageR::ReadBib("references.bib")` 读取现有 `.bib` 文件。
-2. **从 DOI 创建**：使用 `RefManageR::GetBibEntryWithDOI("10.xxxx/yyyy")` 从 DOI 获取元数据。
-3. **从标题搜索**：使用 `RefManageR::ReadCrossRef(query = "论文标题")` 查询 CrossRef。
-4. **手动条目**：使用 `RefManageR::BibEntry()` 以正确的条目类型（article、book、inproceedings 等）构造条目。
-5. **合并多个来源**：使用 `c(bib1, bib2)` 将来自不同来源的 BibEntry 对象合并。
+### Step 1: Install and Load Required Packages
 
 ```r
+required_packages <- c("RefManageR", "bibtex", "stringdist")
+missing <- required_packages[!vapply(required_packages, requireNamespace,
+                                     logical(1), quietly = TRUE)]
+if (length(missing) > 0) install.packages(missing)
+
 library(RefManageR)
-bib <- ReadBib("references.bib")
-new_entry <- GetBibEntryWithDOI("10.1234/example.2024")
-bib <- c(bib, new_entry)
 ```
 
-**预期结果：** 一个包含所有目标参考文献的 BibEntry 对象，可供验证和操作。
+**Expected:** All packages load without errors.
 
-**失败处理：** 如果 DOI 查找失败，请验证 DOI 格式并检查网络连接。如果 `.bib` 文件有解析错误，使用 `ReadBib(file, check = FALSE)` 识别有问题的条目。
+**On failure:** If RefManageR fails to install, check that `curl` and `xml2` system
+libraries are available. On Ubuntu: `sudo apt install libcurl4-openssl-dev libxml2-dev`.
 
-### 第 2 步：验证和清理条目
-
-确保每个条目包含其类型所需的所有字段：
-
-1. **必填字段检查**：每种条目类型都有 BibTeX 规定的必填字段（例如 article 需要 author、title、journal、year、volume）。
-2. **字段标准化**：确保一致的格式——作者姓名使用 `姓, 名` 格式，月份使用三字母缩写，页码使用 `--` 表示范围。
-3. **引用键生成**：如果缺少引用键，按 `AuthorYear` 模式生成（例如 `Smith2024`），并用字母后缀处理重复。
-4. **编码修正**：将 LaTeX 特殊字符（`{\"u}` 等）转换为 UTF-8 或保持一致性。
+### Step 2: Parse Existing .bib Files
 
 ```r
-# 检查缺失字段
-for (i in seq_along(bib)) {
-  entry <- bib[[i]]
-  if (is.na(entry$author)) warning(paste("缺少 author:", entry$key))
-  if (is.na(entry$year)) warning(paste("缺少 year:", entry$key))
+bib <- RefManageR::ReadBib("references.bib", check = FALSE)
+message(sprintf("Parsed %d entries from references.bib", length(bib)))
+
+# Inspect structure
+print(bib[1:3])
+
+# Access fields programmatically
+keys <- names(bib)
+years <- vapply(bib, function(x) x$year %||% NA_character_, character(1))
+```
+
+**Expected:** A `BibEntry` object containing all entries from the file. Entry count
+matches the number of `@article{`, `@book{`, etc. blocks in the file.
+
+**On failure:** If parsing fails, check for unmatched braces or invalid UTF-8 in the
+.bib file. Run `bibtex::read.bib()` as a fallback with stricter parsing.
+
+### Step 3: Generate Entries from Identifiers
+
+```r
+# From DOI
+entry_doi <- RefManageR::GetBibEntryWithDOI("10.1093/bioinformatics/btz848")
+
+# From a vector of DOIs
+dois <- c("10.1093/bioinformatics/btz848", "10.1038/s41586-020-2649-2")
+entries <- do.call(c, lapply(dois, function(d) {
+  tryCatch(
+    RefManageR::GetBibEntryWithDOI(d),
+    error = function(e) {
+      warning(sprintf("Failed to fetch DOI %s: %s", d, e$message))
+      NULL
+    }
+  )
+}))
+entries <- Filter(Negate(is.null), entries)
+```
+
+**Expected:** BibEntry objects with complete metadata (title, author, journal, year,
+DOI) for each successfully resolved identifier.
+
+**On failure:** DOI resolution depends on the CrossRef API. If requests fail, check
+network connectivity and whether the DOI is valid. Rate limiting may apply for
+large batches; add `Sys.sleep(1)` between requests.
+
+### Step 4: Merge Multiple Bibliographies
+
+```r
+bib1 <- RefManageR::ReadBib("project_a.bib", check = FALSE)
+bib2 <- RefManageR::ReadBib("project_b.bib", check = FALSE)
+
+# Simple merge
+merged <- c(bib1, bib2)
+message(sprintf("Merged: %d + %d = %d entries (before dedup)",
+                length(bib1), length(bib2), length(merged)))
+```
+
+**Expected:** A combined BibEntry object containing entries from both files.
+
+Regenerating keys after a merge is a separate job, and RefManageR gives you both
+halves: `names(bib)` returns the citation keys and `names(bib) <- new_keys` writes
+them back, so `names(bib)[1] <- "newkey"` renames a single entry. Do not assume the
+keys you assign survive verbatim — both `names<-` and `c()` push their result
+through `make.unique(keys, sep = ":")`, so a second `Smith2020` becomes
+`Smith2020:1`; `c()` therefore never drops an entry, but a collision you did not
+disambiguate yourself reaches the output .bib as a colon-suffixed key.
+Disambiguate first (`Smith2020a`/`Smith2020b`, a coauthor name, or a title word),
+then re-read `names(bib)` and keep the old-to-new pairing — every `@key` in an
+.Rmd or .qmd body still names the old key.
+
+### Step 5: Deduplicate Entries
+
+```r
+deduplicate_bib <- function(bib, method = "both") {
+  n_before <- length(bib)
+  keys_to_remove <- c()
+
+  for (i in seq_along(bib)) {
+    if (names(bib)[i] %in% keys_to_remove) next
+    for (j in seq(i + 1, length(bib))) {
+      if (j > length(bib)) break
+      if (names(bib)[j] %in% keys_to_remove) next
+
+      is_dup <- FALSE
+      if (method %in% c("doi", "both")) {
+        doi_i <- bib[[i]]$doi %||% ""
+        doi_j <- bib[[j]]$doi %||% ""
+        if (nzchar(doi_i) && nzchar(doi_j) && tolower(doi_i) == tolower(doi_j)) {
+          is_dup <- TRUE
+        }
+      }
+      if (!is_dup && method %in% c("title", "both")) {
+        title_i <- tolower(gsub("[^a-z0-9 ]", "", tolower(bib[[i]]$title %||% "")))
+        title_j <- tolower(gsub("[^a-z0-9 ]", "", tolower(bib[[j]]$title %||% "")))
+        if (nzchar(title_i) && nzchar(title_j)) {
+          sim <- 1 - stringdist::stringdist(title_i, title_j, method = "jw")
+          if (sim > 0.95) is_dup <- TRUE
+        }
+      }
+      if (is_dup) keys_to_remove <- c(keys_to_remove, names(bib)[j])
+    }
+  }
+
+  if (length(keys_to_remove) > 0) {
+    bib <- bib[!names(bib) %in% keys_to_remove]
+  }
+  message(sprintf("Deduplication: %d -> %d entries (%d duplicates removed)",
+                  n_before, length(bib), n_before - length(bib)))
+  bib
 }
+
+merged <- deduplicate_bib(merged, method = "both")
 ```
 
-**预期结果：** 所有条目通过其类型必填字段的验证，格式统一。
+**Expected:** Duplicate entries removed. Count of removed duplicates printed.
 
-**失败处理：** 对于有无法自动解决的缺失字段的条目，生成需要手动补充的条目报告。
+**On failure:** If title comparison is too aggressive (removing non-duplicates), raise
+the similarity threshold above 0.95 or switch to `method = "doi"` only.
 
-### 第 3 步：去重
-
-移除重复条目，保留信息最完整的版本：
-
-1. **精确匹配**：比较 DOI（如有）——共享 DOI 的条目是确定的重复项。
-2. **模糊匹配**：比较标题（不区分大小写，去除标点）和作者/年份组合。
-3. **合并策略**：保留字段更完整的条目。如果两个重复项有互补字段，合并它们。
-4. **记录移除**：报告哪些条目被识别为重复项以及保留了哪个。
+### Step 6: Sort and Export
 
 ```r
-# 基于标题的简单去重
-titles <- tolower(gsub("[[:punct:]]", "", sapply(bib, `[[`, "title")))
-dups <- duplicated(titles)
-if (any(dups)) {
-  message(paste("找到", sum(dups), "个重复项"))
-  bib <- bib[!dups]
-}
+# Sort by citation key
+sorted_bib <- sort(merged, sorting = "nyt")  # name-year-title
+
+# Export to .bib file
+RefManageR::WriteBib(sorted_bib, file = "references.bib", biblatex = FALSE)
+message(sprintf("Wrote %d entries to references.bib", length(sorted_bib)))
 ```
 
-**预期结果：** 参考文献库不含重复条目，所有合并和移除操作都有记录。
+**Expected:** A clean .bib file written to disk with consistent formatting, one entry
+per block, sorted alphabetically by citation key.
 
-**失败处理：** 如果模糊匹配产生误报（不同论文标题相似），提高相似度阈值或切换为仅精确 DOI 匹配。
+**On failure:** If WriteBib produces encoding issues, ensure the R session locale
+supports UTF-8: `Sys.setlocale("LC_ALL", "en_US.UTF-8")`.
 
-### 第 4 步：排序和导出
+## Validation
 
-按所需方案排列条目并写入输出文件：
+- [ ] Output .bib file parses without errors: `RefManageR::ReadBib("references.bib")`
+- [ ] Entry count matches expectations (input count minus duplicates)
+- [ ] No duplicate DOIs remain: all DOIs in output are unique
+- [ ] All entries have a citation key
+- [ ] Required fields present per entry type (author, title, year at minimum)
+- [ ] File is valid BibTeX (test with `bibtex::read.bib()`)
 
-1. **排序**：使用 `sort(bib, sorting = "nyt")` 按姓名-年份-标题排序，或使用 `"ynt"` 按年份优先排序。
-2. **导出为 BibTeX**：使用 `WriteBib(bib, file = "output.bib")` 写入标准 `.bib` 文件。
-3. **导出为数据框**：使用 `as.data.frame(bib)` 在 R 中进行表格操作。
-4. **导出为格式化文本**：使用 `print(bib, .opts = list(style = "text"))` 输出可读的参考文献列表。
+## Common Pitfalls
 
-```r
-bib_sorted <- sort(bib, sorting = "nyt")
-WriteBib(bib_sorted, file = "references_clean.bib")
-```
+- **Encoding issues**: .bib files with Latin-1 accents break UTF-8 parsers. Convert
+  encoding first: `iconv -f ISO-8859-1 -t UTF-8 old.bib > new.bib`
+- **Unmatched braces**: A single missing `}` silently drops entries. Validate brace
+  balance before parsing large files
+- **DOI rate limiting**: CrossRef throttles unauthenticated requests. Set a polite
+  email with `RefManageR::BibOptions(check.entries = FALSE)` and batch requests
+- **Key collisions**: Merging files where both have `Smith2020` does not overwrite
+  either entry — `c.BibEntry` routes the combined keys through
+  `make.unique(keys, sep = ":")`, so the second becomes `Smith2020:1`. Nothing is
+  lost, but a colon-suffixed key you did not choose reaches the output `.bib` and
+  no longer matches the `@Smith2020` in your document. Disambiguate before merging
+- **LaTeX in titles**: Titles with `{DNA}` or `$\alpha$` need careful handling;
+  RefManageR preserves these but downstream tools may strip them
 
-**预期结果：** 一个排序后、经过验证和去重的参考文献文件，可直接用于 LaTeX 或 R Markdown。
+## Related Skills
 
-**失败处理：** 如果导出文件中出现编码问题，在写入前使用 `Encoding()` 和 `iconv()` 强制统一 UTF-8 编码。
-
-## 验证清单
-
-- [ ] 所有条目包含其 BibTeX 类型所需的必填字段
-- [ ] 引用键在整个库中唯一
-- [ ] 不存在重复条目（通过 DOI 或模糊标题匹配验证）
-- [ ] 条目按请求的方案排序
-- [ ] 输出文件可在 LaTeX 或 R Markdown 中无错误解析
-
-## 常见问题
-
-- **忽略条目类型差异**：`article` 和 `inproceedings` 的必填字段不同。验证前务必根据正确的类型检查字段。
-- **过度激进的模糊去重**：标题相似但不同的论文可能被误标为重复项。始终在移除前人工审查模糊匹配结果。
-- **混合编码**：`.bib` 文件可能混合使用 LaTeX 编码和 UTF-8，导致作者姓名中出现乱码。在合并之前先统一编码。
-- **忽视 CrossRef 速率限制**：大量使用 `ReadCrossRef()` 进行批量查询可能触发速率限制。使用 `Sys.sleep()` 在请求之间添加延迟。
-
-## 相关技能
-
-- `format-citations` -- 使用 CSL 样式将参考文献格式化为引用
-- `validate-references` -- 深入验证参考文献的准确性和可访问性
+- `format-citations` - format the bibliography entries into styled citations
+- `validate-references` - verify completeness and DOI resolution of .bib entries
+- `../reporting/format-apa-report` - generate APA-formatted reports using bibliographies
+- `../r-packages/write-vignette` - create package vignettes that cite references

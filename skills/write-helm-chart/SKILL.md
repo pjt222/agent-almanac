@@ -183,7 +183,9 @@ metadata:
   labels:
     {{- include "my-app.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   template:
     spec:
       containers:
@@ -331,12 +333,24 @@ replicaCount: 1
 resources:
   limits: {cpu: 500m, memory: 256Mi}
 ingress:
-  hosts: [my-app-dev.example.com]
+  enabled: true
+  hosts:
+  - host: my-app-dev.example.com
+    paths:
+    - path: /
+      pathType: Prefix
 
+---
 # values-prod.yaml (excerpt)
 replicaCount: 5
 autoscaling: {enabled: true, minReplicas: 3, maxReplicas: 10}
-# ... (see EXAMPLES.md for complete env-specific values)
+ingress:
+  enabled: true
+  hosts:
+  - host: my-app.example.com
+    paths:
+    - path: /
+      pathType: Prefix
   tls:
   - secretName: my-app-tls
     hosts:
@@ -354,6 +368,12 @@ postgresql:
         cpu: 4000m
         memory: 8Gi
 ```
+
+Two shapes in that block are easy to get backwards. `ingress.hosts` is a list of **mappings** — the template renders `.host` and iterates `.paths` — while `tls[].hosts` is a list of **strings**, ranged as scalars. And `enabled: true` is required in each environment file because the base `values.yaml` ships `ingress.enabled: false` and the whole template is wrapped in that guard; omit it and the ingress renders nothing at all, silently.
+
+`replicaCount: 5` in the production file is not the production replica count. The Deployment renders `replicas:` only under `{{- if not .Values.autoscaling.enabled }}`, so with the autoscaler enabled the field is never emitted, the Deployment is created at the API server's default of **one** replica, and the HPA raises it to `minReplicas: 3` on its first reconcile — a brief window of under-provisioning worth knowing about on a cold install. The value is kept deliberately: it is what applies the moment autoscaling is switched off. Reading it as a live production setting is the mistake, and it is why the guard belongs in the deployment excerpt above rather than only in the complete template.
+
+See [EXAMPLES.md](references/EXAMPLES.md#step-5-environment-specific-values) for the complete values-dev.yaml and values-prod.yaml
 
 **Test with different environments:**
 ```bash

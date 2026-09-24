@@ -3,6 +3,7 @@ name: heal
 locale: caveman
 source_locale: en
 source_commit: 2eb09392
+fence_basis_commit: 2eb09392
 translator: Julius Brussee homage — caveman
 translation_date: "2026-04-17"
 description: >

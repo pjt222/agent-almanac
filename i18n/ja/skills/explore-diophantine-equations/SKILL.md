@@ -11,8 +11,8 @@ metadata:
   version: "1.0"
   domain: number-theory
   complexity: advanced
-  language: natural
-  tags: number-theory, diophantine-equations, pell-equation, pythagorean-triples, descent
+  language: multi
+  tags: number-theory, diophantine, integer-solutions, pell-equation, euclidean
   locale: ja
   source_locale: en
   source_commit: 6f65f316

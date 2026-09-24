@@ -53,7 +53,7 @@ Produce publication-ready graphics that meet technical requirements for academic
 
 ID technical specs for target publication:
 
-```yaml
+```text
 # Common publication requirements
 
 academic_journal:

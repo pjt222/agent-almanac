@@ -48,7 +48,7 @@ Produce publication-ready graphics that meet technical requirements for academic
 
 Identify technical specifications for target publication:
 
-```yaml
+```text
 # Common publication requirements
 
 academic_journal:

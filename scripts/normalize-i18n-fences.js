@@ -96,26 +96,33 @@
  *   node scripts/normalize-i18n-fences.js --tag yaml,json  # restrict to tags (#477 batches)
  *   node scripts/normalize-i18n-fences.js --tree guides,agents  # restrict to trees
  *   node scripts/normalize-i18n-fences.js --fork-threshold 0  # disable the #498 check
+ *   node scripts/normalize-i18n-fences.js --root /tmp/fixture   # run against another tree
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
-import { resolve, dirname, join } from 'path';
+import { readFileSync, writeFileSync } from 'fs';
+import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from 'child_process';
 import {
-  extractFences, toLines, isGated, buildEnglishFenceHistory, TREES, contentKey,
+  extractFences, toLines, isGated, buildEnglishFenceHistory,
+  foldedTagSequence, compareTagSequence, mirrorsBasis,
 } from './lib/fences.js';
 import { measure, DEFAULT_FORK_THRESHOLD } from './lib/code-tokens.js';
 import { assertNotShallow } from './lib/git-freshness.js';
+import {
+  SOURCE_COMMIT_FIELD, FENCE_BASIS_FIELD,
+  readFrontmatterField, stampFrontmatterField, clearFrontmatterField,
+} from './lib/provenance.js';
+import { parseArgs, usageExit } from './lib/parse-args.js';
+import { catFileBatch } from './lib/git-batch.js';
+import { collectI18nTargets, presentTrees, scannableLocales, validateScope } from './lib/i18n-targets.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dirname, '..');
-const I18N_DIR = resolve(ROOT, 'i18n');
 
 const argv = process.argv.slice(2);
 
 /**
- * Single-pass argument parser, default-deny: an argument this table does not
+ * Argument table for the shared default-deny parser: an argument it does not
  * name is an error, never a silent no-op.
  *
  * The `indexOf('--locale')` version it replaces failed open in the worst
@@ -134,37 +141,14 @@ const argv = process.argv.slice(2);
  * Also retains the older guard this replaces: `--locale --dry` must not read
  * `"--dry"` as the locale value.
  */
-const BOOL_FLAGS = new Set(['--write', '--dry']);
-const VALUE_FLAGS = new Set(['--basis', '--locale', '--tag', '--tree', '--fork-threshold']);
-
-function usageError(message) {
-  console.error(`ERROR: ${message}`);
-  console.error(`Usage: ${[...BOOL_FLAGS, ...VALUE_FLAGS].join(' ')}`);
-  process.exit(2);
-}
-
-const opts = {
-  write: false, dry: false, basis: 'source-commit', locale: null, tag: null, tree: null,
-  'fork-threshold': String(DEFAULT_FORK_THRESHOLD),
+const ARG_SPEC = {
+  bool: ['--write', '--dry'],
+  value: ['--basis', '--locale', '--tag', '--tree', '--root', '--fork-threshold'],
 };
-for (let i = 0; i < argv.length; i++) {
-  const arg = argv[i];
-  const eq = arg.indexOf('=');
-  const name = eq >= 0 ? arg.slice(0, eq) : arg;
-
-  if (BOOL_FLAGS.has(name)) {
-    if (eq >= 0) usageError(`${name} takes no value (got '${arg}')`);
-    opts[name.slice(2)] = true;
-  } else if (VALUE_FLAGS.has(name)) {
-    const value = eq >= 0 ? arg.slice(eq + 1) : argv[++i];
-    if (value === undefined || value === '' || (eq < 0 && value.startsWith('--'))) {
-      usageError(`${name} requires a value`);
-    }
-    opts[name.slice(2)] = value;
-  } else {
-    usageError(`unknown argument '${arg}'`);
-  }
-}
+// The parser this file grew is now `scripts/lib/parse-args.js` (#619), because
+// `generate-translation-status.js` had a hand-rolled one that disagreed with it — a third copy
+// was the alternative, and a second copy that already disagreed is what made the case.
+const opts = parseArgs(argv, ARG_SPEC, usageExit(ARG_SPEC));
 
 // Writing is opt-in. `--dry` predates the inversion and is kept as an explicit
 // no-op so documented commands and muscle memory keep working; it is the
@@ -177,7 +161,38 @@ if (opts.write && opts.dry) {
 const WRITE = opts.write;
 const PREVIEW = !WRITE;
 
-const BASIS = opts.basis;
+/**
+ * `--root` exists so the splice gate can be driven against a fixture (#674).
+ *
+ * #674 could only be demonstrated at component level for exactly this reason: there was no way
+ * to run the real normalizer over a corpus you constructed. Every other fixture in this tool's
+ * test file COPIES `scripts/` into a temp repo to work around it.
+ *
+ * ## How common the retrofit is, counted rather than asserted
+ *
+ * An earlier draft called this "the FOURTH appearance … `buildEnglishFenceHistory` (#559),
+ * `gate-envelope`, `check-i18n-fence-parity`, and this". The number survives and the membership
+ * does not, which is the failure `english-history.js` warns about in as many words: "an
+ * unqualified 'three' is a count the obvious grep refutes". Measured over the 13 scripts here
+ * that take `--root`, comparing each file's creating commit against the commit that introduced
+ * the flag:
+ *
+ *   RETROFITTED (4)  check-i18n-fence-parity.js, generate-translation-status.js,
+ *                    measure-tag-sequence-parity.js, and this file
+ *   BORN WITH IT (9) including `gate-envelope.js`, which the draft named as a retrofit
+ *
+ * So four is right by coincidence. `gate-envelope` was born with the flag — its own comment
+ * explains why, which is presumably how it got into the list. `buildEnglishFenceHistory` (#559)
+ * belongs to the lineage as the FUNCTION-level precedent, not as one of these four.
+ *
+ * The rule it keeps teaching, in `check-i18n-fence-parity.js`'s words: a module that hardcodes
+ * its own repo root cannot be tested, so it will not be.
+ */
+const ROOT = resolve(opts.root ?? resolve(__dirname, '..'));
+
+// Default applied HERE rather than seeded into the parse, because `parseArgs` initialises every
+// value flag to null and a default living inside the parser would be invisible from the call site.
+const BASIS = opts.basis ?? 'source-commit';
 const ONLY_LOCALE = opts.locale;
 
 if (!['source-commit', 'head'].includes(BASIS)) {
@@ -210,7 +225,7 @@ if (!['source-commit', 'head'].includes(BASIS)) {
  * check and silently turned the guard off — the disabling value arriving
  * through what looks like a typo.
  */
-const FORK_THRESHOLD_RAW = opts['fork-threshold'];
+const FORK_THRESHOLD_RAW = opts['fork-threshold'] ?? String(DEFAULT_FORK_THRESHOLD);
 if (!/^(?:[01](?:\.[0-9]+)?|\.[0-9]+)$/.test(FORK_THRESHOLD_RAW)) {
   console.error(`ERROR: --fork-threshold must be a decimal in [0, 1] (got '${FORK_THRESHOLD_RAW}')`);
   process.exit(2);
@@ -257,10 +272,9 @@ const tagOf = (fence) => (fence.lang === '' ? 'untagged' : fence.lang);
  * Membership in the scan's own list is the only formulation that cannot drift
  * from the scan.
  */
-const hasTree = (locale, tree) => {
-  const p = join(I18N_DIR, locale, tree);
-  return existsSync(p) && statSync(p).isDirectory();
-};
+// `hasTree`, `PRESENT_TREES` and `SCANNABLE_LOCALES` come from `./lib/i18n-targets.js` (#623),
+// so this file performs no `readdirSync` over `i18n/` at all and the pre-scan guards cannot drift
+// from the walk they gate.
 
 /**
  * Scoped to content trees, so the mirrors can be repaired as their own batch —
@@ -273,8 +287,7 @@ const hasTree = (locale, tree) => {
  * translations for would otherwise report the clean-looking zero both guards
  * exist to reject.
  */
-const PRESENT_TREES = TREES.filter((tree) =>
-  readdirSync(I18N_DIR).some((locale) => hasTree(locale, tree)));
+const PRESENT_TREES = presentTrees(ROOT);
 
 const ONLY_TREES = opts.tree === null ? null : new Set(
   opts.tree.split(',').map((t) => t.trim().toLowerCase()).filter((t) => t !== ''),
@@ -292,8 +305,17 @@ if (ONLY_TREES !== null && ONLY_TREES.size === 0) {
 // It is checked after the scan instead, against the trees the SCOPED run
 // actually visited — the same shape as `--tag`, and for the same reason.
 
-const SCANNABLE_LOCALES = readdirSync(I18N_DIR).filter((entry) =>
-  PRESENT_TREES.some((tree) => hasTree(entry, tree)));
+const SCANNABLE_LOCALES = scannableLocales(ROOT);
+
+// A missing `i18n/` used to crash here on `readdirSync`. The lib returns `[]` instead — correct
+// for a library, and a silent `files to change: 0` at exit 0 for a tool that writes. Refused
+// explicitly, because "there is nothing to repair" and "I am not looking at the corpus" must not
+// print the same thing.
+if (SCANNABLE_LOCALES.length === 0) {
+  console.error('ERROR: no translated locales found under i18n/.');
+  console.error('Nothing would be scanned, and the run would report a clean-looking zero.');
+  process.exit(2);
+}
 
 if (ONLY_LOCALE && !SCANNABLE_LOCALES.includes(ONLY_LOCALE)) {
   console.error(`ERROR: --locale '${ONLY_LOCALE}' is not a translated locale under i18n/.`);
@@ -371,115 +393,146 @@ if (WRITE) {
   }
 }
 
-const GIT_BUFFER = 512 * 1024 * 1024;
+// The frontmatter reader that used to live here moved to `scripts/lib/provenance.js` (#552),
+// which owns both provenance fields and the only reader anchored to the frontmatter block.
+// Three hand-rolled readers existed across this repo and they disagreed — the one in
+// `generate-translation-status.js` is unanchored and reads a `source_commit:` written inside a
+// body fence as metadata.
 
-function frontmatterField(text, field) {
-  const fm = text.replace(/\r\n/g, '\n').match(/^---\n([\s\S]*?)\n---(\n|$)/);
-  if (!fm) return null;
-  const m = new RegExp(`^\\s*${field}:\\s*(\\S.*)$`, 'm').exec(fm[1]);
-  if (!m) return null;
-  // A few source_commit values carry a trailing YAML comment.
-  return m[1].replace(/\s+#.*$/, '').trim().replace(/^["']|["']$/g, '');
-}
-
-/** Batch-resolve `<commit>:<englishRel>` blobs in one git process. */
+/**
+ * Batch-resolve `<commit>:<englishRel>` blobs in one git process.
+ *
+ * The parse moved to `scripts/lib/git-batch.js` (#587). The copy that was here carried the
+ * older 512 MiB buffer, its own `process.exit(1)`, and no `batch.error` branch — so a maxBuffer
+ * overflow would have blamed git for failing rather than naming the truncation, and a truncated
+ * pool is the failure that silently supplies the wrong RESTORE BASIS to a tool that writes.
+ *
+ * The `null` for a missing object is kept: callers here distinguish "resolved to nothing" from
+ * "never asked", which is why `catFileBatch` reports absences rather than skipping them.
+ */
 function readBlobs(specs) {
   const out = new Map();
-  if (!specs.length) return out;
-  const batch = spawnSync('git', ['cat-file', '--batch'], {
-    cwd: ROOT,
-    input: Buffer.from(specs.join('\n') + '\n', 'utf8'),
-    maxBuffer: GIT_BUFFER,
-  });
-  if (batch.status !== 0) {
-    console.error('ERROR: git cat-file --batch failed');
-    console.error(batch.stderr?.toString().slice(0, 500));
+  try {
+    catFileBatch(ROOT, specs, (spec, text) => out.set(spec, text));
+  } catch (error) {
+    // The library throws; this is a CLI, so it says what happened and exits the way its other
+    // failures do rather than surfacing a stack trace.
+    console.error(`ERROR: ${error.message}`);
     process.exit(1);
-  }
-  const buf = batch.stdout;
-  let offset = 0;
-  let index = 0;
-  while (offset < buf.length && index < specs.length) {
-    const nl = buf.indexOf(0x0a, offset);
-    if (nl < 0) break;
-    const header = buf.slice(offset, nl).toString('utf8');
-    offset = nl + 1;
-    if (/ (missing|ambiguous)$/.test(header)) { out.set(specs[index], null); index++; continue; }
-    const size = Number.parseInt(header.split(' ')[2], 10);
-    if (!Number.isFinite(size)) break;
-    out.set(specs[index], buf.slice(offset, offset + size).toString('utf8'));
-    offset += size + 1;
-    index++;
   }
   return out;
 }
 
 assertNotShallow(ROOT);
-const history = buildEnglishFenceHistory();
 
 // ---- gather targets ----
-const targets = [];
+//
+// The walk moved to `scripts/lib/i18n-targets.js` (#623). #622 extracted it because the gate and
+// this tool had each grown a copy and the copies had ALREADY DRIFTED on the two points that
+// decide whether a scoped run reaching nothing reports a clean zero or exits 2 — one recorded
+// its reached-trees before the `--tree` filter and one after (validating a filter against the
+// post-filter set is circular and always passes), and one checked `isFile` where the other
+// checked only `existsSync`. This file was left on its own copy there to keep a 3,415-file diff
+// auditable, which made the count 2 → 2 rather than 2 → 3.
+//
+// `SCANNABLE_LOCALES` and `PRESENT_TREES` stay: the `--locale` guard above fires BEFORE the scan
+// and needs them, and `gitStatus(...PRESENT_TREES)` and `WRITE_SCOPE` read them too.
+//
+// They are NOT the same predicate as the walk's, and the first version of this comment claimed
+// they were. They are directory-based and answer "could this locale be scanned at all"; the walk's
+// `localesReached` is content-based and answers "did anything survive every check". A locale whose
+// `skills/` is empty is in the first and never in the second. Both now enumerate `i18n/` through
+// the lib's single `localeDirs`, so they cannot disagree about what a locale IS — which is the part
+// that was a live divergence, not a documentation nicety.
+const collected = collectI18nTargets({
+  root: ROOT,
+  onlyLocale: ONLY_LOCALE,
+  onlyTrees: ONLY_TREES,
+  withText: true,
+});
+
+const targets = collected.targets.map((t) => ({
+  locale: t.locale,
+  tree: t.tree,
+  key: t.key,
+  // The lib calls it `absPath`; everything downstream here reads `path`. Renamed at the seam
+  // rather than in the lib, whose other two callers already use `absPath`.
+  path: t.absPath,
+  english: t.english,
+  englishRel: t.englishRel,
+  relPath: t.relPath,
+  text: t.text,
+  // Not the lib's job: it returns content, and provenance has its own reader. `readFrontmatterField`
+  // is the anchored one from #552 — the same call the old inline walk made.
+  sourceCommit: readFrontmatterField(t.text, SOURCE_COMMIT_FIELD),
+}));
+
 /** Trees the locale-scoped scan found translated content in, before `--tree`. */
-const treesInScope = new Set();
-for (const locale of SCANNABLE_LOCALES) {
-  if (ONLY_LOCALE && locale !== ONLY_LOCALE) continue;
-  for (const tree of PRESENT_TREES) {
-    if (!hasTree(locale, tree)) continue;
-    for (const entry of readdirSync(join(I18N_DIR, locale, tree))) {
-      // `skills/<id>/SKILL.md` for skills, `<tree>/<id>.md` for the mirrors.
-      // `contentKey` decides which names are content at all, so `_template.md`,
-      // `README.md` and `_registry.yml` fall out here rather than needing a
-      // second list that could drift from the checker's.
-      const englishRel = tree === 'skills' ? `${tree}/${entry}/SKILL.md` : `${tree}/${entry}`;
-      const key = contentKey(englishRel);
-      if (key === null) continue;
-      const translated = join(I18N_DIR, locale, englishRel);
-      const english = join(ROOT, englishRel);
-      // `isFile`, not merely `existsSync`, matching the checker. For skills the
-      // entry is a directory and the file is `SKILL.md`, so existence alone was
-      // safe by construction; on the mirror branch the ENTRY is the file, and a
-      // directory named `foo.md` would reach readFileSync and kill the run with
-      // EISDIR where the checker skips it.
-      if (!existsSync(translated) || !statSync(translated).isFile()) continue;
-      if (!existsSync(english) || !statSync(english).isFile()) continue;
-      // Recorded BEFORE the `--tree` filter, so the accept-list describes what
-      // this locale-scoped run could have reached rather than what it selected.
-      // Collected after the existence checks, so it means "carries translated
-      // content" and not merely "has a directory of that name" — the same
-      // distinction the `--locale` guard turns on.
-      treesInScope.add(tree);
-      if (ONLY_TREES && !ONLY_TREES.has(tree)) continue;
-      const text = readFileSync(translated, 'utf8');
-      targets.push({
-        locale, tree, key, path: translated, english, englishRel,
-        relPath: `i18n/${locale}/${englishRel}`,
-        text,
-        sourceCommit: frontmatterField(text, 'source_commit'),
-      });
-    }
-  }
-}
+const treesInScope = collected.treesReached;
 
 /**
- * Validate `--tree` against what the SCOPED scan actually reached, not against
- * a corpus-wide union. Checked here rather than at parse time because the
- * accept-list is the scan's own output — the only formulation that cannot drift
- * from the scan — and before any write, so a mistyped or unreachable batch
- * cannot touch the corpus.
+ * Validate the scope against what the SCOPED scan actually reached, not against a corpus-wide
+ * union. Checked here rather than at parse time because the accept-list is the scan's own output
+ * — the only formulation that cannot drift from the scan — and before any write, so a mistyped
+ * or unreachable batch cannot touch the corpus.
  *
- * The pre-scan version passed `--locale wenyan --tree guides` and reported
- * `files to change: 0`: each guard was satisfied on its own and neither saw the
- * composition, while six of the ten locales carry `skills/` alone.
+ * The pre-scan version passed `--locale wenyan --tree guides` and reported `files to change: 0`:
+ * each guard was satisfied on its own and neither saw the composition, while six of the ten
+ * locales carry `skills/` alone.
+ *
+ * Since #677 this covers `--locale` too, content-based, on top of the directory-based pre-scan
+ * check above — which stays, because it is what licenses the `i18n/${ONLY_LOCALE}` interpolation
+ * in `WRITE_SCOPE` and runs before the dirty-tree check. Then the backstop, for the case no flag
+ * was given at all.
  */
-if (ONLY_TREES !== null) {
-  const unreachable = [...ONLY_TREES].filter((t) => !treesInScope.has(t));
-  if (unreachable.length) {
-    console.error(`ERROR: --tree matched no translated content${ONLY_LOCALE ? ` in locale '${ONLY_LOCALE}'` : ''}: ${unreachable.join(', ')}`);
-    console.error('Nothing would be scanned, and the run would report a clean-looking zero.');
-    console.error(`Reachable here: ${[...treesInScope].sort().join(', ') || '(none)'}`);
-    process.exit(2);
-  }
+const scopeErrors = validateScope({
+  onlyLocale: ONLY_LOCALE,
+  onlyTrees: ONLY_TREES,
+  localesReached: collected.localesReached,
+  treesReached: treesInScope,
+});
+if (scopeErrors.length) {
+  for (const line of scopeErrors) console.error(line);
+  process.exit(2);
 }
+
+// Belt-and-braces behind both guards, copied in intent from `backfill-fence-basis.js`: they
+// answer "is each flag reachable", this answers "did this run reach anything at all", and the
+// two come apart the moment a scope flag changes what the WALK collects rather than what a
+// filter keeps.
+if (targets.length === 0) {
+  console.error('ERROR: this scope selected no translated files. Nothing would be repaired.');
+  console.error(`Reachable locales: ${[...collected.localesReached].sort().join(', ') || '(none)'}`);
+  console.error(`Reachable trees:   ${[...treesInScope].sort().join(', ') || '(none)'}`);
+  process.exit(2);
+}
+
+// The history walk runs AFTER the scope is validated (#677), not before, so a mistyped `--tree`
+// is refused before it rather than after. Same reorder #634 made in the parity gate.
+//
+// The magnitude is NOT measured for this tool, and an earlier draft of this comment called it
+// "the ~90 s step" on inherited lore. What is measured, on the parity gate and on this mount
+// (#635): of an 87 s unscoped run, 53 s was the TARGET walk's `existsSync`/`statSync` pass, not
+// the history build. This tool never passes `onlyId`, so its target walk still pays that in
+// full and necessarily runs before `validateScope` can say anything. The reorder is free and in
+// the right direction; how much it saves here is unknown, and saying so is cheaper than
+// repeating a number nobody took.
+// `ROOT`, explicitly. `buildEnglishFenceHistory` defaults to `fences.js`'s OWN module root, so
+// the argument-less call was correct only while this tool could not be pointed anywhere else.
+// Adding `--root` (#674) turned that default into a split-brain — targets from the fixture,
+// history from the real repository — and the first fixture written against the new flag reported
+// `no English history for this id` for a file whose English source it had just committed.
+//
+// Latent before the flag existed, and the precedent is #559 — `buildEnglishFenceHistory`
+// closing over its own module root — not #634, which is a vacuous-scope guard and shares only
+// "latent until first exercised". A module-scope root is invisible until something tries to move
+// it, and the thing that tries is always the first test.
+//
+// Corroborated by timing rather than proven by it: the fixture went from 15 s to 0.35 s once the
+// walk stopped scanning the real corpus. The load-bearing evidence is functional — the run
+// reported `no English history for this id` for a file it had just committed — and a fixture
+// pins that, so the delta is colour and not a measurement to quote elsewhere.
+const history = buildEnglishFenceHistory(ROOT);
 
 // ---- resolve each target's English basis ----
 const specs = BASIS === 'source-commit'
@@ -548,7 +601,7 @@ for (const t of targets) {
   // A `text` fence facing an untagged one is NOT a divergence:
   // `normalize-content-style.js --mode fences` retro-tagged untagged blocks as
   // `text`, so that pairing is an artifact of a known repo tool acting on the
-  // newer side only. `alignmentTag` folds the two together.
+  // newer side only. `foldedTagSequence` folds the two together.
   //
   // This must NOT be expressed as `isGated(a) !== isGated(b)`. Under default-deny
   // an untagged fence is gated while `text` is not, so that formulation makes
@@ -557,13 +610,34 @@ for (const t of targets) {
   // this PR, while the comment above it still described the pre-inversion
   // behaviour. Alignment is a question about ordinal correspondence, not about
   // what the gate covers.
-  const alignmentTag = (f) => (f.lang === '' ? 'text' : f.lang);
-  const misaligned = translatedFences.findIndex(
-    (f, i) => alignmentTag(f) !== alignmentTag(basisFences[i]),
-  );
+  //
+  // `foldedTagSequence`, not a local copy (#674). The copy that stood here folded a brace-info
+  // fence to `text` exactly like an untagged one, so an English ```text facing a translated
+  // ```{r} at the same ordinal read as ALIGNED — and the brace fence is gated, so a divergent
+  // body at that position became eligible for a splice from a localisable block. The tool whose
+  // job is to restore frozen fences would have written translated prose into one.
+  //
+  // Its sibling copy in `check-placeholder-drift.js` went the same way in this commit; #612
+  // removed the third from the measurement script. The stamp guard below already used the
+  // shared fold, and the comment beside it said so — "STRICTER than the pre-splice guards" —
+  // which is how a known asymmetry sat in the file for two issues without being read as a bug.
+  //
+  // Note what `{` does NOT distinguish: every brace fence folds to the same token, so ```{r}
+  // facing ```{python} still aligns, under this fold and under the old one alike. Inherited
+  // from `foldedTagSequence` by design and shared with the gate and `mirrorsBasis`, so it is
+  // not a regression — but it is the next thing to look at if brace fences ever land in the
+  // corpus, because a splice would then place an `{r}` body under a `{python}` tag.
+  const translatedSeq = foldedTagSequence(translatedFences);
+  const basisSeq = foldedTagSequence(basisFences);
+  const misaligned = translatedSeq.findIndex((tag, i) => tag !== basisSeq[i]);
   if (misaligned >= 0) {
-    const a = translatedFences[misaligned].lang || 'untagged';
-    const b = basisFences[misaligned].lang || 'untagged';
+    // The FOLDED tokens, not `lang || 'untagged'`. That label predates #674 and was accurate
+    // while the only way to reach this branch was a genuine tag difference; the brace case this
+    // fix opens would print "(untagged vs text)" for a ```{r} fence, sending whoever does the
+    // manual repair hunting for an untagged fence that is not in the file. `{` is what the
+    // comparison actually used, so `{` is what the message owes the reader.
+    const a = translatedSeq[misaligned];
+    const b = basisSeq[misaligned];
     skipped.push({ file: t.relPath, reason: `tag sequence diverges at fence ${misaligned + 1} (${a} vs ${b})`, n: divergent.length });
     continue;
   }
@@ -641,10 +715,77 @@ for (const t of targets) {
   }
   if (!restoredHere) continue;
 
+  let repairedText = lines.join('\n');
+
+  // #552: record which English revision these fences were verified against — but only when the
+  // claim is true, on both counts that can make it false.
+  //
+  //   1. The repaired file must MIRROR THE BASIS at every gated fence. An earlier version of
+  //      this tested "nothing gated is still divergent", which is a strictly weaker statement
+  //      and the gap is reachable. `everEnglish` is the union of every revision, so that test
+  //      proves each fence matches SOME revision while the stamp names ONE. The splice repairs
+  //      only the divergent fences, so an untouched fence keeps whatever revision it came from:
+  //      given English W=[A1,B1] and X=[A2,B2] and a mirror [localized, B1] whose source_commit
+  //      was bumped to X without retranslation (the #405 shape), the repair yields [A2,B1] —
+  //      X at one ordinal, W at the other — and the weaker test stamped X. That is a false
+  //      claim at the moment of writing, invisible to the parity checker because every body
+  //      does match some revision, and inherited by whatever reads the field next. Pinned by
+  //      `scripts/test/fence-basis-stamp.test.js`, which fails against the weaker test.
+  //   2. The basis must be a real revision. `basisLabel` is `worktree` whenever the fallback
+  //      read English off disk, and the working tree is not a commit — the same distinction the
+  //      report already refuses to blur ("labelled `worktree`, not a commit").
+  //
+  // Otherwise CLEAR the field. A file that still diverges must not keep a claim from an earlier,
+  // then-complete verification: a stale claim reads as verified and is worse than no claim.
+  // Clearing cannot destroy a TRUE claim here, because a file only reaches this point with a
+  // gated fence that matched no revision at all, and English history only grows — so any
+  // pre-existing stamp on it was already stale.
+  const repairedFences = extractFences(repairedText);
+  const stillDivergent = repairedFences.filter((f) => isGated(f) && !everEnglish.has(f.body)).length;
+  // `mirrorsBasis` lives in `lib/fences.js` so this writer and `backfill-fence-basis.js` cannot
+  // drift about what "verified" means. It used to be STRICTER than the pre-splice guards,
+  // because those folded through a local `alignmentTag` that could not tell ```{r} from an
+  // untagged fence; #674 gave the splice gate the same `foldedTagSequence`, so the asymmetry is
+  // gone.
+  //
+  // Worth keeping the history: that asymmetry was WRITTEN DOWN here, accurately, and read as a
+  // design note rather than as a bug for two issues. "Stricter than the pre-splice guards" is a
+  // true sentence about a guard that writes being looser than the one that only stamps.
+  //
+  // The stamp needs the basis to be one the GATE can see, on both axes the gate checks:
+  //
+  //   - `stillDivergent === 0` — every gated BODY is in the walked pool;
+  //   - `sequencePooled` — the folded SEQUENCE appears in some walked revision.
+  //
+  // Neither is implied by `mirrorsBasis`, because the pool comes from `git log --name-only` over
+  // path-limited, history-simplified history that lists no paths for merges, while the basis
+  // blob is resolved with `git cat-file --batch`, which answers for any object in the store.
+  // Bodies and sequence are genuinely separate holes: a conflict-resolved merge can assemble
+  // fences whose bodies each already exist in a parent into an ORDER or COUNT no single revision
+  // ever had. Closing only the body axis left that case stamping a basis the gate immediately
+  // reports as a false claim — measured, and pinned by the merge-reorder fixture in
+  // `scripts/test/fence-basis-stamp.test.js`.
+  const sequencePooled = compareTagSequence(
+    foldedTagSequence(repairedFences), history.sequences.get(t.key),
+  ) === null;
+  let basisStamp = null;
+  if (stillDivergent === 0 && sequencePooled && mirrorsBasis(repairedFences, basisFences)
+      && basisLabel !== 'worktree') {
+    const stamped = stampFrontmatterField(repairedText, FENCE_BASIS_FIELD, basisLabel);
+    // `stamped` is null when the file has no `source_commit` to anchor beside. Repair the body
+    // anyway and leave the field off, rather than guessing a nesting depth.
+    if (stamped !== null) { repairedText = stamped; basisStamp = basisLabel; }
+  } else {
+    repairedText = clearFrontmatterField(repairedText, FENCE_BASIS_FIELD);
+  }
+
   filesChanged++;
   fencesRestored += restoredHere;
   changedByLocale.set(t.locale, (changedByLocale.get(t.locale) || 0) + restoredHere);
-  plan.push({ path: t.path, relPath: t.relPath, text: lines.join('\n'), n: restoredHere, basisLabel });
+  plan.push({
+    path: t.path, relPath: t.relPath, text: repairedText, n: restoredHere,
+    basisLabel, basisStamp, stillDivergent,
+  });
 }
 
 // Validate `--tag` against what the scan actually saw, not against a hand-kept
@@ -672,7 +813,22 @@ if (!PREVIEW && plan.length) {
 }
 
 for (const p of plan) {
-  console.log(`${PREVIEW ? 'would restore' : '   restoring'} ${String(p.n).padStart(2)} fence(s) in ${p.relPath}  (basis ${p.basisLabel})`);
+  // The provenance suffix says which of the three outcomes this file got, because they are not
+  // distinguishable from the fence count: stamped (fully verified against a named revision),
+  // still-divergent (claim withheld or cleared), or a worktree basis (repaired, but from bytes
+  // that are not a commit, so there is nothing honest to record).
+  // `stillDivergent` is tested BEFORE `basisStamp`, not after. A stamp and a non-zero divergence
+  // count are mutually exclusive by the condition above, so reporting the stamp first would only
+  // ever matter if that invariant broke — which is exactly when the operator needs to be told
+  // the file still diverges rather than reassured it was signed.
+  const provenance = p.stillDivergent
+    ? `, no ${FENCE_BASIS_FIELD} (${p.stillDivergent} still divergent)`
+    : p.basisStamp
+      ? `, ${FENCE_BASIS_FIELD}=${p.basisStamp}`
+      : p.basisLabel === 'worktree'
+        ? `, no ${FENCE_BASIS_FIELD} (basis is not a commit)`
+        : `, no ${FENCE_BASIS_FIELD} (mirrors more than one revision)`;
+  console.log(`${PREVIEW ? 'would restore' : '   restoring'} ${String(p.n).padStart(2)} fence(s) in ${p.relPath}  (basis ${p.basisLabel}${provenance})`);
 }
 
 if (!PREVIEW) {

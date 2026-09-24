@@ -28,7 +28,7 @@ import { loadRegistries, resolveItems, filterSkills, search, findTeam, findAgent
 import { detectAlmanacRoot, resolveTargetDir } from './lib/resolver.js';
 import { detectFrameworks } from './lib/detector.js';
 import { getAdapter, getAdaptersForDetections, listAdapters } from './adapters/index.js';
-import { installAll, uninstallAll, auditAll, auditExitCode } from './lib/installer.js';
+import { installAll, uninstallAll, auditAll, auditExitCode, warnUnsupportedScopes } from './lib/installer.js';
 import { loadManifest, resolveManifest, generateManifest, writeManifest } from './lib/manifest.js';
 import { loadState, saveState, recordGather, recordScatter, recordWarm, markWelcomed, getFireStates, getFireState, findSharedSkills } from './lib/state.js';
 import * as campfire from './lib/campfire-reporter.js';
@@ -57,7 +57,14 @@ function getContext(options) {
   }
 
   const reg = loadRegistries(almanacRoot);
+  // The commander default was removed from every `--scope` option (#607) so an
+  // absent flag is distinguishable from an explicit `--scope project`. The
+  // effective default is unchanged and lives here; the help text states it.
+  // Without this distinction, every bare `almanac install` on a machine where a
+  // scope-ignoring framework is detected would warn that a flag the user never
+  // typed had been ignored.
   const scope = options.global ? 'global' : (options.scope || 'project');
+  const scopeExplicit = Boolean(options.global) || options.scope !== undefined;
   const projectDir = process.cwd();
 
   // Determine adapters
@@ -74,7 +81,7 @@ function getContext(options) {
     adapters = getAdaptersForDetections(detections);
   }
 
-  return { reg, almanacRoot, scope, projectDir, adapters };
+  return { reg, almanacRoot, scope, scopeExplicit, projectDir, adapters };
 }
 
 // ── install ──────────────────────────────────────────────────────
@@ -89,7 +96,7 @@ program
   .option('--with-deps', 'Also install agent skills / team agents+skills')
   .option('-f, --framework <id>', 'Target specific framework (default: auto-detect)')
   .option('-g, --global', 'Install to global scope')
-  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('-n, --dry-run', 'Preview without making changes')
   .option('--force', 'Overwrite existing content')
   .option('--source <path>', 'Path to agent-almanac root')
@@ -107,6 +114,7 @@ program
         console.log(`\nInstalling ${totalItems} item(s) from agent-almanac.yml...\n`);
         const results = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
           dryRun: options.dryRun, force: options.force, almanacRoot: ctx.almanacRoot,
+          scopeExplicit: ctx.scopeExplicit,
         });
         reporter.printResults(results);
         return;
@@ -137,6 +145,7 @@ program
       dryRun: options.dryRun,
       force: options.force,
       almanacRoot: ctx.almanacRoot,
+      scopeExplicit: ctx.scopeExplicit,
     });
 
     reporter.printResults(results);
@@ -149,7 +158,7 @@ program
   .description('Remove installed skills, agents, or teams')
   .option('-f, --framework <id>', 'Target specific framework')
   .option('-g, --global', 'Uninstall from global scope')
-  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('-n, --dry-run', 'Preview without making changes')
   .option('--source <path>', 'Path to agent-almanac root')
   .action(async (names, options) => {
@@ -163,6 +172,7 @@ program
 
     const results = await uninstallAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
       dryRun: options.dryRun,
+      scopeExplicit: ctx.scopeExplicit,
     });
 
     reporter.printResults(results);
@@ -181,7 +191,7 @@ program
   .option('--domains', 'List available domains')
   .option('-f, --framework <id>', 'Filter installed by framework')
   .option('-g, --global', 'List from global scope')
-  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('--source <path>', 'Path to agent-almanac root')
   .action(async (options) => {
     const ctx = getContext(options);
@@ -197,6 +207,16 @@ program
 
     if (options.installed) {
       console.log('\nInstalled content:\n');
+      // The fourth path that reads a scope an adapter may not honour. It calls
+      // listInstalled() directly rather than going through installer.js, so it
+      // does not inherit the warning from installAll/uninstallAll/auditAll —
+      // `list --installed --scope project` would otherwise report hermes's
+      // GLOBAL content under a project heading, silently (#607).
+      warnUnsupportedScopes(ctx.adapters, ctx.scope, {
+        contentTypes: [...new Set(ctx.adapters.flatMap((a) => a.constructor.contentTypes ?? []))],
+        explicit: ctx.scopeExplicit,
+        verb: 'reading',
+      });
       for (const adapter of ctx.adapters) {
         const items = await adapter.listInstalled(ctx.projectDir, ctx.scope);
         if (items.length > 0) {
@@ -276,7 +296,7 @@ program
   .description('Health check installed content across frameworks')
   .option('-f, --framework <id>', 'Audit specific framework only')
   .option('-g, --global', 'Audit global scope')
-  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('--source <path>', 'Path to agent-almanac root')
   .addHelpText('after', `
 Exit codes:
@@ -295,7 +315,7 @@ Examples:
     const ctx = getContext(options);
 
     console.log('\nAudit results:\n');
-    const results = await auditAll(ctx.adapters, ctx.projectDir, ctx.scope);
+    const results = await auditAll(ctx.adapters, ctx.projectDir, ctx.scope, ctx.scopeExplicit);
     reporter.printAudit(results);
 
     // An empty result set prints nothing at all, which reads exactly like a
@@ -382,7 +402,7 @@ program
   .description('Reconcile installed state with agent-almanac.yml')
   .option('-f, --framework <id>', 'Target specific framework')
   .option('-g, --global', 'Sync global scope')
-  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('-n, --dry-run', 'Preview without making changes')
   .option('--source <path>', 'Path to agent-almanac root')
   .action(async (options) => {
@@ -403,6 +423,7 @@ program
     const installResults = await installAll(desired, ctx.adapters, ctx.projectDir, ctx.scope, {
       dryRun: options.dryRun,
       almanacRoot: ctx.almanacRoot,
+      scopeExplicit: ctx.scopeExplicit,
     });
 
     // Find items to remove (installed but not in manifest) — universal adapter only
@@ -418,7 +439,7 @@ program
           [universalAdapter],
           ctx.projectDir,
           ctx.scope,
-          { dryRun: options.dryRun },
+          { dryRun: options.dryRun, scopeExplicit: ctx.scopeExplicit },
         );
       }
     }
@@ -517,7 +538,7 @@ program
   .option('--only <agents>', 'Partial gathering — comma-separated agent IDs')
   .option('-f, --framework <id>', 'Target specific framework')
   .option('-g, --global', 'Install to global scope')
-  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('-n, --dry-run', 'Preview without making changes')
   .option('-q, --quiet', 'No ceremony, just install')
   .option('--json', 'Output as JSON')
@@ -600,6 +621,7 @@ program
       dryRun: options.dryRun,
       force: false,
       almanacRoot: ctx.almanacRoot,
+      scopeExplicit: ctx.scopeExplicit,
     });
 
     // Categorize results
@@ -651,7 +673,7 @@ program
   .option('--ceremonial', 'Show each practice scattering')
   .option('-f, --framework <id>', 'Target specific framework')
   .option('-g, --global', 'Uninstall from global scope')
-  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('-n, --dry-run', 'Preview without making changes')
   .option('-q, --quiet', 'No ceremony, just uninstall')
   .option('--json', 'Output as JSON')
@@ -760,6 +782,7 @@ program
 
     const uninstallResults = await uninstallAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
       dryRun: options.dryRun,
+      scopeExplicit: ctx.scopeExplicit,
     });
 
     if (options.json) {

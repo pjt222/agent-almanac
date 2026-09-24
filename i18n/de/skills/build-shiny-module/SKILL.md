@@ -1,17 +1,13 @@
 ---
 name: build-shiny-module
 description: >
-  Wiederverwendbare Shiny-Module mit UI/Server-Paaren erstellen. Behandelt
-  Namespace-Isolation, Kommunikation zwischen Modulen über reactive Values
-  und die Integration in die Haupt-App. Verwenden, wenn App-Logik in
-  verwaltbare Teile aufgeteilt, UI-Komponenten wiederverwendet oder
-  Namespace-Konflikte in großen Shiny-Apps vermieden werden sollen.
+  Build reusable Shiny modules with proper namespace isolation using NS().
+  Covers module UI/server pairs, reactive return values, inter-module
+  communication, and nested module composition. Use when extracting a reusable
+  component from a growing Shiny app, building a UI widget used in multiple
+  places, encapsulating complex reactive logic behind a clean interface, or
+  composing larger applications from smaller, testable units.
 license: MIT
-locale: de
-source_locale: en
-source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
@@ -19,258 +15,277 @@ metadata:
   domain: shiny
   complexity: intermediate
   language: R
-  tags: shiny, modules, namespacing, reactive, r-packages
+  tags: shiny, modules, namespace, reactive, composition
+  locale: de
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Shiny-Modul erstellen
+# Build Shiny Module
 
-Wiederverwendbare Shiny-Module mit korrekt isolierten Namespaces und sauberer API erstellen.
+Create reusable Shiny UI/server module pairs with proper namespace isolation, reactive communication, and composability.
 
-## Wann verwenden
+## When to Use
 
-- App-Logik in verwaltbare, testbare Einheiten aufteilen
-- UI-Komponenten über mehrere Apps oder App-Teile wiederverwenden
-- Namespace-Konflikte in großen Shiny-Apps mit vielen Inputs/Outputs vermeiden
-- Teams arbeiten an verschiedenen App-Teilen unabhängig voneinander
+- Extracting a reusable component from a growing Shiny app
+- Building a UI widget that will be used in multiple places
+- Encapsulating complex reactive logic behind a clean interface
+- Composing larger applications from smaller, testable units
 
-## Eingaben
+## Inputs
 
-- **Erforderlich**: Modulname (z. B. `dataFilter`, `plotViewer`)
-- **Erforderlich**: Welche Daten/Werte das Modul empfangen und zurückgeben soll
-- **Optional**: Ob das Modul reaktive Werte zurückgeben soll (für Modul-zu-Modul-Kommunikation)
+- **Required**: Module purpose and functionality description
+- **Required**: Input/output contract (what the module receives and returns)
+- **Optional**: Whether the module nests other modules (default: no)
+- **Optional**: Framework context (golem, rhino, or vanilla)
 
-## Vorgehensweise
+## Procedure
 
-### Schritt 1: Modul-Struktur planen
+### Step 1: Define the Module Interface
 
-Die Modul-API definieren, bevor Code geschrieben wird.
+Before writing code, define what the module accepts and returns:
 
-Für jedes Modul entscheiden:
-- **Inputs** (Parameter der UI-Funktion): Statische Konfiguration — Beschriftungen, Optionen
-- **Server-Inputs** (Parameter der Server-Funktion): Reaktive Werte von Elternkomponente
-- **Outputs** (Rückgabewert der Server-Funktion): Reaktive Werte, die andere Module verwenden
+```text
+Module: data_filter
+Inputs: reactive dataset, column names to filter on
+Outputs: reactive filtered dataset
+UI: filter controls (selectInput, sliderInput, dateRangeInput)
+```
 
-Beispiel: Datenfilter-Modul
-- UI bekommt: `id`, optionale Beschriftungen
-- Server bekommt: `data` (reaktiv — DataFrame)
-- Server gibt zurück: `filtered_data` (reaktiv — gefilterter DataFrame)
+**Expected:** Clear contract specifying reactive inputs, reactive outputs, and UI elements.
 
-**Erwartet:** Klar dokumentierte Modul-API vor Implementierung.
+**On failure:** If the interface is unclear, the module is probably too broad. Split it into smaller modules with single responsibilities.
 
-**Bei Fehler:** Wenn die API unklar ist, mit einer Minimalversion starten und iterieren. Übermäßig komplizierte Modul-APIs sind ein häufiges Problem.
-
-### Schritt 2: Modul-UI-Funktion erstellen
-
-Die UI-Komponente mit korrektem Namespace-Handling implementieren.
+### Step 2: Create the Module UI Function
 
 ```r
-# R/mod_data_filter.R
-#' Datenfilter-Modul UI
+#' Data Filter Module UI
 #'
-#' @param id Modul-ID (wird für Namespace-Isolation verwendet)
-#' @param label Beschriftung für Datensatz-Auswahl
+#' @param id Module namespace ID
+#' @return A tagList of filter controls
 #' @export
-mod_data_filter_ui <- function(id, label = "Datensatz auswählen") {
-  ns <- NS(id)  # Namespace-Funktion erstellen
-
+dataFilterUI <- function(id) {
+  ns <- NS(id)
   tagList(
     selectInput(
-      inputId = ns("dataset"),  # ns() auf alle IDs anwenden
-      label = label,
-      choices = c("iris", "mtcars", "airquality")
+      ns("column"),
+      "Filter column",
+      choices = NULL
     ),
-    sliderInput(
-      inputId = ns("n_rows"),
-      label = "Anzahl Zeilen",
-      min = 1,
-      max = 150,
-      value = 10
-    ),
-    actionButton(
-      inputId = ns("apply"),
-      label = "Filter anwenden"
-    )
+    uiOutput(ns("filter_control")),
+    actionButton(ns("apply"), "Apply Filter", class = "btn-primary")
   )
 }
 ```
 
-**Erwartet:** Alle Input/Output-IDs werden durch `ns()` geleitet. UI rendert ohne Fehler.
+Key rules:
+- Function name follows `<name>UI` convention
+- First argument is always `id`
+- Create `ns <- NS(id)` at the top
+- Wrap every `inputId` and `outputId` with `ns()`
+- Return a `tagList()` to allow flexible placement
 
-**Bei Fehler:** Wenn Fehler wie "undefined input" erscheinen, sicherstellen, dass ALLE IDs (nicht nur einige) durch `ns()` geleitet werden, einschließlich Outputs in `renderUI()`.
+**Expected:** UI function that creates namespaced input/output elements.
 
-### Schritt 3: Modul-Server-Funktion erstellen
+**On failure:** If IDs collide when using the module twice, check that every ID is wrapped with `ns()`. Common miss: IDs inside `renderUI()` or `uiOutput()` — these need `ns()` too.
 
-Die Server-Logik mit reaktiven Werten und Rückgabewert implementieren.
+### Step 3: Create the Module Server Function
 
 ```r
-#' Datenfilter-Modul Server
+#' Data Filter Module Server
 #'
-#' @param id Modul-ID (muss UI-ID entsprechen)
-#' @param data Reaktiver DataFrame, der gefiltert werden soll
-#' @return Reaktiver gefilterter DataFrame
+#' @param id Module namespace ID
+#' @param data Reactive expression returning a data frame
+#' @param columns Character vector of filterable column names
+#' @return Reactive expression returning the filtered data frame
 #' @export
-mod_data_filter_server <- function(id, data) {
-  # Validierung der Eingaben
-  stopifnot(is.reactive(data))
-
+dataFilterServer <- function(id, data, columns) {
   moduleServer(id, function(input, output, session) {
-    # Gefilterte Daten als reaktiven Wert
-    filtered <- eventReactive(input$apply, {
-      df <- get(input$dataset)
-      head(df, input$n_rows)
-    }, ignoreNULL = FALSE)
+    ns <- session$ns
 
-    # Optional: Vorschau im Modul rendern
-    output$preview <- renderTable({
-      filtered()
+    # Update column choices when data changes
+    observeEvent(data(), {
+      available <- intersect(columns, names(data()))
+      updateSelectInput(session, "column", choices = available)
     })
 
-    # Reaktiven Wert zurückgeben, damit Elternkomponente ihn verwenden kann
+    # Dynamic filter control based on selected column
+    output$filter_control <- renderUI({
+      req(input$column)
+      col_data <- data()[[input$column]]
+
+      if (is.numeric(col_data)) {
+        sliderInput(
+          ns("value_range"),
+          "Range",
+          min = min(col_data, na.rm = TRUE),
+          max = max(col_data, na.rm = TRUE),
+          value = range(col_data, na.rm = TRUE)
+        )
+      } else {
+        selectInput(
+          ns("value_select"),
+          "Values",
+          choices = unique(col_data),
+          multiple = TRUE,
+          selected = unique(col_data)
+        )
+      }
+    })
+
+    # Return filtered data as a reactive
+    filtered <- eventReactive(input$apply, {
+      req(input$column)
+      col <- input$column
+      df <- data()
+
+      if (is.numeric(df[[col]])) {
+        req(input$value_range)
+        df[df[[col]] >= input$value_range[1] &
+           df[[col]] <= input$value_range[2], ]
+      } else {
+        req(input$value_select)
+        df[df[[col]] %in% input$value_select, ]
+      }
+    }, ignoreNULL = FALSE)
+
     return(filtered)
   })
 }
 ```
 
-**Erwartet:** Server-Funktion verwendet `moduleServer()`. Reaktive Werte werden korrekt zurückgegeben.
+Key rules:
+- Function name follows `<name>Server` convention
+- First argument is always `id`
+- Additional arguments are reactive expressions or static values
+- Use `moduleServer(id, function(input, output, session) { ... })`
+- Use `session$ns` for dynamic UI created inside the server
+- Return reactive values explicitly
 
-**Bei Fehler:** Wenn `is.reactive(data)` fehlschlägt, sicherstellen, dass der Eltern-Server einen reaktiven Ausdruck übergibt (z. B. `reactive({ ... })`), nicht einen rohen Wert.
+**Expected:** Server function that processes inputs and returns reactive output.
 
-### Schritt 4: Module in Haupt-App integrieren
+**On failure:** If reactive values don't update, check that inputs from dynamic UI use `session$ns` (not the outer `ns`). If the module returns NULL, ensure `return()` is the last expression inside `moduleServer()`.
 
-Das Modul in `app_ui.R` und `app_server.R` (oder `app.R`) einbinden.
-
-```r
-# R/app_ui.R (oder ui in app.R)
-app_ui <- function(request) {
-  fluidPage(
-    titlePanel("Meine App mit Modulen"),
-    sidebarLayout(
-      sidebarPanel(
-        # Modul-UI aufrufen mit eindeutiger ID
-        mod_data_filter_ui("filter1", label = "Hauptdatensatz"),
-        mod_data_filter_ui("filter2", label = "Vergleichsdatensatz")
-      ),
-      mainPanel(
-        fluidRow(
-          column(6, tableOutput("table1")),
-          column(6, tableOutput("table2"))
-        )
-      )
-    )
-  )
-}
-
-# R/app_server.R (oder server in app.R)
-app_server <- function(input, output, session) {
-  # Reaktive Datenquelle
-  raw_data <- reactive({ iris })
-
-  # Modul-Server aufrufen — dieselbe ID wie UI
-  filtered1 <- mod_data_filter_server("filter1", data = raw_data)
-  filtered2 <- mod_data_filter_server("filter2", data = raw_data)
-
-  # Modul-Outputs in Haupt-App verwenden
-  output$table1 <- renderTable({ filtered1() })
-  output$table2 <- renderTable({ filtered2() })
-}
-```
-
-**Erwartet:** Beide Modulinstanzen unabhängig voneinander funktionieren. IDs "filter1" und "filter2" isolieren ihre Inputs/Outputs.
-
-**Bei Fehler:** Wenn Module sich gegenseitig beeinflussen, prüfen ob beide UI und Server denselben `id`-Parameter verwenden. Unterschiedliche IDs = vollständige Isolation.
-
-### Schritt 5: Modul-zu-Modul-Kommunikation
-
-Mehrere Module miteinander kommunizieren lassen.
+### Step 4: Wire the Module into the Parent App
 
 ```r
-# Fortgeschrittenes Muster: ReactiveValues für bidirektionale Kommunikation
-app_server <- function(input, output, session) {
-  # Gemeinsamer Status zwischen Modulen
-  shared <- reactiveValues(
-    selected_id = NULL,
-    filter_active = FALSE
+# In app_ui.R or ui
+ui <- page_sidebar(
+  title = "Analysis App",
+  sidebar = sidebar(
+    dataFilterUI("filter1")
+  ),
+  card(
+    DT::dataTableOutput("table")
+  )
+)
+
+# In app_server.R or server
+server <- function(input, output, session) {
+  # Raw data source
+  raw_data <- reactive({ mtcars })
+
+  # Call module — capture its return value
+  filtered_data <- dataFilterServer(
+    "filter1",
+    data = raw_data,
+    columns = c("cyl", "mpg", "hp", "wt")
   )
 
-  # Modul 1 aktualisiert shared state
-  observeEvent(mod_selector_server("selector", shared = shared), {
-    # Modul signalisiert über reactiveValues
+  # Use the module's returned reactive
+  output$table <- DT::renderDataTable({
+    filtered_data()
   })
-
-  # Modul 2 reagiert auf shared state
-  mod_detail_server("detail", shared = shared)
 }
 ```
 
-Einfacheres Muster — Reaktive weitergeben:
+**Expected:** Module appears in the UI and its returned reactive flows into downstream outputs.
+
+**On failure:** If the module UI doesn't render, verify the `id` string matches between UI and server calls. If the returned reactive is NULL, check that the server function actually returns a value.
+
+Sibling modules communicate through the parent, not directly with each other. Capture the first module's returned reactive and pass it as an argument into the second module's server call — `filtered_data <- dataFilterServer("filter1", data = raw_data, columns = cols)`, then `summaryServer("summary1", data = filtered_data)`. Pass the reactive itself, not `filtered_data()`: the receiving module has to re-run when the value changes, so it needs the reactive, not whatever value it happened to hold at the moment of the call. Reactive expressions are the most portable format for moving reactive information between modules — a module that takes a plain reactive argument works under any parent that can produce one.
+
+### Step 5: Compose Nested Modules (Optional)
+
+For modules that contain other modules:
 
 ```r
-app_server <- function(input, output, session) {
-  # Modul 1 gibt reaktiven Wert zurück
-  selected_item <- mod_list_server("list")
+analysisUI <- function(id) {
+  ns <- NS(id)
+  tagList(
+    dataFilterUI(ns("filter")),
+    plotOutput(ns("plot"))
+  )
+}
 
-  # Modul 2 empfängt reaktiven Wert von Modul 1
-  mod_detail_server("detail", item = selected_item)
+analysisServer <- function(id, data) {
+  moduleServer(id, function(input, output, session) {
+    # Call inner module with namespaced ID
+    filtered <- dataFilterServer("filter", data = data, columns = names(data()))
+
+    output$plot <- renderPlot({
+      req(filtered())
+      plot(filtered())
+    })
+
+    return(filtered)
+  })
 }
 ```
 
-**Erwartet:** Module kommunizieren über reaktive Werte oder reactiveValues ohne direkte Kopplung.
+Key rule: In the UI, nest with `ns("inner_id")`. In the server, call with just `"inner_id"` — `moduleServer` handles the namespace chaining.
 
-**Bei Fehler:** Wenn Modul-Kommunikation nicht funktioniert, sicherstellen, dass reaktive Werte nicht "ausgepackt" werden (d. h. `selected_item` nicht `selected_item()` beim Weitergeben).
+**Expected:** Inner module renders correctly within the outer module's namespace.
 
-### Schritt 6: Modul testen
+**On failure:** If the inner module's UI doesn't appear, you likely forgot `ns()` around the inner module's ID in the outer UI function. If server communication breaks, check that the inner module ID matches (no `ns()` in the server call).
 
-Modul isoliert mit `testServer()` testen.
+### Step 6: Test the Module in Isolation
 
 ```r
-# tests/testthat/test-mod_data_filter.R
-library(testthat)
-library(shiny)
-
-test_that("data filter module returns filtered data", {
-  # Reaktive Testdaten erstellen
-  test_data <- reactive({ iris })
-
-  testServer(
-    mod_data_filter_server,
-    args = list(data = test_data),
-    {
-      # Input-Werte simulieren
-      session$setInputs(dataset = "iris", n_rows = 5, apply = 1)
-
-      # Rückgabewert prüfen
-      result <- session$returned()
-      expect_s3_class(result(), "data.frame")
-      expect_equal(nrow(result()), 5)
+# Quick test app for the module
+if (interactive()) {
+  shiny::shinyApp(
+    ui = fluidPage(
+      dataFilterUI("test"),
+      DT::dataTableOutput("result")
+    ),
+    server = function(input, output, session) {
+      data <- reactive(iris)
+      filtered <- dataFilterServer("test", data, names(iris))
+      output$result <- DT::renderDataTable(filtered())
     }
   )
-})
+}
 ```
 
-**Erwartet:** Tests laufen mit `testthat::test_file()`. Assertions prüfen Modul-Verhalten.
+**Expected:** Module works correctly in the minimal test app.
 
-**Bei Fehler:** Wenn `session$returned()` nicht verfügbar ist, sicherstellen, dass Server-Funktion einen reaktiven Wert explizit zurückgibt (letzter Ausdruck oder `return()`).
+**On failure:** If the module fails in isolation but works in the full app (or vice versa), check for implicit dependencies on global variables or parent session state.
 
-## Validierung
+## Validation
 
-- [ ] Modul-UI verwendet `NS(id)` und leitet alle IDs durch `ns()`
-- [ ] Modul-Server verwendet `moduleServer(id, ...)`
-- [ ] Modul gibt reaktive Werte zurück (für Kommunikation mit Elternkomponente)
-- [ ] Zwei Modulinstanzen mit verschiedenen IDs sind vollständig isoliert
-- [ ] Integration in Haupt-App funktioniert
-- [ ] Modul-Tests laufen ohne Fehler
+- [ ] Module UI function accepts `id` as first argument and uses `NS(id)`
+- [ ] Every input/output ID in the UI is wrapped with `ns()`
+- [ ] Module server uses `moduleServer(id, function(input, output, session) { ... })`
+- [ ] Dynamic UI in server uses `session$ns` for IDs
+- [ ] Module can be instantiated multiple times without ID collisions
+- [ ] Reactive return values are accessible to the parent app
+- [ ] Module works in a minimal standalone test app
 
-## Haeufige Stolperfallen
+## Common Pitfalls
 
-- **Vergessenes `ns()` für IDs**: Jedes `inputId`, `outputId` und ID in `tagList` muss durch `ns()` geleitet werden. Fehlende Namespace-Wrapping verursacht subtile Bugs.
-- **Reaktive Werte vs reaktive Ausdrücke zurückgeben**: `reactiveValues` und `reactive()` haben unterschiedliche Aufruf-Syntax. `reactiveValues$x` vs `reactive_expr()`.
-- **Modul-ID-Gleichheit**: UI und Server MÜSSEN dieselbe ID verwenden. Selbst ein Tippfehler bricht die Namespace-Isolation.
-- **`ignoreNULL` in `eventReactive`**: Standardmäßig feuert `eventReactive` nicht, wenn Event-Auslöser NULL ist. `ignoreNULL = FALSE` für Initialisierung beim Laden.
-- **Verschachtelte Module**: Module können andere Module enthalten — die Namespace-Funktion korrekt durch alle Ebenen weitergeben.
-- **Modul-Tests brauchen reaktive Kontexte**: Immer `testServer()` für Unit-Tests verwenden, da `moduleServer()` reaktiven Kontext erfordert.
+- **Forgetting `ns()` in `renderUI()`**: Dynamic UI created inside the server must use `session$ns` — the outer `ns` is not available inside `moduleServer()`.
+- **Passing non-reactive data**: Module arguments that change over time must be reactive expressions. Pass `reactive(data)` not `data`.
+- **ID mismatch**: The `id` string in the UI call must exactly match the `id` in the server call.
+- **Not returning reactives**: If the module computes something the parent needs, it must `return()` a reactive. Forgetting this is a silent bug.
+- **Namespace in nested modules**: In UI: `ns("inner_id")`. In server: just `"inner_id"`. Mixing these up causes namespace double-wrapping or missing prefixes.
 
-## Verwandte Skills
+## Related Skills
 
-- `scaffold-shiny-app` — Shiny-App scaffolden, bevor Module hinzugefügt werden
-- `test-shiny-app` — vollständige App-Tests mit shinytest2
-- `design-shiny-ui` — UI-Gestaltung und Theming
+- `scaffold-shiny-app` — set up the app structure before adding modules
+- `test-shiny-app` — test modules with testServer() unit tests
+- `design-shiny-ui` — bslib layout and theming for module UIs
+- `optimize-shiny-performance` — cache and async patterns within modules

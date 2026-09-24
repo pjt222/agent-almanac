@@ -186,6 +186,16 @@ Useful commands:
 
 See [cli/README.md](../cli/README.md) for the full surface.
 
+### Hermes note
+
+The Hermes adapter resolves the Hermes home at runtime (#604):
+
+1. `$HERMES_HOME` when set (authoritative on every platform)
+2. `%LOCALAPPDATA%\hermes` on Windows-native installs (accepted when its `config.yaml` exists)
+3. `~/.hermes` otherwise — including Hermes running inside WSL
+
+Skills install to `<hermes-home>/skills/<domain>/<id>/` and are loaded by Hermes as-is. Two caveats: agent installs currently land in `<hermes-home>/agents/`, which Hermes does not read (#605 tracks mapping them to persona-skills instead); and Windows symlink creation may need Developer Mode or admin rights depending on machine policy.
+
 ---
 
 ## Phase 3 — Team activation wiring

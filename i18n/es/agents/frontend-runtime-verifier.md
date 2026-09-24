@@ -17,7 +17,8 @@ skills:
 locale: es
 source_locale: en
 source_commit: 3b0afd0b
-translator: "Claude + human review"
+fence_basis_commit: 3b0afd0b
+translator: "(untranslated stub)"
 translation_date: "2026-07-10"
 ---
 

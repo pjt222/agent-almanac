@@ -54,7 +54,7 @@ Publikationsfertige Grafiken erzeugen die technische Anforderungen fuer akademis
 
 Technische Spezifikationen fuer die Zielpublikation identifizieren:
 
-```yaml
+```text
 # Common publication requirements
 
 academic_journal:

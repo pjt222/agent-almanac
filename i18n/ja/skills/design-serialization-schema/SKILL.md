@@ -169,6 +169,48 @@ enum Unit {
 3. **識別子でスキーマをバージョニング**する（`v1`、`v2`）
 4. バイナリフォーマットには**スキーマレジストリを使用**する（Avro/ProtobufのConfluent Schema Registry）
 
+#### Protobufの進化ルール:
+
+```protobuf
+// v1 — original
+message Measurement {
+  string sensor_id = 1;
+  double value = 2;
+  Unit unit = 3;
+}
+
+// v2 — safe evolution
+message Measurement {
+  string sensor_id = 1;
+  double value = 2;
+  Unit unit = 3;
+  // NEW: added in v2 — old clients ignore this field
+  google.protobuf.Timestamp timestamp = 4;
+  // DEPRECATED: use sensor_id instead
+  reserved 6;
+  reserved "old_sensor_name";
+}
+```
+
+#### JSON Schemaのバージョニング:
+
+```json
+{
+  "$id": "https://example.com/schemas/measurement/v2",
+  "allOf": [
+    {"$ref": "https://example.com/schemas/measurement/v1"},
+    {
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "Added in v2: GPS coordinates"
+        }
+      }
+    }
+  ]
+}
+```
+
 **期待結果:** 進化計画が文書化: どの変更が安全か、どれが新バージョンを必要とするか。
 **失敗時:** 破壊的変更が不可避な場合、スキーマをバージョニングし（v1 -> v2）、移行中は並行サポートを維持する。
 

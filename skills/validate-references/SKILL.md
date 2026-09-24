@@ -8,12 +8,13 @@ description: >
   preparing a manuscript bibliography for journal submission, auditing a shared
   .bib file before a project milestone, after merging bibliographies from
   multiple sources, when citations render incorrectly, or as a CI check on
-  version-controlled .bib files.
+  version-controlled .bib files; not for agent-memory or documentation
+  cross-references — see repair-broken-references.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: citations
   complexity: intermediate
   language: R
@@ -35,6 +36,13 @@ ensures that .bib files are publication-ready before rendering.
 - After merging bibliographies from multiple sources
 - When citations render incorrectly and you need to diagnose .bib issues
 - As a CI check on .bib files in version-controlled projects
+
+**Do NOT use** for agent-memory or documentation cross-references — see
+[`repair-broken-references`](../repair-broken-references/SKILL.md). This skill
+validates bibliographic entries and DOI resolution; the name collision with
+"references" in the link-checking sense is the only thing the two share. For the
+reachability and budget of a Claude Code memory directory, see
+[`verify-memory-integrity`](../verify-memory-integrity/SKILL.md).
 
 ## Inputs
 
@@ -379,10 +387,51 @@ generate_report(all_issues, bib, output_file = "validation-report.md")
   trigger fuzzy matching. Review flagged duplicates manually
 - **Missing DOIs for older works**: Pre-2000 publications often lack DOIs. Flag as
   informational, not as errors
+- **Author names are separated by `and`, not commas**: BibTeX splits an `author`
+  or `editor` field on the word `and` surrounded by spaces and not enclosed in
+  braces. A comma delimits parts inside a single name (`von Last, First` or
+  `von Last, Jr, First`), so a comma-joined list collapses silently into one
+  author rather than several, and a trailing comma makes BibTeX complain that a
+  name ends with a comma
+- **Organizations as authors need an extra pair of braces**: An institution left
+  bare in an `author` field is dissected into First/von/Last like a personal
+  name, and any internal `and` splits it into two people. Wrap it in its own
+  braces: `author = {{National Aeronautics and Space Administration}}`
+- **One person under two spellings**: `Donald E. Knuth` in one entry and `D. E. Knuth`
+  in another alphabetize as two different authors. Settle on one form per person,
+  or write `D[onald] E. Knuth`, which BibTeX alphabetizes as if the brackets were
+  absent
+- **Journal name inconsistency**: One entry writes `Journal of the American Chemical
+  Society`, another writes `J. Am. Chem. Soc.`, and nothing above notices, because
+  Step 6 compares DOIs and article titles and never looks at the `journal` field. The
+  CrossRef record fetched in Step 4 carries the journal's `ISSN` and `container-title`,
+  and often its `short-container-title` (`J. Am. Chem. Soc.` for this journal), so
+  group entries by `ISSN` and flag any group whose `journal` values disagree. Flag
+  rather than normalize: ISO 4 governs title-word abbreviation through the LTWA
+  maintained by the ISSN International Centre, but NLM/MEDLINE strips the punctuation
+  from that assignment, so PubMed writes `J Am Chem Soc` for the same journal. Pick the
+  form the target journal's style requires
+- **A resolving DOI is not a matching DOI**: HTTP 200 confirms the DOI is
+  registered, not that it points at the entry's work. A wrong but registered DOI
+  resolves exactly like a correct one, so compare the CrossRef record Step 4
+  already fetched against the entry: `title` (an array), the `family` names in
+  `author`, and `issued.date-parts`. Normalize both sides first, or LaTeX escapes
+  and Unicode accents will manufacture mismatches
+- **False mismatches from CrossRef's own shape**: a year off by one need not be an
+  error, because `published-online` and `published-print` are separate fields that
+  can fall in different years. `10.1093/bioinformatics/btz848` is online 2019 and
+  print 2020, with `issued` following the online date. `short-container-title` is
+  sometimes an empty array, so a missing journal abbreviation is not a mismatch,
+  and a record paginated by article number can carry `article-number` with no
+  `page` field at all
 
 ## Related Skills
 
 - `manage-bibliography` - fix issues found by this validator (dedup, add fields)
 - `format-citations` - format validated entries into styled citations
+- `repair-broken-references` - the correct destination for broken internal links,
+  dead URLs, stale imports, and orphaned files in documentation or agent memory
+- `verify-memory-integrity` - read-only reachability and budget check for a Claude
+  Code memory directory; not a bibliography tool despite the shared word
 - `../reporting/format-apa-report` - APA reports require complete, validated references
 - `../r-packages/write-vignette` - vignettes with citations need valid .bib entries

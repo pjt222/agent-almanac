@@ -102,6 +102,14 @@ If the frontmatter contains a `locale` field, the file is a translated SKILL.md.
 
 3. **Code block identity check** — Compare code blocks in the translated file against the English source. Code blocks must be identical (code is never translated).
 
+```bash
+# Check translation frontmatter fields
+for field in "locale:" "source_locale:" "source_commit:" "translator:" "translation_date:"; do
+  grep -q "^${field}\|^  ${field}" i18n/<locale>/skills/<skill-name>/SKILL.md \
+    && echo "$field OK" || echo "$field MISSING"
+done
+```
+
 **Expected:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
 
 **On failure:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING.

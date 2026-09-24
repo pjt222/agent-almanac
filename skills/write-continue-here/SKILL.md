@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.3"
   domain: general
   complexity: basic
   language: multi
@@ -49,18 +49,49 @@ git diff --stat
 
 Review the conversation context: what was the objective, what was completed, what is partially done, what was tried and failed, what decisions were made.
 
-**Expected:** Clear understanding of current task state — completed items, in-progress items, and planned next steps.
+Record every measurement you will cite in a **facts file** (`handoff-facts.md`, outside the repository or ignored by it): one line per fact, each naming the command that produced it and quoting its output verbatim — the range you actually read, not the range you meant. A claim in the handoff that traces to no line here is an assertion; an output paraphrased here is an extrapolation the verifier cannot see.
+
+**Expected:** Clear understanding of current task state — completed items, in-progress items, and planned next steps — and a facts file behind every number, sha, quoted output and status line you intend to write.
 
 **On failure:** If not in a git repository, skip git commands. The continuation file can still capture conversational context and task state.
 
-### Step 2: Write CONTINUE_HERE.md
+### Step 2: Resolve the Location, Then Write the Draft
 
-Write the file to the project root using the structure below. Every section must contain actionable content, not placeholders.
+A project does not necessarily keep its handoff at the repository root, and the draft belongs beside wherever the installed file goes. Resolve that first. This is the **shared resolver**: `read-continue-here` Step 1 carries the same block byte-for-byte, and `scripts/test/continue-here-blocks.test.js` fails if the two ever diverge.
+
+```bash
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
+CONTINUE_FILE=
+for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
+  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
+done
+if [ -n "$CONTINUE_FILE" ]; then
+  echo "handoff: $CONTINUE_FILE"
+else
+  ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
+    -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
+  if [ -n "$ELSEWHERE" ]; then
+    echo "no handoff at a resolved path, but one exists elsewhere:"
+    echo "$ELSEWHERE"
+  else
+    echo "no handoff"
+  fi
+fi
+```
+
+Write the draft according to what it reports:
+
+- **A resolved path** — the project already keeps its handoff there. Put the draft beside it, as `<dir>/CONTINUE_HERE.draft.md`; Step 3 installs over the existing file and refuses to clobber an unconsumed one.
+- **A handoff at an unresolved path** — the project keeps it somewhere this skill does not look for it. Put the draft beside *that* file rather than at the root, so the next session is not handed two handoffs in two places.
+- **No handoff at all** — this is the first one. Put the draft at the repository root, which the resolver checks first and which the SessionStart hook finds with no configuration.
+
+Then write it — it becomes `CONTINUE_HERE.md` only after Step 3 — using the structure below. Every section must contain actionable content, not placeholders. Where a claim is not measured, tag it in place as `inferred`, `not re-measured`, `by-construction`, or `the operator's call`; a tag is allowed only where the facts file records why the measurement was not taken, and never on a sha, count, or status line a reader would act on.
 
 ```markdown
 # Continue Here
 
 > Last updated: YYYY-MM-DDTHH:MM:SSZ | Branch: current-branch-name
+> Verified: verify-handoff round N, 0 blocking, coverage complete — or "not run (workflow unavailable)"
 
 ## Objective
 One-paragraph description of what we are trying to accomplish and why.
@@ -91,31 +122,89 @@ Guidelines:
 - **Next Steps**: Number by priority. Prefix user-dependent items with `**[USER]**`
 - **Context**: Record negative space — what was tried and rejected, and why
 
-**Expected:** A CONTINUE_HERE.md file at the project root with all 5 sections populated with real content from the current session. The timestamp and branch are accurate.
+**Expected:** A `CONTINUE_HERE.draft.md` at the location Step 2 resolved, with all 5 sections populated with real content from the current session, every claim backed by the facts file or tagged. The timestamp and branch are accurate.
 
-**On failure:** If Write fails, check file permissions. The file should be created in the project root (same directory as `.git/`). Verify `.gitignore` contains `CONTINUE_HERE.md` — if not, add it.
+**On failure:** If Write fails, check file permissions. The draft belongs beside the installed handoff, at whichever of the three resolved locations Step 2 reported — not at the project root by assumption.
 
-### Step 3: Verify the File
+### Step 3: Verify the Draft, Then Install It
 
-Read back CONTINUE_HERE.md and confirm:
+Read back `CONTINUE_HERE.draft.md` and confirm:
 - Timestamp is current (within the last few minutes)
 - Branch name matches `git branch --show-current`
 - All 5 sections contain real content (no template placeholders)
 - Next Steps are numbered and actionable
 - In Progress items describe current state specifically enough to resume
 
-**Expected:** The file reads as a clear, actionable handoff that a fresh session could use to immediately resume work.
+Then verify it adversarially. Copy `workflows/verify-handoff.mjs` from agent-almanac into `.claude/workflows/` (workflows are not auto-installed) and run:
 
-**On failure:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?"
+```js
+Workflow({ name: 'verify-handoff', args: { drafts: [{
+  key: 'this-repo',
+  draft: '/abs/path/CONTINUE_HERE.draft.md',
+  facts: '/abs/path/handoff-facts.md',
+  sources: ['/abs/path/previous-edition.md'],   // the previous CONTINUE_HERE.md if one survives, else the plan the work follows
+  context: 'what the file is, who consumes it, which repositories the agents must not read (the draft and facts file are the exception)',
+}], round: 1 } })
+```
+
+Write the run's findings to a file beside the facts file (e.g. `handoff-findings-r1.md`), apply them, pass that file among `sources`, and re-run with the next `round`. The gate is the run's return value, not its log: **`blocking` is 0 and `coverage.complete` is true** — no dead or unusable lens, no dropped draft, and the completeness lens actually ran. Re-stamp the header immediately before installing, then install without clobbering an unconsumed prior handoff, in the directory Step 2 resolved: `mv -n <dir>/CONTINUE_HERE.draft.md <dir>/CONTINUE_HERE.md` (if a prior file still exists, read and archive it first). If the workflow is not available, record `Verified: not run (workflow unavailable)` in the header rather than skipping the step silently.
+
+**Expected:** The installed file reads as a clear, actionable handoff that a fresh session could use to immediately resume work, and every claim in it survived a verifier that could see the facts file.
+
+**On failure:** Edit sections that contain placeholder text or are too vague. Each section should pass the test: "Could a fresh session act on this without asking clarifying questions?" A verifier finding you disagree with is answered in the file (tag the claim, cite the fact), never by deleting the finding.
+
+### Step 4: Decide the Handoff's Lifecycle — Once Per Project, and Do Not Enforce It
+
+A handoff can be **tracked** or **ignored**, and both are legitimate. This step states the trade-off so the project can choose; it prescribes nothing, and this skill must not change a project's `.gitignore` to make the choice for it (#775). Earlier editions did: Step 2's On-failure told you to add `CONTINUE_HERE*.md` to `.gitignore` "if not", and Validation listed it as a box to tick. That silently ruled out half the design space, and it contradicted this skill's own complement — `read-continue-here` Step 5 branches on tracked-vs-untracked and treats both as normal.
+
+Find out which one the project has already chosen, rather than assuming. **Shell state does not survive between steps**, and Step 2's resolver assigns `CONTINUE_FILE` only when a handoff already *exists* — so for a first handoff it is empty until Step 3 has installed the file. Run this after Step 3, with `CONTINUE_FILE` set to the path Step 3 installed, or re-run Step 2's resolver in this shell now that the file is there.
+
+```bash
+: "${CONTINUE_FILE:?set this to the path Step 3 installed, or re-run the Step 2 resolver now that the file exists}"
+HOME_DIR=$(dirname -- "$CONTINUE_FILE")
+if ! git -C "$HOME_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "lifecycle: NOT IN A REPOSITORY — an ordinary file; deleting it is final"
+elif git -C "$HOME_DIR" ls-files --error-unmatch -- "$CONTINUE_FILE" >/dev/null 2>&1; then
+  echo "lifecycle: TRACKED — deletions are recoverable; every edition is in git log"
+elif RULE=$(git -C "$HOME_DIR" check-ignore -v -- "$CONTINUE_FILE" 2>/dev/null); then
+  echo "lifecycle: IGNORED — deletions are final; archive before consuming"
+  echo "  decided by: $(printf '%s' "$RULE" | cut -f1)"
+else
+  echo "lifecycle: UNDECIDED — untracked and not ignored, the state most likely to be swept into an unrelated commit"
+fi
+```
+
+Three details are load-bearing, and each was a wrong answer before an adversarial round measured it:
+
+- **It anchors on the directory holding the handoff** (`git -C "$HOME_DIR"`), not on the current directory. Asking `git` about a path in a repository you are not standing in makes both discriminators exit 128, which the old `else` reported as UNDECIDED — a confident classification produced by a command that could not see.
+- **"Could not tell" is reported separately from "not ignored."** Outside a repository, or with an unreadable `.git`, both commands exit 128; the old block printed *"untracked and not ignored, the state most likely to be swept into an unrelated commit"* when there was no repository, nothing tracked or untracked, and nothing that could sweep it. This step's whole claim is that it *detects* rather than assumes, so a detector that answers confidently when blind is the defect that matters most here.
+- **`-v` names the file that decided**, because IGNORED is not necessarily the *project's* choice. A user-level `core.excludesFile` produces the identical verdict, while a collaborator cloning the same repository without it gets UNDECIDED — so `decided by: .gitignore:1:…` and `decided by: /home/you/.config/git/ignore:3:…` are different facts wearing one label. The `--` before the pathspec is there because a path with a leading dash is otherwise parsed as options (measured: exit 129, `unknown switch`).
+
+| | Tracked | Ignored |
+|---|---|---|
+| Consuming it | `git rm` plus a commit; `git log -p -- <path>` recovers every edition | `rm`; the content is gone unless it was archived first |
+| A stray `git add -A` | harmless, it belongs in the repository | sweeps nothing, the ignore rule covers it |
+| Cost | handoffs and their churn live in the project's history forever | no history, so an unconsumed edition can be destroyed by the next session |
+| Suits | a repository whose handoffs are part of its record | a repository where the handoff is scratch between two sessions |
+
+**UNDECIDED is the one state worth acting on.** An untracked, un-ignored handoff is visible to `git add -A` and belongs to neither lifecycle. Say so and let the project choose; do not choose for it.
+
+Where the project has chosen *ignored*, the pattern must be a glob, not the bare name — Step 2 writes `CONTINUE_HERE.draft.md` and Step 3 renames it only after verification, so `CONTINUE_HERE.md` alone leaves every draft untracked-but-visible, which is the edition most likely to be swept up. That is a note about what a correct ignore rule looks like, not an instruction to add one.
+
+**Expected:** the lifecycle is named, and whoever consumes the handoff knows whether deleting it is recoverable.
+
+**On failure:** outside a git repository the question does not arise — the handoff is an ordinary file and deleting it is final. If the project has no stated preference, report `UNDECIDED` and leave it; a handoff written under the wrong lifecycle is recoverable, a `.gitignore` edited by a tool nobody asked is not obviously so.
 
 ## Validation
 
-- [ ] CONTINUE_HERE.md exists at the project root
+- [ ] The installed CONTINUE_HERE.md is at the location Step 2 resolved, and there is not a second one elsewhere
 - [ ] File contains all 5 sections with real content (not placeholders)
 - [ ] Timestamp and branch are accurate
-- [ ] `.gitignore` includes `CONTINUE_HERE.md`
+- [ ] The handoff's lifecycle is named — TRACKED, IGNORED, or UNDECIDED — and not changed by this skill
 - [ ] Next Steps are numbered and actionable
 - [ ] In Progress items specify enough detail to resume without questions
+- [ ] Every number, sha, quoted output and status claim traces to a line of the facts file from Step 1 that names the command which produced it, or is tagged in place as `inferred`, `not re-measured`, `by-construction`, or `the operator's call` where the facts file records why the measurement was not taken — and no sha, count, or status line a reader would act on carries a tag
+- [ ] The draft was verified adversarially in Step 3 (`verify-handoff`, traceability + completeness + actionability, against the facts file and the previous edition if one survives, else the plan) and the last run returned `blocking: 0` with `coverage.complete: true` before the draft was renamed to `CONTINUE_HERE.md` — or, if the workflow is not installed, the header records `Verified: not run (workflow unavailable)`
 
 ## Common Pitfalls
 
@@ -123,7 +212,10 @@ Read back CONTINUE_HERE.md and confirm:
 - **Duplicating git state**: Do not list every file changed — git already tracks that. Focus on intent, partial state, and next steps.
 - **Forgetting the Context section**: Failed approaches are the most valuable thing to record. Without them, the next session will retry the same dead ends.
 - **Overwriting without reading**: If CONTINUE_HERE.md already exists from a prior session, read it first — it may contain unfinished work from an earlier handoff.
-- **Leaving stale files**: CONTINUE_HERE.md is ephemeral. After the next session consumes it, delete it. Stale files cause confusion.
+- **Leaving stale files**: CONTINUE_HERE.md is ephemeral. After the next session consumes it, delete it. Stale files cause confusion — and so does a leftover `CONTINUE_HERE.draft.md`, which the next session may mistake for the installed one.
+- **Extrapolating a measurement**: "every run since the 20th" written from a `tail -6` that showed three days is an assertion, not a measurement. Quote the command that ran, and if the claim needs more days, read them. The verification workflow flags this only when the facts file records the command that actually ran — paste real output, never a paraphrased range.
+- **Claiming a section is unchanged when part of it was regenerated**: a section can be byte-identical through its last paragraph and still contain a subsection rewritten today. Scope the claim to what you compared.
+- **Pinning the absence of the last bad value**: a status line that says "not X" passes when the value drifts to Y. State the value.
 
 ## Related Skills
 
@@ -132,3 +224,4 @@ Read back CONTINUE_HERE.md and confirm:
 - `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
 - `commit-changes` — save work to git before writing the continuation file
 - `write-claude-md` — project instructions where optional continuity guidance lives
+- `coordinate-peer-sessions` — a peer sharing this worktree may consume the same `CONTINUE_HERE.md`; that skill is where a path-scope declaration belongs so the two sessions do not both act on it

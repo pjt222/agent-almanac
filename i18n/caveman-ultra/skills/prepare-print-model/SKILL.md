@@ -51,16 +51,14 @@ Export + optimize 3D models for additive manufacturing. CAD/modeling export → 
 Export 3D model in suitable format:
 
 **FDM/SLA**:
-```bash
-# If starting from CAD (Fusion 360, SolidWorks)
-# Export as: STL (binary) or 3MF
-# Resolution: High (triangle count sufficient for detail)
-# Units: mm (verify scale)
+If starting from CAD (Fusion 360, SolidWorks)
+Export as: STL (binary) or 3MF
+Resolution: High (triangle count sufficient for detail)
+Units: mm (verify scale)
 
-# Example export settings:
-# STL: Binary format, refinement 0.1mm
-# 3MF: Include color/material data if using multi-material printer
-```
+Example export settings:
+STL: Binary format, refinement 0.1mm
+3MF: Include color/material data if using multi-material printer
 
 → Model exported w/ appropriate resolution (0.1mm chord tolerance for mech parts, 0.05mm for organic).
 
@@ -127,16 +125,14 @@ Verify min wall thickness for process:
 | SLA (engineering) | 0.6mm | 1.2mm | 2.5mm+ |
 | SLS (nylon) | 0.7mm | 1.0mm | 2.0mm+ |
 
-```bash
-# Check wall thickness visually in slicer:
-# - Import model
-# - Enable "Thin walls" detection
-# - Slice with 0 infill to see wall structure
+Check wall thickness visually in slicer:
+- Import model
+- Enable "Thin walls" detection
+- Slice with 0 infill to see wall structure
 
-# For precise measurement, use CAD software:
-# - Measure distance between parallel surfaces
-# - Check in critical load-bearing areas
-```
+For precise measurement, use CAD software:
+- Measure distance between parallel surfaces
+- Check in critical load-bearing areas
 
 → All walls meet min thickness for process. Thin walls flagged.
 
@@ -208,15 +204,13 @@ Auto or manual supports for overhangs:
 - Reduces surface marks
 - Easier removal
 
-```bash
-# In slicer (PrusaSlicer example):
-# Print Settings → Support material
-# - Generate support material: Yes
-# - Overhang threshold: 45° (FDM) / 30° (SLA)
-# - Pattern: Rectilinear / Tree (auto)
-# - Interface layers: 3
-# - Interface pattern spacing: 0.2mm
-```
+In slicer (PrusaSlicer example):
+Print Settings → Support material
+- Generate support material: Yes
+- Overhang threshold: 45° (FDM) / 30° (SLA)
+- Pattern: Rectilinear / Tree (auto)
+- Interface layers: 3
+- Interface pattern spacing: 0.2mm
 
 → Supports gen'd for all overhangs > threshold, preview shows no floating geometry.
 
@@ -272,17 +266,15 @@ If err: unsure → start w/ slicer's default "Standard Quality" profile for mate
 
 Inspect sliced G-code:
 
-```bash
-# In slicer:
-# - Slice model
-# - Use layer preview slider to inspect each layer
-# - Check for:
-#   * Gaps in perimeters (indicates thin walls)
-#   * Floating regions (missing supports)
-#   * Excessive stringing paths (reduce travel)
-#   * First layer: proper squish and adhesion
-#   * Top layers: sufficient solid infill
-```
+In slicer:
+- Slice model
+- Use layer preview slider to inspect each layer
+- Check for:
+  * Gaps in perimeters (indicates thin walls)
+  * Floating regions (missing supports)
+  * Excessive stringing paths (reduce travel)
+  * First layer: proper squish and adhesion
+  * Top layers: sufficient solid infill
 
 **Red flags**:
 - **White gaps in solid regions**: Walls too thin for line width

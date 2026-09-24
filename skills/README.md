@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 369 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 373 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -28,8 +28,8 @@ Browse by domain:
 | [Compliance](compliance/) | 17 | GxP regulatory and validation skills |
 | [Mcp Integration](mcp-integration/) | 6 | MCP server setup and troubleshooting skills |
 | [Web Dev](web-dev/) | 5 | Web development skills for Next.js and modern frontend |
-| [Git](git/) | 10 | Git version control and GitHub workflow skills |
-| [General](general/) | 24 | Cross-cutting development environment and workflow skills |
+| [Git](git/) | 11 | Git version control and GitHub workflow skills |
+| [General](general/) | 26 | Cross-cutting development environment and workflow skills |
 | [Citations](citations/) | 3 | Academic and software citation management with R and BibTeX |
 | [Data Serialization](data-serialization/) | 2 | Data serialization formats, schemas, and evolution strategies |
 | [Review](review/) | 11 | Senior-level review skills for research, data, architecture, and design |
@@ -87,6 +87,7 @@ Browse by domain:
 | [Investigation](investigation/) | 9 | Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure |
 | [Memex](memex/) | 5 | Ritual wrappers and umbrella skill for the memex agent-native shared-memory subsystem (markdown source-of-truth + Postgres/pgvector + MCP) — session init, observation logging, pre-commit verification, and milestone slice handoff |
 | [Ocr](ocr/) | 1 | Optical character and handwritten-text recognition — engine selection, benchmarking, and transcription quality measurement |
+| [Agent Commerce](agent-commerce/) | 1 | Agent payment protocols — testing, conformance, and settlement verification for x402 and related rails |
 <!-- AUTO:END:skills-table -->
 
 ## SKILL.md Format
@@ -182,11 +183,12 @@ When performing package development tasks, follow procedures from:
 
 ## Contributing a New Skill
 
-1. Create a directory: `skills/<skill-name>/`
-2. Write `SKILL.md` following the template (see any existing skill)
-3. Add the skill to `_registry.yml`
-4. Ensure frontmatter includes required fields: `name`, `description`, `allowed-tools`
-5. Include at minimum: When to Use, Procedure, and Validation sections
+The contributor steps are in [CONTRIBUTING.md](../CONTRIBUTING.md) § Adding a skill, together
+with the acceptance rules, the local checks, and which steps are the maintainer's at merge. In
+one line: `SKILL.md` from [`_template/SKILL.md`](_template/SKILL.md) with all six required
+sections — When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills — the
+`_registry.yml` entry with its `total_skills` bump, and the `.claude/skills/` symlink. The
+`skills` CI check enforces the six sections; three of them is not a minimum.
 
 ## See Also
 

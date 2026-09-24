@@ -104,7 +104,7 @@ Usar esta matriz de decisión para determinar si refinar en el lugar o crear una
 |---|---|---|
 | ID de habilidad | Sin cambios | Nuevo ID: `<skill>-advanced` |
 | Ruta del archivo | Mismo SKILL.md | Nuevo directorio |
-| Incremento de versión | Parche o menor | Comienza en 1.0 |
+| Incremento de versión | Menor (mayor solo si rompe compatibilidad) | Comienza en 1.0 |
 | Complejidad | Puede aumentar | Mayor que la original |
 | Registro | Sin nueva entrada | Nueva entrada añadida |
 | Symlinks | Sin cambio | Nuevos symlinks necesarios |
@@ -124,14 +124,12 @@ Usar esta matriz de decisión para determinar si refinar en el lugar o crear una
 
 Editar el SKILL.md existente directamente:
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- Abrir para edición
+- Añadir/revisar pasos del procedimiento
+- Fortalecer pares Expected/On failure
+- Añadir tablas o ejemplos
+- Actualizar los disparadores de When to Use
+- Revisar Inputs si el alcance cambió
 
 Seguir estas reglas de edición:
 - Preservar todas las secciones existentes — añadir contenido, no eliminar secciones
@@ -178,15 +176,14 @@ ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 1. Obtener el hash del commit de la fuente actual:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
 2. Actualizar `source_commit` en el frontmatter de cada archivo traducido:
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
 3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:
@@ -218,12 +215,12 @@ Aplazar la traducción de nuevas variantes hasta que la variante se estabilice (
 
 ### Paso 5: Actualizar la Versión y los Metadatos
 
-Incrementar el campo `version` en el frontmatter siguiendo las convenciones de semver:
+Incrementar el campo `version` en el frontmatter:
 
 | Tipo de cambio | Incremento de versión | Ejemplo |
 |---|---|---|
-| Corrección tipográfica, aclaración de redacción | Parche: 1.0 → 1.1 | Oración poco clara corregida en el Paso 3 |
-| Nuevo paso, nuevo error, nueva tabla | Menor: 1.0 → 2.0 | Añadido Paso 7 para manejo de casos extremos |
+| Corrección tipográfica, aclaración de redacción | Menor: 1.0 → 1.1 | Oración poco clara corregida en el Paso 3 |
+| Nuevo paso, nuevo error, nueva tabla | Menor: 1.0 → 1.1 | Añadido Paso 7 para manejo de casos extremos |
 | Procedimiento reestructurado, entradas cambiadas | Mayor: 1.0 → 2.0 | Reorganizado de 5 a 8 pasos |
 
 También actualizar:

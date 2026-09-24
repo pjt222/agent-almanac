@@ -1,15 +1,12 @@
 ---
 name: create-dockerfile
-locale: es
-source_locale: en
-source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
 description: >
-  Crear Dockerfiles generales de propósito general para múltiples lenguajes (Node.js,
-  Python, Go, Java, Rust) con mejores prácticas de seguridad, optimización de capas,
-  y configuración de producción. Usar cuando se necesite contenerizar cualquier aplicación
-  para despliegue consistente y reproducible.
+  Create general-purpose Dockerfiles for Node.js, Python, Go, Rust, and Java
+  projects. Covers base image selection, dependency installation, user
+  permissions, COPY patterns, ENTRYPOINT vs CMD, and .dockerignore. Use when
+  containerizing an application for the first time, creating a consistent
+  build/runtime environment, preparing an app for cloud deployment or Docker
+  Compose, or when no existing Dockerfile is present in the project.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -17,114 +14,156 @@ metadata:
   version: "1.0"
   domain: containerization
   complexity: basic
-  language: multi
-  tags: docker, dockerfile, containerization, multi-language, best-practices
+  language: Docker
+  tags: docker, dockerfile, node, python, go, rust, java, container
+  locale: es
+  source_locale: en
+  source_commit: 1d84967e5
+  fence_basis_commit: 1d84967e5
+  translator: "(untranslated stub)"
+  translation_date: "2026-08-11"
 ---
 
-# Crear Dockerfile
+# Create Dockerfile
 
-Crear Dockerfiles de producción para aplicaciones en cualquier lenguaje con mejores prácticas.
+Write a production-ready Dockerfile for general-purpose application projects.
 
-## Cuándo Usar
+## When to Use
 
-- Contenerizando una aplicación para despliegue en producción
-- Necesitando un Dockerfile con mejores prácticas de seguridad
-- Creando entornos de desarrollo reproducibles
-- Estandarizando la contenerización en un equipo
-- Preparando aplicaciones para despliegue en Kubernetes
+- Containerizing a Node.js, Python, Go, Rust, or Java application
+- Creating a consistent build/runtime environment
+- Preparing an application for cloud deployment or Docker Compose
+- No existing Dockerfile in the project
 
-## Entradas
+## Inputs
 
-- **Requerido**: Código fuente de la aplicación
-- **Requerido**: Lenguaje y framework utilizado
-- **Requerido**: Archivo de dependencias (package.json, requirements.txt, go.mod, etc.)
-- **Opcional**: Requisitos de compilación específicos
-- **Opcional**: Variables de entorno necesarias
-- **Opcional**: Archivos de configuración de la aplicación
+- **Required**: Project language and entry point (e.g., `npm start`, `python app.py`)
+- **Required**: Dependency manifest (package.json, requirements.txt, go.mod, Cargo.toml, pom.xml)
+- **Optional**: Target environment (development or production)
+- **Optional**: Exposed ports
 
-## Procedimiento
+## Procedure
 
-### Paso 1: Seleccionar Imagen Base Apropiada
+### Step 1: Choose Base Image
 
-Elegir la imagen base según el lenguaje y los requisitos.
+| Language | Dev Image | Prod Image | Size |
+|---|---|---|---|
+| Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
+| Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
+| Go | `golang:1.23-bookworm` | `gcr.io/distroless/static` | ~2MB |
+| Rust | `rust:1.82-bookworm` | `debian:bookworm-slim` | ~80MB |
+| Java | `eclipse-temurin:21-jdk` | `eclipse-temurin:21-jre` | ~200MB |
 
-```dockerfile
-# Node.js
-FROM node:20-alpine
+**Expected:** Select the slim/distroless variant for production images.
 
-# Python
-FROM python:3.11-slim
+### Step 2: Write Dockerfile (by language)
 
-# Go
-FROM golang:1.21-alpine
-
-# Java
-FROM eclipse-temurin:17-jre-alpine
-
-# Rust
-FROM rust:1.74-alpine AS builder
-```
-
-Principios de selección:
-- Preferir variantes `alpine` o `slim` para producción
-- Anclar versiones mayores y menores (no usar `latest`)
-- Usar imágenes oficiales de Docker Hub
-
-**Esperado:** Imagen base seleccionada que minimiza el tamaño y la superficie de ataque.
-
-**En caso de fallo:** Verificar compatibilidad de la imagen con la arquitectura del host (amd64 vs arm64), comprobar disponibilidad en Docker Hub.
-
-### Paso 2: Configurar Estructura del Dockerfile
-
-Seguir la estructura recomendada para máxima eficiencia de caché.
+#### Node.js
 
 ```dockerfile
-# 1. Imagen base
-FROM python:3.11-slim
+FROM node:22-bookworm-slim
 
-# 2. Metadatos
-LABEL maintainer="equipo@ejemplo.com"
-LABEL version="1.0"
+RUN groupadd -r appuser && useradd -r -g appuser -m appuser
 
-# 3. Crear usuario no-root
-RUN groupadd -r appuser && useradd -r -g appuser appuser
-
-# 4. Instalar dependencias del sistema
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# 5. Establecer directorio de trabajo
 WORKDIR /app
 
-# 6. Copiar e instalar dependencias (caché de capas)
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+COPY . .
+
+USER appuser
+EXPOSE 3000
+CMD ["node", "src/index.js"]
+```
+
+#### Python
+
+```dockerfile
+FROM python:3.12-slim-bookworm
+
+RUN groupadd -r appuser && useradd -r -g appuser -m appuser
+
+WORKDIR /app
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 7. Copiar código fuente
 COPY . .
 
-# 8. Cambiar a usuario no-root
 USER appuser
-
-# 9. Healthcheck
-HEALTHCHECK --interval=30s --timeout=3s \
-    CMD curl -f http://localhost:8000/health || exit 1
-
-# 10. Exponer puertos
 EXPOSE 8000
-
-# 11. Punto de entrada
-CMD ["python", "main.py"]
+CMD ["python", "app.py"]
 ```
 
-**Esperado:** Dockerfile sigue las mejores prácticas de seguridad y optimización de capas.
+#### Go
 
-**En caso de fallo:** Revisar errores de sintaxis Docker, verificar que los archivos referenciados existen en el contexto de compilación.
+```dockerfile
+FROM golang:1.23-bookworm AS builder
 
-### Paso 3: Agregar .dockerignore
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -o /app/server ./cmd/server
 
-Excluir archivos innecesarios del contexto de compilación.
+FROM gcr.io/distroless/static
+COPY --from=builder /app/server /server
+EXPOSE 8080
+ENTRYPOINT ["/server"]
+```
+
+#### Rust
+
+```dockerfile
+FROM rust:1.82-bookworm AS builder
+
+WORKDIR /src
+COPY Cargo.toml Cargo.lock ./
+RUN mkdir src && echo "fn main() {}" > src/main.rs && cargo build --release && rm -rf src
+
+COPY . .
+RUN touch src/main.rs && cargo build --release
+
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /src/target/release/myapp /usr/local/bin/myapp
+EXPOSE 8080
+ENTRYPOINT ["myapp"]
+```
+
+#### Java (Maven)
+
+```dockerfile
+FROM eclipse-temurin:21-jdk AS builder
+
+WORKDIR /src
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+COPY src ./src
+RUN mvn package -DskipTests
+
+FROM eclipse-temurin:21-jre
+COPY --from=builder /src/target/*.jar /app/app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+```
+
+**Expected:** `docker build -t myapp .` completes without errors.
+
+**On failure:** Check base image availability and dependency installation commands.
+
+### Step 3: ENTRYPOINT vs CMD
+
+| Directive | Purpose | Override |
+|---|---|---|
+| `ENTRYPOINT` | Fixed executable | Override with `--entrypoint` |
+| `CMD` | Default arguments | Override with trailing args |
+| Both | `ENTRYPOINT` + default args via `CMD` | Args override CMD only |
+
+Use `ENTRYPOINT` for compiled binaries with a single purpose. Use `CMD` for interpreted languages where you might want `docker run myapp bash`.
+
+### Step 4: Create .dockerignore
 
 ```text
 .git
@@ -132,65 +171,68 @@ Excluir archivos innecesarios del contexto de compilación.
 node_modules
 __pycache__
 *.pyc
+target/
 .env
-.venv
-README.md
-docker-compose*.yml
-.dockerignore
-Dockerfile
-.github
-tests/
-docs/
+.env.*
 *.md
+!README.md
+.vscode
+.idea
+Dockerfile
+docker-compose*.yml
 ```
 
-**Esperado:** El contexto de compilación es mínimo, las compilaciones son más rápidas, no se incluyen secretos.
+**Expected:** Build context excludes development artifacts.
 
-**En caso de fallo:** Verificar que no se excluyen archivos necesarios para la compilación.
+### Step 5: Add Non-Root User
 
-### Paso 4: Compilar y Probar
+Always run as non-root in production:
+
+```dockerfile
+RUN groupadd -r appuser && useradd -r -g appuser -m appuser
+USER appuser
+```
+
+For distroless images, use the built-in nonroot user:
+
+```dockerfile
+FROM gcr.io/distroless/static:nonroot
+USER nonroot
+```
+
+### Step 6: Build and Verify
 
 ```bash
-# Compilar
-docker build -t mi-app:latest .
-
-# Ejecutar
-docker run -p 8000:8000 mi-app:latest
-
-# Verificar que se ejecuta como no-root
-docker run mi-app:latest whoami
-# Debe imprimir: appuser
-
-# Verificar tamaño de imagen
-docker images mi-app:latest
+docker build -t myapp:latest .
+docker run --rm myapp:latest
+docker image inspect myapp:latest --format '{{.Size}}'
 ```
 
-**Esperado:** La imagen se compila exitosamente, se ejecuta como usuario no-root, el tamaño es razonable.
+**Expected:** Container starts, responds on the expected port, runs as non-root.
 
-**En caso de fallo:** Revisar logs de compilación, verificar permisos de archivos dentro del contenedor, comprobar healthcheck.
+**On failure:** Check logs with `docker logs`. Verify WORKDIR, COPY paths, and exposed ports.
 
-## Validación
+## Validation
 
-- [ ] La imagen se compila sin errores ni advertencias
-- [ ] La aplicación se ejecuta correctamente dentro del contenedor
-- [ ] Se ejecuta como usuario no-root
-- [ ] El healthcheck funciona correctamente
-- [ ] El .dockerignore excluye archivos innecesarios
-- [ ] El tamaño de la imagen es razonable para el lenguaje
-- [ ] No se incluyen secretos ni credenciales en la imagen
+- [ ] `docker build` completes without errors
+- [ ] Container starts and application responds
+- [ ] `.dockerignore` excludes unnecessary files
+- [ ] Application runs as non-root user
+- [ ] Dependencies are copied before source code (cache efficiency)
+- [ ] No secrets or `.env` files baked into the image
 
-## Errores Comunes
+## Common Pitfalls
 
-- **Ejecutar como root**: Siempre crear y usar un usuario no-root para seguridad.
-- **Usar `latest` como tag**: Anclar versiones específicas para reproducibilidad.
-- **No limpiar caché de apt**: Siempre agregar `rm -rf /var/lib/apt/lists/*` después de `apt-get install`.
-- **Copiar todo antes de dependencias**: Las dependencias deben copiarse e instalarse antes del código fuente.
-- **Secretos en la imagen**: Nunca incluir archivos .env, claves API o credenciales en la imagen.
-- **Imagen demasiado grande**: Usar variantes alpine/slim, compilación multi-etapa, y .dockerignore.
+- **COPY before dependency install**: Invalidates the dependency cache on every code change. Always copy the manifest file first.
+- **Running as root**: Default Docker user is root. Always add a non-root user for production.
+- **Missing .dockerignore**: Sending `node_modules` or `.git` into the build context wastes time and disk.
+- **Using `latest` tag for base images**: Pin to specific versions (e.g., `node:22.11.0`) for reproducibility.
+- **Forgetting `--no-cache-dir`**: Python `pip` caches packages by default, bloating the image.
+- **ADD vs COPY**: Use `COPY` unless you need URL download or tar extraction (`ADD` auto-extracts).
 
-## Habilidades Relacionadas
+## Related Skills
 
-- `create-multistage-dockerfile` - Compilaciones multi-etapa para imágenes más pequeñas
-- `optimize-docker-build-cache` - Optimizar caché de compilación Docker
-- `create-r-dockerfile` - Dockerfiles específicos para R
-- `setup-docker-compose` - Orquestación multi-contenedor
+- `create-r-dockerfile` - R-specific Dockerfile using rocker images
+- `create-multistage-dockerfile` - multi-stage patterns for minimal production images
+- `optimize-docker-build-cache` - advanced caching strategies
+- `setup-compose-stack` - orchestrate the containerized app with other services

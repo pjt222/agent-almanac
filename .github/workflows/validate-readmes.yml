@@ -1,0 +1,119 @@
+name: Validate READMEs
+
+# `scripts/generate-readmes.js` writes twelve committed files, and until now the only
+# thing that checked them was `npm run check-readmes` inside `npm test` — which runs
+# in `release.yml` alone, on a tag. So a stale generated README could land on a PR,
+# sit on main, and first surface as a RED RELEASE, blaming the tag rather than the
+# commit that caused it (#563).
+#
+# `update-readmes.yml` does auto-commit regenerated output on push to main, so drift
+# is usually transient — but that job is path-triggered, and a hand edit to a
+# generated file matches none of its content-tree paths. Nothing repaired those.
+#
+# Why `paths` is the OUTPUT set and not the read-set:
+#
+#   The inputs (five registries, `i18n/_config.yml`, the per-locale
+#   `translation_status.yml`, the `i18n/<locale>/<type>/` listings,
+#   `generate-readmes.js` itself) are deliberately NOT listed. Contributors are not
+#   expected to regenerate — CLAUDE.md tells them "run `npm run update-readmes` (or
+#   let CI auto-commit on push to main)" in four places, and update-readmes.yml is
+#   what makes that true. Triggering on inputs would fail every ordinary content PR
+#   for not having run a generator the docs say CI runs for you, which is a contract
+#   change wearing a bug fix's clothes.
+#
+#   Scoping to outputs closes the whole release-blocking defect with no contract
+#   change: it catches a generated file that was hand-edited or committed stale,
+#   which is the only case nothing else covers. The translations slice of the same
+#   table is additionally gated on every PR by integrity check B13 (#560).
+#
+# Not wired into `validate-integrity.sh` on purpose: that job runs with
+# `setup-node` and deliberately NO `npm ci` (integrity check A8 documents the
+# constraint), while `generate-readmes.js` imports js-yaml. It would die at module
+# resolution in CI while passing locally.
+
+on:
+  push:
+    branches: [main]
+    # GitHub Actions does not resolve YAML anchors across event blocks, so this list
+    # is written out twice. Keep the two identical or push and pull_request diverge
+    # silently — the shape integrity check A8 exists to catch elsewhere.
+    paths:
+      - 'README.md'
+      - 'CLAUDE.md'
+      - 'skills/README.md'
+      - 'agents/README.md'
+      - 'teams/README.md'
+      - 'guides/README.md'
+      - 'guides/quick-reference.md'
+      - 'viz/README.md'
+      - 'tests/README.md'
+      - 'i18n/README.md'
+      - 'tools/README.md'
+      - 'SECURITY.md'
+      - '.github/workflows/validate-readmes.yml'
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'CLAUDE.md'
+      - 'skills/README.md'
+      - 'agents/README.md'
+      - 'teams/README.md'
+      - 'guides/README.md'
+      - 'guides/quick-reference.md'
+      - 'viz/README.md'
+      - 'tests/README.md'
+      - 'i18n/README.md'
+      - 'tools/README.md'
+      - 'SECURITY.md'
+      - '.github/workflows/validate-readmes.yml'
+  # Path filters do not apply to `schedule`, which is the point. Everything above is
+  # commit-triggered, so all of it is blind to HEALER FAILURE: if update-readmes.yml goes red
+  # — rotated deploy key, npm ci failure, a non-fast-forward race against a human merge — main
+  # is left stale, no output file was touched by the failure, and nothing re-checks until the
+  # next tag. That is precisely the #563 symptom, still reachable after this gate lands.
+  # A daily unconditional run turns "surfaces at the next release" into "surfaces within 24h",
+  # for that case, for a dependency bump that changes generator output, and for a generator
+  # change that never triggered a regeneration. One read-only job per day.
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readmes:
+    runs-on: ubuntu-latest
+    steps:
+      # No `fetch-depth: 0`: unlike generate-translation-status.js, this generator
+      # makes no git calls, so full history buys nothing and costs ~90s here.
+      - uses: actions/checkout@v7
+
+      # Prerequisite for the grep -> rg migration; no call site uses rg yet.
+      - name: Ensure ripgrep
+        run: bash scripts/ci/ensure-ripgrep.sh
+
+      - uses: actions/setup-node@v7
+        with:
+          # Matches update-readmes.yml, the job that WRITES these files. If the two
+          # ever disagree, this gate could fail on output the writer considers correct.
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Regenerates every managed file in memory and byte-compares it against the
+      # committed copy, so this is exhaustive over the output rather than a
+      # heuristic. Exits 1 listing each stale file.
+      - run: npm run check-readmes
+
+      # `npm run check:generator-inputs` (#618) briefly lived here, on the argument that this
+      # workflow owns the generated-README surface and that `readmes` is job-blocking, which
+      # is the right severity for a latent scheduling defect. It moved to
+      # validate-integrity.yml because the severity argument assumed the check would run at
+      # all: its subject is a generator module or the healer's `paths:` filter, and the
+      # trigger list above is deliberately the OUTPUT set, so a PR adding an import to
+      # `scripts/generate-readmes.js` and touching no README never reaches this job.
+      #
+      # Recorded rather than deleted, because "why is that check over there and not here" is
+      # exactly the question this file's header answers for everything else.

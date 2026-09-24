@@ -3,6 +3,7 @@ name: format-apa-report
 locale: wenyan
 source_locale: en
 source_commit: 82c77053
+fence_basis_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-24"
 description: >

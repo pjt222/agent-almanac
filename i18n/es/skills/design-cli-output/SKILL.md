@@ -26,6 +26,7 @@ metadata:
   locale: es
   source_locale: en
   source_commit: 2630b6e9
+  fence_basis_commit: 2630b6e9
   translator: "Claude + human review"
   translation_date: "2026-07-30"
 ---

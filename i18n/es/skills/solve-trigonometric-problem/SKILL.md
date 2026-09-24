@@ -18,8 +18,8 @@ metadata:
   version: "1.0"
   domain: geometry
   complexity: intermediate
-  language: natural
-  tags: geometry, trigonometry, triangles, identities, law-of-sines
+  language: multi
+  tags: geometry, trigonometry, identities, triangle, sines, cosines
 ---
 
 # Resolver Problema Trigonométrico

@@ -24,7 +24,8 @@ members:
 locale: de
 source_locale: en
 source_commit: 7de503a4
-translator: "Claude + human review"
+fence_basis_commit: 7de503a4
+translator: "(untranslated stub)"
 translation_date: "2026-07-24"
 ---
 

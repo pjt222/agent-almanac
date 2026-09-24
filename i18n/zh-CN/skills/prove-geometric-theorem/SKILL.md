@@ -9,9 +9,9 @@ metadata:
   author: Philipp Thoss
   version: "1.0"
   domain: geometry
-  complexity: intermediate
-  language: natural
-  tags: geometry, proof, theorem, coordinate-geometry, vector-geometry
+  complexity: advanced
+  language: multi
+  tags: geometry, proof, theorem, euclidean, axiomatic, coordinate
   locale: zh-CN
   source_locale: en
   source_commit: 6f65f316

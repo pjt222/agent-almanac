@@ -172,7 +172,7 @@ metadata:
     app: myapp
     version: v1.0.0
 spec:
-  replicas: 3
+  # no replicas: here — the HPA in Step 5 owns the count
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -274,6 +274,13 @@ spec:
       imagePullSecrets:
       - name: registry-credentials
 ```
+
+No `replicas:` field: the HPA in Step 5 targets this Deployment and owns the
+count. Declaring both makes every client-side `kubectl apply` — the default —
+reset what the autoscaler chose; under `--server-side`, once the HPA has written
+the field, the apply is refused with a conflict on `.spec.replicas` instead.
+Without the field the Deployment starts at the API default of one replica and the
+HPA raises it to `minReplicas`.
 
 ```bash
 # Apply deployment
@@ -463,6 +470,13 @@ kubectl get hpa myapp-hpa -n myapp-prod --watch
 
 ## Step 6: Package Application with Helm Chart
 
+`replicaCount` in the values below is not the same decision as the Deployment's
+`replicas:` field above. The `helm create` scaffold this chart starts from guards
+its template's `replicas:` line behind `{{- if not .Values.autoscaling.enabled }}`,
+so with `autoscaling.enabled: true` the value is inert and `minReplicas` is the
+floor that applies. It is kept here because it is the value a chart with
+autoscaling disabled would use — delete it only if you also delete the guard.
+
 ```bash
 # Create Helm chart structure
 helm create myapp-chart
@@ -550,7 +564,7 @@ helm install myapp . --dry-run --debug --namespace myapp-prod
 helm install myapp . --namespace myapp-prod --create-namespace
 
 # Upgrade with new values
-helm upgrade myapp . --namespace myapp-prod --set replicaCount=5
+helm upgrade myapp . --namespace myapp-prod --set image.tag=v1.1.0
 
 # Rollback if needed
 helm rollback myapp 1 --namespace myapp-prod

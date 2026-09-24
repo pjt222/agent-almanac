@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.5"
+  version: "2.0"
   domain: general
   complexity: intermediate
   language: multi
@@ -116,14 +116,12 @@ Use this decision matrix to determine whether to refine in-place or create a var
 
 Edit the existing SKILL.md directly:
 
-```bash
-# Open for editing
-# Add/revise procedure steps
-# Strengthen Expected/On failure pairs
-# Add tables or examples
-# Update When to Use triggers
-# Revise Inputs if scope changed
-```
+- Open for editing
+- Add/revise procedure steps
+- Strengthen Expected/On failure pairs
+- Add tables or examples
+- Update When to Use triggers
+- Revise Inputs if scope changed
 
 Follow these editing rules:
 - Preserve all existing sections — add content, don't remove sections
@@ -156,41 +154,82 @@ cp skills/<skill-name>/SKILL.md skills/<skill-name>-advanced/SKILL.md
 
 ### Step 4.5: Sync Translated Variants
 
-> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+> **Required when translations exist.** Applies to human authors and AI agents
+> alike. **Do not bump `source_commit`** — an evolve run that changes English
+> without retranslating leaves every provenance field untouched, and the staleness
+> it creates is true rather than noise (#405, #616).
 
-Check whether translations exist for the evolved skill and update them to reflect the new source state:
+Check which translations exist for the evolved skill. They are about to become stale, and this step is how you leave them honestly stale rather than falsely fresh:
 
 ```bash
 # Check for existing translations
 ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
 ```
 
-#### If translations exist
+#### Which provenance field may move, and by what
 
-1. Get the current source commit hash:
+`scripts/lib/provenance.js` is the authority on this; the table is its summary.
+
+| Field | Moves when | Moved by |
+|---|---|---|
+| `source_commit` | a **human** retranslates against a newer English revision | that human, in the commit carrying the retranslated prose |
+| `fence_basis_commit` | frozen-fence bytes are propagated into the mirror **and verified** | `normalize-i18n-fences.js` when it does the propagating; `tools/provenance-field.mjs` when you propagate by hand, after `check:fence-propagation` passes |
+
+Which of those applies depends on **what you edited**, and getting this wrong is how a
+provenance field becomes a false claim:
+
+- **Prose only** — neither field moves. The mirror is genuinely stale afterwards, `npm run
+  validate:translations` is right to say so, and bumping `source_commit` would assert a
+  translation event that never happened, suppressing the one signal that would have
+  surfaced the drift (#405, #616).
+- **A frozen fence** — `source_commit` still does not move, but the mirrors' fence bodies
+  just changed, so every `fence_basis_commit` naming the old revision is now false.
+  Step 2 below restamps them. Leaving them is the failure this table exists to prevent.
+- **A retranslation of one locale** — that locale's `source_commit` moves, in the commit
+  carrying the prose, and the others' do not.
+
+`normalize-i18n-fences.js` is named above for the case where it does the propagating. It
+does **not** fire on a hand propagation — measured on this skill's own rewrite, where a
+preview reported five files to change and not one was a mirror of these skills. Do not wait
+for it to restamp what you copied by hand.
+
+Never repair a provenance field in bulk with `sed`. The form this step used to carry was a
+substitution anchored at `^source_commit` — column 0 — which silently no-ops on every mirror
+that nests provenance under `metadata:` at two-space indent: wrong and unreliable at once.
+Route any bulk field edit through `tools/provenance-field.mjs`, which is indent-aware and
+refuses to move `source_commit` unless you declare you are the human retranslating.
+
+(That anchored form is deliberately not reproduced here. #616's acceptance criterion is a
+grep, and prose quoting the thing it forbids would defeat the check that proves the thing
+is gone.)
+
+1. Read which mirrors this change made stale, and leave them stale:
 
 ```bash
-SOURCE_COMMIT=$(git rev-parse HEAD)
+npm run validate:translations
 ```
 
-2. Update `source_commit` in each translated file's frontmatter:
+2. If you edited a **frozen fence** in English, its bytes must reach all ten mirrors in
+   this same commit, verified by bytes rather than by the fence gate — that gate accepts a
+   body from any English revision, so it cannot tell you whether your edit landed. Then
+   restamp the mirrors you touched, because their old `fence_basis_commit` now names a
+   revision whose fences they no longer carry:
 
 ```bash
-for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
-done
+npm run check:fence-propagation -- --id <skill-name>
+node tools/provenance-field.mjs --field fence_basis_commit --set $(git rev-parse --short HEAD) <mirror paths>
 ```
 
-3. Flag files for re-translation by including affected locales in the commit message:
+3. Flag the affected locales in the commit message, naming what changed:
 
 ```text
 evolve(<skill-name>): <description of changes>
 
-Translations flagged for re-sync: de, zh-CN, ja, es
+Translations now stale, source_commit deliberately NOT bumped: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
-4. Regenerate translation status files:
+4. Regenerate the translation status files:
 
 ```bash
 npm run translation:status
@@ -204,9 +243,19 @@ No action needed. Proceed to Step 5.
 
 Defer translation of new variants until the variant stabilizes (1-2 versions). Translating a v1.0 variant that may change substantially by v1.2 wastes effort. Add translations after the variant has been refined at least once.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. The commit message notes which locales need re-translation and which sections changed. `npm run translation:status` exits 0.
+**Expected:** `source_commit` unchanged everywhere. `npm run validate:translations` reports
+more stale mirrors than before — that count rising is the correct outcome of an evolve run,
+not a failure to repair. If you edited a frozen fence, `fence_basis_commit` on the mirrors
+you touched names the commit carrying the new bytes; if you edited only prose, no provenance
+field moved at all. If a frozen fence was edited, `check:fence-propagation` shows every
+mirror carrying the new bytes. `npm run translation:status` exits 0.
 
-**On failure:** If `sed` fails to match the frontmatter field, the translated file may have non-standard formatting. Open it manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, the file was not scaffolded correctly — re-scaffold with `npm run translate:scaffold`.
+**On failure:** If `check:fence-propagation` reports a mirror whose fence body differs, the
+byte-copy did not reach it: copy the English fence body verbatim into that mirror and re-run
+— and read its output rather than its exit code, which it shares with the `unalignable`
+case. If a frontmatter field genuinely needs a bulk edit, use `tools/provenance-field.mjs`; a
+substitution anchored at column 0 matches nothing in a mirror that nests provenance under
+`metadata:`, and reports success while changing nothing.
 
 ### Step 5: Update Version and Metadata
 
@@ -293,7 +342,7 @@ Run the full validation checklist:
 - [ ] `total_skills` count matches actual skill count on disk
 - [ ] Symlinks resolve correctly (variants only)
 - [ ] `git diff` shows no accidental deletions from the original content
-- [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
+- [ ] For refinements with translations: no provenance field moved; the now-stale locales named in the commit message
 
 ```bash
 # Verify frontmatter
@@ -325,7 +374,7 @@ git diff
 - [ ] For variants: new entry in `_registry.yml` with correct path
 - [ ] For variants: symlinks created at `.claude/skills/` and `~/.claude/skills/`
 - [ ] `git diff` confirms no accidental content removal
-- [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
+- [ ] For refinements with translations: no provenance field moved; the now-stale locales named in the commit message
 
 ## Common Pitfalls
 
@@ -333,7 +382,6 @@ git diff
 - **Accidental content deletion**: When restructuring steps, it's easy to drop an On failure block or a table row. Always review `git diff` before committing.
 - **Stale cross-references**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
 - **Registry count drift**: After creating a variant, the `total_skills` count must be incremented. Forgetting this causes validation failures in other skills that check the registry.
-- **Stale translations after evolution**: The repo mirrors content across 10 locale trees (`i18n/<locale>/skills/<skill-name>/SKILL.md`), so a single skill evolution can stale up to 10 locale copies. Always check for existing translations with `ls i18n/*/skills/<skill-name>/SKILL.md` and either update `source_commit` in each translated file's frontmatter *after re-translating*, or flag them for re-translation in the commit message. Bumping `source_commit` without re-translating marks stale content as fresh and suppresses the freshness check — never do that. Skipping the check entirely causes `npm run validate:translations` to report stale warnings.
 - **Scope creep during refinement**: A refinement that doubles the skill's length should probably be a variant instead. If you're adding more than 3 new procedure steps, reconsider the scope decision from Step 3.
 - **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
 

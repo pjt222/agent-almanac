@@ -17,7 +17,7 @@ Universal skill/agent/team installer for 12+ agentic CLI frameworks. Detects whi
 | OpenCode | `opencode.js` | `.opencode/` |
 | Windsurf | `windsurf.js` | `.windsurf/` |
 | Vibe | `vibe.js` | `.vibe/` |
-| Hermes | `hermes.js` | `.hermes/` |
+| Hermes | `hermes.js` | `$HERMES_HOME` / `~/.hermes/` (`%LOCALAPPDATA%\hermes` on Windows) |
 | OpenClaw | `openclaw.js` | `.openclaw/` |
 | Universal | `universal.js` | `.agents/skills/` |
 

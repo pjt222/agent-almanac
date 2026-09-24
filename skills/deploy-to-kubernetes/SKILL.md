@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: devops
   complexity: intermediate
   language: multi
@@ -228,7 +228,7 @@ metadata:
     app: myapp
     version: v1.0.0
 spec:
-  replicas: 3
+  # no replicas: here — the HPA in Step 5 owns the count
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -331,6 +331,19 @@ spec:
       - name: registry-credentials
 ```
 
+**The Deployment declares no `replicas:` field, and that omission is the lesson.**
+Step 5 puts a HorizontalPodAutoscaler on this same Deployment, and the two cannot
+both own the replica count: with `replicas:` in the manifest, every client-side
+`kubectl apply` — the default — resets the count to the manifest's value,
+discarding whatever the autoscaler chose, and the HPA scales it back. Under
+`--server-side` the failure changes shape rather than going away: once the HPA has
+written the field, an apply still carrying it is refused with a field-manager
+conflict on `.spec.replicas`, and `--force-conflicts` reinstates the reset. Either
+way the manifest and the autoscaler are fighting over one field, and under load
+the visible symptom is a capacity drop the Deployment does not explain. Omit the field on any
+Deployment an HPA targets. Such a Deployment starts at the API default of one
+replica, and the HPA raises it to `minReplicas` on its first sync.
+
 Apply and monitor deployment:
 
 ```bash
@@ -353,7 +366,7 @@ kubectl describe deployment myapp -n myapp-prod
 kubectl top pods -n myapp-prod -l app=myapp
 ```
 
-**Expected:** Deployment creates 3 replicas with rolling update strategy. Pods pass readiness probes before receiving traffic. Liveness probes restart unhealthy pods. Resource requests/limits prevent OOM kills. Logs show successful application startup.
+**Expected:** Deployment rolls out with the RollingUpdate strategy at the default of one replica, and Step 5's HPA raises it to `minReplicas` once applied. Pods pass readiness probes before receiving traffic. Liveness probes restart unhealthy pods. Resource requests/limits prevent OOM kills. Logs show successful application startup.
 
 **On failure:** For ImagePullBackOff, verify image exists and imagePullSecret is valid with `kubectl get secret registry-credentials -o yaml`. For CrashLoopBackOff, check logs with `kubectl logs pod-name --previous`. For probe failures, test endpoints manually with `kubectl port-forward` and `curl localhost:8080/healthz`. For OOMKilled pods, increase memory limits or investigate memory leaks.
 
@@ -389,7 +402,9 @@ kubectl get svc -n myapp-prod
 
 ### Step 5: Configure Horizontal Pod Autoscaling
 
-Implement automatic scaling based on CPU/memory or custom metrics.
+Implement automatic scaling based on CPU/memory or custom metrics. The Deployment
+in Step 3 omits `replicas:` deliberately so that this HPA is the only owner of
+the replica count.
 
 ```yaml
 # hpa.yaml

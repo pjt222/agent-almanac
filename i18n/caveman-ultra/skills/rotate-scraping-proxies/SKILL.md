@@ -48,16 +48,15 @@ Network-layer escalation when client stealth exhausted. Last resort, not default
 
 Gate workflow on documented review. Skip = biggest harm source.
 
-```python
-# Inputs to confirm before writing any code:
-# 1. Is the data public (no login required)?
-# 2. Does robots.txt permit the path?
-# 3. Does the site's ToS prohibit automated access? (read it)
-# 4. Would the scraping process personal data? If yes, what is the legal basis?
-# 5. Could this access circumvent geo-licensing, paywalls, or auth?
-# 6. Is there a public API or data dump that would make scraping unnecessary?
-# 7. Have you contacted the site owner if scope is large?
-```
+Inputs to confirm before writing any code:
+
+1. Is the data public (no login required)?
+2. Does robots.txt permit the path?
+3. Does the site's ToS prohibit automated access? (read it)
+4. Would the scraping process personal data? If yes, what is the legal basis?
+5. Could this access circumvent geo-licensing, paywalls, or auth?
+6. Is there a public API or data dump that would make scraping unnecessary?
+7. Have you contacted the site owner if scope is large?
 
 → Every Q has defensible written ans. First "no"|"unknown" stops proc.
 

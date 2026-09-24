@@ -53,7 +53,7 @@ metadata:
 
 識目示之技規：
 
-```yaml
+```text
 # Common publication requirements
 
 academic_journal:

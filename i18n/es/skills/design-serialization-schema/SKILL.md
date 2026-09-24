@@ -128,6 +128,24 @@ enum Unit {
 }
 ```
 
+#### Ejemplo de Apache Avro:
+
+```json
+{
+  "type": "record",
+  "name": "Measurement",
+  "namespace": "com.example.sensors",
+  "doc": "A sensor measurement reading",
+  "fields": [
+    {"name": "sensor_id", "type": "string", "doc": "Unique sensor identifier"},
+    {"name": "value", "type": "double", "doc": "Measured value"},
+    {"name": "unit", "type": {"type": "enum", "name": "Unit", "symbols": ["CELSIUS", "FAHRENHEIT", "KELVIN", "PERCENT", "PPM"]}},
+    {"name": "timestamp", "type": {"type": "long", "logicalType": "timestamp-millis"}},
+    {"name": "metadata", "type": ["null", {"type": "map", "values": "string"}], "default": null}
+  ]
+}
+```
+
 **Esperado:** Esquema auto-documentado con descripciones, restricciones y definiciones claras de tipos.
 **En caso de fallo:** Si el modelo de datos aun no es estable, marcar el esquema como `draft` y evitar publicarlo en un registro.
 
@@ -151,6 +169,48 @@ Estrategia de evolucion segura:
 2. **Nunca eliminar ni renombrar** -- deprecar en su lugar
 3. **Versionar el esquema** en el identificador (`v1`, `v2`)
 4. **Usar un registro de esquemas** para formatos binarios (Confluent Schema Registry para Avro/Protobuf)
+
+#### Reglas de evolucion de Protobuf:
+
+```protobuf
+// v1 — original
+message Measurement {
+  string sensor_id = 1;
+  double value = 2;
+  Unit unit = 3;
+}
+
+// v2 — safe evolution
+message Measurement {
+  string sensor_id = 1;
+  double value = 2;
+  Unit unit = 3;
+  // NEW: added in v2 — old clients ignore this field
+  google.protobuf.Timestamp timestamp = 4;
+  // DEPRECATED: use sensor_id instead
+  reserved 6;
+  reserved "old_sensor_name";
+}
+```
+
+#### Versionado de JSON Schema:
+
+```json
+{
+  "$id": "https://example.com/schemas/measurement/v2",
+  "allOf": [
+    {"$ref": "https://example.com/schemas/measurement/v1"},
+    {
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "Added in v2: GPS coordinates"
+        }
+      }
+    }
+  ]
+}
+```
 
 **Esperado:** Plan de evolucion documentado: que cambios son seguros, cuales requieren nuevas versiones.
 **En caso de fallo:** Si un cambio incompatible es inevitable, versionar el esquema (v1 -> v2) y mantener soporte paralelo durante la migracion.
@@ -178,12 +238,58 @@ errors = validate_measurement({"sensor_id": "s-01", "value": "not_a_number"})
 # -> ["$.value: 'not_a_number' is not of type 'number'"]
 ```
 
+```typescript
+// TypeScript with Zod (runtime + compile-time)
+import { z } from 'zod';
+
+const MeasurementSchema = z.object({
+  sensor_id: z.string().regex(/^[a-z]+-[0-9]+$/),
+  value: z.number(),
+  unit: z.enum(['celsius', 'fahrenheit', 'kelvin', 'percent', 'ppm']),
+  timestamp: z.string().datetime(),
+  metadata: z.record(z.string()).optional(),
+});
+
+type Measurement = z.infer<typeof MeasurementSchema>;
+
+// Validation
+const result = MeasurementSchema.safeParse(inputData);
+if (!result.success) {
+  console.error(result.error.issues);
+}
+```
+
 **Esperado:** La validacion se ejecuta en todos los datos entrantes en los limites del sistema (endpoints API, ingestion de archivos).
 **En caso de fallo:** Registrar errores de validacion con la carga completa (redactando campos sensibles) para depuracion.
 
 ### Paso 5: Documentar el Esquema
 
 Crear una pagina de documentacion del esquema con: resumen, tabla de campos (campo, tipo, requerido, descripcion, restricciones), registro de cambios (version, fecha, cambios) y politica de compatibilidad.
+
+```markdown
+# Measurement Schema (v1)
+
+## Overview
+Represents a single sensor reading with metadata.
+
+## Fields
+| Field | Type | Required | Description | Constraints |
+|-------|------|----------|-------------|-------------|
+| sensor_id | string | Yes | Unique sensor ID | Pattern: `^[a-z]+-[0-9]+$` |
+| value | number | Yes | Measured value | Any valid IEEE 754 double |
+| unit | enum | Yes | Unit of measurement | One of: celsius, fahrenheit, kelvin, percent, ppm |
+| timestamp | string | Yes | Reading time | ISO 8601 with timezone |
+| metadata | object | No | Key-value pairs | String keys and values |
+
+## Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| v1 | 2025-03-01 | Initial schema |
+
+## Compatibility
+- **Backwards**: Consumers of v1 will continue to work with future versions
+- **Policy**: Only additive, optional field changes between minor versions
+```
 
 **Esperado:** La documentacion se genera automaticamente o se mantiene sincronizada con la definicion del esquema.
 **En caso de fallo:** Si la documentacion se desvia del esquema, agregar una verificacion CI que valide la documentacion contra la fuente del esquema.

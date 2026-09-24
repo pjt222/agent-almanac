@@ -8,9 +8,9 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync } from 'child_process';
-import { existsSync, mkdirSync, mkdtempSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
-import { tmpdir } from 'os';
-import { resolve } from 'path';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { tmpdir, homedir } from 'os';
+import { isAbsolute, resolve } from 'path';
 
 // Direct imports for unit tests.
 import { ClaudeCodeAdapter } from '../adapters/claude-code.js';
@@ -18,8 +18,10 @@ import { CopilotAdapter } from '../adapters/copilot.js';
 import { CursorAdapter } from '../adapters/cursor.js';
 import { GeminiAdapter } from '../adapters/gemini.js';
 import { HermesAdapter } from '../adapters/hermes.js';
+import { resolveHermesHome } from '../lib/hermes-home.js';
 import { OpenClawAdapter } from '../adapters/openclaw.js';
 import { OpenCodeAdapter } from '../adapters/opencode.js';
+import { UniversalAdapter } from '../adapters/universal.js';
 import { VibeAdapter } from '../adapters/vibe.js';
 import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-renderer.js';
 import {
@@ -27,7 +29,9 @@ import {
   getCampfireSprite,
   createAgentGlyph, getAgentPng, getTeamStrip, getCampfirePng, getCampfireFrames, GLYPH_SIZE,
 } from '../lib/sprites.js';
-import { auditAll, auditExitCode, AUDIT_EXIT } from '../lib/installer.js';
+import { installAll, uninstallAll, auditAll, auditExitCode, AUDIT_EXIT, warnUnsupportedScopes } from '../lib/installer.js';
+import { getAdapter, listAdapterIds } from '../adapters/index.js';
+import { FrameworkAdapter } from '../adapters/base.js';
 import { makeChalkStub } from '../lib/chalk-stub.js';
 import { detectFrameworks } from '../lib/detector.js';
 import { buildFireScene } from '../lib/scene.js';
@@ -86,6 +90,58 @@ function auditSection(out, framework) {
   const rest = lines.slice(start + 1);
   const end = rest.findIndex((line) => /^\S/.test(line));
   return (end === -1 ? rest : rest.slice(0, end)).join('\n');
+}
+
+/**
+ * Collect the lines reporter.warn() emits while `fn` runs (#607).
+ *
+ * warn() writes through console.log, so this stubs it for the duration and
+ * restores it in a finally — a throw inside `fn` must not leave the suite with
+ * a swallowed console.
+ *
+ * ANSI is stripped because warn() colours through chalk and FORCE_COLOR is set
+ * in this environment, so the lines arrive wrapped in escape codes. Matching
+ * them literally would miss every time and, worse, make an "expected no
+ * warnings" assertion pass for the wrong reason.
+ *
+ * @param {() => void} fn
+ * @returns {string[]} One trimmed, ANSI-free line per console.log call.
+ */
+function captureWarnings(fn) {
+  const originalLog = console.log;
+  const lines = [];
+  console.log = (...args) => { lines.push(args.join(' ')); };
+  try {
+    fn();
+  } finally {
+    console.log = originalLog;
+  }
+  // eslint-disable-next-line no-control-regex
+  return lines.map((line) => line.replace(/\x1b\[[0-9;]*m/g, '').trim());
+}
+
+/**
+ * Async sibling of captureWarnings, for the orchestrators (#607).
+ *
+ * Separate rather than making captureWarnings await an optional promise: a
+ * sync-looking helper that silently accepts an async callback restores
+ * console.log before the callback finishes, losing exactly the output the test
+ * is for.
+ *
+ * @param {() => Promise<unknown>} fn
+ * @returns {Promise<string[]>}
+ */
+async function captureWarningsAsync(fn) {
+  const originalLog = console.log;
+  const lines = [];
+  console.log = (...args) => { lines.push(args.join(' ')); };
+  try {
+    await fn();
+  } finally {
+    console.log = originalLog;
+  }
+  // eslint-disable-next-line no-control-regex
+  return lines.map((line) => line.replace(/\x1b\[[0-9;]*m/g, '').trim());
 }
 
 // ── Registry-derived expectations (#307) ─────────────────────────
@@ -481,6 +537,180 @@ describe('universal framework detection (#457)', () => {
   });
 });
 
+// ── hermes home resolution (#604) ───────────────────────────────
+//
+// detect() and both adapter bases used to hardcode homedir()/.hermes. A
+// Windows-native Hermes install lives at %LOCALAPPDATA%\hermes, and every
+// platform honors $HERMES_HOME — the adapter saw neither, and only a manual
+// directory junction made detection fire. These tests pin the resolution
+// order so a revert to the hardcoded path fails: the env-home case would
+// return homedir()/.hermes instead of the fixture, and the win32 case would
+// never reach the LOCALAPPDATA default.
+describe('resolveHermesHome (#604)', () => {
+  let tmpRoot;
+  let savedHermesHome;
+  let savedLocalAppData;
+
+  before(() => {
+    tmpRoot = mkdtempSync(resolve(tmpdir(), 'almanac-hermes-home-'));
+    savedHermesHome = process.env.HERMES_HOME;
+    savedLocalAppData = process.env.LOCALAPPDATA;
+  });
+
+  after(() => {
+    if (savedHermesHome === undefined) delete process.env.HERMES_HOME;
+    else process.env.HERMES_HOME = savedHermesHome;
+    if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
+    else process.env.LOCALAPPDATA = savedLocalAppData;
+    rmSync(tmpRoot, { recursive: true, force: true });
+  });
+
+  it('prefers $HERMES_HOME over every other location', () => {
+    const envHome = resolve(tmpRoot, 'env-home');
+    mkdirSync(envHome, { recursive: true });
+    process.env.HERMES_HOME = envHome;
+    assert.equal(resolveHermesHome(), envHome);
+  });
+
+  // #611: the test above builds its fixture with resolve(), and resolve() is
+  // idempotent on its own output, so it passes byte-identically whether tier 1
+  // returns the value raw or normalizes it. Being absolute is NOT on its own
+  // enough to make it blind — resolve('/x/') is '/x' and resolve('/a/../b') is
+  // '/b' — it is being normalized-absolute that does.
+  //
+  // Of the four tests below, TWO discriminate the fix from the bug: the
+  // relative case and the whitespace case. The empty-string case is green on
+  // the pre-#611 body too, since '' is falsy and already fell through; it is
+  // kept as a pin against a future rewrite to `fromEnv !== undefined`, not
+  // counted as evidence. The padded case covers the half of the whitespace
+  // decision the docstring promises and neither recorded mutant reached.
+  //
+  // The contract under test is the return SHAPE — always normalized-absolute —
+  // not cwd-independence, which a relative $HERMES_HOME cannot have and which
+  // this fix does not claim to give it.
+  it('resolves a relative HERMES_HOME to an absolute path', () => {
+    delete process.env.LOCALAPPDATA; // keep the win32 probe out of the answer
+    process.env.HERMES_HOME = 'relative-hermes-home';
+    const got = resolveHermesHome();
+    // Fails on the pre-#611 body, which returned 'relative-hermes-home' raw.
+    assert.ok(isAbsolute(got), `expected an absolute path, got ${JSON.stringify(got)}`);
+    assert.equal(got, resolve('relative-hermes-home'));
+  });
+
+  it('does not trim the value it uses, only the value it tests for emptiness', () => {
+    delete process.env.LOCALAPPDATA;
+    // The docstring promises a path with a leading or trailing space survives
+    // byte-for-byte, and nothing tested it: every other tier-1 fixture in this
+    // file is whitespace-free, so `return resolve(fromEnv.trim())` passed the
+    // entire suite while breaking exactly this. Tier 1 does no existence check,
+    // so the directory need not exist.
+    process.env.HERMES_HOME = ' padded-hermes-home';
+    assert.equal(resolveHermesHome(), resolve(' padded-hermes-home'));
+  });
+
+  it('treats an empty HERMES_HOME as unset', () => {
+    delete process.env.LOCALAPPDATA;
+    process.env.HERMES_HOME = '';
+    assert.equal(resolveHermesHome(), resolve(homedir(), '.hermes'));
+  });
+
+  it('treats a whitespace-only HERMES_HOME as unset, not as a directory named " "', () => {
+    delete process.env.LOCALAPPDATA;
+    process.env.HERMES_HOME = '   ';
+    // Without the trim test this returns resolve('   ') — cwd + a directory
+    // literally named three spaces. The decision is recorded in the module's
+    // @returns docstring: the is-it-set test ignores whitespace, the value
+    // that is USED is never trimmed.
+    assert.equal(resolveHermesHome(), resolve(homedir(), '.hermes'));
+  });
+
+  it('falls back to ~/.hermes when HERMES_HOME is unset', () => {
+    delete process.env.HERMES_HOME;
+    delete process.env.LOCALAPPDATA; // keep the win32 probe out of the fallback
+    // Pure path arithmetic — the fallback never checks existence, so the WSL
+    // path (~/.hermes inside a WSL home) keeps working with no extra logic.
+    assert.equal(resolveHermesHome(), resolve(homedir(), '.hermes'));
+  });
+
+  it('on win32, uses %LOCALAPPDATA%\\hermes when its config.yaml exists',
+    { skip: process.platform !== 'win32' && 'win32-only branch' }, () => {
+      delete process.env.HERMES_HOME;
+      const localAppData = resolve(tmpRoot, 'lad');
+      const winHome = resolve(localAppData, 'hermes');
+      mkdirSync(winHome, { recursive: true });
+      writeFileSync(resolve(winHome, 'config.yaml'), '# fixture');
+      process.env.LOCALAPPDATA = localAppData;
+      assert.equal(resolveHermesHome(), winHome);
+    });
+
+  it('on win32, skips the %LOCALAPPDATA% default when it has no config.yaml',
+    { skip: process.platform !== 'win32' && 'win32-only branch' }, () => {
+      delete process.env.HERMES_HOME;
+      const localAppData = resolve(tmpRoot, 'lad-empty');
+      mkdirSync(resolve(localAppData, 'hermes'), { recursive: true });
+      process.env.LOCALAPPDATA = localAppData;
+      // An empty leftover dir must not claim detection; the fallback applies.
+      assert.equal(resolveHermesHome(), resolve(homedir(), '.hermes'));
+    });
+});
+
+// The block above proves the resolver. This one proves the DETECTOR CALLS it,
+// and the two are not interchangeable: with only the unit tests present,
+// reverting cli/lib/detector.js and cli/adapters/hermes.js to their pre-#604
+// `homedir()` form leaves the entire suite green — measured, not assumed. That
+// is the "logic covered, but nothing sees whether the caller invokes it" shape
+// #439 was closed to prevent, in this same file.
+//
+// Deliberately platform-independent: both cases route through HERMES_HOME, so
+// tier 1 short-circuits before homedir() is consulted and nothing depends on
+// $HOME steering os.homedir() — which it does not do on win32, the whole point
+// of #604. A real ~/.hermes on the dev box therefore cannot reach either case.
+describe('detectFrameworks resolves the Hermes home (#604)', () => {
+  let tmpRoot;
+  let projectDir;
+  let savedHermesHome;
+  let savedLocalAppData;
+
+  const hermesDetected = () => detectFrameworks(projectDir).map((d) => d.id).includes('hermes');
+
+  before(() => {
+    tmpRoot = mkdtempSync(resolve(tmpdir(), 'almanac-hermes-detect-'));
+    // Empty project dir: no project-scope rule can fire, so `hermes` in the
+    // result can only have come from the global rule under test.
+    projectDir = resolve(tmpRoot, 'project');
+    mkdirSync(projectDir, { recursive: true });
+    savedHermesHome = process.env.HERMES_HOME;
+    savedLocalAppData = process.env.LOCALAPPDATA;
+    delete process.env.LOCALAPPDATA;
+  });
+
+  after(() => {
+    if (savedHermesHome === undefined) delete process.env.HERMES_HOME;
+    else process.env.HERMES_HOME = savedHermesHome;
+    if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
+    else process.env.LOCALAPPDATA = savedLocalAppData;
+    rmSync(tmpRoot, { recursive: true, force: true });
+  });
+
+  it('detects a Hermes home reachable only through $HERMES_HOME', () => {
+    const envHome = resolve(tmpRoot, 'env-home');
+    mkdirSync(envHome, { recursive: true });
+    writeFileSync(resolve(envHome, 'config.yaml'), '# fixture');
+    process.env.HERMES_HOME = envHome;
+    // Pre-#604 this read homedir()/.hermes, which cannot see envHome.
+    assert.equal(hermesDetected(), true);
+  });
+
+  it('does not detect a $HERMES_HOME without a config.yaml', () => {
+    const bare = resolve(tmpRoot, 'bare-home');
+    mkdirSync(bare, { recursive: true });
+    process.env.HERMES_HOME = bare;
+    // The control: without it, a detector that returned hermes unconditionally
+    // would satisfy the case above.
+    assert.equal(hermesDetected(), false);
+  });
+});
+
 // ── audit exit codes, end to end (#439) ──────────────────────────
 //
 // The block above covers auditExitCode()'s logic, but it cannot see whether the
@@ -505,6 +735,8 @@ describe('audit exit codes end to end (#439)', () => {
   const cliEntry = resolve(ROOT, 'cli/index.js');
   let tmpRoot;
   let savedHome;
+  let savedHermesHome;
+  let savedLocalAppData;
 
   /** A project fixture copilot detects, via .github/copilot-instructions.md. */
   function project(name) {
@@ -549,11 +781,23 @@ describe('audit exit codes end to end (#439)', () => {
 
     savedHome = process.env.HOME;
     process.env.HOME = resolve(tmpRoot, 'home');
+    // #604: resolveHermesHome() reads HERMES_HOME first, and on win32 probes
+    // %LOCALAPPDATA%\hermes — a dev machine carrying either (this very
+    // integration ran on one) would leak a real Hermes home into the fixture
+    // and flip the exit-code reduction. Both are pinned to the fixture home.
+    savedHermesHome = process.env.HERMES_HOME;
+    savedLocalAppData = process.env.LOCALAPPDATA;
+    process.env.HERMES_HOME = resolve(tmpRoot, 'home', '.hermes');
+    delete process.env.LOCALAPPDATA;
   });
 
   after(() => {
     if (savedHome === undefined) delete process.env.HOME;
     else process.env.HOME = savedHome;
+    if (savedHermesHome === undefined) delete process.env.HERMES_HOME;
+    else process.env.HERMES_HOME = savedHermesHome;
+    if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
+    else process.env.LOCALAPPDATA = savedLocalAppData;
     rmSync(tmpRoot, { recursive: true, force: true });
   });
 
@@ -578,25 +822,59 @@ describe('audit exit codes end to end (#439)', () => {
 // opencode did report the error but still counted the dangling item in `ok`;
 // #445 aligned it, so all nine now split valid from broken the same way.
 //
-// Nine adapters split, but this block holds SEVEN cases. claude-code is
-// covered by its own direct audit test above; universal is not covered by any
-// broken-symlink test yet (#447) — its `N broken symlinks: <ids>` wording at
-// universal.js:123 is unexercised.
+// Nine adapters split, and this block holds EIGHT cases. claude-code is the one
+// left out — and NOT because it is covered. Its direct audit test above (#373)
+// exercises only the healthy path: it audits the real repository root, builds no
+// dangling link, and asserts `errors` is EMPTY, which is exactly what a
+// regression would also produce. Deleting its broken-skill-symlink push
+// (claude-code.js:199) fails nothing — measured with a deletion mutant. It has a
+// second broken branch at :203 that was not mutated; #823 carries both.
 //
-// Each case builds one valid and one dangling symlink and asserts BOTH the
-// exact error and the exact ok string, so neither a regression to `errors: []`
-// nor a drift back to counting totals passes. The wording differs per adapter
+// Both numbers in this paragraph's first sentence — nine, and EIGHT — are prose
+// that no tool reads. A tenth symlink-installing adapter would join uncovered,
+// the shape #447 had, except that there the gap was at least written down.
+// Gating them is #824.
+//
+// universal is the odd one here: alone among the nine it ENUMERATES the broken
+// ids in the error rather than only counting them (the `broken.map(b => b.id)`
+// in universal.js's errors.push — cited by expression, because a line number
+// here was already wrong once: #607 moved the push and the citation did not
+// follow). Its case therefore pins the id list, not just the number —
+// dropping `.map(b => b.id).join(', ')` would keep the count right and still go
+// red (#447).
+//
+// `1 broken skill symlinks` (five rows) and `1 broken links` (opencode) each
+// disagree with themselves on number, as do the ok strings `1 skills installed`,
+// `1 items installed` and `1 skills in workspace`. All of it is pinned
+// DELIBERATELY — the string is behaviour, so a pluralisation fix should go red
+// here and be made on purpose rather than slipping through unnoticed.
+//
+// Each case builds one valid link and at least one dangling one, and asserts the
+// error and the exact ok string, so neither a regression to `errors: []` nor a
+// drift back to counting totals passes. Seven rows assert the error as an exact
+// string; universal supplies `errAssert` instead — it needs two dangling links
+// for the join to be observable, and their order is not promised (see the row).
+// hermes builds two of each, one pair per content type. The wording differs
 // by design and follows what each installs: "broken skill symlinks" where only
 // skills are linked, "broken links" for hermes and opencode, which link agents
 // too.
 //
-// `hermes` and `openclaw` resolve their target from `homedir()` rather than a
-// project dir, so HOME is redirected into the fixture for the whole block.
-// That also pins `vibe`, whose agents dir is home-based — without it, a real
-// ~/.vibe/agents on the dev machine would leak .toml entries into the counts.
+// `openclaw` resolves its target from `homedir()` rather than a project dir,
+// so HOME is redirected into the fixture for the whole block. That also pins
+// `vibe`, whose agents dir is home-based — without it, a real ~/.vibe/agents
+// on the dev machine would leak .toml entries into the counts.
+//
+// `hermes` is steered by HERMES_HOME instead (#604), and its fixture lives
+// OUTSIDE the redirected HOME on purpose. Pinning it at `<fakeHome>/.hermes`
+// would make the env path and the old `homedir()/.hermes` path byte-identical
+// on POSIX, so this case would pass just as well against the wiring #604
+// replaced — a hermeticity fix that reads as coverage without being any. The
+// separate root is what makes reverting hermes.js or detector.js go red here.
 describe('adapter audits detect broken symlinks', () => {
   const tmpRoot = resolve(ROOT, '.tmp-test-audit');
   const fakeHome = resolve(tmpRoot, 'home');
+  // Deliberately NOT under fakeHome — see the note above the describe.
+  const hermesHome = resolve(tmpRoot, 'hermes-env-home');
   const realSkill = resolve(ROOT, 'skills/commit-changes');
   const realAgent = resolve(ROOT, 'agents/code-reviewer.md');
   let savedHome;
@@ -613,15 +891,51 @@ describe('adapter audits detect broken symlinks', () => {
     // while a dangling ~/.hermes/agents/<id>.md audited clean, which is the
     // #438 defect surviving in the content type this adapter's "broken links"
     // wording exists to describe.
-    { name: 'hermes', base: 'home', dir: '.hermes/skills/general', agentDir: '.hermes/agents', ok: '2 items installed', err: '2 broken links', audit: () => new HermesAdapter().audit() },
+    { name: 'hermes', base: 'hermes-home', dir: 'skills/general', agentDir: 'agents', ok: '2 items installed', err: '2 broken links', audit: () => new HermesAdapter().audit() },
     { name: 'openclaw', base: 'home', dir: '.openclaw/workspace', ok: '1 skills in workspace', err: '1 broken skill symlinks', audit: () => new OpenClawAdapter().audit(ROOT, 'project') },
     // opencode already reported broken links before #438; #445 aligned its ok
     // line to valid-only like the rest. One dir is enough here: unlike hermes,
     // its skills and agents flow through the same expression (opencode.js:82).
     { name: 'opencode', base: 'project', dir: '.opencode/skills', ok: '1 items installed', err: '1 broken links', audit: (d) => new OpenCodeAdapter().audit(d, 'project') },
+    // universal enumerates the broken ids; every other adapter only counts them.
+    //
+    // TWO dangling links, not one. With a single id there is nothing to join, so
+    // `join(', ')` and `join('; ')` produce identical output and a separator
+    // mutant SURVIVES — measured, before this was widened. One id pins an id;
+    // it does not pin an enumeration.
+    //
+    // The assertion splits on ', ' and compares as a set. Splitting is what pins
+    // the separator: under `join('; ')` the split yields one element and the
+    // deepEqual fails. Comparing as a set is what keeps it honest about order —
+    // the adapter enumerates in readdirSync order, which is not specified, so an
+    // exact two-id string would be asserting something universal.js does not
+    // promise.
+    {
+      name: 'universal', base: 'project', dir: '.agents/skills',
+      extraGhosts: ['ghost-skill-2'],
+      ok: '1 skills installed',
+      errAssert: (errors) => {
+        assert.equal(errors.length, 1, `expected one error, got: ${JSON.stringify(errors)}`);
+        const enumerated = /^2 broken symlinks: (.+)$/.exec(errors[0]);
+        assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
+        assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
+      },
+      // 'project' is explicit, not load-bearing: _targetBase() returns the project
+      // path for any scope that is not 'global', so audit(d) behaves identically
+      // here — that mutant survives, measured. Passed anyway so the row states its
+      // scope instead of leaning on a default that could change.
+      audit: (d) => new UniversalAdapter().audit(d, 'project'),
+    },
   ];
 
-  const dirFor = (c) => (c.base === 'home' ? resolve(fakeHome, c.dir) : resolve(tmpRoot, c.name, c.dir));
+  // Which root a home-based case hangs off: hermes gets its own, so that the
+  // env path and the homedir() path cannot coincide.
+  const homeRootFor = (c) => (c.base === 'hermes-home' ? hermesHome : fakeHome);
+  const dirFor = (c) => (c.base === 'project'
+    ? resolve(tmpRoot, c.name, c.dir)
+    : resolve(homeRootFor(c), c.dir));
+  let savedHermesHome;
+  let savedLocalAppData;
 
   before(() => {
     rmSync(tmpRoot, { recursive: true, force: true }); // leftover from a crashed run
@@ -631,8 +945,12 @@ describe('adapter audits detect broken symlinks', () => {
       mkdirSync(skillsDir, { recursive: true });
       symlinkSync(realSkill, resolve(skillsDir, 'good-skill'));
       symlinkSync(resolve(tmpRoot, 'no-such-target'), resolve(skillsDir, 'ghost-skill'));
+      // Extra dangling links for a case that asserts the enumeration, not the count.
+      for (const extra of c.extraGhosts ?? []) {
+        symlinkSync(resolve(tmpRoot, 'no-such-target'), resolve(skillsDir, extra));
+      }
       if (c.agentDir) {
-        const agentsDir = resolve(fakeHome, c.agentDir);
+        const agentsDir = resolve(homeRootFor(c), c.agentDir);
         mkdirSync(agentsDir, { recursive: true });
         symlinkSync(realAgent, resolve(agentsDir, 'good-agent.md'));
         symlinkSync(resolve(tmpRoot, 'no-such-agent.md'), resolve(agentsDir, 'ghost-agent.md'));
@@ -642,18 +960,38 @@ describe('adapter audits detect broken symlinks', () => {
     // are steered at the fixture. Restored in after().
     savedHome = process.env.HOME;
     process.env.HOME = fakeHome;
+    // #604: on Windows, os.homedir() ignores $HOME entirely, so the hermes case
+    // could never be steered by HOME alone — it leaked to the real user profile
+    // and failed on any Windows-native checkout. resolveHermesHome() honors
+    // HERMES_HOME on every platform, so pin it at the fixture. Clear
+    // LOCALAPPDATA too, or the win32 probe escapes the fixture the other way;
+    // a dev machine with a real Hermes home (e.g. one running this very
+    // integration) would otherwise poison the counts.
+    //
+    // `hermesHome` is outside fakeHome, so this pin also DISCRIMINATES: the
+    // pre-#604 wiring would look under fakeHome/.hermes, find nothing, and
+    // fail the assertions below.
+    savedHermesHome = process.env.HERMES_HOME;
+    savedLocalAppData = process.env.LOCALAPPDATA;
+    process.env.HERMES_HOME = hermesHome;
+    delete process.env.LOCALAPPDATA;
   });
 
   after(() => {
     if (savedHome === undefined) delete process.env.HOME;
     else process.env.HOME = savedHome;
+    if (savedHermesHome === undefined) delete process.env.HERMES_HOME;
+    else process.env.HERMES_HOME = savedHermesHome;
+    if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
+    else process.env.LOCALAPPDATA = savedLocalAppData;
     rmSync(tmpRoot, { recursive: true, force: true });
   });
 
   for (const c of cases) {
     it(`${c.name}: reports a dangling symlink as an error`, async () => {
       const result = await c.audit(resolve(tmpRoot, c.name));
-      assert.deepEqual(result.errors, [c.err]);
+      if (c.errAssert) c.errAssert(result.errors);
+      else assert.deepEqual(result.errors, [c.err]);
       assert.deepEqual(result.ok, [c.ok]);
     });
   }
@@ -1179,5 +1517,376 @@ describe('scene', () => {
   it('buildFireScene uses cold sprite for cold state', () => {
     const lines = buildFireScene({ state: 'cold', maxWidth: 80 });
     assert.equal(lines.length, 4);
+  });
+});
+
+// ── Adapter scope declarations (#607) ────────────────────────────
+// Most adapters install to exactly one place no matter what `--scope` asked
+// for: hermes and openclaw are always global (a home directory), seven others
+// are always project (a path under projectDir). They accepted the flag and
+// ignored it in silence.
+//
+// Honouring is a property of the CELL — the (adapter, content type) pair — not
+// of the adapter. `vibe` branches on scope for skills and writes agents to
+// ~/.vibe/agents unconditionally. The first version of this change declared one
+// array per adapter and exercised skills only, so it gave vibe a declaration
+// saying the agent downgrade could not happen, and shipped it still silent.
+// These tests are per cell for that reason.
+
+describe('adapter scope declarations (#607)', () => {
+  let sandbox;
+  let savedEnv;
+
+  const ITEMS = {
+    skill: {
+      type: 'skill', id: 'commit-changes', domain: 'git',
+      sourcePath: resolve(ROOT, 'skills/commit-changes/SKILL.md'),
+      sourceDir: resolve(ROOT, 'skills/commit-changes'),
+    },
+    agent: {
+      type: 'agent', id: 'code-reviewer',
+      sourcePath: resolve(ROOT, 'agents/code-reviewer.md'),
+      sourceDir: resolve(ROOT, 'agents'),
+      description: 'fixture', tools: ['Read'],
+    },
+    team: {
+      type: 'team', id: 'code-review-team',
+      sourcePath: resolve(ROOT, 'teams/code-review-team.md'),
+      sourceDir: resolve(ROOT, 'teams'),
+    },
+  };
+
+  // Cells whose dry-run install returns an EMPTY path, so the path comparison
+  // below cannot see them: '' === '' would otherwise be counted as a confident
+  // "one distinct path, therefore ignores scope". Listed individually and
+  // asserted in both directions, so a NEW unmeasurable cell fails rather than
+  // joining a silent hole.
+  const UNMEASURABLE_CELLS = {
+    'codex:skill':
+      'codex delegates skills into its agent file and returns { path: "" } from install(), ' +
+      'so there is no path to compare. Its agent cell IS measurable and covers the adapter.',
+  };
+
+  /** @returns {string} `${adapterId}:${contentType}` */
+  const cellKey = (id, type) => `${id}:${type}`;
+
+  before(() => {
+    sandbox = mkdtempSync(resolve(tmpdir(), 'almanac-scope-'));
+    savedEnv = {
+      HOME: process.env.HOME,
+      USERPROFILE: process.env.USERPROFILE,
+      HERMES_HOME: process.env.HERMES_HOME,
+    };
+    process.env.HOME = sandbox;
+    process.env.USERPROFILE = sandbox;
+    process.env.HERMES_HOME = resolve(sandbox, '.hermes');
+  });
+
+  after(() => {
+    for (const [key, value] of Object.entries(savedEnv)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    rmSync(sandbox, { recursive: true, force: true });
+  });
+
+  /** Dry-run install one cell at both scopes and return the two paths. */
+  async function probeCell(adapter, type) {
+    const options = { dryRun: true, force: false, almanacRoot: ROOT };
+    const projectDir = resolve(sandbox, 'proj');
+    return {
+      projectDir,
+      asProject: (await adapter.install(ITEMS[type], projectDir, 'project', options)).path,
+      asGlobal: (await adapter.install(ITEMS[type], projectDir, 'global', options)).path,
+    };
+  }
+
+  it('every registered adapter declares its own scopes rather than inheriting the default', () => {
+    // base.js defaults permissively so a third-party adapter written before the
+    // field keeps working. Inheriting it HERE would mean an adapter that
+    // silently ignores scope and never warns — the exact pre-#607 state.
+    const inheriting = listAdapterIds().filter(
+      (id) => !Object.hasOwn(getAdapter(id).constructor, 'scopes'),
+    );
+    assert.deepEqual(
+      inheriting, [],
+      `these adapters inherit base's default instead of deciding: ${inheriting.join(', ')}`,
+    );
+  });
+
+  it('every declaration covers exactly the adapter\'s contentTypes — no more, no less', () => {
+    // A missing key makes scopesFor() return [], which reads as "honours
+    // nothing" and warns on every scope. A surplus key is a cell that does not
+    // exist. Both directions, so neither hides.
+    const wrong = [];
+    for (const id of listAdapterIds()) {
+      const { contentTypes, scopes } = getAdapter(id).constructor;
+      const declared = Object.keys(scopes).sort();
+      const supported = [...contentTypes].sort();
+      if (JSON.stringify(declared) !== JSON.stringify(supported)) {
+        wrong.push(`${id}: declares [${declared}] but supports [${supported}]`);
+      }
+    }
+    assert.deepEqual(wrong, [], `\n${wrong.join('\n')}\n`);
+  });
+
+  it('each cell\'s declared scope count matches the number of distinct paths it installs to', async () => {
+    const mismatches = [];
+    const unmeasurable = [];
+
+    for (const id of listAdapterIds()) {
+      const adapter = getAdapter(id);
+      for (const type of adapter.constructor.contentTypes) {
+        const { asProject, asGlobal } = await probeCell(adapter, type);
+
+        if (asProject === '' && asGlobal === '') { unmeasurable.push(cellKey(id, type)); continue; }
+
+        // Same path for both requests => the cell ignores scope => one real
+        // scope. Different paths => it honours scope => two.
+        const observed = asProject === asGlobal ? 1 : 2;
+        const declared = adapter.scopesFor(type).length;
+        if (observed !== declared) {
+          mismatches.push(
+            `${cellKey(id, type)}: declares [${adapter.scopesFor(type).join(',')}] (${declared}) but ` +
+            `installs to ${observed} distinct path(s)\n    project: ${asProject}\n    global : ${asGlobal}`,
+          );
+        }
+      }
+    }
+
+    assert.deepEqual(mismatches, [], `\n${mismatches.join('\n')}\n`);
+    assert.deepEqual(
+      unmeasurable.sort(), Object.keys(UNMEASURABLE_CELLS).sort(),
+      'the set of cells with an empty dry-run path has changed. A new one is a hole in the ' +
+      'check above, not a pass — add it to UNMEASURABLE_CELLS with the reason, or give the ' +
+      'adapter a real path.',
+    );
+  });
+
+  it('each single-scope cell installs in the DIRECTION it declares, not merely to one place', async () => {
+    // Counting distinct paths cannot tell ['global'] from ['project'] — both
+    // are "one path". Without this, hermes could declare project-only and
+    // cursor global-only and every structural test would still pass.
+    const wrongWay = [];
+
+    for (const id of listAdapterIds()) {
+      const adapter = getAdapter(id);
+      for (const type of adapter.constructor.contentTypes) {
+        const declared = adapter.scopesFor(type);
+        if (declared.length !== 1) continue;
+        if (UNMEASURABLE_CELLS[cellKey(id, type)]) continue;
+
+        const { asProject, projectDir } = await probeCell(adapter, type);
+        const underProject = asProject.startsWith(projectDir);
+        const underHome = asProject.startsWith(sandbox) && !underProject;
+        const actual = underProject ? 'project' : (underHome ? 'global' : 'neither');
+        if (actual !== declared[0]) {
+          wrongWay.push(`${cellKey(id, type)}: declares '${declared[0]}' but installs to ${actual}: ${asProject}`);
+        }
+      }
+    }
+
+    assert.deepEqual(wrongWay, [], `\n${wrongWay.join('\n')}\n`);
+  });
+
+  it('those dry runs wrote nothing into the sandboxed home', () => {
+    // Guards the probes above: a dry run that wrote would leave the path
+    // comparison passing while the suite created files. Effective on POSIX,
+    // where the HOME redirect takes. On win32 os.homedir() ignores $HOME
+    // (#609), so there this assertion inspects a sandbox nothing could have
+    // written to — it does not fail, it stops meaning anything.
+    assert.deepEqual(
+      readdirSync(sandbox).filter((entry) => entry !== 'proj'), [],
+      'a dry run created something in the sandboxed home',
+    );
+  });
+
+  // ── the warning itself ──────────────────────────────────────────
+
+  const EXPLICIT = { contentTypes: ['skill'], explicit: true };
+
+  it('warns when a global-only adapter is asked for project scope', () => {
+    const lines = captureWarnings(() => warnUnsupportedScopes([getAdapter('hermes')], 'project', EXPLICIT));
+    assert.equal(lines.length, 1, `expected one warning, got: ${JSON.stringify(lines)}`);
+    assert.match(lines[0], /Hermes Agent is global-only/);
+    assert.match(lines[0], /--scope project ignored/);
+  });
+
+  it('warns when a project-only adapter is asked for global scope', () => {
+    // The mirror case, which #607 does not mention: seven adapters pin project.
+    const lines = captureWarnings(
+      () => warnUnsupportedScopes([getAdapter('cursor')], 'global', { contentTypes: ['skill'], explicit: true }),
+    );
+    assert.equal(lines.length, 1, `expected one warning, got: ${JSON.stringify(lines)}`);
+    assert.match(lines[0], /Cursor is project-only/);
+    assert.match(lines[0], /--scope global ignored/);
+  });
+
+  it('warns for a SPLIT adapter only about the type that is downgraded', () => {
+    // The regression test for the defect the per-adapter model shipped: vibe
+    // honours scope for skills and never for agents.
+    const vibe = getAdapter('vibe');
+    assert.deepEqual(vibe.scopesFor('skill'), ['project', 'global']);
+    assert.deepEqual(vibe.scopesFor('agent'), ['global']);
+
+    assert.deepEqual(
+      captureWarnings(() => warnUnsupportedScopes([vibe], 'project', { contentTypes: ['skill'], explicit: true })),
+      [], 'vibe honours project scope for skills and must not warn about them',
+    );
+
+    const both = captureWarnings(
+      () => warnUnsupportedScopes([vibe], 'project', { contentTypes: ['skill', 'agent'], explicit: true }),
+    );
+    assert.equal(both.length, 1);
+    assert.match(both[0], /agents are global-only/);
+    assert.doesNotMatch(both[0], /skills are/, 'skills are honoured; naming them would be false');
+  });
+
+  it('stays silent when the adapter can honour the requested scope', () => {
+    // The half that makes the warning worth having: a gate that fires on
+    // everything carries no information.
+    for (const [id, scope] of [['hermes', 'global'], ['cursor', 'project'],
+      ['claude-code', 'project'], ['claude-code', 'global']]) {
+      assert.deepEqual(
+        captureWarnings(() => warnUnsupportedScopes([getAdapter(id)], scope, EXPLICIT)), [],
+        `${id} honours ${scope} and must not warn`,
+      );
+    }
+  });
+
+  it('says nothing at all when --scope was never passed', () => {
+    // `--scope` carries a default of 'project'. Warning on the defaulted value
+    // would print "--scope project ignored" on every bare `almanac install` for
+    // anyone with hermes installed — naming a flag they never typed.
+    assert.deepEqual(
+      captureWarnings(
+        () => warnUnsupportedScopes([getAdapter('hermes')], 'project', { contentTypes: ['skill'], explicit: false }),
+      ), [],
+    );
+  });
+
+  it('warns once per adapter, not once per adapter per item', () => {
+    const adapters = [getAdapter('hermes'), getAdapter('cursor'), getAdapter('claude-code')];
+    const lines = captureWarnings(() => warnUnsupportedScopes(adapters, 'project', EXPLICIT));
+    assert.equal(lines.length, 1, 'only hermes cannot honour project scope for skills');
+  });
+
+  it('names the supported set for --scope workspace, which no adapter declares', () => {
+    // NOT unreachable — an earlier version of this comment said it was.
+    // `--scope workspace` is advertised in every command's help text, so every
+    // two-scope cell lands in the branch that cannot derive a destination.
+    const lines = captureWarnings(
+      () => warnUnsupportedScopes([getAdapter('claude-code')], 'workspace', EXPLICIT),
+    );
+    assert.equal(lines.length, 1);
+    assert.match(lines[0], /skills support project, global/);
+    assert.match(lines[0], /--scope workspace ignored/);
+  });
+
+  it('does not throw on a duck-typed adapter that predates the scopes field', () => {
+    // warnUnsupportedScopes runs BEFORE auditAll's try/catch. An unguarded
+    // supportsScope() call there threw out of auditAll entirely, so a
+    // third-party adapter without the method would crash `almanac audit`
+    // instead of being recorded as crashed — the guarantee #439 exists for.
+    class LegacyAdapter {
+      static displayName = 'Legacy';
+      async audit() { return { framework: 'Legacy', ok: [], warnings: [], errors: [] }; }
+    }
+    assert.deepEqual(captureWarnings(() => warnUnsupportedScopes([new LegacyAdapter()], 'project', EXPLICIT)), []);
+  });
+
+  it('does not throw on a MALFORMED scopes declaration', () => {
+    // The typeof guard catches a missing method, not a mistyped field. A bare
+    // string satisfies String.prototype.includes and then dies at .join(); an
+    // absent key is undefined and dies at .includes(). Both escape the guard
+    // and abort the audit from outside its try/catch. scopesFor() normalises
+    // anything non-array to [], so these are reported rather than fatal.
+    class StringScopes extends FrameworkAdapter {
+      static id = 'stringy'; static displayName = 'Stringy';
+      static contentTypes = ['skill']; static scopes = 'project';
+    }
+    class MissingKey extends FrameworkAdapter {
+      static id = 'missing'; static displayName = 'MissingKey';
+      static contentTypes = ['skill']; static scopes = {};
+    }
+    class EmptyList extends FrameworkAdapter {
+      static id = 'empty'; static displayName = 'EmptyList';
+      static contentTypes = ['skill']; static scopes = { skill: [] };
+    }
+    for (const AdapterClass of [StringScopes, MissingKey, EmptyList]) {
+      const lines = captureWarnings(() => warnUnsupportedScopes([new AdapterClass()], 'project', EXPLICIT));
+      assert.equal(lines.length, 1, `${AdapterClass.id} should warn, not throw`);
+      assert.match(lines[0], /does not support|support no scope|no scope/);
+    }
+  });
+
+  it('effectiveScope returns the request unchanged when it can be honoured', () => {
+    assert.equal(getAdapter('claude-code').effectiveScope('project', 'skill'), 'project');
+    assert.equal(getAdapter('claude-code').effectiveScope('global', 'skill'), 'global');
+    assert.equal(getAdapter('hermes').effectiveScope('project', 'skill'), 'global');
+    assert.equal(getAdapter('vibe').effectiveScope('project', 'skill'), 'project');
+    assert.equal(getAdapter('vibe').effectiveScope('project', 'agent'), 'global');
+    assert.equal(getAdapter('claude-code').effectiveScope('workspace', 'skill'), null);
+  });
+});
+
+// ── The warning is WIRED, not merely implemented (#607) ──────────
+// The block above proves the function. This one proves the three orchestrators
+// CALL it, and the two are not interchangeable: with only the block above,
+// deleting all three `warnUnsupportedScopes(...)` lines from installer.js
+// leaves the entire suite green — measured, not assumed. That is the
+// "prove the wiring, not the component" trap this repo names in CLAUDE.md, and
+// it is the same shape as #439's, in the same file.
+
+describe('the scope warning is wired into the orchestrators (#607)', () => {
+  const resolved = (items) => ({ skills: [], agents: [], teams: [], ...items });
+
+  const skillItem = {
+    type: 'skill', id: 'commit-changes', domain: 'git',
+    sourcePath: resolve(ROOT, 'skills/commit-changes/SKILL.md'),
+    sourceDir: resolve(ROOT, 'skills/commit-changes'),
+  };
+  const one = resolved({ skills: [skillItem] });
+  const hermes = () => [getAdapter('hermes')];
+
+  it('installAll warns, with the installing verb', async () => {
+    const lines = await captureWarningsAsync(() => installAll(
+      one, hermes(), ROOT, 'project', { dryRun: true, scopeExplicit: true },
+    ));
+    assert.ok(
+      lines.some((l) => /Hermes Agent is global-only/.test(l) && /installing to/.test(l)),
+      `installAll did not warn: ${JSON.stringify(lines)}`,
+    );
+  });
+
+  it('uninstallAll warns, with the uninstalling verb', async () => {
+    // "installing to" is wrong here, and was what the first version printed.
+    const lines = await captureWarningsAsync(() => uninstallAll(
+      one, hermes(), ROOT, 'project', { dryRun: true, scopeExplicit: true },
+    ));
+    assert.ok(
+      lines.some((l) => /Hermes Agent is global-only/.test(l) && /uninstalling from/.test(l)),
+      `uninstallAll did not warn with the right verb: ${JSON.stringify(lines)}`,
+    );
+  });
+
+  it('auditAll warns, with the reading verb', async () => {
+    const lines = await captureWarningsAsync(() => auditAll(hermes(), ROOT, 'project', true));
+    assert.ok(
+      lines.some((l) => /Hermes Agent is global-only/.test(l) && /reading/.test(l)),
+      `auditAll did not warn with the right verb: ${JSON.stringify(lines)}`,
+    );
+  });
+
+  it('none of the three warns when --scope was not passed', async () => {
+    const lines = await captureWarningsAsync(async () => {
+      await installAll(one, hermes(), ROOT, 'project', { dryRun: true, scopeExplicit: false });
+      await uninstallAll(one, hermes(), ROOT, 'project', { dryRun: true, scopeExplicit: false });
+      await auditAll(hermes(), ROOT, 'project', false);
+    });
+    assert.deepEqual(
+      lines.filter((l) => /--scope/.test(l)), [],
+      'a defaulted scope must not produce a warning naming a flag the user never typed',
+    );
   });
 });

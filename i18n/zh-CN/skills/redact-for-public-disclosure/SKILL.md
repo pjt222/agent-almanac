@@ -22,6 +22,7 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: f74b59bd
+  fence_basis_commit: f74b59bd
   translator: "Claude Sonnet 4.6"
   translation_date: "2026-04-17"
 ---

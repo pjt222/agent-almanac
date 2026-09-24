@@ -1,0 +1,35 @@
+# Earlier runs of this probe, before the rmTree arm was added — verbatim tool output, kept so
+# that RESULT.md's "Four earlier invocations of the probe's second version … two rounds"
+# sentence is checkable. Five blocks: one from version 1, which spun a fixed 15 ms instead of
+# waiting for the writer and is a DIFFERENT trial shape (its script was overwritten by the
+# second version and is not retained), and four from version 2 — three binaries at 60 ms and
+# one 200 ms run on v25 — which are the current trial shape minus the rmTree arm (that script
+# is archived off-repo as enotempty-probe2.mjs). Neither script is in the repository, so these
+# blocks are a record, not a reproduction.
+
+## Version 1 — fixed 15 ms spin, no wait for the writer's first file (measured nothing)
+node v25.9.0, trials=20, writer window=60ms
+no retries (the current teardown)            {"removed":20} max_elapsed_ms=15
+maxRetries:3 retryDelay:50 (the issue's fix) {"removed":20} max_elapsed_ms=15
+maxRetries:10 retryDelay:20                  {"removed":20} max_elapsed_ms=15
+
+## Version 2 — waits for the writer's first file; three arms
+node v25.9.0, trials=20, writer window=60ms after its first file
+no retries (the current teardown)            {"removed":14,"ENOTEMPTY":6} max_elapsed_ms=22 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the issue's fix) {"removed":20} max_elapsed_ms=29 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                  {"removed":20} max_elapsed_ms=33 min_files_seen_before_rm=1
+
+node v25.9.0, trials=10, writer window=200ms after its first file
+no retries (the current teardown)            {"removed":8,"ENOTEMPTY":2} max_elapsed_ms=12 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the issue's fix) {"removed":10} max_elapsed_ms=24 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                  {"removed":10} max_elapsed_ms=30 min_files_seen_before_rm=1
+
+node v22.16.0, trials=20, writer window=60ms after its first file
+no retries (the current teardown)            {"ENOTEMPTY":20} max_elapsed_ms=3 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the issue's fix) {"ENOTEMPTY":20} max_elapsed_ms=319 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                  {"ENOTEMPTY":20} max_elapsed_ms=1165 min_files_seen_before_rm=1
+
+node v24.20.0, trials=20, writer window=60ms after its first file
+no retries (the current teardown)            {"removed":17,"ENOTEMPTY":3} max_elapsed_ms=31 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the issue's fix) {"removed":20} max_elapsed_ms=36 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                  {"removed":20} max_elapsed_ms=23 min_files_seen_before_rm=1
