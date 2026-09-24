@@ -24,7 +24,8 @@ metadata:
   tags: git, coordination, worktree, concurrency, safety
   locale: es
   source_locale: en
-  source_commit: "d34f9ced6"
+  source_commit: "0ac5353e9e305d1cfdfb8ca04f41b0dd5af4f9a9"
+  fence_basis_commit: "0ac5353e9e305d1cfdfb8ca04f41b0dd5af4f9a9"
   translator: "(untranslated stub)"
   translation_date: "2026-08-18"
 ---
