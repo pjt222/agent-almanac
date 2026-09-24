@@ -216,6 +216,21 @@ test('content under a NEGATED files entry is not refused — npm never packs it'
   assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/scratch.md']);
 });
 
+test('an injected `shipped` with hand-built negations is refused, not answered (#882)', (t) => {
+  // `divergentPaths` takes `shipped` as a parameter, which makes it the one public door past
+  // `shippedEntries`. A hand-built negations array never went through `assertInterpretable`,
+  // so the matcher must refuse it rather than carve paths out on its say-so.
+  const dir = pkg(t);
+  write(dir, { 'skills/real/scratch.md': 'x\n' });
+
+  // Positive control: the same tree through the validated path is answered.
+  assert.deepEqual(divergentPaths(dir).untracked, ['skills/real/scratch.md']);
+  assert.throws(
+    () => divergentPaths(dir, { included: ['skills/'], negations: ['skills/_template/'] }),
+    /did not come from shippedEntries/,
+  );
+});
+
 test('a git failure THROWS rather than reporting a clean tree', async (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'publishable-bare-'));
   t.after(() => rmTree(dir));
@@ -452,7 +467,7 @@ test('the pack-hook sentence is DERIVED — a manifest without the hook yields n
   assert.equal(packHookSentence({ scripts: { postpack: 'node x.js' } }), '');
 });
 
-test('assertInterpretable refuses the two `files` shapes npm and this matcher disagree about', async (t) => {
+test('assertInterpretable refuses the directory-order and re-include shapes npm and this matcher disagree about', async (t) => {
   const { shippedEntries } = await import('../lib/skills-inventory.js');
   const dir = mkdtempSync(join(tmpdir(), 'publishable-files-'));
   t.after(() => rmTree(dir));

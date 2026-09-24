@@ -116,6 +116,14 @@ export function skillsDeclaringBash(root, domains) {
 }
 
 /**
+ * The `negations` arrays `shippedEntries` has returned, and therefore validated (#882).
+ *
+ * Membership is by object identity, held outside the array. A Symbol property or a wrapper class
+ * would change what `deepStrictEqual` sees, and the suites compare these arrays to literals.
+ */
+const VALIDATED_NEGATIONS = new WeakSet();
+
+/**
  * Does `files`' negation set exclude this path?
  *
  * Derived from the consumer's own accept-list rather than re-stated. The first version
@@ -128,8 +136,29 @@ export function skillsDeclaringBash(root, domains) {
  * `content-paths.js`'s `isExcludedId` was the other candidate and is wrong in the
  * opposite direction: its `_`-prefix rule would skip `skills/_experimental/tool.py`,
  * which ships. Neither hand-rolled rule is the package's rule. This one is.
+ *
+ * DELIBERATELY NARROWER THAN NPM, and that is a recorded decision, not a gap awaiting a fix
+ * (#882, maintainer, 2026-09-24). The model is "trailing slash means prefix, otherwise exact
+ * path", with no notion of entry order or re-inclusion. npm has both, and where they matter the
+ * two disagree in the under-counting direction. Those shapes are REFUSED by
+ * `assertInterpretable` rather than taught here: modelling them would mean encoding an ordering
+ * rule seen on one npm version (11.13.0) and never tested as a mechanism.
+ *
+ * So the answer is only correct for negations that went through that refusal, and this
+ * function is exported. It therefore accepts only the `negations` array `shippedEntries`
+ * returned, the same object, which is frozen, and throws for any other array, a copy or a
+ * filtered subset included. A caller holding a hand-built list would otherwise get a confident
+ * answer for an array nobody checked.
  */
 export function isExcludedFromPackage(relPath, negations) {
+  if (!VALIDATED_NEGATIONS.has(negations)) {
+    throw new Error(
+      'isExcludedFromPackage was handed negations that did not come from shippedEntries(root). '
+      + 'Only that array has been through assertInterpretable, and this matcher is narrower than '
+      + 'npm on purpose, so an unchecked array can get a confident wrong answer (#882). Pass '
+      + '`shippedEntries(root).negations` itself, not a copy.',
+    );
+  }
   return negations.some((pattern) => (pattern.endsWith('/')
     ? relPath.startsWith(pattern)
     : relPath === pattern));
@@ -258,14 +287,21 @@ export function extensionOf(path) {
  * test written alongside it pinned the behaviour rather than catching it.
  *
  * The negations are returned too, because they are the package's own exclusion rule and
- * the walk below has no business restating it.
+ * the walk below has no business restating it. They come back FROZEN and registered as
+ * validated, which is what `isExcludedFromPackage` checks for (#882): frozen, because a
+ * validated array that could still be pushed onto would carry its approval to a pattern nobody
+ * checked.
  */
 export function shippedEntries(root) {
   const files = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).files ?? [];
   assertInterpretable(files, root);
+  const negations = Object.freeze(
+    files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1)),
+  );
+  VALIDATED_NEGATIONS.add(negations);
   return {
     included: files.filter((entry) => !entry.startsWith('!')),
-    negations: files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1)),
+    negations,
   };
 }
 
@@ -331,15 +367,18 @@ export function contentTrees(root) {
  * The refutation holds for FILE negations: the real array places `!agents/_template.md`,
  * `!teams/_template.md` and `!guides/_template.md` before the entries they carve from, and
  * `npm pack --dry-run` honours them there — 78 files under `agents/`, zero templates. Position
- * does not matter for those.
+ * does not matter for a file negation carved from a DIRECTORY inclusion that contains it (rows
+ * r3 and r4 below). It is not established for a file negation paired with an explicit inclusion
+ * of the SAME path; see the third shape.
  *
  * It does NOT hold for a DIRECTORY negation, re-derived here rather than taken on report:
  *
- *   [skills/,!skills/_template/]                       packs skills/real only     (honoured)
- *   [!skills/_template/,skills/]                       packs _template TOO        (DEAD)
- *   [agents/,!agents/_template.md]                     packs agents/real.md only  (honoured)
- *   [!agents/_template.md,agents/]                     packs agents/real.md only  (honoured)
- *   [skills/,!skills/_template/,skills/_template/SKILL.md]   packs the re-included file
+ *   r1 [skills/,!skills/_template/]                       packs skills/real only     (honoured)
+ *   r2 [!skills/_template/,skills/]                       packs _template TOO        (DEAD)
+ *   r3 [agents/,!agents/_template.md]                     packs agents/real.md only  (honoured)
+ *   r4 [!agents/_template.md,agents/]                     packs agents/real.md only  (honoured)
+ *   r5 [skills/,!skills/_template/,skills/_template/SKILL.md]   packs the re-included file
+ *   r6 [skills/,!skills/_template/,skills/_template/]           packs all of _template/
  *
  * So two shapes are refused below: a directory negation positioned before an inclusion it
  * prefixes, which npm ignores while this matcher honours it; and an inclusion nested under a
@@ -347,9 +386,41 @@ export function contentTrees(root) {
  * report FEWER files than ship — the silent direction, and the one a security document must
  * never take. Today's array is neither shape; an alphabetised `files` would become the first
  * one without a word from any gate.
+ *
+ * A THIRD shape is refused, in EITHER order: one path both included and negated (#882). On npm
+ * 11.13.0, `npm pack --dry-run --json` gave these answers, where the matcher would carve the
+ * path out in every row:
+ *
+ *   e1 [skills/,!skills/real/x.py,skills/real/x.py]     x.py not packed  (agrees)
+ *   e2 [skills/real/x.py,skills/,!skills/real/x.py]     x.py packed      (under-counts)
+ *   e3 [skills/,skills/real/x.py,!skills/real/x.py]     x.py packed      (under-counts)
+ *   e4 [skills/real/x.py,!skills/real/x.py]             x.py packed      (under-counts)
+ *   e5 [!skills/real/x.py,skills/real/x.py]             nothing packed   (agrees)
+ *   e6 [agents/_template.md,!agents/_template.md,agents/]   _template packed (under-counts)
+ *   e7 [agents/,agents/_template.md,!agents/_template.md]   _template packed (under-counts)
+ *
+ * "Whichever of the two entries comes first wins" fits all seven rows. It rests on one npm
+ * version and one fixture, and no test separated it from other explanations, so the refusal
+ * does not depend on it. Any pair is refused, including e1 and e5, which the matcher gets right
+ * today, because including a path and negating it is a contradiction nobody writes on purpose.
+ * Order is gone by the time `shippedEntries` returns, so this is also the only place the shape
+ * can be refused at all. The pair test runs FIRST and reads no disk, so its verdict does not
+ * depend on what the tree holds. Paths are compared with one trailing slash stripped, so a
+ * directory spelled with and without it is one path.
  */
 function assertInterpretable(files, root) {
   const negations = files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1));
+  const bareNegated = new Set(negations.map((pattern) => pattern.replace(/\/$/, '')));
+  for (const entry of files) {
+    if (!entry.startsWith('!') && bareNegated.has(entry.replace(/\/$/, ''))) {
+      throw new Error(
+        `package.json \`files\` both includes and negates "${entry}". Measured on npm 11.13.0: `
+        + 'whether npm packs it depends on which entry comes first, while this module always '
+        + 'carves it out, so the published file count can be lower than what ships. Remove one '
+        + 'of the two entries (#882).',
+      );
+    }
+  }
   for (const [index, entry] of files.entries()) {
     if (entry.startsWith('!') && entry.endsWith('/')) {
       // A DIRECTORY negation is dead unless it follows the inclusion it carves from — measured,

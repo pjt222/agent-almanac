@@ -109,7 +109,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export function shippedPaths(root = ROOT) {
   // IMPORTED, not re-implemented. `shippedEntries` already returns exactly this shape and runs
   // `assertInterpretable` on the way — which is the half that matters: a `files` array in one of
-  // the two shapes npm and this matcher disagree about now refuses HERE, at prepack, rather than
+  // the three shapes npm and this matcher disagree about now refuses HERE, at prepack, rather than
   // only where check-readmes happens to run. A second copy of the split was what let the guard
   // and the inventory hold different opinions about the same manifest (#879 round 2, S1).
   return shippedEntries(root);
@@ -160,6 +160,10 @@ function carvedOut(path, negations) {
  * carves back out removed — npm never packs those. A git failure THROWS rather than returning
  * empty: an empty answer here reads as "the tree is clean", which is the publish this check
  * exists to refuse.
+ *
+ * `shipped` is injectable for tests, but its `negations` must be the array `shippedEntries`
+ * returned: `isExcludedFromPackage` throws for any other, so a hand-built `shipped` throws as
+ * soon as a path is tested against it, rather than being answered (#882).
  */
 export function divergentPaths(root = ROOT, shipped = shippedPaths(root)) {
   const { included, negations } = shipped;

@@ -90,7 +90,7 @@ each direction, so choose by the QUESTION, never by which import is already in t
 |---|---|---|
 | is this author scaffolding? | `isTemplate(path)` / `isTemplateSegment(name)` | `scripts/lib/content-paths.js` |
 | is this non-content? (`_`-prefix **or** `README` — a superset) | `isExcludedId(id)` | `scripts/lib/content-paths.js` |
-| does npm ship it? | `isExcludedFromPackage` | `scripts/lib/skills-inventory.js` |
+| does npm ship it? | `isExcludedFromPackage(path, shippedEntries(root).negations)` — that array only; any other throws (#882) | `scripts/lib/skills-inventory.js` |
 
 `isExcludedId` is wrong for the package question — its `_`-prefix rule would skip
 `skills/_experimental/tool.py`, which ships. A name test is wrong too, in the other direction:
