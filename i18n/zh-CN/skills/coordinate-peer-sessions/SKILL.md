@@ -25,7 +25,6 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: "aa9d84ee7fad3d326653553bb8f138dedf11237f"
-  fence_basis_commit: "aa9d84ee7fad3d326653553bb8f138dedf11237f"
   translator: "(untranslated stub)"
   translation_date: "2026-08-18"
 ---
@@ -351,8 +350,8 @@ in the same PR moved the lines, and the issue never said which revision it meant
 - **Chaining checks with `&&`**: `rg`, `test -f` and `git grep` answer "no" with a non-zero exit,
   and `diff -q` answers "they differ" the same way, so `&&` stops at the first such answer and
   the output is shorter but looks complete. Run checks separately or join them with `;` — and
-with `;`, use `rg -c --include-zero`, because a bare `rg -c` prints nothing for zero and the
-line simply goes missing.
+  with `;`, use `rg -c --include-zero`, because a bare `rg -c` prints nothing for zero and the
+  line simply goes missing.
 - **Assessing work already merged into your own**: a lead grading its support is not
   disinterested, and a flattering number it did not derive carefully is undetectable from the
   support's side (Step 10).
@@ -406,4 +405,4 @@ briefs); the cost of the lead reading the files itself was never measured.
 - `create-pull-request` -- opens the PR whose branch Step 8 reviews
 - `resolve-git-conflicts` -- for a collision that reached the index rather than the working tree
 - `write-continue-here` -- the handoff to the NEXT session, which is not where a peer-scope declaration belongs (#660): its reader deletes it
-- `unleash-the-agents` -- subagent fan-out: Steps 2, 3, 5 and 7 are about a peer you cannot bracket and do not transfer, while Step 9's rules for a brief do
+- `unleash-the-agents` -- subagent fan-out: Step 2 is peer-specific, Steps 3, 5 and 7 apply to subagents in weaker form (a named write path, a shared index, shared settings), and Step 9's rules for a brief apply in full
