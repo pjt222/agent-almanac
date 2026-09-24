@@ -491,7 +491,7 @@ Stated because the section above looks broader than it is.
   round-1 reviewer measured nine invocation shapes and three import shapes against the guard and
   found no case where it answers wrongly, including `npm run`, `node --run`, a `..` path, an
   out-of-tree symlink and `sh -c`; `--preserve-symlinks-main` on the out-of-tree symlink fails at
-  module resolution before the guard is reached, and nothing here uses that shape. (The dynamic import of a repository `.js` named above has since been closed; see the Addendum (#892) at the end of this file.)
+  module resolution before the guard is reached, and nothing here uses that shape. (The dynamic import of a repository `.js` named above has since been closed for a module outside the import graph, not for one a comment or string puts into it; see the Addendum (#892) at the end of this file.)
 - **The fixture declares a `prepack` so it takes production's branch**, after the round-1 review
   found it taking the other one: without it `packHookSentence` returns `''` and the paragraph is
   missing a clause the real one carries. The clause is now asserted.
@@ -851,7 +851,9 @@ own descriptor, no other call contributes, so the arms pass for the reason they 
 
 **Still unmeasured**, as the probe's header states: a module loaded before the probe, any side
 effect reaching the filesystem through none of the wrapped entry points, and code in the root's own
-dependency tree, which the rule exempts by design. A **static** import by absolute path or
+dependency tree, which the rule exempts by design. Since the #915 review the header also lists a
+module the regex graph takes from a comment or a string, a `?query` re-import of a graph member,
+and `import-graph.js` loaded before patching. A **static** import by absolute path or
 `file://` URL is outside `importGraph`'s relative-only walk too, so it grades as content. That is
 the loud direction, and nothing in the generator's graph is written that way.
 
@@ -867,7 +869,7 @@ file restored byte-identical (sha256) afterwards:
 | dependency exemption dropped | `dep-import`, `bare-resolve-import`, `main-report-to-file` |
 | exemption by `node_modules` segment instead of root prefix | `foreign-node-modules-import` |
 | realpath of the dependency root dropped | `dep-import`, `bare-resolve-import`, `main-report-to-file` |
-| pre-planting of `files` dropped | `foreign-node-modules-import` |
+| pre-planting of `files` dropped | `foreign-node-modules-import` (and, since round 1 added it, `commented-import-then-dynamic`) |
 
 The realpath row is killed only where `node_modules` is a symlink, as in the worktree these were
 measured in. In a checkout with a real `node_modules` directory that mutant is equivalent, and no
@@ -889,9 +891,10 @@ arm here can tell the difference.
 - **S2:** the header no longer carries the 27. Main mode prints the `module set:` line instead
   (see above).
 - **N1:** the `files` pre-plant was pinned only on one side. Moving it to just before the import
-  (the reviewer's M13) survived every arm. A check before the import now refuses a run in which
-  anything was recorded after the controls. M13 is killed by `foreign-node-modules-import` and
-  `commented-import-then-dynamic`.
+  (the reviewer's M13) survived every arm. Round 1 added a check before the import, which catches
+  only a plant moved ahead of it; round 2 found that the literal M13 sits after it, and that the
+  one row failing there died through an `importGraph` throw. See round 2 below for the pin that
+  holds.
 - **N4, N5:** two more items are recorded in the header's list of what remains unmeasured. A
   `?query` re-import of a graph member is a second read and a second execution, graded as the
   loader's. And the probe itself loads `scripts/lib/import-graph.js` before patching.
@@ -906,3 +909,33 @@ arm here can tell the difference.
   - The realpath row is equivalent with a real `node_modules` (42/42 on v25 and v22).
   - A mutant that makes `modulePath` return `null` for absolute paths is held by one arm on v22 and
     v25 (`bare-resolve-import`) and by three on v24, whose ESM resolver also calls `realpathSync`.
+
+### Round 2 of the #915 review
+
+`BLOCKING=0 SHOULD-FIX=1 NOTE=6`, confirming round 1's fixes and correcting one of them.
+
+- **SF-1, the pre-import check did not pin what round 1 said it pinned.** It sees only calls made
+  before it runs. A plant moved past it still read `seen` on the probe's own writes, and the one
+  failing row died by crashing. The pin is now where the placement comment always said: at the
+  end of the shape block, before the patch loops, the probe refuses a shape whose `files` do not
+  exist. Measured on v25: a plant moved to either side of the pre-import check fails
+  `foreign-node-modules-import` with that refusal ("declares … in files, and it does not exist
+  before the patch loops"), and `commented-import-then-dynamic` fails beside it. A mutant deleting
+  the existence check alone is equivalent while the loop stays in place.
+- **NOTE-1, the `module set:` line was printed but unpinned.** `main-report-to-file` now parses it
+  and requires graph > 0, every member loaded, none unloaded and at least one dependency. Deleting
+  the line, or the bookkeeping behind it, fails that row. Replacing the loaded count with the graph
+  size is equivalent on the generator.
+- **NOTE-2, NOTE-3, the hole is wider than the wording.** `export … from`, a side-effect `import`
+  and a line-continued string reach the regex graph the same way, and so does a comment in a graph
+  member rather than in the entry. A `//` comment does not, because it defeats the line-start
+  anchor. A percent-encoded specifier is a second, unrelated over-inclusion: `importGraph` resolves
+  it as a path, the loader as a URL. Both are now in the header and on #918.
+- **NOTE-4, NOTE-5:** this Addendum's M5 row, its unmeasured list and the §5 pointer are brought up
+  to date above.
+- **NOTE-6, left as is:** a refusal from the pre-import check is also reported by guard 1 as an
+  exit during import, charging the subject with the probe's writes. Controls 3 and 4 share the
+  pattern, which predates this PR, and it fails loudly either way.
+
+After round 2, `--verify` passes 43/43 on v22.16.0, v24.20.0 and v25.9.0, and main mode is
+unchanged.

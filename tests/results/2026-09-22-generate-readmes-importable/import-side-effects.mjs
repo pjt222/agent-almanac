@@ -73,8 +73,11 @@
  * mode prints the sizes of both sets (`module set:`), so that the unmodified generator's graph and
  * the modules the loader read can be seen to coincide by running this, not by quoting a figure;
  * the figures measured when the rule landed are in RESULT.md's #892 Addendum. The "graph" is a
- * per-line regex over source TEXT, so a line-start `import` inside a comment or a string is in
- * it — see `commented-import-then-dynamic`.
+ * per-line regex over source TEXT, so a line-start `import` or `export … from` inside a block
+ * comment, a template literal or a line-continued string is in it — see
+ * `commented-import-then-dynamic` (a `//` comment is not: it defeats the line-start anchor). It
+ * also resolves a specifier as a PATH where the loader resolves a URL, so a percent-encoded
+ * specifier names a different file in the graph than the one loaded (#915 round 2).
  *
  * **Four controls, because "zero content" has four ways of being a lie**: the patch fires at
  * all; it reaches a NAMED binding (correction 3); the classifier can still say *content*; and no
@@ -283,9 +286,8 @@ if (SHAPE) {
   process.env.SHAPE_ROOT = ROOT;
   // Files a shape needs to exist BEFORE it runs, written here, before the patch loops, for the same
   // reason as the module itself: a shape that wrote them at import would already read `seen`, and
-  // the arm would pass on that write rather than on what it is declared to test. The check just
-  // before the import refuses a run in which anything was recorded after the controls, which is
-  // what pins this placement (#915 round 1, N1).
+  // the arm would pass on that write rather than on what it is declared to test. The check at the
+  // end of this block is what pins the placement (#915 round 2, SF-1).
   for (const [name, text] of Object.entries(shape.files ?? {})) {
     fs.mkdirSync(dirname(resolve(shapeDir, name)), { recursive: true });
     fs.writeFileSync(resolve(shapeDir, name), text, 'utf8');
@@ -304,6 +306,17 @@ if (SHAPE) {
     shape.code,
     '',
   ].join('\n'), 'utf8');
+  // PINS the placement of the `files` loop above: every planted file exists before the patch loops
+  // begin. A plant moved anywhere after this line is refused here, whatever it would have been
+  // graded. The check before the import could see only a plant moved ahead of IT; round 1's own
+  // mutant sat after it and passed `foreign-node-modules-import` on the probe's writes (#915 round 2,
+  // SF-1). A mutant deleting this check alone is equivalent while the loop stays where it is.
+  for (const name of Object.keys(shape.files ?? {})) {
+    if (!fs.existsSync(resolve(shapeDir, name))) {
+      console.error(`REFUSED: shape \`${SHAPE}\` declares \`${name}\` in files, and it does not exist before the patch loops.`);
+      process.exit(2);
+    }
+  }
 }
 
 // ── the static import graph ─────────────────────────────────────────────────
@@ -566,11 +579,16 @@ if (VERIFY) {
     const lateAt = report.search(new RegExp(`^${escapeRegExp(MAIN_LATE_LABEL)} \\d+$`, 'm'));
     const okAt = report.search(/^OK: every call during import/m);
     const okPresent = okAt >= 0 && lateAt >= 0 && okAt > lateAt;
+    // The `module set:` line, pinned rather than printed on trust (#915 round 2, NOTE-1): on the
+    // unmodified generator every graph member is loaded, and at least the one dependency is.
+    const setMatch = report.match(/^  module set: graph (\d+), graph loaded (\d+), graph not loaded (\d+), dependency paths (\d+)$/m);
+    const [graphSize, graphLoadedCount, graphNotLoaded, dependencyCount] = setMatch ? setMatch.slice(1).map(Number) : [null, null, null, null];
+    const setOk = setMatch !== null && graphSize > 0 && graphLoadedCount === graphSize && graphNotLoaded === 0 && dependencyCount > 0;
     const parsed = [total, loader, guardCount, contentCount, lateCount].every((value) => value !== null);
-    const selfOk = parsed && okPresent && total === loader + guardCount + contentCount;
+    const selfOk = parsed && okPresent && setOk && total === loader + guardCount + contentCount;
     if (!selfOk) bad++;
     rows.push(`  ${selfOk ? 'ok  ' : 'FAIL'}  ${'main-report-to-file'.padEnd(18)} declared calls = loader + guard + content, OK after the late count`
-      + ` observed ${total} = ${loader} + ${guardCount} + ${contentCount}, late ${lateCount}, OK ${okPresent ? 'after the count' : (okAt >= 0 ? 'BEFORE the count' : 'absent')}`);
+      + ` observed ${total} = ${loader} + ${guardCount} + ${contentCount}, late ${lateCount}, OK ${okPresent ? 'after the count' : (okAt >= 0 ? 'BEFORE the count' : 'absent')}, module set ${setMatch ? `${graphLoadedCount}/${graphSize} loaded, ${dependencyCount} dependency` : 'absent'}`);
     if (!selfOk) {
       const why = (mainRun.stderr || '').trim().split('\n').filter(Boolean).slice(-1)[0];
       if (why) rows.push(`        ${why}`);
@@ -673,9 +691,9 @@ process.on('exit', (code) => {
   process.exitCode = 1;
 });
 
-// Nothing may be recorded between the controls' reset and the import. A shape's `files` written here
-// rather than before the patch loops would be graded as the subject's content, and its arm would
-// read `seen` on that write; that mutant survived every arm (#915 round 1, N1).
+// Nothing may be recorded between the controls' reset and this line: a call here would be charged
+// to the subject. It sees only what happens BEFORE it, so it is not what pins the `files` plant —
+// the existence check at the end of the shape block is (#915 round 2, SF-1).
 if (calls.length !== 0) {
   refuse(`${calls.length} call(s) were recorded before the import began; the subject would be charged with them.`);
 }
