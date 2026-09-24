@@ -213,6 +213,20 @@ test('a path whose status line MOVED is not described as one whose line did not 
         spawnSync('git', ['merge', '-q', 'side'], { cwd: dir, encoding: 'utf8' }).status, 0,
         'the fixture must actually conflict'),
       listed: /\n {4}\+ UU src\/a\.txt\n/ },
+    // A path git lists TWICE, a staged delete plus an untracked file of the same name. Keyed by
+    // path, one of its two lines stood for both, so the move of the other went unseen (#920
+    // review, F3). Recreated after the snapshot, then removed after it.
+    { name: 'F3a: a staged delete, then the file recreated',
+      setup: (dir) => git(dir, ['rm', '-q', '--', 'src/a.txt']),
+      act: (dir) => {
+        mkdirSync(join(dir, 'src'), { recursive: true });   // `git rm` took the emptied directory
+        writeFileSync(join(dir, 'src', 'a.txt'), 'back\n', 'utf8');
+      },
+      listed: /\n {4}\+ \?\? src\/a\.txt\n/ },
+    { name: 'F3b: an untracked copy of a staged delete, then removed',
+      setup: (dir) => git(dir, ['rm', '-q', '--cached', '--', 'src/a.txt']),
+      act: (dir) => rmSync(join(dir, 'src', 'a.txt')),
+      listed: /\n {4}- \?\? src\/a\.txt\n/ },
   ];
 
   for (const { name, setup, act, listed } of cases) {
@@ -1441,4 +1455,48 @@ test('no command the guard prints for pasting carries a trailing # comment (#908
   const commented = all.split('\n').filter((line) => /^\s+(?:git|npm run) /.test(line) && /\s#/.test(line));
   assert.deepEqual(commented, [], 'a command line with a trailing # does not paste under zsh');
   assert.doesNotMatch(all, /;\s*read\b/, 'a `read` after a `;` runs as a command when pasted');
+});
+
+// ── #920 round 1 ────────────────────────────────────────────────────────────
+
+test('a corrupt branch ref is not read as an orphan checkout, and rebaseline still fails closed (#920 F2)', async (t) => {
+  // `head` is `(unborn)` whenever `git rev-parse HEAD` fails, for any reason. An orphan
+  // checkout is one; a ref holding garbage is another, and git calls that "broken", not unborn.
+  // `symbolic-ref` tells them apart: it names an orphan's branch and fails on a broken ref. The
+  // tree is emptied first so rebaseline's worktree refusal cannot be what stops it.
+  const dir = makeRepo(t);
+  git(dir, ['rm', '-rfq', '--', '.']);
+  git(dir, ['commit', '-qm', 'empty the tree']);
+  guard(dir, ['snapshot']);
+  writeFileSync(join(dir, '.git', 'refs', 'heads', 'main'), 'not-a-sha\n', 'utf8');
+  assert.notEqual(spawnSync('git', ['symbolic-ref', '--short', 'HEAD'], { cwd: dir }).status, 0,
+    'premise: the branch read fails too, which is what separates this from an orphan');
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /could NOT determine ancestry/);
+  assert.doesNotMatch(r.stderr, /orphan checkout/);
+
+  const accepted = guard(dir, ['rebaseline', '--accept=(unborn)']);
+
+  assert.equal(accepted.status, 2, `a question git could not answer is not a yes:\n${accepted.stderr}`);
+  assert.match(accepted.stderr, /git could not list the commits/);
+});
+
+test('a deleted branch ref is still an unborn branch, and can be accepted (#920 F2 control)', async (t) => {
+  // `update-ref -d` leaves HEAD naming `main` with no commits; git says "No commits yet".
+  // The fix for the broken-ref case must not refuse this one.
+  const dir = makeRepo(t);
+  git(dir, ['rm', '-rfq', '--', '.']);
+  git(dir, ['commit', '-qm', 'empty the tree']);
+  guard(dir, ['snapshot']);
+  git(dir, ['update-ref', '-d', 'refs/heads/main']);
+  assert.equal(git(dir, ['symbolic-ref', '--short', 'HEAD']), 'main', 'premise: the branch still reads');
+
+  const accepted = guard(dir, ['rebaseline', '--accept=(unborn)']);
+
+  assert.equal(accepted.status, 0, accepted.stderr);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+  assert.equal(snap.rebaselinedFrom.fastForward, 'to-unborn');
 });

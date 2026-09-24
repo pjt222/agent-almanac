@@ -124,6 +124,8 @@ const BRANCH_ARGS = ['rev-parse', '--abbrev-ref', 'HEAD'];
 // `HEAD`. So which command prints what the guard read depends on the state, and the advice names
 // the one for the state the repository is in now: the fallback when HEAD is unborn, the state in
 // which the primary fails (measured on git 2.43; `repo-guard.test.js` asserts both premises).
+// On a broken ref (garbage in `refs/heads/<b>`) both fail, and so does the command named; no
+// command prints a branch there, and the finding line then reads `-> (unborn)` (#920 review, F2).
 const UNBORN_BRANCH_ARGS = ['symbolic-ref', '--short', 'HEAD'];
 const branchCommandFor = (state) => `git ${(state.head === UNBORN ? UNBORN_BRANCH_ARGS : BRANCH_ARGS).join(' ')}`;
 const INDEX_FLAGS_ARGS = ['ls-files', '-v'];
@@ -455,10 +457,14 @@ if (before.head !== after.head) {
   // a confident wrong claim, and the exact opposite of "evidence, not a verdict".
   fastForward = before.head === UNBORN
     ? 'created'
-    : after.head === UNBORN
-      // `git checkout --orphan`: HEAD names a branch with no commits. Asking `--is-ancestor`
-      // about `(unborn)` returned "could not look", which was then blamed on a pruned or corrupt
-      // object, over a move that simply added no commit (#908).
+    // `git checkout --orphan`: HEAD names a branch with no commits. Asking `--is-ancestor`
+    // about `(unborn)` returned "could not look", which was then blamed on a pruned or corrupt
+    // object, over a move that simply added no commit (#908). `head` is `(unborn)` whenever
+    // `rev-parse HEAD` fails, though, and a branch ref holding garbage fails it too. The branch
+    // read separates the two: `symbolic-ref` names an orphan's branch and fails on a broken ref.
+    // So a broken ref falls through to `'unknown'`, and rebaseline refuses it with exit 2 rather
+    // than accepting an orphan move that never happened (#920 review, F2).
+    : after.head === UNBORN && after.branch !== UNBORN
       ? 'to-unborn'
       : ancestry(before.head, after.head);
   // `false` covered two shapes (#908): unrelated history, and a move BACKWARD onto an ancestor of
@@ -532,19 +538,22 @@ worktreeMoved = reportList('working tree', before.status, after.status) || workt
 // conflict) has no `before` entry, so its bytes always "differ"; and a path whose
 // line changed (` M` staged into `MM`) differs too. Every such path's status line
 // moved, so the working-tree diff above already lists it. The heading below is true
-// only of a path whose status line is byte-identical in both captures, the case this
+// only of a path whose status lines are byte-identical in both captures, the case this
 // comparison exists for, so it lists those and no others. Detection is unchanged:
 // any differing path still marks the worktree as moved.
+//
+// LINES, plural: git can list one path twice, as a staged delete plus an untracked file
+// of the same name (`D  a` and `?? a`). A map keyed by path kept one of the two, so the
+// other could move while the path still read as unmoved (#920 review, F3). All of a
+// path's lines are compared together.
 const contentChanged = Object.keys(after.contents)
   .filter((path) => before.contents[path] !== after.contents[path])
   .sort();
 if (contentChanged.length) {
   worktreeMoved = true;
-  const statusLineOf = (state) => new Map(state.status.map((line) => [line.slice(3), line]));
-  const beforeLines = statusLineOf(before);
-  const afterLines = statusLineOf(after);
+  const linesOf = (state, path) => state.status.filter((line) => line.slice(3) === path).join('\n');
   const hidden = contentChanged
-    .filter((path) => beforeLines.has(path) && beforeLines.get(path) === afterLines.get(path));
+    .filter((path) => linesOf(before, path) !== '' && linesOf(before, path) === linesOf(after, path));
   if (hidden.length) {
     console.error('\n  contents changed (same status line as at the snapshot, so only the bytes show the write):');
     for (const path of hidden) console.error(`    ~ ${path}`);
