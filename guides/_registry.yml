@@ -59,7 +59,7 @@ guides:
   - id: coordinate-peer-sessions
     path: guides/coordinate-peer-sessions.md
     title: "Coordinating Peer Sessions"
-    description: "Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, and what the guard cannot see"
+    description: "Working safely when a second interactive session shares your worktree — declaring path scope before the first edit, index etiquette, what the guard cannot see, and dividing the labour when one session leads"
     category: workflow
     agents: []
     teams: []

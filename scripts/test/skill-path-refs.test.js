@@ -124,7 +124,7 @@ test('the corpus is clean, and three named skills extract exactly the sets they 
   // coverage to two prefixes and leave every assertion here green.
   const PINNED = {
     'write-continue-here': ['scripts/test/continue-here-blocks.test.js', 'workflows/verify-handoff.mjs'],
-    'coordinate-peer-sessions': ['scripts/repo-guard.js'],
+    'coordinate-peer-sessions': ['scripts/repo-guard.js', 'tools/patch-literal.py'],
     'redact-for-public-disclosure': [
       'tools/check-redaction.sh', 'tools/public-allowlist.txt', 'tools/sync-to-public.sh',
     ],

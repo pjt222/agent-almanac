@@ -334,7 +334,7 @@ domains:
         path: coordinate-peer-sessions/SKILL.md
         complexity: intermediate
         language: multi
-        description: Coordinate with a peer interactive session sharing one git worktree — declare path scope before the first edit, survive a contended index lock, and read a guard slot you did not arm
+        description: Coordinate with a peer interactive session sharing one git worktree — declare path scope before the first edit, survive a contended index lock, read a guard slot you did not arm, and divide the labour when one session leads
       - id: commit-changes
         path: commit-changes/SKILL.md
         complexity: basic
