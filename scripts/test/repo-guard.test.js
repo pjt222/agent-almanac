@@ -1362,8 +1362,8 @@ test('a HEAD move onto an unborn branch is not blamed on a corrupt object (#908)
 
 test('rebaseline accepts a move onto an unborn branch when the tree did not move (#908)', async (t) => {
   // The range `<sha>..(unborn)` cannot resolve, so the enumeration guard refused this as
-  // "git could not list the commits", sending the operator to `--force`. The empty list is
-  // complete: a branch with no commits holds none that could have been added.
+  // "git could not list the commits", sending the operator to `--force`. HEAD's empty list is
+  // complete, and `main`, the branch HEAD left, was read and gained nothing (#920 R2-2).
   const dir = makeRepo(t);
   guard(dir, ['snapshot']);
   git(dir, ['checkout', '-q', '--orphan', 'fresh']);
@@ -1383,6 +1383,17 @@ test('rebaseline accepts a move onto an unborn branch when the tree did not move
   const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
   assert.equal(snap.rebaselinedFrom.fastForward, 'to-unborn');
   assert.deepEqual(snap.rebaselinedFrom.acceptedCommits, []);
+
+  // The re-armed baseline sits on an unborn branch: it verifies clean, and still sees the next
+  // commit, the resume path no test had run (#920 round 3).
+  const resumed = guard(dir, ['verify']);
+  assert.equal(resumed.status, 0, resumed.stderr);
+  assert.match(resumed.stdout, /unchanged at \(unborn\) on fresh/);
+  mkdirSync(join(dir, 'src'), { recursive: true });
+  strayCommit(dir);
+  const after = guard(dir, ['verify']);
+  assert.equal(after.status, 1);
+  assert.match(after.stderr, /every commit now present arrived during the run:\n {2}git log --oneline\n/);
 });
 
 test('an unborn baseline sees a branch switch, and names a command that prints it (#908)', async (t) => {
@@ -1407,6 +1418,10 @@ test('an unborn baseline sees a branch switch, and names a command that prints i
 
   assert.equal(refused.status, 2);
   assert.match(refused.stderr, /the checkout you made:\n {2}git symbolic-ref --short HEAD\n/);
+  // `refs/heads/main` resolves no more for an unborn branch than for a deleted one; `main` had
+  // no commit at the snapshot and has none now, so it did not vanish (#920 round 3).
+  assert.doesNotMatch(refused.stderr, /no longer exists/);
+  assert.match(refused.stderr, /main, the branch HEAD left, gained none either\./);
   // `(unborn)` unquoted is a glob group under zsh and a syntax error under bash.
   assert.ok(refused.stderr.includes("npm run guard:rebaseline -- --accept='(unborn)'\n"),
     'the sentinel is quoted, so the line pastes');

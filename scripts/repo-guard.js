@@ -540,7 +540,11 @@ if (branchMoved && before.branch !== 'HEAD' && before.branch !== UNBORN) {
   }
   const name = ref.slice('refs/heads/'.length);
   if (tip !== after.head) {
-    leftBranch = { name, ref, state: tip === null ? 'gone' : tip === before.head ? 'unmoved' : 'moved' };
+    // No ref resolves for an unborn branch any more than for a deleted one. A branch that had no
+    // commit at the snapshot and has none now is unmoved, not gone (#920 round 3).
+    const state = tip === null ? (before.head === UNBORN ? 'unmoved' : 'gone')
+      : tip === before.head ? 'unmoved' : 'moved';
+    leftBranch = { name, ref, state };
     if (leftBranch.state === 'moved') {
       const exclude = [before.head, after.head].filter((sha) => sha !== UNBORN).map((sha) => `^${sha}`);
       const log = git(['log', '--format=  %h %an <%ae>  %s', tip, ...exclude],
@@ -568,11 +572,12 @@ if (branchMoved && before.branch !== 'HEAD' && before.branch !== UNBORN) {
 // a detached snapshot, a branch deleted since, and HEAD's own branch losing its ref
 // (`update-ref -d`), which leaves HEAD unborn on the same name. The old build refused them
 // all, because the range `<sha>..(unborn)` failed; this refuses them on purpose.
+// (`before.branch` is never `(unborn)` here: 'to-unborn' needs a snapshot commit, and with one,
+// `rev-parse --abbrev-ref` prints a branch name or `HEAD`.)
 const leftUnreadReason = before.branch === 'HEAD' ? 'the snapshot was on a detached HEAD'
-  : before.branch === UNBORN ? "the snapshot's branch could not be read"
-    : leftBranch?.state === 'gone' ? `${leftBranch.name}, the branch the snapshot was on, no longer exists`
-      : !branchMoved && fastForward === 'to-unborn' ? `${before.branch} no longer points at a commit`
-        : null;
+  : leftBranch?.state === 'gone' ? `${leftBranch.name}, the branch the snapshot was on, no longer exists`
+    : !branchMoved && fastForward === 'to-unborn' ? `${before.branch} no longer points at a commit`
+      : null;
 if (fastForward === 'to-unborn' && leftUnreadReason) commitsEnumerated = false;
 /** The range that shows the left branch's commits; with no snapshot commit, the whole branch. */
 const leftLogCommand = () => (before.head === UNBORN
