@@ -536,11 +536,10 @@ if ((headMoved || branchMoved) && before.branch !== 'HEAD' && before.branch !== 
       // The ENUMERATE leg again: a list git could not produce is not an empty one.
       if (log === null) commitsEnumerated = false;
       leftCommits = (log ?? '').trim().split('\n').filter(Boolean).map((l) => l.trim());
-      if (log !== null && leftCommits.length === 0 && ancestry(tip, after.head) === true) {
-        // Its new position is in HEAD's history, as after a merge of it: every commit it gained
-        // is already in HEAD's list, and printing that it moved would only repeat that list.
-        leftBranch.state = 'reached';
-      } else {
+      // Silent when its new position is in HEAD's history, as after a merge of it: every commit
+      // it gained is already in HEAD's list, and saying that it moved would only repeat that list.
+      const inHeadHistory = log !== null && leftCommits.length === 0 && ancestry(tip, after.head) === true;
+      if (!inHeadHistory) {
         console.error(`\n  ${before.branch}, the branch HEAD left, moved: ${before.head.slice(0, 8)} -> ${tip.slice(0, 8)}`);
         if (leftCommits.length) {
           console.error(`  commits added to ${before.branch}, the branch HEAD left:`);
@@ -576,8 +575,7 @@ function printNoCommitScope() {
     console.error('The snapshot was on a detached HEAD, so a commit made there and then left is not ' +
       'checked here. The reflog lists every commit HEAD visited:');
     console.error('  git reflog');
-  } else if (leftBranch?.state === 'unmoved' || leftBranch?.state === 'reached') {
-    // 'reached' here, where HEAD gained nothing, means it moved back into HEAD's history.
+  } else if (leftBranch?.state === 'unmoved') {
     console.error(`${leftBranch.name}, the branch HEAD left, gained none either.`);
   } else if (leftBranch?.state === 'gone') {
     console.error(`${leftBranch.name}, the branch the snapshot was on, no longer exists, so a commit ` +

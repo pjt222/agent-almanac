@@ -1687,3 +1687,22 @@ test('an unborn baseline names rebaseline, and a flag change its command (#920 F
   assert.match(r.stderr, /Settle that first:\n {4}the index flags \([^)]*\):\n {6}git ls-files -v\n/);
   assert.doesNotMatch(r.stderr, /npm run guard:rebaseline/, 'rebaseline refuses a flag change, so it is not offered');
 });
+
+test('a branch name that needs quoting is printed as one shell word (#920 F5)', async (t) => {
+  // Branch names may hold characters a shell reads, `(` among them. The way back names the
+  // branch, so it must paste: run as printed, under bash, it has to succeed.
+  const dir = makeRepo(t);
+  git(dir, ['checkout', '-q', '-b', 'feature(x)']);
+  strayCommit(dir, 'feature work');
+  guard(dir, ['snapshot']);
+  git(dir, ['checkout', '-q', 'main']);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  const line = r.stderr.split('\n').find((l) => l.startsWith('    git checkout '));
+  assert.equal(line, "    git checkout 'feature(x)'");
+  const pasted = spawnSync('bash', ['-c', line.trim()], { cwd: dir, encoding: 'utf8' });
+  assert.equal(pasted.status, 0, pasted.stderr);
+  assert.equal(git(dir, ['rev-parse', '--abbrev-ref', 'HEAD']), 'feature(x)');
+});
