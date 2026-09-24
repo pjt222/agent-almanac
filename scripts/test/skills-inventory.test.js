@@ -24,6 +24,7 @@ import {
   skillsDeclaringBash,
   nonDocumentationFiles,
   shippedEntries,
+  isExcludedFromPackage,
   contentTrees,
   executableFiles,
   extensionOf,
@@ -260,6 +261,87 @@ test('the EXACT-match negation arm is live — a negated non-doc FILE is exclude
   writeFileSync(join(dir, 'skills', 'alpha', 'kept.py'), 'y = 2\n', 'utf8');
 
   assert.deepEqual(inventory(dir), ['skills/alpha/kept.py']);
+});
+
+test('a path both included and negated is refused, in EITHER order (#882)', (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
+  t.after(() => rmTree(dir));
+  const manifest = (files) => {
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ files }), 'utf8');
+    return () => shippedEntries(dir);
+  };
+  const PAIR = /both includes and negates/;
+
+  // The rows where npm packs the path and the matcher carves it out: the silent direction.
+  // Measured on npm 11.13.0 (#882, oracle comment of 2026-09-23).
+  for (const files of [
+    ['skills/real/x.py', 'skills/', '!skills/real/x.py'], // e2
+    ['skills/', 'skills/real/x.py', '!skills/real/x.py'], // e3
+    ['skills/real/x.py', '!skills/real/x.py'], // e4
+    ['agents/_template.md', '!agents/_template.md', 'agents/'], // e6
+    ['agents/', 'agents/_template.md', '!agents/_template.md'], // e7
+  ]) {
+    assert.throws(manifest(files), PAIR, `${JSON.stringify(files)} must be refused`);
+  }
+
+  // The rows the matcher gets RIGHT today, refused anyway: the recorded decision is "any pair",
+  // so the guard does not rest on the first-entry-wins reading. These two are the rows that pin
+  // it. Both put the negation first. A guard reading only the negations after the first inclusion
+  // accepts e5; one refusing a pair only when its inclusion precedes its negation accepts both.
+  // Either passes every row above.
+  for (const files of [
+    ['skills/', '!skills/real/x.py', 'skills/real/x.py'], // e1
+    ['!skills/real/x.py', 'skills/real/x.py'], // e5
+  ]) {
+    assert.throws(manifest(files), PAIR, `${JSON.stringify(files)} must be refused`);
+  }
+
+  // One trailing slash is not a different path.
+  assert.throws(manifest(['skills/_template', '!skills/_template/']), PAIR);
+  assert.throws(manifest(['skills/_template/', '!skills/_template']), PAIR);
+
+  // Controls: a negation of a DIFFERENT path, and the measured-honoured rows r1, r3 and r4, are
+  // accepted, so the arm is not simply "refuse any negation of a file".
+  assert.doesNotThrow(manifest(['skills/', 'skills/real/x.py', '!skills/real/y.py']));
+  assert.doesNotThrow(manifest(['skills/', '!skills/_template/'])); // r1
+  assert.doesNotThrow(manifest(['agents/', '!agents/_template.md'])); // r3
+  assert.doesNotThrow(manifest(['!agents/_template.md', 'agents/'])); // r4
+  // And the real array, which pairs no inclusion with a negation of the same path.
+  assert.doesNotThrow(() => shippedEntries(REPO_ROOT));
+});
+
+test('the pair refusal runs before any arm that reads the disk (#882)', (t) => {
+  // With `skills/_template` a real directory, `!skills/_template` without its slash is ALSO the
+  // "negates a DIRECTORY without a trailing slash" shape, an arm that asks the disk. The pair
+  // is the more basic defect and must be the one reported, whatever the tree holds.
+  const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
+  t.after(() => rmTree(dir));
+  mkdirSync(join(dir, 'skills', '_template'), { recursive: true });
+  writeFileSync(join(dir, 'package.json'),
+    JSON.stringify({ files: ['skills/_template', '!skills/_template'] }), 'utf8');
+
+  assert.throws(() => shippedEntries(dir), /both includes and negates/);
+});
+
+test('isExcludedFromPackage answers only for the negations shippedEntries returned (#882)', (t) => {
+  const dir = makeTree(t, { alpha: BASH_SKILL });
+  const { negations } = shippedEntries(dir);
+  const UNCHECKED = /did not come from shippedEntries/;
+
+  // Positive control: the validated array is answered, in both directions.
+  assert.equal(isExcludedFromPackage('skills/_template/', negations), true);
+  assert.equal(isExcludedFromPackage('skills/alpha/', negations), false);
+
+  // An equal literal, a copy and a filtered subset are all different objects nobody validated.
+  // The message is asserted, not merely `throws`, so an unrelated TypeError cannot pass here.
+  assert.throws(() => isExcludedFromPackage('skills/_template/', ['skills/_template/']), UNCHECKED);
+  assert.throws(() => isExcludedFromPackage('skills/_template/', [...negations]), UNCHECKED);
+  assert.throws(() => isExcludedFromPackage('skills/_template/', negations.filter(Boolean)), UNCHECKED);
+
+  // Frozen, so the validated array cannot be extended with a pattern that skipped the check.
+  assert.ok(Object.isFrozen(negations));
+  assert.throws(() => negations.push('skills/alpha/'), TypeError);
+  assert.equal(isExcludedFromPackage('skills/alpha/', negations), false);
 });
 
 test('a package.json with no files array yields nothing, rather than throwing', (t) => {
