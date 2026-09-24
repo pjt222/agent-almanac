@@ -25,7 +25,6 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: "0ac5353e9e305d1cfdfb8ca04f41b0dd5af4f9a9"
-  fence_basis_commit: "0ac5353e9e305d1cfdfb8ca04f41b0dd5af4f9a9"
   translator: "(untranslated stub)"
   translation_date: "2026-08-18"
 ---
@@ -38,7 +37,8 @@ process and can bracket it. A peer session cannot be bracketed: it may have been
 before you arrived, so no baseline predates its work and every detector fires after the
 collision rather than before it. The control this skill applies is an agreement about paths
 and the branch, established before the first edit — after checking whether the sharing is
-necessary at all.
+necessary at all. When one session leads and the other supports, Steps 9 and 10 add a division
+of labour, whether or not the two share a worktree.
 
 ## When to Use
 
@@ -70,7 +70,8 @@ git worktree list
 git worktree add ../repo-peer -b feat/their-task
 ```
 
-**Expected:** either a second worktree, after which this skill is unnecessary, or a stated
+**Expected:** either a second worktree, after which Steps 2-8 are unnecessary (Steps 9 and 10
+still apply if one session leads the other), or a stated
 reason the sessions must share one — same-branch collaboration, a toolchain bound to a fixed
 path, or an expensive filesystem.
 
@@ -241,7 +242,8 @@ commits, the merges and everything cited in public — and the other supports. A
 shape of the work, not by "one thinks, one reads":
 
 ```text
-Support decides: where to look, what is on disk, how big the job is
+Support decides: where to look, what is on disk
+Support counts:  how big the job is -- the lead makes the call
 Lead decides:    what a finding means, what the prose says, what is cited publicly
 Support writes:  nothing by default; for a write task, through a tool that refuses on mismatch
 ```
@@ -253,12 +255,17 @@ the plan, your own read — and mark an end state you intend to create as intend
 target reaches the support as "the issue says" and is searched for as an existing fact. Ask for
 re-derivation from a named sha, for "say so if anything contradicts the source", and for
 observations and near-misses outside the brief: the report is the only interface, and nothing
-the brief did not ask for arrives unless the support volunteers it.
+the brief did not ask for arrives unless the support volunteers it. Confirm the support can run
+what the brief asks for: a peer session cannot be granted a tool by the lead, and in the recorded
+pairing the support was not permitted to run scripts, so a script-shaped check became a weaker
+substitute.
 
-Write scope has three strengths: read-only removes the failure mode, a tool that checks every
-needle before writing (`tools/patch-literal.py --spec`) is next, and a list of named paths is
-the weakest, because it constrains where a session intends to write rather than where it does.
-While an adversarial review runs on a branch the sessions share, the support writes nothing.
+Write scope comes in three strengths, ordered by argument in the recorded log rather than
+measured: read-only removes the failure mode; a tool that checks every needle before writing
+(`tools/patch-literal.py`, with `--spec`) is next, though it constrains only the writes made
+through it; and a list of named paths is the weakest, because it constrains where a session
+intends to write rather than where it does. In the recorded pairing the support wrote nothing
+while an adversarial review ran on the branch the sessions shared, and sat idle for it.
 
 **Expected:** every brief names the source of each claim and states its write scope as one of
 the three levels.
@@ -270,24 +277,32 @@ intended before sending — a brief lends the plan's guesses the authority of th
 
 The report decides where to look and how big the job is. It is never quoted as evidence. Every
 number that will reach a pull request, an issue or a close comment is re-derived by the lead
-against a **named committed revision**, not against the tree being edited:
+against a committed revision, and **the artifact names that revision**, so a reader can open it:
 
 ```bash
-git show "origin/main:path/to/file" | rg -n 'pattern'   # a revision the reader can open
+git grep -n 'pattern' <sha> -- path/to/file   # quote <sha> beside the number you publish
 ```
 
-Judge the support's accuracy with an instrument neither session chose — a tool's refusal count,
-say — never with a number the lead derived loosely and offered. And a claim about *who found
+`git grep` exits 128 for a bad revision but 1 for a path that matches nothing — the same as no
+match — so confirm the path first with `git cat-file -e <sha>:<path>` (exit 128 when absent).
+Piped through `rg`, `git show <rev>:<path>` reports every one of these failures as exit 1.
+
+Judge the support's accuracy with a check that tests the report's own claim from another
+direction, chosen by neither session to flatter the other — in the recorded pairing, a tool that
+refuses non-stub mirrors refusing none of four confirmed the report's "all four are stubs". Never
+use a number the lead derived loosely and offered: the withdrawn one was a refusal count too, from
+a tool that had never been given the support's anchors. And a claim about *who found
 what* gets the same command as a line number: provenance reads as narration, not as an
 assertion, which is why it slips through.
 
-**Expected:** every published number traces to a command against a named sha, and the support's
-report appears nowhere as a source.
+**Expected:** every published number traces to a command against a sha that the artifact names,
+and the support's report appears nowhere as a source.
 
-**On failure:** if a number was taken from a working tree, re-derive it against the base branch
-and correct the artifact where it was published. The dated record behind this step
+**On failure:** if a published number names no revision, re-derive it, name the revision, and
+correct the artifact where it was published. The dated record behind this step
 (`docs/investigations/lead-support-coordination-2026-09-15.md`, PR #841) holds one such case: an
-issue's line numbers came from an uncommitted tree and matched no revision on `main`.
+issue's line numbers were right at a commit that reached `main`, then went stale when a revert
+in the same PR moved the lines, and the issue never said which revision it meant.
 
 ## Validation
 
@@ -334,7 +349,9 @@ issue's line numbers came from an uncommitted tree and matched no revision on `m
   that refuses on mismatch is.
 - **Chaining checks with `&&`**: `rg`, `test -f` and `git grep` answer "no" with a non-zero exit,
   and `diff -q` answers "they differ" the same way, so `&&` stops at the first such answer and
-  the output is shorter but looks complete. Run checks separately or join them with `;`.
+  the output is shorter but looks complete. Run checks separately or join them with `;` — and
+with `;`, use `rg -c --include-zero`, because a bare `rg -c` prints nothing for zero and the
+line simply goes missing.
 - **Assessing work already merged into your own**: a lead grading its support is not
   disinterested, and a flattering number it did not derive carefully is undetectable from the
   support's side (Step 10).
@@ -379,8 +396,8 @@ than an agreement, which is the difference this whole section is about.
 questions it did not test: whether a peer session does the support work better than a spawned
 subagent would, and whether the division survives a support session that disagrees with the
 lead's *conclusion* rather than with a brief's framing. The breadth threshold in Step 9 is an
-estimate from counted brief lengths alone; the cost of the lead reading the files itself was
-never measured.
+estimate from counted message lengths alone (ten messages, four of them coordination rather than
+briefs); the cost of the lead reading the files itself was never measured.
 
 ## Related Skills
 
@@ -388,4 +405,4 @@ never measured.
 - `create-pull-request` -- opens the PR whose branch Step 8 reviews
 - `resolve-git-conflicts` -- for a collision that reached the index rather than the working tree
 - `write-continue-here` -- the handoff to the NEXT session, which is not where a peer-scope declaration belongs (#660): its reader deletes it
-- `unleash-the-agents` -- subagent fan-out: Steps 1-8 do not apply to spawned agents, while Step 9's rules for a brief do
+- `unleash-the-agents` -- subagent fan-out: Steps 2, 3, 5 and 7 are about a peer you cannot bracket and do not transfer, while Step 9's rules for a brief do
