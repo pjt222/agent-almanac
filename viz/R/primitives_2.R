@@ -281,18 +281,19 @@ glyph_anchor <- function(cx, cy, s, col, bright) {
   cross <- data.frame(x = c(cx - 14 * s, cx + 14 * s), y = c(cy + 8 * s, cy + 8 * s))
   # ring at top
   ring <- data.frame(x0 = cx, y0 = cy + 22 * s, r = 5 * s)
-  # curved flukes at bottom
-  t_l <- seq(pi, pi * 0.5, length.out = 20)
-  t_r <- seq(0, pi * 0.5, length.out = 20)
-  fluke_l <- data.frame(x = cx - 14 * s * cos(t_l) - 14 * s, y = cy - 18 * s + 14 * s * sin(t_l))
-  fluke_r <- data.frame(x = cx + 14 * s * cos(t_r) + 14 * s, y = cy - 18 * s + 14 * s * sin(t_r))
+  # crown: one half-circle from the left arm, through the shaft foot, to the right arm.
+  # Centred on the shaft at cy - 4s with radius 14s, so its lowest point is the foot
+  # (cy - 18s). The two flukes this replaces were quarter-circles centred 14s either
+  # side of the shaft: the left one rose straight up out of the foot, and the right one
+  # ran from (cx + 28s, cy - 18s) to (cx + 14s, cy - 4s) without touching the shaft.
+  t_crown <- seq(pi, 2 * pi, length.out = 40)
+  crown <- data.frame(x = cx + 14 * s * cos(t_crown), y = cy - 4 * s + 14 * s * sin(t_crown))
   list(
     ggplot2::geom_path(data = shaft, .aes(x, y), color = bright, linewidth = .lw(s, 3)),
     ggplot2::geom_path(data = cross, .aes(x, y), color = bright, linewidth = .lw(s, 2.5)),
     ggforce::geom_circle(data = ring, .aes(x0 = x0, y0 = y0, r = r),
       fill = NA, color = bright, linewidth = .lw(s, 2.5)),
-    ggplot2::geom_path(data = fluke_l, .aes(x, y), color = col, linewidth = .lw(s, 2.5)),
-    ggplot2::geom_path(data = fluke_r, .aes(x, y), color = col, linewidth = .lw(s, 2.5))
+    ggplot2::geom_path(data = crown, .aes(x, y), color = col, linewidth = .lw(s, 2.5))
   )
 }
 
