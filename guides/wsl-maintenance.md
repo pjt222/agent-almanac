@@ -14,6 +14,7 @@ On-demand reference for maintaining a WSL2-based Claude Code development environ
 ## When to Use This Guide
 
 - A WSL2 `.vhdx` has grown large and you want to reclaim space Windows still holds after files were deleted inside Linux
+- `df` inside WSL reports far more free space than the Windows drive actually has
 - You need the precise meaning of each Claude Code permission mode before choosing one
 - You want a periodic security sweep of your projects directory for keys, tokens, real emails, or hardcoded personal paths
 
@@ -32,6 +33,26 @@ WSL2 stores each distro as a sparse `.vhdx` virtual disk. Default max 1 TB. **Gr
 - `%LOCALAPPDATA%\wsl\<distro-guid>\ext4.vhdx` — the Linux distro
 - `%LOCALAPPDATA%\Docker\wsl\disk\docker_data.vhdx` — Docker Desktop data
 - `%LOCALAPPDATA%\Docker\wsl\main\ext4.vhdx` — Docker Desktop bootstrap
+
+**`df` inside the distro reports the vhdx, not the Windows drive.** The root filesystem is ext4 on that sparse vhdx, so `df /`, and `df /tmp` when `/tmp` is on the root filesystem, show the virtual size (default 1 TB) minus what Linux uses. Measured on one machine: `df /` showed 720 GiB available while the Windows drive holding the vhdx had 179 GiB free. A write that needs the vhdx to grow fails once the *host* drive is full, whatever `df` says. For any path on the Linux root, real free space is the smaller of `df`'s figure and the host drive's free space. `/mnt/<letter>` mounts report the Windows drive correctly.
+
+Find the host drive from inside WSL, without PowerShell. The registry records each distro's `BasePath`. Docker Desktop's entry carries a `\\?\` prefix, which is stripped here:
+
+```bash
+base=$(reg.exe query 'HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss' /s 2>/dev/null | tr -d '\r' |
+  awk -v d="$WSL_DISTRO_NAME" '/^HKEY/ {hit = 0} /DistributionName/ {hit = ($3 == d)}
+       hit && /BasePath/ {sub(/^.*REG_SZ +/, ""); sub(/^\\\\\?\\/, ""); print; exit}')
+printf '%s\n' "$base"                         # e.g. C:\Users\<you>\AppData\Local\wsl\{<distro-guid>}
+df -h "/mnt/$(printf '%s' "${base:0:1}" | tr 'A-Z' 'a-z')"   # the host drive's real free space
+```
+
+**Estimate what compaction would reclaim** as the vhdx's size on disk minus what Linux uses. Keep both figures in bytes: `ls -l` prints bytes (powers of 10) and `df -h` prints GiB (powers of 2), so mixing them overstates the headroom. For example, a 301 GB vhdx with 237 GiB used looks like 64 of headroom, but it is 43.7 GiB.
+
+```bash
+vhdx_bytes=$(stat -c %s "$(wslpath "$base")/ext4.vhdx")
+used_bytes=$(df -B1 --output=used / | tail -1)
+echo "reclaimable ~ $(( (vhdx_bytes - used_bytes) / 1024**3 )) GiB"
+```
 
 **Reclaim wasted vhdx space** (elevated PowerShell):
 
