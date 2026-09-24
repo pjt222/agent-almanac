@@ -349,7 +349,8 @@ export function contentTrees(root) {
  *
  *   files: ["skills/","!skills/_template"]        npm packs 0 of skills/_template/.
  *       A directory negation WITHOUT its trailing slash still excludes the directory. This
- *       matcher can never match it, because `walk` appends the slash before testing — so one
+ *       matcher can never match it, because `shippedFilesUnder` tests each ancestor directory with
+ *       its slash appended — so one
  *       deleted character silently turns the exclusion off HERE while npm keeps honouring it.
  *   files: ["agents/","!_template.md"]            npm packs 0 of agents/_template.md.
  *       An unanchored, slash-free pattern matches at depth. This matcher compares exact paths
@@ -385,7 +386,8 @@ export function contentTrees(root) {
  * negated prefix, which npm packs while this matcher carves it out. Both make the matcher
  * report FEWER files than ship — the silent direction, and the one a security document must
  * never take. Today's array is neither shape; an alphabetised `files` would become the first
- * one without a word from any gate.
+ * one without a word from any gate. Row r6 is not one of the two: it includes and negates one
+ * path, so the third check below, which runs first, is the one that refuses it.
  *
  * A THIRD shape is refused, in EITHER order: one path both included and negated (#882). On npm
  * 11.13.0, `npm pack --dry-run --json` gave these answers, where the matcher would carve the
@@ -403,8 +405,8 @@ export function contentTrees(root) {
  * version and one fixture, and no test separated it from other explanations, so the refusal
  * does not depend on it. Any pair is refused, including e1 and e5, which the matcher gets right
  * today, because including a path and negating it is a contradiction nobody writes on purpose.
- * Order is gone by the time `shippedEntries` returns, so this is also the only place the shape
- * can be refused at all. The pair test runs FIRST and reads no disk, so its verdict does not
+ * Order is gone by the time `shippedEntries` returns, so nothing downstream of it can refuse the
+ * shape: it has to be refused here. The pair test runs FIRST and reads no disk, so its verdict does not
  * depend on what the tree holds. Paths are compared with one trailing slash stripped, so a
  * directory spelled with and without it is one path.
  */
@@ -414,8 +416,8 @@ function assertInterpretable(files, root) {
   for (const entry of files) {
     if (!entry.startsWith('!') && bareNegated.has(entry.replace(/\/$/, ''))) {
       throw new Error(
-        `package.json \`files\` both includes and negates "${entry}". Measured on npm 11.13.0: `
-        + 'whether npm packs it depends on which entry comes first, while this module always '
+        `package.json \`files\` both includes and negates "${entry}". In the measurements on `
+        + '#882 (npm 11.13.0), whether npm packed such a path depended on which entry came first, while this module always '
         + 'carves it out, so the published file count can be lower than what ships. Remove one '
         + 'of the two entries (#882).',
       );
@@ -489,7 +491,7 @@ function assertInterpretable(files, root) {
       throw new Error(
         `package.json \`files\` entry "${entry}" negates a DIRECTORY without a trailing ` +
         'slash. Measured: npm excludes it and its contents; this module would never match it, ' +
-        'because the walk appends the slash before testing. Write ' + `"${entry}/".`,
+        'because the shipped-file walk tests each directory with its slash appended. Write ' + `"${entry}/".`,
       );
     }
   }

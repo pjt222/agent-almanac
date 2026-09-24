@@ -163,7 +163,9 @@ function carvedOut(path, negations) {
  *
  * `shipped` is injectable for tests, but its `negations` must be the array `shippedEntries`
  * returned: `isExcludedFromPackage` throws for any other, so a hand-built `shipped` throws as
- * soon as a path is tested against it, rather than being answered (#882).
+ * soon as a path is tested against it, rather than being answered (#882). On a tree with nothing
+ * to report no path is tested, so there a hand-built `shipped` is answered; and `included` is not
+ * validated here at all.
  */
 export function divergentPaths(root = ROOT, shipped = shippedPaths(root)) {
   const { included, negations } = shipped;

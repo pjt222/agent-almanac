@@ -286,8 +286,9 @@ test('a path both included and negated is refused, in EITHER order (#882)', (t) 
 
   // The rows the matcher gets RIGHT today, refused anyway: the recorded decision is "any pair",
   // so the guard does not rest on the first-entry-wins reading. These two are the rows that pin
-  // it. Both put the negation first, and a guard refusing only inclusion-first pairs passes
-  // every row above while accepting these.
+  // it. Both put the negation first. A guard reading only the negations after the first inclusion
+  // accepts e5; one refusing a pair only when its inclusion precedes its negation accepts both.
+  // Either passes every row above.
   for (const files of [
     ['skills/', '!skills/real/x.py', 'skills/real/x.py'], // e1
     ['!skills/real/x.py', 'skills/real/x.py'], // e5
