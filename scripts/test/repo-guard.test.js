@@ -950,7 +950,7 @@ test('a branch-only change is not described as a HEAD move, and can be accepted 
   const refused = guard(dir, ['rebaseline']);
 
   assert.equal(refused.status, 2, 'still an unanswered question, not a yes');
-  assert.match(refused.stderr, /only the branch changed\. HEAD did not move, so no commit was added\./);
+  assert.match(refused.stderr, /only the branch changed\. HEAD did not move, so HEAD gained no commit\./);
   assert.match(refused.stderr, /the checkout you made:\n {2}git rev-parse --abbrev-ref HEAD\n/);
   assert.doesNotMatch(refused.stderr, /HEAD moved|commits above/);
   assert.ok(refused.stderr.includes(`--accept=${head}`), 'rebaseline, unlike verify, names the sha');
@@ -1308,7 +1308,7 @@ test('a HEAD move BACKWARD is not called diverged, and names a range that prints
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1, 'a backward move is still a change');
-  assert.match(r.stderr, /the new HEAD is an ANCESTOR of the snapshot commit — HEAD moved backward, so no commit was added\./);
+  assert.match(r.stderr, /the new HEAD is an ANCESTOR of the snapshot commit — HEAD moved backward and gained no commit\./);
   assert.doesNotMatch(r.stderr, /diverged or was replaced/);
   assert.match(r.stderr, /commits the snapshot had that HEAD no longer does:\n {2}\S+ .*feature work\n/);
   assert.doesNotMatch(r.stderr, /commits added:|Read every commit listed above|If a commit is NOT yours|git reset --mixed/,
@@ -1324,7 +1324,7 @@ test('rebaseline over a backward move does not ask for commits that are not ther
   const refused = guard(dir, ['rebaseline']);
 
   assert.equal(refused.status, 2, 'still an unanswered question');
-  assert.match(refused.stderr, /HEAD moved, but no commit was added: it moved backward/);
+  assert.match(refused.stderr, /HEAD moved, but gained no commit: it moved backward/);
   assert.doesNotMatch(refused.stderr, /Read the commits above|commits added:/);
   assert.ok(refused.stderr.includes(`--accept=${head}`), 'rebaseline, unlike verify, names the sha');
 
@@ -1351,7 +1351,7 @@ test('a HEAD move onto an unborn branch is not blamed on a corrupt object (#908)
 
   assert.equal(r.status, 1);
   assert.match(r.stderr, /HEAD moved: \S+ -> \(unborn\)/);
-  assert.match(r.stderr, /the new HEAD is on a branch with no commits \(an orphan checkout\?\), so no commit was added\./);
+  assert.match(r.stderr, /the new HEAD is on a branch with no commits \(an orphan checkout\?\), so HEAD gained no commit\./);
   assert.doesNotMatch(r.stderr, /could NOT determine ancestry|pruned or corrupt/);
   assert.doesNotMatch(r.stderr, /Read every commit listed above|git reset --mixed|\.\.HEAD/);
   assert.ok(r.stderr.includes(`\n    git log --oneline ${short}\n`), 'the snapshot commit is still there to read');
@@ -1373,7 +1373,7 @@ test('rebaseline accepts a move onto an unborn branch when the tree did not move
   const refused = guard(dir, ['rebaseline']);
 
   assert.equal(refused.status, 2);
-  assert.match(refused.stderr, /HEAD moved, but no commit was added: it moved onto a branch with no commits\./);
+  assert.match(refused.stderr, /HEAD moved, but gained no commit: it moved onto a branch with no commits\./);
   assert.doesNotMatch(refused.stderr, /could not list the commits/);
   assert.ok(refused.stderr.includes("npm run guard:rebaseline -- --accept='(unborn)'\n"));
 
@@ -1449,7 +1449,7 @@ test('no command the guard prints for pasting carries a trailing # comment (#908
   // Reached, not bare: the premises must not do the sweep's job, or its own assertion is never
   // the one that fails (measured: a `#` mutant died here first, leaving the sweep unproven).
   assert.match(all, /\n {4}git reset --mixed \S+/, 'the fixtures reached the reset line');
-  assert.match(all, /\n {4}git log --oneline 0{8}\.\.HEAD/, 'and the enumeration refusal');
+  assert.match(all, /git log --oneline 0{8}\.\.HEAD/, 'and the enumeration refusal');
   assert.match(all, /\n {4}npm run guard:rebaseline/, 'and the rebaseline hint');
 
   const commented = all.split('\n').filter((line) => /^\s+(?:git|npm run) /.test(line) && /\s#/.test(line));
@@ -1499,4 +1499,191 @@ test('a deleted branch ref is still an unborn branch, and can be accepted (#920 
   assert.equal(accepted.status, 0, accepted.stderr);
   const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
   assert.equal(snap.rebaselinedFrom.fastForward, 'to-unborn');
+});
+
+/** Commit a stray file on whatever HEAD is now, the way an agent would. */
+function strayCommit(dir, message = 'STRAY agent commit') {
+  writeFileSync(join(dir, 'src', 'stray.txt'), `${message}\n`, 'utf8');
+  git(dir, ['add', '--', 'src/stray.txt']);
+  git(dir, ['commit', '-qm', message]);
+  return git(dir, ['rev-parse', 'HEAD']);
+}
+
+test('a commit on the branch HEAD left is listed, not called "no commit" (#920 F1, backward)', async (t) => {
+  // "No commit was added" was printed after reading only HEAD's range. An agent commits on
+  // `feature`, the snapshot's branch, then checks out `main`: HEAD gained nothing, the
+  // repository did, and the old output never showed it.
+  const dir = makeRepo(t);
+  git(dir, ['checkout', '-q', '-b', 'feature']);
+  writeFileSync(join(dir, 'src', 'b.txt'), 'feature work\n', 'utf8');
+  git(dir, ['add', '--', 'src/b.txt']);
+  git(dir, ['commit', '-qm', 'feature work']);
+  guard(dir, ['snapshot']);
+  strayCommit(dir);
+  git(dir, ['checkout', '-q', 'main']);
+  const head = git(dir, ['rev-parse', 'HEAD']);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /commits added to feature, the branch HEAD left:\n {2}\S+ .*STRAY agent commit\n/);
+  assert.doesNotMatch(r.stderr, /no commit was added|gained no commit:/,
+    'a commit WAS added, so no sentence may say otherwise');
+  assert.match(r.stderr, /Read every commit listed above/);
+  assert.match(r.stderr, /\n {4}git log --oneline \S+\.\.feature\n/, 'names the range that shows it');
+  assert.doesNotMatch(r.stderr, /git reset --mixed/,
+    'HEAD gained nothing, so a reset of HEAD\'s branch would drop nothing and move it onto feature');
+
+  const refused = guard(dir, ['rebaseline']);
+  assert.equal(refused.status, 2);
+  assert.match(refused.stderr, /Read the commits above/);
+  assert.doesNotMatch(refused.stderr, /no commit was added|gained no commit:/);
+
+  const accepted = guard(dir, ['rebaseline', `--accept=${head}`]);
+  assert.equal(accepted.status, 0, accepted.stderr);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+  assert.equal(snap.rebaselinedFrom.acceptedCommits.length, 1);
+  assert.match(snap.rebaselinedFrom.acceptedCommits[0], /STRAY agent commit/, 'the record names it');
+});
+
+test('a commit on the branch left for an orphan is listed, and must be acknowledged (#920 F1, orphan)', async (t) => {
+  // The orphan case went from refused (exit 2) to accepted with `acceptedCommits: []` while a
+  // stray commit sat on the branch HEAD left.
+  const dir = makeRepo(t);
+  guard(dir, ['snapshot']);
+  strayCommit(dir);
+  git(dir, ['checkout', '-q', '--orphan', 'fresh']);
+  git(dir, ['rm', '-rfq', '--', '.']);
+
+  const r = guard(dir, ['verify']);
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /commits added to main, the branch HEAD left:\n {2}\S+ .*STRAY agent commit\n/);
+  assert.doesNotMatch(r.stderr, /no commit was added|gained no commit:/);
+
+  const refused = guard(dir, ['rebaseline']);
+  assert.equal(refused.status, 2);
+  assert.match(refused.stderr, /Read the commits above/);
+
+  const accepted = guard(dir, ['rebaseline', '--accept=(unborn)']);
+  assert.equal(accepted.status, 0, accepted.stderr);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+  assert.equal(snap.rebaselinedFrom.acceptedCommits.length, 1);
+  assert.equal(snap.rebaselinedFrom.fastForward, 'to-unborn');
+});
+
+test('a commit on the branch left for a detached checkout is listed (#920 F1, branch only)', async (t) => {
+  // HEAD did not move at all: armed on main, a stray commit, then a detached checkout of the
+  // snapshot commit. "HEAD did not move, so no commit was added" was printed over it (#907's line).
+  const dir = makeRepo(t);
+  const snapshotCommit = git(dir, ['rev-parse', 'HEAD']);
+  guard(dir, ['snapshot']);
+  strayCommit(dir);
+  git(dir, ['checkout', '-q', '--detach', snapshotCommit]);
+
+  const r = guard(dir, ['verify']);
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /commits added to main, the branch HEAD left:\n {2}\S+ .*STRAY agent commit\n/);
+  assert.match(r.stderr, /\n {2}commits on main, the branch HEAD left: {2}git log --oneline \S+\.\.main\n/);
+
+  const refused = guard(dir, ['rebaseline']);
+  assert.equal(refused.status, 2);
+  assert.doesNotMatch(refused.stderr, /no commit was added/);
+  assert.match(refused.stderr, /Read the commits above/);
+});
+
+test('a branch merged into HEAD is not listed twice (#920 F1 control)', async (t) => {
+  // The branch HEAD left can be an ancestor of HEAD, after a merge. Its commits are HEAD's
+  // then, and the left-branch listing excludes what HEAD reaches.
+  const dir = makeRepo(t);
+  git(dir, ['checkout', '-q', '-b', 'feature']);
+  guard(dir, ['snapshot']);
+  strayCommit(dir, 'my own work on feature');
+  git(dir, ['checkout', '-q', 'main']);
+  git(dir, ['merge', '-q', '--no-ff', '-m', 'merge feature', 'feature']);
+  const head = git(dir, ['rev-parse', 'HEAD']);
+
+  const accepted = guard(dir, ['rebaseline', `--accept=${head}`]);
+
+  assert.equal(accepted.status, 0, accepted.stderr);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+  assert.equal(snap.rebaselinedFrom.acceptedCommits.length, 2, 'the merge and the commit it brought in, once each');
+  assert.doesNotMatch(accepted.stderr, /the branch HEAD left/);
+});
+
+test('with nothing on the branch HEAD left, the no-commit claim says what it checked (#920 F1, F5)', async (t) => {
+  // The earned sentence: HEAD gained none, and the branch it left gained none. And since the
+  // move may not be the operator's, a way back is named, one that refuses rather than overwrites.
+  const { dir, before } = armAheadThenCheckoutMain(t);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /HEAD moved, but gained no commit: it moved backward, onto an ancestor of the snapshot commit\./);
+  assert.match(r.stderr, /feature, the branch HEAD left, gained none either\./);
+  assert.match(r.stderr, /If you did NOT make it, this returns to the snapshot's branch:\n {4}git checkout feature\n/);
+  assert.ok(!r.stderr.includes(`merge --ff-only`), 'the branch moved, so the way back is a checkout');
+  void before;
+});
+
+test('a backward move on the same branch names a way back that refuses to overwrite (#920 F5)', async (t) => {
+  // An agent's `git reset --hard HEAD~1` drops an operator commit. The only exit named was
+  // rebaseline, for "I made it".
+  const dir = makeRepo(t);
+  strayCommit(dir, 'operator commit');
+  const snapshotCommit = git(dir, ['rev-parse', 'HEAD']);
+  guard(dir, ['snapshot']);
+  git(dir, ['reset', '-q', '--hard', 'HEAD~1']);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.ok(r.stderr.includes(`If you did NOT make it, this moves main back to the snapshot commit, refusing rather than overwriting:\n    git merge --ff-only ${snapshotCommit.slice(0, 8)}\n`),
+    r.stderr);
+  const back = spawnSync('git', ['merge', '-q', '--ff-only', snapshotCommit.slice(0, 8)], { cwd: dir, encoding: 'utf8' });
+  assert.equal(back.status, 0, 'the named command works');
+  assert.equal(guard(dir, ['verify']).status, 0, 'and restores the baseline');
+});
+
+test('a detached snapshot says its left-behind commits were not checked (#920 F1)', async (t) => {
+  // Armed on a detached HEAD, there is no branch to read: a commit made there and then left is
+  // reachable only through the reflog, so "no commit was added" cannot be earned.
+  const dir = makeRepo(t);
+  git(dir, ['checkout', '-q', '--detach']);
+  guard(dir, ['snapshot']);
+  git(dir, ['checkout', '-q', 'main']);
+
+  const refused = guard(dir, ['rebaseline']);
+
+  assert.equal(refused.status, 2);
+  assert.match(refused.stderr, /only the branch changed\. HEAD did not move, so HEAD gained no commit\./);
+  assert.match(refused.stderr, /The snapshot was on a detached HEAD, so a commit made there and then left is not checked here\. The reflog lists every commit HEAD visited:\n {2}git reflog\n/);
+});
+
+test('an unborn baseline names rebaseline, and a flag change its command (#920 F4)', async (t) => {
+  // The third HEAD-moved path called neither helper: it never named rebaseline, which accepts
+  // this case, and never named `git ls-files -v` for a flag change.
+  const armEmpty = () => {
+    const dir = mkdtempSync(join(tmpdir(), 'repo-guard-unborn-'));
+    t.after(() => rmTree(dir));
+    git(dir, ['init', '-b', 'main']);
+    git(dir, ['config', 'user.email', 'test@example.invalid']);
+    git(dir, ['config', 'user.name', 'Fixture']);
+    guard(dir, ['snapshot']);
+    mkdirSync(join(dir, 'src'), { recursive: true });
+    writeFileSync(join(dir, 'src', 'a.txt'), 'mine\n', 'utf8');
+    git(dir, ['add', '-A']);
+    git(dir, ['commit', '-qm', 'my own first commit']);
+    return dir;
+  };
+
+  const clean = guard(armEmpty(), ['verify']);
+  assert.equal(clean.status, 1);
+  assert.match(clean.stderr, /If you made these commits, run this\. It prints the delta and refuses\. Read it, then accept:\n {4}npm run guard:rebaseline\n/);
+
+  const flagged = armEmpty();
+  git(flagged, ['update-index', '--skip-worktree', 'src/a.txt']);
+  const r = guard(flagged, ['verify']);
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /Settle that first:\n {4}the index flags \([^)]*\):\n {6}git ls-files -v\n/);
+  assert.doesNotMatch(r.stderr, /npm run guard:rebaseline/, 'rebaseline refuses a flag change, so it is not offered');
 });
