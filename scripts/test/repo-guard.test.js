@@ -1432,9 +1432,11 @@ test('no command the guard prints for pasting carries a trailing # comment (#908
     outputs.push(guard(dir, ['verify']).stderr);
   }
   const all = outputs.join('\n');
-  assert.match(all, /\n {4}git reset --mixed \S+\n/, 'the fixtures reached the reset line');
-  assert.match(all, /\n {4}git log --oneline 0{8}\.\.HEAD\n/, 'and the enumeration refusal');
-  assert.match(all, /\n {4}npm run guard:rebaseline\n/, 'and the rebaseline hint');
+  // Reached, not bare: the premises must not do the sweep's job, or its own assertion is never
+  // the one that fails (measured: a `#` mutant died here first, leaving the sweep unproven).
+  assert.match(all, /\n {4}git reset --mixed \S+/, 'the fixtures reached the reset line');
+  assert.match(all, /\n {4}git log --oneline 0{8}\.\.HEAD/, 'and the enumeration refusal');
+  assert.match(all, /\n {4}npm run guard:rebaseline/, 'and the rebaseline hint');
 
   const commented = all.split('\n').filter((line) => /^\s+(?:git|npm run) /.test(line) && /\s#/.test(line));
   assert.deepEqual(commented, [], 'a command line with a trailing # does not paste under zsh');
