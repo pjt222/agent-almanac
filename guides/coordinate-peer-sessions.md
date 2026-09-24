@@ -298,6 +298,45 @@ artifact stale, after `git status` had read clean. Regenerating first would have
 job green and buried the finding. When a generated artifact is stale for no reason you can
 name, find the reason before you regenerate.
 
+## Dividing the labour: lead and support
+
+Everything above treats the peer as a neighbour working on something else. Sometimes the peer
+is a collaborator instead: one session leads a plan and hands the other the read-heavy
+scouting, or a mechanical write across many files. The arrangement was recorded once, on
+2026-09-15 (`docs/investigations/lead-support-coordination-2026-09-15.md`, PR #841), and the
+procedure is Steps 9 and 10 of the `coordinate-peer-sessions` skill. This section is the why.
+
+**Divide by shape, not by "thinking versus reading".** In the recorded pairing the support
+session decided where to look, what was on disk and how big the job was. The lead decided what
+a finding meant, what the prose said and what was cited in public. What it contributed beyond the lookups — two
+corrections to the lead's plan, and a finding nobody had asked for, which the log calls the most
+valuable thing either session produced — is not "reading".
+
+**The costs are real.**
+- **A brief costs about as much as the lookup it replaces.** The ten recorded messages ran 205 to
+  569 words, so delegation pays for breadth, across many files or many fields, and not for a
+  single lookup. That threshold is an estimate: only the outbound words were counted.
+- **The support sits idle during review rounds.** While an adversarial review ran on the shared
+  branch, the support was told to write nothing.
+- **Everything is assembled through the lead,** because one worktree has one branch.
+
+**Two failures only this arrangement produces.**
+- **The brief inherits authority it has not earned.** A lead merging the issue, its plan and
+  its own reading into one message turns the plan's intended end state into "the issue says…",
+  and the support then searches for a fact that does not exist. Attribute each claim in a brief
+  to its source.
+- **The lead's assessment of the support is not disinterested.** It is grading work it has
+  already merged into its own, so judge accuracy with an instrument neither side chose.
+
+**The report is never the evidence.** It decides where to look. Every number that reaches a
+pull request or an issue is re-derived by the lead, against a committed revision the reader can
+open. In the recorded pairing one number was taken from the lead's uncommitted working tree,
+and the issue it went into cited line numbers that no revision on `main` has ever had.
+
+**Not tested.** Whether a peer session beats a spawned subagent for the same support work, and
+whether the division holds when the support thinks the lead's plan is wrong rather than merely
+badly briefed.
+
 ## Troubleshooting
 
 | Problem | Cause | Solution |
@@ -317,3 +356,4 @@ name, find the reason before you regenerate.
 - [Coordinate Peer Sessions](../skills/coordinate-peer-sessions/SKILL.md) -- the machine-executable form of this procedure
 - [Commit Changes](../skills/commit-changes/SKILL.md) -- explicit-path staging
 - [Understanding the System](understanding-the-system.md) -- how agents, skills and teams relate, and why subagent concurrency is a different problem
+- [Unleash the Agents](unleash-the-agents.md) -- § The Brief, whose source-attribution rule applies to a support session's brief as much as to a subagent's

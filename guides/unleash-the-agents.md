@@ -106,6 +106,7 @@ The brief is the single most important artifact. Every agent receives it, and it
 3. Known constraints and failed approaches (prevents rediscovery)
 4. Success criteria (how to test a hypothesis)
 5. Output template (enforces parseable structure)
+6. Sources for every claim: say whether each fact comes from the issue, your plan or your own reading, and mark an end state you intend to create as intended
 
 **Domain-specific framing for non-technical agents**: The quality of contributions from agents outside the problem's natural domain depends heavily on how the brief frames the problem in *their* language. A generic brief to a mystic produces nothing useful; "What does your tradition recognize in systems that exhibit this kind of threshold behavior?" produces structural insight. Invest in 1-2 sentences of domain-specific framing per agent — this is where non-obvious perspectives originate.
 
@@ -114,6 +115,7 @@ The brief is the single most important artifact. Every agent receives it, and it
 - Providing too few examples (agents resort to surface-level pattern matching)
 - Omitting the output template (responses become unparseable narratives)
 - Not listing failed approaches (waves waste time rediscovering dead ends)
+- Merging the issue, your plan and your own reading into one voice: an intended end state then reaches the agents as "the issue says…", and they spend their effort looking for a fact that does not exist (recorded for a peer session in `docs/investigations/lead-support-coordination-2026-09-15.md`)
 
 ## Inter-Wave Knowledge Injection
 
