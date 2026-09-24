@@ -1159,6 +1159,9 @@ test('an unanswerable ancestry is reported as unknown, not as "no"', async (t) =
   assert.match(r.stderr, /git could not tell whether that commit is an ancestor/,
     'the reset advice must be qualified when ancestry is unknown');
   assert.match(r.stderr, /git cat-file -t/, 'and must say how to check');
+  // git could not produce the list, so "listed above" would point at nothing (#908's class).
+  assert.doesNotMatch(r.stderr, /Read every commit listed above/);
+  assert.match(r.stderr, /HEAD moved, and git could not list its commits \(see the ancestry line above\)/);
 });
 
 test('an unborn baseline can still be re-baselined, without an invalid range', async (t) => {
@@ -1341,6 +1344,31 @@ test('a HEAD move onto an unborn branch is not blamed on a corrupt object (#908)
   assert.match(r.stderr, /branch changed: main -> fresh/, 'the unborn branch is read by name, not as (unborn)');
   // The orphan keeps the index, so the tree moved too and rebaseline would refuse.
   assert.match(r.stderr, /Settle that first:\n {4}the working tree: /);
+});
+
+test('rebaseline accepts a move onto an unborn branch when the tree did not move (#908)', async (t) => {
+  // The range `<sha>..(unborn)` cannot resolve, so the enumeration guard refused this as
+  // "git could not list the commits", sending the operator to `--force`. The empty list is
+  // complete: a branch with no commits holds none that could have been added.
+  const dir = makeRepo(t);
+  guard(dir, ['snapshot']);
+  git(dir, ['checkout', '-q', '--orphan', 'fresh']);
+  git(dir, ['rm', '-rfq', '--', '.']);
+  assert.equal(git(dir, ['status', '--porcelain', '-uall']), '', 'precondition: the tree did not move');
+
+  const refused = guard(dir, ['rebaseline']);
+
+  assert.equal(refused.status, 2);
+  assert.match(refused.stderr, /HEAD moved, but no commit was added: it moved onto a branch with no commits\./);
+  assert.doesNotMatch(refused.stderr, /could not list the commits/);
+  assert.ok(refused.stderr.includes("npm run guard:rebaseline -- --accept='(unborn)'\n"));
+
+  const accepted = guard(dir, ['rebaseline', '--accept=(unborn)']);
+
+  assert.equal(accepted.status, 0, accepted.stderr);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+  assert.equal(snap.rebaselinedFrom.fastForward, 'to-unborn');
+  assert.deepEqual(snap.rebaselinedFrom.acceptedCommits, []);
 });
 
 test('an unborn baseline sees a branch switch, and names a command that prints it (#908)', async (t) => {
