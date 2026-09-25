@@ -16,7 +16,8 @@
  * does not get followed. (`--release` in particular cannot cross `npm run` —
  * npm swallows it as its own config — which is why it has a script of its own.)
  *
- * Exit 0 = the repository is exactly as it was. Exit 1 = it moved, with the
+ * Exit 0 = the repository is exactly as it was, in everything compared below (and
+ * "What it does NOT cover" says what is not). Exit 1 = it moved, with the
  * difference printed. Exit 2 = the question could not be answered honestly.
  *
  * ## Why this exists (#493)
@@ -62,11 +63,20 @@
  * repo, `CONTINUE_HERE.md`) is invisible here. Everything else under the working
  * tree is compared by content.
  *
+ * Refs other than two. History is read through HEAD, and through the branch the
+ * snapshot was on once HEAD has left it (#920 review). A commit on any other branch,
+ * made while HEAD is back where it was by the time `verify` runs, reads as unchanged;
+ * so does a commit made on a detached HEAD and then left, which only the reflog keeps.
+ *
  * ## Failing closed
  *
  * A guard that answers "unchanged" when it could not look is worse than none.
- * Every uncertainty exits 2, never 0: a missing, unreadable, or foreign snapshot,
- * a git invocation that fails, or an unrecognised argument.
+ * Every uncertainty about the snapshot or HEAD's own history exits 2, never 0: a
+ * missing, unreadable, or foreign snapshot, a git invocation that fails, or an
+ * unrecognised argument. The branch HEAD left is read where it can be; where it
+ * cannot (a detached snapshot, a branch deleted since), the output says it was not
+ * checked, and `rebaseline` refuses only an orphan move over it (#920 review). The
+ * refs no one reads are under "What it does NOT cover".
  *
  * Two rules keep a second run from laundering the first run's damage into a
  * green, which a single global snapshot slot otherwise invites:
@@ -117,7 +127,17 @@ const UNBORN = '(unborn)';
 // where interactive comments are off, a trailing `#` is not a comment, so its words became
 // arguments to the command and a `;` in it started a second one (measured on #907).
 const BRANCH_ARGS = ['rev-parse', '--abbrev-ref', 'HEAD'];
-const BRANCH_COMMAND = `git ${BRANCH_ARGS.join(' ')}`;
+// The fallback read, for the one state the primary cannot answer: on an unborn branch there is no
+// commit for `--abbrev-ref` to resolve, so it exits 128, both captures read `(unborn)`, and a
+// branch switch passed as "unchanged" (#908). `symbolic-ref` reads the name HEAD points at, commit
+// or not. It is not the primary because it fails on a detached HEAD, where the primary prints
+// `HEAD`. So which command prints what the guard read depends on the state, and the advice names
+// the one for the state the repository is in now: the fallback when HEAD is unborn, the state in
+// which the primary fails (measured on git 2.43; `repo-guard.test.js` asserts both premises).
+// On a broken ref (garbage in `refs/heads/<b>`) both fail, and so does the command named; no
+// command prints a branch there, and the finding line then reads `-> (unborn)` (#920 review, F2).
+const UNBORN_BRANCH_ARGS = ['symbolic-ref', '--short', 'HEAD'];
+const branchCommandFor = (state) => `git ${(state.head === UNBORN ? UNBORN_BRANCH_ARGS : BRANCH_ARGS).join(' ')}`;
 const INDEX_FLAGS_ARGS = ['ls-files', '-v'];
 const INDEX_FLAGS_COMMAND = `git ${INDEX_FLAGS_ARGS.join(' ')}`;
 const INDEX_FLAGS_LEGEND = 'run at the repository root; a tag other than H: S is skip-worktree, ' +
@@ -290,13 +310,26 @@ function captureState() {
   // A repository with no commits yet has neither a resolvable HEAD nor an
   // abbrev-ref for it. That is a legitimate state to snapshot, not an error —
   // dying here would make the guard unusable on a fresh fixture.
+  //
+  // The branch falls back to `symbolic-ref`, which names an unborn branch (#908). A snapshot an
+  // older build armed on an unborn repository recorded `(unborn)` there, so its first verify under
+  // this build reports a branch change that did not happen. That over-reports, the direction this
+  // tool accepts, and it needs no format bump: the shape of the capture did not change.
   const head = git(['rev-parse', 'HEAD'], { cwd: TOPLEVEL, allowFailure: true });
-  const branch = git(BRANCH_ARGS, { cwd: TOPLEVEL, allowFailure: true });
+  const branch = git(BRANCH_ARGS, { cwd: TOPLEVEL, allowFailure: true })
+    ?? git(UNBORN_BRANCH_ARGS, { cwd: TOPLEVEL, allowFailure: true });
+  // The full ref HEAD names, for reading that branch later. `branch` above is for display, and
+  // `--abbrev-ref` spells it `heads/<b>` or `refs/heads/<b>` when a tag shares the name, so
+  // parsing it back found no branch and reported a live one as deleted (#920 rounds 2 and 3).
+  // null on a detached or broken HEAD. An extra field, not a new shape: nothing compares it, an
+  // older build ignores it, and a snapshot without it falls back to `refs/heads/<branch>`.
+  const headRef = git(['symbolic-ref', '-q', 'HEAD'], { cwd: TOPLEVEL, allowFailure: true });
 
   return {
     toplevel: TOPLEVEL,
     head: head === null ? UNBORN : head.trim(),
     branch: branch === null ? UNBORN : branch.trim(),
+    headRef: headRef === null ? null : headRef.trim(),
     status,
     contents,
     indexFlags,
@@ -441,25 +474,169 @@ if (before.head !== after.head) {
   // a confident wrong claim, and the exact opposite of "evidence, not a verdict".
   fastForward = before.head === UNBORN
     ? 'created'
-    : ancestry(before.head, after.head);
+    // `git checkout --orphan`: HEAD names a branch with no commits. Asking `--is-ancestor`
+    // about `(unborn)` returned "could not look", which was then blamed on a pruned or corrupt
+    // object, over a move that simply added no commit (#908). `head` is `(unborn)` whenever
+    // `rev-parse HEAD` fails, though, and a branch ref holding garbage fails it too. The branch
+    // read separates the two: `symbolic-ref` names an orphan's branch and fails on a broken ref.
+    // So a broken ref falls through to `'unknown'`, and rebaseline refuses it with exit 2 rather
+    // than accepting an orphan move that never happened (#920 review, F2).
+    : after.head === UNBORN && after.branch !== UNBORN
+      ? 'to-unborn'
+      : ancestry(before.head, after.head);
+  // `false` covered two shapes (#908): unrelated history, and a move BACKWARD onto an ancestor of
+  // the snapshot commit, such as a checkout of `main` from a branch ahead of it. Only the first
+  // diverged. The second added no commit, so "read the commits above" described nothing.
+  if (fastForward === false && ancestry(after.head, before.head) === true) fastForward = 'backward';
   console.error(`  ${{
     true: 'the snapshot commit IS an ancestor of the new HEAD — history was added on top',
     false: 'the snapshot commit is NOT an ancestor of the new HEAD — history diverged or was replaced',
+    // Both say what was checked, HEAD's range, and no more: a commit can still sit on the branch
+    // HEAD left, which is read below (#920 review, F1).
+    backward: 'the new HEAD is an ANCESTOR of the snapshot commit — HEAD moved backward and gained no commit',
+    'to-unborn': 'the new HEAD is on a branch with no commits (an orphan checkout?), so HEAD gained no commit',
     created: 'the baseline had no commits, so this history was created, not moved',
     unknown: 'git could NOT determine ancestry (a pruned or corrupt object?) — treat the reading below as unavailable, not as a "no"',
   }[fastForward]}.`);
+  if (fastForward === 'backward') {
+    // What a backward move leaves behind is the reverse range, and it is never empty here.
+    const behind = git(['log', '--format=  %h %an <%ae>  %s', `${after.head}..${before.head}`],
+      { cwd: TOPLEVEL, allowFailure: true });
+    if (behind && behind.trim()) {
+      console.error('  commits the snapshot had that HEAD no longer does:');
+      console.error(behind.trimEnd());
+    }
+  }
 
   // The ENUMERATE leg of the acknowledgement rests on this list. If git could not
   // produce it, `rebaseline` must not go on to accept an empty one — "read the
   // commits above" printed over nothing, and `acceptedCommits: []` written into
   // permanent provenance, is a record that says a review happened when none could.
-  commitsEnumerated = range !== null;
+  // An unborn HEAD is the exception: HEAD's range cannot resolve, and HEAD's list is
+  // complete, because a branch with no commits holds none. A commit made before the
+  // orphan checkout sits on the branch HEAD left, which is read below (#920 review, F1).
+  commitsEnumerated = range !== null || fastForward === 'to-unborn';
 }
 
 if (before.branch !== after.branch) {
   changed = true;
   branchMoved = true;
   console.error(`\n  branch changed: ${before.branch} -> ${after.branch}`);
+}
+
+// The branch the snapshot was on, once HEAD has left it (#920 review, F1). "No commit was
+// added" was printed after reading HEAD's range alone, while a commit could sit on the branch
+// HEAD left: an agent commits on `feature`, then checks out `main`, and HEAD gained nothing.
+// That branch is read too, and its new commits join the list rebaseline makes the caller
+// acknowledge. Commits HEAD reaches are excluded, so a branch merged into HEAD is not listed
+// twice. No other ref is read: see "What it does NOT cover" in the header.
+//
+// It is read only when the branch changed; while HEAD is still on it, HEAD's own range covers
+// it. It is read by the full ref recorded at capture (`headRef`), never by parsing back the
+// display name, whose spelling depends on which other refs share it (#920 rounds 2 and 3). A
+// snapshot from before `headRef` falls back to `refs/heads/<branch>`. Printed ranges name the
+// full ref, because `git log` resolves a short name a tag shares to the tag; a checkout takes
+// the short name, which git resolves to the branch (both measured on git 2.43).
+/** The name of the branch the snapshot was on, for printing. */
+const snapshotName = before.headRef?.startsWith('refs/heads/')
+  ? before.headRef.slice('refs/heads/'.length) : before.branch;
+const snapshotRef = before.headRef
+  ?? (before.branch !== 'HEAD' && before.branch !== UNBORN ? `refs/heads/${before.branch}` : null);
+let leftBranch = null;   // { name, ref, state }; null when the branch did not change or had no ref
+let leftCommits = [];
+if (branchMoved && snapshotRef !== null && before.branch !== 'HEAD') {
+  const ref = snapshotRef;
+  const tip = git(['rev-parse', '--quiet', '--verify', `${ref}^{commit}`],
+    { cwd: TOPLEVEL, allowFailure: true })?.trim() || null;
+  const name = snapshotName;
+  if (tip !== after.head) {
+    // No ref resolves for an unborn branch any more than for a deleted one, so a branch that had no
+    // commit at the snapshot and resolves to none now may have gained commits and been deleted.
+    // Neither "gone" nor "unmoved" is established there, and it is said so (#920 round 3, R3-1).
+    const state = tip === null ? (before.head === UNBORN ? 'unresolved' : 'gone')
+      : tip === before.head ? 'unmoved' : 'moved';
+    leftBranch = { name, ref, state };
+    if (leftBranch.state === 'moved') {
+      const exclude = [before.head, after.head].filter((sha) => sha !== UNBORN).map((sha) => `^${sha}`);
+      const log = git(['log', '--format=  %h %an <%ae>  %s', tip, ...exclude],
+        { cwd: TOPLEVEL, allowFailure: true });
+      // The ENUMERATE leg again: a list git could not produce is not an empty one.
+      if (log === null) commitsEnumerated = false;
+      leftCommits = (log ?? '').trim().split('\n').filter(Boolean).map((l) => l.trim());
+      // Silent when its new position is in HEAD's history, as after a merge of it: every commit
+      // it gained is already in HEAD's list, and saying that it moved would only repeat that list.
+      const inHeadHistory = log !== null && leftCommits.length === 0 && ancestry(tip, after.head) === true;
+      if (!inHeadHistory) {
+        console.error(`\n  ${name}, the branch HEAD left, moved: ${before.head.slice(0, 8)} -> ${tip.slice(0, 8)}`);
+        if (leftCommits.length) {
+          console.error(`  commits added to ${name}, the branch HEAD left:`);
+          console.error(log.trimEnd());
+        }
+      }
+    }
+  }
+}
+
+// An orphan move adds no commit to HEAD, so what it may have left behind is on the branch the
+// snapshot was on. When that branch could not be read, "found nothing there" is not known, and
+// rebaseline must not accept `acceptedCommits: []` over it (#920 round 2, R2-2). The shapes:
+// a detached snapshot, a branch deleted since, and HEAD's own branch losing its ref
+// (`update-ref -d`), which leaves HEAD unborn on the same name. The old build refused them
+// all, because the range `<sha>..(unborn)` failed; this refuses them on purpose.
+// (`before.branch` is never `(unborn)` here: 'to-unborn' needs a snapshot commit, and with one,
+// `rev-parse --abbrev-ref` prints a branch name or `HEAD`.)
+const leftUnreadReason = before.branch === 'HEAD' ? 'the snapshot was on a detached HEAD'
+  : leftBranch?.state === 'gone' ? `${leftBranch.name}, the branch the snapshot was on, no longer exists`
+    : !branchMoved && fastForward === 'to-unborn' ? `${snapshotName} no longer points at a commit`
+      : null;
+if (fastForward === 'to-unborn' && leftUnreadReason) commitsEnumerated = false;
+/** The range that shows the left branch's commits; with no snapshot commit, the whole branch. */
+const leftLogCommand = () => (before.head === UNBORN
+  ? `git log --oneline ${shellWord(leftBranch.ref)}`
+  : `git log --oneline ${before.head.slice(0, 8)}..${shellWord(leftBranch.ref)}`);
+// `git reflog` exits 128 on an unborn HEAD; the reflog file is still there (#920 round 2, R2-6).
+const reflogCommand = after.head === UNBORN ? 'cat "$(git rev-parse --git-dir)/logs/HEAD"' : 'git reflog';
+
+// The two HEAD moves that add no commit to HEAD (#908), when the branch HEAD left gained none
+// either (#920 review, F1). Advice keyed on "HEAD moved" alone told the caller to read commits
+// that are not there; these get what the move left behind instead, with a range that prints
+// it. For an unborn HEAD that is the snapshot commit's own history, since `HEAD..<sha>` cannot
+// resolve there.
+const movedWithoutCommit = (fastForward === 'backward' || fastForward === 'to-unborn') &&
+  leftCommits.length === 0;
+const noCommitReason = fastForward === 'backward'
+  ? 'it moved backward, onto an ancestor of the snapshot commit'
+  : 'it moved onto a branch with no commits';
+const leftBehindCommand = fastForward === 'backward'
+  ? `git log --oneline HEAD..${before.head.slice(0, 8)}`
+  : `git log --oneline ${before.head.slice(0, 8)}`;
+/** A ref name as a shell word: bare when it holds only safe characters, single-quoted otherwise. */
+const shellWord = (word) => (/^[\w./-]+$/.test(word) ? word : `'${word.replace(/'/g, `'\\''`)}'`);
+
+/**
+ * What "HEAD gained no commit" does not cover, said right after it (#920 review, F1). Only HEAD
+ * and the branch the snapshot was on are read, so a claim about any other commit is not made.
+ */
+function printNoCommitScope() {
+  if (before.branch === 'HEAD') {
+    console.error('The snapshot was on a detached HEAD, so a commit made there and then left is not ' +
+      'checked here. The reflog lists every commit HEAD visited:');
+    console.error(`  ${reflogCommand}`);
+  } else if (!branchMoved && fastForward === 'to-unborn') {
+    console.error(`${snapshotName} no longer points at a commit, so a commit made on it is not checked here.`);
+  } else if (leftBranch?.state === 'unresolved') {
+    console.error(`${leftBranch.name} had no commit at the snapshot and resolves to none now, so a commit ` +
+      'made on it and then deleted is not checked here. The reflog lists every commit HEAD visited:');
+    console.error(`  ${reflogCommand}`);
+  } else if (leftBranch?.state === 'unmoved') {
+    console.error(`${leftBranch.name}, the branch HEAD left, gained none either.`);
+  } else if (leftBranch?.state === 'gone') {
+    console.error(`${leftBranch.name}, the branch the snapshot was on, no longer exists, so a commit ` +
+      'made on it is not checked here.');
+  } else if (leftBranch?.state === 'moved') {
+    console.error(`${leftBranch.name}, the branch HEAD left, moved without gaining a commit HEAD ` +
+      'cannot reach.');
+  }
 }
 
 // Tracked separately from `changed` because `rebaseline` may accept a HEAD move
@@ -478,13 +655,40 @@ worktreeMoved = reportList('working tree', before.status, after.status) || workt
 // A path in `before` but not in `after` cannot hide here: the key set of each
 // map is exactly its status list, so the path must also have left the status
 // list, which the working-tree diff above already reports.
+//
+// The opposite direction is why only some of these paths are printed (#899). A path
+// NEW to the status list (an untracked file, a clean file modified or deleted, a
+// conflict) has no `before` entry, so its bytes always "differ"; and a path whose
+// line changed (` M` staged into `MM`) differs too. Every such path's status line
+// moved, so the working-tree diff above already lists it. The heading below is true
+// only of a path whose status lines are byte-identical in both captures, the case this
+// comparison exists for, so it lists those and no others. Detection is unchanged:
+// any differing path still marks the worktree as moved.
+//
+// LINES, plural: git can list one path twice, as a staged delete plus an untracked file
+// of the same name (`D  a` and `?? a`). A map keyed by path kept one of the two, so the
+// other could move while the path still read as unmoved (#920 review, F3). All of a
+// path's lines are compared together.
 const contentChanged = Object.keys(after.contents)
   .filter((path) => before.contents[path] !== after.contents[path])
   .sort();
 if (contentChanged.length) {
   worktreeMoved = true;
-  console.error('\n  contents changed (file was already modified, so its status line did not move):');
-  for (const path of contentChanged) console.error(`    ~ ${path}`);
+  // Grouped once per capture: filtering the whole list once per changed path made verify
+  // quadratic in the number of pending paths (#920 round 2, R2-4).
+  const linesByPath = (state) => {
+    const byPath = new Map();
+    for (const line of state.status) byPath.set(line.slice(3), `${byPath.get(line.slice(3)) ?? ''}${line}\n`);
+    return byPath;
+  };
+  const beforeLines = linesByPath(before);
+  const afterLines = linesByPath(after);
+  const hidden = contentChanged
+    .filter((path) => beforeLines.has(path) && beforeLines.get(path) === afterLines.get(path));
+  if (hidden.length) {
+    console.error('\n  contents changed (same status line as at the snapshot, so only the bytes show the write):');
+    for (const path of hidden) console.error(`    ~ ${path}`);
+  }
 }
 
 // Kept apart from the file changes only so the advice can name a command that shows each: for a
@@ -552,35 +756,71 @@ if (command === 'rebaseline') {
     }
   }
 
+  if (!commitsEnumerated && fastForward === 'to-unborn' && leftUnreadReason) {
+    // Not git failing: the branch that could hold what an orphan move left behind cannot be
+    // read, so an empty list would be a guess (#920 round 2, R2-2).
+    console.error(`\nrepo-guard: HEAD moved onto a branch with no commits, and ${leftUnreadReason}, so a ` +
+      'commit made before the move cannot be listed.');
+    console.error('There is nothing to read, so there is nothing to acknowledge. Accepting here would');
+    console.error('write `acceptedCommits: []` into the record — provenance asserting a review that');
+    console.error('could not happen. The reflog still lists every commit HEAD visited:');
+    console.error(`  ${reflogCommand}`);
+    process.exit(2);
+  }
   if (!commitsEnumerated) {
     console.error('\nrepo-guard: git could not list the commits between the baseline and HEAD.');
     console.error('There is nothing to read, so there is nothing to acknowledge. Accepting here would');
     console.error('write `acceptedCommits: []` into the record — provenance asserting a review that');
     console.error('could not happen.');
-    console.error(`\n  git log --oneline ${before.head.slice(0, 8)}..HEAD   # to see why it failed`);
+    // The command bare, its purpose on the line above, for the reason in the comment above
+    // BRANCH_ARGS (#908).
+    console.error('\n  To see why it failed:');
+    console.error(`    git log --oneline ${before.head.slice(0, 8)}..HEAD`);
     process.exit(2);
   }
 
   const accepted = values['--accept'];
-  if (!accepted && !headMoved) {
+  // An unborn HEAD has no sha, so the sentinel is what `--accept` must match; quoted, because
+  // `(unborn)` is a glob group under zsh and a syntax error under bash (#908).
+  const acceptArg = after.head === UNBORN ? `'${UNBORN}'` : after.head;
+  if (!accepted && !headMoved && leftCommits.length === 0) {
     // Only the branch changed, at the same commit. #887 observed it with the baseline armed on a
     // detached HEAD and `git checkout main` afterwards. The message below this one says HEAD
-    // moved and asks the caller to read the commits above, and there are none.
-    console.error('\nrepo-guard: only the branch changed. HEAD did not move, so no commit was added.');
+    // moved and asks the caller to read the commits above, and there are none. "No commit was
+    // added" claimed more than HEAD's range, the one thing read (#920 review, F1).
+    console.error('\nrepo-guard: only the branch changed. HEAD did not move, so HEAD gained no commit.');
+    printNoCommitScope();
     console.error('Nothing has been accepted yet. Check that this is the checkout you made:');
-    console.error(`  ${BRANCH_COMMAND}`);
+    console.error(`  ${branchCommandFor(after)}`);
     console.error('\nIf it is, re-run naming the HEAD it sits on:');
-    console.error(`  npm run guard:rebaseline -- --accept=${after.head}`);
+    console.error(`  npm run guard:rebaseline -- --accept=${acceptArg}`);
+    process.exit(2);
+  }
+  if (!accepted && movedWithoutCommit) {
+    // HEAD moved and added nothing, so "Read the commits above" would point at an empty list,
+    // and the acceptance below records `acceptedCommits: []` beside the move's real shape (#908).
+    console.error(`\nrepo-guard: HEAD moved, but gained no commit: ${noCommitReason}.`);
+    printNoCommitScope();
+    console.error('Nothing has been accepted yet. Check that this is a move you made. What the snapshot');
+    console.error('commit had that HEAD does not:');
+    console.error(`  ${leftBehindCommand}`);
+    console.error(`\nIf you made it (${fastForward === 'backward' ? 'a checkout of an older branch' : 'an orphan checkout'}, ` +
+      'say), re-run naming the HEAD it sits on:');
+    console.error(`  npm run guard:rebaseline -- --accept=${acceptArg}`);
     process.exit(2);
   }
   if (!accepted) {
-    console.error('\nrepo-guard: HEAD moved. Nothing has been accepted yet.');
+    console.error(`\nrepo-guard: ${headMoved
+      ? 'HEAD moved'
+      // A branch-only move whose left branch gained commits (#920 review, F1).
+      : `only the branch changed, and ${before.branch}, the branch HEAD left, gained commits`}. ` +
+      'Nothing has been accepted yet.');
     console.error('Read the commits above. Every one of them must be yours — a commit you did not');
     console.error('make is the thing this guard is for, and accepting it here hides it permanently.');
     console.error('\nIf they are all yours, re-run naming the HEAD you just read:');
-    console.error(`  npm run guard:rebaseline -- --accept=${after.head}`);
+    console.error(`  npm run guard:rebaseline -- --accept=${acceptArg}`);
     console.error('  npm run guard:rebaseline -- ' +
-      `--accept=${after.head} --reason="merged my own PR"`);
+      `--accept=${acceptArg} --reason="merged my own PR"`);
     console.error('\nThe sha is required so an acknowledgement cannot be given by reflex, and so the');
     console.error('transcript records WHICH move was accepted — which `--force` does not. It is a');
     console.error('control against ACCIDENT, not against intent: anyone who wants to can substitute');
@@ -610,7 +850,10 @@ if (command === 'rebaseline') {
       head: before.head,
       branch: before.branch,
       takenAt: before.takenAt ?? null,
-      acceptedCommits: addedCommits,
+      // HEAD's range and the branch HEAD left, as THIS run read and printed them (#920 review, F1).
+      // `--accept` pins HEAD only, so a commit that reached the left branch after the refusal the
+      // caller read is shown only in this run's output before it is recorded (#920 round 2, R2-7).
+      acceptedCommits: [...addedCommits, ...leftCommits],
       fastForward,
       reason: values['--reason'] ?? null,
     },
@@ -622,7 +865,8 @@ if (command === 'rebaseline') {
 
   if (!QUIET) {
     console.log(`\nrepo-guard: re-baselined ${before.head.slice(0, 8)} -> ${after.head.slice(0, 8)}` +
-      ` on ${after.branch}, accepting ${addedCommits.length} commit(s)` +
+      ` on ${after.branch}, accepting ${addedCommits.length + leftCommits.length} commit(s)` +
+      `${movedWithoutCommit ? ` (HEAD ${fastForward === 'backward' ? 'moved backward' : 'moved onto a branch with no commits'})` : ''}` +
       `${values['--reason'] ? ` — ${values['--reason']}` : ''}.`);
     console.log('The run is guarded again from here. `npm run guard:verify` compares against the new baseline.');
   }
@@ -643,6 +887,44 @@ if (argv.includes('--release') && !changed) {
   }
 }
 
+/**
+ * One line per working-tree finding, each naming the command that shows it, and only for the
+ * findings made (#887). Shared by verify's two paths: the HEAD-moved one said only "Settle that
+ * first", so a flag change there got no command, and `git diff` / `git status` print nothing for
+ * a flag (#908).
+ */
+function printWorktreeCommands(indent) {
+  if (filesMoved) console.error(`${indent}the working tree:  git diff  /  git status --porcelain -uall`);
+  if (flagsMoved) console.error(`${indent}the index flags (${INDEX_FLAGS_LEGEND}):\n${indent}  ${INDEX_FLAGS_COMMAND}`);
+}
+
+/** The way out of a moved HEAD: rebaseline when it would accept, and what to settle when not. */
+function printHeadMovedExit(lead) {
+  if (!worktreeMoved && fastForward === 'to-unborn' && leftUnreadReason) {
+    // rebaseline refuses this move whatever is accepted, so naming it as the way out would be
+    // the incoherent advice described below (#920 round 3, R3-2).
+    console.error(`\n  rebaseline would refuse this move: ${leftUnreadReason}. A commit made before it cannot ` +
+      'be listed, so there is nothing to acknowledge.');
+    if (before.branch !== 'HEAD') {   // the detached sentence above already named the reflog
+      console.error('  The reflog lists every commit HEAD visited:');
+      console.error(`    ${reflogCommand}`);
+    }
+    return;
+  }
+  if (worktreeMoved) {
+    // Advising rebaseline here would advise a command that then refuses: it declines
+    // any worktree change. Incoherent advice at the moment of decision is the failure
+    // this file already fixed once, for the occupied-slot refusal.
+    console.error('\n  The working tree moved too, so `guard:rebaseline` would refuse. Settle that first:');
+    printWorktreeCommands('    ');
+  } else {
+    // The command bare, for the reason in the comment above BRANCH_ARGS (#908).
+    console.error(`\n  ${lead} run this. It prints the delta and refuses. Read it, then accept:`);
+    console.error('    npm run guard:rebaseline');
+    console.error('    (it re-arms from here and RECORDS what it accepted, which --force does not)');
+  }
+}
+
 if (changed) {
   console.error('\nrepo-guard: the repository CHANGED during the run.');
   if (headMoved && before.head === UNBORN) {
@@ -651,7 +933,40 @@ if (changed) {
     // at precisely the moment the caller is deciding what to trust.
     console.error('The baseline had no commits, so every commit now present arrived during the run:');
     console.error('  git log --oneline');
+    if (leftCommits.length) {
+      // That command shows HEAD's history only (#920 round 3, R3-6).
+      console.error(`Some are on ${leftBranch.name}, the branch HEAD left, and not in HEAD's history:`);
+      console.error(`  ${leftLogCommand()}`);
+    }
     console.error('Inspect them before pushing; there is no earlier revision to reset to.');
+    // rebaseline accepts this case, so it is named here as on the other HEAD-moved paths, and a
+    // flag change gets its command (#920 review, F4).
+    printHeadMovedExit('If you made these commits,');
+  } else if (headMoved && movedWithoutCommit) {
+    // No commit was added, so there is none to read and none to reset away: `git reset --mixed
+    // <snapshot>` after a backward checkout would drag HEAD forward and leave the checked-out
+    // files looking like a revert. What the caller can check is what the move left behind (#908).
+    console.error(`HEAD moved, but gained no commit: ${noCommitReason}.`);
+    printNoCommitScope();
+    console.error('What the snapshot commit had that HEAD does not:');
+    console.error(`    ${leftBehindCommand}`);
+    console.error('Decide whether you made this move — a checkout or a reset. This tool cannot decide');
+    console.error('that for you.');
+    // A way back for the case the guard exists for, named only where one is known to be safe
+    // (#920 review, F5): `--ff-only` refuses rather than overwrites, and the checkout is offered
+    // only when the branch it returns to still points at the snapshot commit.
+    if (!branchMoved && fastForward === 'backward' && after.branch !== 'HEAD') {
+      console.error(`\n  If you did NOT make it, this moves ${after.branch} back to the snapshot commit, ` +
+        'refusing rather than overwriting:');
+      console.error(`    git merge --ff-only ${before.head.slice(0, 8)}`);
+    } else if (branchMoved && leftBranch?.state === 'unmoved' && !leftBranch.name.startsWith('-')) {
+      // A name starting with `-` reaches git as an option whatever the quoting, and `git checkout
+      // -f` discards local edits; only plumbing makes such a branch, and it gets no way back
+      // (#920 round 2, R2-5).
+      console.error("\n  If you did NOT make it, this returns to the snapshot's branch:");
+      console.error(`    git checkout ${shellWord(leftBranch.name)}`);
+    }
+    printHeadMovedExit('If you made this move,');
   } else if (headMoved) {
     // Two readings, and the tool cannot tell them apart — only the caller knows
     // whether they made these commits. Printing one recovery command as though
@@ -659,16 +974,33 @@ if (changed) {
     // merge the operator intended, offered at the moment they are deciding what
     // to trust. So both exits are named, and the discriminator (the author lines
     // above) is stated rather than guessed at.
-    console.error('HEAD moved. Read every commit listed above and decide whether you made it —');
+    console.error(addedCommits.length || leftCommits.length
+      ? 'HEAD moved. Read every commit listed above and decide whether you made it —'
+      // "listed above" over an empty list is the #908 defect; this is the ancestry-unknown case,
+      // where git could not produce the list at all.
+      : 'HEAD moved, and git could not list its commits (see the ancestry line above). Decide whether you made it —');
     console.error('this tool cannot decide that for you. The author line is a HINT, not the test:');
     console.error('a subagent commits through this repository\'s own git config, so in #493 the');
     console.error('author was identical to the operator\'s. What the commit CONTAINS is the test.');
     console.error(`\n  If a commit is NOT yours — the case this guard exists for` +
       `${worktreeMoved ? '' : ' (the tree is otherwise clean, which is exactly how a committed stray write hides)'}:`);
-    console.error(`    git log --oneline ${before.head.slice(0, 8)}..HEAD`);
-    console.error(`    git reset --mixed ${before.head.slice(0, 8)}   # keeps the files, drops the commit`);
+    // HEAD's own commits get the reset; commits on the branch HEAD left do not, since resetting
+    // HEAD's branch would drop none of them (#920 review, F1).
+    const headRange = addedCommits.length > 0 || !commitsEnumerated;
+    if (headRange) {
+      console.error(`    git log --oneline ${before.head.slice(0, 8)}..HEAD`);
+      // The command bare, its effect on the line above, for the reason given above BRANCH_ARGS.
+      console.error('    To drop those commits and keep their changes in the working tree:');
+      console.error(`    git reset --mixed ${before.head.slice(0, 8)}`);
+    }
+    if (leftCommits.length) {
+      console.error(`    The ones on ${leftBranch.name}, the branch HEAD left:`);
+      console.error(`    ${leftLogCommand()}`);
+    }
     console.error('    Investigate BEFORE PUSHING — a stray commit is recoverable while unpushed.');
-    if (fastForward === false) {
+    if (!headRange) {
+      // No reset was named, so no warning about one.
+    } else if (fastForward === false) {
       console.error('    NOTE: the snapshot commit is not an ancestor of HEAD, so that reset would');
       console.error('    move you onto different history. Inspect before running it.');
     } else if (fastForward === 'unknown') {
@@ -679,16 +1011,7 @@ if (changed) {
       console.error(`    may move you onto different history. Confirm it exists first:`);
       console.error(`      git cat-file -t ${before.head.slice(0, 8)}`);
     }
-    if (worktreeMoved) {
-      // Advising rebaseline here would advise a command that then refuses: it declines
-      // any worktree change. Incoherent advice at the moment of decision is the failure
-      // this file already fixed once, for the occupied-slot refusal.
-      console.error('\n  The working tree moved too, so `guard:rebaseline` would refuse. Settle that first.');
-    } else {
-      console.error('\n  If every commit IS yours — you merged, switched branches, or rebased:');
-      console.error('    npm run guard:rebaseline    # prints the delta and refuses; read it, then accept');
-      console.error('    (re-arms from here and RECORDS what it accepted, which --force does not)');
-    }
+    printHeadMovedExit('If every commit IS yours — you merged, switched branches, or rebased —');
   } else {
     // `git reset --mixed` would unstage the caller's own work here, so it must
     // not be suggested when HEAD never moved.
@@ -698,20 +1021,19 @@ if (changed) {
     // (#887). So each finding gets the command that can show it, and only the findings made.
     console.error('HEAD did not move. What moved, and the command that shows it:');
     if (branchMoved) {
-      console.error(`  the branch (${before.branch} -> ${after.branch}):  ${BRANCH_COMMAND}`);
+      console.error(`  the branch (${before.branch} -> ${after.branch}):  ${branchCommandFor(after)}`);
     }
-    if (filesMoved) {
-      console.error('  the working tree:  git diff  /  git status --porcelain -uall');
+    if (leftCommits.length) {
+      // HEAD did not move, and the branch it left gained commits (#920 review, F1).
+      console.error(`  commits on ${leftBranch.name}, the branch HEAD left:  ${leftLogCommand()}`);
     }
-    if (flagsMoved) {
-      console.error(`  the index flags (${INDEX_FLAGS_LEGEND}):\n    ${INDEX_FLAGS_COMMAND}`);
-    }
+    printWorktreeCommands('  ');
     if (worktreeMoved) {
       console.error('Inspect it before assuming it was yours.');
     } else if (branchMoved) {
-      // The command bare, for the reason in the comment above BRANCH_ARGS. The HEAD-moved advice
-      // above still carries the `#` form (#908).
-      console.error('\n  If you made this checkout, run this. It prints the delta and refuses; read it, then accept:');
+      // The command bare, for the reason in the comment above BRANCH_ARGS. The prose ends in `.`
+      // rather than `; read it`: pasted with the line below it, `read` ran as a command (#908).
+      console.error('\n  If you made this checkout, run this. It prints the delta and refuses. Read it, then accept:');
       console.error('    npm run guard:rebaseline');
     }
   }
