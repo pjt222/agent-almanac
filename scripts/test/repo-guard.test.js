@@ -1420,8 +1420,10 @@ test('an unborn baseline sees a branch switch, and names a command that prints i
   assert.match(refused.stderr, /the checkout you made:\n {2}git symbolic-ref --short HEAD\n/);
   // `refs/heads/main` resolves no more for an unborn branch than for a deleted one; `main` had
   // no commit at the snapshot and has none now, so it did not vanish (#920 round 3).
-  assert.doesNotMatch(refused.stderr, /no longer exists/);
-  assert.match(refused.stderr, /main, the branch HEAD left, gained none either\./);
+  assert.doesNotMatch(refused.stderr, /no longer exists|gained none/);
+  // Neither is established: a branch that gained a commit and was then deleted reads the same
+  // (#920 round 3, R3-1). So the sentence says what is known, and what is not checked.
+  assert.match(refused.stderr, /main had no commit at the snapshot and resolves to none now, so a commit made on it and then deleted is not checked here\./);
   // `(unborn)` unquoted is a glob group under zsh and a syntax error under bash.
   assert.ok(refused.stderr.includes("npm run guard:rebaseline -- --accept='(unborn)'\n"),
     'the sentinel is quoted, so the line pastes');
@@ -1742,6 +1744,11 @@ test('an orphan move is refused when the branch HEAD left cannot be read (#920 R
   git(deleted, ['checkout', '-q', '--orphan', 'fresh']);
   git(deleted, ['rm', '-rfq', '--', '.']);
   git(deleted, ['branch', '-D', 'main']);
+  // verify must not send the caller to a rebaseline that refuses every accept (#920 round 3, R3-2).
+  const v1 = guard(deleted, ['verify']);
+  assert.equal(v1.status, 1);
+  assert.doesNotMatch(v1.stderr, /Read it, then accept/);
+  assert.match(v1.stderr, /rebaseline would refuse this move: main, the branch the snapshot was on, no longer exists\./);
   const r1 = guard(deleted, ['rebaseline', '--accept=(unborn)']);
   assert.equal(r1.status, 2, r1.stderr);
   assert.match(r1.stderr, /HEAD moved onto a branch with no commits, and main, the branch the snapshot was on, no longer exists, so a commit made before the move cannot be listed\./);
@@ -1753,6 +1760,12 @@ test('an orphan move is refused when the branch HEAD left cannot be read (#920 R
   guard(detached, ['snapshot']);
   git(detached, ['checkout', '-q', '--orphan', 'fresh']);
   git(detached, ['rm', '-rfq', '--', '.']);
+  const v2 = guard(detached, ['verify']);
+  assert.equal(v2.status, 1);
+  assert.doesNotMatch(v2.stderr, /Read it, then accept/);
+  assert.match(v2.stderr, /rebaseline would refuse this move: the snapshot was on a detached HEAD\./);
+  // verify's own reflog line, the site R2-6 named, on an unborn HEAD (#920 round 3, R3-4).
+  assert.match(v2.stderr, /HEAD visited:\n {2}cat "\$\(git rev-parse --git-dir\)\/logs\/HEAD"\n/);
   const r2 = guard(detached, ['rebaseline', '--accept=(unborn)']);
   assert.equal(r2.status, 2, r2.stderr);
   assert.match(r2.stderr, /and the snapshot was on a detached HEAD, so a commit made before the move cannot be listed\./);
@@ -1860,4 +1873,111 @@ test('a branch name git would parse as an option gets no way back (#920 R2-5)', 
 
   assert.equal(r.status, 1);
   assert.doesNotMatch(r.stderr, /git checkout/, r.stderr);
+});
+
+// ── #920 round 3 ────────────────────────────────────────────────────────────
+
+test('an unborn branch that gained a commit and was deleted is not called unmoved (#920 R3-1)', async (t) => {
+  // A null tip is the state of a branch never born AND of one that gained commits and was
+  // deleted; "gained none either" was printed over the second and the commit recorded as [].
+  const dir = mkdtempSync(join(tmpdir(), 'repo-guard-unborn-'));
+  t.after(() => rmTree(dir));
+  git(dir, ['init', '-b', 'main']);
+  git(dir, ['config', 'user.email', 'test@example.invalid']);
+  git(dir, ['config', 'user.name', 'Fixture']);
+  guard(dir, ['snapshot']);
+  writeFileSync(join(dir, 'first.txt'), 'x\n', 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-qm', 'STRAY first commit']);
+  git(dir, ['checkout', '-q', '--orphan', 'other']);
+  git(dir, ['rm', '-rfq', '--', '.']);
+  git(dir, ['branch', '-qD', 'main']);
+
+  const refused = guard(dir, ['rebaseline']);
+
+  assert.equal(refused.status, 2);
+  assert.doesNotMatch(refused.stderr, /gained none/);
+  assert.match(refused.stderr, /main had no commit at the snapshot and resolves to none now, so a commit made on it and then deleted is not checked here\./);
+});
+
+test('a branch name --abbrev-ref prints as refs/heads/<b> is read too (#920 R3-3)', async (t) => {
+  // Two tags, `feature` and `heads/feature`, make `rev-parse --abbrev-ref` print the full
+  // `refs/heads/feature`. The ref HEAD names is recorded at capture, so no spelling of the
+  // short name has to be parsed back.
+  const dir = makeRepo(t);
+  git(dir, ['checkout', '-q', '-b', 'feature']);
+  strayCommit(dir, 'feature work');
+  git(dir, ['tag', 'feature', 'HEAD~1']);
+  git(dir, ['tag', 'heads/feature', 'HEAD~1']);
+  assert.equal(git(dir, ['rev-parse', '--abbrev-ref', 'HEAD']), 'refs/heads/feature', 'premise: the third spelling');
+  guard(dir, ['snapshot']);
+  writeFileSync(join(dir, 'src', 'late.txt'), 'late\n', 'utf8');
+  git(dir, ['add', '--', 'src/late.txt']);
+  git(dir, ['commit', '-qm', 'STRAY agent commit']);
+  git(dir, ['checkout', '-q', 'main']);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.doesNotMatch(r.stderr, /no longer exists/);
+  assert.match(r.stderr, /commits added to feature, the branch HEAD left:\n {2}\S+ .*STRAY agent commit\n/);
+});
+
+test('the way back into a branch a tag shares pastes and lands on the branch (#920 R3-4)', async (t) => {
+  // `git checkout heads/feature` would detach HEAD; the short name resolves to the branch.
+  const dir = makeRepo(t);
+  git(dir, ['checkout', '-q', '-b', 'feature']);
+  strayCommit(dir, 'feature work');
+  git(dir, ['tag', 'feature', 'HEAD~1']);
+  guard(dir, ['snapshot']);
+  git(dir, ['checkout', '-q', 'main']);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /\n {4}git checkout feature\n/);
+  const pasted = spawnSync('bash', ['-c', 'git checkout feature'], { cwd: dir, encoding: 'utf8' });
+  assert.equal(pasted.status, 0, pasted.stderr);
+  assert.equal(git(dir, ['branch', '--show-current']), 'feature');
+});
+
+test('an unborn baseline names the left branch\'s commits, not only HEAD\'s (#920 R3-6)', async (t) => {
+  // "Every commit now present arrived during the run: git log --oneline" printed HEAD's history,
+  // which omits a commit on the branch HEAD left.
+  const dir = mkdtempSync(join(tmpdir(), 'repo-guard-unborn-'));
+  t.after(() => rmTree(dir));
+  git(dir, ['init', '-b', 'main']);
+  git(dir, ['config', 'user.email', 'test@example.invalid']);
+  git(dir, ['config', 'user.name', 'Fixture']);
+  guard(dir, ['snapshot']);
+  mkdirSync(join(dir, 'src'), { recursive: true });
+  writeFileSync(join(dir, 'src', 'a.txt'), 'a\n', 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-qm', 'first']);
+  strayCommit(dir);
+  git(dir, ['checkout', '-q', '-b', 'other', 'HEAD~1']);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /every commit now present arrived during the run:\n {2}git log --oneline\n/);
+  assert.match(r.stderr, /Some are on main, the branch HEAD left, and not in HEAD's history:\n {2}git log --oneline refs\/heads\/main\n/);
+});
+
+test('a snapshot written before headRef still reads the branch HEAD left (#920 R3-3)', async (t) => {
+  // An older build's snapshot has no `headRef`; the read falls back to `refs/heads/<branch>`.
+  const dir = makeRepo(t);
+  git(dir, ['checkout', '-q', '-b', 'feature']);
+  guard(dir, ['snapshot']);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+  assert.equal(snap.headRef, 'refs/heads/feature', 'premise: this build records it');
+  delete snap.headRef;
+  writeFileSync(snapshotPath(dir), JSON.stringify(snap), 'utf8');
+  strayCommit(dir);
+  git(dir, ['checkout', '-q', 'main']);
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /commits added to feature, the branch HEAD left:\n {2}\S+ .*STRAY agent commit\n/);
 });

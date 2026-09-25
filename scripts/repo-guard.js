@@ -71,8 +71,12 @@
  * ## Failing closed
  *
  * A guard that answers "unchanged" when it could not look is worse than none.
- * Every uncertainty exits 2, never 0: a missing, unreadable, or foreign snapshot,
- * a git invocation that fails, or an unrecognised argument.
+ * Every uncertainty about the snapshot or HEAD's own history exits 2, never 0: a
+ * missing, unreadable, or foreign snapshot, a git invocation that fails, or an
+ * unrecognised argument. The branch HEAD left is read where it can be; where it
+ * cannot (a detached snapshot, a branch deleted since), the output says it was not
+ * checked, and `rebaseline` refuses only an orphan move over it (#920 review). The
+ * refs no one reads are under "What it does NOT cover".
  *
  * Two rules keep a second run from laundering the first run's damage into a
  * green, which a single global snapshot slot otherwise invites:
@@ -314,11 +318,18 @@ function captureState() {
   const head = git(['rev-parse', 'HEAD'], { cwd: TOPLEVEL, allowFailure: true });
   const branch = git(BRANCH_ARGS, { cwd: TOPLEVEL, allowFailure: true })
     ?? git(UNBORN_BRANCH_ARGS, { cwd: TOPLEVEL, allowFailure: true });
+  // The full ref HEAD names, for reading that branch later. `branch` above is for display, and
+  // `--abbrev-ref` spells it `heads/<b>` or `refs/heads/<b>` when a tag shares the name, so
+  // parsing it back found no branch and reported a live one as deleted (#920 rounds 2 and 3).
+  // null on a detached or broken HEAD. An extra field, not a new shape: nothing compares it, an
+  // older build ignores it, and a snapshot without it falls back to `refs/heads/<branch>`.
+  const headRef = git(['symbolic-ref', '-q', 'HEAD'], { cwd: TOPLEVEL, allowFailure: true });
 
   return {
     toplevel: TOPLEVEL,
     head: head === null ? UNBORN : head.trim(),
     branch: branch === null ? UNBORN : branch.trim(),
+    headRef: headRef === null ? null : headRef.trim(),
     status,
     contents,
     indexFlags,
@@ -521,28 +532,28 @@ if (before.branch !== after.branch) {
 // twice. No other ref is read: see "What it does NOT cover" in the header.
 //
 // It is read only when the branch changed; while HEAD is still on it, HEAD's own range covers
-// it. The name is what `rev-parse --abbrev-ref` printed, which is `heads/<b>` when a tag or
-// another ref shares the short name, so `refs/heads/<name>` is tried first (a branch really
-// called `heads/x`) and then `refs/<name>`. Reading only the first reported a live branch as
-// deleted and skipped its commits (#920 round 2, R2-1). Printed ranges name the full ref,
-// because `git log` resolves a short name a tag shares to the tag; a checkout takes the short
-// name, which git resolves to the branch (both measured on git 2.43).
-let leftBranch = null;   // { name, ref, state }; null when the branch did not change or had no name
+// it. It is read by the full ref recorded at capture (`headRef`), never by parsing back the
+// display name, whose spelling depends on which other refs share it (#920 rounds 2 and 3). A
+// snapshot from before `headRef` falls back to `refs/heads/<branch>`. Printed ranges name the
+// full ref, because `git log` resolves a short name a tag shares to the tag; a checkout takes
+// the short name, which git resolves to the branch (both measured on git 2.43).
+/** The name of the branch the snapshot was on, for printing. */
+const snapshotName = before.headRef?.startsWith('refs/heads/')
+  ? before.headRef.slice('refs/heads/'.length) : before.branch;
+const snapshotRef = before.headRef
+  ?? (before.branch !== 'HEAD' && before.branch !== UNBORN ? `refs/heads/${before.branch}` : null);
+let leftBranch = null;   // { name, ref, state }; null when the branch did not change or had no ref
 let leftCommits = [];
-if (branchMoved && before.branch !== 'HEAD' && before.branch !== UNBORN) {
-  const tipOf = (ref) => git(['rev-parse', '--quiet', '--verify', `${ref}^{commit}`],
+if (branchMoved && snapshotRef !== null && before.branch !== 'HEAD') {
+  const ref = snapshotRef;
+  const tip = git(['rev-parse', '--quiet', '--verify', `${ref}^{commit}`],
     { cwd: TOPLEVEL, allowFailure: true })?.trim() || null;
-  let ref = `refs/heads/${before.branch}`;
-  let tip = tipOf(ref);
-  if (tip === null && before.branch.startsWith('heads/') && tipOf(`refs/${before.branch}`) !== null) {
-    ref = `refs/${before.branch}`;
-    tip = tipOf(ref);
-  }
-  const name = ref.slice('refs/heads/'.length);
+  const name = snapshotName;
   if (tip !== after.head) {
-    // No ref resolves for an unborn branch any more than for a deleted one. A branch that had no
-    // commit at the snapshot and has none now is unmoved, not gone (#920 round 3).
-    const state = tip === null ? (before.head === UNBORN ? 'unmoved' : 'gone')
+    // No ref resolves for an unborn branch any more than for a deleted one, so a branch that had no
+    // commit at the snapshot and resolves to none now may have gained commits and been deleted.
+    // Neither "gone" nor "unmoved" is established there, and it is said so (#920 round 3, R3-1).
+    const state = tip === null ? (before.head === UNBORN ? 'unresolved' : 'gone')
       : tip === before.head ? 'unmoved' : 'moved';
     leftBranch = { name, ref, state };
     if (leftBranch.state === 'moved') {
@@ -576,7 +587,7 @@ if (branchMoved && before.branch !== 'HEAD' && before.branch !== UNBORN) {
 // `rev-parse --abbrev-ref` prints a branch name or `HEAD`.)
 const leftUnreadReason = before.branch === 'HEAD' ? 'the snapshot was on a detached HEAD'
   : leftBranch?.state === 'gone' ? `${leftBranch.name}, the branch the snapshot was on, no longer exists`
-    : !branchMoved && fastForward === 'to-unborn' ? `${before.branch} no longer points at a commit`
+    : !branchMoved && fastForward === 'to-unborn' ? `${snapshotName} no longer points at a commit`
       : null;
 if (fastForward === 'to-unborn' && leftUnreadReason) commitsEnumerated = false;
 /** The range that shows the left branch's commits; with no snapshot commit, the whole branch. */
@@ -612,7 +623,11 @@ function printNoCommitScope() {
       'checked here. The reflog lists every commit HEAD visited:');
     console.error(`  ${reflogCommand}`);
   } else if (!branchMoved && fastForward === 'to-unborn') {
-    console.error(`${before.branch} no longer points at a commit, so a commit made on it is not checked here.`);
+    console.error(`${snapshotName} no longer points at a commit, so a commit made on it is not checked here.`);
+  } else if (leftBranch?.state === 'unresolved') {
+    console.error(`${leftBranch.name} had no commit at the snapshot and resolves to none now, so a commit ` +
+      'made on it and then deleted is not checked here. The reflog lists every commit HEAD visited:');
+    console.error(`  ${reflogCommand}`);
   } else if (leftBranch?.state === 'unmoved') {
     console.error(`${leftBranch.name}, the branch HEAD left, gained none either.`);
   } else if (leftBranch?.state === 'gone') {
@@ -885,6 +900,17 @@ function printWorktreeCommands(indent) {
 
 /** The way out of a moved HEAD: rebaseline when it would accept, and what to settle when not. */
 function printHeadMovedExit(lead) {
+  if (!worktreeMoved && fastForward === 'to-unborn' && leftUnreadReason) {
+    // rebaseline refuses this move whatever is accepted, so naming it as the way out would be
+    // the incoherent advice described below (#920 round 3, R3-2).
+    console.error(`\n  rebaseline would refuse this move: ${leftUnreadReason}. A commit made before it cannot ` +
+      'be listed, so there is nothing to acknowledge.');
+    if (before.branch !== 'HEAD') {   // the detached sentence above already named the reflog
+      console.error('  The reflog lists every commit HEAD visited:');
+      console.error(`    ${reflogCommand}`);
+    }
+    return;
+  }
   if (worktreeMoved) {
     // Advising rebaseline here would advise a command that then refuses: it declines
     // any worktree change. Incoherent advice at the moment of decision is the failure
@@ -907,6 +933,11 @@ if (changed) {
     // at precisely the moment the caller is deciding what to trust.
     console.error('The baseline had no commits, so every commit now present arrived during the run:');
     console.error('  git log --oneline');
+    if (leftCommits.length) {
+      // That command shows HEAD's history only (#920 round 3, R3-6).
+      console.error(`Some are on ${leftBranch.name}, the branch HEAD left, and not in HEAD's history:`);
+      console.error(`  ${leftLogCommand()}`);
+    }
     console.error('Inspect them before pushing; there is no earlier revision to reset to.');
     // rebaseline accepts this case, so it is named here as on the other HEAD-moved paths, and a
     // flag change gets its command (#920 review, F4).
