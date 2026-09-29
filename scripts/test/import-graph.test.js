@@ -223,18 +223,53 @@ test('a caller already running with the flag walks in-process and gets the same 
   assert.deepEqual(JSON.parse(run.stdout), REAL_ONLY);
 });
 
-test('a parser child that dies is an error, never an empty or entry-only graph', (t) => {
-  // An entry-only set would make the healer check print `1 module(s) reachable … 0 unlisted` over
-  // a graph it never read. NODE_OPTIONS reaches the child and kills it before the walk starts;
-  // this process, already running, is unaffected.
-  const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n" });
+/** Run `importGraph` with NODE_OPTIONS set for its child only, restoring it afterwards. */
+function withChildOptions(t, options) {
   const saved = process.env.NODE_OPTIONS;
   t.after(() => {
     if (saved === undefined) delete process.env.NODE_OPTIONS;
     else process.env.NODE_OPTIONS = saved;
   });
-  process.env.NODE_OPTIONS = `--require=${join(root, 'no-such-preload.cjs')}`;
-  assert.throws(() => importGraph(root, 'a.js'), /the parser child .* exited 1 without a graph/);
+  process.env.NODE_OPTIONS = options;
+}
+
+test('a parser child that dies is an error naming why, never an empty or entry-only graph', (t) => {
+  // An entry-only set would make the healer check print `1 module(s) reachable … 0 unlisted` over
+  // a graph it never read. NODE_OPTIONS reaches the child and kills it before the walk starts;
+  // this process, already running, is unaffected. The reason must survive: a crashed node's LAST
+  // stderr line is its `Node.js vX.Y.Z` footer, which reads as a version problem (round 1, F2).
+  const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n" });
+  withChildOptions(t, `--require=${join(root, 'no-such-preload.cjs')}`);
+  assert.throws(
+    () => importGraph(root, 'a.js'),
+    /the parser child .* exited 1 without a graph: Error: Cannot find module '[^']*no-such-preload\.cjs'/,
+  );
+});
+
+test('a parser child that dies on a thrown non-Error keeps the value, and not the version footer', (t) => {
+  // No `…Error` line to pick: the thrown value sits above a `--trace-uncaught` hint and the footer.
+  const root = fixture(t, {
+    ...PLANTED,
+    'a.js': "import { real } from './real.js';\n",
+    'throw-string.cjs': "throw 'preload threw a string';\n",
+  });
+  withChildOptions(t, `--require=${join(root, 'throw-string.cjs')}`);
+  assert.throws(() => importGraph(root, 'a.js'), (error) => {
+    assert.match(error.message, /the parser child .* exited 1 without a graph: .*preload threw a string/);
+    assert.doesNotMatch(error.message, /Node\.js v\d/, 'the version footer is not a reason');
+    return true;
+  });
+});
+
+test('a parser child killed by a signal says so, and is still an error', { skip: process.platform === 'win32' }, (t) => {
+  // `child.status` is null here; the message used to read `exited null … no output`.
+  const root = fixture(t, {
+    ...PLANTED,
+    'a.js': "import { real } from './real.js';\n",
+    'kill-self.cjs': "process.kill(process.pid, 'SIGKILL');\n",
+  });
+  withChildOptions(t, `--require=${join(root, 'kill-self.cjs')}`);
+  assert.throws(() => importGraph(root, 'a.js'), /the parser child .* was killed by SIGKILL without a graph/);
 });
 
 test('a seeded accumulator is the one returned, and a seeded module is not walked again', (t) => {

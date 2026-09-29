@@ -92,13 +92,28 @@ export function importGraph(root, entry, seen = new Set()) {
   let answer = null;
   try { answer = JSON.parse(child.stdout); } catch { /* stays null, refused below */ }
   if (child.status !== 0 || answer === null || typeof answer !== 'object') {
-    const why = (child.stderr || '').trim().split('\n').filter(Boolean).slice(-1)[0] || child.error?.message || 'no output';
-    throw new Error(`import graph: the parser child (node ${CHILD_FLAGS.join(' ')}) exited ${child.status} without a graph: ${why}`);
+    const how = child.signal ? `was killed by ${child.signal}` : `exited ${child.status}`;
+    throw new Error(`import graph: the parser child (node ${CHILD_FLAGS.join(' ')}) ${how} without a graph: ${failureReason(child)}`);
   }
   if (!answer.ok) throw new Error(answer.message);
   // Into the caller's own set, so the accumulator passed in is the one returned.
   for (const module of answer.seen) seen.add(module);
   return seen;
+}
+
+/**
+ * The line of a failed child's stderr that says WHY. Not simply the last line: a crashed node
+ * ends its stderr with a `Node.js vX.Y.Z` footer, which would make every crash read as a version
+ * problem in a module whose design turns on a Node flag. So the first `…Error` line wins (an
+ * uncaught Error, a preload that is missing or throws one). Otherwise every line but the footer,
+ * joined: that is the child's own one-line refusal or `bad option` as they are, and a thrown
+ * non-Error, whose value sits ABOVE a `--trace-uncaught` hint and so is not the last line either.
+ */
+function failureReason(child) {
+  const lines = (child.stderr || '').split('\n').map((line) => line.trim()).filter(Boolean);
+  const errorLine = lines.find((line) => /^\w*Error\b/.test(line));
+  const allButFooter = lines.filter((line) => !/^Node\.js v\d/.test(line)).join(' | ');
+  return errorLine || allButFooter || child.error?.message || 'no output';
 }
 
 /** The static module requests of one module's source, as specifiers. */
