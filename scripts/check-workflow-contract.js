@@ -80,6 +80,11 @@
  * is advisory and carries Bash, which is the case a "read-only types are exempt" rule gets wrong.
  * Built-ins by `BUILTIN_SHELL`; an almanac agent by its `tools:` line (Bash, a `Bash(...)` pattern
  * or `*`). It fails closed: no `tools:` line, or one that is not a one-line list, counts as able.
+ * Both rules key on shell, the write-location one included, so an agent that can Write or Edit but
+ * not run shell gets neither (nine almanac agents have that shape; no shipped workflow spawns
+ * one). That is deliberate, not a gap in the predicate: WRITE_LOCATION names a `$DIR` only the
+ * preamble's shell block creates, and Claude Code's Write tool takes an absolute path, so such an
+ * agent cannot write where it stands by accident. Whether it needs a line of its own is open.
  *
  * What this reads is the prompt's TEXT between `agent(` and its options object, so its residuals
  * are textual: a comment inside that span naming WRITE_LOCATION satisfies the second rule; a
