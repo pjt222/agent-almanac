@@ -30,9 +30,11 @@
 #     fields rather than as shell words, so no quoting reaches the needle.
 #   - Every row is checked before any mutant is measured. One refused row stops the run before
 #     the first checker cycle, every refused row is named in the same run, and no measuring time
-#     is spent on a table that could not be finished (#903). A last row with no trailing newline
-#     is read like any other; `read` alone drops it, and a one-row plan then reported
-#     `0 row(s), 0 not a clean kill` and exited 0.
+#     is spent on a table that could not be finished (#903). The plan is read once, into memory,
+#     and the check and the run both read that copy: a plan given as a pipe (`--plan <(...)`,
+#     `--plan /dev/stdin`) is measured like a file, and an edit to the plan file during a run is
+#     not seen by that run. A last row with no trailing newline is read like any other; `read`
+#     alone drops it, and a one-row plan then reported `0 row(s), 0 not a clean kill` and exited 0.
 #
 # It is NOT a gate. It mutates the working tree and restores it, it takes minutes, and it needs a
 # green baseline — `scripts/mutation-check.js` refuses without one. Run it from the repository
@@ -44,6 +46,7 @@
 #
 #   --test CMD    the command every mutant is measured under; name the one CI runs
 #   --plan FILE   the mutants, one per line: <id><TAB><file><TAB><old>::<new>
+#                 read once, so a pipe works and an edit made during the run is not seen;
 #                 blank lines and lines starting with `#` are ignored; `::` must occur exactly
 #                 once in the last field, so an OLD ending in `:` or holding `::` cannot be
 #                 expressed until #783 gives the checker a way to say it
@@ -135,7 +138,11 @@ if [ "$VERIFY" -eq 1 ]; then
 const fs = require('fs');
 const path = require('path');
 const argv = process.argv.slice(2);
-fs.appendFileSync(path.join(__dirname, '..', 'calls.log'), argv[argv.indexOf('--replace') + 1] + '\n');
+const calls = path.join(__dirname, '..', 'calls.log');
+const first = !fs.existsSync(calls);
+fs.appendFileSync(calls, argv[argv.indexOf('--replace') + 1] + '\n');
+// On its first call, append a row the plan check refuses to the plan file it is told about.
+if (first && process.env.STUB_APPEND_TO) fs.appendFileSync(process.env.STUB_APPEND_TO, 'late\tsrc.js\ta::b::c\n');
 console.log('MUTANT KILLED by 1 failing test(s)');
 JS
   ARMS_FAILED=0
@@ -197,6 +204,20 @@ JS
   printf '# a comment\n\n' > "$P/empty.tsv"
   arm refuse-empty-plan "$P/empty.tsv" 2 0 "the plan holds no rows"
 
+  # The plan is read once. A pipe can be read only once, so a second read of it, by the run
+  # after the check, finds nothing: both rows must be measured, not `0 row(s)` with exit 0.
+  { row pipe-one src.js 'x::y'; echo; row pipe-two src.js 'p::q'; echo; } > "$P/two-good.tsv"
+  arm read-plan-from-fifo <(cat "$P/two-good.tsv") 0 2 ''
+  arm read-plan-from-stdin /dev/stdin 0 2 '' < <(cat "$P/two-good.tsv")
+  # A row appended to the plan file during the run is not measured: the stub appends one the
+  # plan check would refuse, on its first call.
+  { row before-edit src.js 'x::y'; echo; } > "$P/edited-mid-run.tsv"
+  export STUB_APPEND_TO="$P/edited-mid-run.tsv"
+  arm ignore-plan-edited-mid-run "$P/edited-mid-run.tsv" 0 1 ''
+  unset STUB_APPEND_TO
+  # A plan path that passes `-r` but cannot be read as a file.
+  arm refuse-unreadable-plan "$P" 2 0 "cannot read plan"
+
   if [ "$ARMS_FAILED" -ne 0 ]; then
     echo "mutation-envelope --verify: FAILED — $ARMS_FAILED plan-check arm(s) above" >&2
     exit 1
@@ -253,17 +274,23 @@ fi
 [ -n "$PLAN" ] || { echo "mutation-envelope: --plan is required" >&2; exit 2; }
 [ -r "$PLAN" ] || { echo "mutation-envelope: cannot read plan: $PLAN" >&2; exit 2; }
 
+# The plan is read ONCE, here, and both loops below read this copy. Reading the file once per
+# loop let the plan check and the run see different plans: a pipe (`--plan <(...)`,
+# `--plan /dev/stdin`) was drained by the check, so the run measured nothing and exited 0 with
+# `0 row(s)`, and a row appended to the file during a run was measured without being checked.
+# `$(...)` drops trailing newlines and `<<<` adds exactly one, so every row the loops read ends
+# in a newline, including a last row the file saved without one; a bare `read` drops such a row
+# when it reads the file directly, and a one-row plan was then reported as `0 row(s), 0 not a
+# clean kill` with exit 0.
+PLAN_TEXT=$(cat -- "$PLAN") || { echo "mutation-envelope: cannot read plan: $PLAN" >&2; exit 2; }
+
 # The plan check: every row, before any checker cycle. A refusal used to be discovered only when
 # the loop below reached the row, after every earlier row had spent its baseline and its mutant
 # run, and the exit 2 then suppressed the summary those rows had paid for. Every refused row is
 # named, not just the first, so a plan is repaired in one pass.
-#
-# `|| [ -n "${id:-}" ]`, here and in the run loop: `read` returns non-zero on a last line with no
-# trailing newline while still filling the fields, so a bare `while read` drops that row, and a
-# one-row plan was reported as `0 row(s), 0 not a clean kill` with exit 0.
 PLANNED=0
 REFUSED=0
-while IFS=$'\t' read -r id file mutation || [ -n "${id:-}" ]; do
+while IFS=$'\t' read -r id file mutation; do
   case "${id:-}" in ''|'#'*) continue ;; esac
   PLANNED=$((PLANNED + 1))
   problem=$(row_problem "${file:-}" "${mutation:-}")
@@ -271,7 +298,7 @@ while IFS=$'\t' read -r id file mutation || [ -n "${id:-}" ]; do
     echo "REFUSED: row '$id': $problem" >&2
     REFUSED=$((REFUSED + 1))
   fi
-done < "$PLAN"
+done <<< "$PLAN_TEXT"
 if [ "$REFUSED" -gt 0 ]; then
   echo "mutation-envelope: $REFUSED of $PLANNED row(s) refused by the plan check; no mutant was measured" >&2
   exit 2
@@ -286,7 +313,7 @@ echo
 
 ROWS=0
 BAD=0
-while IFS=$'\t' read -r id file mutation || [ -n "${id:-}" ]; do
+while IFS=$'\t' read -r id file mutation; do
   case "${id:-}" in ''|'#'*) continue ;; esac
   ROWS=$((ROWS + 1))
   node "$CHECKER" --file "$file" --replace "$mutation" --test "$TEST_CMD" > "${OUT:?}/$id.log" 2>&1
@@ -297,7 +324,7 @@ while IFS=$'\t' read -r id file mutation || [ -n "${id:-}" ]; do
   esac
   printf '%-24s %s\n' "$id" "${verdict:-<no verdict line — read ${OUT:?}/$id.log>}"
   [ -n "$verdict" ] || BAD=$((BAD + 1))
-done < "$PLAN"
+done <<< "$PLAN_TEXT"
 
 echo
 echo "mutation-envelope: $ROWS row(s), $BAD not a clean kill; logs in ${OUT:?}"
