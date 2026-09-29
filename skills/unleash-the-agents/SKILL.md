@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
@@ -49,6 +49,7 @@ Write a problem brief that any agent can understand regardless of domain experti
 3. **Known constraints**: What you already know, what has already been tried
 4. **Success criteria**: How to recognize a correct hypothesis
 5. **Output template**: The exact format you want responses in
+6. **Sources for every claim**: Say whether each fact comes from the issue, your plan or your own reading, and mark an end state you intend to create as intended
 
 ```markdown
 ## Brief: [Problem Title]
@@ -239,6 +240,7 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 ## Common Pitfalls
 
 - **Too few examples in the brief**: Agents need 5+ examples to find patterns. With 3 examples, most agents resort to surface-level pattern matching or template echo (repeating the brief back in different words).
+- **Merging sources into one voice**: A brief that blends the issue, your plan and your own reading loses the seams between them. An intended end state then reaches the agents as "the issue says…", and they spend their effort looking for a fact that does not exist. Attribute every claim (Step 1, element 6). This was recorded for a peer session, not an unleash wave, in `docs/investigations/lead-support-coordination-2026-09-15.md`.
 - **No verification path**: Without a way to test hypotheses, you cannot distinguish signal from noise. Convergence alone is necessary but not sufficient.
 - **Metaphorical responses**: Domain-specialist agents (mystic, shaman, kabalist) may respond with rich metaphorical reasoning that is hard to parse programmatically. Include "Express your hypothesis as a testable formula or algorithm" in the output template.
 - **Rediscovery across waves**: Without inter-wave knowledge injection, waves 3-7 independently rediscover what waves 1-2 already found. Always update the brief between waves.
