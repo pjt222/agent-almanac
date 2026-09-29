@@ -242,7 +242,7 @@ JS
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { covered } from '../lib/subject.js';
-test('covered is asserted', () => { assert.equal(covered(11), true); assert.equal(covered(5), false); });
+test('covered is asserted', () => { assert.equal(covered(11), true); assert.equal(covered(10), false); assert.equal(covered(5), false); });
 JS
   cat > package.json <<'JSON'
 { "name": "envelope-fixture", "private": true, "type": "module",
@@ -256,15 +256,19 @@ JSON
 
   bash tools/mutation-envelope.sh --test 'npm run t' --plan plan.txt --out "${DIR:?}/logs" > "${DIR:?}/run.log" 2>&1
   STATUS=$?
-  KILLED=$(grep -c 'KILLED' "${DIR:?}/run.log" || true)
-  SURVIVED=$(grep -c 'SURVIVED' "${DIR:?}/run.log" || true)
+  # Counted on each row's own line. An unanchored `grep -c KILLED` also counted the footer
+  # ("Read every row above that is not 'MUTANT KILLED' ..."), so it reported one kill while both
+  # rows survived: `covered(11)` and `covered(5)` cannot tell `n > 10` from `n >= 10`, which is
+  # why the fixture test now asserts `covered(10)`.
+  KILLED=$(grep -c '^kill .*MUTANT KILLED' "${DIR:?}/run.log" || true)
+  SURVIVED=$(grep -c '^survive .*MUTANT SURVIVED' "${DIR:?}/run.log" || true)
 
   printf 'exit=%s killed-rows=%s survived-rows=%s\n' "$STATUS" "$KILLED" "$SURVIVED"
-  if [ "$STATUS" -eq 1 ] && [ "$KILLED" -ge 1 ] && [ "$SURVIVED" -ge 1 ]; then
-    echo "mutation-envelope --verify: OK (every plan-check arm holds; a covered line is reported killed, an uncovered one survives, and a survivor fails the run)"
+  if [ "$STATUS" -eq 1 ] && [ "$KILLED" -eq 1 ] && [ "$SURVIVED" -eq 1 ]; then
+    echo "mutation-envelope --verify: OK (every plan-check arm holds; under the --test command, the covered row is reported killed, the uncovered row survives, and the survivor fails the run)"
     exit 0
   fi
-  echo "mutation-envelope --verify: FAILED — want exit 1 with at least one kill and one survivor" >&2
+  echo "mutation-envelope --verify: FAILED — want exit 1, the kill row killed and the survive row survived" >&2
   sed -n '1,40p' "${DIR:?}/run.log" >&2
   exit 1
 fi
