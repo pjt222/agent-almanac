@@ -939,3 +939,31 @@ arm here can tell the difference.
 
 After round 2, `--verify` passes 43/43 on v22.16.0, v24.20.0 and v25.9.0, and main mode is
 unchanged.
+
+## Addendum (#918): the static graph comes from V8's parser
+
+`importGraph` now reads each module's edges from `vm.SourceTextModule`, V8's own parser, instead
+of the line-start regex. Comments, strings and template literals no longer contribute edges, so
+the declared-blind arm `commented-import-then-dynamic` is now declared `seen`. The planted module
+is outside the graph, and its dynamic import is content.
+
+| arm | before | now |
+|---|---|---|
+| `commented-import-then-dynamic` | declared blind | `seen` |
+
+The one content line the arm prints is the `openSync` of `planted.mjs`, marked "outside the
+static import graph". Its `readSync`/`closeSync` pair follows on the same descriptor, so the arm
+passes for the reason it is declared. `--verify` passes 43/43 on v22.16.0, v24.20.0 and v25.9.0.
+Main mode on v25.9.0 is unchanged: `module set: graph 27, graph loaded 27, graph not loaded 0,
+dependency paths 1`, then `OK`.
+
+Mutant: put the old regex back in place of the parser call in `scripts/lib/import-graph.js`,
+measured with `scripts/mutation-check.js --test '<this probe> --verify'` on v25.9.0. It is
+killed, and re-running it by hand shows one failing row, `commented-import-then-dynamic`
+(`declared seen observed blind`).
+
+This removes one item from the header's unmeasured list. The graph still resolves a specifier
+as a path where the loader resolves a URL, so a percent-encoded specifier (#915 round 2) remains
+on that list. `import-graph.js` still loads before the patch loops. Run without
+`--experimental-vm-modules`, it now also starts its parser child at that point, and that child
+is not recorded either.

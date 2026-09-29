@@ -72,11 +72,11 @@
  * anything else it loaded is reported as content, marked "outside the static import graph". Main
  * mode prints the sizes of both sets (`module set:`), so that the unmodified generator's graph and
  * the modules the loader read can be seen to coincide by running this, not by quoting a figure;
- * the figures measured when the rule landed are in RESULT.md's #892 Addendum. The "graph" is a
- * per-line regex over source TEXT, so a line-start `import` or `export … from` inside a block
- * comment, a template literal or a line-continued string is in it — see
- * `commented-import-then-dynamic` (a `//` comment is not: it defeats the line-start anchor). It
- * also resolves a specifier as a PATH where the loader resolves a URL, so a percent-encoded
+ * the figures measured when the rule landed are in RESULT.md's #892 Addendum. The graph's edges
+ * are the module requests V8's own parser records (`vm.SourceTextModule`, #918), so an `import`
+ * or `export … from` inside a comment, a template literal or a string is not in it — see
+ * `commented-import-then-dynamic`, declared blind while the graph was a per-line regex. The graph
+ * still resolves a specifier as a PATH where the loader resolves a URL, so a percent-encoded
  * specifier names a different file in the graph than the one loaded (#915 round 2).
  *
  * **Four controls, because "zero content" has four ways of being a lie**: the patch fires at
@@ -99,13 +99,14 @@
  * Still unmeasured beyond the declared-blind arms: a module loaded before this file, any side
  * effect reaching the filesystem through none of the wrapped entry points, and code in the root's
  * own dependency tree, which the graph rule exempts by design (`dep-import` and
- * `bare-resolve-import` declare that). Three more, from the #915 review: a module the regex graph
- * takes from a comment or a string, then imported dynamically (`commented-import-then-dynamic`,
- * declared blind); a re-import of a graph member under a `?query`, which is a second read and a
- * second execution graded as the loader's, since the module is in the graph; and
- * `scripts/lib/import-graph.js`, which this probe itself loads before patching. A dynamic import of
- * a repository `.js` outside the graph is no longer on this list: `dynamic-import-repo-js` and
- * `require-repo-js` read `seen` since #892.
+ * `bare-resolve-import` declare that). Two more, from the #915 review: a re-import of a graph
+ * member under a `?query`, which is a second read and a second execution graded as the loader's,
+ * since the module is in the graph; and `scripts/lib/import-graph.js`, which this probe itself
+ * loads before patching (and which, run without `--experimental-vm-modules`, spawns its parser
+ * child then too). Two are no longer on this list: a dynamic import of a repository `.js` outside
+ * the graph, since `dynamic-import-repo-js` and `require-repo-js` read `seen` (#892); and a module
+ * the graph took from a comment or a string, since `commented-import-then-dynamic` reads `seen`
+ * (#918).
  */
 import fs, { readFileSync as namedReadFileSync } from 'node:fs';
 import fsPromises from 'node:fs/promises';
@@ -202,12 +203,13 @@ const SHAPES = {
   // module under some other `node_modules/` is code the subject chose to run. The file is planted
   // before the patch loops (`files`), so the arm cannot read `seen` on the strength of writing it.
   'foreign-node-modules-import': { expect: 'seen', files: { 'node_modules/planted/index.mjs': 'export const planted = true;\n' }, code: "await import(new URL('file://' + T('node_modules/planted/index.mjs')).href);" },
-  // DECLARED BLIND, for a structural reason: the "static graph" is `importGraph`'s per-line regex
-  // over source TEXT, which cannot tell code from a comment or a string. A line-start `import`
-  // inside a block comment (or a template literal) puts its module into the graph without
-  // loading it, and a dynamic import of that module then grades as the loader's. Closing it
-  // needs a parser in `scripts/lib/import-graph.js`, not a probe change (#915 round 1, B1; #918).
-  'commented-import-then-dynamic': { expect: 'blind', files: { 'planted.mjs': 'export const planted = true;\n' }, code: "/*\nimport x from './planted.mjs'\n*/\nawait import(new URL('./planted.mjs', import.meta.url).href);" },
+  // Declared blind until #918, for a structural reason: the "static graph" was `importGraph`'s
+  // per-line regex over source TEXT, which could not tell code from a comment or a string, so a
+  // line-start `import` inside a block comment put its module into the graph without loading it,
+  // and a dynamic import of that module then graded as the loader's (#915 round 1, B1). The graph
+  // now comes from V8's parser (`vm.SourceTextModule`), which records no request for a comment,
+  // so `planted.mjs` is outside the graph and its dynamic import reads `seen`.
+  'commented-import-then-dynamic': { expect: 'seen',files: { 'planted.mjs': 'export const planted = true;\n' }, code: "/*\nimport x from './planted.mjs'\n*/\nawait import(new URL('./planted.mjs', import.meta.url).href);" },
   // CONTROL, declared blind: a LOAD of a file under the root's `node_modules`, which `empty` does not
   // exercise. It was described as exercising bare-specifier RESOLUTION and does not — it imports
   // an absolute `file://` URL, so nothing is resolved (#888 round 5, F2). The arm below is the
