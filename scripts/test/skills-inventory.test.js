@@ -323,6 +323,38 @@ test('the pair refusal runs before any arm that reads the disk (#882)', (t) => {
   assert.throws(() => shippedEntries(dir), /both includes and negates/);
 });
 
+test('a doubled slash is refused on either side, and a single slash is not (#913)', (t) => {
+  // Measured on npm 11.13.0: npm collapses `//`, so `!skills/_template//` packs exactly what
+  // `!skills/_template/` packs. This module compares literally, so the doubled negation carved
+  // out nothing and `_template/` was counted as shipping.
+  const dir = mkdtempSync(join(tmpdir(), 'skills-inventory-'));
+  t.after(() => rmTree(dir));
+  const manifest = (files) => {
+    writeFileSync(join(dir, 'package.json'), JSON.stringify({ files }), 'utf8');
+    return () => shippedEntries(dir);
+  };
+  const DOUBLED = /contains "\/\/"/;
+
+  // Row 2 of the issue: not a pair, and accepted by every other arm before #913.
+  assert.throws(manifest(['skills/', '!skills/_template//']), DOUBLED);
+  // The message names the single-slash spelling, with the `!` kept.
+  assert.throws(manifest(['skills/', '!skills/_template//']), /Write it with single slashes: "!skills\/_template\/"/);
+
+  // Row 3: a same-path pair, but the PAIR message does not fire, because the pair check strips one
+  // trailing slash and `skills/_template/` is not `skills/_template`. This arm is what refuses it.
+  assert.throws(manifest(['skills/_template/', '!skills/_template//']), DOUBLED);
+
+  // The inclusion side, mid-path. npm packs `skills//real/` as `skills/real/`. Without this arm a
+  // check that looked only at negations would pass every row above.
+  assert.throws(manifest(['skills//real/']), /contains "\/\/".*single slashes: "skills\/real\/"/s);
+
+  // Control: the single-slash spelling of row 2 is accepted, so the arm is not "refuse any slash".
+  assert.deepEqual(manifest(['skills/', '!skills/_template/'])(),
+    { included: ['skills/'], negations: ['skills/_template/'] });
+  // And the real array carries no `//`.
+  assert.doesNotThrow(() => shippedEntries(REPO_ROOT));
+});
+
 test('isExcludedFromPackage answers only for the negations shippedEntries returned (#882)', (t) => {
   const dir = makeTree(t, { alpha: BASH_SKILL });
   const { negations } = shippedEntries(dir);

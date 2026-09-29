@@ -109,7 +109,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export function shippedPaths(root = ROOT) {
   // IMPORTED, not re-implemented. `shippedEntries` already returns exactly this shape and runs
   // `assertInterpretable` on the way — which is the half that matters: a `files` array in one of
-  // the three shapes npm and this matcher disagree about now refuses HERE, at prepack, rather than
+  // any shape npm and this matcher disagree about now refuses HERE, at prepack, rather than
   // only where check-readmes happens to run. A second copy of the split was what let the guard
   // and the inventory hold different opinions about the same manifest (#879 round 2, S1).
   return shippedEntries(root);
