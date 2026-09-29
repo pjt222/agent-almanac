@@ -335,15 +335,41 @@ git merge-base --is-ancestor <branch> "$oid" && git branch -D <branch>
 merge, it keeps the branch and exits 3: that is a commit never pushed, or a branch someone
 force-pushed over while its tracking ref went stale (#896).
 
-**`CodeQL: neutral` is not evidence that code scanning passed.** The aggregate check by that name
-comes from the `github-advanced-security` app and reports `neutral` while the per-language
-`Analyze (…)` runs — a different app, `github-actions` — report `failure`. A reader checking "is
-CodeQL green" sees the wrong one. Read the `Analyze (…)` runs:
+**Code scanning is green only when the `CodeQL` check AND every `Analyze (…)` run are
+`success`; each has disagreed with the other, in both directions** (#643, #905). The aggregate
+check named `CodeQL` and the per-language `Analyze (<language>)` runs report different things,
+and reading either alone gets one direction wrong. Measured from the check-runs API on real PRs:
+
+| sha (PR) | `Analyze (…)` runs | `CodeQL` conclusion | `CodeQL` `output.title` | what it was |
+|---|---|---|---|---|
+| `13f7bd5d3` (#640) | 2 `failure`, 1 `success` | `neutral` | `2 configurations not found` | the tool failing: a GitHub-side 503 in the `Analyze` log |
+| `327ec481b` (#904) | 3 `success` | `failure` | `3 new alerts including 2 high severity security vulnerabilities` | a finding: three alerts in the diff, fixed in `e0b9d96e5` |
+| `4ff5a4900` (#904) | 3 `success` | `success` | `No new alerts in code changed by this pull request` | clean |
+
+- **`Analyze` red, `CodeQL` `neutral`: `neutral` is not evidence that code scanning passed.**
+  Read the failed `Analyze` job's log (step 2). An error from GitHub's side there is the tool
+  failing, and step 3's limit applies: default-setup runs cannot be re-run.
+- **`Analyze` green, `CodeQL` red: that is a finding, and a finding is never merged past**
+  (step 2). The analysis ran and reported alerts in the diff; its title counts them. Read them
+  from the PR's code-scanning alerts, fix them, and wait for the aggregate on the new head.
+
+Neither check is one of the five required contexts, and the maintainer merges as a bypass
+actor, so by hand nothing but the reader stands between a red aggregate and a merge.
+`tools/merge-pr.sh` refuses it, as it refuses any context whose bucket is not `pass` or
+`skipping`. Read both checks, then the alerts:
 
 ```bash
 gh api --paginate repos/pjt222/agent-almanac/commits/SHA/check-runs \
-  --jq '.check_runs[] | select(.name|test("Analyze")) | "\(.name)\t\(.conclusion)"'
+  --jq '.check_runs[] | select(.name == "CodeQL" or (.name|test("^Analyze "))) | "\(.name)\t\(.conclusion)\t\(.output.title // "")"'
+gh api 'repos/pjt222/agent-almanac/code-scanning/alerts?ref=refs/pull/<n>/head&state=open' \
+  --jq '.[] | "\(.number)\t\(.rule.security_severity_level // .rule.severity)\t\(.rule.id)\t\(.most_recent_instance.location.path)"'
 ```
+
+An empty alerts list is not a clean bill on its own. The endpoint answers `[]` for a PR number
+that does not exist, and it ignores a `state` value it does not know rather than refusing it
+(both measured 2026-09-29); once the alerts are fixed they leave `state=open` for
+`state=fixed`, which is where #904's three sit now. Trust `[]` only beside a `CodeQL` title that
+agrees with it.
 
 Deliberately still open on #643: whether default setup stays at all. A committed `codeql.yml`
 produces retriable runs and removes step 3's exception; default setup is lower maintenance and
