@@ -680,7 +680,9 @@ def _verify() -> int:
         ("<p>acme_<![CDATA[x]]>secret</p>", "CDATA in HTML content is a bogus comment, not text"),
         ("<svg></svg><p>acme_<![CDATA[x]]>secret</p>", "...also after a CLOSED svg"),
         ("<svg/><p>acme_<![CDATA[x]]>secret</p>", "...and after a self-closing svg"),
-        ("<svg><text>acme_<![if x]>secret</text></svg>", "a marked section in SVG is not CDATA"),
+        # Long enough that slicing off a `CDATA[` prefix it does not have leaves text behind.
+        ("<svg><text>acme_<![if gte mso 9]>secret</text></svg>",
+         "a marked section in SVG is not CDATA"),
         ("<xmp>acme_</xmp>secret", "XMP renders its content, so it stays in the run"),
     ):
         got = survivors_of(doc)
