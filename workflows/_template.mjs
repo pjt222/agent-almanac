@@ -172,12 +172,19 @@ Start every shell block that touches files with exactly this:
 // never meant to write to the repository still inherits it as its working
 // directory.
 //
-// It names the stage's OWN `$DIR`, the one the preamble's `mktemp -d` created,
-// not a path the caller passes in (#861): no interface change, and a location
-// nobody hands over cannot go stale. A stage that must write somewhere else as
-// well — an implementing stage producing artifacts — narrows this rather than
-// dropping it: "write only under <that directory> and your own $DIR; nowhere
-// else in the repository" (batch-generate-waves' Generate stage is the shape).
+// It names the stage's OWN `$DIR`, a directory the preamble's `mktemp -d`
+// created, not a path the caller passes in (#861), so it needs no interface
+// change. `$DIR` is per shell block, not per agent: the preamble runs `mktemp -d`
+// at the top of every block, and nothing but files carries over between an
+// agent's tool calls. Measured in a workflow-spawned agent thread, each Bash call
+// starts again in the directory the agent was launched in, with `DIR` and every
+// other variable unset, while the directory itself survives. A Write call is a
+// later tool call by definition, so the line tells the agent to print the path in
+// the block that creates it and reuse that literal path. A stage that must write
+// somewhere else as well — an implementing stage producing artifacts — narrows
+// this rather than dropping it: "write only under <that directory> and your own
+// $DIR; nowhere else in the repository" (batch-generate-waves' Generate stage is
+// the shape).
 //
 // Both constants are copied byte for byte into every shipped workflow, and
 // scripts/test/workflow-template.test.js fails when a copy differs from this one.
@@ -185,8 +192,13 @@ Start every shell block that touches files with exactly this:
 // Bash-capable spawn whose prompt does not start with REPO_SAFETY or does not
 // name a write location.
 const WRITE_LOCATION = `WRITE LOCATION — write every file you produce, by any tool, under your own
-\`$DIR\`: the absolute path the preamble's \`mktemp -d\` created (\`echo "\${DIR:?}"\`
-prints it for a tool that is not the shell). Write nothing under the repository root.`
+\`$DIR\`: a directory the preamble's \`mktemp -d\` created for you. Nothing but files
+carries over from one tool call to the next: a new shell call may start back in the
+directory you were launched in, with \`DIR\` unset. So end the block that creates
+\`$DIR\` with \`echo "\${DIR:?}"\`, note the absolute path it prints, and use that
+literal path wherever the variable cannot reach: in a tool that is not the shell, and
+in a later block that needs a file written earlier. Write nothing under the
+repository root.`
 
 // A JSON Schema turns agent() into structured output: the subagent is forced to
 // call StructuredOutput and agent() returns the validated object (no parsing).

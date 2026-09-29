@@ -166,31 +166,43 @@ Start every shell block that touches files with exactly this:
   repository itself, and never invoke a repo tool with a write flag there.`
 
 const WRITE_LOCATION = `WRITE LOCATION — write every file you produce, by any tool, under your own
-\`$DIR\`: the absolute path the preamble's \`mktemp -d\` created (\`echo "\${DIR:?}"\`
-prints it for a tool that is not the shell). Write nothing under the repository root.`
+\`$DIR\`: a directory the preamble's \`mktemp -d\` created for you. Nothing but files
+carries over from one tool call to the next: a new shell call may start back in the
+directory you were launched in, with \`DIR\` unset. So end the block that creates
+\`$DIR\` with \`echo "\${DIR:?}"\`, note the absolute path it prints, and use that
+literal path wherever the variable cannot reach: in a tool that is not the shell, and
+in a later block that needs a file written earlier. Write nothing under the
+repository root.`
 
 // The Generate stage writes artifacts, so it cannot be told "write nothing in the repository";
 // it is NARROWED, not exempted (#861, maintainer decision 2): the caller's outputDir and its own
 // $DIR, nothing else. outputDir is a caller path and may well sit inside the repository — that is
 // the stage's job — which is why the line names it rather than ruling the repository out.
-const GENERATE_WRITE_LOCATION = `WRITE LOCATION — write only under ${outputDir} and your own \`$DIR\` (the
-absolute path the preamble's \`mktemp -d\` created); nowhere else in the repository.
+const GENERATE_WRITE_LOCATION = `WRITE LOCATION — write only under ${outputDir} and your own \`$DIR\` (a
+directory the preamble's \`mktemp -d\` created for you); nowhere else in the repository.
 Writing your artifacts under ${outputDir} is this stage's job, and the one exception to the
 preamble's "work only in a directory you created yourself"; everything else — scratch files,
-fixtures, logs — goes under \`$DIR\`.`
+fixtures, logs — goes under \`$DIR\`. Nothing but files carries over from one tool call to the
+next, so end the block that creates \`$DIR\` with \`echo "\${DIR:?}"\`, note the absolute path it
+prints, and use that literal path in a tool that is not the shell and in a later block.`
 
-// REPO_ROOT_NOTE — local to this workflow, not a template constant (#861). The preamble's
-// `cd "${DIR:?}"` persists between an agent's shell calls, so without this line the
-// repository-relative paths and bare `git` commands in the prompts below would resolve against
-// the agent's temp directory instead: `git diff` fails outside a repository and a relative
-// outputDir reads as empty. It follows the write-location line and does not loosen it.
+// REPO_ROOT_NOTE — local to this workflow, not a template constant (#861). Within one shell
+// block the preamble's `cd "${DIR:?}"` moves the agent into its temp directory, so a
+// repository-relative path or bare `git` command later in that block resolves there instead: a
+// relative outputDir reads as empty and a relative validatorCommand runs in the wrong place.
+// Across tool calls nothing carries over: measured in a workflow-spawned agent thread, each Bash
+// call starts again in the directory the agent was launched in, with every variable unset. So the
+// note tells the agent to learn the root once and reuse it as a literal path, never to rely on
+// where it stands. It follows the write-location line and does not loosen it. review-changes
+// carries a byte-identical copy; scripts/test/workflow-template.test.js compares the two.
 const REPO_ROOT_NOTE = `REPOSITORY ROOT — relative paths and \`git\` commands in this task are relative to the
-repository root: the working directory you started in, before any \`cd\`. The preamble's
-\`cd "\${DIR:?}"\` moves you away from it, and the move persists between shell calls. So learn
-the root first, in a block that touches no files (\`pwd\`), and use it absolutely from then on:
-\`git -C "<root>" …\`, \`"<root>/<relative path>"\`, and \`(cd "<root>" && <command>)\` for a
-command that must run there. Reading the repository this way is expected; where you may WRITE
-is the write-location line above.`
+repository root: the directory you were launched in. Never rely on the working directory to be
+there. Inside a shell block the preamble's \`cd "\${DIR:?}"\` moves you away from it, and a new
+shell call may start back there, with no variable carried over. So learn the root once, in your
+first shell call and before any \`cd\` (\`pwd\`), note the absolute path it prints, and use that
+literal path from then on: \`git -C "<root>" …\`, \`"<root>/<relative path>"\`, and
+\`(cd "<root>" && <command>)\` for a command that must run there. Reading the repository this way
+is expected; where you may WRITE is the write-location line above.`
 
 const SCOUT_SCHEMA = {
   type: 'object',
