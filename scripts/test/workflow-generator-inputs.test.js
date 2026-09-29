@@ -107,6 +107,12 @@ test('the graph is walked from --root, not from the working directory', () => {
   }
 });
 
+// The parsing tests below were written against the line-start regex `importGraph` used until #918,
+// and their comments explain that regex: "the specifier class", "anchors on `from`", "the tightened
+// class". The graph now comes from V8's parser (`scripts/lib/import-graph.js`), so those comments
+// are the history of why each case exists. The ASSERTIONS still hold and still pin behaviour the
+// parser must keep, which is why they stay.
+
 test('an exported function whose body quotes a dotted string is not read as an import', () => {
   // Found by #672. The specifier class spans newlines on purpose, so that multi-line
   // `import {\n a,\n} from './x.js'` is covered without an `s` flag. Unanchored, it ran from

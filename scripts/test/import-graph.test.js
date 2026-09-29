@@ -192,11 +192,19 @@ test('a module that does not parse is an error naming it, never an empty graph',
 
 test('a caller already running with the flag walks in-process and gets the same graph', (t) => {
   const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n/*\nimport { planted } from './planted.js';\n*/\n" });
-  const script = `import { importGraph } from ${JSON.stringify(pathToFileURL(LIB).href)};\n`
-    + `import vm from 'node:vm';\n`
-    + `if (typeof vm.SourceTextModule !== 'function') throw new Error('flag did not take');\n`
-    + `process.stdout.write(JSON.stringify([...importGraph(${JSON.stringify(root)}, 'a.js')].sort()));\n`;
-  const run = spawnSync(process.execPath, ['--experimental-vm-modules', '--disable-warning=ExperimentalWarning', '--input-type=module', '-e', script], { encoding: 'utf8' });
+  // The two paths ride the environment rather than being interpolated into the script's source,
+  // the shape CodeQL's js/bad-code-sanitization flagged on the import-side-effects probe.
+  const script = [
+    "import vm from 'node:vm';",
+    "if (typeof vm.SourceTextModule !== 'function') throw new Error('flag did not take');",
+    'const { importGraph } = await import(process.env.IMPORT_GRAPH_LIB);',
+    "process.stdout.write(JSON.stringify([...importGraph(process.env.IMPORT_GRAPH_ROOT, 'a.js')].sort()));",
+  ].join('\n');
+  const run = spawnSync(
+    process.execPath,
+    ['--experimental-vm-modules', '--disable-warning=ExperimentalWarning', '--input-type=module', '-e', script],
+    { encoding: 'utf8', env: { ...process.env, IMPORT_GRAPH_LIB: pathToFileURL(LIB).href, IMPORT_GRAPH_ROOT: root } },
+  );
   assert.equal(run.status, 0, run.stderr);
   assert.deepEqual(JSON.parse(run.stdout), REAL_ONLY);
 });
