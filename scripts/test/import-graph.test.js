@@ -192,18 +192,32 @@ test('a module that does not parse is an error naming it, never an empty graph',
 
 test('a caller already running with the flag walks in-process and gets the same graph', (t) => {
   const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n/*\nimport { planted } from './planted.js';\n*/\n" });
-  // The two paths ride the environment rather than being interpolated into the script's source,
-  // the shape CodeQL's js/bad-code-sanitization flagged on the import-side-effects probe.
+  // The paths ride the environment rather than being interpolated into the script's source, the
+  // shape CodeQL's js/bad-code-sanitization flagged on the import-side-effects probe.
+  //
+  // IN-process is the property, so any child is poisoned: NODE_OPTIONS set after this process
+  // started does not touch it, but every child it spawns inherits a preload that does not exist
+  // and dies. A graph therefore proves no child ran; the same graph through a child (the flagged
+  // branch deleted) fails here (#918 round 1, F1).
   const script = [
     "import vm from 'node:vm';",
     "if (typeof vm.SourceTextModule !== 'function') throw new Error('flag did not take');",
+    'process.env.NODE_OPTIONS = process.env.IMPORT_GRAPH_POISON;',
     'const { importGraph } = await import(process.env.IMPORT_GRAPH_LIB);',
     "process.stdout.write(JSON.stringify([...importGraph(process.env.IMPORT_GRAPH_ROOT, 'a.js')].sort()));",
   ].join('\n');
   const run = spawnSync(
     process.execPath,
     ['--experimental-vm-modules', '--disable-warning=ExperimentalWarning', '--input-type=module', '-e', script],
-    { encoding: 'utf8', env: { ...process.env, IMPORT_GRAPH_LIB: pathToFileURL(LIB).href, IMPORT_GRAPH_ROOT: root } },
+    {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        IMPORT_GRAPH_LIB: pathToFileURL(LIB).href,
+        IMPORT_GRAPH_ROOT: root,
+        IMPORT_GRAPH_POISON: `--require=${join(root, 'no-such-preload.cjs')}`,
+      },
+    },
   );
   assert.equal(run.status, 0, run.stderr);
   assert.deepEqual(JSON.parse(run.stdout), REAL_ONLY);
