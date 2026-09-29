@@ -119,6 +119,10 @@ class _Positions(HTMLParser):
         halves as one word, so dropping the join — which an earlier version did, on all 37
         BLOCK tags — was a false CLEAN. The label tells the operator it is the lower-confidence
         kind: two table cells that really do render apart also raise it.
+      - a CDATA section inside `<svg>`/`<math>` is rendered text and joins the run; in HTML
+        content it is a bogus comment and neither joins nor breaks it (#910)
+      - `<script>`/`<style>` content (see NOT_RENDERED) never joins a run and gets no position:
+        `acme_<script>x</script>secret` is the one run `acme_secret` (#910)
 
     `<br>` and `<hr>` are in BLOCK, but in SVG they are not rendered elements at all, so
     `<text>acme_<br/>secret</text>` may render as one identifier. That is inferred from SVG
@@ -135,12 +139,28 @@ class _Positions(HTMLParser):
         "thead tr ul".split()
     )
 
+    # Elements whose content this parser delivers RAW (its own CDATA_CONTENT_ELEMENTS, so the set
+    # tracks the Python it runs on) AND which a renderer never shows. Their content must not join
+    # the surrounding run: `acme_<script>x</script>secret` renders as `acme_secret`, and joining
+    # made the run `acme_xsecret`, a false CLEAN (#910). The content gets no position of its own,
+    # for the reason a decl gets none: it arrives un-decoded, so its value is a substring of the
+    # text the whole-text tier already checked. `xmp` is the exception, because it DOES render
+    # its content (as a block), so it stays in the run as it always did.
+    NOT_RENDERED = frozenset(HTMLParser.CDATA_CONTENT_ELEMENTS) - {"xmp"}
+
+    # Where a CDATA section is rendered text. In foreign content (SVG, MathML) it is; in HTML
+    # content a browser reads `<![CDATA[…]]>` as a bogus comment and shows nothing (#910).
+    FOREIGN = frozenset({"svg", "math"})
+
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.found: list[tuple[str, str]] = []
         self._n = 0
         self._run: list[str] = []
         self._run_start = 0
+        # Open `<svg>`/`<math>` elements. Counted from tags rather than a tree, so an unclosed
+        # `<svg>` leaves it raised for the rest of the document.
+        self._foreign = 0
         # Every run, whitespace-only ones included, in document order. Consecutive runs are
         # separated by a block boundary and nothing else, which is what `across_block` joins.
         self._runs: list[tuple[int, str]] = []
@@ -156,12 +176,19 @@ class _Positions(HTMLParser):
                 self.found.append((f"text[{self._run_start}]", joined))
             self._run = []
 
-    def handle_data(self, data: str) -> None:
-        self._events += 1
+    def _text(self, data: str) -> None:
         self._n += 1
         if not self._run:
             self._run_start = self._n
         self._run.append(data)
+
+    def handle_data(self, data: str) -> None:
+        self._events += 1
+        if self.cdata_elem in self.NOT_RENDERED:
+            # Counted, so no later label moves, and not flushed: the run around it continues.
+            self._n += 1
+            return
+        self._text(data)
 
     def handle_comment(self, data: str) -> None:
         # No flush: a comment is invisible to a renderer, so the text around it is one run.
@@ -184,13 +211,32 @@ class _Positions(HTMLParser):
         self._n += 1
 
     def unknown_decl(self, data: str) -> None:
-        # A CDATA section arrives here. Like a decl it is never unescaped, so it yields no
-        # position; it is still an event, so `close()` emitting an unclosed one is not read as a
-        # drop. Uncounted, `<![CDATA[x` refused at exit 2 while `<![CDATA[x]]>` passed (#870).
-        # `_n` is left alone, so no label after a CDATA section moves.
+        # A CDATA section arrives here as `CDATA[<content>`, and so does a marked section such as
+        # `<![if !IE]>`. It is always an event, so `close()` emitting an unclosed one is not read
+        # as a drop: uncounted, `<![CDATA[x` refused at exit 2 while `<![CDATA[x]]>` passed (#870).
+        #
+        # Inside SVG or MathML the CDATA content is rendered text, so it joins the run like any
+        # other data: `<svg><text>acme<![CDATA[_]]>secret</text></svg>` shows `acme_secret`, and
+        # leaving it out made the run `acmesecret`, a false CLEAN (#910). It is not unescaped,
+        # because a renderer does not unescape it either. In HTML content it is a bogus comment,
+        # so it neither joins nor breaks the run, and `_n` is left alone there as before.
+        # Joining it everywhere would turn `<p>acme_<![CDATA[x]]>secret</p>` from caught to CLEAN.
         self._events += 1
+        if self._foreign and data.startswith("CDATA["):
+            content = data[len("CDATA["):]
+            if content:
+                self._text(content)
 
     def handle_starttag(self, tag: str, attrs) -> None:
+        self._open(tag, attrs)
+        if tag in self.FOREIGN:
+            self._foreign += 1
+
+    def handle_startendtag(self, tag: str, attrs) -> None:
+        # Self-closing, so no end tag follows: `<svg/>` opens no foreign content.
+        self._open(tag, attrs)
+
+    def _open(self, tag: str, attrs) -> None:
         self._events += 1
         if tag in self.BLOCK:
             self._flush()
@@ -203,10 +249,10 @@ class _Positions(HTMLParser):
 
     def handle_endtag(self, tag: str) -> None:
         self._events += 1
+        if tag in self.FOREIGN and self._foreign:
+            self._foreign -= 1
         if tag in self.BLOCK:
             self._flush()
-
-    handle_startendtag = handle_starttag
 
     def close(self) -> None:  # noqa: D102
         # Whether the parser DROPPED input no handler ever saw. What `feed()` could not tokenise
@@ -615,6 +661,37 @@ def _verify() -> int:
         got = survivors_of(doc)
         check(f"text runs: {why}", got.startswith("structure:") and want in got,
               f"wanted a {want}…] survivor, got {got or 'no raise'!r}")
+
+    # --- #910: what renders joins the run, and what does not render does not -----------------
+    # Every doc below keeps the term out of its raw bytes, so the whole-text tier cannot be what
+    # catches it; only a `text[N]` run can. The first two groups were a silent CLEAN before #910.
+    for doc, why in (
+        ("<svg><text>acme<![CDATA[_]]>secret</text></svg>", "CDATA in SVG is rendered text"),
+        ("<svg><text><![CDATA[acme_]]>secret</text></svg>", "CDATA opening an SVG run"),
+        ("<svg><text>acme<![CDATA[_secret", "an unclosed CDATA in SVG, emitted by close()"),
+        ("<math><mi>acme<![CDATA[_]]>secret</mi></math>", "CDATA in MathML"),
+        ("<p>acme_<script>x</script>secret</p>", "SCRIPT content is not rendered"),
+        ("<p>acme_<style>x</style>secret</p>", "STYLE content is not rendered"),
+        ("<svg><text>acme_<script>x</script>secret</text></svg>", "SCRIPT inside SVG"),
+        # The next group passed before #910 and guards the fix's own over-reach. In HTML content
+        # a CDATA section is a bogus comment, so joining it everywhere (which #910's first
+        # wording proposed) would make these CLEAN; `xmp` renders its content, so dropping it
+        # with the other raw-text elements would too.
+        ("<p>acme_<![CDATA[x]]>secret</p>", "CDATA in HTML content is a bogus comment, not text"),
+        ("<svg></svg><p>acme_<![CDATA[x]]>secret</p>", "...also after a CLOSED svg"),
+        ("<svg/><p>acme_<![CDATA[x]]>secret</p>", "...and after a self-closing svg"),
+        ("<svg><text>acme_<![if x]>secret</text></svg>", "a marked section in SVG is not CDATA"),
+        ("<xmp>acme_</xmp>secret", "XMP renders its content, so it stays in the run"),
+    ):
+        got = survivors_of(doc)
+        check(f"#910 runs: {why}",
+              "acme_secret" not in doc and got.startswith("structure:") and "text[" in got,
+              f"got {got or 'no raise'!r} over {doc!r}")
+
+    # "Its own raw position or none": none. Script content is never decoded, so a position for
+    # it would be a substring of the text the whole-text tier already checked.
+    pos = positions("<script>acme&#95;x</script>", "html")
+    check("#910: SCRIPT content yields no position of its own", pos == [], str(pos))
 
     # Across-block is only for what no single run holds, so one leak gets one label.
     one_run = survivors_of("<div>acme&#95;secret</div><div>x</div>")
