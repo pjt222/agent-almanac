@@ -422,10 +422,11 @@ export function contentTrees(root) {
  *
  * So npm collapses the `//`. This matcher does not, so the negation in d2 and d3 carves out
  * nothing: in d2 the inventory counts `_template/` as shipping, and in d3 the `prepack` guard
- * would refuse an untracked file under `_template/`, where npm packs nothing. That is the
- * OPPOSITE direction to the refusals above: it over-counts. It is refused anyway, because a
- * security document that names files which do not ship is wrong too. d3 is also a same-path pair
- * that the pair check misses, since that check strips only one trailing slash.
+ * would refuse an untracked file under `_template/`, where npm packs nothing. Files are counted
+ * that do not ship, the direction the unanchored-negation and directory-without-slash messages
+ * below describe too, and the opposite of the `./`, order, re-include and pair refusals. d3 is
+ * also a same-path pair that the pair check misses, since that check strips only one trailing
+ * slash.
  */
 function assertInterpretable(files, root) {
   const negations = files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1));
