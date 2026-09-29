@@ -97,9 +97,10 @@ for (const name of CONSTANTS) {
   });
 }
 
-test('the drift check has something to compare: the shipped workflows are the three known ones', () => {
-  assert.deepEqual(shipped.map((p) => p.slice(p.lastIndexOf('/') + 1)),
-    ['batch-generate-waves.mjs', 'review-changes.mjs', 'verify-handoff.mjs']);
+test('the drift check has something to compare', () => {
+  // A floor, not the set: the seed set is already pinned by name and count in
+  // workflow-contract.test.js, and a third pin site is one more to keep in step.
+  assert.ok(shipped.length >= 3, `only ${shipped.length} shipped workflow(s) found`);
 });
 
 for (const path of shipped) {

@@ -85,6 +85,19 @@ const WRITE_LOCATION = `WRITE LOCATION — write every file you produce, by any 
 \`$DIR\`: the absolute path the preamble's \`mktemp -d\` created (\`echo "\${DIR:?}"\`
 prints it for a tool that is not the shell). Write nothing under the repository root.`
 
+// REPO_ROOT_NOTE — local to this workflow, not a template constant (#861). The preamble's
+// `cd "${DIR:?}"` persists between an agent's shell calls, so without this line the
+// repository-relative paths and bare `git` commands in the prompts below would resolve against
+// the agent's temp directory instead: `git diff` fails outside a repository and a relative
+// outputDir reads as empty. It follows the write-location line and does not loosen it.
+const REPO_ROOT_NOTE = `REPOSITORY ROOT — relative paths and \`git\` commands in this task are relative to the
+repository root: the working directory you started in, before any \`cd\`. The preamble's
+\`cd "\${DIR:?}"\` moves you away from it, and the move persists between shell calls. So learn
+the root first, in a block that touches no files (\`pwd\`), and use it absolutely from then on:
+\`git -C "<root>" …\`, \`"<root>/<relative path>"\`, and \`(cd "<root>" && <command>)\` for a
+command that must run there. Reading the repository this way is expected; where you may WRITE
+is the write-location line above.`
+
 // Adversarial verifiers per candidate finding. A finding SURVIVES only when a
 // majority of refuters independently CONFIRM it (refuted === false). Default-refuted
 // votes — and null/dead refuters — do NOT count as confirmation, so a finding dies on
@@ -145,6 +158,7 @@ let files = Array.isArray(args?.files) && args.files.length ? args.files : null
 if (!files) {
   const disc = await agent(
     `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
+    `${REPO_ROOT_NOTE}\n\n` +
     'Run `git diff --name-only HEAD` (fall back to `git diff --name-only` if HEAD is unborn) ' +
       'and return the changed, non-deleted file paths. Read-only — do not modify anything.',
     { label: 'discover-files', phase: 'Classify', agentType: 'Explore', schema: FILES_SCHEMA },
@@ -167,6 +181,7 @@ const perFile = await pipeline(
   (file) =>
     agent(
       `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
+      `${REPO_ROOT_NOTE}\n\n` +
       `Review the changed file "${file}". Read it and its diff (\`git diff -- ${file}\`). ` +
         `Report concrete candidate findings (bugs, security issues, correctness risks). ` +
         `Return file="${file}"; for each finding give a title, a severity ` +
@@ -184,6 +199,7 @@ const perFile = await pipeline(
           Array.from({ length: REFUTERS }, (_unused, i) => () =>
             agent(
               `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
+              `${REPO_ROOT_NOTE}\n\n` +
               `Adversarially verify this finding in "${file}" (refuter ${i + 1}/${REFUTERS}): ` +
                 `${f.title} — ${f.mechanism}. Evidence cited: ${f.evidence}. ` +
                 `Read the file yourself and, if needed, run \`git diff -- ${file}\` to see what changed. ` +
@@ -220,6 +236,7 @@ if (!surviving.length) {
 phase('Synthesize')
 const synth = await agent(
   `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
+  `${REPO_ROOT_NOTE}\n\n` +
   `Consolidate these verified review findings into a single markdown report grouped by ` +
     `severity (critical → info). Keep each entry's file:line evidence and mechanism. ` +
     `Findings JSON:\n${JSON.stringify(surviving, null, 2)}`,

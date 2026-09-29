@@ -179,6 +179,19 @@ Writing your artifacts under ${outputDir} is this stage's job, and the one excep
 preamble's "work only in a directory you created yourself"; everything else — scratch files,
 fixtures, logs — goes under \`$DIR\`.`
 
+// REPO_ROOT_NOTE — local to this workflow, not a template constant (#861). The preamble's
+// `cd "${DIR:?}"` persists between an agent's shell calls, so without this line the
+// repository-relative paths and bare `git` commands in the prompts below would resolve against
+// the agent's temp directory instead: `git diff` fails outside a repository and a relative
+// outputDir reads as empty. It follows the write-location line and does not loosen it.
+const REPO_ROOT_NOTE = `REPOSITORY ROOT — relative paths and \`git\` commands in this task are relative to the
+repository root: the working directory you started in, before any \`cd\`. The preamble's
+\`cd "\${DIR:?}"\` moves you away from it, and the move persists between shell calls. So learn
+the root first, in a block that touches no files (\`pwd\`), and use it absolutely from then on:
+\`git -C "<root>" …\`, \`"<root>/<relative path>"\`, and \`(cd "<root>" && <command>)\` for a
+command that must run there. Reading the repository this way is expected; where you may WRITE
+is the write-location line above.`
+
 const SCOUT_SCHEMA = {
   type: 'object',
   required: ['batches', 'remaining', 'poolCovered'],
@@ -273,6 +286,7 @@ for (let waveIndex = 1; waveIndex <= maxWaves; waveIndex++) {
   } else {
     scout = await agent(
       `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
+      `${REPO_ROOT_NOTE}\n\n` +
       `Build the wave-${waveIndex} todo list for a generation pool. Read-only — write nothing.\n` +
         `Pool source: ${poolSource}\n` +
         `An item is DONE when its artifact already exists under ${outputDir} — never re-list a finished item ` +
@@ -326,6 +340,7 @@ for (let waveIndex = 1; waveIndex <= maxWaves; waveIndex++) {
     (batch, _originalBatch, batchIndex) =>
       agent(
         `${REPO_SAFETY}\n\n${GENERATE_WRITE_LOCATION}\n\n` +
+        `${REPO_ROOT_NOTE}\n\n` +
         `You are one batch generator in a resumable wave. Produce a validated artifact for EACH item below.\n\n` +
           `Per-item procedure (the caller's generator template — canonical pattern: the generative-recipe-dsl skill):\n` +
           `${generatorPrompt}\n\n` +
@@ -350,6 +365,7 @@ for (let waveIndex = 1; waveIndex <= maxWaves; waveIndex++) {
     (report, batch, batchIndex) =>
       agent(
         `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
+        `${REPO_ROOT_NOTE}\n\n` +
         `Read-only audit of one generation batch — trust the DISK, not the report.\n` +
           `Expected item ids: ${JSON.stringify(batch.map((item) => item.id))}\n` +
           `Generator report (null means the generator died mid-batch; artifacts it finished before dying ` +
