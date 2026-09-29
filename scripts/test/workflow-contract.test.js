@@ -25,7 +25,11 @@ import { spawnSync } from 'node:child_process';
 import { rmTree } from './_tmp.js';
 import {
   BUILTIN_INTENT,
+  BUILTIN_SHELL,
+  PREAMBLE_NAME,
   SIDECAR_IMPLEMENTING_FIELD,
+  WRITE_LOCATION_RE,
+  canRunShell,
   checkWorkflow,
   countAgentCalls,
   listWorkflows,
@@ -36,7 +40,9 @@ import {
   parsePhaseCalls,
   parseSidecar,
   readAgentIntents,
+  readAgentTools,
   readKey,
+  startsWithPreamble,
 } from '../check-workflow-contract.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -135,8 +141,8 @@ ${body}
 
 const BODY_OK = `
 phase('Scan')
-const a = await agent('look', { label: \`scan:\${x}\`, phase: 'Scan', agentType: 'Explore' })
-const b = await agent('make', {
+const a = await agent(REPO_SAFETY + WRITE_LOCATION + 'look', { label: \`scan:\${x}\`, phase: 'Scan', agentType: 'Explore' })
+const b = await agent(REPO_SAFETY + WRITE_LOCATION + 'make', {
   label: 'build',
   phase: 'Build',
   agentType: 'general-purpose', // implementing: writes files
@@ -170,7 +176,7 @@ test('strict forward: an implementing type in an undeclared phase fails; worktre
 });
 
 test('lenient reverse: a mixed phase is fine; a declared phase with no implementing spawn at all is a finding', () => {
-  const mixed = fixture({ body: BODY_OK + "\nconst c = await agent('peek', { label: 'peek', phase: 'Build', agentType: 'Explore' })\n" });
+  const mixed = fixture({ body: BODY_OK + "\nconst c = await agent(REPO_SAFETY + WRITE_LOCATION + 'peek', { label: 'peek', phase: 'Build', agentType: 'Explore' })\n" });
   assert.deepEqual(clean('fx.mjs', mixed), [], 'a scout beside a writer in the same declared phase');
   const noWriter = clean('fx.mjs', fixture({ body: BODY_OK
     .replace("agentType: 'general-purpose'", "agentType: 'Explore'")
@@ -410,5 +416,93 @@ test('exit 1 with FAIL lines on a finding; exit 0 with the OK line on a clean tr
 test('the CLI exits 0 on the corpus and prints the counts it measured', () => {
   const r = spawnSync(process.execPath, [SCRIPT], { cwd: ROOT, encoding: 'utf8' });
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stdout, /^OK: 3 workflow\(s\), 8 agent\(\) spawn\(s\) honour the capability contract/m);
+  assert.match(r.stdout, /^OK: 3 workflow\(s\), 8 agent\(\) spawn\(s\) honour the capability contract, and the 8 that can run shell start with REPO_SAFETY and name a write location;/m);
+});
+
+// ── containment: the preamble and the write location (#861) ────────────────
+
+test('#861 mutant: deleting the preamble line from a real workflow spawn is two findings', () => {
+  const original = read('review-changes.mjs');
+  assert.deepEqual(clean('review-changes.mjs', original), [], 'precondition: the corpus file is clean');
+  const needle = "const synth = await agent(\n  `${REPO_SAFETY}\\n\\n${WRITE_LOCATION}\\n\\n` +\n";
+  assert.equal(original.split(needle).length - 1, 1, 'the synthesize prepend is where this test says, once');
+  const findings = clean('review-changes.mjs', original.replace(needle, 'const synth = await agent(\n'));
+  assert.equal(findings.length, 2, findings.join('\n'));
+  assert.match(findings[0], /^review-changes\.mjs:\d+ agentType 'Explore' can run shell commands but its prompt does not start with REPO_SAFETY/);
+  assert.match(findings[1], /^review-changes\.mjs:\d+ agentType 'Explore' can run shell commands but its prompt names no write location/);
+});
+
+test('#861 mutant: the implementing Generate stage losing its narrowed write location is a finding', () => {
+  const original = read('batch-generate-waves.mjs');
+  assert.deepEqual(clean('batch-generate-waves.mjs', original), []);
+  const needle = '`${REPO_SAFETY}\\n\\n${GENERATE_WRITE_LOCATION}\\n\\n` +';
+  assert.equal(original.split(needle).length - 1, 1, 'the Generate prepend is where this test says, once');
+  const findings = clean('batch-generate-waves.mjs', original.replace(needle, '`${REPO_SAFETY}\\n\\n` +'));
+  assert.equal(findings.length, 1, findings.join('\n'));
+  assert.match(findings[0], /agentType 'general-purpose' can run shell commands but its prompt names no write location/);
+});
+
+test('#861: the preamble must START the prompt — appended is a finding, a leading comment is skipped', () => {
+  const only = (body) => fixture({ sidecarPhases: 'Scan', metaTitles: ['Scan'], implementing: null, body: "phase('Scan')\n" + body });
+  const appended = clean('fx.mjs', only("const a = await agent('look' + REPO_SAFETY + WRITE_LOCATION, { label: 'scan', phase: 'Scan', agentType: 'Explore' })\n"));
+  assert.equal(appended.length, 1, appended.join('\n'));
+  assert.match(appended[0], /does not start with REPO_SAFETY/);
+  const commented = only("const a = await agent(\n  // a comment before the prompt, as the template's verify stage has\n  `${REPO_SAFETY}\\n\\n${WRITE_LOCATION}\\n\\nlook`,\n  { label: 'scan', phase: 'Scan', agentType: 'Explore' })\n");
+  assert.deepEqual(clean('fx.mjs', commented), [], 'the template-literal form after a comment is the preamble');
+  const text = commented;
+  const { calls } = parseAgentCalls(text);
+  assert.ok(calls[0].prompt.startsWith('`${REPO_SAFETY}'), `prompt read as: ${calls[0].prompt.slice(0, 40)}`);
+  assert.equal(startsWithPreamble('REPO_SAFETY + x'), true);
+  assert.equal(startsWithPreamble('REPO_SAFETY_OLD + x'), false, 'a longer identifier is not the preamble');
+  assert.equal(startsWithPreamble('`${REPO_SAFETY_OLD}x`'), false);
+  assert.equal(startsWithPreamble(null), false);
+  assert.ok(WRITE_LOCATION_RE.test('${GENERATE_WRITE_LOCATION}') && WRITE_LOCATION_RE.test('${WRITE_LOCATION}'));
+  assert.ok(!WRITE_LOCATION_RE.test('${WRITE_LOCATIONS}') && !WRITE_LOCATION_RE.test('write location'));
+});
+
+test('#861: the predicate keys on shell CAPABILITY, fail-closed — not on intent', () => {
+  assert.deepEqual(BUILTIN_SHELL, { Explore: true, Plan: true, 'general-purpose': true, claude: true },
+    'Explore is advisory AND shell-capable: the case an intent-keyed rule gets wrong');
+  assert.equal(PREAMBLE_NAME, 'REPO_SAFETY');
+  const tools = { 'ro-agent': ['Read', 'Grep'], 'sh-agent': ['Read', 'Bash'], 'pat-agent': ['Bash(git:*)'], 'star-agent': ['*'], 'odd-tools': null };
+  assert.equal(canRunShell('ro-agent', tools), false);
+  assert.equal(canRunShell('sh-agent', tools), true);
+  assert.equal(canRunShell('pat-agent', tools), true);
+  assert.equal(canRunShell('star-agent', tools), true);
+  assert.equal(canRunShell('odd-tools', tools), true, 'an unreadable tools: line never exempts');
+  assert.equal(canRunShell('bare-agent', tools), true, 'no tools: line inherits every tool');
+  assert.equal(canRunShell('Explore', {}), true);
+
+  const agentIntents = { 'ro-agent': 'advisory', 'sh-agent': 'advisory', 'bare-agent': 'advisory', 'odd-tools': 'advisory' };
+  const spawn = (type) => fixture({ sidecarPhases: 'Scan', metaTitles: ['Scan'], implementing: null,
+    body: `phase('Scan')\nconst a = await agent('look', { label: 'scan', phase: 'Scan', agentType: '${type}' })\n` });
+  const run = (type) => checkWorkflow({ path: 'fx.mjs', text: spawn(type), agentIntents, agentTools: tools });
+  assert.deepEqual(run('ro-agent').findings, [], 'an agent whose tools exclude Bash needs no preamble');
+  assert.equal(run('ro-agent').measured.shell, 0);
+  for (const type of ['sh-agent', 'bare-agent', 'odd-tools']) {
+    const r = run(type);
+    assert.equal(r.findings.length, 2, `${type}:\n${r.findings.join('\n')}`);
+    assert.equal(r.measured.shell, 1);
+  }
+});
+
+test('#861: readAgentTools reads the one-line list, marks anything else null, skips README and templates', (t) => {
+  const dir = tree(t, { agents: {
+    'a.md': 'intent: advisory\ntools: [Read, Bash]\n',
+    'b.md': 'intent: advisory\ntools:\n  - Read\n',
+    'c.md': 'intent: advisory\n',
+    'README.md': 'tools: [Bash]\n',
+    '_template.md': 'tools: [Bash]\n',
+  } });
+  assert.deepEqual(readAgentTools(join(dir, 'agents')), { a: ['Read', 'Bash'], b: null });
+  const corpus = readAgentTools(join(ROOT, 'agents'));
+  const noShell = Object.entries(corpus).filter(([, list]) => list && !canRunShell('x', { x: list }));
+  assert.ok(noShell.length > 0, 'the corpus carries agents without Bash, so the exemption branch is reachable');
+  assert.ok(Object.values(corpus).every((list) => list !== null), 'every corpus agent has a readable one-line tools: list');
+});
+
+test('#861: the template models the rule it documents', () => {
+  const r = checkWorkflow({ path: '_template.mjs', text: read('_template.mjs'), agentIntents: intents });
+  assert.deepEqual(r.findings, [], r.findings.join('\n'));
+  assert.equal(r.measured.shell, 2, 'both template spawns are shell-capable and were judged');
 });
