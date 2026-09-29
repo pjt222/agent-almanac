@@ -76,13 +76,17 @@
  * unrecognised argument. The branch HEAD left is read where it can be. Where it
  * cannot (a detached snapshot; a branch whose ref was deleted since; one that had
  * no commit at the snapshot and resolves to none now), a sentence saying so is
- * printed only where HEAD gained no commit: verify's report of a backward or orphan
- * move, and rebaseline's refusals of those and of a branch-only move. Every other
- * path says nothing about it: any other HEAD move (forward, diverged, ancestry git
- * could not read, or from an unborn baseline), verify's report of a branch-only
- * move, and every run that accepts. `rebaseline` refuses on that ground only an
- * orphan move; the other moves are accepted with nothing listed from that branch
- * (#920 rounds 3 and 4). The refs no one reads are under "What it does NOT cover".
+ * printed only where HEAD gained no commit, and only on three paths: verify's
+ * report of a backward or orphan move, whether or not the working tree moved too;
+ * rebaseline's refusal of an orphan move, whatever `--accept` names; and
+ * rebaseline's refusal of a backward or branch-only move run without `--accept`.
+ * Every other path says nothing about it: any other HEAD move (forward, diverged,
+ * ancestry git could not read, or from an unborn baseline), verify's report of a
+ * branch-only move, rebaseline's working-tree refusal (checked before any of the
+ * above, whatever HEAD did), its refusal of an `--accept` sha that is not HEAD,
+ * and every run that accepts. `rebaseline` refuses on that ground only an orphan
+ * move; the other moves are accepted with nothing listed from that branch (#920
+ * rounds 3 to 5). The refs no one reads are under "What it does NOT cover".
  *
  * Two rules keep a second run from laundering the first run's damage into a
  * green, which a single global snapshot slot otherwise invites:
@@ -443,9 +447,11 @@ if (before.rebaselineHistory !== undefined && !Array.isArray(before.rebaselineHi
 // `headRef` is the same rule for the field #920 added (round 4, R4-4). A non-string crashed the
 // left-branch read below with the same uncaught TypeError, exit 1; an empty or bare-name string
 // named no ref, so the branch the snapshot was on read as deleted, in silence. This build writes
-// a full ref or null (a detached HEAD), and an older one writes no field at all; anything else is
-// a record this tool did not write. `refs/`, not `refs/heads/`: a HEAD made to point at a tag by
-// plumbing records `refs/tags/<t>`, which is a real capture.
+// a full ref or null (a detached HEAD), and an older one writes no field at all; a value of any
+// other shape is a record this tool did not write. The check is of shape only: a `refs/` string
+// naming the wrong ref, which only a hand edit makes, passes and is read as that ref (#920 round
+// 5, R5-N2). `refs/`, not `refs/heads/`: a HEAD made to point at a tag by plumbing records
+// `refs/tags/<t>`, which is a real capture.
 if (before.headRef !== undefined && before.headRef !== null) {
   const malformedHeadRef = typeof before.headRef !== 'string' ? typeof before.headRef
     : !before.headRef.startsWith('refs/') ? JSON.stringify(before.headRef)
