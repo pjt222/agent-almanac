@@ -155,7 +155,10 @@ function walk(root, entry, seen) {
  */
 function runChild() {
   if (typeof vm.SourceTextModule !== 'function') {
-    // Never re-spawn from here: that would recurse for as long as the flag failed to take.
+    // A flag that did not take. Without this refusal the walk below would still run, fail in
+    // `requestedSpecifiers`, and answer `{ ok: false }` at exit 0 with `cannot parse <entry>`:
+    // the caller would blame the module. Exit 3 is the child failing, and the caller says so.
+    // (This file calls `walk`, never `importGraph`, so it cannot re-spawn; keep it that way.)
     process.stderr.write(`vm.SourceTextModule is unavailable on node ${process.version} even under --experimental-vm-modules\n`);
     process.exit(3);
   }

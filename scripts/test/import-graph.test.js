@@ -7,8 +7,9 @@
  * on: the root is a parameter, the output is root-relative and includes the entry, a cycle
  * terminates, a missing file throws, a bare specifier is not walked, and a seeded accumulator is
  * the one returned. Since #918 it also pins the parsing that consumer relies on — import-shaped
- * text in a comment or a string is not an edge — and the two ways the parser flag reaches the
- * walk.
+ * text in a comment or a string is not an edge — and how the parser flag reaches the walk: in
+ * process for a caller that has it, through a child otherwise, and an error naming why whenever
+ * that child cannot deliver a graph.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -187,8 +188,9 @@ test('a module that does not parse is an error naming it, never an empty graph',
 // ── #918: how the parser flag reaches the walk ─────────────────────────────────────────────
 //
 // `node --test` runs this file WITHOUT `--experimental-vm-modules`, so every test above goes
-// through the child `importGraph` starts with the flag. The two below pin the other two paths: a
-// caller that has the flag walks in-process, and a child that cannot deliver is an error.
+// through the child `importGraph` starts with the flag. The ones below pin the other paths: a
+// caller that has the flag walks in-process, a child that cannot deliver is an error naming why,
+// and a child whose flag did not take refuses rather than blaming the module.
 
 test('a caller already running with the flag walks in-process and gets the same graph', (t) => {
   const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n/*\nimport { planted } from './planted.js';\n*/\n" });
@@ -270,6 +272,38 @@ test('a parser child killed by a signal says so, and is still an error', { skip:
   });
   withChildOptions(t, `--require=${join(root, 'kill-self.cjs')}`);
   assert.throws(() => importGraph(root, 'a.js'), /the parser child .* was killed by SIGKILL without a graph/);
+});
+
+test('a child whose flag did not take refuses with exit 3, and does not blame the module', (t) => {
+  // Direct: the child run WITHOUT --experimental-vm-modules. If a future Node ships
+  // vm.SourceTextModule unflagged, this arm fails, and the refusal can go.
+  const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n" });
+  const env = { ...process.env };
+  delete env.NODE_OPTIONS;
+  const child = spawnSync(process.execPath, [LIB, '--import-graph-child'], {
+    input: JSON.stringify({ root, entry: 'a.js', seen: [] }),
+    encoding: 'utf8',
+    env,
+  });
+  assert.equal(child.status, 3, child.stderr);
+  assert.match(child.stderr, /vm\.SourceTextModule is unavailable on node v\S+ even under --experimental-vm-modules/);
+  assert.equal(child.stdout, '', 'a refusal is not an answer');
+});
+
+test('the refusal reaches the caller as the reason, not as a parse error in the entry', (t) => {
+  // End to end: the flag is on the child's command line, and a preload takes the constructor away
+  // again, which is what a flag that stopped working looks like from inside the child. Without the
+  // refusal the caller would throw `cannot parse a.js as an ES module` and blame the module.
+  const root = fixture(t, {
+    ...PLANTED,
+    'a.js': "import { real } from './real.js';\n",
+    'drop-constructor.cjs': "delete require('node:vm').SourceTextModule;\n",
+  });
+  withChildOptions(t, `--require=${join(root, 'drop-constructor.cjs')}`);
+  assert.throws(
+    () => importGraph(root, 'a.js'),
+    /the parser child .* exited 3 without a graph: vm\.SourceTextModule is unavailable on node v\S+ even under --experimental-vm-modules/,
+  );
 });
 
 test('a seeded accumulator is the one returned, and a seeded module is not walked again', (t) => {
