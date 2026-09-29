@@ -1269,6 +1269,25 @@ test('a malformed headRef exits 2 on verify and rebaseline, naming the field (#9
   }
 });
 
+test('a HEAD that plumbing pointed at a tag is a real capture, not a malformed headRef (#920 R5-N3)', async (t) => {
+  // The headRef check accepts any `refs/` prefix, not only `refs/heads/`, because `git symbolic-ref
+  // HEAD refs/tags/<t>` is allowed and this build records what it names. Narrowing the prefix would
+  // exit 2 over an untouched repository armed in that state.
+  const dir = makeRepo(t);
+  git(dir, ['tag', 'v1']);
+  git(dir, ['symbolic-ref', 'HEAD', 'refs/tags/v1']);
+  assert.equal(guard(dir, ['snapshot']).status, 0);
+  assert.equal(JSON.parse(readFileSync(snapshotPath(dir), 'utf8')).headRef, 'refs/tags/v1',
+    'premise: the tag ref is what was recorded');
+
+  const v = guard(dir, ['verify']);
+  assert.equal(v.status, 0, v.stderr);
+  assert.match(v.stdout, /unchanged at/);
+  const r = guard(dir, ['rebaseline']);
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /nothing moved/);
+});
+
 test('a replaced history is reported as NOT an ancestor', async (t) => {
   // The reset advice is actively destructive here, so the message says so.
   const dir = makeRepo(t);
@@ -1777,7 +1796,7 @@ test('an orphan move is refused when the branch HEAD left cannot be read (#920 R
   // The refuse arm's own reflog line, printed for a snapshot on a branch; v2's detached line is
   // printed elsewhere, at a different indent (#920 round 4, R4-8).
   assert.match(v1.stderr, /\n {2}The reflog lists every commit HEAD visited:\n {4}cat "\$\(git rev-parse --git-dir\)\/logs\/HEAD"\n/);
-  const r1 =guard(deleted, ['rebaseline', '--accept=(unborn)']);
+  const r1 = guard(deleted, ['rebaseline', '--accept=(unborn)']);
   assert.equal(r1.status, 2, r1.stderr);
   assert.match(r1.stderr, /HEAD moved onto a branch with no commits, and main, the branch the snapshot was on, no longer exists, so a commit made before the move cannot be listed\./);
   assert.match(r1.stderr, /\n {2}cat "\$\(git rev-parse --git-dir\)\/logs\/HEAD"\n/,
