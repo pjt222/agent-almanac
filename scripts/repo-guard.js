@@ -73,10 +73,16 @@
  * A guard that answers "unchanged" when it could not look is worse than none.
  * Every uncertainty about the snapshot or HEAD's own history exits 2, never 0: a
  * missing, unreadable, or foreign snapshot, a git invocation that fails, or an
- * unrecognised argument. The branch HEAD left is read where it can be; where it
- * cannot (a detached snapshot, a branch deleted since), the output says it was not
- * checked, and `rebaseline` refuses only an orphan move over it (#920 review). The
- * refs no one reads are under "What it does NOT cover".
+ * unrecognised argument. The branch HEAD left is read where it can be. Where it
+ * cannot (a detached snapshot; a branch whose ref was deleted since; one that had
+ * no commit at the snapshot and resolves to none now), a sentence saying so is
+ * printed only where HEAD gained no commit: verify's report of a backward or orphan
+ * move, and rebaseline's refusals of those and of a branch-only move. Every other
+ * path says nothing about it: any other HEAD move (forward, diverged, ancestry git
+ * could not read, or from an unborn baseline), verify's report of a branch-only
+ * move, and every run that accepts. `rebaseline` refuses on that ground only an
+ * orphan move; the other moves are accepted with nothing listed from that branch
+ * (#920 rounds 3 and 4). The refs no one reads are under "What it does NOT cover".
  *
  * Two rules keep a second run from laundering the first run's damage into a
  * green, which a single global snapshot slot otherwise invites:
