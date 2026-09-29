@@ -360,8 +360,12 @@ export function contentTrees(root) {
  *   control: files: ["agents/"]                   npm packs agents/_template.md.
  *       So the three zeros above are exclusions, not an empty probe.
  *
- * All three under-count silently, so all three are refused rather than guessed at — the same
- * contract `mutation-check` holds itself to.
+ * All three are negations, and for each the matcher carves out less than npm does, so it counts
+ * files that do not ship and nothing reports it. Re-measured for #913 with each refusal switched off:
+ * `!skills/_template`, `!_template.py` (under `agents/`) and `!skills/*\/references/` each left a
+ * file in `nonDocumentationFiles` that `npm pack --dry-run` did not list. The glob refusal also
+ * fires on an inclusion, and which way that side errs was not measured. All three are refused
+ * rather than guessed at — the same contract `mutation-check` holds itself to.
  *
  * A FOURTH class was proposed, refuted, and then REFUTED ONLY IN PART — the correction matters
  * because the original wording licensed two shapes that lose files silently (#879 round 2).
@@ -422,11 +426,14 @@ export function contentTrees(root) {
  *
  * So npm collapses the `//`. This matcher does not, so the negation in d2 and d3 carves out
  * nothing: in d2 the inventory counts `_template/` as shipping, and in d3 the `prepack` guard
- * would refuse an untracked file under `_template/`, where npm packs nothing. Files are counted
- * that do not ship, the direction the unanchored-negation and directory-without-slash messages
- * below describe too, and the opposite of the `./`, order, re-include and pair refusals. d3 is
- * also a same-path pair that the pair check misses, since that check strips only one trailing
- * slash.
+ * would refuse an untracked file under `_template/`, where npm packs nothing. On the negation
+ * side, then, files are counted that do not ship. d3 is also a same-path pair that the pair
+ * check misses, since that check strips only one trailing slash.
+ *
+ * On the inclusion side no disagreement was found. For d5, `divergentPaths` reported the same
+ * untracked file under `skills/real/` that npm packs, and `contentTrees` throws for a content
+ * directory spelled with `//`, because that spelling is not a content type. The inclusion side is
+ * refused anyway, as #913 asks, because the single-slash spelling means the same thing to npm.
  */
 function assertInterpretable(files, root) {
   const negations = files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1));
