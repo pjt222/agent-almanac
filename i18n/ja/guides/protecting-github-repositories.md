@@ -7,7 +7,8 @@ teams: []
 skills: [assess-github-repo-security, harden-github-repo-security]
 locale: ja
 source_locale: en
-source_commit: 6dc5eeaf9
+source_commit: "d9f0886da"
+fence_basis_commit: "d9f0886da"
 translator: "(untranslated stub)"
 translation_date: "2026-09-02"
 ---
