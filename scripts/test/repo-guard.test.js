@@ -1774,7 +1774,10 @@ test('an orphan move is refused when the branch HEAD left cannot be read (#920 R
   assert.equal(v1.status, 1);
   assert.doesNotMatch(v1.stderr, /Read it, then accept/);
   assert.match(v1.stderr, /rebaseline would refuse this move: main, the branch the snapshot was on, no longer exists\./);
-  const r1 = guard(deleted, ['rebaseline', '--accept=(unborn)']);
+  // The refuse arm's own reflog line, printed for a snapshot on a branch; v2's detached line is
+  // printed elsewhere, at a different indent (#920 round 4, R4-8).
+  assert.match(v1.stderr, /\n {2}The reflog lists every commit HEAD visited:\n {4}cat "\$\(git rev-parse --git-dir\)\/logs\/HEAD"\n/);
+  const r1 =guard(deleted, ['rebaseline', '--accept=(unborn)']);
   assert.equal(r1.status, 2, r1.stderr);
   assert.match(r1.stderr, /HEAD moved onto a branch with no commits, and main, the branch the snapshot was on, no longer exists, so a commit made before the move cannot be listed\./);
   assert.match(r1.stderr, /\n {2}cat "\$\(git rev-parse --git-dir\)\/logs\/HEAD"\n/,
@@ -1923,6 +1926,12 @@ test('an unborn branch that gained a commit and was deleted is not called unmove
   assert.equal(refused.status, 2);
   assert.doesNotMatch(refused.stderr, /gained none/);
   assert.match(refused.stderr, /main had no commit at the snapshot and resolves to none now, so a commit made on it and then deleted is not checked here\./);
+  // The command that sentence names, and that it shows the commit it says is not checked
+  // (#920 round 4, R4-8).
+  assert.match(refused.stderr, /not checked here\. The reflog lists every commit HEAD visited:\n {2}cat "\$\(git rev-parse --git-dir\)\/logs\/HEAD"\n/);
+  const pasted = spawnSync('bash', ['-c', 'cat "$(git rev-parse --git-dir)/logs/HEAD"'], { cwd: dir, encoding: 'utf8' });
+  assert.equal(pasted.status, 0, pasted.stderr);
+  assert.match(pasted.stdout, /STRAY first commit/);
 });
 
 test('a branch name --abbrev-ref prints as refs/heads/<b> is read too (#920 R3-3)', async (t) => {
