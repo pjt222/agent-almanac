@@ -49,7 +49,9 @@
  * `moduleRequests` (objects with a `specifier`) on 24.20.0 and 25.9.0; absent on 22.16.0, which has
  * only `dependencySpecifiers` (strings). `dependencySpecifiers` is present on all five versions
  * above, with no warning. So the walk reads `moduleRequests` where it exists and falls back.
- * Not measured: 22.12.0 (the `engines` floor), any 23.x, and any 22.x or 24.x other than those
+ * The fallback is the documented-deprecated field: the Node docs mark `dependencySpecifiers`
+ * "Stability: 0 - Deprecated" and give `moduleRequests` "Added in: v24.4.0, v22.20.0", so by the
+ * docs (not measured) the fallback is reached only on 22.12 to 22.19. Not measured: 22.12.0 (the `engines` floor), any 23.x, and any 22.x or 24.x other than those
  * listed.
  */
 import { readFileSync, existsSync, realpathSync } from 'node:fs';
