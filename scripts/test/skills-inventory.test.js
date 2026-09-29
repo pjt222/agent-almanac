@@ -347,6 +347,8 @@ test('a doubled slash is refused on either side, and a single slash is not (#913
   // The inclusion side, mid-path. npm packs `skills//real/` as `skills/real/`. Without this arm a
   // check that looked only at negations would pass every row above.
   assert.throws(manifest(['skills//real/']), /contains "\/\/".*single slashes: "skills\/real\/"/s);
+  // A run of three is one doubled slash too, and the suggested spelling collapses the whole run.
+  assert.throws(manifest(['skills///real/']), /single slashes: "skills\/real\/"/);
 
   // Control: the single-slash spelling of row 2 is accepted, so the arm is not "refuse any slash".
   assert.deepEqual(manifest(['skills/', '!skills/_template/'])(),
