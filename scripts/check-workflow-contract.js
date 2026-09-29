@@ -223,6 +223,26 @@ export function parsePhaseCalls(text, masked = maskCode(text)) {
   return calls;
 }
 
+/**
+ * Every `const <name> = \`…\`` declaration in the file, as its exact SOURCE text from `const`
+ * through the closing backtick, with its line. Located in masked text (so a commented-out or
+ * quoted declaration is not one) and sliced from the original, the closing delimiter taken from
+ * the mask, which blanks an escaped backtick inside the literal. Source bytes, not the evaluated
+ * string: the drift test for #861 asks whether a shipped copy is the template's copy, and two
+ * spellings that evaluate alike (`\${` against `$\{`) are still two copies.
+ */
+export function extractConstLiterals(text, name, masked = maskCode(text)) {
+  const found = [];
+  const re = new RegExp(`\\bconst\\s+${name}\\s*=\\s*\``, 'g');
+  for (const m of masked.matchAll(re)) {
+    const open = m.index + m[0].length - 1;
+    const close = masked.indexOf('`', open + 1);
+    if (close === -1) { found.push({ source: null, line: lineOf(text, m.index) }); continue; }
+    found.push({ source: text.slice(m.index, close + 1), line: lineOf(text, m.index) });
+  }
+  return found;
+}
+
 /** Number of `agent(` call sites in the body (masked, so strings and comments do not count). */
 export function countAgentCalls(masked) {
   return (masked.match(/\bagent\s*\(/g) ?? []).length;

@@ -20,6 +20,8 @@
 // Write/Edit). If a future stage were to write a patch, it would have to target
 // an `implementing` agent type instead. The script names the spawn type per
 // call — the cleanest expression of the agent-persona vs subagent_type decoupling.
+// Advisory is not the same as unable to write: Explore carries Bash, so every
+// prompt below starts with REPO_SAFETY and WRITE_LOCATION (#861).
 //
 // Invoke:  Workflow({ name: 'review-changes' })            // diff vs HEAD
 //          Workflow({ name: 'review-changes', args: { files: ['a.js','b.R'] } })
@@ -37,6 +39,51 @@ export const meta = {
     { title: 'Synthesize', detail: 'consolidate only surviving findings into a severity report' },
   ],
 }
+
+// REPO_SAFETY and WRITE_LOCATION: byte-identical copies of the two constants in
+// workflows/_template.mjs, which carries their rationale (#493, #859). Every Bash-capable
+// spawn below starts its prompt with them (#861). Do not edit them here: edit the template and
+// re-copy. scripts/test/workflow-template.test.js fails on a copy that differs, and A7b
+// (scripts/check-workflow-contract.js) fails a Bash-capable spawn that does not carry them.
+const REPO_SAFETY = `SAFETY — you are running inside a live git repository.
+Work only in a directory you created yourself; never a shared or fixed path,
+because parallel agents pick the same obvious filename and clobber each other.
+Start every shell block that touches files with exactly this:
+
+    DIR="$(mktemp -d)" || exit 1
+    cd "\${DIR:?}" || exit 1
+
+- The \`|| exit 1\` on \`cd\` is load-bearing: a bare \`cd\` that fails does NOT stop
+  the script, and every relative path after it resolves against the repository.
+  The brace matters for the same reason it does below — \`cd ""\` returns 0 without
+  moving, so an unset \`DIR\` leaves you wherever you started and the \`|| exit 1\`
+  never fires. Every \`$DIR\` in this preamble is braced; do not copy one of these
+  lines on its own and drop it.
+- Name an ABSOLUTE path under \`$DIR\` in every destructive command, braced so an
+  unset variable refuses instead of expanding: \`rm -rf "\${DIR:?}/fixtures"\`,
+  never \`rm -rf fixtures\` and never a bare \`"$DIR/fixtures"\`. The \`cd\` above
+  is one control; a relative \`rm\` makes it the only one, so the single failure it
+  guards against becomes repository damage instead of a wasted command. An
+  absolute path trades the dependency on the working directory for a dependency on
+  \`$DIR\` being set, and that one bites: \`cd ""\` succeeds without moving, so an
+  unset \`DIR\` leaves you standing in the repository AND expands
+  \`"$DIR/fixtures"\` to \`/fixtures\`. The \`:?\` refuses both cases, unset and
+  empty alike, on bash 5.2 and zsh 5.9. It aborts the enclosing shell at top
+  level; inside \`( )\` or \`$( )\` it aborts only that subshell, so keep
+  destructive commands at top level. It checks non-emptiness, not absoluteness —
+  a relative \`TMPDIR\` makes \`mktemp -d\` return a relative path, which is no
+  worse than the unbraced form but is not protected by it either.
+- Before any \`git add\`, \`git commit\`, or a tool run with a write flag, assert —
+  braced for the same reason as the rule above, since OUTSIDE any repository
+  \`git rev-parse\` prints nothing and an unset \`DIR\` makes this compare "" to ""
+  and PASS:
+    [ "$(git rev-parse --show-toplevel)" = "\${DIR:?}" ] || exit 1
+- Never run \`git commit\`, \`git update-index\`, or \`git checkout --\` against the
+  repository itself, and never invoke a repo tool with a write flag there.`
+
+const WRITE_LOCATION = `WRITE LOCATION — write every file you produce, by any tool, under your own
+\`$DIR\`: the absolute path the preamble's \`mktemp -d\` created (\`echo "\${DIR:?}"\`
+prints it for a tool that is not the shell). Write nothing under the repository root.`
 
 // Adversarial verifiers per candidate finding. A finding SURVIVES only when a
 // majority of refuters independently CONFIRM it (refuted === false). Default-refuted
@@ -97,6 +144,7 @@ phase('Classify')
 let files = Array.isArray(args?.files) && args.files.length ? args.files : null
 if (!files) {
   const disc = await agent(
+    `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
     'Run `git diff --name-only HEAD` (fall back to `git diff --name-only` if HEAD is unborn) ' +
       'and return the changed, non-deleted file paths. Read-only — do not modify anything.',
     { label: 'discover-files', phase: 'Classify', agentType: 'Explore', schema: FILES_SCHEMA },
@@ -118,6 +166,7 @@ const perFile = await pipeline(
   // Classify — one advisory agent per file proposes candidate findings.
   (file) =>
     agent(
+      `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
       `Review the changed file "${file}". Read it and its diff (\`git diff -- ${file}\`). ` +
         `Report concrete candidate findings (bugs, security issues, correctness risks). ` +
         `Return file="${file}"; for each finding give a title, a severity ` +
@@ -134,6 +183,7 @@ const perFile = await pipeline(
         parallel(
           Array.from({ length: REFUTERS }, (_unused, i) => () =>
             agent(
+              `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
               `Adversarially verify this finding in "${file}" (refuter ${i + 1}/${REFUTERS}): ` +
                 `${f.title} — ${f.mechanism}. Evidence cited: ${f.evidence}. ` +
                 `Read the file yourself and, if needed, run \`git diff -- ${file}\` to see what changed. ` +
@@ -169,6 +219,7 @@ if (!surviving.length) {
 
 phase('Synthesize')
 const synth = await agent(
+  `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
   `Consolidate these verified review findings into a single markdown report grouped by ` +
     `severity (critical → info). Keep each entry's file:line evidence and mechanism. ` +
     `Findings JSON:\n${JSON.stringify(surviving, null, 2)}`,

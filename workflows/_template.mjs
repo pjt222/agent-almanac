@@ -167,13 +167,26 @@ Start every shell block that touches files with exactly this:
 // reaches a stage nobody classified as writing. The preamble above gives a shell
 // block a private directory; this line names where the stage's output belongs and
 // rules out the repository root, and it covers files produced by any tool, not
-// only by a shell block. Fill in the directory and append it to the prompt of
-// every Bash-capable stage — the read-only-by-intent ones included, since an
-// agent that never meant to write to the repository still inherits it as its
-// working directory:
+// only by a shell block. Append it, after REPO_SAFETY, to the prompt of every
+// Bash-capable stage — the read-only-by-intent ones included, since an agent that
+// never meant to write to the repository still inherits it as its working
+// directory.
 //
-// const WRITE_LOCATION = `Write every file you produce under <ABSOLUTE PATH>;
-// write nothing under the repository root.`;
+// It names the stage's OWN `$DIR`, the one the preamble's `mktemp -d` created,
+// not a path the caller passes in (#861): no interface change, and a location
+// nobody hands over cannot go stale. A stage that must write somewhere else as
+// well — an implementing stage producing artifacts — narrows this rather than
+// dropping it: "write only under <that directory> and your own $DIR; nowhere
+// else in the repository" (batch-generate-waves' Generate stage is the shape).
+//
+// Both constants are copied byte for byte into every shipped workflow, and
+// scripts/test/workflow-template.test.js fails when a copy differs from this one.
+// Edit them HERE, then re-copy; A7b (scripts/check-workflow-contract.js) fails a
+// Bash-capable spawn whose prompt does not start with REPO_SAFETY or does not
+// name a write location.
+const WRITE_LOCATION = `WRITE LOCATION — write every file you produce, by any tool, under your own
+\`$DIR\`: the absolute path the preamble's \`mktemp -d\` created (\`echo "\${DIR:?}"\`
+prints it for a tool that is not the shell). Write nothing under the repository root.`
 
 // A JSON Schema turns agent() into structured output: the subagent is forced to
 // call StructuredOutput and agent() returns the validated object (no parsing).
@@ -218,7 +231,7 @@ const results = await pipeline(
   // capability contract governs the agent type a stage DECLARES, not what a
   // Bash-capable agent does to the working tree (#493).
   (item) =>
-    agent(`${REPO_SAFETY}\n\nExamine "${item}" and report one finding.`, {
+    agent(`${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\nExamine "${item}" and report one finding.`, {
       label: `scan:${item}`,
       phase: 'Scan',
       agentType: 'Explore', // advisory: Read/Grep/Glob/Bash, no Write/Edit — honors the contract above
@@ -233,7 +246,8 @@ const results = await pipeline(
       // Every Bash-capable stage carries the preamble, not just the first —
       // a verifier that reproduces a finding is exactly the agent most likely
       // to build a fixture, which is how #493 happened.
-      `${REPO_SAFETY}\n\nIndependently verify this finding about "${item}": ${finding?.summary}. ` +
+      `${REPO_SAFETY}\n\n${WRITE_LOCATION}\n\n` +
+        `Independently verify this finding about "${item}": ${finding?.summary}. ` +
         `Default to confirmed=false unless you can reproduce it.`,
       { label: `verify:${item}`, phase: 'Verify', agentType: 'Explore', schema: VERDICT_SCHEMA },
     ).then((verdict) => ({ ...finding, verdict })),
