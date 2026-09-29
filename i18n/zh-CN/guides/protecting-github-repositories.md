@@ -7,8 +7,8 @@ teams: []
 skills: [assess-github-repo-security, harden-github-repo-security]
 locale: zh-CN
 source_locale: en
-source_commit: 6dc5eeaf9
-fence_basis_commit: 6dc5eeaf9
+source_commit: "d9f0886da"
+fence_basis_commit: "d9f0886da"
 translator: "(untranslated stub)"
 translation_date: "2026-09-02"
 ---
@@ -213,12 +213,16 @@ Apply top to bottom. The **essential** tier is no-regret — every bullet is eit
 - **Enable CodeQL "default setup"** (server-managed) rather than advanced setup, so no extra workflow YAML is committed into a repo that auto-commits. Two consequences to accept with it, both learned the expensive way (#643):
 
   - **Its runs cannot be retried.** Default setup produces `event: dynamic` runs, and `gh run rerun` refuses them — both bare and `--failed`. A transient GitHub-side failure (#640 recorded a 503) therefore pins a red check that no re-run can clear. The only ways forward are a new commit or, *reportedly*, a PR close/reopen — the new-commit path is measured (#640's merge commit healed on `main`); the close/reopen path is not, and whether a `reopened` event re-fires a dynamic analysis on an unchanged head SHA is unrecorded. Try it, but do not plan around it. A committed `codeql.yml` produces retriable runs and would remove this entirely; that is the trade.
-  - **`CodeQL: neutral` is not evidence that code scanning passed.** The aggregate check named `CodeQL` comes from the `github-advanced-security` app and reports `neutral` even while the per-language `Analyze (…)` runs — from the `github-actions` app — report `failure`. Anything asserting code-scanning health, human or automated, must read the `Analyze (…)` runs:
+  - **Code scanning reports as two kinds of check, and each has contradicted the other, in both directions** (#643, #905). There is one aggregate check named `CodeQL` and one `Analyze (<language>)` run per language. When `Analyze` runs are `failure` and `CodeQL` is `neutral` (#640 at `13f7bd5d3`, title `2 configurations not found`), the analysis jobs failed: `neutral` is not evidence that code scanning passed, and the `Analyze` log says whether GitHub's side failed. When every `Analyze` run is `success` and `CodeQL` is `failure` (#904 at `327ec481b`, title `3 new alerts including 2 high severity security vulnerabilities`), the analysis ran and found alerts in the diff: that is a finding, not a tool failure, and it must be fixed before merging. Code scanning is green only when both are `success`. Anything asserting code-scanning health, human or automated, must read both, and on a red aggregate the PR's open alerts:
 
     ```bash
     gh api --paginate repos/OWNER/REPO/commits/SHA/check-runs \
-      --jq '.check_runs[] | select(.name|test("Analyze")) | "\(.name)\t\(.conclusion)"'
+      --jq '.check_runs[] | select(.name == "CodeQL" or (.name|test("^Analyze "))) | "\(.name)\t\(.conclusion)\t\(.output.title // "")"'
+    gh api 'repos/OWNER/REPO/code-scanning/alerts?ref=refs/pull/<n>/head&state=open' \
+      --jq '.[] | "\(.number)\t\(.rule.security_severity_level // .rule.severity)\t\(.rule.id)\t\(.most_recent_instance.location.path)"'
     ```
+
+    An empty alerts list proves little by itself: the endpoint also answers `[]` for a PR number that does not exist, and fixed alerts move to `state=fixed`. Read it beside the `CodeQL` title.
 
   Neither is a reason against default setup. They are the reasons to know which one you chose.
 - **Set merge-method toggles to match policy** (e.g. merge-commits-only: `allow_squash_merge=false`, `allow_rebase_merge=false`) and auto-delete head branches on merge.
