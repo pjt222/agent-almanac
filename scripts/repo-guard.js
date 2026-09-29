@@ -434,6 +434,21 @@ if (before.rebaselineHistory !== undefined && !Array.isArray(before.rebaselineHi
   die(`snapshot has a malformed 'rebaselineHistory' (${typeof before.rebaselineHistory}) — ` +
     'refusing to compare against a record this tool did not write.');
 }
+// `headRef` is the same rule for the field #920 added (round 4, R4-4). A non-string crashed the
+// left-branch read below with the same uncaught TypeError, exit 1; an empty or bare-name string
+// named no ref, so the branch the snapshot was on read as deleted, in silence. This build writes
+// a full ref or null (a detached HEAD), and an older one writes no field at all; anything else is
+// a record this tool did not write. `refs/`, not `refs/heads/`: a HEAD made to point at a tag by
+// plumbing records `refs/tags/<t>`, which is a real capture.
+if (before.headRef !== undefined && before.headRef !== null) {
+  const malformedHeadRef = typeof before.headRef !== 'string' ? typeof before.headRef
+    : !before.headRef.startsWith('refs/') ? JSON.stringify(before.headRef)
+      : null;
+  if (malformedHeadRef !== null) {
+    die(`snapshot has a malformed 'headRef' (${malformedHeadRef}) — ` +
+      'refusing to compare against a record this tool did not write.');
+  }
+}
 
 const after = captureState();
 let changed = false;

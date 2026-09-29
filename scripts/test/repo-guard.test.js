@@ -1244,6 +1244,31 @@ test('a malformed rebaselineHistory exits 2, not 1 — uncertainty is not a verd
   }
 });
 
+test('a malformed headRef exits 2 on verify and rebaseline, naming the field (#920 R4-4)', async (t) => {
+  // A non-string crashed the left-branch read with a TypeError, exit 1, "the repository changed",
+  // over a repository nothing had touched; an empty or bare-name string read the snapshot's branch
+  // as deleted in silence. The repository below is unchanged, so only the field can decide the exit.
+  const dir = makeRepo(t);
+  guard(dir, ['snapshot']);
+  const pristine = readFileSync(snapshotPath(dir), 'utf8');
+  assert.equal(JSON.parse(pristine).headRef, 'refs/heads/main', 'premise: this build records it');
+  assert.equal(guard(dir, ['verify']).status, 0, 'premise: unchanged with the recorded headRef');
+
+  for (const corrupt of [5, true, {}, ['refs/heads/main'], '', 'main']) {
+    const snap = JSON.parse(pristine);
+    snap.headRef = corrupt;
+    writeFileSync(snapshotPath(dir), JSON.stringify(snap), 'utf8');
+
+    for (const command of ['verify', 'rebaseline']) {
+      const r = guard(dir, [command]);
+      // No stderr in the message: the asserted property is the absence of a crash, and a quoted
+      // stack trace would make a kill of this test read as a crash (see mutation-check.js).
+      assert.equal(r.status, 2, `${command} with headRef ${JSON.stringify(corrupt)} must read as uncertainty`);
+      assert.match(r.stderr, /malformed 'headRef'/, `${command} with headRef ${JSON.stringify(corrupt)}`);
+    }
+  }
+});
+
 test('a replaced history is reported as NOT an ancestor', async (t) => {
   // The reset advice is actively destructive here, so the message says so.
   const dir = makeRepo(t);
