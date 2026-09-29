@@ -316,7 +316,7 @@ tools:
     language: bash
     status: active
     superseded_by: null
-    description: "Runs a plan of mutants through scripts/mutation-check.js under ONE test command and prints a verdict table; exit 1 when any row is not a clean kill, exit 2 when a row is malformed or its needle carries the :: separator"
+    description: "Runs a plan of mutants through scripts/mutation-check.js under ONE test command and prints a verdict table; exit 1 when any row is not a clean kill, exit 2 before any mutant is measured when a row is malformed or its <old>::<new> field does not hold :: exactly once"
     need: "Measuring a TABLE of mutants for a review round or a PR body, every row under the command CI runs rather than under whatever was convenient per row."
     not_for: "scripts/mutation-check.js itself, which proves ONE line and is the right unit for that; a merge gate — this mutates the working tree, takes minutes, and needs a green baseline"
     tag: measurement
