@@ -323,7 +323,7 @@ tools:
     invoke: "bash tools/mutation-envelope.sh --test 'npm run test:scripts' --plan tests/results/2026-09-21-git-files-enumeration/mutation-plan.tsv"
     verify: "bash tools/mutation-envelope.sh --verify"
     verify_in_ci: false
-    verify_skip_reason: "the self-test runs a full mutation cycle (baseline plus two mutants) in a throwaway repository, which takes minutes and needs node_modules symlinked from the checkout"
+    verify_skip_reason: "the self-test runs a full mutation cycle (baseline plus two mutants) in a throwaway repository and needs node_modules symlinked from the checkout"
     deps: "node and git; calls scripts/mutation-check.js by path, not through npm"
     promoted_from: "the #874 review rounds, where the same loop was typed four times as a heredoc (mutants-r2, -r3, -r4, -final) and two published counts turned out to have been taken under a narrower test command than the table claimed"
     issue: "874"
