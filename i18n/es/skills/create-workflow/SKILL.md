@@ -21,7 +21,6 @@ metadata:
   locale: es
   source_locale: en
   source_commit: "ef9445268"
-  fence_basis_commit: "ef9445268"
   translator: "(untranslated stub)"
   translation_date: "2026-06-16"
 ---
@@ -202,15 +201,19 @@ The advisory/implementing contract in Step 7 governs the agent type a stage
 tree, and a "read-only" review fleet is exactly where that gap bites: every agent
 inherits the repository as its default working directory.
 
-**Name a write location in every prompt** — one sentence per `Bash`-capable stage,
-and the only control that reaches a stage nobody classified as writing. Name an
-absolute path and rule out the repository root (`Write every file you produce
-under /abs/path; write nothing under the repository root`), including in the
-read-only-by-intent stages: those are exactly the ones that pollute the repository
-by inherited working directory alone, with no collision, no `git add` and no
-intent to touch it. This is not the preamble's `mktemp -d` restated — that gives a
-shell block a private directory, while this covers every file the agent produces
-by any tool, and rules out the repository root.
+**Name a write location in every prompt** — one line per `Bash`-capable stage,
+after the preamble, and the only control that reaches a stage nobody classified as
+writing. Include the read-only-by-intent stages: those are exactly the ones that
+pollute the repository by inherited working directory alone, with no collision, no
+`git add` and no intent to touch it. Copy the template's `WRITE_LOCATION`: it names
+the stage's own `$DIR` (the directory the preamble's `mktemp -d` created), covers
+every file the agent produces by any tool, and rules out the repository root. It
+also tells the agent to print that path and reuse it literally, because nothing but
+files carries over between an agent's tool calls — each Bash call may start again in
+the launch directory with `DIR` unset. A stage that must also write elsewhere
+narrows the line as a `<PREFIX>_WRITE_LOCATION` constant ("write only under <that
+directory> and your own `$DIR`; nowhere else in the repository") rather than
+dropping it. A7b looks for the identifier, so a sentence typed in its place fails.
 
 **Bracket the run with `repo-guard`** — this is the mechanical control. A workflow
 body cannot run shell (no filesystem or Node API), so this is the *invoker's*
