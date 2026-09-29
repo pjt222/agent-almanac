@@ -151,14 +151,22 @@ class _Positions(HTMLParser):
         "thead tr ul".split()
     )
 
-    # Elements whose content this parser delivers RAW (its own CDATA_CONTENT_ELEMENTS, so the set
-    # tracks the Python it runs on) AND which a renderer never shows. Their content must not join
-    # the surrounding run: `acme_<script>x</script>secret` renders as `acme_secret`, and joining
-    # made the run `acme_xsecret`, a false CLEAN (#910). The content gets no position of its own,
-    # for the reason a decl gets none: it arrives un-decoded, so its value is a substring of the
-    # text the whole-text tier already checked. `xmp` is the exception, because it DOES render
-    # its content (as a block), so it stays in the run as it always did.
-    NOT_RENDERED = frozenset(HTMLParser.CDATA_CONTENT_ELEMENTS) - {"xmp"}
+    # The raw-text elements: their content is delivered undecoded and unparsed. Fixed here rather
+    # than inherited, because the stdlib's list depends on the interpreter's PATCH level: 3.12.13
+    # and later (and distro backports such as Ubuntu's 3.12.3) list all six, while 3.12.12 and
+    # 3.11 list only `script style`. Inherited, `<iframe>` content joined the run on the older
+    # ones, a false CLEAN there only, and the `xmp` arm below could not fail on them. HTMLParser
+    # reads this attribute through `self`, so the override takes effect on every interpreter
+    # (measured on 3.11.14, 3.12.3-ubuntu, 3.12.12 and 3.13.12).
+    CDATA_CONTENT_ELEMENTS = ("script", "style", "xmp", "iframe", "noembed", "noframes")
+
+    # The raw-text elements a renderer never shows. Their content must not join the surrounding
+    # run: `acme_<script>x</script>secret` renders as `acme_secret`, and joining made the run
+    # `acme_xsecret`, a false CLEAN (#910). The content gets no position of its own, for the
+    # reason a decl gets none: it arrives un-decoded, so its value is a substring of the text the
+    # whole-text tier already checked. `xmp` is the exception, because it DOES render its content
+    # (as a block), so it stays in the run as it always did.
+    NOT_RENDERED = frozenset(CDATA_CONTENT_ELEMENTS) - {"xmp"}
 
     def __init__(self, join_cdata: bool = False) -> None:
         super().__init__(convert_charrefs=True)
@@ -706,6 +714,12 @@ def _verify() -> int:
         ("<p>acme_<script>x</script>secret</p>", "text[1]", "SCRIPT content is not rendered"),
         ("<p>acme_<style>x</style>secret</p>", "text[1]", "STYLE content is not rendered"),
         ("<svg><text>acme_<script>x</script>secret</text></svg>", "text[1]", "SCRIPT inside SVG"),
+        # Raw text on EVERY interpreter, because the class fixes its own CDATA_CONTENT_ELEMENTS;
+        # inherited, these three joined the run on 3.11 and 3.12.12 (#910 round 1, S4).
+        ("<p>acme_<iframe>x</iframe>secret</p>", "text[1]", "IFRAME content is not rendered"),
+        ("<p>acme_<noembed>x</noembed>secret</p>", "text[1]", "NOEMBED content is not rendered"),
+        ("<p>acme_<noframes>x</noframes>secret</p>", "text[1]", "NOFRAMES content is not rendered"),
+        # ...and XMP is raw text on every interpreter too, so this row can fail on each of them.
         ("<xmp>acme_</xmp>secret", "text[1]", "XMP renders its content, so it stays in the run"),
         # In HTML content a CDATA section is a bogus comment, so a join-only reading makes these
         # CLEAN. Caught on origin/main; the next group is why namespace is not tracked at all.
