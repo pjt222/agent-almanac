@@ -46,13 +46,16 @@
  *
  * ## Which field holds the requests
  *
- * `moduleRequests` (objects with a `specifier`) on 24.20.0 and 25.9.0; absent on 22.16.0, which has
- * only `dependencySpecifiers` (strings). `dependencySpecifiers` is present on all five versions
- * above, with no warning. So the walk reads `moduleRequests` where it exists and falls back.
- * The fallback is the documented-deprecated field: the Node docs mark `dependencySpecifiers`
- * "Stability: 0 - Deprecated" and give `moduleRequests` "Added in: v24.4.0, v22.20.0", so by the
- * docs (not measured) the fallback is reached only on 22.12 to 22.19. Not measured: 22.12.0 (the `engines` floor), any 23.x, and any 22.x or 24.x other than those
- * listed.
+ * `moduleRequests` (objects with a `specifier`) where it exists; otherwise only
+ * `dependencySpecifiers` (strings), which every version measured has, with no warning. So the walk
+ * reads `moduleRequests` and falls back. The fallback is the documented-deprecated field: the Node
+ * docs mark `dependencySpecifiers` "Stability: 0 - Deprecated" and give `moduleRequests` "Added
+ * in: v24.4.0, v22.20.0". The fallback is therefore reached on every release inside `engines` that
+ * predates `moduleRequests`: 22.12 to 22.19, all of 23.x, and 24.0 to 24.3. Measured without
+ * `moduleRequests`: 22.16.0, 22.19.0, 23.0.0, 23.11.1, 24.0.0, 24.3.0. Measured with it: 22.20.0,
+ * 24.4.0, 24.20.0, 25.9.0. So the fallback can go only once `engines` excludes all of those, that
+ * is, 22.20 and up on 22.x, no 23.x, and 24.4 and up on 24.x (#918 round 2, N1). Not measured:
+ * 22.12.0 (the `engines` floor), the other 22.x, 23.x and 24.x releases.
  */
 import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { dirname, extname, relative, resolve as resolvePath } from 'node:path';
