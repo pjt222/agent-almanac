@@ -55,8 +55,10 @@
 # Exit 0 when every row is `MUTANT KILLED`. Exit 1 when any row survives, is SUSPECT, INVALID or
 # INCONCLUSIVE — read that row's log before quoting anything. Exit 2 when the envelope itself
 # could not run: no plan, an unreadable plan, a plan with no rows, or any row the plan check
-# refuses (a missing field, no `::`, or `::` more than once). Exit 2 is always reached before
-# the first mutant is measured.
+# refuses (a missing field, no `::`, or `::` more than once). Each of those is reached before
+# the first mutant is measured. The one exit 2 that comes after measuring is a run that measured
+# a different number of rows than the plan check counted: the run did not read the plan the check
+# read (a checker that reads its stdin drains the rows after its own), so do not quote the table.
 set -uo pipefail
 
 # Resolved once, absolutely, and used for both the self-test's fixture and the checker call: an
@@ -143,6 +145,8 @@ const first = !fs.existsSync(calls);
 fs.appendFileSync(calls, argv[argv.indexOf('--replace') + 1] + '\n');
 // On its first call, append a row the plan check refuses to the plan file it is told about.
 if (first && process.env.STUB_APPEND_TO) fs.appendFileSync(process.env.STUB_APPEND_TO, 'late\tsrc.js\ta::b::c\n');
+// On its first call, read stdin to the end, as a checker that prompted for input would.
+if (first && process.env.STUB_READ_STDIN) fs.readFileSync(0);
 console.log('MUTANT KILLED by 1 failing test(s)');
 JS
   ARMS_FAILED=0
@@ -217,6 +221,13 @@ JS
   unset STUB_APPEND_TO
   # A plan path that passes `-r` but cannot be read as a file.
   arm refuse-unreadable-plan "$P" 2 0 "cannot read plan"
+  # The run loop's here-string is the checker's stdin. A checker that reads stdin drains the rows
+  # not yet measured, and the run then reported `1 row(s), 0 not a clean kill` with exit 0 for a
+  # three-row plan. The row-count check after the run turns that into exit 2.
+  { row drain-one src.js 'x::y'; echo; row drain-two src.js 'p::q'; echo; row drain-three src.js 'm::n'; echo; } > "$P/three-good.tsv"
+  export STUB_READ_STDIN=1
+  arm refuse-plan-drained-by-checker "$P/three-good.tsv" 2 1 "measured 1 of 3 planned row(s)"
+  unset STUB_READ_STDIN
 
   if [ "$ARMS_FAILED" -ne 0 ]; then
     echo "mutation-envelope --verify: FAILED — $ARMS_FAILED plan-check arm(s) above" >&2
@@ -250,7 +261,6 @@ JS
 JSON
   git add -A >/dev/null 2>&1
   git commit -qm fixture >/dev/null 2>&1
-
   printf 'kill\tscripts/lib/subject.js\texport function covered(n) { return n > 10; }::export function covered(n) { return n >= 10; }\n' > plan.txt
   printf 'survive\tscripts/lib/subject.js\texport function uncovered(n) { return n > 10; }::export function uncovered(n) { return n >= 10; }\n' >> plan.txt
 
@@ -332,5 +342,9 @@ done <<< "$PLAN_TEXT"
 
 echo
 echo "mutation-envelope: $ROWS row(s), $BAD not a clean kill; logs in ${OUT:?}"
+# Both loops read one string, but the run loop's here-string is also the checker's stdin, so a
+# checker that reads stdin ends the run early, and a short table would otherwise exit 0. This
+# detects a run that read a different plan after the fact; it does not save the time spent.
+[ "$ROWS" -eq "$PLANNED" ] || { echo "mutation-envelope: measured $ROWS of $PLANNED planned row(s); the run did not read the plan the check counted, so do not quote this table" >&2; exit 2; }
 [ "$BAD" -eq 0 ] || { echo "Read every row above that is not 'MUTANT KILLED' before quoting this table." >&2; exit 1; }
 exit 0
