@@ -11,14 +11,14 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
   tags: swarm, parallel, hypothesis-generation, multi-agent, brainstorming, convergence
   locale: de
   source_locale: en
-  source_commit: 11edabf5
+  source_commit: be74aff5
   fence_basis_commit: 11edabf5
   translator: "Claude + human review"
   translation_date: "2026-05-03"
@@ -55,6 +55,7 @@ Einen Problem-Brief schreiben den jeder Agent verstehen kann unabhaengig von Dom
 3. **Bekannte Beschraenkungen**: Was du bereits weisst, was bereits versucht wurde
 4. **Erfolgskriterien**: Wie eine korrekte Hypothese zu erkennen ist
 5. **Ausgabe-Template**: Das exakte Format in dem Antworten gewuenscht sind
+6. **Quellen fuer jede Behauptung**: Fuer jede Tatsache angeben, ob sie aus dem Issue, deinem Plan, deiner eigenen Lektuere oder den Notizen einer frueheren Sitzung stammt, und einen Endzustand, den du erst herstellen willst, als beabsichtigt kennzeichnen
 
 ```markdown
 ## Brief: [Problem Title]
@@ -108,25 +109,9 @@ Agents zu Wellen zuweisen. Anfangs fuer 4 Wellen planen — moeglicherweise sind
 
 Jede Welle als parallele Agents starten. `sonnet`-Modell fuer Kosteneffizienz nutzen (der Wert kommt von Perspektivenvielfalt, nicht individueller Tiefe).
 
-#### Option A: TeamCreate (empfohlen fuer volle Entfesselung)
+#### Option A: Spawning ueber das Agent-Tool (empfohlen)
 
-Claude Codes `TeamCreate`-Tool nutzen um ein koordiniertes Team mit Aufgaben-Tracking aufzusetzen. TeamCreate ist ein deferred Tool — zuerst via `ToolSearch("select:TeamCreate")` abrufen.
-
-1. Das Team erstellen:
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. Eine Aufgabe pro Agent mit `TaskCreate` erstellen mit dem Brief und domaenen-spezifischer Rahmung
-3. Jeden Agent als Teammate spawnen mit dem `Agent`-Tool mit `team_name: "unleash-wave-1"` und `subagent_type` auf den Agent-Typ gesetzt (z.B. `kabalist`, `geometrist`)
-4. Aufgaben den Teammates via `TaskUpdate` mit `owner` zuweisen
-5. Fortschritt via `TaskList` ueberwachen — Teammates markieren Aufgaben als abgeschlossen wenn sie fertig sind
-6. Zwischen Wellen das aktuelle Team via `SendMessage({ type: "shutdown_request" })` herunterfahren und das naechste Team mit dem aktualisierten Brief erstellen (Schritt 4)
-
-Das gibt eingebaute Koordination: eine geteilte Aufgabenliste verfolgt welche Agents geantwortet haben, Teammates koennen fuer Follow-ups bemessagt werden und der Lead verwaltet Wellen-Uebergaenge durch Aufgaben-Zuweisung.
-
-#### Option B: Rohes Agent-Spawning (einfacher, fuer kleinere Laeufe)
-
-Fuer jeden Agent in der Welle ihn mit dem Brief und einer domaenen-spezifischen Rahmung spawnen:
+Das ist der Weg fuer gewoehnliche interaktive Sitzungen. Jeden Agent der Welle als Subagent ueber das **Agent-Tool** spawnen (`subagent_type` auf den Agent-Typ gesetzt, z.B. `kabalist`, `geometrist`), mit dem Brief und einer domaenen-spezifischen Rahmung:
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -137,16 +122,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-Alle Agents in einer Welle gleichzeitig mit dem Agent-Tool mit `run_in_background: true` starten. Auf die Welle zum Abschluss warten bevor die naechste Welle gestartet wird (um Inter-Wellen-Wissens-Injektion in Schritt 4 zu ermoeglichen).
+Alle Agents einer Welle gleichzeitig mit dem Agent-Tool und `run_in_background: true` starten und sie mit `SendMessage` im einzigen impliziten Team der Sitzung koordinieren. Auf den Abschluss der Welle warten bevor die naechste gestartet wird (um Inter-Wellen-Wissens-Injektion in Schritt 4 zu ermoeglichen).
+
+#### Option B: TeamCreate (nur FleetView / Cloud)
+
+`TeamCreate` ist **veraltet und in gewoehnlichen interaktiven Sitzungen nicht verfuegbar** — `ToolSearch("select:TeamCreate")` liefert dort nichts, und `team_name` wird ignoriert (die Sitzung hat ein einziges implizites Team). Wo es *doch* auftaucht (FleetView / Cloud), fuegt es ein **benanntes Team-Objekt** mit Aufgaben-Eigentum pro Teammate und einem Shutdown-Lebenszyklus hinzu (die `Task*`-Tools selbst funktionieren auch in interaktiven Sitzungen — nur die Team-Zuordnung nicht):
+
+1. Das Team erstellen: `TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. Eine Aufgabe pro Agent mit `TaskCreate` erstellen (Brief + domaenen-spezifische Rahmung)
+3. Jeden Agent als Teammate ueber das `Agent`-Tool spawnen, mit `subagent_type` auf den Agent-Typ gesetzt
+4. Aufgaben via `TaskUpdate` mit `owner` zuweisen; mit `TaskList` ueberwachen
+5. Zwischen Wellen das Team via `SendMessage({ type: "shutdown_request" })` herunterfahren und das naechste mit dem aktualisierten Brief starten (Schritt 4)
+
+Eingebaute Team-Koordination — Eigentum und Lebenszyklus pro Teammate, mit Status der ueber Wellen hinweg erhalten bleibt — aber die Team-Zuordnung existiert nur dort, wo TeamCreate auftaucht. In interaktiven Sitzungen Option A nutzen.
 
 #### Zwischen Optionen waehlen
 
-| | TeamCreate | Rohes Agent |
+| | Agent-Tool (Option A) | TeamCreate (Option B) |
 |---|---|---|
-| Am besten fuer | Tier 3 volle Entfesselung (40+ Agents) | Tier 2 Panel (5-10 Agents) |
-| Koordination | Aufgabenliste, Messaging, Eigentum | Fire-and-Forget, manuelle Sammlung |
-| Inter-Wellen-Handoff | Aufgaben-Status uebertraegt sich | Muss manuell verfolgt werden |
-| Overhead | Hoeher (Team-Setup pro Welle) | Niedriger (einzelner Tool-Call pro Agent) |
+| Verfuegbarkeit | Jede Sitzung (primaer) | Nur FleetView / Cloud (eingeschraenkt) |
+| Am besten fuer | Alle interaktiven Entfesselungen | Cloud-Laeufe die eine geteilte Aufgabenliste wollen |
+| Koordination | SendMessage, manuelle Sammlung | Aufgabenliste, Messaging, Eigentum |
+| Inter-Wellen-Handoff | Ueber das Brief-Update verfolgen | Aufgaben-Status uebertraegt sich |
 
 **Erwartet:** Jede Welle gibt ~10 strukturierte Antworten innerhalb 2-5 Minuten zurueck. Agents die nicht antworten oder off-format-Ausgabe zurueckgeben werden vermerkt aber blockieren die Pipeline nicht.
 
@@ -204,7 +201,7 @@ Die Top-Hypothese gegen ein Null-Modell testen um sicherzustellen dass die Konve
 
 **Bevorzugtes Timing: Welle 3, nicht Post-Synthese.** `advocatus-diaboli` in Welle 3 einzubeziehen (neben der Inter-Wellen-Wissens-Injektion) ist effektiver als ein eigenstaendiger adversarialer Pass nach Abschluss aller Wellen. Frueher Herausforderung erlaubt Wellen 4+ gegen die Kritik zu verfeinern statt auf einen unherausgeforderten Konsens zu haeufen.
 
-Wenn der adversariale Pass bereits Teil von Welle 3 war, wird dieser Schritt zu einer finalen Pruefung. Falls nicht (z.B. alle Wellen ohne ihn gelaufen), `advocatus-diaboli` (oder `senior-researcher`) jetzt spawnen. Fuer einen strukturierten Pass `TeamCreate` nutzen um ein Review-Team aufzustellen mit beiden Agents parallel gegen den Konsens arbeitend:
+Wenn der adversariale Pass bereits Teil von Welle 3 war, wird dieser Schritt zu einer finalen Pruefung. Falls nicht (z.B. alle Wellen ohne ihn gelaufen), `advocatus-diaboli` (oder `senior-researcher`) jetzt spawnen. Fuer einen strukturierten Pass beide Agents als parallele Subagents ueber das Agent-Tool spawnen und sie mit `SendMessage` gegen den Konsens koordinieren:
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -226,7 +223,7 @@ Entfesselung findet Probleme; Teams loesen sie. Verifizierte Hypothesen-Familien
 
 1. Ein GitHub-Issue pro verifizierter Hypothesen-Familie erstellen (den `create-github-issues`-Skill nutzen)
 2. Issues nach Konvergenz-Staerke und Impact priorisieren
-3. Fuer jedes Issue ein kleines Team via `TeamCreate` zusammenstellen:
+3. Fuer jedes Issue ein kleines Team zusammenstellen — eine passende Definition lesen und ihre Mitglieder als Subagents ueber das Agent-Tool (`subagent_type`) spawnen, koordiniert mit `SendMessage`:
    - Wenn eine vordefinierte Team-Definition in `teams/` zur Problem-Domaene passt, sie nutzen
    - Wenn kein passendes Team existiert, auf `opaque-team` defaulten (N Shapeshifters mit adaptiver Rollen-Zuweisung) — es behandelt unbekannte Problem-Formen ohne eine custom Komposition zu erfordern
    - Mindestens einen nicht-technischen Agent einbeziehen (z.B. `advocatus-diaboli`, `contemplative`) — sie fangen Implementations-Risiken die technische Agents verfehlen
@@ -249,6 +246,7 @@ Entfesselung findet Probleme; Teams loesen sie. Verifizierte Hypothesen-Familien
 ## Haeufige Stolperfallen
 
 - **Zu wenige Beispiele im Brief**: Agents brauchen 5+ Beispiele um Muster zu finden. Mit 3 Beispielen greifen die meisten Agents auf Oberflaechen-Muster-Matching oder Template-Echo zurueck (den Brief in unterschiedlichen Worten zurueckwiederholen).
+- **Quellen zu einer Stimme verschmelzen**: Ein Brief, der das Issue, deinen Plan, deine eigene Lektuere und die Notizen einer frueheren Sitzung vermischt, verliert die Naehte zwischen ihnen. Ein beabsichtigter Endzustand erreicht die Agents dann als "das Issue sagt…", und sie verwenden ihre Muehe darauf, eine Tatsache zu suchen, die nicht existiert. Jede Behauptung zuordnen (Schritt 1, Element 6). Dies wurde fuer eine Peer-Sitzung festgehalten, nicht fuer eine Entfesselungs-Welle, in `docs/investigations/lead-support-coordination-2026-09-15.md`.
 - **Kein Verifikations-Pfad**: Ohne einen Weg Hypothesen zu testen kann man Signal nicht von Rauschen unterscheiden. Konvergenz allein ist notwendig aber nicht ausreichend.
 - **Metaphorische Antworten**: Domaenen-Spezialisten-Agents (mystic, shaman, kabalist) koennen mit reichem metaphorischem Reasoning antworten das schwer programmatisch zu parsen ist. "Druecke deine Hypothese als testbare Formel oder Algorithmus aus" im Ausgabe-Template einbeziehen.
 - **Wiederentdeckung ueber Wellen**: Ohne Inter-Wellen-Wissens-Injektion entdecken Wellen 3-7 unabhaengig wieder was Wellen 1-2 bereits gefunden haben. Den Brief immer zwischen Wellen aktualisieren.

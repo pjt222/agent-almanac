@@ -2,7 +2,7 @@
 name: unleash-the-agents
 locale: caveman-ultra
 source_locale: en
-source_commit: 82c77053
+source_commit: be74aff5
 fence_basis_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-05-03"
@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
@@ -55,6 +55,7 @@ Write brief any agent can understand regardless of domain. Include:
 3. **Constraints**: Known + tried
 4. **Success**: Recognize correct hypothesis
 5. **Out template**: Exact format
+6. **Sources per claim**: Each fact → from issue|plan|own reading|prior session notes; end state you intend to create → mark as intended
 
 ```markdown
 ## Brief: [Problem Title]
@@ -108,25 +109,9 @@ Assign agents to waves. Plan 4 waves initially → may not need all (early stop 
 
 Launch each wave parallel. `sonnet` model → cost efficiency (value from perspective diversity, not depth).
 
-#### Option A: TeamCreate (recommended for full unleash)
+#### Option A: Agent tool spawning (recommended)
 
-`TeamCreate` for coordinated team w/ task tracking. Deferred tool → fetch via `ToolSearch("select:TeamCreate")`.
-
-1. Create team:
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. `TaskCreate` per agent → brief + domain-specific framing
-3. Spawn each agent as teammate via `Agent` w/ `team_name: "unleash-wave-1"` + `subagent_type` (e.g., `kabalist`, `geometrist`)
-4. Assign tasks via `TaskUpdate` w/ `owner`
-5. Monitor via `TaskList` → teammates mark completed
-6. Between waves → shut down via `SendMessage({ type: "shutdown_request" })` + create next w/ updated brief (Step 4)
-
-Built-in coord: shared task list tracks responses, teammates messaged for follow-up, lead manages wave transitions.
-
-#### Option B: Raw Agent spawning (simpler, smaller runs)
-
-Per agent in wave, spawn w/ brief + domain framing:
+Path for ordinary interactive sessions. Per agent in wave → spawn as subagent via **Agent tool** (`subagent_type` = agent's type, e.g. `kabalist`, `geometrist`) w/ brief + domain framing:
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -137,16 +122,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-Launch all in wave simultaneous via Agent w/ `run_in_background: true`. Wait for wave complete before next (inter-wave knowledge injection Step 4).
+Launch all in wave simultaneous via Agent tool w/ `run_in_background: true`, coord via `SendMessage` under session's single implicit team. Wait for wave complete before next (inter-wave knowledge injection Step 4).
+
+#### Option B: TeamCreate (FleetView / cloud only)
+
+`TeamCreate` **deprecated + gated out of ordinary interactive sessions** — `ToolSearch("select:TeamCreate")` returns nothing there, `team_name` ignored (session has single implicit team). Where it *does* surface (FleetView / cloud) → adds **named team object** w/ per-teammate task ownership + shutdown lifecycle (`Task*` tools themselves also work interactive — only team scoping doesn't):
+
+1. Create team: `TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. `TaskCreate` per agent (brief + domain framing)
+3. Spawn each agent as teammate via `Agent` w/ `subagent_type` = agent's type
+4. Assign via `TaskUpdate` w/ `owner`; monitor via `TaskList`
+5. Between waves → shut down via `SendMessage({ type: "shutdown_request" })` + start next w/ updated brief (Step 4)
+
+Built-in team coord — per-teammate ownership + lifecycle, status carried across waves — but team scoping only where TeamCreate surfaces. Interactive → Option A.
 
 #### Choosing options
 
-| | TeamCreate | Raw Agent |
+| | Agent tool (Option A) | TeamCreate (Option B) |
 |---|---|---|
-| Best for | Tier 3 full unleash (40+ agents) | Tier 2 panel (5-10 agents) |
-| Coordination | Task list, messaging, ownership | Fire-and-forget, manual collection |
-| Inter-wave handoff | Task status carries over | Must track manually |
-| Overhead | Higher (team setup per wave) | Lower (single tool call per agent) |
+| Availability | Every session (primary) | FleetView / cloud only (gated) |
+| Best for | All interactive unleashes | Cloud runs wanting shared task list |
+| Coordination | SendMessage, manual collection | Task list, messaging, ownership |
+| Inter-wave handoff | Track via brief update | Task status carries over |
 
 **Got:** Each wave returns ~10 structured responses in 2-5 min. Failed|off-format noted but no block.
 
@@ -204,7 +201,7 @@ Test top hypothesis vs null model → ensure convergence meaningful, not trainin
 
 **Preferred timing: Wave 3, not post-synthesis.** `advocatus-diaboli` in Wave 3 (alongside inter-wave injection) > standalone after all waves. Early challenge → Waves 4+ refine vs critique not pile on unchallenged consensus.
 
-If adversarial part of Wave 3, this = final check. If not (ran all waves w/o it) → spawn `advocatus-diaboli` (or `senior-researcher`) now. Structured pass → `TeamCreate` for review team w/ both parallel vs consensus:
+If adversarial part of Wave 3, this = final check. If not (ran all waves w/o it) → spawn `advocatus-diaboli` (or `senior-researcher`) now. Structured pass → spawn both as parallel subagents via Agent tool, coord via `SendMessage` vs consensus:
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -226,7 +223,7 @@ Unleash finds problems; teams solve. Convert verified families → actionable is
 
 1. GitHub issue per verified family (use `create-github-issues`)
 2. Prioritize by convergence strength + impact
-3. Per issue, assemble small team via `TeamCreate`:
+3. Per issue, assemble small team → read matching def + spawn members as subagents via Agent tool (`subagent_type`), coord via `SendMessage`:
    - Predefined team in `teams/` matches → use it
    - No fit → default `opaque-team` (N shapeshifters, adaptive role) → handles unknown shapes w/o custom comp
    - Include 1+ non-tech agent (`advocatus-diaboli`, `contemplative`) → catches implementation risks tech misses
@@ -249,6 +246,7 @@ Unleash finds problems; teams solve. Convert verified families → actionable is
 ## Traps
 
 - **Too few examples**: Agents need 5+. W/ 3 → surface pattern matching|template echo (brief back in different words).
+- **Merge sources into one voice**: Brief blending issue, plan, own reading, prior session notes → loses seams. Intended end state reaches agents as "issue says…" → effort spent hunting nonexistent fact. Attribute every claim (Step 1, element 6). Recorded for peer session, not unleash wave, in `docs/investigations/lead-support-coordination-2026-09-15.md`.
 - **No verify path**: W/o test, can't distinguish signal from noise. Convergence necessary but not sufficient.
 - **Metaphorical responses**: Domain specialists (mystic, shaman, kabalist) → rich metaphor hard to parse programmatically. Include "Express as testable formula or algorithm" in template.
 - **Rediscovery across waves**: W/o inter-wave injection → waves 3-7 rediscover what 1-2 found. Update brief between.

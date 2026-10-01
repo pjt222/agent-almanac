@@ -2,7 +2,7 @@
 name: unleash-the-agents
 locale: wenyan-lite
 source_locale: en
-source_commit: 82c77053
+source_commit: be74aff5
 fence_basis_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-05-03"
@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
@@ -55,6 +55,7 @@ metadata:
 3. **已知約束**：已知者為何、已嘗試者為何
 4. **成功準則**：如何辨識正確假設
 5. **輸出範本**：欲收回應之確切格式
+6. **每一主張皆注出處**：言明每一事實出自 issue、己之計畫、己之閱讀抑或前次會話之筆記,並將己意欲造成之終態標為「意欲」
 
 ```markdown
 ## Brief: [Problem Title]
@@ -108,25 +109,9 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 將每波作為平行代理發動。用 `sonnet` 模型以節省成本（價值來自視角多元,非個別深度）。
 
-#### 選項 A：TeamCreate（推薦用於完整 unleash）
+#### 選項 A：以 Agent 工具召喚（推薦）
 
-用 Claude Code 之 `TeamCreate` 工具設置具任務追蹤之協調團隊。TeamCreate 為延遲工具——須先經 `ToolSearch("select:TeamCreate")` 取得。
-
-1. 建立團隊：
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. 用 `TaskCreate` 為每代理建立任務,含簡報與領域特定框架
-3. 以 `Agent` 工具召喚每代理為隊員,`team_name: "unleash-wave-1"`,`subagent_type` 設為該代理類型（如 `kabalist`、`geometrist`）
-4. 經 `TaskUpdate` 含 `owner` 將任務指派予隊員
-5. 經 `TaskList` 監看進度——隊員完成時將任務標為已完成
-6. 波次間,經 `SendMessage({ type: "shutdown_request" })` 關閉當前團隊,並以更新後之簡報建立次團隊（步驟四）
-
-此提供內建協調：共享任務清單追蹤哪些代理已回應,隊員可被傳訊以追問,主導者經任務指派管理波次轉換。
-
-#### 選項 B：原始 Agent 召喚（更簡單,適小規模）
-
-對波中每代理,以簡報與領域特定框架召喚之：
+此為尋常互動會話之路。對波中每代理,經 **Agent 工具**召喚之為子代理（`subagent_type` 設為該代理類型,如 `kabalist`、`geometrist`）,附簡報與領域特定框架：
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -137,16 +122,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-用 Agent 工具加 `run_in_background: true` 同時發動一波中之所有代理。等該波完成再發動下一波（以使步驟四之波間知識注入得進行）。
+用 Agent 工具加 `run_in_background: true` 同時發動一波中之所有代理,並於會話唯一之隱含團隊下以 `SendMessage` 協調之。等該波完成再發動下一波（以使步驟四之波間知識注入得進行）。
+
+#### 選項 B：TeamCreate（僅限 FleetView / 雲端）
+
+`TeamCreate` **已棄用,且於尋常互動會話中被閘除**——彼處 `ToolSearch("select:TeamCreate")` 無所返,`team_name` 被忽略（會話僅有一隱含團隊）。其*確實*浮現之處（FleetView / 雲端）,則添一**具名團隊物件**,含逐隊員之任務所有權與關閉生命週期（`Task*` 工具本身於互動會話中亦可用——惟團隊範圍不可）：
+
+1. 建立團隊：`TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. 用 `TaskCreate` 為每代理建立任務（簡報 + 領域特定框架）
+3. 經 `Agent` 工具召喚每代理為隊員,`subagent_type` 設為該代理類型
+4. 經 `TaskUpdate` 含 `owner` 指派任務；以 `TaskList` 監看
+5. 波次間,經 `SendMessage({ type: "shutdown_request" })` 關閉團隊,並以更新後之簡報啟次團隊（步驟四）
+
+內建團隊協調——逐隊員之所有權與生命週期,狀態跨波延續——然團隊範圍僅存於 TeamCreate 浮現之處。互動會話中用選項 A。
 
 #### 選項間之取捨
 
-| | TeamCreate | Raw Agent |
+| | Agent 工具（選項 A） | TeamCreate（選項 B） |
 |---|---|---|
-| 最適合 | 第 3 級全 unleash（40+ 代理） | 第 2 級小組（5-10 代理） |
-| 協調 | 任務清單、傳訊、所有權 | 發出即忘、手動收集 |
-| 波間交接 | 任務狀態延續 | 須手動追蹤 |
-| 開銷 | 較高（每波設團隊） | 較低（每代理單次工具呼叫） |
+| 可用性 | 每一會話（主要） | 僅 FleetView / 雲端（受閘） |
+| 最適合 | 一切互動 unleash | 欲共享任務清單之雲端運行 |
+| 協調 | SendMessage、手動收集 | 任務清單、傳訊、所有權 |
+| 波間交接 | 經簡報更新追蹤 | 任務狀態延續 |
 
 **預期：** 每波於 2-5 分鐘內回約 10 個結構化回應。未回應或回非格式輸出之代理被記錄,但不阻塞流水線。
 
@@ -204,7 +201,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 **首選時機：第 3 波,而非綜合後。** 將 `advocatus-diaboli` 納入第 3 波（與波間知識注入並行）比所有波後之獨立對抗回合更有效。早期挑戰使第 4 波及之後得對批評精煉,而非堆疊於未經挑戰之共識之上。
 
-若對抗回合已是第 3 波之一部分,則此步成最終檢查。否則（如未含而跑完所有波次）,現在召喚 `advocatus-diaboli`（或 `senior-researcher`）。為結構化回合,用 `TeamCreate` 設立審查團隊,兩代理皆對共識平行運作：
+若對抗回合已是第 3 波之一部分,則此步成最終檢查。否則（如未含而跑完所有波次）,現在召喚 `advocatus-diaboli`（或 `senior-researcher`）。為結構化回合,經 Agent 工具將兩代理召為平行子代理,並以 `SendMessage` 協調彼等對共識運作：
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -226,7 +223,7 @@ Unleash 找問題；團隊解問題。將驗證之假設族轉為可行 issue,�
 
 1. 為每驗證之假設族建立 GitHub issue（用 `create-github-issues` 技能）
 2. 依收斂強度與影響為 issue 排序
-3. 為每 issue,經 `TeamCreate` 組小團隊：
+3. 為每 issue 組小團隊——讀相合之定義,經 Agent 工具（`subagent_type`）將其成員召為子代理,以 `SendMessage` 協調：
    - 若 `teams/` 中有預定義團隊配對問題領域,用之
    - 若無合適者,預設用 `opaque-team`（N 個 shapeshifter 含適應性角色指派）——此處理未知問題形狀,無需自訂組成
    - 至少含一非技術代理（如 `advocatus-diaboli`、`contemplative`）——彼等捕捉技術代理錯失之實作風險
@@ -249,6 +246,7 @@ Unleash 找問題；團隊解問題。將驗證之假設族轉為可行 issue,�
 ## 常見陷阱
 
 - **簡報範例過少**：代理需 5+ 範例以找模式。3 範例下,多數代理訴諸表面模式匹配或範本回聲（將簡報以不同字詞回覆）
+- **諸出處併為一聲**：簡報若混 issue、己之計畫、己之閱讀與前次會話之筆記,則失其間之接縫。意欲之終態遂以「issue 云……」之貌達於代理,彼等竭力尋一不存之事實。每一主張皆注出處（步驟一第 6 項）。此記錄於同儕會話,非 unleash 波次,見 `docs/investigations/lead-support-coordination-2026-09-15.md`
 - **無驗證路徑**：無測試假設之法,則無法區分訊號與雜訊。收斂單獨為必要但不充分
 - **隱喻式回應**：領域專家代理（mystic、shaman、kabalist）可能以豐富隱喻推理回應,難以程式解析。於輸出範本中含「將假設表為可測試之公式或演算法」
 - **波間重複發現**：無波間知識注入,第 3-7 波獨立重新發現第 1-2 波已找到者。永遠於波次間更新簡報

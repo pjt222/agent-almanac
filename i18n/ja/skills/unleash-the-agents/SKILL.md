@@ -11,14 +11,14 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
   tags: swarm, parallel, hypothesis-generation, multi-agent, brainstorming, convergence
   locale: ja
   source_locale: en
-  source_commit: 11edabf5
+  source_commit: be74aff5
   fence_basis_commit: 11edabf5
   translator: "Claude + human review"
   translation_date: "2026-05-03"
@@ -55,6 +55,7 @@ metadata:
 3. **既知の制約**: 既に知っていること、既に試したこと
 4. **成功基準**: 正しい仮説をどう認識するか
 5. **出力テンプレート**: 応答が欲しい正確なフォーマット
+6. **すべての主張の出典**: 各事実が issue、自分の計画、自分自身の読み、前セッションのノートのいずれに由来するかを述べ、これから作り出すつもりの最終状態は意図したものとして明示する
 
 ```markdown
 ## Brief: [Problem Title]
@@ -108,25 +109,9 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 各波を並列エージェントとして起動する。コスト効率のため `sonnet` モデルを使う（価値は個々の深さではなく視点の多様性から来る）。
 
-#### Option A: TeamCreate（フル unleash 推奨）
+#### Option A: Agent ツール生成（推奨）
 
-タスク追跡付きの調整チームをセットアップするため Claude Code の `TeamCreate` ツールを使う。TeamCreate は遅延ツール — まず `ToolSearch("select:TeamCreate")` で取得する。
-
-1. チームを作成:
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. ブリーフとドメイン固有フレーミング付きで `TaskCreate` を使ってエージェント毎にタスクを作成
-3. `team_name: "unleash-wave-1"` と `subagent_type` をエージェントタイプ（例: `kabalist`、`geometrist`）に設定して `Agent` ツールで各エージェントをチームメイトとして生成
-4. `owner` 付き `TaskUpdate` を介してチームメイトにタスクを割り当て
-5. `TaskList` を介して進捗を監視 — チームメイトは終わるとタスクを完了とマーク
-6. 波の間で、`SendMessage({ type: "shutdown_request" })` を介して現チームをシャットダウンし、更新されたブリーフ（ステップ4）で次のチームを作成
-
-これは組込調整を与える: 共有タスクリストがどのエージェントが応答したかを追跡し、チームメイトは follow-up のためにメッセージされ、リードはタスク割り当てを通じて波遷移を管理する。
-
-#### Option B: 生 Agent 生成（より小さい実行用、より単純）
-
-波の各エージェントについて、ブリーフとドメイン固有フレーミング付きで生成:
+これは通常の対話セッションのための経路。波の各エージェントについて、**Agent ツール**（`subagent_type` をエージェントタイプ、例: `kabalist`、`geometrist` に設定）を介して、ブリーフとドメイン固有フレーミング付きでサブエージェントとして生成する:
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -137,16 +122,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-`run_in_background: true` で Agent ツールを使って波内のすべてのエージェントを同時に起動する。波間知識注入を可能にするため次の波を起動する前に波が完了するのを待つ（ステップ4）。
+Agent ツールと `run_in_background: true` で波内のすべてのエージェントを同時に起動し、セッションの単一の暗黙チームの下で `SendMessage` により調整する。波間知識注入を可能にするため次の波を起動する前に波が完了するのを待つ（ステップ4）。
+
+#### Option B: TeamCreate（FleetView / cloud のみ）
+
+`TeamCreate` は **非推奨であり、通常の対話セッションからはゲートで除外されている** — そこでは `ToolSearch("select:TeamCreate")` は何も返さず、`team_name` は無視される（セッションは単一の暗黙チームを持つ）。それが *実際に* 現れる場所（FleetView / cloud）では、チームメイト毎のタスク所有権とシャットダウンライフサイクルを伴う **名前付きチームオブジェクト** を加える（`Task*` ツール自体は対話セッションでも動く — 動かないのはチームのスコープ化だけ）:
+
+1. チームを作成: `TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. `TaskCreate` でエージェント毎にタスクを作成（ブリーフ + ドメイン固有フレーミング）
+3. `subagent_type` をエージェントタイプに設定して `Agent` ツールで各エージェントをチームメイトとして生成
+4. `owner` 付き `TaskUpdate` でタスクを割り当て; `TaskList` で監視
+5. 波の間で、`SendMessage({ type: "shutdown_request" })` を介してチームをシャットダウンし、更新されたブリーフ（ステップ4）で次を開始
+
+組込チーム調整 — チームメイト毎の所有権とライフサイクル、波を越えて引き継がれるステータス — を与えるが、チームのスコープ化は TeamCreate が現れる場所にしか存在しない。対話セッションでは Option A を使う。
 
 #### オプションの選択
 
-| | TeamCreate | Raw Agent |
+| | Agent tool (Option A) | TeamCreate (Option B) |
 |---|---|---|
-| Best for | Tier 3 full unleash (40+ agents) | Tier 2 panel (5-10 agents) |
-| Coordination | Task list, messaging, ownership | Fire-and-forget, manual collection |
-| Inter-wave handoff | Task status carries over | Must track manually |
-| Overhead | Higher (team setup per wave) | Lower (single tool call per agent) |
+| Availability | Every session (primary) | FleetView / cloud only (gated) |
+| Best for | All interactive unleashes | Cloud runs wanting a shared task list |
+| Coordination | SendMessage, manual collection | Task list, messaging, ownership |
+| Inter-wave handoff | Track via the brief update | Task status carries over |
 
 **期待結果：** 各波が 2-5 分以内に ~10 構造化応答を返す。応答に失敗するまたはオフフォーマット出力を返すエージェントは記されるがパイプラインをブロックしない。
 
@@ -204,7 +201,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 **好まれるタイミング: 合成後ではなく Wave 3。** Wave 3 に（波間知識注入と並んで）`advocatus-diaboli` を含めることが、すべての波が完了した後の独立した adversarial パスより効果的。早期挑戦が Waves 4+ を、挑戦されていない合意に積み重ねるのではなく批判に対して精緻化させる。
 
-adversarial パスが既に Wave 3 の一部だったなら、このステップは最終確認になる。そうでなければ（例: それなしに全波を実行した）、今 `advocatus-diaboli`（または `senior-researcher`）を生成する。構造化されたパスには、合意に対して並列に作業する両エージェントを伴うレビューチームを立てるため `TeamCreate` を使う:
+adversarial パスが既に Wave 3 の一部だったなら、このステップは最終確認になる。そうでなければ（例: それなしに全波を実行した）、今 `advocatus-diaboli`（または `senior-researcher`）を生成する。構造化されたパスには、Agent ツールを介して両エージェントを並列サブエージェントとして生成し、合意に対して `SendMessage` で調整する:
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -226,7 +223,7 @@ Unleash は問題を見つけ、チームがそれらを解決する。検証さ
 
 1. 検証された仮説ファミリー毎に GitHub issue を作成（`create-github-issues` スキルを使う）
 2. 収束強度とインパクトで issue を優先順位付け
-3. 各 issue について、`TeamCreate` を介して小チームを組み立てる:
+3. 各 issue について、小チームを組み立てる — 合致する定義を読み、そのメンバーを Agent ツール（`subagent_type`）を介してサブエージェントとして生成し、`SendMessage` で調整する:
    - 問題ドメインに合う `teams/` の事前定義チーム定義があれば、それを使う
    - 適合チームが存在しなければ、`opaque-team`（適応的役割割り当てを伴う N shapeshifters）を既定とする — それはカスタム構成を要求せずに未知の問題形を扱う
    - 少なくとも 1 つの非技術エージェント（例: `advocatus-diaboli`、`contemplative`）を含む — 技術エージェントが見逃す実装リスクを彼らが捕える
@@ -249,6 +246,7 @@ Unleash は問題を見つけ、チームがそれらを解決する。検証さ
 ## よくある落とし穴
 
 - **ブリーフの例が少なすぎる**: エージェントはパターンを見つけるに 5+ 例が必要。3 例では、ほとんどのエージェントが表面レベルパターンマッチングまたはテンプレートエコー（異なる言葉でブリーフを繰り返す）に頼る。
+- **情報源を一つの声に混ぜる**: issue、自分の計画、自分自身の読み、前セッションのノートを混ぜ合わせたブリーフは、それらの間の継ぎ目を失う。すると意図した最終状態が「issue によれば…」としてエージェントに届き、彼らは存在しない事実を探すことに労力を費やす。すべての主張に出典を明記する（ステップ1、要素6）。これは unleash 波ではなくピアセッションについて `docs/investigations/lead-support-coordination-2026-09-15.md` に記録された。
 - **検証経路なし**: 仮説をテストする方法なしには、信号をノイズと区別できない。収束だけでは必要だが十分でない。
 - **メタファー応答**: ドメイン専門エージェント（mystic、shaman、kabalist）は解析が難しい豊かなメタファー的推論で応答するかもしれない。出力テンプレートに「あなたの仮説をテスト可能な公式またはアルゴリズムとして表現」を含める。
 - **波を越える再発見**: 波間知識注入なしでは、波 3-7 が独立に波 1-2 が既に見つけたものを再発見する。常に波の間でブリーフを更新する。

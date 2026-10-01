@@ -8,14 +8,14 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
   tags: swarm, parallel, hypothesis-generation, multi-agent, brainstorming, convergence
   locale: zh-CN
   source_locale: en
-  source_commit: 11edabf5
+  source_commit: be74aff5
   fence_basis_commit: 11edabf5
   translator: "Claude + human review"
   translation_date: "2026-05-03"
@@ -52,6 +52,7 @@ metadata:
 3. **已知约束**：您已知道什么、已尝试什么
 4. **成功标准**：如何识别正确假设
 5. **输出模板**：您想要响应的精确格式
+6. **每项陈述的来源**：说明每个事实来自 issue、您的计划、您自己的阅读还是先前会话的笔记，并将您打算创造的最终状态标记为"预期"
 
 ```markdown
 ## Brief: [Problem Title]
@@ -105,25 +106,9 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 将每波作为并行代理启动。为成本效率使用 `sonnet` 模型（价值来自视角多样性，非个体深度）。
 
-#### 选项 A：TeamCreate（推荐用于完整释放）
+#### 选项 A：Agent 工具派生（推荐）
 
-使用 Claude Code 的 `TeamCreate` 工具设置带任务跟踪的协调团队。TeamCreate 是延迟工具 —— 先通过 `ToolSearch("select:TeamCreate")` 获取它。
-
-1. 创建团队：
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. 用 `TaskCreate` 为每个代理创建任务，附简报和领域特定构架
-3. 使用 `Agent` 工具派生每个代理为团友，附 `team_name: "unleash-wave-1"` 和设为代理类型的 `subagent_type`（如 `kabalist`、`geometrist`）
-4. 通过 `TaskUpdate` 用 `owner` 将任务分配给团友
-5. 通过 `TaskList` 监视进度 —— 团友完成后将任务标记完成
-6. 在波次之间，通过 `SendMessage({ type: "shutdown_request" })` 关闭当前团队，并用更新的简报创建下个团队（第 4 步）
-
-这给您内置协调：共享任务列表跟踪哪些代理已响应、可向团友发消息跟进，且 lead 通过任务分配管理波次过渡。
-
-#### 选项 B：原始 Agent 派生（更简单，用于较小运行）
-
-对波中每个代理，用简报和领域特定构架派生它：
+这是普通交互式会话的路径。对波中每个代理，通过 **Agent 工具**将其派生为子代理（`subagent_type` 设为代理类型，如 `kabalist`、`geometrist`），附简报和领域特定构架：
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -134,16 +119,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-使用 Agent 工具用 `run_in_background: true` 同时启动一波中所有代理。等待波次完成后再启动下波（以使能第 4 步的波间知识注入）。
+使用 Agent 工具和 `run_in_background: true` 同时启动一波中所有代理，并在会话的单一隐式团队下用 `SendMessage` 协调它们。等待波次完成后再启动下波（以使能第 4 步的波间知识注入）。
+
+#### 选项 B：TeamCreate（仅限 FleetView / 云端）
+
+`TeamCreate` **已弃用，且在普通交互式会话中被屏蔽** —— 在那里 `ToolSearch("select:TeamCreate")` 不返回任何结果，且 `team_name` 被忽略（会话只有一个隐式团队）。在它*确实*出现的地方（FleetView / 云端），它增加一个**具名团队对象**，带每个团友的任务所有权和关闭生命周期（`Task*` 工具本身在交互式会话中也可用 —— 只有团队作用域不可用）：
+
+1. 创建团队：`TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. 用 `TaskCreate` 为每个代理创建任务（简报 + 领域特定构架）
+3. 通过 `Agent` 工具派生每个代理为团友，`subagent_type` 设为代理类型
+4. 通过 `TaskUpdate` 用 `owner` 分配任务；用 `TaskList` 监视
+5. 在波次之间，通过 `SendMessage({ type: "shutdown_request" })` 关闭团队，并用更新的简报启动下个团队（第 4 步）
+
+内置团队协调 —— 每个团友的所有权和生命周期，状态跨波承载 —— 但团队作用域仅在 TeamCreate 出现的地方存在。在交互式会话中使用选项 A。
 
 #### 在选项之间选择
 
-| | TeamCreate | 原始 Agent |
+| | Agent 工具（选项 A） | TeamCreate（选项 B） |
 |---|---|---|
-| 最适合 | 第 3 层完整释放（40+ 代理） | 第 2 层小组（5-10 代理） |
-| 协调 | 任务列表、消息、所有权 | 即发即忘、手动收集 |
-| 波间交接 | 任务状态承载 | 必须手动跟踪 |
-| 开销 | 较高（每波团队设置） | 较低（每代理单一工具调用） |
+| 可用性 | 每个会话（主要） | 仅限 FleetView / 云端（受屏蔽） |
+| 最适合 | 所有交互式释放 | 需要共享任务列表的云端运行 |
+| 协调 | SendMessage、手动收集 | 任务列表、消息、所有权 |
+| 波间交接 | 通过简报更新跟踪 | 任务状态承载 |
 
 **预期结果：** 每波在 2-5 分钟内返回约 10 个结构化响应。无法响应或返回非格式输出的代理被注明，但不阻塞流水线。
 
@@ -201,7 +198,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 **优选时机：Wave 3，非综合后。** 在 Wave 3（与波间知识注入并行）包含 `advocatus-diaboli` 比所有波次完成后的独立对抗通行更有效。早期挑战让 Waves 4+ 对照批评精炼，而非堆叠到未挑战共识上。
 
-若对抗通行已是 Wave 3 的一部分，本步骤成为最终检查。若否（如您不带它运行所有波），现在派生 `advocatus-diaboli`（或 `senior-researcher`）。对结构化通行，使用 `TeamCreate` 起立审查团队，两个代理并行对照共识工作：
+若对抗通行已是 Wave 3 的一部分，本步骤成为最终检查。若否（如您不带它运行所有波），现在派生 `advocatus-diaboli`（或 `senior-researcher`）。对结构化通行，通过 Agent 工具将两个代理派生为并行子代理，并用 `SendMessage` 协调它们对照共识工作：
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -223,7 +220,7 @@ Unleash 找问题；团队解决它们。将验证的假设家族转换为可执
 
 1. 每个验证的假设家族创建一个 GitHub issue（使用 `create-github-issues` 技能）
 2. 按收敛强度和影响优先化 issue
-3. 对每个 issue，通过 `TeamCreate` 组装小团队：
+3. 对每个 issue，组装小团队 —— 读取匹配的定义，并通过 Agent 工具（`subagent_type`）将其成员派生为子代理，用 `SendMessage` 协调：
    - 若 `teams/` 中预定义团队定义匹配问题域，使用它
    - 若无契合团队存在，默认 `opaque-team`（N 个 shapeshifter 带自适应角色分配）—— 它处理未知问题形状而无需自定义组合
    - 包含至少一个非技术代理（如 `advocatus-diaboli`、`contemplative`）—— 他们捕捉技术代理错过的实现风险
@@ -246,6 +243,7 @@ Unleash 找问题；团队解决它们。将验证的假设家族转换为可执
 ## 常见问题
 
 - **简报中示例过少**：代理需要 5+ 示例找模式。3 个示例时，多数代理诉诸表面级模式匹配或模板回响（用不同词重复简报）。
+- **将来源合并为一种声音**：把 issue、您的计划、您自己的阅读和先前会话的笔记混在一起的简报，会丢失它们之间的接缝。于是打算创造的最终状态以"issue 中说……"的形式到达代理，他们把精力花在寻找一个并不存在的事实上。为每项陈述标注来源（第 1 步，第 6 项）。此问题记录于一次同伴会话而非 unleash 波次，见 `docs/investigations/lead-support-coordination-2026-09-15.md`。
 - **无验证路径**：没有测试假设的方法，您无法区分信号与噪声。仅收敛必要但不充分。
 - **隐喻响应**：领域专家代理（mystic、shaman、kabalist）可能用难以程序化解析的丰富隐喻推理响应。在输出模板中包括 "Express your hypothesis as a testable formula or algorithm"。
 - **跨波重发现**：没有波间知识注入，波 3-7 独立重发现波 1-2 已找到的。波间始终更新简报。
