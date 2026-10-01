@@ -23,8 +23,8 @@ import { importGraph } from '../lib/import-graph.js';
 
 const LIB = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'lib', 'import-graph.js');
 
-function fixture(t, files) {
-  const dir = mkdtempSync(join(tmpdir(), 'import-graph-'));
+function fixture(t, files, prefix = 'import-graph-') {
+  const dir = mkdtempSync(join(tmpdir(), prefix));
   t.after(() => rmTree(dir));
   for (const [rel, text] of Object.entries(files)) {
     mkdirSync(dirname(join(dir, rel)), { recursive: true });
@@ -219,13 +219,23 @@ test('a caller already running with the flag walks in-process and gets the same 
         ...process.env,
         IMPORT_GRAPH_LIB: pathToFileURL(LIB).href,
         IMPORT_GRAPH_ROOT: root,
-        IMPORT_GRAPH_POISON: `--require=${join(root, 'no-such-preload.cjs')}`,
+        IMPORT_GRAPH_POISON: preload(join(root, 'no-such-preload.cjs')),
       },
     },
   );
   assert.equal(run.status, 0, run.stderr);
   assert.deepEqual(JSON.parse(run.stdout), REAL_ONLY);
 });
+
+/**
+ * A NODE_OPTIONS preload of `path`, quoted. NODE_OPTIONS splits on whitespace, so an unquoted
+ * path under a temp dir with a space loads `<prefix>/sp`, and every arm below would fail on the
+ * wrong missing module (#918 round 2, N3). JSON quoting is the double-quoted form NODE_OPTIONS
+ * reads; that it also escapes Windows backslashes correctly was not measured.
+ */
+function preload(path) {
+  return `--require=${JSON.stringify(path)}`;
+}
 
 /**
  * What `importGraph(root, 'a.js')` throws when its child runs with `poison` as NODE_OPTIONS, or
@@ -263,12 +273,25 @@ function childFailureMessage(root, poison) {
 test('a parser child that dies is an error naming why, never an empty or entry-only graph', (t) => {
   // An entry-only set would make the healer check print `1 module(s) reachable … 0 unlisted` over
   // a graph it never read. NODE_OPTIONS reaches the child and kills it before the walk starts;
-  // this process, already running, is unaffected. The reason must survive: a crashed node's LAST
-  // stderr line is its `Node.js vX.Y.Z` footer, which reads as a version problem (round 1, F2).
+  // the node calling `importGraph`, already running, is unaffected. The reason must survive: a
+  // crashed node's LAST stderr line is its `Node.js vX.Y.Z` footer, which reads as a version
+  // problem (round 1, F2).
   const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n" });
   assert.match(
-    childFailureMessage(root, `--require=${join(root, 'no-such-preload.cjs')}`),
+    childFailureMessage(root, preload(join(root, 'no-such-preload.cjs'))),
     /the parser child .* exited 1 without a graph: Error: Cannot find module '[^']*no-such-preload\.cjs'/,
+  );
+});
+
+test('a root with a space in its path is walked, and a preload under it is named whole', (t) => {
+  // The arms above put their preload under the fixture root, so a temp dir with a space split the
+  // preload path in NODE_OPTIONS and they failed on the wrong module (#918 round 2, N3). This root
+  // has its own space, so CI holds the quoting whatever TMPDIR is.
+  const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n" }, 'import graph ');
+  assert.deepEqual([...importGraph(root, 'a.js')].sort(), REAL_ONLY);
+  assert.match(
+    childFailureMessage(root, preload(join(root, 'no-such-preload.cjs'))),
+    /exited 1 without a graph: Error: Cannot find module '[^']*import graph [^']*no-such-preload\.cjs'/,
   );
 });
 
@@ -282,7 +305,7 @@ test('a parser child that dies on a thrown non-Error keeps the value, and not th
     'a.js': "import { real } from './real.js';\n",
     'throw-string.cjs': "throw ['preload', 'threw', 'a', 'string'].join(' ');\n",
   });
-  const message = childFailureMessage(root, `--require=${join(root, 'throw-string.cjs')}`);
+  const message = childFailureMessage(root, preload(join(root, 'throw-string.cjs')));
   assert.match(message, /the parser child .* exited 1 without a graph: .*preload threw a string/);
   assert.doesNotMatch(message, /Node\.js v\d/, 'the version footer is not a reason');
 });
@@ -295,7 +318,7 @@ test('a parser child killed by a signal says so, and is still an error', { skip:
     'kill-self.cjs': "process.kill(process.pid, 'SIGKILL');\n",
   });
   assert.match(
-    childFailureMessage(root, `--require=${join(root, 'kill-self.cjs')}`),
+    childFailureMessage(root, preload(join(root, 'kill-self.cjs'))),
     /the parser child .* was killed by SIGKILL without a graph/,
   );
 });
@@ -326,7 +349,7 @@ test('the refusal reaches the caller as the reason, not as a parse error in the 
     'drop-constructor.cjs': "delete require('node:vm').SourceTextModule;\n",
   });
   assert.match(
-    childFailureMessage(root, `--require=${join(root, 'drop-constructor.cjs')}`),
+    childFailureMessage(root, preload(join(root, 'drop-constructor.cjs'))),
     /the parser child .* exited 3 without a graph: vm\.SourceTextModule is unavailable on node v\S+ even under --experimental-vm-modules/,
   );
 });
