@@ -168,10 +168,10 @@ Start every shell block that touches files with exactly this:
 const WRITE_LOCATION = `WRITE LOCATION — write every file you produce, by any tool, under your own
 \`$DIR\`: a directory the preamble's \`mktemp -d\` created for you. Nothing but files
 carries over from one tool call to the next: a new shell call may start back in the
-directory you were launched in, with \`DIR\` unset. So end the block that creates
-\`$DIR\` with \`echo "\${DIR:?}"\`, note the absolute path it prints, and use that
-literal path wherever the variable cannot reach: in a tool that is not the shell, and
-in a later block that needs a file written earlier. Write nothing under the
+directory you were launched in, with \`DIR\` unset. So in the block that creates
+\`$DIR\`, run \`pwd\` right after the preamble's \`cd\`, note the absolute path it prints,
+and use that literal path wherever the variable cannot reach: in a tool that is not the
+shell, and in a later block that needs a file written earlier. Write nothing under the
 repository root.`
 
 // The Generate stage writes artifacts, so it cannot be told "write nothing in the repository";
@@ -183,8 +183,9 @@ directory the preamble's \`mktemp -d\` created for you); nowhere else in the rep
 Writing your artifacts under ${outputDir} is this stage's job, and the one exception to the
 preamble's "work only in a directory you created yourself"; everything else — scratch files,
 fixtures, logs — goes under \`$DIR\`. Nothing but files carries over from one tool call to the
-next, so end the block that creates \`$DIR\` with \`echo "\${DIR:?}"\`, note the absolute path it
-prints, and use that literal path in a tool that is not the shell and in a later block.`
+next, so in the block that creates \`$DIR\`, run \`pwd\` right after the preamble's \`cd\`, note
+the absolute path it prints, and use that literal path in a tool that is not the shell and in a
+later block.`
 
 // REPO_ROOT_NOTE — local to this workflow, not a template constant (#861). Within one shell
 // block the preamble's `cd "${DIR:?}"` moves the agent into its temp directory, so a
@@ -198,11 +199,11 @@ prints, and use that literal path in a tool that is not the shell and in a later
 const REPO_ROOT_NOTE = `REPOSITORY ROOT — relative paths and \`git\` commands in this task are relative to the
 repository root: the directory you were launched in. Never rely on the working directory to be
 there. Inside a shell block the preamble's \`cd "\${DIR:?}"\` moves you away from it, and a new
-shell call may start back there, with no variable carried over. So learn the root once, in your
-first shell call and before any \`cd\` (\`pwd\`), note the absolute path it prints, and use that
-literal path from then on: \`git -C "<root>" …\`, \`"<root>/<relative path>"\`, and
-\`(cd "<root>" && <command>)\` for a command that must run there. Reading the repository this way
-is expected; where you may WRITE is the write-location line above.`
+shell call may start back there, with no variable carried over. So learn the root once, in a
+first shell call that touches no files and so needs no preamble: a bare \`pwd\`, before any \`cd\`.
+Note the absolute path it prints, and use that literal path from then on: \`git -C "<root>" …\`,
+\`"<root>/<relative path>"\`, and \`(cd "<root>" && <command>)\` for a command that must run there.
+Reading the repository this way is expected; where you may WRITE is the write-location line above.`
 
 const SCOUT_SCHEMA = {
   type: 'object',

@@ -180,7 +180,10 @@ Start every shell block that touches files with exactly this:
 // starts again in the directory the agent was launched in, with `DIR` and every
 // other variable unset, while the directory itself survives. A Write call is a
 // later tool call by definition, so the line tells the agent to print the path in
-// the block that creates it and reuse that literal path. A stage that must write
+// the block that creates it and reuse that literal path. It prints with `pwd`
+// after the `cd`, not `echo "${DIR:?}"`: under a relative TMPDIR `mktemp -d`
+// returns a relative path, which a later call would resolve against the launch
+// directory, while `pwd` is absolute either way. A stage that must write
 // somewhere else as well — an implementing stage producing artifacts — narrows
 // this rather than dropping it: "write only under <that directory> and your own
 // $DIR; nowhere else in the repository" (batch-generate-waves' Generate stage is
@@ -194,10 +197,10 @@ Start every shell block that touches files with exactly this:
 const WRITE_LOCATION = `WRITE LOCATION — write every file you produce, by any tool, under your own
 \`$DIR\`: a directory the preamble's \`mktemp -d\` created for you. Nothing but files
 carries over from one tool call to the next: a new shell call may start back in the
-directory you were launched in, with \`DIR\` unset. So end the block that creates
-\`$DIR\` with \`echo "\${DIR:?}"\`, note the absolute path it prints, and use that
-literal path wherever the variable cannot reach: in a tool that is not the shell, and
-in a later block that needs a file written earlier. Write nothing under the
+directory you were launched in, with \`DIR\` unset. So in the block that creates
+\`$DIR\`, run \`pwd\` right after the preamble's \`cd\`, note the absolute path it prints,
+and use that literal path wherever the variable cannot reach: in a tool that is not the
+shell, and in a later block that needs a file written earlier. Write nothing under the
 repository root.`
 
 // A JSON Schema turns agent() into structured output: the subagent is forced to
