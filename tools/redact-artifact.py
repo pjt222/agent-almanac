@@ -130,7 +130,9 @@ class _Positions(HTMLParser):
         and missed breakout tags, `<foreignObject>` children and a stray `</math>`, turning
         leaks origin/main caught into CLEAN (#910). The limit: each parse reads EVERY section
         its one way, so a run whose term needs one section joined and another dropped (SVG
-        text and a `<foreignObject>` span in one run, each with a CDATA section) is not found
+        text and a `<foreignObject>` span in one run, each with a CDATA section) is not found.
+        No witness was found: Chromium's innerText puts a line break between those two, so the
+        limit may be narrower than this states
       - nor is a term split by content a renderer hides for a reason this class does not
         model: `<template>` and `<noscript>` content (and anything `display:none`) still joins
         the run, so `acme_<template>x</template>secret` is CLEAN (measured)
