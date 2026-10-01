@@ -122,9 +122,10 @@ class _Positions(HTMLParser):
       - a `<![CDATA[…]]>` section never breaks a run, and what it contributes to the run depends
         on the namespace it sits in, which this class does NOT track. In SVG or MathML the
         content up to `]]>` is rendered text. In HTML content the section is a bogus comment
-        that ends at the FIRST `>`, and whatever follows that `>` is rendered text. So every
-        document is parsed twice, once per reading (`join_cdata`), and a term either reading
-        holds is a survivor. That over-reports where the other reading is the true one, which is
+        that ends at the FIRST `>`, and whatever follows that `>` is ordinary markup, which the
+        parser then decodes and tokenises (`parse_html_declaration`). So every document is
+        parsed twice, once per reading (`join_cdata`), and a term either reading holds is a
+        survivor. That over-reports where the other reading is the true one, which is
         the direction a redaction gate can afford. A tag-counting namespace tracker was tried
         and missed breakout tags, `<foreignObject>` children and a stray `</math>`, turning
         leaks origin/main caught into CLEAN (#910). The limit: each parse reads EVERY section
@@ -239,22 +240,49 @@ class _Positions(HTMLParser):
         # It never breaks the run. What it adds depends on the reading (see the class docstring):
         #   join_cdata   a CDATA section's content, up to `]]>`, is text, as in SVG/MathML:
         #                `<svg><text>acme<![CDATA[_]]>secret</text></svg>` shows `acme_secret`,
-        #                and leaving it out made the run `acmesecret`, a false CLEAN (#910)
-        #   otherwise    a bogus comment that ends at the FIRST `>`, as in HTML content, so only
-        #                what follows that `>` is text: `<p>acme_<![CDATA[>secret]]></p>` shows
-        #                `acme_secret]]>`, and dropping the whole section was a false CLEAN. The
-        #                `]]>` that closed it is not re-added, which can over-report, never hide.
-        # A marked section that is not CDATA is a bogus comment in both namespaces. Nothing here
-        # is unescaped, because a renderer does not unescape either form.
+        #                and leaving it out made the run `acmesecret`, a false CLEAN (#910). It
+        #                is joined raw, because a renderer leaves CDATA content literal.
+        #   otherwise    a bogus comment that ends at the FIRST `>`, as in HTML content, and
+        #                nothing of it is text. What follows that `>` is ordinary markup, which a
+        #                renderer decodes and tokenises, so it must not be joined here at all:
+        #                `parse_html_declaration` below ends a CDATA section at that `>` and hands
+        #                the rest back to the parser. Joined raw, as round 2 did, `&#95;`, a tag or
+        #                a comment after the `>` made a false CLEAN (#910 round 2, F2).
+        # A marked section that is not CDATA is a bogus comment in both namespaces, and on the
+        # four interpreters measured the stdlib already ends it at its first `>`, so `data` holds
+        # no `>` and the partition below adds nothing. It adds the raw text after a `>` only on an
+        # interpreter whose stdlib runs a marked section on to `]>`.
         #
-        # One ordinal, and `_join` even when nothing shows, in BOTH readings: the two parses must
-        # number every run alike, or one leak both readings hold is reported under two labels.
+        # One ordinal, and `_join` even when nothing shows, in BOTH readings, so the two parses
+        # number runs alike up to here and a leak both readings hold is one label. After a section
+        # whose first `>` comes before its `]]>`, the HTML reading's tail adds ordinals the CDATA
+        # reading does not have, so a leak after it that both hold gets two labels: a duplicate,
+        # never a loss.
         self._events += 1
         self._n += 1
         if self._join_cdata and data.startswith("CDATA["):
             self._join(data[len("CDATA["):])
         else:
             self._join(data.partition(">")[2])
+
+    def parse_html_declaration(self, i: int) -> int:
+        # The HTML reading of `<![CDATA[`: a bogus comment that ends at the first `>`, after which
+        # the PARSER carries on, decoding and tokenising the rest as a renderer does. The stdlib
+        # runs the section on to `]]>` instead and hands it whole to `unknown_decl`, so whatever
+        # sat between the first `>` and `]]>` was never tokenised (#910 round 2, F2). This narrows
+        # that one case and delegates everything else, including a section with no `>` at all,
+        # which `close()` then emits. `parse_html_declaration` is stdlib-internal but carries no
+        # underscore; its signature and its one call site in `goahead` are the same on 3.11.14,
+        # 3.12.3-ubuntu, 3.12.12 and 3.13.12. `_set_support_cdata(False)` would do the same, but
+        # it is private, absent from upstream v3.12.11 and v3.13.7 (present from v3.12.12), and on
+        # 3.13.12 sends a closed section to `handle_comment`, which this class does not join.
+        rawdata = self.rawdata
+        if not self._join_cdata and rawdata.startswith("<![CDATA[", i):
+            j = rawdata.find(">", i + len("<![CDATA["))
+            if j >= 0:
+                self.unknown_decl(rawdata[i + len("<!["):j])
+                return j + 1
+        return super().parse_html_declaration(i)
 
     def handle_starttag(self, tag: str, attrs) -> None:
         self._events += 1
@@ -762,6 +790,15 @@ def _verify() -> int:
         ("<p>acme_<![CDATA[>secret]]></p>", "text[1]", "a bogus comment ends at the first >"),
         ("<p>acme_<![CDATA[x>secret]]></p>", "text[1]", "...wherever that > is"),
         ("<p>acme_<![CDATA[>secret</p>", "text[1]", "...and in an unclosed section"),
+        # CLEAN on origin/main and round 2, which joined that tail raw. A renderer decodes and
+        # tokenises it (Chromium: `acme_secret]]>`, the last row `acme_secret`) (#910 round 2, F2).
+        ("<p><![CDATA[>acme&#95;secret]]></p>", "text[1]", "...and the text after it is decoded"),
+        ("<p>acme<![CDATA[>&#95;secret]]></p>", "text[1]", "...a charref just after the >"),
+        ("<p><![CDATA[>acme_<b></b>secret]]></p>", "text[1]", "...a tag after the > is a tag"),
+        ("<p><![CDATA[>acme_<!--c-->secret]]></p>", "text[1]", "...a comment after it too"),
+        ("<p>acme_<![CDATA[><!--]]>-->secret</p>", "text[1]", "...even one that swallows ]]>"),
+        ("<p>acme_<![CDATA[></p><p>secret]]></p>", "text-across-block[1]",
+         "...and a block tag after it splits the run"),
         # Guards that passed on origin/main.
         # Long enough that slicing off a `CDATA[` prefix it does not have leaves text behind.
         ("<svg><text>acme_<![if gte mso 9]>secret</text></svg>", "text[1]",
@@ -791,6 +828,12 @@ def _verify() -> int:
     hits = structure_survivors("<svg><text><![CDATA[x]]>acme&#95;secret</text></svg>",
                                ["acme_secret"], "html")
     check("#910: a leak both readings hold is one label", hits == ["text[1]:acme_secret"], str(hits))
+    # ...but not after a section whose first `>` precedes its `]]>`: the HTML reading's tail adds
+    # an ordinal the CDATA reading lacks, so the one leak is listed twice. A duplicate, not a loss.
+    hits = structure_survivors("<p><![CDATA[a>b]]></p><p>acme&#95;secret</p>",
+                               ["acme_secret"], "html")
+    check("#910: after an early > in a section, a shared leak has two labels",
+          hits == ["text[3]:acme_secret", "text[2]:acme_secret"], str(hits))
     pos = positions("<p>acme&#95;secret</p>", "html")
     check("#910: a position both readings share is listed once",
           pos == [("text[1]", "acme_secret")], str(pos))
@@ -805,6 +848,14 @@ def _verify() -> int:
     p.close()
     check("#910: a marked section adds no text in the CDATA reading",
           p.found == [("text[1]", "ab")], str(p.found))
+    # The fallback for an interpreter whose stdlib runs a marked section on to `]>`: the text
+    # after its first `>` still joins. No document reaches it on the four measured interpreters.
+    p = _Positions()
+    p.handle_data("acme_")
+    p.unknown_decl("if x>secret")
+    p.close()
+    check("#910: a marked section's text after its first > joins the run",
+          p.found == [("text[1]", "acme_secret")], str(p.found))
 
     # Across-block is only for what no single run holds, so one leak gets one label.
     one_run = survivors_of("<div>acme&#95;secret</div><div>x</div>")
