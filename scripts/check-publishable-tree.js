@@ -109,8 +109,9 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export function shippedPaths(root = ROOT) {
   // IMPORTED, not re-implemented. `shippedEntries` already returns exactly this shape and runs
   // `assertInterpretable` on the way — which is the half that matters: a `files` array in any
-  // shape `assertInterpretable` refuses (the rows in its JSDoc, and the measurement in the comment at each arm) now refuses HERE, at prepack,
-  // rather than only where check-readmes happens to run. That list is not every shape npm and
+  // shape `assertInterpretable` refuses (the rows in its JSDoc, and the measurement in the
+  // comment at each arm) now refuses HERE, at prepack, rather than only where check-readmes
+  // happens to run. That list is not every shape npm and
   // this matcher disagree about: `["skills/", "!skills/real/../_template/"]` is accepted, npm
   // resolves the `..` and carves out `_template/`, and the matcher carves out nothing (#913
   // round 1, measured on npm 11.13.0). A second copy of the split was what let the guard

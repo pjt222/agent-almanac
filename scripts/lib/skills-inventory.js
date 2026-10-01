@@ -430,12 +430,12 @@ export function contentTrees(root) {
  * side, then, files are counted that do not ship. d3 is also a same-path pair that the pair
  * check misses, since that check strips only one trailing slash.
  *
-
  * On the inclusion side no SILENT disagreement was found. For d5 (`skills//real/`),
  * `divergentPaths` reported the same untracked file under `skills/real/` that npm packs; its
  * `contentTrees` throw is not a `//` effect, since `skills/real/` throws the same way. For
  * `skills//`, npm packs all of `skills/` while `contentTrees` throws where `skills/` is scanned:
- * a disagreement, but a loud one. The inclusion side is refused anyway, as #913 asks, because the single-slash spelling means the same thing to npm.
+ * a disagreement, but a loud one. The inclusion side is refused anyway, as #913 asks, because
+ * the single-slash spelling means the same thing to npm.
  */
 function assertInterpretable(files, root) {
   const negations = files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1));
