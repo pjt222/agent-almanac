@@ -360,8 +360,12 @@ export function contentTrees(root) {
  *   control: files: ["agents/"]                   npm packs agents/_template.md.
  *       So the three zeros above are exclusions, not an empty probe.
  *
- * All three under-count silently, so all three are refused rather than guessed at — the same
- * contract `mutation-check` holds itself to.
+ * All three are negations, and for each the matcher carves out less than npm does, so it counts
+ * files that do not ship and nothing reports it. Re-measured for #913 with each refusal switched off:
+ * `!skills/_template`, `!_template.py` (under `agents/`) and `!skills/*\/references/` each left a
+ * file in `nonDocumentationFiles` that `npm pack --dry-run` did not list. The glob refusal also
+ * fires on an inclusion, and which way that side errs was not measured. All three are refused
+ * rather than guessed at — the same contract `mutation-check` holds itself to.
  *
  * A FOURTH class was proposed, refuted, and then REFUTED ONLY IN PART — the correction matters
  * because the original wording licensed two shapes that lose files silently (#879 round 2).
@@ -409,6 +413,29 @@ export function contentTrees(root) {
  * shape: it has to be refused here. The pair test runs FIRST and reads no disk, so its verdict does not
  * depend on what the tree holds. Paths are compared with one trailing slash stripped, so a
  * directory spelled with and without it is one path.
+ *
+ * A DOUBLED SLASH is refused anywhere in an entry, on either side (#913). Measured with
+ * `npm pack --dry-run --json --ignore-scripts` on npm 11.13.0 / node v25.9.0, over a fixture
+ * holding `skills/real/{SKILL.md,x.py}` and `skills/_template/{SKILL.md,other.md}`:
+ *
+ *   d1 [skills/,!skills/_template/]              packs skills/real only   (control)
+ *   d2 [skills/,!skills/_template//]             packs skills/real only   (same as d1)
+ *   d3 [skills/_template/,!skills/_template//]   packs nothing
+ *   d4 [skills/,!skills//_template/]             packs skills/real only   (mid-path, same as d1)
+ *   d5 [skills//real/]                           packs skills/real        (inclusion side too)
+ *
+ * So npm collapses the `//`. This matcher does not, so the negation in d2 and d3 carves out
+ * nothing: in d2 the inventory counts `_template/` as shipping, and in d3 the `prepack` guard
+ * would refuse an untracked file under `_template/`, where npm packs nothing. On the negation
+ * side, then, files are counted that do not ship. d3 is also a same-path pair that the pair
+ * check misses, since that check strips only one trailing slash.
+ *
+ * On the inclusion side no SILENT disagreement was found. For d5 (`skills//real/`),
+ * `divergentPaths` reported the same untracked file under `skills/real/` that npm packs; its
+ * `contentTrees` throw is not a `//` effect, since `skills/real/` throws the same way. For
+ * `skills//`, npm packs all of `skills/` while `contentTrees` throws where `skills/` is scanned:
+ * a disagreement, but a loud one. The inclusion side is refused anyway, as #913 asks, because
+ * the single-slash spelling means the same thing to npm.
  */
 function assertInterpretable(files, root) {
   const negations = files.filter((entry) => entry.startsWith('!')).map((entry) => entry.slice(1));
@@ -474,6 +501,20 @@ function assertInterpretable(files, root) {
         + 'normalises the prefix away and packs the directory, while this module compares '
         + 'literal paths and matches nothing — so the published file count would be lower than '
         + `what ships. Write it without the prefix: "${entry.startsWith('!') ? '!' : ''}${bare.replace(/^\.?\//, '')}".`,
+      );
+    }
+    // npm also collapses a doubled slash, anywhere in the entry and on either side: it packs
+    // `!skills/_template//` exactly as `!skills/_template/`. This module compares literally, so
+    // that negation carves out nothing and `_template/` is treated as shipping when it does not
+    // ship (#913, rows d1-d5 in the JSDoc). The pair check above strips ONE trailing slash, so it
+    // misses `["skills/_template/", "!skills/_template//"]` too. Refused, like `./`, rather than
+    // normalised.
+    if (bare.includes('//')) {
+      throw new Error(
+        `package.json \`files\` entry "${entry}" contains "//". Measured: npm collapses the doubled `
+        + 'slash, while this module compares literal paths, so the two read the entry differently '
+        + 'and the published file count can disagree with what ships. Write it with single '
+        + `slashes: "${entry.startsWith('!') ? '!' : ''}${bare.replace(/\/{2,}/g, '/')}".`,
       );
     }
     if (entry.startsWith('!') && !entry.slice(1).includes('/')) {
