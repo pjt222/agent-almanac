@@ -250,10 +250,13 @@ test('a parser child that dies is an error naming why, never an empty or entry-o
 
 test('a parser child that dies on a thrown non-Error keeps the value, and not the version footer', (t) => {
   // No `…Error` line to pick: the thrown value sits above a `--trace-uncaught` hint and the footer.
+  // The value is COMPUTED: a crashed node also echoes the throwing source line, so a literal would
+  // put the asserted text on stderr twice, and a reason that dropped the value line would still
+  // match it (#918 round 2, N2).
   const root = fixture(t, {
     ...PLANTED,
     'a.js': "import { real } from './real.js';\n",
-    'throw-string.cjs': "throw 'preload threw a string';\n",
+    'throw-string.cjs': "throw ['preload', 'threw', 'a', 'string'].join(' ');\n",
   });
   withChildOptions(t, `--require=${join(root, 'throw-string.cjs')}`);
   assert.throws(() => importGraph(root, 'a.js'), (error) => {
