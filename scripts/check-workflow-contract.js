@@ -82,9 +82,13 @@
  * or `*`). It fails closed: no `tools:` line, or one that is not a one-line list, counts as able.
  * Both rules key on shell, the write-location one included, so an agent that can Write or Edit but
  * not run shell gets neither (nine almanac agents have that shape; no shipped workflow spawns
- * one). That is deliberate, not a gap in the predicate: WRITE_LOCATION names a `$DIR` only the
- * preamble's shell block creates, and Claude Code's Write tool takes an absolute path, so such an
- * agent cannot write where it stands by accident. Whether it needs a line of its own is open.
+ * one). That is an open gap, not a closed one: such an agent CAN write where it stands. The Write
+ * tool's schema asks for an absolute path but accepts a relative one and resolves it against the
+ * agent's working directory, the directory it was launched in — the repository, in the measured
+ * case (#861 round 2; verify-handoff warns on a relative path for the same reason). The rule is
+ * not widened to cover it because the line it would demand does not exist yet: WRITE_LOCATION
+ * names a `$DIR` only the preamble's shell block creates, so it would be false for that agent,
+ * and this check, which matches the identifier, would accept it anyway.
  *
  * What this reads is the prompt's TEXT between `agent(` and its options object, so its residuals
  * are textual: a comment inside that span naming WRITE_LOCATION satisfies the second rule; a

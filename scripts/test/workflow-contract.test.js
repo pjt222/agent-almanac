@@ -486,6 +486,24 @@ test('#861: the predicate keys on shell CAPABILITY, fail-closed — not on inten
   }
 });
 
+test('#861: an agent that can Write or Edit but not run shell is outside A7b — the disclosed open gap, pinned', () => {
+  // Not a safe case: the Write tool resolves a relative path against the agent's working directory
+  // (#861 round 2, SF1). It is outside the rule because WRITE_LOCATION names a `$DIR` only a shell
+  // block creates, and the docstring and workflows/README.md say so. This arm pins that disclosed
+  // scope, so widening the rule fails here and is a decision someone makes with the docs, not a
+  // drift nobody records.
+  const tools = { 'wr-agent': ['Read', 'Write', 'Edit'], 'ed-agent': ['Read', 'Edit'] };
+  const agentIntents = { 'wr-agent': 'advisory', 'ed-agent': 'advisory' };
+  for (const type of Object.keys(tools)) {
+    assert.equal(canRunShell(type, tools), false, `${type} carries no Bash`);
+    const text = fixture({ sidecarPhases: 'Scan', metaTitles: ['Scan'], implementing: null,
+      body: `phase('Scan')\nconst a = await agent('look', { label: 'scan', phase: 'Scan', agentType: '${type}' })\n` });
+    const r = checkWorkflow({ path: 'fx.mjs', text, agentIntents, agentTools: tools });
+    assert.deepEqual(r.findings, [], `${type}:\n${r.findings.join('\n')}`);
+    assert.equal(r.measured.shell, 0);
+  }
+});
+
 test('#861: readAgentTools reads the one-line list, marks anything else null, skips README and templates', (t) => {
   const dir = tree(t, { agents: {
     'a.md': 'intent: advisory\ntools: [Read, Bash]\n',
