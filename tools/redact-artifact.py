@@ -370,8 +370,9 @@ def _readings(text: str) -> tuple[_Positions, _Positions]:
     """`text` parsed once per reading of `<![CDATA[…]]>`: HTML content first, then SVG/MathML.
 
     The namespace a section sits in is not tracked (the class docstring says why), so a
-    position either reading holds is a position. Both number every run alike, so a value the
-    two readings share appears under one label.
+    position either reading holds is a position. Both number runs alike, so a value the two
+    readings share appears under one label, up to a section whose first `>` comes before its
+    `]]>`; after one, a shared value can appear under two (`_Positions.unknown_decl` says why).
     """
     return _parse_html(text), _parse_html(text, join_cdata=True)
 
@@ -823,7 +824,7 @@ def _verify() -> int:
     pos = positions("<script>acme&#95;x</script>", "html")
     check("#910: SCRIPT content yields no position of its own", pos == [], str(pos))
 
-    # The two readings number every run alike, so a leak both hold is ONE label. Here the CDATA
+    # The two readings number runs alike, so a leak both hold is ONE label. Here the CDATA
     # section opens the run: it takes the ordinal (1) and joins even when it contributes nothing.
     hits = structure_survivors("<svg><text><![CDATA[x]]>acme&#95;secret</text></svg>",
                                ["acme_secret"], "html")
