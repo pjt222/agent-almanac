@@ -152,12 +152,14 @@ class _Positions(HTMLParser):
     )
 
     # The raw-text elements: their content is delivered undecoded and unparsed. Fixed here rather
-    # than inherited, because the stdlib's list depends on the interpreter's PATCH level: 3.12.13
-    # and later (and distro backports such as Ubuntu's 3.12.3) list all six, while 3.12.12 and
-    # 3.11 list only `script style`. Inherited, `<iframe>` content joined the run on the older
-    # ones, a false CLEAN there only, and the `xmp` arm below could not fail on them. HTMLParser
-    # reads this attribute through `self`, so the override takes effect on every interpreter
-    # (measured on 3.11.14, 3.12.3-ubuntu, 3.12.12 and 3.13.12).
+    # than inherited, because the stdlib's list depends on the interpreter's PATCH level, not its
+    # minor version: 3.11.14 and 3.12.12 (and earlier patch levels) list only `script style`,
+    # while 3.11.15, 3.12.14 (what CI installs), 3.13.12 and Ubuntu's backported 3.12.3 list all
+    # six. Inherited, `<iframe>` content joined the run on the older ones, a false CLEAN there
+    # only. HTMLParser reads this attribute through `self`, so the override takes effect on every
+    # interpreter (measured on 3.11.14, 3.12.3-ubuntu, 3.12.12 and 3.13.12). On an interpreter
+    # whose own list already has all six, no behavioural arm can tell this line from an inherited
+    # one, so a literal arm in `_verify` pins the class's own tuple (#910 round 2, F1).
     CDATA_CONTENT_ELEMENTS = ("script", "style", "xmp", "iframe", "noembed", "noframes")
 
     # The raw-text elements a renderer never shows. Their content must not join the surrounding
@@ -719,7 +721,9 @@ def _verify() -> int:
         ("<p>acme_<iframe>x</iframe>secret</p>", "text[1]", "IFRAME content is not rendered"),
         ("<p>acme_<noembed>x</noembed>secret</p>", "text[1]", "NOEMBED content is not rendered"),
         ("<p>acme_<noframes>x</noframes>secret</p>", "text[1]", "NOFRAMES content is not rendered"),
-        # ...and XMP is raw text on every interpreter too, so this row can fail on each of them.
+        # XMP renders its content, so it must not be in NOT_RENDERED. This row pins only that:
+        # `acme_` joins the run whether or not XMP is raw text, so dropping "xmp" from
+        # CDATA_CONTENT_ELEMENTS passes it, and the literal arm below is what pins the tuple.
         ("<xmp>acme_</xmp>secret", "text[1]", "XMP renders its content, so it stays in the run"),
         # In HTML content a CDATA section is a bogus comment, so a join-only reading makes these
         # CLEAN. Caught on origin/main; the next group is why namespace is not tracked at all.
@@ -768,6 +772,14 @@ def _verify() -> int:
               "acme_secret" not in doc and got.startswith("structure:")
               and f"{want}:acme_secret" in got,
               f"wanted {want}:acme_secret, got {got or 'no raise'!r} over {doc!r}")
+
+    # The raw-text list is the class's OWN, not the stdlib's. Read from `__dict__`, so an
+    # inherited value is not found, and compared by identity, because on 3.12.14 (CI) the
+    # stdlib's tuple equals this one and every behavioural arm above passes either way.
+    own = _Positions.__dict__.get("CDATA_CONTENT_ELEMENTS")
+    check("#910: the raw-text element list is the class's own, all six",
+          own == ("script", "style", "xmp", "iframe", "noembed", "noframes")
+          and own is not HTMLParser.CDATA_CONTENT_ELEMENTS, repr(own))
 
     # "Its own raw position or none": none. Script content is never decoded, so a position for
     # it would be a substring of the text the whole-text tier already checked.
