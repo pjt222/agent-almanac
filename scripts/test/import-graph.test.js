@@ -187,10 +187,12 @@ test('a module that does not parse is an error naming it, never an empty graph',
 
 // ── #918: how the parser flag reaches the walk ─────────────────────────────────────────────
 //
-// `node --test` runs this file WITHOUT `--experimental-vm-modules`, so every test above goes
-// through the child `importGraph` starts with the flag. The ones below pin the other paths: a
-// caller that has the flag walks in-process, a child that cannot deliver is an error naming why,
-// and a child whose flag did not take refuses rather than blaming the module.
+// CI's `node --test` runs this file WITHOUT `--experimental-vm-modules`, so there every test above
+// goes through the child `importGraph` starts with the flag (a runner with the flag walks them
+// in-process, and they hold either way). The ones below pin the other paths: a caller that has the
+// flag walks in-process, a child that cannot deliver is an error naming why, and a child whose
+// flag did not take refuses rather than blaming the module. Those need a process without the flag,
+// so each spawns its own rather than assuming this one is (#918 round 2, N4).
 
 test('a caller already running with the flag walks in-process and gets the same graph', (t) => {
   const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n/*\nimport { planted } from './planted.js';\n*/\n" });
@@ -225,14 +227,37 @@ test('a caller already running with the flag walks in-process and gets the same 
   assert.deepEqual(JSON.parse(run.stdout), REAL_ONLY);
 });
 
-/** Run `importGraph` with NODE_OPTIONS set for its child only, restoring it afterwards. */
-function withChildOptions(t, options) {
-  const saved = process.env.NODE_OPTIONS;
-  t.after(() => {
-    if (saved === undefined) delete process.env.NODE_OPTIONS;
-    else process.env.NODE_OPTIONS = saved;
-  });
-  process.env.NODE_OPTIONS = options;
+/**
+ * What `importGraph(root, 'a.js')` throws when its child runs with `poison` as NODE_OPTIONS, or
+ * `NO THROW: <graph>`. It runs in a spawned node, not in this process, because this process may
+ * have the flag: a runner with `--experimental-vm-modules` in NODE_OPTIONS walks in-process and
+ * never starts the child these arms poison, so they would fail on `Missing expected exception`
+ * (#918 round 2, N4). The spawned node gets no NODE_OPTIONS and no flag, checks that, and sets
+ * NODE_OPTIONS once it is running, which reaches only the child `importGraph` starts.
+ */
+function childFailureMessage(root, poison) {
+  const env = {
+    ...process.env,
+    IMPORT_GRAPH_LIB: pathToFileURL(LIB).href,
+    IMPORT_GRAPH_ROOT: root,
+    IMPORT_GRAPH_POISON: poison,
+  };
+  delete env.NODE_OPTIONS;
+  const script = [
+    "import vm from 'node:vm';",
+    "if (typeof vm.SourceTextModule === 'function') throw new Error('the flag is on with NODE_OPTIONS deleted');",
+    'process.env.NODE_OPTIONS = process.env.IMPORT_GRAPH_POISON;',
+    'const { importGraph } = await import(process.env.IMPORT_GRAPH_LIB);',
+    'try {',
+    "  const graph = importGraph(process.env.IMPORT_GRAPH_ROOT, 'a.js');",
+    "  process.stdout.write('NO THROW: ' + JSON.stringify([...graph].sort()));",
+    '} catch (error) {',
+    '  process.stdout.write(error.message);',
+    '}',
+  ].join('\n');
+  const run = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', env });
+  assert.equal(run.status, 0, run.stderr);
+  return run.stdout;
 }
 
 test('a parser child that dies is an error naming why, never an empty or entry-only graph', (t) => {
@@ -241,9 +266,8 @@ test('a parser child that dies is an error naming why, never an empty or entry-o
   // this process, already running, is unaffected. The reason must survive: a crashed node's LAST
   // stderr line is its `Node.js vX.Y.Z` footer, which reads as a version problem (round 1, F2).
   const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n" });
-  withChildOptions(t, `--require=${join(root, 'no-such-preload.cjs')}`);
-  assert.throws(
-    () => importGraph(root, 'a.js'),
+  assert.match(
+    childFailureMessage(root, `--require=${join(root, 'no-such-preload.cjs')}`),
     /the parser child .* exited 1 without a graph: Error: Cannot find module '[^']*no-such-preload\.cjs'/,
   );
 });
@@ -258,12 +282,9 @@ test('a parser child that dies on a thrown non-Error keeps the value, and not th
     'a.js': "import { real } from './real.js';\n",
     'throw-string.cjs': "throw ['preload', 'threw', 'a', 'string'].join(' ');\n",
   });
-  withChildOptions(t, `--require=${join(root, 'throw-string.cjs')}`);
-  assert.throws(() => importGraph(root, 'a.js'), (error) => {
-    assert.match(error.message, /the parser child .* exited 1 without a graph: .*preload threw a string/);
-    assert.doesNotMatch(error.message, /Node\.js v\d/, 'the version footer is not a reason');
-    return true;
-  });
+  const message = childFailureMessage(root, `--require=${join(root, 'throw-string.cjs')}`);
+  assert.match(message, /the parser child .* exited 1 without a graph: .*preload threw a string/);
+  assert.doesNotMatch(message, /Node\.js v\d/, 'the version footer is not a reason');
 });
 
 test('a parser child killed by a signal says so, and is still an error', { skip: process.platform === 'win32' }, (t) => {
@@ -273,8 +294,10 @@ test('a parser child killed by a signal says so, and is still an error', { skip:
     'a.js': "import { real } from './real.js';\n",
     'kill-self.cjs': "process.kill(process.pid, 'SIGKILL');\n",
   });
-  withChildOptions(t, `--require=${join(root, 'kill-self.cjs')}`);
-  assert.throws(() => importGraph(root, 'a.js'), /the parser child .* was killed by SIGKILL without a graph/);
+  assert.match(
+    childFailureMessage(root, `--require=${join(root, 'kill-self.cjs')}`),
+    /the parser child .* was killed by SIGKILL without a graph/,
+  );
 });
 
 test('a child whose flag did not take refuses with exit 3, and does not blame the module', (t) => {
@@ -302,9 +325,8 @@ test('the refusal reaches the caller as the reason, not as a parse error in the 
     'a.js': "import { real } from './real.js';\n",
     'drop-constructor.cjs': "delete require('node:vm').SourceTextModule;\n",
   });
-  withChildOptions(t, `--require=${join(root, 'drop-constructor.cjs')}`);
-  assert.throws(
-    () => importGraph(root, 'a.js'),
+  assert.match(
+    childFailureMessage(root, `--require=${join(root, 'drop-constructor.cjs')}`),
     /the parser child .* exited 3 without a graph: vm\.SourceTextModule is unavailable on node v\S+ even under --experimental-vm-modules/,
   );
 });
