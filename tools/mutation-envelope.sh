@@ -125,6 +125,13 @@ if [ "$VERIFY" -eq 1 ]; then
   DIR=$(mktemp -d)
   trap 'rm -rf "${DIR:?}"' EXIT
   cd "${DIR:?}" || exit 2
+  # A caller's GIT_* reaches every git below. With GIT_DIR and GIT_WORK_TREE exported by the
+  # caller, the fixture's `git init` and `git config user.*` wrote into the CALLER's repository
+  # (#930 round 2), and GIT_CONFIG_COUNT/KEY_n/VALUE_n injects config past any list of names, so
+  # every GIT_* is unset rather than a list of them. The decoy exported first is what the check
+  # after the fixture commit looks for: if this scrub stops working, the fixture lands in it.
+  export GIT_DIR="${DIR:?}/decoy.git" GIT_WORK_TREE="${DIR:?}/decoy" GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=user.name GIT_CONFIG_VALUE_0=decoy
+  unset "${!GIT_@}"
   export GIT_CONFIG_NOSYSTEM=1 HOME="${DIR:?}" XDG_CONFIG_HOME="${DIR:?}/.config"
 
   # ── the plan check, against a stub checker ──
@@ -261,6 +268,13 @@ JS
 JSON
   git add -A >/dev/null 2>&1
   git commit -qm fixture >/dev/null 2>&1
+  # The fixture's git acted on the fixture alone: its own .git, no decoy, the author it was given.
+  if [ "$(git rev-parse --absolute-git-dir 2>/dev/null)" != "$(pwd -P)/.git" ] || [ -e "${DIR:?}/decoy.git" ] \
+     || [ "$(git log -1 --format=%an 2>/dev/null)" != fixture ]; then
+    echo "mutation-envelope --verify: FAILED — an inherited GIT_* variable reached the fixture's git" >&2
+    exit 1
+  fi
+
   printf 'kill\tscripts/lib/subject.js\texport function covered(n) { return n > 10; }::export function covered(n) { return n >= 10; }\n' > plan.txt
   printf 'survive\tscripts/lib/subject.js\texport function uncovered(n) { return n > 10; }::export function uncovered(n) { return n >= 10; }\n' >> plan.txt
 
