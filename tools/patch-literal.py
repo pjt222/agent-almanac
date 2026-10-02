@@ -125,11 +125,12 @@ appends a byte to the target between phase 1 and the rename (so the pre-rename c
 refuses), `readback` appends a byte after the rename (so the read-back mismatches) and
 `readfail` makes the read-back itself raise, `stdout` replaces fd 1 with a pipe nobody reads
 just before the success line (so the print fails with a real EPIPE, and the shutdown flush
-would too), `stdout-early` does the same before the first line of output, and `stderr` makes
-the report's own print fail; several kind:path pairs may be given, comma-separated, so a
-path that itself contains a comma cannot be named. Every
-firing prints
-`patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
+would too), `stdout-early` does the same before the first line of output, and `stderr` does
+the same to fd 2 just before the INCOMPLETE report, or before the could-not-run line when
+the output stream failed before any write (so that print fails for real, and the shutdown
+flush of what it left buffered would too, but for the redirect to /dev/null); several
+kind:path pairs may be given, comma-separated, so a path that itself contains a comma cannot
+be named. Every firing prints `patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
 be misread as the mount misbehaving. The hook exists so that --verify drives the exit-3 arms
 through the real process rather than trusting a comment; an operator who exports the variable
 by accident changes a real run on that one file, loudly -- and with `touch` or `readback`
@@ -399,11 +400,11 @@ def _discard(stream):
         os.dup2(os.open(os.devnull, os.O_WRONLY), stream.fileno())
 
 
-def _break_stdout():
-    """Self-test only: make fd 1 the write end of a pipe nobody reads, so the next print gets EPIPE."""
+def _break_stream(stream):
+    """Self-test only: make the stream's fd the write end of a pipe nobody reads, so the next print gets EPIPE."""
     r, w = os.pipe()
     os.close(r)
-    os.dup2(w, sys.stdout.fileno())
+    os.dup2(w, stream.fileno())
     os.close(w)
 
 
@@ -471,7 +472,7 @@ def run(entries, dry_run):
     try:
         for plan in plans:
             if _fault('stdout-early', plan['path']):
-                _break_stdout()
+                _break_stream(sys.stdout)
             print(f'{TAG}: {plan["path"]}: {plan["edits"]} edit(s) match, '
                   f'{len(plan["before"])} -> {len(plan["after"])} bytes')
         if dry_run:
@@ -495,7 +496,7 @@ def run(entries, dry_run):
             if ok:
                 written.append(plan['path'])
                 if _fault('stdout', plan['path']):
-                    _break_stdout()
+                    _break_stream(sys.stdout)
                 print(f'{TAG}: {plan["path"]}: written, read-back OK ({len(plan["after"])} bytes)')
             else:
                 mismatched.append(plan['path'])
@@ -528,7 +529,7 @@ def run(entries, dry_run):
         parts.append(f'output stream failed ({stream_failed}); the states before it are what was done')
     try:
         if _fault('stderr', plans[0]['path']):
-            raise BrokenPipeError('injected stderr fault (PATCH_LITERAL_FAULT)')
+            _break_stream(sys.stderr)
         print(f'{TAG}: INCOMPLETE: ' + '; '.join(parts), file=sys.stderr)
     except OSError:
         _discard(sys.stderr)
@@ -537,7 +538,7 @@ def run(entries, dry_run):
 
 # --- self-test ------------------------------------------------------------------------------
 
-RUNS_EXPECTED = 64  # process runs below; a fixture added or removed must move this with it
+RUNS_EXPECTED = 65  # process runs below; a fixture added or removed must move this with it
 
 
 def verify():
@@ -972,6 +973,16 @@ def verify():
               f'rc={rc} err={err}')
         check('v36 untouched', get(d, 'ef.txt') == b'ef\n', get(d, 'ef.txt'))
 
+        # v37: the could-not-run line's own stderr print failing (after stdout failed before any
+        # write) is still exit 2, silently; fd 2 is broken for real, as in v34
+        put(d, 'e2s.txt', b'e2s\n')
+        p = os.path.join(d, 'e2s.txt')
+        rc, out, err = go(['e2s.txt', '--replace', 'e2s::E2S'], d, fault=f'stdout-early:{p},stderr:{p}')
+        check('v37 exit', rc == 2, f'rc={rc} err={err}')
+        check('v37 untouched', get(d, 'e2s.txt') == b'e2s\n', get(d, 'e2s.txt'))
+        check('v37 no message', 'output stream failed' not in err and 'Traceback' not in err
+              and f'{FAULT_ENV}=stderr:' in err, err)
+
     check('run count', runs == RUNS_EXPECTED, f'{runs} run(s), RUNS_EXPECTED is {RUNS_EXPECTED}')
     for f in failures:
         print(f'verify: FAIL {f}')
@@ -1033,6 +1044,8 @@ def main(argv):
     except OSError as exc:
         _discard(sys.stdout)
         try:
+            if _fault('stderr', entries[0]['path']):
+                _break_stream(sys.stderr)
             print(f'{TAG}: cannot run: output stream failed before any write ({exc}); nothing written', file=sys.stderr)
         except OSError:
             _discard(sys.stderr)
