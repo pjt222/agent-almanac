@@ -133,7 +133,8 @@ flush of what it left buffered would too, but for the redirect to /dev/null); se
 kind:path pairs may be given, comma-separated, so a path that itself contains a comma cannot
 be named. Such a path is refused instead (exit 2, before anything is read), because its tail
 after the comma is not a known kind followed by `:`; the one shape that cannot be caught is
-a tail that is itself a valid pair (a directory named `x,write:y`). Every firing prints `patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
+a tail that is itself a valid pair (a directory named `x,write:y`). Every firing prints
+`patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
 be misread as the mount misbehaving. The hook exists so that --verify drives the exit-3 arms
 through the real process rather than trusting a comment; an operator who exports the variable
 by accident changes a real run on that one file, loudly -- and with `touch` or `readback`
