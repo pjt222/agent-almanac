@@ -108,7 +108,10 @@ python3 tools/redact-artifact.py --type mermaid --mapping /tmp/viz-map.tsv \
 
 For SVG/HTML pass `--type html`: replacements still apply to the whole text, but the verification
 tier additionally parses the document and asserts that no source term survives in a text node or
-an attribute value, reporting the position (`text[2]`, `attr:data-id[0]`) and never the content.
+an attribute value, reporting the position and never the content. A position is a label such as
+`text[N]` or `attr:<name>[N]`, where N is one ordinal counted across the whole document from 1:
+on `<div data-id="acme&#95;secret">acme&#95;secret</div>`, whose character reference hides the
+term from the whole-text check, it reports `attr:data-id[1]` and `text[2]`.
 
 **Expected:** Exit 0, and the redacted artifact has identical structure to the source with
 descriptive stand-ins in every label position. A non-zero exit means the tool refused to hand back
