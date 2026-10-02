@@ -122,16 +122,19 @@ class _Positions(HTMLParser):
       - a `<![CDATA[…]]>` section never breaks a run, and what it contributes to the run depends
         on the namespace it sits in, which this class does NOT track. In SVG or MathML the
         content up to `]]>` is rendered text. In HTML content the section is a bogus comment
-        that ends at the FIRST `>`, and whatever follows that `>` is rendered text. So every
-        document is parsed twice, once per reading (`join_cdata`), and a term either reading
-        holds is a survivor. That over-reports where the other reading is the true one, which is
-        the direction a redaction gate can afford. A tag-counting namespace tracker was tried
-        and missed breakout tags, `<foreignObject>` children and a stray `</math>`, turning
-        leaks origin/main caught into CLEAN (#910). The limit: each parse reads EVERY section
-        its one way, so a run whose term needs one section joined and another dropped (SVG
-        text and a `<foreignObject>` span in one run, each with a CDATA section) is not found.
-        No witness was found: Chromium's innerText puts a line break between those two, so the
-        limit may be narrower than this states
+        that ends at the FIRST `>`, and whatever follows that `>` is rendered text, which this
+        class joins RAW: a charref, tag or comment in it is missed (`unknown_decl` says how). So
+        every document is parsed twice, once per reading (`join_cdata`), and a term either
+        reading holds is a survivor. That over-reports where the other reading is the true one,
+        which is the direction a redaction gate can afford. A tag-counting namespace tracker was
+        tried and missed breakout tags, `<foreignObject>` children and a stray `</math>`,
+        turning leaks origin/main caught into CLEAN (#910). The limit: each parse reads EVERY
+        section its one way, so a term that needs two sections read different ways is not
+        found. Witness (#910 round 3, N2), which Chromium renders with the term and which is
+        CLEAN here: `<svg><text><![CDATA[x><script>]]></text></svg><p><![CDATA[>acme&#95;secret]]></p>`.
+        Its second section alone is already CLEAN (the raw tail above), and a reading that
+        tokenised that tail would still miss it, because it would also read the first
+        section's `<script>` as a tag and lose the rest of the document (#910 round 3, B1)
       - nor is a term split by content a renderer hides for a reason this class does not
         model: `<template>` and `<noscript>` content (and anything `display:none`) still joins
         the run, so `acme_<template>x</template>secret` is CLEAN (measured)
@@ -246,8 +249,15 @@ class _Positions(HTMLParser):
         #                what follows that `>` is text: `<p>acme_<![CDATA[>secret]]></p>` shows
         #                `acme_secret]]>`, and dropping the whole section was a false CLEAN. The
         #                `]]>` that closed it is not re-added, which can over-report, never hide.
-        # A marked section that is not CDATA is a bogus comment in both namespaces. Nothing here
-        # is unescaped, because a renderer does not unescape either form.
+        #                That text is joined RAW, and a renderer does not leave it raw: it decodes
+        #                and tokenises it as ordinary markup. So a charref, a tag or a comment
+        #                after the first `>` is missed: `<p><![CDATA[>acme&#95;secret]]></p>` is
+        #                CLEAN here, as on origin/main (#910 round 2, F2). Letting the parser
+        #                tokenise that text in this reading was tried and reverted: a section that
+        #                really sits in SVG then opened a `<script>`, `<style>`, `<textarea>` or
+        #                `<!--` from its content, which swallowed the rest of the document in this
+        #                reading, and leaks origin/main caught went CLEAN (#910 round 3, B1).
+        # A marked section that is not CDATA is a bogus comment in both namespaces.
         #
         # One ordinal, and `_join` even when nothing shows, in BOTH readings: the two parses must
         # number every run alike, or one leak both readings hold is reported under two labels.
@@ -344,9 +354,8 @@ def _readings(text: str) -> tuple[_Positions, _Positions]:
     """`text` parsed once per reading of `<![CDATA[…]]>`: HTML content first, then SVG/MathML.
 
     The namespace a section sits in is not tracked (the class docstring says why), so a
-    position either reading holds is a position. Both number runs alike, so a value the two
-    readings share appears under one label, up to a section whose first `>` comes before its
-    `]]>`; after one, a shared value can appear under two (`_Positions.unknown_decl` says why).
+    position either reading holds is a position. Both number every run alike, so a value the
+    two readings share appears under one label.
     """
     return _parse_html(text), _parse_html(text, join_cdata=True)
 
@@ -789,7 +798,7 @@ def _verify() -> int:
     pos = positions("<script>acme&#95;x</script>", "html")
     check("#910: SCRIPT content yields no position of its own", pos == [], str(pos))
 
-    # The two readings number runs alike, so a leak both hold is ONE label. Here the CDATA
+    # The two readings number every run alike, so a leak both hold is ONE label. Here the CDATA
     # section opens the run: it takes the ordinal (1) and joins even when it contributes nothing.
     hits = structure_survivors("<svg><text><![CDATA[x]]>acme&#95;secret</text></svg>",
                                ["acme_secret"], "html")
