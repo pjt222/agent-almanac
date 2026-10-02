@@ -46,7 +46,8 @@
  *
  *   HEAD            a stray commit (the tree looks clean afterwards)
  *   branch          a checkout that moved the working branch
- *   status lines    files appearing, vanishing, or changing state
+ *   status lines    files appearing, vanishing, or changing state; a rename or copy
+ *                   is recorded with its origin, so a swapped origin moves its line
  *   file contents   a stray write to a file that was ALREADY modified. Comparing
  *                   status lines alone misses this entirely: ` M CLAUDE.md` reads
  *                   identical before and after the overwrite. This repo is
@@ -60,8 +61,15 @@
  *
  * Ignored paths. `git status --porcelain` omits them by design and walking them
  * would mean hashing `node_modules`. A stray write to a gitignored file (in this
- * repo, `CONTINUE_HERE.md`) is invisible here. Everything else under the working
- * tree is compared by content.
+ * repo, `CONTINUE_HERE.md`) is invisible here. Every path git does list is compared
+ * as it is on disk, without following a link (#921): a regular file by its bytes, a
+ * symlink by the target it names and not the bytes it reaches, and anything else (a
+ * directory, say) by one marker saying it is not a regular file, so nothing inside it
+ * is read.
+ *
+ * A hard link. A regular file is compared by its bytes, so an untracked file replaced
+ * by a hard link to identical bytes outside the repository reads as unchanged (measured
+ * with the #921 fix in place), although a write through it changes that other file.
  *
  * Refs other than two. History is read through HEAD, and through the branch the
  * snapshot was on once HEAD has left it (#920 review). A commit on any other branch,
@@ -115,7 +123,7 @@
  * about file contents.
  */
 
-import { readFileSync, writeFileSync, existsSync, unlinkSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, unlinkSync, lstatSync, readlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
@@ -127,9 +135,16 @@ const SNAPSHOT_NAME = 'repo-guard.json';
  * happened the guard said `snapshot is missing 'contents'`, which is accurate
  * and useless. Refusing is right; naming the reason is what makes it actionable.
  */
-const FORMAT_VERSION = 3;
+const FORMAT_VERSION = 4;
 /** Sentinel for a repository with no commits yet. */
 const UNBORN = '(unborn)';
+/**
+ * A porcelain v1 code for a rename or copy, in either column: its entry carries two paths. With an
+ * intent-to-add destination git 2.43 reports a worktree rename, ` R` (#922).
+ */
+const isRenameOrCopy = (code) => /[RC]/.test(code);
+/** Joins a rename or copy's destination to its origin on a recorded status line (#922). */
+const ORIGIN_MARK = ' <- ';
 // How the baseline reads the branch and the index flags, and so the commands the advice names for
 // each: a command the guard does not read with can print nothing where the guard found a change.
 // `git branch --show-current` prints nothing on a detached HEAD (#907 round 1), and this prints
@@ -284,12 +299,16 @@ function captureState() {
     const part = parts[i];
     if (!part) continue;
     const code = part.slice(0, 2);
-    entries.push({ code, path: part.slice(3) });
-    // Under -z a rename or copy is TWO fields: the new path, then the original.
-    if (code[0] === 'R' || code[0] === 'C') i++;
+    // Under -z a rename or copy is TWO fields: the new path, then the original. The original is
+    // recorded on the line, so a rename whose origin changes moves it (#922). Only the new path
+    // is hashed, as before.
+    const origin = isRenameOrCopy(code) ? parts[++i] : undefined;
+    entries.push({ code, path: part.slice(3), origin });
   }
 
-  const status = entries.map((e) => `${e.code} ${e.path}`).sort();
+  const status = entries
+    .map((e) => `${e.code} ${e.path}${e.origin === undefined ? '' : `${ORIGIN_MARK}${e.origin}`}`)
+    .sort();
 
   const contents = {};
   for (const { path } of entries) {
@@ -299,8 +318,15 @@ function captureState() {
       // content. Skipping them instead would make a path that STOPS being a
       // regular file — a file swapped for a symlink, say — vanish from the map
       // while its status line stayed identical, and so go unreported.
-      if (!existsSync(abs)) contents[path] = '(absent)';
-      else if (!statSync(abs).isFile()) contents[path] = '(not-a-regular-file)';
+      //
+      // `lstat`, never `stat`: a symlink is recorded by the target it names, not by the bytes it
+      // reaches. Read through the link, a file swapped for a link to identical bytes hashed the
+      // same and verified as unchanged, while a write through the path landed outside the
+      // repository (#921).
+      const stats = lstatSync(abs, { throwIfNoEntry: false });
+      if (stats === undefined) contents[path] = '(absent)';
+      else if (stats.isSymbolicLink()) contents[path] = `(symlink:${readlinkSync(abs)})`;
+      else if (!stats.isFile()) contents[path] = '(not-a-regular-file)';
       else contents[path] = sha(readFileSync(abs));
     } catch (error) {
       contents[path] = `unreadable:${error.code || 'error'}`;
@@ -703,9 +729,16 @@ if (contentChanged.length) {
   worktreeMoved = true;
   // Grouped once per capture: filtering the whole list once per changed path made verify
   // quadratic in the number of pending paths (#920 round 2, R2-4).
+  // A rename or copy line carries two paths, and is grouped under its destination, the key the
+  // content map uses (#922). A destination containing ` <- ` is split at the wrong place; that
+  // changes only which paths the heading lists, since the move was already counted above.
   const linesByPath = (state) => {
     const byPath = new Map();
-    for (const line of state.status) byPath.set(line.slice(3), `${byPath.get(line.slice(3)) ?? ''}${line}\n`);
+    for (const line of state.status) {
+      const path = isRenameOrCopy(line.slice(0, 2))
+        ? line.slice(3, line.indexOf(ORIGIN_MARK, 3)) : line.slice(3);
+      byPath.set(path, `${byPath.get(path) ?? ''}${line}\n`);
+    }
     return byPath;
   };
   const beforeLines = linesByPath(before);
