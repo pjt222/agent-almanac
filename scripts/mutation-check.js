@@ -120,7 +120,9 @@ const MAX_OUTPUT_CHARS = 64 * 1024 * 1024;
  */
 async function runCommand(cmd) {
   return new Promise((settle) => {
-    const child = spawn(cmd, { shell: true });
+    // stdin is closed (#819): an inherited open pipe is what let a mutant's test wait forever
+    // on a `read` in #816. Nothing in a mutation run should read the terminal.
+    const child = spawn(cmd, { shell: true, stdio: ['ignore', 'pipe', 'pipe'] });
     let output = '';
     let overflowed = false;
     let spawnError = null;
