@@ -96,7 +96,7 @@ PATTERNS=(
   # code decodes to, a regex anchor -- and fired on prose documenting exactly that.
   'minified-ident-in-prose|(`[_$][A-Za-z0-9_$]{1,2}`|`[A-Z]`|`[A-Za-z0-9]{1,2}[_$][A-Za-z0-9]{0,1}`)'
 
-  # A template-literal interpolation of a short identifier -- `${r}`, `${at(o)}`. Added
+  # A template-literal interpolation of a short call -- `${at(o)}` (see the #863 note). Added
   # 2026-08-26 (second pass) after a reviewer found `${r} lines and ${at(o)}` quoted verbatim
   # from the bundle in a probe docstring, which the prose-identifier shape above does not match
   # because the name sits inside `${...}` rather than between backticks. Two review rounds, two
