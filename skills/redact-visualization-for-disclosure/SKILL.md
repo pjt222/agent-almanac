@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: investigation
   complexity: intermediate
   language: multi
