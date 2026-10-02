@@ -211,11 +211,42 @@ verify() {
     fi
   done
 
+  # 6. Known false positives must stay CLEAN (#863). A rule that only ever sees dirty input
+  #    looks correct forever, so each row is ordinary text a rule once fired on. The WHOLE file
+  #    must exit 0, so a fix that silences one rule by tripping another fails here too.
+  local negatives=0 negative
+  for negative in template-var-reproducer template-var-short-idents \
+                  backticked-underscore-numeric-code backticked-dollar-in-prose; do
+    case "$negative" in
+      # #863, verbatim: short variables interpolated in readable JavaScript, nothing minified.
+      template-var-reproducer)
+        printf '%s\n' 'walkErrors.push(`${dir}: ${err.code || err.message}`);' \
+          'for (const p of nonJsonlSeen.slice(0, 5)) console.log(`    ${p}`);' ;;
+      template-var-short-idents)
+        printf '%s\n' 'console.log(`row ${i} of ${n}: ${err} in ${ctx}, ${msg}`);' ;;
+      # #863 comment 2, verbatim from tools/redact-artifact.py. The finding was the decoded
+      # character in backticks (a lone underscore), not the numeric code beside it.
+      backticked-underscore-numeric-code)
+        printf '%s\n' '  mermaid   `#NN;` numeric codes decoded (mermaid renders `#95;` as `_`)' \
+          '    """Mermaid renders `#95;` as `_`, so a diagram can carry an identifier the bytes do not."""' ;;
+      # The same class one character over: a lone dollar sign named as a character.
+      backticked-dollar-in-prose)
+        printf '%s\n' 'the regex anchors on `$` at the end of the line' ;;
+    esac > "$tmp/negative.md"
+    negatives=$((negatives + 1))
+    out="$(scan_all "$tmp/negative.md")"; rc=$?
+    if [ "$rc" -ne 0 ]; then
+      echo "verify FAIL: known false positive '$negative' gave exit $rc, expected 0 (clean)" >&2
+      echo "$out" >&2
+      missed=$((missed + 1))
+    fi
+  done
+
   if [ "$missed" -ne 0 ]; then
-    echo "check-redaction --verify: FAILED ($missed of $((seeded + 1)) checks)" >&2
+    echo "check-redaction --verify: FAILED ($missed of $((seeded + negatives + 1)) checks)" >&2
     return 1
   fi
-  echo "check-redaction --verify: OK ($seeded shapes each seeded and caught; clean exits 0; missing file exits 2; labels only)"
+  echo "check-redaction --verify: OK ($seeded shapes each seeded and caught; $negatives known false positives stay clean; clean exits 0; missing file exits 2; labels only)"
   return 0
 }
 
