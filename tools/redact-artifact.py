@@ -774,6 +774,16 @@ def _verify() -> int:
         ("<p>acme_<![CDATA[>secret]]></p>", "text[1]", "a bogus comment ends at the first >"),
         ("<p>acme_<![CDATA[x>secret]]></p>", "text[1]", "...wherever that > is"),
         ("<p>acme_<![CDATA[>secret</p>", "text[1]", "...and in an unclosed section"),
+        # Caught on origin/main (as `text[1]`): an SVG section's content must not derail the HTML
+        # reading for the rest of the document. Round 3 tokenised the text after a section's
+        # first `>` in that reading, so `a><script>` opened a real raw-text element, and each
+        # row went CLEAN while Chromium rendered the term (#910 round 3, B1). The CDATA reading
+        # cannot stand in, because it joins the later section: `acme_xsecret`.
+        *(("<svg><text><![CDATA[a>" + opener + "]]></text></svg><p>acme_<![CDATA[x]]>secret</p>",
+           "text[2]", f"an SVG section holding {opener} does not swallow later HTML")
+          for opener in ("<script>", "<style>", "<!--", "<textarea>", "<title>", "<iframe>")),
+        ("<svg><text><![CDATA[a><script>]]></text></svg><div><p>acme_<![CDATA[x]]>secret</p></div>",
+         "text[2]", "...nor a leak nested a level deeper"),
         # Guards that passed on origin/main.
         # Long enough that slicing off a `CDATA[` prefix it does not have leaves text behind.
         ("<svg><text>acme_<![if gte mso 9]>secret</text></svg>", "text[1]",
