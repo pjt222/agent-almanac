@@ -12,7 +12,9 @@
  *                                                   being checked
  *
  * Exit 0 clean; 1 on any schema error, any file without a row, any row without a file, anything
- * under tools/ that is not a plain file, or any self-test that exits non-zero; 2 when the
+ * under tools/ that is not a plain file, any usage line naming a tool without the interpreter its
+ * extension requires (`usageLineErrors`, #811: every tool is committed non-executable), or any
+ * self-test that exits non-zero; 2 when the
  * registry cannot be read or parsed (never a pass). Dependency-free: the reader is
  * `scripts/lib/tools-registry.js`, not js-yaml.
  *
@@ -48,6 +50,7 @@ export function main(argv, io = console, root = ROOT, run = spawnSync) {
   for (const p of reg.fileWithoutRow) { io.log(`FAIL: file without row: ${p} -- it renders in no index; add an entry to tools/_registry.yml`); failed = true; }
   for (const p of reg.rowWithoutFile) { io.log(`FAIL: row without file: ${p} -- the registry names a tool that is not on disk`); failed = true; }
   for (const p of reg.notPlainFile) { io.log(`FAIL: not a plain file under tools/: ${p} -- a tool is one flat file; a subdirectory or symlink there is representable by no row (NOT_TOOLS is the exact exemption set)`); failed = true; }
+  for (const u of reg.usageErrors) { io.log(`FAIL: usage line: ${u} -- every tool is committed non-executable, so the line as printed does not run`); failed = true; }
   let verifyNote = '';
   if (verify) {
     let ran = 0;

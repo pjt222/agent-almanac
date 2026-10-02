@@ -23,6 +23,7 @@ import { rmTree } from './_tmp.js';
 import { initRepo, isolateGitEnv } from './_git-fixture.js';
 import {
   REGISTRY_PATH, TAGS, parseRegistry, schemaErrors, checkParity, loadRegistry, renderClaudeBlock, renderReadmeTable,
+  usageLineErrors,
 } from '../lib/tools-registry.js';
 import { main as checkMain } from '../check-tools-registry.js';
 
@@ -158,6 +159,38 @@ test('checkParity reports three directions as three lists; README.md, fixtures/ 
   assert.deepEqual(notPlainFile, ['tools/dangling.sh', 'tools/hermes'], 'a tool in a subdirectory is representable by no row, so it must be reported, not dropped');
 });
 
+test('usageLineErrors: a tool named without the interpreter its extension requires is reported by line, bare or behind the wrong one; a title line and mid-prose mention are not (#811)', (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'tools-usage-'));
+  t.after(() => rmTree(root));
+  mkdirSync(join(root, 'tools'));
+  writeFileSync(join(root, 'tools/demo-tool.sh'), [
+    '# demo-tool.sh -- a title line, not an invocation', //            1  exempt
+    '#     tools/demo-tool.sh --verify', //                             2  bare, doc block
+    '#     bash tools/demo-tool.sh --verify', //                        3  ok
+    '# run by tools/demo-tool.sh when the moon is full', //             4  mid-prose, not a usage line
+    'usage: tools/demo-tool.sh <pr-number>', //                         5  bare, after usage:
+    '       demo-tool.sh --pr N', //                                    6  bare, heredoc continuation
+    'usage: bash tools/demo-tool.sh <pr-number>', //                    7  ok
+    '    python3 tools/demo-tool.sh --verify', //                       8  wrong interpreter
+    '    sh tools/demo-tool.sh --verify', //                            9  wrong: /bin/sh is not bash
+    '    node tools/other-tool.mjs --verify', //                        10 ok
+  ].join('\n'));
+  writeFileSync(join(root, 'tools/other-tool.mjs'), [
+    ' * other-tool.mjs — a title line, not an invocation', //           1  exempt
+    "    console.log('usage: other-tool.mjs <id>');", //                2  bare, inside a string
+    "    console.log('Usage: node tools/other-tool.mjs <id>');", //     3  ok
+  ].join('\n'));
+  assert.deepEqual(usageLineErrors(root, ['tools/demo-tool.sh', 'tools/other-tool.mjs']), [
+    'tools/demo-tool.sh:2: names demo-tool.sh without its interpreter; write `bash tools/demo-tool.sh`',
+    'tools/demo-tool.sh:5: names demo-tool.sh without its interpreter; write `bash tools/demo-tool.sh`',
+    'tools/demo-tool.sh:6: names demo-tool.sh without its interpreter; write `bash tools/demo-tool.sh`',
+    'tools/demo-tool.sh:8: runs demo-tool.sh with python3; its extension requires bash',
+    'tools/demo-tool.sh:9: runs demo-tool.sh with sh; its extension requires bash',
+    'tools/other-tool.mjs:2: names other-tool.mjs without its interpreter; write `node tools/other-tool.mjs`',
+  ]);
+  assert.match(usageLineErrors(root, ['tools/odd.rb']).join('\n'), /tools\/odd\.rb: no interpreter is known for `\.rb`/, 'a new kind of tool cannot pass the scan by having no interpreter entry');
+});
+
 test('renderClaudeBlock: need-first lines, not_for as a suffix, every TAGS group in order then untagged, deprecated rows skipped and counted', () => {
   const entries = [
     ENTRY({ id: 'z-untagged', path: 'tools/z-untagged.sh', verify: 'bash tools/z-untagged.sh --verify', need: 'Doing the untagged thing.' }),
@@ -227,6 +260,15 @@ test('the CLI: exit 0 on a clean tree, 1 naming each defect, 2 when the registry
   assert.equal(okLines().length, 0, 'no OK: line on a failing run');
   assert.match(out.at(-1), /^FAIL: 3 row\(s\) \(3 active\) against 2 plain file\(s\) under tools\/, three directions \(1 not a plain file\)/, 'the plain-file count is measured, not reconstructed (round-3 N1)');
 
+  // A usage line without its interpreter reaches the CLI as a FAIL line and costs the OK: line (#811).
+  out.length = 0;
+  const usage = tree([ENTRY()]);
+  t.after(() => rmTree(usage));
+  writeFileSync(join(usage, 'tools/demo-tool.sh'), 'usage: tools/demo-tool.sh --verify\n');
+  assert.equal(checkMain([], capture, usage), 1);
+  assert.match(out.join('\n'), /FAIL: usage line: tools\/demo-tool.sh:1: names demo-tool.sh without its interpreter/);
+  assert.equal(okLines().length, 0, 'no OK: line when a usage line fails');
+
   // A REPOSITORY, like every other fixture here. While it was not, this arm passed for two
   // reasons: `check-tools-registry.js` returns 2 for any throw out of `loadRegistry`, and
   // "not a checkout" is now also a throw — so `=== 2` could no longer tell which one it had
@@ -276,6 +318,7 @@ test('the real catalogue passes its own gate, and its rendered index names every
   assert.deepEqual(reg.fileWithoutRow, []);
   assert.deepEqual(reg.rowWithoutFile, []);
   assert.deepEqual(reg.notPlainFile, []);
+  assert.deepEqual(reg.usageErrors, [], 'every usage line in the real tools names its interpreter (#811)');
   assert.ok(reg.entries.length >= 10, `expected at least the ten tools of 2026-09-08, got ${reg.entries.length}`);
   const block = renderClaudeBlock(reg.entries);
   for (const e of reg.entries.filter((x) => x.status === 'active')) {
