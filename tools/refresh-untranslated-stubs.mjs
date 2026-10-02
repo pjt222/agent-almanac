@@ -254,7 +254,7 @@ export function main(argv) {
   }
   const opts = parseArgs(flags, spec, usageExit({ bool: ['<content-type> <id>', ...spec.bool], value: spec.value }));
   if (opts.help) {
-    console.log('usage: refresh-untranslated-stubs.mjs <content-type> <id> [--verify | --stamp <sha>] [--locale <l>] [--root <dir>]');
+    console.log('usage: node tools/refresh-untranslated-stubs.mjs <content-type> <id> [--verify | --stamp <sha>] [--locale <l>] [--root <dir>]');
     return 0;
   }
   if (positional.length !== 2) throw new CannotRun(`expected <content-type> <id>, got ${positional.length} positional argument(s)`);

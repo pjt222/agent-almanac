@@ -46,9 +46,9 @@
 # internal shapes is itself a description of internals.
 #
 # USAGE
-#     tools/check-redaction.sh FILE...      scan
-#     tools/check-redaction.sh --verify     self-test; exit non-zero if the gate cannot fail
-#     tools/check-redaction.sh --labels     list what is checked, without the patterns
+#     bash tools/check-redaction.sh FILE...      scan
+#     bash tools/check-redaction.sh --verify     self-test; exit non-zero if the gate cannot fail
+#     bash tools/check-redaction.sh --labels     list what is checked, without the patterns
 set -uo pipefail
 
 SELF="$(basename "${BASH_SOURCE[0]}")"
