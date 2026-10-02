@@ -557,7 +557,7 @@ def run(entries, dry_run):
 
 # --- self-test ------------------------------------------------------------------------------
 
-RUNS_EXPECTED = 67  # process runs below; a fixture added or removed must move this with it
+RUNS_EXPECTED = 68  # process runs below; a fixture added or removed must move this with it
 
 
 def verify():
@@ -1003,16 +1003,17 @@ def verify():
               and f'{FAULT_ENV}=stderr:' in err, err)
 
         # v38: a fault path containing a comma cannot be named (pairs are comma-separated), so it
-        # cannot run (exit 2) rather than silently disarming the hook; the fragment after the
-        # comma is caught with no colon in it (not kind:path) and with one (an unknown kind)
-        for sub in ('a,b', 'x,y:z'):
-            os.mkdir(os.path.join(d, sub))
-            put(d, os.path.join(sub, 'cm.txt'), b'cm\n')
-            rc, out, err = go([os.path.join(sub, 'cm.txt'), '--replace', 'cm::CM'], d,
-                              fault='write:' + os.path.join(d, sub, 'cm.txt'))
-            check(f'v38 {sub} exit', rc == 2 and f'cannot run: {FAULT_ENV}' in err and 'contains a comma' in err,
+        # cannot run (exit 2) rather than silently disarming the hook. The tail after the comma
+        # is caught as an unknown kind with no colon (a,b/...) or with one (x,y:z/...), and as
+        # a known kind with no colon (a path ending in ,stdout)
+        os.mkdir(os.path.join(d, 'a,b'))
+        os.mkdir(os.path.join(d, 'x,y:z'))
+        for name in ('a,b/cm.txt', 'x,y:z/cm.txt', 'cm,stdout'):
+            put(d, name, b'cm\n')
+            rc, out, err = go([name, '--replace', 'cm::CM'], d, fault='write:' + os.path.join(d, name))
+            check(f'v38 {name} exit', rc == 2 and f'cannot run: {FAULT_ENV}' in err and 'contains a comma' in err,
                   f'rc={rc} err={err}')
-            check(f'v38 {sub} untouched', get(d, os.path.join(sub, 'cm.txt')) == b'cm\n')
+            check(f'v38 {name} untouched', get(d, name) == b'cm\n')
 
     check('run count', runs == RUNS_EXPECTED, f'{runs} run(s), RUNS_EXPECTED is {RUNS_EXPECTED}')
     for f in failures:
