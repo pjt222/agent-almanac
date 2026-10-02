@@ -12,7 +12,8 @@
  *     --test 'npm run test:cli'
  *
  * Exit 0 = mutant killed (the check works).
- * Exit 1 = mutant survived (the line is uncovered), the run was inconclusive, or the kill was
+ * Exit 1 = mutant survived (the line is uncovered), the run was inconclusive (HUNG past
+ *          --timeout included, #819), or the kill was
  *          SUSPECT — the mutant looks BROKEN rather than caught (#621).
  *
  * ── Why it is this defensive ─────────────────────────────────────
@@ -58,6 +59,18 @@ import { extname, relative, resolve } from 'node:path';
 import { parseFailCount, parsePassCount, crashSuspicion } from './lib/mutation-verdict.js';
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
+/**
+ * How long one test run may take before it is killed and reported HUNG (#819).
+ *
+ * Measured before it was fixed, as the Sprint 2 decision on #819 required: `npm run test:scripts`
+ * took 209.1 s and 192.4 s on the /mnt NTFS mount on 2026-10-02 (load average ~36), so 900 s is
+ * about 4.3x the slower run. A cap tighter than the suite would turn every honest run into HUNG.
+ */
+const DEFAULT_TIMEOUT_SECONDS = 900;
+
+/** setTimeout's ceiling is 2^31-1 ms; above it Node fires after 1 ms instead. */
+const MAX_TIMEOUT_SECONDS = Math.floor((2 ** 31 - 1) / 1000);
+
 const USAGE = `Usage:
   node scripts/mutation-check.js --file <path> --test <cmd>
       (--delete-matching <str> | --replace <old>::<new> | --from <old> --to <new>)
@@ -70,6 +83,9 @@ Options:
                             ${[...SYNTAX_FREE_EXTENSIONS].join(' ')} proceed with no
                             syntax to check; any other type is refused (#758).
   --test <cmd>              Command whose red/green decides whether the mutant died
+  --timeout <seconds>       Kill the test command's whole process group after this long,
+                            baseline and mutant alike, and report HUNG: inconclusive,
+                            never a kill (#819). Whole seconds, default ${DEFAULT_TIMEOUT_SECONDS}.
   --delete-matching <str>   Delete lines containing this literal substring
   --replace <old>::<new>    Replace literal <old> with <new>, split at the FIRST '::'. A value
                             containing ':::' is refused as ambiguous: an <old> ending in a
@@ -110,6 +126,21 @@ function git(args, opts = {}) {
  */
 const MAX_OUTPUT_CHARS = 64 * 1024 * 1024;
 
+/** The test run in flight, so a signal handler can stop it: it no longer shares our group. */
+let activeChild = null;
+
+/**
+ * Kill the test's whole process group (#819).
+ *
+ * With `shell: true` the test is a grandchild under `/bin/sh -c`, and killing the shell alone
+ * was measured to leave it running. `detached: true` makes the shell a group leader, so a
+ * negative pid reaches everything it started that did not leave the group itself.
+ */
+function killGroup(child) {
+  if (!child?.pid) return;
+  try { process.kill(-child.pid, 'SIGKILL'); } catch { /* ESRCH: the group is already gone */ }
+}
+
 /**
  * Run a shell command and report what actually happened.
  *
@@ -123,14 +154,24 @@ const MAX_OUTPUT_CHARS = 64 * 1024 * 1024;
  * inconclusiveReason() can tell "the suite went red" from "I killed the suite
  * myself".
  */
-async function runCommand(cmd) {
+async function runCommand(cmd, timeoutSeconds) {
   return new Promise((settle) => {
     // stdin is closed (#819): an inherited open pipe is what let a mutant's test wait forever
     // on a `read` in #816. Nothing in a mutation run should read the terminal.
-    const child = spawn(cmd, { shell: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(cmd, { shell: true, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    activeChild = child;
     let output = '';
     let overflowed = false;
+    let timedOut = false;
     let spawnError = null;
+    let settled = false;
+
+    // A hang is a verdict of its own, never a red run: a caller-side `timeout N` exits 124,
+    // which read as MUTANT KILLED for a mutant nothing asserted against (#819).
+    const timer = setTimeout(() => {
+      timedOut = true;
+      killGroup(child);
+    }, timeoutSeconds * 1000);
 
     const capture = (chunk) => {
       if (overflowed) return;
@@ -138,7 +179,7 @@ async function runCommand(cmd) {
       if (output.length > MAX_OUTPUT_CHARS) {
         output = output.slice(0, MAX_OUTPUT_CHARS);
         overflowed = true;
-        child.kill('SIGKILL');
+        killGroup(child);
       }
     };
 
@@ -148,10 +189,15 @@ async function runCommand(cmd) {
     child.stderr.on('data', capture);
     child.on('error', (err) => { spawnError = err; });
 
-    child.on('close', (status, signal) => {
+    const finish = (status, signal) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      activeChild = null;
       settle({
         status,
         signal,
+        timedOut,
         // An overflow is reported as an error rather than as a verdict: the run
         // was cut short by this tool, so its exit status describes the kill, not
         // the tests.
@@ -163,6 +209,15 @@ async function runCommand(cmd) {
           : null),
         output,
       });
+    };
+    child.on('close', finish);
+    // After a kill of our own, the shell's exit is enough. 'close' waits for every holder of the
+    // pipes, and a process that left the group would hold them open as long as it runs.
+    child.on('exit', (status, signal) => {
+      if (!timedOut && !overflowed) return;
+      child.stdout.destroy();
+      child.stderr.destroy();
+      finish(status, signal);
     });
   });
 }
@@ -197,6 +252,7 @@ for (let i = 0; i < argv.length; i++) {
   else if (arg === '--from') opts.from = argv[++i];
   else if (arg === '--to') opts.to = argv[++i];
   else if (arg === '--expect-killed-by') opts.expectKilledBy = Number(argv[++i]);
+  else if (arg === '--timeout') opts.timeout = argv[++i] ?? ''; // a missing value is refused, not defaulted
   else fail(`Unknown argument: ${arg}\n\n${USAGE}`);
 }
 
@@ -251,6 +307,18 @@ if (replaceFrom === '') fail('the mutation has an empty <old>, which matches bet
 if (opts.expectKilledBy !== undefined && !Number.isInteger(opts.expectKilledBy)) {
   fail('--expect-killed-by needs an integer');
 }
+const timeoutSeconds = opts.timeout === undefined ? DEFAULT_TIMEOUT_SECONDS : Number(opts.timeout);
+if (!/^\d+$/.test(opts.timeout ?? String(DEFAULT_TIMEOUT_SECONDS))
+    || timeoutSeconds < 1 || timeoutSeconds > MAX_TIMEOUT_SECONDS) {
+  fail(`--timeout needs a whole number of seconds from 1 to ${MAX_TIMEOUT_SECONDS}`);
+}
+
+// The test runs in its own process group, so a terminal's Ctrl-C no longer reaches it: stop it
+// here. `onInterrupt` restores the file once a mutation exists; before that there is nothing to
+// restore.
+let onInterrupt = (code) => process.exit(code);
+process.on('SIGINT', () => { killGroup(activeChild); onInterrupt(130); });
+process.on('SIGTERM', () => { killGroup(activeChild); onInterrupt(143); });
 
 // ── preconditions ────────────────────────────────────────────────
 
@@ -350,7 +418,14 @@ console.log(`  mutation: ${opts.deleteMatching !== undefined
 console.log(`  test:     ${opts.test}\n`);
 
 console.log('[1/5] baseline (expect green) ...');
-const baseline = await runCommand(opts.test);
+const baseline = await runCommand(opts.test, timeoutSeconds);
+if (baseline.timedOut) {
+  fail(
+    `Baseline HUNG — the test command ran past --timeout ${timeoutSeconds} s and its process group\n` +
+    'was killed. INCONCLUSIVE: a mutant cannot be judged against a suite that does not finish.\n' +
+    'Raise --timeout if the suite is genuinely that slow.'
+  );
+}
 const baselineProblem = inconclusiveReason(baseline);
 if (baselineProblem) fail(`Baseline inconclusive — ${baselineProblem}`);
 if (baseline.status !== 0) {
@@ -430,8 +505,7 @@ function restore() {
 
 // These now fire during the test run too, since the child is spawned asynchronously
 // (#462). The on-disk backup still exists for SIGKILL, which no handler can trap.
-process.on('SIGINT', () => { restore(); process.exit(130); });
-process.on('SIGTERM', () => { restore(); process.exit(143); });
+onInterrupt = (code) => { restore(); process.exit(code); };
 
 let verdict = null;
 let invalidDetail = null;
@@ -467,9 +541,13 @@ try {
     }
 
     console.log('[4/5] running tests against the mutant (expect red) ...');
-    const mutant = await runCommand(opts.test);
+    const mutant = await runCommand(opts.test, timeoutSeconds);
     const problem = inconclusiveReason(mutant);
-    if (problem) {
+    // Before `problem`: a timed-out run also carries SIGKILL, and HUNG is the honest name for it.
+    if (mutant.timedOut) {
+      verdict = 'hung';
+      console.log(`      HUNG — no result within --timeout ${timeoutSeconds} s; process group killed.\n`);
+    } else if (problem) {
       verdict = 'inconclusive';
       console.log(`      inconclusive — ${problem}\n`);
     } else {
@@ -495,6 +573,13 @@ if (verdict === 'invalid') {
   console.error('  Any red result would mean "this file is broken", not "a test covers this line".');
   console.error('  Reporting that as a kill is the false confidence this tool exists to prevent.');
   console.error('  Mutate something that leaves valid syntax — a value, not a delimiter.');
+  process.exit(1);
+}
+
+if (verdict === 'hung') {
+  console.error(`HUNG — the test command ran past --timeout ${timeoutSeconds} s and was killed. INCONCLUSIVE, never a kill.`);
+  console.error('  A test that waits instead of failing asserted nothing about this mutant. Find what it');
+  console.error('  waits on, or raise --timeout if the suite is genuinely that slow.');
   process.exit(1);
 }
 
