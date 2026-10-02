@@ -3,7 +3,7 @@ name: unleash-the-agents
 locale: wenyan-lite
 source_locale: en
 source_commit: be74aff5
-fence_basis_commit: 82c77053
+fence_basis_commit: be74aff5
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-05-03"
 description: >
