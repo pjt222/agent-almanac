@@ -98,7 +98,12 @@ PATTERNS=(
   # because the name sits inside `${...}` rather than between backticks. Two review rounds, two
   # distinct escapes from the same class: an internal name is not one shape, and a deny-list
   # reaches it only one spelling at a time.
-  'minified-template-fragment|\$\{[A-Za-z_$][A-Za-z0-9_$]{0,2}(\([A-Za-z0-9_$, ]{0,12}\))?\}'
+  #
+  # Narrowed 2026-10-02 (#863) to the CALL half of that incident, a short name applied to a
+  # short argument list inside `${...}`. The bare-name half matched any 1-3 character variable
+  # interpolated in ordinary code (`${dir}`, `${err}`, `${p}`), and a short name alone carries
+  # no signal of minification. The incident line still fires, on its call.
+  'minified-template-fragment|\$\{[A-Za-z_$][A-Za-z0-9_$]{0,2}\([A-Za-z0-9_$, ]{0,12}\)\}'
 )
 
 list_labels() {
