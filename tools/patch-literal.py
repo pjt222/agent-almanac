@@ -71,7 +71,8 @@ EXIT CODES
     0  every file applied and read back as intended (or --dry-run with nothing to report)
     1  refused: at least one check failed, NOTHING was written
     2  could not run: bad usage, unreadable or malformed spec, an empty forbid literal, a
-       value not encodable as UTF-8, or the output stream failing before any write
+       PATCH_LITERAL_FAULT pair that is not a known kind:path (see FAULT HOOK), a value not
+       encodable as UTF-8, or the output stream failing before any write
     3  incomplete: a write, the pre-rename check or a read-back failed. The report names
        each file's state: `failed` and `unwritten` files were NOT written by this tool;
        `written`, `read-back mismatch` and `unverified` files WERE renamed over. A failed
@@ -130,7 +131,9 @@ the same to fd 2 just before the INCOMPLETE report, or before the could-not-run 
 the output stream failed before any write (so that print fails for real, and the shutdown
 flush of what it left buffered would too, but for the redirect to /dev/null); several
 kind:path pairs may be given, comma-separated, so a path that itself contains a comma cannot
-be named. Every firing prints `patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
+be named. Such a path is refused instead (exit 2, before anything is read), because its tail
+after the comma is not a known kind followed by `:`; the one shape that cannot be caught is
+a tail that is itself a valid pair (a directory named `x,write:y`). Every firing prints `patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
 be misread as the mount misbehaving. The hook exists so that --verify drives the exit-3 arms
 through the real process rather than trusting a comment; an operator who exports the variable
 by accident changes a real run on that one file, loudly -- and with `touch` or `readback`
@@ -394,6 +397,22 @@ def _fault(kind, path):
     return False
 
 
+FAULT_KINDS = ('write', 'touch', 'readback', 'readfail', 'stdout', 'stdout-early', 'stderr')
+
+
+def check_fault_env():
+    """Refuse (exit 2, before phase 1) a fault spec _fault would silently skip or never match."""
+    spec = os.environ.get(FAULT_ENV, '')
+    if not spec:
+        return
+    for item in spec.split(','):
+        kind, sep, _ = item.partition(':')
+        if not sep or kind not in FAULT_KINDS:
+            raise SpecError(f'{FAULT_ENV}: {item!r} is not <kind>:<path> with a known kind '
+                            f'({", ".join(FAULT_KINDS)}); pairs are comma-separated, so the usual cause '
+                            f'is a path that contains a comma, which cannot be named here')
+
+
 def _discard(stream):
     """Point the stream's fd at /dev/null so the interpreter's shutdown flush of a dead pipe cannot fail."""
     with contextlib.suppress(OSError, ValueError, AttributeError):
@@ -538,7 +557,7 @@ def run(entries, dry_run):
 
 # --- self-test ------------------------------------------------------------------------------
 
-RUNS_EXPECTED = 65  # process runs below; a fixture added or removed must move this with it
+RUNS_EXPECTED = 67  # process runs below; a fixture added or removed must move this with it
 
 
 def verify():
@@ -983,6 +1002,18 @@ def verify():
         check('v37 no message', 'output stream failed' not in err and 'Traceback' not in err
               and f'{FAULT_ENV}=stderr:' in err, err)
 
+        # v38: a fault path containing a comma cannot be named (pairs are comma-separated), so it
+        # cannot run (exit 2) rather than silently disarming the hook; the fragment after the
+        # comma is caught with no colon in it (not kind:path) and with one (an unknown kind)
+        for sub in ('a,b', 'x,y:z'):
+            os.mkdir(os.path.join(d, sub))
+            put(d, os.path.join(sub, 'cm.txt'), b'cm\n')
+            rc, out, err = go([os.path.join(sub, 'cm.txt'), '--replace', 'cm::CM'], d,
+                              fault='write:' + os.path.join(d, sub, 'cm.txt'))
+            check(f'v38 {sub} exit', rc == 2 and f'cannot run: {FAULT_ENV}' in err and 'contains a comma' in err,
+                  f'rc={rc} err={err}')
+            check(f'v38 {sub} untouched', get(d, os.path.join(sub, 'cm.txt')) == b'cm\n')
+
     check('run count', runs == RUNS_EXPECTED, f'{runs} run(s), RUNS_EXPECTED is {RUNS_EXPECTED}')
     for f in failures:
         print(f'verify: FAIL {f}')
@@ -1019,6 +1050,7 @@ def main(argv):
     if args.verify:
         return verify()
     try:
+        check_fault_env()
         if args.spec and (args.file or args.replace):
             raise SpecError('give either --spec or FILE --replace, not both')
         if args.spec and args.count is not None:
