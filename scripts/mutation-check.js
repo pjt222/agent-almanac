@@ -59,7 +59,8 @@ import { parseFailCount, parsePassCount, crashSuspicion } from './lib/mutation-v
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
 const USAGE = `Usage:
-  node scripts/mutation-check.js --file <path> --test <cmd> (--delete-matching <str> | --replace <old>::<new>)
+  node scripts/mutation-check.js --file <path> --test <cmd>
+      (--delete-matching <str> | --replace <old>::<new> | --from <old> --to <new>)
 
 Options:
   --file <path>             File to mutate. Must be tracked, unmodified, and a
@@ -70,7 +71,11 @@ Options:
                             syntax to check; any other type is refused (#758).
   --test <cmd>              Command whose red/green decides whether the mutant died
   --delete-matching <str>   Delete lines containing this literal substring
-  --replace <old>::<new>    Replace literal <old> with <new>
+  --replace <old>::<new>    Replace literal <old> with <new>, split at the FIRST '::'. A value
+                            containing ':::' is refused as ambiguous: an <old> ending in a
+                            colon cannot be told from a <new> starting with one (#783).
+  --from <old> --to <new>   Replace literal <old> with <new>, given separately, so either may
+                            contain any colons. <new> may be empty; <old> may not.
   --allow-broad             Accept a kill that fails a large share of the suite. Use when
                             the mutated line genuinely is load-bearing for most of it.
   --allow-crash-text        Accept crash text in the output. Use when the asserted property IS
@@ -189,6 +194,8 @@ for (let i = 0; i < argv.length; i++) {
   else if (arg === '--test') opts.test = argv[++i];
   else if (arg === '--delete-matching') opts.deleteMatching = argv[++i];
   else if (arg === '--replace') opts.replace = argv[++i];
+  else if (arg === '--from') opts.from = argv[++i];
+  else if (arg === '--to') opts.to = argv[++i];
   else if (arg === '--expect-killed-by') opts.expectKilledBy = Number(argv[++i]);
   else fail(`Unknown argument: ${arg}\n\n${USAGE}`);
 }
@@ -198,11 +205,20 @@ if (opts.help) {
   process.exit(0);
 }
 if (!opts.file || !opts.test) fail(`--file and --test are both required\n\n${USAGE}`);
-if (opts.deleteMatching === undefined && opts.replace === undefined) {
-  fail(`One of --delete-matching or --replace is required\n\n${USAGE}`);
+// Presence, never truthiness: `--to ''` is a deletion and must stay expressible (#783).
+if ((opts.from === undefined) !== (opts.to === undefined)) {
+  fail(`--from and --to must be given together\n\n${USAGE}`);
 }
-if (opts.deleteMatching !== undefined && opts.replace !== undefined) {
-  fail('--delete-matching and --replace are mutually exclusive');
+const mutationFlags = [
+  opts.deleteMatching !== undefined && '--delete-matching',
+  opts.replace !== undefined && '--replace',
+  opts.from !== undefined && '--from/--to',
+].filter(Boolean);
+if (mutationFlags.length === 0) {
+  fail(`One of --delete-matching, --replace or --from/--to is required\n\n${USAGE}`);
+}
+if (mutationFlags.length > 1) {
+  fail(`${mutationFlags.join(', ')} are mutually exclusive`);
 }
 // An empty needle matches every line and blanks the file, which reliably "kills"
 // the mutant while proving nothing.
@@ -210,6 +226,28 @@ if (opts.deleteMatching === '') fail('--delete-matching needs a non-empty string
 if (opts.replace !== undefined && !opts.replace.includes('::')) {
   fail('--replace needs the form <old>::<new>');
 }
+// A run of three or more colons has more than one place to split, and the first-`::` split
+// picks one silently: `def f():::def f()` became old `def f()`, new `:def f()` (#783).
+if (opts.replace !== undefined && opts.replace.includes(':::')) {
+  fail(
+    `--replace value contains ':::', which is ambiguous: an <old> ending in ':' cannot be told\n` +
+    `from a <new> starting with one. Pass the two strings separately with --from <old> --to <new>.`
+  );
+}
+// The two strings are resolved ONCE, so the echo line and the mutation cannot disagree.
+let replaceFrom;
+let replaceTo;
+if (opts.replace !== undefined) {
+  const sep = opts.replace.indexOf('::');
+  replaceFrom = opts.replace.slice(0, sep);
+  replaceTo = opts.replace.slice(sep + 2);
+} else if (opts.from !== undefined) {
+  replaceFrom = opts.from;
+  replaceTo = opts.to;
+}
+// An empty <old> matches between every character: `--replace '::x'` rewrote the whole file
+// while reporting `0 site(s) mutated`.
+if (replaceFrom === '') fail('the mutation has an empty <old>, which matches between every character');
 if (opts.expectKilledBy !== undefined && !Number.isInteger(opts.expectKilledBy)) {
   fail('--expect-killed-by needs an integer');
 }
@@ -308,7 +346,7 @@ if (syntaxProbe.verdict === 'invalid') {
 console.log(`\nmutation-check: ${relFile}`);
 console.log(`  mutation: ${opts.deleteMatching !== undefined
   ? `delete lines containing "${opts.deleteMatching}"`
-  : `replace "${opts.replace.slice(0, opts.replace.indexOf('::'))}"`}`);
+  : `replace "${replaceFrom}" with "${replaceTo}"`}`);
 console.log(`  test:     ${opts.test}\n`);
 
 console.log('[1/5] baseline (expect green) ...');
@@ -357,11 +395,8 @@ if (opts.deleteMatching !== undefined) {
   sites = lines.filter((line) => line.includes(opts.deleteMatching)).length;
   mutated = lines.filter((line) => !line.includes(opts.deleteMatching)).join('\n');
 } else {
-  const sep = opts.replace.indexOf('::');
-  const from = opts.replace.slice(0, sep);
-  const to = opts.replace.slice(sep + 2);
-  sites = from === '' ? 0 : original.split(from).length - 1;
-  mutated = original.split(from).join(to);
+  sites = original.split(replaceFrom).length - 1;
+  mutated = original.split(replaceFrom).join(replaceTo);
 }
 
 if (mutated === original) {
