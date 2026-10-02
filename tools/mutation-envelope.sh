@@ -127,10 +127,12 @@ if [ "$VERIFY" -eq 1 ]; then
   cd "${DIR:?}" || exit 2
   # A caller's GIT_* reaches every git below. With GIT_DIR and GIT_WORK_TREE exported by the
   # caller, the fixture's `git init` and `git config user.*` wrote into the CALLER's repository
-  # (#930 round 2), and GIT_CONFIG_COUNT/KEY_n/VALUE_n injects config past any list of names, so
-  # every GIT_* is unset rather than a list of them. The decoy exported first is what the check
-  # after the fixture commit looks for: if this scrub stops working, the fixture lands in it.
-  export GIT_DIR="${DIR:?}/decoy.git" GIT_WORK_TREE="${DIR:?}/decoy" GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=user.name GIT_CONFIG_VALUE_0=decoy
+  # (#930 round 2), so the line after the decoy unsets every GIT_*. The decoy, exported first, is
+  # all the check after the fixture commit can see: GIT_DIR, GIT_WORK_TREE,
+  # GIT_CONFIG_COUNT/KEY_0/VALUE_0, and GIT_INDEX_FILE, which names the decoy path so a leaked one
+  # writes the fixture's index there. Only those names are pinned: a scrub that lists exactly them
+  # passes the check as well as this one does (#930 round 3).
+  export GIT_DIR="${DIR:?}/decoy.git" GIT_WORK_TREE="${DIR:?}/decoy" GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=user.name GIT_CONFIG_VALUE_0=decoy GIT_INDEX_FILE="${DIR:?}/decoy.git"
   unset "${!GIT_@}"
   export GIT_CONFIG_NOSYSTEM=1 HOME="${DIR:?}" XDG_CONFIG_HOME="${DIR:?}/.config"
 
@@ -271,7 +273,7 @@ JSON
   # The fixture's git acted on the fixture alone: its own .git, no decoy, the author it was given.
   if [ "$(git rev-parse --absolute-git-dir 2>/dev/null)" != "$(pwd -P)/.git" ] || [ -e "${DIR:?}/decoy.git" ] \
      || [ "$(git log -1 --format=%an 2>/dev/null)" != fixture ]; then
-    echo "mutation-envelope --verify: FAILED — an inherited GIT_* variable reached the fixture's git" >&2
+    echo "mutation-envelope --verify: FAILED — the fixture repository is not its own .git with a last commit by 'fixture' and no decoy path; a GIT_* variable past the scrub, or a fixture git init or commit that failed (their output is discarded), each does this" >&2
     exit 1
   fi
 
