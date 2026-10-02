@@ -173,6 +173,19 @@ test('an interrupt during the mutant run kills the test\'s process group and res
   assert.equal(existsSync(marker), false, 'the grandchild outlived the interrupt');
 });
 
+test('a timed-out run returns even when a process that left the group still holds the pipes', (t) => {
+  // `setsid` puts the sleep in a session of its own, out of reach of the group kill, still
+  // holding stdout. Settling on 'close' would wait the full 10 s for it; the shell's exit is
+  // enough once the run was killed. The escaped sleep is left to finish on its own.
+  const { dir } = makeRepo(t, 'alpha\n');
+  const test = 'grep -qx alpha notes.md || { setsid sleep 10 & wait; }';
+  const started = Date.now();
+  const r = runTool(dir, ['--file', 'notes.md', '--test', test, '--replace', 'alpha::beta', '--timeout', '1']);
+  const elapsed = Date.now() - started;
+  assert.match(r.out, /^HUNG — /m, r.out);
+  assert.ok(elapsed < 7_000, `the run waited ${elapsed} ms for a process outside the group`);
+});
+
 test('a baseline that hangs is refused as HUNG before any mutation is applied', (t) => {
   const { dir, git } = makeRepo(t, 'alpha\n');
   const r = runTool(dir, ['--file', 'notes.md', '--test', 'sleep 30', '--replace', 'alpha::beta', '--timeout', '1']);
