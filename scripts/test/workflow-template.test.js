@@ -195,14 +195,20 @@ test("GENERATE_WRITE_LOCATION holds maintainer decision 2: outputDir and its own
   // nowhere else in the repository"). Before #861 round 1 a mutant licensing writes anywhere in the
   // repository survived every gate, `npm test` included; before round 3 one that avoided the word
   // "anywhere" still did. This constant has no template copy to be compared with, so this literal
-  // is its only pin. Site count too: declared once, and interpolated into exactly one prompt — the
-  // Generate stage's — so the licence to write under outputDir cannot spread to the scout or audit.
+  // is its only pin. Site counts too: declared once, and the spelling `${GENERATE_WRITE_LOCATION}`
+  // occurs once (today in the Generate stage's prompt), so interpolating it the same way into the
+  // scout or audit as well fails here. That is a count of one spelling, not a guarantee that the licence stays
+  // in the Generate stage: the same constant added to another prompt by concatenation
+  // (`GENERATE_WRITE_LOCATION + `) or as `${ GENERATE_WRITE_LOCATION }` leaves the count at 1,
+  // and A7b accepts a narrowed `<PREFIX>_WRITE_LOCATION` on any shell-capable spawn, whatever
+  // its phase. Both shapes on the read-only scout were measured to pass `npm run test:scripts`
+  // and A7b (#861 round 3, SF-R3-1).
   const text = readFileSync(join(WORKFLOWS, 'batch-generate-waves.mjs'), 'utf8');
   const found = extractConstLiterals(text, 'GENERATE_WRITE_LOCATION');
   assert.equal(found.length, 1, 'batch-generate-waves.mjs declares exactly one GENERATE_WRITE_LOCATION');
   assert.equal(normalise(found[0].source), EXPECTED_GENERATE_WRITE_LOCATION);
   assert.equal(text.split('${GENERATE_WRITE_LOCATION}').length - 1, 1,
-    'GENERATE_WRITE_LOCATION is interpolated into exactly one prompt');
+    'the spelling ${GENERATE_WRITE_LOCATION} occurs exactly once');
 });
 
 const REPO_ROOT_NOTE_FILES = ['batch-generate-waves.mjs', 'review-changes.mjs'];
