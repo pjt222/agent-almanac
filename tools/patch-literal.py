@@ -70,8 +70,8 @@ EXIT CODES
 ----------
     0  every file applied and read back as intended (or --dry-run with nothing to report)
     1  refused: at least one check failed, NOTHING was written
-    2  could not run: bad usage, unreadable or malformed spec, a value not encodable as
-       UTF-8, or the output stream failing before any write
+    2  could not run: bad usage, unreadable or malformed spec, an empty forbid literal, a
+       value not encodable as UTF-8, or the output stream failing before any write
     3  incomplete: a write, the pre-rename check or a read-back failed. The report names
        each file's state: `failed` and `unwritten` files were NOT written by this tool;
        `written`, `read-back mismatch` and `unverified` files WERE renamed over. A failed
@@ -109,7 +109,9 @@ reads it as an option. A spec is either a list of file entries or an
 object `{"forbid": [...], "files": [...]}`; a file entry is
 `{"path": "...", "edits": [{"old": "...", "new": "...", "count": 1}], "forbid": [...]}`.
 Paths are resolved against the current directory. `--forbid` has no default: the
-`__PLACEHOLDER__` convention of the typings is passed as `--forbid __` when it applies.
+`__PLACEHOLDER__` convention of the typings is passed as `--forbid __` when it applies. An
+empty forbid literal, given to `--forbid` or in a spec's `forbid` list, cannot run (exit 2):
+it occurs in every text, so it could only refuse every file.
 `--dry-run` prints a unified diff per file; a last line without a newline is marked
 `\\ No newline at end of file`, as git does, and lines are split on `\\n` alone, so a stray CR
 or form feed inside a line never draws the marker.
@@ -168,6 +170,9 @@ def _as_literal_list(value, where):
         return []
     if not isinstance(value, list) or not all(isinstance(v, str) for v in value):
         raise SpecError(f'{where}: forbid must be a list of strings')
+    if '' in value:
+        raise SpecError(f'{where}: an empty literal cannot be forbidden (it occurs in every text, so every '
+                        f'file would be refused); drop it, or name the literal you mean')
     return [v.encode('utf-8') for v in value]
 
 
@@ -532,7 +537,7 @@ def run(entries, dry_run):
 
 # --- self-test ------------------------------------------------------------------------------
 
-RUNS_EXPECTED = 62  # process runs below; a fixture added or removed must move this with it
+RUNS_EXPECTED = 64  # process runs below; a fixture added or removed must move this with it
 
 
 def verify():
@@ -955,6 +960,18 @@ def verify():
         check('v33 content', get(d, 'ro.txt') == b'RW\n')
         check('v33 mode', os.stat(os.path.join(d, 'ro.txt')).st_mode & 0o777 == 0o444)
 
+        # v36: an empty forbid literal is in every text, so it cannot run (exit 2) rather than
+        # refusing every file at line 1 (exit 1) -- on the command line and in a spec
+        put(d, 'ef.txt', b'ef\n')
+        rc, out, err = go(['ef.txt', '--replace', 'ef::EF', '--forbid', ''], d)
+        check('v36 cli exit', rc == 2 and 'cannot run: --forbid: an empty literal' in err and 'REFUSED' not in err,
+              f'rc={rc} err={err}')
+        s = spec(d, 'v36.json', {'forbid': [''], 'files': [{'path': 'ef.txt', 'edits': [{'old': 'ef', 'new': 'EF'}]}]})
+        rc, out, err = go(['--spec', s], d)
+        check('v36 spec exit', rc == 2 and 'cannot run: spec: an empty literal' in err and 'REFUSED' not in err,
+              f'rc={rc} err={err}')
+        check('v36 untouched', get(d, 'ef.txt') == b'ef\n', get(d, 'ef.txt'))
+
     check('run count', runs == RUNS_EXPECTED, f'{runs} run(s), RUNS_EXPECTED is {RUNS_EXPECTED}')
     for f in failures:
         print(f'verify: FAIL {f}')
@@ -1001,7 +1018,7 @@ def main(argv):
             entries = spec_from_replaces(args.file, args.replace, 1 if args.count is None else args.count)
         else:
             raise SpecError('usage: FILE --replace OLD::NEW [...] | --spec SPEC.json | --verify')
-        extra = [f.encode('utf-8') for f in args.forbid]
+        extra = _as_literal_list(args.forbid, '--forbid')
         for entry in entries:
             entry['forbid'] = entry['forbid'] + extra
     except SpecError as exc:
