@@ -191,8 +191,9 @@ test('a module that does not parse is an error naming it, never an empty graph',
 // goes through the child `importGraph` starts with the flag (a runner with the flag walks them
 // in-process, and they hold either way). The ones below pin the other paths: a caller that has the
 // flag walks in-process, a child that cannot deliver is an error naming why, and a child whose
-// flag did not take refuses rather than blaming the module. Those need a process without the flag,
-// so each spawns its own rather than assuming this one is (#918 round 2, N4).
+// flag did not take refuses rather than blaming the module. The in-process arm needs a process
+// with the flag and the child-failure arms one without it, so each spawns its own rather than
+// assuming what this one is (#918 round 2, N4; round 3, R3-N1).
 
 test('a caller already running with the flag walks in-process and gets the same graph', (t) => {
   const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n/*\nimport { planted } from './planted.js';\n*/\n" });
@@ -284,9 +285,10 @@ test('a parser child that dies is an error naming why, never an empty or entry-o
 });
 
 test('a root with a space in its path is walked, and a preload under it is named whole', (t) => {
-  // The arms above put their preload under the fixture root, so a temp dir with a space split the
-  // preload path in NODE_OPTIONS and they failed on the wrong module (#918 round 2, N3). This root
-  // has its own space, so CI holds the quoting whatever TMPDIR is.
+  // The other arms that go through childFailureMessage, one above this and three below, put their
+  // preload under the fixture root, so a temp dir with a space split the preload path in
+  // NODE_OPTIONS and they failed on the wrong module (#918 round 2, N3). This root has its own
+  // space, so CI holds the quoting whatever TMPDIR is.
   const root = fixture(t, { ...PLANTED, 'a.js': "import { real } from './real.js';\n" }, 'import graph ');
   assert.deepEqual([...importGraph(root, 'a.js')].sort(), REAL_ONLY);
   assert.match(
