@@ -2,8 +2,8 @@
 name: manage-git-branches
 locale: wenyan-lite
 source_locale: en
-source_commit: 82c77053
-fence_basis_commit: 82c77053
+source_commit: aa73494d
+fence_basis_commit: aa73494d
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-24"
 description: >
@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
@@ -159,7 +159,9 @@ git merge origin/main
 
 ### 步驟五：清合並之分支
 
-拉取請求合並後，除陳分支：
+拉取請求合並後，除陳分支。先確每分支之工作已達 `main`，因 `git branch -d` 不答此問（見下文「失敗時」）。二事須並立。其一，代碼託管平台須報 PR 已合入 `main`：`gh pr view <n> --json state,baseRefName,headRefOid,mergeCommit` 示 `MERGED` 與 `main`。其二，本地分支不得含 PR 所無之提交：`git merge-base --is-ancestor <branch> <headRefOid>` 以 0 退出。`headRefOid` 乃平台所合之 PR 頭，故此一驗於合並提交、squash 合並與 rebase 合並皆適用。僅憑 PR 之態不足，因其不見 PR 從未有之本地提交。
+
+退出碼 1 謂分支含此類提交（末次推送後所作者，或遠程分支因強推而失者）：留其分支。退出碼 128 謂 PR 頭不存於本地，如分支刪前他人曾推至該 PR：以 `git fetch origin refs/pull/<n>/head` 取之（分支刪後 GitHub 仍存此引用），再行此驗。若為合並提交，以合並提交驗祖先（同一 `gh` 輸出之 `mergeCommit.oid`，須先行 `git fetch origin main`）亦答同一問。squash 合並，及改寫提交之 rebase 合並，依其構造必不過此合並提交之驗，因其提交皆新，不含分支之提交；然仍過 `headRefOid` 之驗。唯 `MERGED` 與退出碼 0 並具，方許刪。下方代碼塊列諸刪除之式以備參。驗過之後，`git branch -D` 乃安；其 `-d` 行若被拒，即「失敗時」所述之情。
 
 ```bash
 # Delete a local branch that has been merged
@@ -177,7 +179,7 @@ git fetch --prune
 
 **預期：** 合並分支於本地與遠程已除。`git branch` 僅示活分支。
 
-**失敗時：** `git branch -d` 拒刪未合分支。若分支經 GitHub 之 squash 合並，Git 或不認其為已合。若確工作已存，用 `git branch -D`。
+**失敗時：** `git branch -d` 非合並之驗（#865、#900）。據 `git help branch`，分支須已全合入其上游，若未設上游則須全合入 HEAD；經實測（git 2.43），示為 `gone` 之上游視同無上游，故查 HEAD。是故以 `-u` 推送（步驟二）且已全推之分支，無論曾否達 `main` 皆過此查：`-d` 刪之，以 0 退出，僅於 stderr 印一警告（`deleting branch … that has been merged to 'refs/remotes/origin/…', but not yet merged to HEAD`）。若再依序行上方代碼塊，遠程分支亦被刪，無一引用存其工作。無上游之分支，則對執行命令之工作樹之 HEAD 而查，故若 HEAD 為含此分支之堆疊分支，`-d` 刪之而 stderr 全無一字。反之，凡所查之引用缺分支之末端，`-d` 即拒刪*確已*合並之分支：一為遠程分支刪後、上游既去之 HEAD（如尚未更新之本地 `main`），一為落後於末端之上游，因末端自他處克隆推出而尚未取。末端因某提交從未推送而超前其上游者，非此情：該提交不在任何 PR，拒之乃正。squash 合並之分支，唯所查之引用缺其末端時方被拒，如上游既去後之 HEAD；其自推之上游尚存時，`-d` 刪之。無論何向，其答皆同：行本步驟開首之驗，唯驗過方以 `git branch -D` 刪之。
 
 ### 步驟六：列並察分支
 
@@ -220,7 +222,7 @@ git branch -vv
 - **分支前忘取**：自陳本地 main 創分支謂始即落後。恒先 `git fetch origin`
 - **長存分支**：存數周之功能分支累衝突。常同步並保分支短存
 - **孤暫**：`git stash` 為臨存。勿依之作長期工作。提或分支代之
-- **刪未合工作**：`git branch -D` 為破壞性。強刪前以 `git log branch-name` 重查
+- **刪未合工作**：二刪除旗標皆不可單恃。`git branch -D` 不論合並與否皆刪；`git branch -d` 則刪已全推至自身上游之未合分支，或於無上游時，刪當前 HEAD 所含而 `main` 未含之分支（無任何警告）。用任一前，先行步驟五開首之驗：PR 已 `MERGED` 入 `main`，且 `git merge-base --is-ancestor <branch> <headRefOid>` 以 0 退出
 - **未修剪**：GitHub 上已刪之遠程分支於本地仍顯直至 `git fetch --prune`
 
 ## 相關技能

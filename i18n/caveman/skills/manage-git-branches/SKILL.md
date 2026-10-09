@@ -2,8 +2,8 @@
 name: manage-git-branches
 locale: caveman
 source_locale: en
-source_commit: 82c77053
-fence_basis_commit: 82c77053
+source_commit: aa73494d
+fence_basis_commit: aa73494d
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-24"
 description: >
@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
@@ -159,7 +159,9 @@ git merge origin/main
 
 ### Step 5: Clean Up Merged Branches
 
-After pull requests merged, remove stale branches:
+After pull requests merged, remove stale branches. First confirm each branch's work reached `main` — `git branch -d` does not answer that question (see If fail below). Two things must both hold. Forge must report PR merged into `main`: `gh pr view <n> --json state,baseRefName,headRefOid,mergeCommit` shows `MERGED` and `main`. And local branch must hold nothing PR did not: `git merge-base --is-ancestor <branch> <headRefOid>` exits 0. `headRefOid` is PR head forge merged, so this one test works for merge commit, squash merge and rebase merge alike. PR state alone not enough: cannot see local commit PR never had.
+
+Exit 1? Branch carries such commit (one made after last push, or one remote branch lost to force-push): keep branch. Exit 128? PR head not present locally, for example because someone else pushed to PR before branch deleted: fetch it with `git fetch origin refs/pull/<n>/head` (GitHub keeps it after branch deleted), run test again. For merge commit, ancestry against merge commit (`mergeCommit.oid` in same `gh` output, after `git fetch origin main`) answers same question. Squash merge, and rebase merge that rewrote commits, fail that merge-commit test by construction — their commits new, do not contain branch's commits; they still pass `headRefOid` test. Only `MERGED` together with exit 0 licenses delete. Fence below lists delete forms for reference. After check passes, `git branch -D` safe; refusal from its `-d` line is If fail case.
 
 ```bash
 # Delete a local branch that has been merged
@@ -177,7 +179,7 @@ git fetch --prune
 
 **Got:** Merged branches removed locally and remotely. `git branch` shows only active branches.
 
-**If fail:** `git branch -d` refuses to delete unmerged branches. Branch merged via squash merge on GitHub? Git may not recognize it as merged. Use `git branch -D` if certain work is preserved.
+**If fail:** `git branch -d` not a merge check (#865, #900). Per `git help branch`, branch must be fully merged into its upstream, or into HEAD if no upstream set; measured (git 2.43), upstream shown as `gone` counts as none, so HEAD checked. Branch pushed with `-u` (Step 2) and fully pushed therefore passes whether or not it ever reached `main`: `-d` deletes it, exits 0, prints only warning on stderr (`deleting branch … that has been merged to 'refs/remotes/origin/…', but not yet merged to HEAD`). Running fence above in order then deletes remote branch too — no ref left containing work. Branch with no upstream checked against HEAD of worktree command runs in, so when HEAD is stacked branch containing it, `-d` deletes it with nothing at all on stderr. Other direction: `-d` refuses branch that *was* merged whenever reference it checks lacks tip — HEAD (for example local `main` not yet updated) once upstream gone after remote branch deleted, or upstream lagging behind tip because tip pushed from another clone and not yet fetched. Tip ahead of upstream because commit never pushed? Not that case: that commit in no PR, refusal correct. Squash-merged branch refused only when reference checked lacks tip, for example HEAD once upstream gone; while its own pushed upstream live, `-d` deletes it. Answer same either way: run check from start of this step, delete with `git branch -D` only when it passes.
 
 ### Step 6: List and Inspect Branches
 
@@ -220,7 +222,7 @@ git branch -vv
 - **Forgetting to fetch before branching**: Creating branch from stale local main means starting behind. Always `git fetch origin` first.
 - **Long-lived branches**: Feature branches living for weeks accumulate merge conflicts. Sync frequently, keep branches short-lived.
 - **Orphaned stashes**: `git stash` is temporary storage. Don't rely on it for long-term work. Commit or branch instead.
-- **Deleting unmerged work**: `git branch -D` is destructive. Double-check with `git log branch-name` before force-deleting.
+- **Deleting unmerged work**: Neither delete flag safe on its own. `git branch -D` deletes regardless of merge state; `git branch -d` deletes unmerged branch fully pushed to its own upstream, or, with no upstream, one current HEAD contains even if `main` does not (no warning). Before either, run check at start of Step 5: PR `MERGED` into `main`, and `git merge-base --is-ancestor <branch> <headRefOid>` exits 0.
 - **Not pruning**: Remote branches deleted on GitHub still appear locally until you `git fetch --prune`.
 
 ## See Also

@@ -13,15 +13,15 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
   tags: git, branches, branching-strategy, stash, remote-tracking
   locale: de
   source_locale: en
-  source_commit: 6f65f316
-  fence_basis_commit: 6f65f316
+  source_commit: aa73494d
+  fence_basis_commit: aa73494d
   translator: claude-opus-4-6
   translation_date: "2026-03-16"
 ---
@@ -161,7 +161,9 @@ git merge origin/main
 
 ### Schritt 5: Zusammengefuehrte Branches bereinigen
 
-Nach dem Zusammenfuehren von Pull Requests veraltete Branches entfernen:
+Nach dem Zusammenfuehren von Pull Requests veraltete Branches entfernen. Zuerst bestaetigen, dass die Arbeit jedes Branches in `main` angekommen ist, denn `git branch -d` beantwortet diese Frage nicht (siehe Bei Fehler unten). Zwei Bedingungen muessen beide erfuellt sein. Die Forge (der Hosting-Dienst) muss den PR als in `main` zusammengefuehrt melden: `gh pr view <n> --json state,baseRefName,headRefOid,mergeCommit` zeigt `MERGED` und `main`. Und der lokale Branch darf nichts enthalten, was der PR nicht enthielt: `git merge-base --is-ancestor <branch> <headRefOid>` endet mit Exit-Code 0. `headRefOid` ist der PR-Head, den die Forge zusammengefuehrt hat, daher funktioniert dieser eine Test gleichermassen fuer einen Merge-Commit, einen Squash-Merge und einen Rebase-Merge. Der PR-Status allein genuegt nicht, weil er keinen lokalen Commit sehen kann, den der PR nie hatte.
+
+Exit-Code 1 bedeutet, dass der Branch einen solchen Commit traegt (einen nach dem letzten Push erstellten oder einen, den der Remote-Branch durch einen Force-Push verloren hat): den Branch behalten. Exit-Code 128 bedeutet, dass der PR-Head lokal nicht vorhanden ist, zum Beispiel weil jemand anderes noch vor dem Loeschen des Branches in den PR gepusht hat: ihn mit `git fetch origin refs/pull/<n>/head` holen (GitHub bewahrt diese Referenz auch nach dem Loeschen des Branches auf) und den Test erneut ausfuehren. Bei einem Merge-Commit beantwortet die Abstammungspruefung gegen den Merge-Commit (`mergeCommit.oid` in derselben `gh`-Ausgabe, nach `git fetch origin main`) dieselbe Frage. Ein Squash-Merge und ein Rebase-Merge, der die Commits umgeschrieben hat, bestehen diesen Merge-Commit-Test konstruktionsbedingt nicht, weil ihre Commits neu sind und die Commits des Branches nicht enthalten; den `headRefOid`-Test bestehen sie dennoch. Nur `MERGED` zusammen mit Exit-Code 0 erlaubt ein Loeschen. Der Codeblock unten listet die Loeschformen zum Nachschlagen auf. Nach bestandener Pruefung ist `git branch -D` sicher; lehnt die `-d`-Zeile des Codeblocks ab, ist das der Fall unter Bei Fehler.
 
 ```bash
 # Delete a local branch that has been merged
@@ -179,7 +181,7 @@ git fetch --prune
 
 **Erwartet:** Zusammengefuehrte Branches sind lokal und remote entfernt. `git branch` zeigt nur aktive Branches.
 
-**Bei Fehler:** `git branch -d` lehnt das Loeschen nicht zusammengefuehrter Branches ab. Wenn der Branch auf GitHub per Squash Merge zusammengefuehrt wurde, erkennt Git ihn moeglicherweise nicht als zusammengefuehrt. `git branch -D` verwenden, wenn sicher ist, dass die Arbeit erhalten ist.
+**Bei Fehler:** `git branch -d` ist keine Merge-Pruefung (#865, #900). Laut `git help branch` muss der Branch vollstaendig in seinen Upstream zusammengefuehrt sein, oder in HEAD, wenn kein Upstream gesetzt ist; gemessen (git 2.43) zaehlt ein als `gone` angezeigter Upstream als keiner, also wird HEAD geprueft. Ein mit `-u` (Schritt 2) und vollstaendig gepushter Branch besteht die Pruefung daher, ob er jemals in `main` angekommen ist oder nicht: `-d` loescht ihn, endet mit Exit-Code 0 und gibt nur eine Warnung auf stderr aus (`deleting branch … that has been merged to 'refs/remotes/origin/…', but not yet merged to HEAD`). Wird der Codeblock oben der Reihe nach ausgefuehrt, loescht er danach auch den Remote-Branch, und keine Referenz enthaelt die Arbeit mehr. Ein Branch ohne Upstream wird gegen den HEAD des Worktrees geprueft, in dem der Befehl laeuft; ist HEAD also ein gestapelter Branch (Stacked Branch), der ihn enthaelt, loescht `-d` ihn ganz ohne Ausgabe auf stderr. In der Gegenrichtung lehnt `-d` einen Branch ab, der sehr wohl zusammengefuehrt *wurde*, sobald der geprueften Referenz die Branch-Spitze fehlt: HEAD (zum Beispiel ein noch nicht aktualisiertes lokales `main`), sobald der Upstream nach dem Loeschen des Remote-Branches weg ist, oder ein Upstream, der hinter der Spitze zurueckliegt, weil die Spitze aus einem anderen Klon gepusht und noch nicht gefetcht wurde. Eine Spitze, die ihrem Upstream voraus ist, weil ein Commit nie gepusht wurde, ist nicht dieser Fall: Dieser Commit steckt in keinem PR, und die Ablehnung ist korrekt. Ein per Squash-Merge zusammengefuehrter Branch wird nur abgelehnt, wenn der geprueften Referenz die Spitze fehlt, zum Beispiel HEAD, sobald der Upstream weg ist; solange sein eigener gepushter Upstream noch existiert, loescht `-d` ihn. Die Antwort ist in beiden Faellen dieselbe: die Pruefung vom Anfang dieses Schritts ausfuehren und nur dann mit `git branch -D` loeschen, wenn sie besteht.
 
 ### Schritt 6: Branches auflisten und inspizieren
 
@@ -222,7 +224,7 @@ git branch -vv
 - **Vergessen vor dem Branchen zu fetchen**: Einen Branch von einem veralteten lokalen main zu erstellen bedeutet, rueckstaendig zu beginnen. Immer zuerst `git fetch origin` ausfuehren.
 - **Langlebige Branches**: Feature-Branches, die wochenlang bestehen, haeufen Merge-Konflikte an. Haeufig synchronisieren und Branches kurzlebig halten.
 - **Verwaiste Stashes**: `git stash` ist temporaerer Speicher. Nicht fuer langfristige Arbeit darauf verlaessen. Stattdessen committen oder branchen.
-- **Unzusammen gefuehrte Arbeit loeschen**: `git branch -D` ist destruktiv. Vor dem Zwangsloeschen mit `git log branch-name` pruefen.
+- **Unzusammen gefuehrte Arbeit loeschen**: Keines der beiden Loesch-Flags ist fuer sich allein sicher. `git branch -D` loescht unabhaengig vom Merge-Status, und `git branch -d` loescht einen nicht zusammengefuehrten Branch, der vollstaendig in seinen eigenen Upstream gepusht ist, oder, ohne Upstream, einen, den der aktuelle HEAD enthaelt, auch wenn `main` ihn nicht enthaelt (ohne Warnung). Vor beidem die Pruefung vom Anfang von Schritt 5 ausfuehren: Der PR ist `MERGED` in `main`, und `git merge-base --is-ancestor <branch> <headRefOid>` endet mit Exit-Code 0.
 - **Nicht bereinigen**: Auf GitHub geloeschte Remote-Branches erscheinen lokal weiterhin, bis `git fetch --prune` ausgefuehrt wird.
 
 ## Verwandte Skills

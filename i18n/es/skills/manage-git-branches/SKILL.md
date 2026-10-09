@@ -11,15 +11,15 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
   tags: git, branches, branching-strategy, stash, remote-tracking
 locale: es
 source_locale: en
-source_commit: 6f65f316
-fence_basis_commit: 6f65f316
+source_commit: aa73494d
+fence_basis_commit: aa73494d
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 ---
@@ -159,7 +159,9 @@ git merge origin/main
 
 ### Paso 5: Limpiar Ramas Fusionadas
 
-Después de que los pull requests sean fusionados, elimina las ramas obsoletas:
+Después de que los pull requests sean fusionados, elimina las ramas obsoletas. Primero confirma que el trabajo de cada rama llegó a `main`, porque `git branch -d` no responde a esa pregunta (ver En caso de fallo más abajo). Deben cumplirse dos condiciones a la vez. La forja (forge) debe informar que el PR se fusionó en `main`: `gh pr view <n> --json state,baseRefName,headRefOid,mergeCommit` muestra `MERGED` y `main`. Y la rama local no debe contener nada que el PR no tuviera: `git merge-base --is-ancestor <branch> <headRefOid>` termina con código de salida 0. `headRefOid` es el head del PR que la forja fusionó, por lo que esta única prueba funciona igual para un merge commit, un squash merge y un rebase merge. El estado del PR por sí solo no basta, porque no puede ver un commit local que el PR nunca tuvo.
+
+El código de salida 1 significa que la rama lleva un commit así (uno hecho después del último push, o uno que la rama remota perdió por un force-push): conserva la rama. El código de salida 128 significa que el head del PR no está presente localmente, por ejemplo porque otra persona hizo push al PR antes de que se eliminara la rama: tráelo con `git fetch origin refs/pull/<n>/head`, que GitHub conserva tras eliminar la rama, y vuelve a ejecutar la prueba. Para un merge commit, la prueba de ascendencia contra el merge commit (`mergeCommit.oid` en la misma salida de `gh`, tras `git fetch origin main`) responde a la misma pregunta. Un squash merge, y un rebase merge que reescribió los commits, fallan esa prueba contra el merge commit por construcción, porque sus commits son nuevos y no contienen los commits de la rama; aun así pasan la prueba de `headRefOid`. Solo `MERGED` junto con el código de salida 0 autoriza una eliminación. El bloque de código de abajo enumera las formas de eliminación como referencia. Una vez superada la comprobación, `git branch -D` es seguro, y si la línea `-d` del bloque se niega a eliminar, se trata del caso descrito en En caso de fallo.
 
 ```bash
 # Delete a local branch that has been merged
@@ -177,7 +179,7 @@ git fetch --prune
 
 **Esperado:** Las ramas fusionadas se eliminan local y remotamente. `git branch` muestra solo las ramas activas.
 
-**En caso de fallo:** `git branch -d` se niega a eliminar ramas no fusionadas. Si la rama fue fusionada mediante squash merge en GitHub, Git puede no reconocerla como fusionada. Usa `git branch -D` si tienes la certeza de que el trabajo está preservado.
+**En caso de fallo:** `git branch -d` no es una comprobación de fusión (#865, #900). Según `git help branch`, la rama debe estar completamente fusionada en su upstream, o en HEAD si no hay upstream configurado; medido (git 2.43), un upstream mostrado como `gone` cuenta como inexistente, así que se comprueba HEAD. Por tanto, una rama subida con `-u` (Paso 2) y sin nada pendiente de subir pasa la comprobación tanto si llegó a `main` como si no: `-d` la elimina, termina con código de salida 0 y solo imprime una advertencia en stderr (`deleting branch … that has been merged to 'refs/remotes/origin/…', but not yet merged to HEAD`). Si luego se ejecuta en orden el bloque de código anterior, también se elimina la rama remota, y no queda ninguna ref que contenga el trabajo. Una rama sin upstream se comprueba contra el HEAD del worktree en el que se ejecuta el comando, de modo que cuando HEAD es una rama apilada que la contiene, `-d` la elimina sin imprimir absolutamente nada en stderr. En la dirección contraria, `-d` rechaza una rama que *sí* fue fusionada siempre que a la referencia que comprueba le falte la punta (tip): HEAD (por ejemplo, un `main` local aún no actualizado) una vez que el upstream ha desaparecido tras eliminarse la rama remota, o un upstream que va por detrás de la punta porque esta se subió desde otro clon y aún no se ha hecho fetch. Una punta por delante de su upstream porque un commit nunca se subió no es ese caso: ese commit no está en ningún PR, y el rechazo es correcto. Una rama fusionada mediante squash merge solo se rechaza cuando a la referencia comprobada le falta la punta, por ejemplo HEAD una vez que el upstream ha desaparecido; mientras su propio upstream subido siga vivo, `-d` la elimina. La respuesta es la misma en ambos casos: ejecuta la comprobación del inicio de este paso y elimina con `git branch -D` solo cuando se supere.
 
 ### Paso 6: Listar e Inspeccionar Ramas
 
@@ -220,7 +222,7 @@ git branch -vv
 - **Olvidar hacer fetch antes de crear una rama**: Crear una rama desde un main local desactualizado significa empezar atrasado. Siempre ejecuta `git fetch origin` primero.
 - **Ramas de larga duración**: Las ramas de funcionalidad que viven semanas acumulan conflictos de fusión. Sincroniza con frecuencia y mantén las ramas de corta duración.
 - **Stashes huérfanos**: `git stash` es almacenamiento temporal. No dependas de él para trabajo a largo plazo. Haz commit o crea una rama en su lugar.
-- **Eliminar trabajo no fusionado**: `git branch -D` es destructivo. Verifica con `git log branch-name` antes de forzar la eliminación.
+- **Eliminar trabajo no fusionado**: Ninguna de las dos opciones de eliminación es segura por sí sola. `git branch -D` elimina sin importar el estado de fusión, y `git branch -d` elimina una rama no fusionada que esté completamente subida a su propio upstream o, sin upstream, una que el HEAD actual contenga aunque `main` no la contenga (sin ninguna advertencia). Antes de usar cualquiera de las dos, ejecuta la comprobación del inicio del Paso 5: el PR está `MERGED` en `main` y `git merge-base --is-ancestor <branch> <headRefOid>` termina con código de salida 0.
 - **No hacer prune**: Las ramas remotas eliminadas en GitHub siguen apareciendo localmente hasta que ejecutas `git fetch --prune`.
 
 ## Habilidades Relacionadas
