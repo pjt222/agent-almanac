@@ -91,9 +91,11 @@ PATTERNS=(
   # excluded because this repository's prose is full of legitimate ones -- locale codes (`de`,
   # `es`, `ja`), file types (`md`, `js`, `sh`, `py`). Widen only with a case that motivated it.
   #
-  # The leading-`_`/`$` shape needs at least one character after it (#863, comment 2): a lone
-  # backticked underscore or dollar sign is a character being named -- what a Mermaid numeric
-  # code decodes to, a regex anchor -- and fired on prose documenting exactly that.
+  # The leading-`_`/`$` shape needs at least one character after it (#863, the Mermaid report,
+  # issuecomment-5719785310): a lone backticked underscore or dollar sign is usually a character
+  # being named -- what a Mermaid numeric code decodes to, a regex anchor -- and fired on prose
+  # documenting exactly that. The cost is real: a bundler does assign `_` and `$` as names, and
+  # one named alone in prose now passes, as a lone lowercase name always has.
   'minified-ident-in-prose|(`[_$][A-Za-z0-9_$]{1,2}`|`[A-Z]`|`[A-Za-z0-9]{1,2}[_$][A-Za-z0-9]{0,1}`)'
 
   # A template-literal interpolation of a short call -- `${at(o)}` (see the #863 note). Added
@@ -233,8 +235,9 @@ verify() {
           'for (const p of nonJsonlSeen.slice(0, 5)) console.log(`    ${p}`);' ;;
       template-var-short-idents)
         printf '%s\n' 'console.log(`row ${i} of ${n}: ${err} in ${ctx}, ${msg}`);' ;;
-      # #863 comment 2, verbatim from tools/redact-artifact.py. The finding was the decoded
-      # character in backticks (a lone underscore), not the numeric code beside it.
+      # The Mermaid report on #863 (issuecomment-5719785310), verbatim from
+      # tools/redact-artifact.py. The finding was the decoded character in backticks (a lone
+      # underscore), not the numeric code beside it.
       backticked-underscore-numeric-code)
         printf '%s\n' '  mermaid   `#NN;` numeric codes decoded (mermaid renders `#95;` as `_`)' \
           '    """Mermaid renders `#95;` as `_`, so a diagram can carry an identifier the bytes do not."""' ;;
