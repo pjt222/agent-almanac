@@ -141,7 +141,8 @@ for i in $(seq 1 "$ITER"); do
     esac
     FINDINGS=$(open_threads)
     if [ -z "$FINDINGS" ]; then
-      echo "clean re-review at $LATEST (0 new comments)"; exit 0
+      # No open threads is not yet a clean pass: a suppression block posts none.
+      echo "re-review at $LATEST, no open threads — run SKILL.md Step 8's block read before calling it clean"; exit 0
     fi
     echo "re-review at $LATEST with new findings:"; echo "$FINDINGS"; exit 0
   fi
@@ -151,7 +152,7 @@ echo "timeout: no re-review after $ITER iterations" >&2
 exit 1
 ```
 
-There is no exit-condition asymmetry to manage any more, and that is the point of the shape above. Every completion mode observed on this repository posts a **review object** — 58 of 58 Copilot requests across 52 PRs produced one, zero mismatches — and there are **four** modes, not three: a clean pass (five on #494), findings (#512, #562), a quota refusal (#479, #470), and nothing-to-review (#506). So the reviews list is the only surface the poll reads, the `commit_id` decides whether the review is yours, and the body separates the two modes that ran from the two that did not. `requested_reviewers` is not consulted at all — it omits Bot-type reviewers, so it reads `[]` for a request that landed and for one that never did.
+There is no exit-condition asymmetry to manage any more, and that is the point of the shape above. Every completion mode observed on this repository posts a **review object** — 58 of 58 Copilot requests across 52 PRs produced one, zero mismatches — and there are **four** modes, not three: a clean pass (#491), findings (#512, #562 as threads; five #494 passes only in a suppression block, which a thread count never sees — SKILL.md Step 8), a quota refusal (#479, #470), and nothing-to-review (#506). So the reviews list is the only surface the poll reads, the `commit_id` decides whether the review is yours, and the body separates the two modes that ran from the two that did not. `requested_reviewers` is not consulted at all — it omits Bot-type reviewers, so it reads `[]` for a request that landed and for one that never did.
 
 ## Unresolve a Thread (Undo an Accidental Resolve)
 
