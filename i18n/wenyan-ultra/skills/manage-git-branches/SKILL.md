@@ -2,8 +2,8 @@
 name: manage-git-branches
 locale: wenyan-ultra
 source_locale: en
-source_commit: 82c77053
-fence_basis_commit: 82c77053
+source_commit: aa73494d
+fence_basis_commit: aa73494d
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-24"
 description: >
@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
@@ -159,7 +159,9 @@ git merge origin/main
 
 ### 五：清已合支
 
-PR 合後除陳支：
+PR 合後除陳支。先證各支之工已入 `main`，因 `git branch -d` 不答此問（見下敗）。二者必並立。一：托管報 PR 已合入 `main`：`gh pr view <n> --json state,baseRefName,headRefOid,mergeCommit` 示 `MERGED` 與 `main`。二：本支無 PR 所無者：`git merge-base --is-ancestor <branch> <headRefOid>` 退 0。`headRefOid` 乃托管所合之 PR 頭，故此一測通合提交、擠合、重定基合。僅 PR 態不足→不見 PR 未有之本提交。
+
+退 1→支有此提交（末推後所提，或遠支因強推所失者）：留支。退 128→PR 頭不在本，如支刪前他人推於 PR：以 `git fetch origin refs/pull/<n>/head` 取之（GitHub 刪支後仍存），再測。合提交者，對合提交驗祖（同 `gh` 出之 `mergeCommit.oid`，先 `git fetch origin main`）亦答同問。擠合與改寫提交之重定基合必敗此合提交測：其提交皆新，不含支之提交；然仍過 `headRefOid` 測。唯 `MERGED` 並退 0 方許刪。下碼列刪式備參。測過→`git branch -D` 安；其 `-d` 行見拒→屬敗例。
 
 ```bash
 # Delete a local branch that has been merged
@@ -177,7 +179,7 @@ git fetch --prune
 
 得：已合支本地與遠除。`git branch` 僅示活支。
 
-敗：`git branch -d` 拒刪未合支。若 GitHub 以擠合→Git 或不識為已合。若確工已保→用 `git branch -D`。
+敗：`git branch -d` 非合驗（#865, #900）。據 `git help branch`，支須全合入其上游，無上游則入 HEAD；實測（git 2.43），上游示 `gone` 視為無→驗 HEAD。故以 `-u` 推（步二）且全推之支，無論曾入 `main` 否皆過：`-d` 刪之、退 0、唯 stderr 一警（`deleting branch … that has been merged to 'refs/remotes/origin/…', but not yet merged to HEAD`）。續依序行上碼→遠支亦刪，無引存其工。無上游之支對命令所運工樹之 HEAD 驗，故 HEAD 為含之之疊支→`-d` 刪之，stderr 全無聲。反之，所驗引缺支端→`-d` 拒*確*已合之支：遠支刪、上游失後之 HEAD（如未更之本 `main`），或落後支端之上游（端自他克隆推而未取）。端因某提交未推而先於上游→非此例：其提交不在任 PR，拒乃正。擠合支僅於所驗引缺端時見拒，如上游失後之 HEAD；其自推上游猶存→`-d` 刪之。答皆同：行本步首之測，過方以 `git branch -D` 刪。
 
 ### 六：列並察支
 
@@ -220,7 +222,7 @@ git branch -vv
 - **分支前忘取**：由陳本 main 造支→始落。必先 `git fetch origin`
 - **長命支**：持週之功支積合衝。常同並保短命
 - **孤藏**：`git stash` 乃臨存。勿賴之為長期工。改提或分支
-- **刪未合工**：`git branch -D` 為毀。強刪前以 `git log branch-name` 複核
+- **刪未合工**：二刪旗皆不自安。`git branch -D` 不論合態皆刪；`git branch -d` 刪全推於己上游之未合支，或無上游時，刪當前 HEAD 所含而 `main` 不含者（無警）。用任一前，行步五首之測：PR 已 `MERGED` 入 `main`，且 `git merge-base --is-ancestor <branch> <headRefOid>` 退 0
 - **不剪**：GitHub 已刪遠支於本地仍現至運 `git fetch --prune`
 
 ## 參
