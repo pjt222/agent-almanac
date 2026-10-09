@@ -234,6 +234,21 @@ test('a shell that exits before --timeout keeps its own verdict, and a process t
   assert.equal(git('status', '--porcelain'), '', 'restored');
 });
 
+test('a straggler still in the group dies at --timeout when the shell exited first, and the shell keeps its verdict', async (t) => {
+  // The exit-first ordering with a holder that did NOT leave the group: it is reachable, so the
+  // limit kills it rather than leaving it to run after the tool has gone.
+  const marker = markerDir(t);
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const test = `grep -qx alpha notes.md || { ${grandchild(marker)}; exit 1; }`;
+  const r = runTool(dir, ['--file', 'notes.md', '--test', test, '--replace', 'alpha::beta', '--timeout', '1']);
+  assert.equal(r.status, 0, r.out);
+  assert.match(r.out, /^MUTANT KILLED/m, r.out);
+  assert.equal(git('status', '--porcelain'), '', 'restored');
+  assert.ok(existsSync(`${marker}.started`), 'the grandchild was running when the limit came');
+  await outlastGrandchild();
+  assert.equal(existsSync(marker), false, 'the in-group straggler outlived the limit');
+});
+
 test('a baseline that hangs is refused as HUNG before any mutation is applied', (t) => {
   const { dir, git } = makeRepo(t, 'alpha\n');
   const r = runTool(dir, ['--file', 'notes.md', '--test', 'sleep 30', '--replace', 'alpha::beta', '--timeout', '1']);
