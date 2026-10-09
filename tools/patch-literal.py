@@ -402,7 +402,11 @@ FAULT_KINDS = ('write', 'touch', 'readback', 'readfail', 'stdout', 'stdout-early
 
 
 def check_fault_env():
-    """Refuse (exit 2, before phase 1) a fault spec _fault would silently skip or never match."""
+    """Refuse (exit 2, before phase 1) an item _fault would skip (no ':') or whose kind no call site names.
+
+    Only the shape of each item is checked, never its path: a known kind naming no file in this run
+    (an empty path, `write:`, included) passes, and that pair simply never fires.
+    """
     spec = os.environ.get(FAULT_ENV, '')
     if not spec:
         return
@@ -410,8 +414,9 @@ def check_fault_env():
         kind, sep, _ = item.partition(':')
         if not sep or kind not in FAULT_KINDS:
             raise SpecError(f'{FAULT_ENV}: {item!r} is not <kind>:<path> with a known kind '
-                            f'({", ".join(FAULT_KINDS)}); pairs are comma-separated, so the usual cause '
-                            f'is a path that contains a comma, which cannot be named here')
+                            f'({", ".join(FAULT_KINDS)}); pairs are comma-separated, so check for a path '
+                            f'that contains a comma (it cannot be named here), a misspelt kind, a space '
+                            f'after a comma, or a stray comma')
 
 
 def _discard(stream):
