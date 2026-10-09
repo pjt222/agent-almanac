@@ -241,13 +241,19 @@ const ANY_INTERPRETER = 'bash|sh|zsh|dash|node|python|python3';
  * this through `loadRegistry` too.
  *
  * Scanned: each file in `toolPaths`. Looked for: the basename of ANY file in `toolPaths`,
- * optionally behind `./` or `tools/`. Two shapes are reported:
+ * optionally behind `./` or `tools/`. Three shapes are reported:
  *
- *   bare   the name opens the line — after leading blanks and one comment marker (`#`, `*` or
- *          `//`) — or directly follows `usage:` (any case) anywhere in the line. That covers a
- *          `# USAGE` doc block (printed by `--help` in three of the tools), a heredoc usage
- *          block, and `console.log('usage: x.mjs …')`.
- *   wrong  the name directly follows an interpreter other than its own (`python3 tools/x.sh`).
+ *   bare      the name opens the line — after leading blanks and one comment marker (`#`, `*`
+ *             or `//`) — or directly follows `usage:` (any case) or `prog=` and a quote anywhere
+ *             in the line. That covers a `# USAGE` doc block (printed by `--help` in three of
+ *             the tools), a heredoc usage block, `console.log('usage: x.mjs …')`, and an
+ *             argparse `prog='x.py'`.
+ *   wrong     the name directly follows an interpreter other than its own (`python3 tools/x.sh`).
+ *   argparse  a `.py` tool's line that opens `ArgumentParser(` without `prog=`. argparse prints
+ *             its prog as the usage line and defaults it to `sys.argv[0]`'s basename, which is
+ *             bare by construction and built at runtime, so no other shape can see it. The test
+ *             is per line: a call that sets `prog=` on a later line is reported too, and the
+ *             remedy is to move it up.
  *
  * One exemption, a heuristic: a bare name followed by ` — ` or ` -- ` and a lowercase word is a
  * header's title line (`# x.sh -- what it does`), not an invocation. A name mentioned mid-prose
@@ -266,16 +272,20 @@ export function usageLineErrors(root, toolPaths) {
   if (!names.size) return errors;
   const alt = [...names.keys()].map(esc).join('|');
   const path = `(?:\\./)?(?:tools/)?(${alt})(?![\\w.-])`;
-  const bare = new RegExp(`(?:^\\s*(?:#+|\\*|//)?\\s*|usage:\\s*)${path}(?!\\s+(?:—|--)\\s+[a-z])`, 'i');
+  const bare = new RegExp(`(?:^\\s*(?:#+|\\*|//)?\\s*|usage:\\s*|prog\\s*=\\s*['"])${path}(?!\\s+(?:—|--)\\s+[a-z])`, 'i');
   const named = new RegExp(`(?<![\\w.-])(${ANY_INTERPRETER})\\s+${path}`, 'g');
   for (const p of toolPaths) {
     let text;
     try { text = readFileSync(join(root, p), 'utf8'); } catch { continue; }
+    const own = p.replace(/^.*\//, '');
     text.split('\n').forEach((line, i) => {
       const m = bare.exec(line);
       if (m) errors.push(`${p}:${i + 1}: names ${m[1]} without its interpreter; write \`${names.get(m[1])} tools/${m[1]}\``);
       for (const w of line.matchAll(named)) {
         if (w[1] !== names.get(w[2])) errors.push(`${p}:${i + 1}: runs ${w[2]} with ${w[1]}; its extension requires ${names.get(w[2])}`);
+      }
+      if (own.endsWith('.py') && line.includes('ArgumentParser(') && !/\bprog\s*=/.test(line)) {
+        errors.push(`${p}:${i + 1}: ArgumentParser( without prog= prints sys.argv[0]'s basename as the usage line; pass prog='${names.get(own)} tools/${own}'`);
       }
     });
   }

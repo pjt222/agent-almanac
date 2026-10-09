@@ -191,6 +191,23 @@ test('usageLineErrors: a tool named without the interpreter its extension requir
   assert.match(usageLineErrors(root, ['tools/odd.rb']).join('\n'), /tools\/odd\.rb: no interpreter is known for `\.rb`/, 'a new kind of tool cannot pass the scan by having no interpreter entry');
 });
 
+test('usageLineErrors: argparse prints its prog as the usage line, so a .py parser without prog= prints the bare basename and one with a bare prog= is the bare shape (#811)', (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'tools-argparse-'));
+  t.after(() => rmTree(root));
+  mkdirSync(join(root, 'tools'));
+  writeFileSync(join(root, 'tools/demo-py.py'), [
+    '    p = argparse.ArgumentParser(description=__doc__)', //                          1  no prog: sys.argv[0]'s basename
+    "    p = argparse.ArgumentParser(prog='demo-py.py', add_help=True,", //             2  bare prog
+    '    p = argparse.ArgumentParser(prog="python3 tools/demo-py.py", add_help=True)', // 3  ok
+    "    p = argparse.ArgumentParser(prog='node tools/demo-py.py')", //                 4  wrong interpreter
+  ].join('\n'));
+  assert.deepEqual(usageLineErrors(root, ['tools/demo-py.py']), [
+    "tools/demo-py.py:1: ArgumentParser( without prog= prints sys.argv[0]'s basename as the usage line; pass prog='python3 tools/demo-py.py'",
+    'tools/demo-py.py:2: names demo-py.py without its interpreter; write `python3 tools/demo-py.py`',
+    'tools/demo-py.py:4: runs demo-py.py with node; its extension requires python3',
+  ]);
+});
+
 test('renderClaudeBlock: need-first lines, not_for as a suffix, every TAGS group in order then untagged, deprecated rows skipped and counted', () => {
   const entries = [
     ENTRY({ id: 'z-untagged', path: 'tools/z-untagged.sh', verify: 'bash tools/z-untagged.sh --verify', need: 'Doing the untagged thing.' }),
