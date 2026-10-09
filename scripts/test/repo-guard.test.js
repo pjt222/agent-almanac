@@ -469,6 +469,28 @@ test('an untracked symlink swapped back to a regular file of IDENTICAL bytes is 
   assertKindChanged(r, 'notes.md', `a symlink to ${target}`, 'a regular file');
 });
 
+test('a deleted path whose parent becomes a file is listed as what it is, not as a byte write (#921 round 1)', async (t) => {
+  // `D  d/f` stays byte-identical and `?? d` joins it. `lstat` of d/f now throws ENOTDIR, so the
+  // recorded value moves from `(absent)` to `unreadable:ENOTDIR`, which is not a write to bytes
+  // that exist either time (#921 round 1, F5). Recording ENOTDIR as `(absent)` is the follow-up.
+  const dir = makeRepo(t);
+  mkdirSync(join(dir, 'd'), { recursive: true });
+  writeFileSync(join(dir, 'd', 'f'), 'x\n', 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-qm', 'd/f']);
+  git(dir, ['rm', '-q', '--', 'd/f']);   // takes the emptied directory with it
+  guard(dir, ['snapshot']);
+
+  writeFileSync(join(dir, 'd'), 'now a file\n', 'utf8');
+  assert.equal(git(dir, ['status', '--porcelain']), 'D  d/f\n?? d', 'precondition: the D line did not move');
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /\n {4}\+ \?\? d\n/);
+  assertKindChanged(r, 'd/f', 'nothing', 'unreadable:ENOTDIR');
+});
+
 test('hashes the DESTINATION path of a rename, not the vanished original', async (t) => {
   // Porcelain -z emits `R  <destination>\0<original>\0` — destination first,
   // which is the file that exists on disk. Verified directly:
