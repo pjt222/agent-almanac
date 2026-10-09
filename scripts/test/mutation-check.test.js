@@ -159,29 +159,32 @@ test('a mutant whose test hangs is HUNG -- inconclusive, exit 1, never a kill --
   assert.equal(existsSync(marker), false, 'the grandchild outlived the timeout kill');
 });
 
-test('an interrupt during the mutant run kills the test\'s process group and restores the file', async (t) => {
-  // The test now runs in a group of its own, so a terminal's Ctrl-C no longer reaches it; the
-  // handler has to. Signalled once the grandchild exists, so the mutation is on disk and the
-  // shell is past its `grep`.
-  const marker = markerDir(t);
-  const { dir, git } = makeRepo(t, 'alpha\n');
-  const test = `grep -qx alpha notes.md || { ${grandchild(marker)}; wait; }`;
-  const child = spawn(process.execPath, [TOOL, '--file', 'notes.md', '--test', test, '--replace', 'alpha::beta'],
-    { cwd: dir, stdio: ['ignore', 'pipe', 'pipe'] });
-  let out = '';
-  child.stdout.setEncoding('utf8');
-  child.stdout.on('data', (chunk) => { out += chunk; });
-  const poll = setInterval(() => {
-    if (existsSync(`${marker}.started`)) { clearInterval(poll); child.kill('SIGINT'); }
-  }, 20);
-  const [code] = await once(child, 'close');
-  clearInterval(poll);
-  assert.equal(code, 130, out);
-  assert.equal(readFileSync(join(dir, 'notes.md'), 'utf8'), 'alpha\n', 'restored');
-  assert.equal(git('status', '--porcelain'), '');
-  await outlastGrandchild();
-  assert.equal(existsSync(marker), false, 'the grandchild outlived the interrupt');
-});
+// Both handlers kill the group; with only SIGINT driven, the SIGTERM one went unasserted.
+for (const [signal, expectedExit] of [['SIGINT', 130], ['SIGTERM', 143]]) {
+  test(`an interrupt (${signal}) during the mutant run kills the test's process group and restores the file`, async (t) => {
+    // The test now runs in a group of its own, so a terminal's Ctrl-C no longer reaches it; the
+    // handler has to. Signalled once the grandchild exists, so the mutation is on disk and the
+    // shell is past its `grep`.
+    const marker = markerDir(t);
+    const { dir, git } = makeRepo(t, 'alpha\n');
+    const test = `grep -qx alpha notes.md || { ${grandchild(marker)}; wait; }`;
+    const child = spawn(process.execPath, [TOOL, '--file', 'notes.md', '--test', test, '--replace', 'alpha::beta'],
+      { cwd: dir, stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '';
+    child.stdout.setEncoding('utf8');
+    child.stdout.on('data', (chunk) => { out += chunk; });
+    const poll = setInterval(() => {
+      if (existsSync(`${marker}.started`)) { clearInterval(poll); child.kill(signal); }
+    }, 20);
+    const [code] = await once(child, 'close');
+    clearInterval(poll);
+    assert.equal(code, expectedExit, out);
+    assert.equal(readFileSync(join(dir, 'notes.md'), 'utf8'), 'alpha\n', 'restored');
+    assert.equal(git('status', '--porcelain'), '');
+    await outlastGrandchild();
+    assert.equal(existsSync(marker), false, 'the grandchild outlived the interrupt');
+  });
+}
 
 test('a timed-out run returns even when a process that left the group still holds the pipes', (t) => {
   // `setsid` puts the sleep in a session of its own, out of reach of the group kill, still
