@@ -617,7 +617,7 @@ def verify(mod, hermes_version: str, tmp: Path) -> int:
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
+    ap = argparse.ArgumentParser(prog="python3 tools/validate-hermes-distribution.py", description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
     ap.add_argument("--module", required=True, help="path to Hermes's hermes_cli/profile_distribution.py")
     ap.add_argument("--dist", help="generated distribution: a local directory (the generator's output, not a clone) or a git URL")
     ap.add_argument("--almanac", help="agent-almanac checkout to derive version, skill count and SOUL.md from")

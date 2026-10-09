@@ -530,7 +530,9 @@ done
 # constraint as B13 -- and holds each spawn's type to the sidecar's `// implementing-phases:`
 # declaration: STRICT forward (an implementing type must sit in a listed phase), LENIENT
 # reverse (a listed phase needs at least one such spawn, so a phase may pair a scout with a
-# writer). Phase titles are exact three ways: sidecar == meta == body. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
+# writer). Phase titles are exact three ways: sidecar == meta == body. Since #861 it also
+# fails a spawn whose type can run shell (by capability, not intent: Explore counts) when its
+# prompt does not start with REPO_SAFETY or names no write location. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
 # aborts the script before the findings print. Exit 2 (could not measure) fails like 1.
 echo "--- A7b: Workflow capability contract ---"
 if ! command -v node >/dev/null 2>&1; then
@@ -1518,12 +1520,14 @@ fi
 # CLAUDE.md § Tools and the catalogue in tools/README.md are rendered from the registry, so a
 # tool with no row is in no index a session reads, a row with no file recommends a path that
 # does not exist, and a subdirectory or symlink under tools/ is representable by no row and
-# would otherwise vanish from both lists. check-tools-registry.js is dependency-free like every
+# would otherwise vanish from both lists. It also refuses a usage line in a tool that names a
+# tool without its interpreter (#811): every tool is committed 100644, so `tools/x.sh` as printed
+# is `permission denied`. check-tools-registry.js is dependency-free like every
 # checker here and prints one FAIL line per discrepancy. Its `--verify` (each tool's self-test) is deliberately
 # NOT run from this required job: one row's self-test needs a third-party fetch, and a required
 # context that can go red on an outage is what CLAUDE.md § Merging With a Red Check forbids.
 # The self-tests run in validate-tools.yml, which is not required.
-echo "--- B14: tools registry parity ---"
+echo "--- B14: tools registry parity and usage lines ---"
 if ! command -v node >/dev/null 2>&1; then
   echo "FAIL: node not available, so B14 could not be evaluated (this is not a pass)"
   failed=1

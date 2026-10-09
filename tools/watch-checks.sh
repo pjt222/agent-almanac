@@ -75,9 +75,9 @@
 #
 # USAGE
 # -----
-#     tools/watch-checks.sh <pr-number | commit-sha> [options]
-#     tools/watch-checks.sh --pr N | --sha SHA [options]
-#     tools/watch-checks.sh --verify
+#     bash tools/watch-checks.sh <pr-number | commit-sha> [options]
+#     bash tools/watch-checks.sh --pr N | --sha SHA [options]
+#     bash tools/watch-checks.sh --verify
 #
 #     --interval S    seconds between polls (default 30; GitHub rate limits apply)
 #     --timeout S     give up after S seconds (default 1800)
@@ -119,9 +119,9 @@ REPORT_FAILS=0
 
 usage() {
   cat <<'EOF'
-usage: tools/watch-checks.sh <pr-number | commit-sha> [--interval S] [--timeout S] [--min-polls N] [--repo OWNER/NAME]
-       tools/watch-checks.sh --pr N | --sha SHA [options]
-       tools/watch-checks.sh --verify
+usage: bash tools/watch-checks.sh <pr-number | commit-sha> [--interval S] [--timeout S] [--min-polls N] [--repo OWNER/NAME]
+       bash tools/watch-checks.sh --pr N | --sha SHA [options]
+       bash tools/watch-checks.sh --verify
 exit 0: every reported context pass/skipping   1: a context failed   2: no verdict (arguments, fetch, timeout)
 EOF
 }

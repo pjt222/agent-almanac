@@ -46,9 +46,9 @@
 # internal shapes is itself a description of internals.
 #
 # USAGE
-#     tools/check-redaction.sh FILE...      scan
-#     tools/check-redaction.sh --verify     self-test; exit non-zero if the gate cannot fail
-#     tools/check-redaction.sh --labels     list what is checked, without the patterns
+#     bash tools/check-redaction.sh FILE...      scan
+#     bash tools/check-redaction.sh --verify     self-test; exit non-zero if the gate cannot fail
+#     bash tools/check-redaction.sh --labels     list what is checked, without the patterns
 set -uo pipefail
 
 SELF="$(basename "${BASH_SOURCE[0]}")"
@@ -90,15 +90,26 @@ PATTERNS=(
   # lone capital, or an embedded `_`/`$`. Two-letter backticked tokens without those are
   # excluded because this repository's prose is full of legitimate ones -- locale codes (`de`,
   # `es`, `ja`), file types (`md`, `js`, `sh`, `py`). Widen only with a case that motivated it.
-  'minified-ident-in-prose|(`[_$][A-Za-z0-9_$]{0,2}`|`[A-Z]`|`[A-Za-z0-9]{1,2}[_$][A-Za-z0-9]{0,1}`)'
+  #
+  # The leading-`_`/`$` shape needs at least one character after it (#863, the Mermaid report,
+  # issuecomment-5719785310): a lone backticked underscore or dollar sign is usually a character
+  # being named -- what a Mermaid numeric code decodes to, a regex anchor -- and fired on prose
+  # documenting exactly that. The cost is real: a bundler does assign `_` and `$` as names, and
+  # one named alone in prose now passes, as a lone lowercase name always has.
+  'minified-ident-in-prose|(`[_$][A-Za-z0-9_$]{1,2}`|`[A-Z]`|`[A-Za-z0-9]{1,2}[_$][A-Za-z0-9]{0,1}`)'
 
-  # A template-literal interpolation of a short identifier -- `${r}`, `${at(o)}`. Added
+  # A template-literal interpolation of a short call -- `${at(o)}` (see the #863 note). Added
   # 2026-08-26 (second pass) after a reviewer found `${r} lines and ${at(o)}` quoted verbatim
   # from the bundle in a probe docstring, which the prose-identifier shape above does not match
   # because the name sits inside `${...}` rather than between backticks. Two review rounds, two
   # distinct escapes from the same class: an internal name is not one shape, and a deny-list
   # reaches it only one spelling at a time.
-  'minified-template-fragment|\$\{[A-Za-z_$][A-Za-z0-9_$]{0,2}(\([A-Za-z0-9_$, ]{0,12}\))?\}'
+  #
+  # Narrowed 2026-10-02 (#863) to the CALL half of that incident, a short name applied to a
+  # short argument list inside `${...}`. The bare-name half matched any 1-3 character variable
+  # interpolated in ordinary code (`${dir}`, `${err}`, `${p}`), and a short name alone carries
+  # no signal of minification. The incident line still fires, on its call.
+  'minified-template-fragment|\$\{[A-Za-z_$][A-Za-z0-9_$]{0,2}\([A-Za-z0-9_$, ]{0,12}\)\}'
 )
 
 list_labels() {
@@ -211,11 +222,56 @@ verify() {
     fi
   done
 
+  # 6. Known false positives must stay CLEAN (#863). A rule that only ever sees dirty input
+  #    looks correct forever, so each row is ordinary text a rule once fired on. The WHOLE file
+  #    must exit 0, so a fix that silences one rule by tripping another fails here too.
+  local negatives=0 negative
+  for negative in template-var-reproducer template-var-short-idents \
+                  backticked-underscore-numeric-code backticked-dollar-in-prose; do
+    case "$negative" in
+      # #863, verbatim: short variables interpolated in readable JavaScript, nothing minified.
+      template-var-reproducer)
+        printf '%s\n' 'walkErrors.push(`${dir}: ${err.code || err.message}`);' \
+          'for (const p of nonJsonlSeen.slice(0, 5)) console.log(`    ${p}`);' ;;
+      template-var-short-idents)
+        printf '%s\n' 'console.log(`row ${i} of ${n}: ${err} in ${ctx}, ${msg}`);' ;;
+      # The Mermaid report on #863 (issuecomment-5719785310), verbatim from
+      # tools/redact-artifact.py. The finding was the decoded character in backticks (a lone
+      # underscore), not the numeric code beside it.
+      backticked-underscore-numeric-code)
+        printf '%s\n' '  mermaid   `#NN;` numeric codes decoded (mermaid renders `#95;` as `_`)' \
+          '    """Mermaid renders `#95;` as `_`, so a diagram can carry an identifier the bytes do not."""' ;;
+      # The same class one character over: a lone dollar sign named as a character.
+      backticked-dollar-in-prose)
+        printf '%s\n' 'the regex anchors on `$` at the end of the line' ;;
+    esac > "$tmp/negative.md"
+    negatives=$((negatives + 1))
+    # A blank fixture always scans clean, so this row's pass condition is exactly what a row
+    # that tested nothing produces. That happens when a name in the list above has no matching
+    # case label (a typo, a half-done rename) and when an arm's printf loses its text -- the
+    # second writes a lone newline, which a non-empty test (-s) would accept. Section 2 cannot
+    # fail this way: a blank canary exits 0 where 1 is expected.
+    if ! grep -q '[^[:space:]]' "$tmp/negative.md"; then
+      echo "verify FAIL: known false positive '$negative' wrote a blank fixture -- a blank file always scans clean" >&2
+      missed=$((missed + 1))
+      continue
+    fi
+    out="$(scan_all "$tmp/negative.md")"; rc=$?
+    if [ "$rc" -ne 0 ]; then
+      echo "verify FAIL: known false positive '$negative' gave exit $rc, expected 0 (clean)" >&2
+      echo "$out" >&2
+      missed=$((missed + 1))
+    fi
+  done
+
+  # No denominator: one canary can fail up to two checks and section 5 adds three, so a total
+  # computed from the loop sizes was smaller than what it claimed to count. Every miss above
+  # prints its own verify FAIL line, so the count can be read off the lines it summarises.
   if [ "$missed" -ne 0 ]; then
-    echo "check-redaction --verify: FAILED ($missed of $((seeded + 1)) checks)" >&2
+    echo "check-redaction --verify: FAILED ($missed check(s), one verify FAIL line above each)" >&2
     return 1
   fi
-  echo "check-redaction --verify: OK ($seeded shapes each seeded and caught; clean exits 0; missing file exits 2; labels only)"
+  echo "check-redaction --verify: OK ($seeded shapes each seeded and caught; $negatives known false positives stay clean; clean exits 0; missing file exits 2; labels only)"
   return 0
 }
 

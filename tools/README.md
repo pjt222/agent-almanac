@@ -38,7 +38,7 @@ Generated from `tools/_registry.yml` by `npm run update-readmes`; the need-first
 | `fact-sheet.sh` | bash | Assembles a fact sheet from a spec of labelled commands, recording every command and its output verbatim, a non-zero exit noted on the label line, the whole spec parsed and refused before anything runs | `bash tools/fact-sheet.sh --verify` |
 | `append-only.py` | python | Checks that a diff only added text — every original line survives, in order, as a prefix of a later one — refusing a range spec that cannot see the working tree, a file the diff never reached, and a file new at the named path | `python3 tools/append-only.py --verify` |
 | `provenance-field.mjs` | node | Reads, stamps or clears a translation's `source_commit` or `fence_basis_commit` indent-aware, refusing to move source_commit unless the caller declares the human retranslation | `node tools/provenance-field.mjs --verify` |
-| `mutation-envelope.sh` | bash | Runs a plan of mutants through scripts/mutation-check.js under ONE test command and prints a verdict table; exit 1 when any row is not a clean kill, exit 2 when a row is malformed or its needle carries the :: separator | `bash tools/mutation-envelope.sh --verify` |
+| `mutation-envelope.sh` | bash | Runs a plan of mutants through scripts/mutation-check.js under ONE test command and prints a verdict table; exit 1 when any row is not a clean kill, exit 2 before any mutant is measured when a row is malformed or its <old>::<new> field does not hold :: exactly once | `bash tools/mutation-envelope.sh --verify` |
 <!-- AUTO:END:tools-table -->
 
 ## Layout
@@ -182,8 +182,12 @@ checks its own back-catalogue is a ratchet, and it will catch the error you were
 wrong kind of position — which is the entire argument for the convention.
 
 Then add its row to `tools/_registry.yml` — `npm run check:tools-registry` refuses a file
-without a row, a row without a file, and anything under `tools/` that is not a plain file (a
-subdirectory or a symlink is representable by no row), and `npm run update-readmes` renders the
+without a row, a row without a file, anything under `tools/` that is not a plain file (a
+subdirectory or a symlink is representable by no row), and any usage line or `# USAGE` line that
+names a tool without its interpreter (`bash` for `.sh`, `node` for `.mjs`, `python3` for
+`.py`: every tool is committed non-executable, so `tools/x.sh --verify` as printed is
+`permission denied`; an argparse parser therefore passes `prog=`, whose default is the bare
+file name), and `npm run update-readmes` renders the
 catalogue above and `CLAUDE.md` § Tools from it. Write the `need` field as what a session is
 trying to do when it should reach for this file, not as what the file is: the failure the
 registry exists for is a session that remembers the procedure and has lost the name. The

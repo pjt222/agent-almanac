@@ -226,13 +226,90 @@ export function checkParity(root, entries) {
   };
 }
 
+/**
+ * The interpreter each tool's extension requires (#811). Every tool is committed 100644, so a
+ * usage line that names the file without one is unrunnable exactly as printed: `permission
+ * denied`, exit 126. An extension missing here is itself reported, so a new kind of tool cannot
+ * slip past the scan by having no entry.
+ */
+export const INTERPRETERS = { '.sh': 'bash', '.mjs': 'node', '.py': 'python3' };
+const ANY_INTERPRETER = 'bash|sh|zsh|dash|node|python|python3';
+
+/**
+ * Usage lines that name a tool without the interpreter its extension requires, as
+ * `path:line: message` strings (empty when clean). Never throws: `generate-readmes.js` reaches
+ * this through `loadRegistry` too.
+ *
+ * Scanned: each file in `toolPaths`. Looked for: the basename of ANY file in `toolPaths`,
+ * optionally behind `./` or `tools/`. Three shapes are reported:
+ *
+ *   bare      the name opens the line — after leading blanks and one comment marker (`#`, `*`
+ *             or `//`) — or directly follows `usage:`, `Usage:` or `USAGE:`, or `prog=` and a
+ *             quote, anywhere in the line. That covers a `# USAGE` doc block (printed by `--help`
+ *             in three of the tools), a JSDoc ` * ` or `//` usage block, a heredoc usage block,
+ *             `console.log('usage: x.mjs …')`, and an argparse `prog='x.py'`. The match is
+ *             case-sensitive: those three spellings of the opener, and `tools/` and the names
+ *             exactly as committed.
+ *   wrong     the name directly follows an interpreter other than its own (`python3 tools/x.sh`).
+ *   argparse  a `.py` tool's line that opens `ArgumentParser(` without `prog=`. argparse prints
+ *             its prog as the usage line and defaults it to `sys.argv[0]`'s basename, which is
+ *             bare by construction and built at runtime, so no other shape can see it. The test
+ *             is per line: a call that sets `prog=` on a later line is reported too, and the
+ *             remedy is to move it up.
+ *
+ * One exemption, a heuristic, and on the line-start opener only: a name there followed by ` — `
+ * or ` -- ` and a lowercase word is a header's title line (`# x.sh -- what it does`), not an
+ * invocation. After `usage:` or `prog=` it never applies, since `usage: x.sh -- <file>` is a usage
+ * line. A name mid-line is neither shape and is not reported, whether it is prose (`run by
+ * tools/x.sh when …`) or a printed remedy (`-- run tools/x.sh $PR`), so a remedy a tool prints
+ * must carry its interpreter by hand, as merge-pr.sh's refusals do.
+ */
+export function usageLineErrors(root, toolPaths) {
+  const errors = [];
+  const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const names = new Map();
+  for (const p of toolPaths) {
+    const name = p.replace(/^.*\//, '');
+    const ext = /\.[^.]+$/.exec(name)?.[0] ?? '';
+    if (!INTERPRETERS[ext]) { errors.push(`${p}: no interpreter is known for \`${ext || '(no extension)'}\`; add it to INTERPRETERS`); continue; }
+    names.set(name, INTERPRETERS[ext]);
+  }
+  if (!names.size) return errors;
+  const alt = [...names.keys()].map(esc).join('|');
+  const path = `(?:\\./)?(?:tools/)?(${alt})(?![\\w.-])`;
+  // Two regexes, so the title-line exemption binds to the line-start opener alone and each holds
+  // `path` once (the name is m[1] in both). No 'i' flag: it would make `[a-z]` match any letter.
+  const bareStart = new RegExp(`^\\s*(?:#+|\\*|//)?\\s*${path}(?!\\s+(?:—|--)\\s+[a-z])`);
+  const bareAfter = new RegExp(`(?:(?:[Uu]sage|USAGE):\\s*|prog\\s*=\\s*['"])${path}`);
+  const named = new RegExp(`(?<![\\w.-])(${ANY_INTERPRETER})\\s+${path}`, 'g');
+  for (const p of toolPaths) {
+    let text;
+    try { text = readFileSync(join(root, p), 'utf8'); } catch { continue; }
+    const own = p.replace(/^.*\//, '');
+    text.split('\n').forEach((line, i) => {
+      const m = bareStart.exec(line) ?? bareAfter.exec(line);
+      if (m) errors.push(`${p}:${i + 1}: names ${m[1]} without its interpreter; every tool is committed non-executable, so the line as printed does not run: write \`${names.get(m[1])} tools/${m[1]}\``);
+      for (const w of line.matchAll(named)) {
+        if (w[1] !== names.get(w[2])) errors.push(`${p}:${i + 1}: runs ${w[2]} with ${w[1]}; its extension requires ${names.get(w[2])}`);
+      }
+      if (own.endsWith('.py') && line.includes('ArgumentParser(') && !/\bprog\s*=/.test(line)) {
+        errors.push(`${p}:${i + 1}: ArgumentParser( without prog= prints sys.argv[0]'s basename as the usage line; pass prog='${names.get(own)} tools/${own}'`);
+      }
+    });
+  }
+  return errors;
+}
+
 /** Load, parse, and check; the shape every caller wants. Throws only when the file cannot be parsed. */
 export function loadRegistry(root) {
   const text = readFileSync(join(root, REGISTRY_PATH), 'utf8');
   const { entries, declaredTotal } = parseRegistry(text);
   const errors = schemaErrors(entries, declaredTotal);
   const parity = checkParity(root, entries);
-  return { entries, errors, ...parity };
+  // The registered files that are on disk as plain files: a row without a file, or one naming a
+  // subdirectory or symlink, is already reported above and has no usage lines to read.
+  const toolPaths = entries.map((e) => e.path).filter((p) => p && !parity.rowWithoutFile.includes(p) && !parity.notPlainFile.includes(p));
+  return { entries, errors, ...parity, usageErrors: usageLineErrors(root, toolPaths) };
 }
 
 /** The CLAUDE.md index: one need-first line per ACTIVE tool, `not_for` as a suffix, grouped by tag in TAGS order, untagged last. */
@@ -248,7 +325,7 @@ export function renderClaudeBlock(entries) {
   }
   if (lines.length !== active.length) throw new Error(`renderClaudeBlock rendered ${lines.length} of ${active.length} active tools; a tag outside TAGS reached the renderer`);
   const skipped = entries.length - active.length;
-  const head = `\`tools/_registry.yml\` catalogues ${active.length} operator utilities under \`tools/\`, each with a self-test (\`verify\` in its row). \`npm run check:tools-registry\` checks every row against disk in three directions — a file without a row, a row without a file, anything under \`tools/\` that is not a plain file — inside \`validate:integrity\`; a separate, non-required job runs each row's self-test where \`verify_in_ci\` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (\`tools/README.md\` § Adding one).${skipped ? ` ${skipped} deprecated tool(s) are in the registry with a successor and are not listed here.` : ''}`;
+  const head = `\`tools/_registry.yml\` catalogues ${active.length} operator utilities under \`tools/\`, each with a self-test (\`verify\` in its row). \`npm run check:tools-registry\` checks every row against disk in three directions — a file without a row, a row without a file, anything under \`tools/\` that is not a plain file — and refuses a usage line that names a tool without its interpreter (\`bash\`, \`node\` or \`python3\`, by extension), inside \`validate:integrity\`; a separate, non-required job runs each row's self-test where \`verify_in_ci\` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (\`tools/README.md\` § Adding one).${skipped ? ` ${skipped} deprecated tool(s) are in the registry with a successor and are not listed here.` : ''}`;
   return `${head}\n\n${lines.join('\n')}`;
 }
 

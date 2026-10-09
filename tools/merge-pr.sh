@@ -261,10 +261,10 @@ run_merge() {
   green=$(printf '%s\n' "$checks" | grep -Ec $'\t(pass|skipping)$' || true)
   other=$((total - green))
   say "checks on ${PR_HEAD:0:9}: $total context(s), $green pass or skipping, $other other"
-  [ "$total" -gt 0 ] || refuse "no check context reported on PR $PR (unknown PR, expired token, or no checks yet) -- run tools/watch-checks.sh $PR"
+  [ "$total" -gt 0 ] || refuse "no check context reported on PR $PR (unknown PR, expired token, or no checks yet) -- run bash tools/watch-checks.sh $PR"
   if [ "$other" -gt 0 ]; then
     printf '%s\n' "$checks" | grep -Ev $'\t(pass|skipping)$' | awk -F'\t' '{ print "merge-pr:   " $1 ": " $2 }'
-    refuse "$other context(s) not pass or skipping on PR $PR -- run tools/watch-checks.sh $PR and fix or re-run what is red"
+    refuse "$other context(s) not pass or skipping on PR $PR -- run bash tools/watch-checks.sh $PR and fix or re-run what is red"
   fi
 
   # 2b. the REQUIRED contexts, from the rules in effect on the base branch (#896). "Every context
@@ -294,7 +294,7 @@ run_merge() {
       if [ -z "$bucket" ]; then say "  required context missing: $req"; req_bad=$((req_bad + 1))
       elif [ "$bucket" != pass ]; then say "  required context not pass: $req ($bucket)"; req_bad=$((req_bad + 1)); fi
     done <<< "$required"
-    [ "$req_bad" -eq 0 ] || refuse "$req_bad of $req_total required context(s) on $PR_BASE not pass on PR $PR -- a bypass merge would not be stopped by GitHub; wait with tools/watch-checks.sh $PR, or find out why the required workflow did not run"
+    [ "$req_bad" -eq 0 ] || refuse "$req_bad of $req_total required context(s) on $PR_BASE not pass on PR $PR -- a bypass merge would not be stopped by GitHub; wait with bash tools/watch-checks.sh $PR, or find out why the required workflow did not run"
   fi
 
   # 2c. mergeStateStatus, the state GitHub computes for the merge itself. It reads UNKNOWN until
@@ -690,10 +690,13 @@ verify() {
   v_has 'red-check refusal' "$V_OUT" '^merge-pr: REFUSED: 1 context\(s\) not pass or skipping on PR 42'
   FAKE_CHECKS='[{"name":"integrity","bucket":"pending"}]' v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'refuse/pending-check' 1 "$V_RC"
-  v_has 'pending refusal points at watch-checks' "$V_OUT" 'run tools/watch-checks.sh 42'
+  # Each refusal names its remedy WITH the interpreter: every tool is committed 100644, so the
+  # bare `tools/watch-checks.sh 42` these printed before #811 was `permission denied` as pasted.
+  v_has 'pending refusal points at watch-checks' "$V_OUT" 'run bash tools/watch-checks.sh 42 and fix'
   FAKE_CHECKS='[]' v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'refuse/zero-checks' 1 "$V_RC"
   v_has 'zero-checks refusal' "$V_OUT" '^merge-pr: REFUSED: no check context reported on PR 42'
+  v_has 'zero-checks refusal points at watch-checks' "$V_OUT" 'no checks yet\) -- run bash tools/watch-checks.sh 42$'
   FAKE_CHECKS='' v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'refuse/empty-checks-body' 1 "$V_RC"
   v_has 'empty body is zero contexts' "$V_OUT" '^merge-pr: checks on [0-9a-f]+: 0 context\(s\)'
@@ -708,6 +711,7 @@ verify() {
   v_rc 'refuse/only-non-required-green' 1 "$V_RC"
   v_has 'only-non-required: names what is missing' "$V_OUT" '^merge-pr:   required context missing: line-endings$'
   v_has 'only-non-required: refusal' "$V_OUT" '^merge-pr: REFUSED: 5 of 5 required context\(s\) on main not pass on PR 42'
+  v_has 'only-non-required: refusal points at watch-checks' "$V_OUT" 'wait with bash tools/watch-checks.sh 42, or find'
   FAKE_CHECKS="[$(printf '%s' "$all_required" | sed 's/{"name":"cli-test","bucket":"pass"}/{"name":"cli-test","bucket":"skipping"}/')]" v_run "$d" 42 --head "$FX_HEAD"
   v_rc 'refuse/required-skipping' 1 "$V_RC"
   v_has 'required-skipping: named with its bucket' "$V_OUT" '^merge-pr:   required context not pass: cli-test \(skipping\)$'

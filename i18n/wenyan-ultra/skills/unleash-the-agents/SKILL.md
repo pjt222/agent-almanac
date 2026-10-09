@@ -2,8 +2,8 @@
 name: unleash-the-agents
 locale: wenyan-ultra
 source_locale: en
-source_commit: 82c77053
-fence_basis_commit: 82c77053
+source_commit: be74aff5
+fence_basis_commit: be74aff5
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-05-03"
 description: >
@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
@@ -55,6 +55,7 @@ metadata:
 3. **已知約**：已知、已試
 4. **成標**：何為正假之識
 5. **出式**：欲應之確式
+6. **每述標源**：各實言其源——議、己謀、己讀、或前會之記；欲成之終態標為「欲」
 
 ```markdown
 ## Brief: [Problem Title]
@@ -108,25 +109,9 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 各波並放。用 `sonnet` 模以省（值在視多，非個深）。
 
-#### 法甲：TeamCreate（推薦於全放）
+#### 法甲：Agent 工生客（推薦）
 
-用 Claude Code 之 `TeamCreate` 工建協團附任跡。TeamCreate 為延工——先 `ToolSearch("select:TeamCreate")` 取。
-
-1. 建團：
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. 每客建任，用 `TaskCreate` 附綱與域框
-3. 每客以 `Agent` 工生為團員，附 `team_name: "unleash-wave-1"` 與 `subagent_type`（如 `kabalist`、`geometrist`）
-4. 派任於員以 `TaskUpdate` 附 `owner`
-5. 察跡以 `TaskList`——員畢自標
-6. 波間關現團 `SendMessage({ type: "shutdown_request" })`、建次團附更綱（步四）
-
-此給內建協：共任跡、員可訊隨、頭管波轉。
-
-#### 法乙：直生客（簡於小行）
-
-每客生附綱與域框：
+常互會之路。波中每客以 **Agent 工** 生為子客（`subagent_type` 設客類，如 `kabalist`、`geometrist`），附綱與域框：
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -137,16 +122,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-並放諸客於波，以 Agent 附 `run_in_background: true`。波畢乃放次波（以波間注知於步四）。
+並放波中諸客，以 Agent 附 `run_in_background: true`，以 `SendMessage` 協於會之單隱團。波畢乃放次波（以波間注知於步四）。
+
+#### 法乙：TeamCreate（獨 FleetView／雲）
+
+`TeamCreate` **已棄、閘於常互會外**——彼處 `ToolSearch("select:TeamCreate")` 無返，`team_name` 被略（會唯一隱團）。其*現*處（FleetView／雲）增**名團物**附員任屬與關命（`Task*` 工於互會亦行——獨團域不行）：
+
+1. 建團：`TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. 每客建任以 `TaskCreate`（綱＋域框）
+3. 每客以 `Agent` 工生為團員，`subagent_type` 設客類
+4. 派任以 `TaskUpdate` 附 `owner`；察以 `TaskList`
+5. 波間關團 `SendMessage({ type: "shutdown_request" })`、啟次團附更綱（步四）
+
+內建團協——員屬與命、態續於波——然團域獨存於 TeamCreate 現處。互會用法甲。
 
 #### 擇法
 
-| | TeamCreate | 直 Agent |
+| | Agent 工（法甲）| TeamCreate（法乙）|
 |---|---|---|
-| 宜 | 三層全放（40+ 客）| 二層席（5-10 客）|
-| 協 | 任跡、訊、屬 | 放即忘、手集 |
-| 波接 | 任態續 | 須手跡 |
-| 耗 | 高（每波建團）| 低（每客一召）|
+| 可得 | 諸會（主）| 獨 FleetView／雲（閘）|
+| 宜 | 諸互會之放 | 雲行欲共任跡 |
+| 協 | SendMessage、手集 | 任跡、訊、屬 |
+| 波接 | 以更綱跡 | 任態續 |
 
 得：每波 2-5 分內返 ~10 結構應。失應或誤式者錄而不阻流。
 
@@ -204,7 +201,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 **宜時：波 3，非後合。** 納 advocatus-diaboli 於波 3（與波間知並）優於後波獨敵。早挑使波 4+ 對挑精煉，非堆於未挑共識。
 
-若敵已於波 3，此步為末察。否（如諸波無之）→今生 advocatus-diaboli（或 senior-researcher）。為結構行，用 `TeamCreate` 立評團附二客並對共識：
+若敵已於波 3，此步為末察。否（如諸波無之）→今生 advocatus-diaboli（或 senior-researcher）。為結構行，以 Agent 工並生二客為子客、以 `SendMessage` 協之對共識：
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -226,7 +223,7 @@ What experiment would definitively falsify this hypothesis?
 
 1. 每驗假族建 GitHub 議（用 `create-github-issues`）
 2. 議按合強與影排
-3. 每議組小團以 `TeamCreate`：
+3. 每議組小團——讀合定、以 Agent 工（`subagent_type`）生其員為子客、以 `SendMessage` 協：
    - `teams/` 中合域團定→用之
    - 無合→默 `opaque-team`（N shapeshifters 適派）——應未知問形不需自定組
    - 納至少一非技客（如 `advocatus-diaboli`、`contemplative`）——彼覺技客漏之施險
@@ -249,6 +246,7 @@ What experiment would definitively falsify this hypothesis?
 ## 忌
 
 - **綱例少**：客需 5+ 例覓式。3 例→多客退表面配或鸚式（以異詞復述綱）
+- **併源為一聲**：綱混議、己謀、己讀、前會之記→失其縫。欲成之終態達客為「議云…」，客耗力覓無之實。每述標源（步一第六）。此錄於伴會、非放波，見 `docs/investigations/lead-support-coordination-2026-09-15.md`
 - **無驗路**：無試假法→不能辨信與噪。合必而不足
 - **喻應**：域專客（mystic、shaman、kabalist）或應富喻難程析。納「以可試式或算述假」於出式
 - **波重發**：無波間注知，波 3-7 獨重得波 1-2 已成。波間必更綱

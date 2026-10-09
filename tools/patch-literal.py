@@ -70,8 +70,9 @@ EXIT CODES
 ----------
     0  every file applied and read back as intended (or --dry-run with nothing to report)
     1  refused: at least one check failed, NOTHING was written
-    2  could not run: bad usage, unreadable or malformed spec, a value not encodable as
-       UTF-8, or the output stream failing before any write
+    2  could not run: bad usage, unreadable or malformed spec, an empty forbid literal, a
+       PATCH_LITERAL_FAULT pair that is not a known kind:path (see FAULT HOOK), a value not
+       encodable as UTF-8, or the output stream failing before any write
     3  incomplete: a write, the pre-rename check or a read-back failed. The report names
        each file's state: `failed` and `unwritten` files were NOT written by this tool;
        `written`, `read-back mismatch` and `unverified` files WERE renamed over. A failed
@@ -91,7 +92,8 @@ USAGE
     python3 tools/patch-literal.py --verify
 
 `--replace` takes exactly one `::`. scripts/mutation-check.js splits the same argument at its
-FIRST `::` and applies whatever results; this tool splits there too and then refuses (exit 2)
+FIRST `::` (refusing a `:::` run since #783, with `--from`/`--to` as the way out); this tool
+splits there too and then refuses (exit 2)
 the two shapes that split has been measured to mangle. An OLD that itself ends in a colon --
 every Python `if`, `def` or `for` line -- loses that colon to the separator, so NEW begins with
 the stray one: ten of this file's own first twenty mutants came back INVALID (they did not
@@ -109,7 +111,9 @@ reads it as an option. A spec is either a list of file entries or an
 object `{"forbid": [...], "files": [...]}`; a file entry is
 `{"path": "...", "edits": [{"old": "...", "new": "...", "count": 1}], "forbid": [...]}`.
 Paths are resolved against the current directory. `--forbid` has no default: the
-`__PLACEHOLDER__` convention of the typings is passed as `--forbid __` when it applies.
+`__PLACEHOLDER__` convention of the typings is passed as `--forbid __` when it applies. An
+empty forbid literal, given to `--forbid` or in a spec's `forbid` list, cannot run (exit 2):
+it occurs in every text, so it could only refuse every file.
 `--dry-run` prints a unified diff per file; a last line without a newline is marked
 `\\ No newline at end of file`, as git does, and lines are split on `\\n` alone, so a stray CR
 or form feed inside a line never draws the marker.
@@ -123,10 +127,14 @@ appends a byte to the target between phase 1 and the rename (so the pre-rename c
 refuses), `readback` appends a byte after the rename (so the read-back mismatches) and
 `readfail` makes the read-back itself raise, `stdout` replaces fd 1 with a pipe nobody reads
 just before the success line (so the print fails with a real EPIPE, and the shutdown flush
-would too), `stdout-early` does the same before the first line of output, and `stderr` makes
-the report's own print fail; several kind:path pairs may be given, comma-separated, so a
-path that itself contains a comma cannot be named. Every
-firing prints
+would too), `stdout-early` does the same before the first line of output, and `stderr` does
+the same to fd 2 just before the INCOMPLETE report, or before the could-not-run line when
+the output stream failed before any write (so that print fails for real, and the shutdown
+flush of what it left buffered would too, but for the redirect to /dev/null); several
+kind:path pairs may be given, comma-separated, so a path that itself contains a comma cannot
+be named. Such a path is refused instead (exit 2, before anything is read), because its tail
+after the comma is not a known kind followed by `:`; the one shape that cannot be caught is
+a tail that is itself a valid pair (a directory named `x,write:y`). Every firing prints
 `patch-literal: FAULT HOOK ACTIVE (...)` on stderr, so an exit 3 caused by the hook can never
 be misread as the mount misbehaving. The hook exists so that --verify drives the exit-3 arms
 through the real process rather than trusting a comment; an operator who exports the variable
@@ -168,6 +176,9 @@ def _as_literal_list(value, where):
         return []
     if not isinstance(value, list) or not all(isinstance(v, str) for v in value):
         raise SpecError(f'{where}: forbid must be a list of strings')
+    if '' in value:
+        raise SpecError(f'{where}: an empty literal cannot be forbidden (it occurs in every text, so every '
+                        f'file would be refused); drop it, or name the literal you mean')
     return [v.encode('utf-8') for v in value]
 
 
@@ -388,17 +399,38 @@ def _fault(kind, path):
     return False
 
 
+FAULT_KINDS = ('write', 'touch', 'readback', 'readfail', 'stdout', 'stdout-early', 'stderr')
+
+
+def check_fault_env():
+    """Refuse (exit 2, before phase 1) an item _fault would skip (no ':') or whose kind no call site names.
+
+    Only the shape of each item is checked, never its path: a known kind naming no file in this run
+    (an empty path, `write:`, included) passes, and that pair simply never fires.
+    """
+    spec = os.environ.get(FAULT_ENV, '')
+    if not spec:
+        return
+    for item in spec.split(','):
+        kind, sep, _ = item.partition(':')
+        if not sep or kind not in FAULT_KINDS:
+            raise SpecError(f'{FAULT_ENV}: {item!r} is not <kind>:<path> with a known kind '
+                            f'({", ".join(FAULT_KINDS)}); pairs are comma-separated, so check for a path '
+                            f'that contains a comma (it cannot be named here), a misspelt kind, a space '
+                            f'after a comma, or a stray comma')
+
+
 def _discard(stream):
     """Point the stream's fd at /dev/null so the interpreter's shutdown flush of a dead pipe cannot fail."""
     with contextlib.suppress(OSError, ValueError, AttributeError):
         os.dup2(os.open(os.devnull, os.O_WRONLY), stream.fileno())
 
 
-def _break_stdout():
-    """Self-test only: make fd 1 the write end of a pipe nobody reads, so the next print gets EPIPE."""
+def _break_stream(stream):
+    """Self-test only: make the stream's fd the write end of a pipe nobody reads, so the next print gets EPIPE."""
     r, w = os.pipe()
     os.close(r)
-    os.dup2(w, sys.stdout.fileno())
+    os.dup2(w, stream.fileno())
     os.close(w)
 
 
@@ -466,7 +498,7 @@ def run(entries, dry_run):
     try:
         for plan in plans:
             if _fault('stdout-early', plan['path']):
-                _break_stdout()
+                _break_stream(sys.stdout)
             print(f'{TAG}: {plan["path"]}: {plan["edits"]} edit(s) match, '
                   f'{len(plan["before"])} -> {len(plan["after"])} bytes')
         if dry_run:
@@ -490,7 +522,7 @@ def run(entries, dry_run):
             if ok:
                 written.append(plan['path'])
                 if _fault('stdout', plan['path']):
-                    _break_stdout()
+                    _break_stream(sys.stdout)
                 print(f'{TAG}: {plan["path"]}: written, read-back OK ({len(plan["after"])} bytes)')
             else:
                 mismatched.append(plan['path'])
@@ -523,7 +555,7 @@ def run(entries, dry_run):
         parts.append(f'output stream failed ({stream_failed}); the states before it are what was done')
     try:
         if _fault('stderr', plans[0]['path']):
-            raise BrokenPipeError('injected stderr fault (PATCH_LITERAL_FAULT)')
+            _break_stream(sys.stderr)
         print(f'{TAG}: INCOMPLETE: ' + '; '.join(parts), file=sys.stderr)
     except OSError:
         _discard(sys.stderr)
@@ -532,7 +564,7 @@ def run(entries, dry_run):
 
 # --- self-test ------------------------------------------------------------------------------
 
-RUNS_EXPECTED = 62  # process runs below; a fixture added or removed must move this with it
+RUNS_EXPECTED = 70  # process runs below; a fixture added or removed must move this with it
 
 
 def verify():
@@ -955,6 +987,63 @@ def verify():
         check('v33 content', get(d, 'ro.txt') == b'RW\n')
         check('v33 mode', os.stat(os.path.join(d, 'ro.txt')).st_mode & 0o777 == 0o444)
 
+        # v36: an empty forbid literal is in every text, so it cannot run (exit 2) rather than
+        # refusing every file at line 1 (exit 1) -- on the command line and in a spec
+        put(d, 'ef.txt', b'ef\n')
+        rc, out, err = go(['ef.txt', '--replace', 'ef::EF', '--forbid', ''], d)
+        check('v36 cli exit', rc == 2 and 'cannot run: --forbid: an empty literal' in err and 'REFUSED' not in err,
+              f'rc={rc} err={err}')
+        s = spec(d, 'v36.json', {'forbid': [''], 'files': [{'path': 'ef.txt', 'edits': [{'old': 'ef', 'new': 'EF'}]}]})
+        rc, out, err = go(['--spec', s], d)
+        check('v36 spec exit', rc == 2 and 'cannot run: spec: an empty literal' in err and 'REFUSED' not in err,
+              f'rc={rc} err={err}')
+        check('v36 untouched', get(d, 'ef.txt') == b'ef\n', get(d, 'ef.txt'))
+
+        # v37: the could-not-run line's own stderr print failing (after stdout failed before any
+        # write) is still exit 2, silently; fd 2 is broken for real, as in v34
+        put(d, 'e2s.txt', b'e2s\n')
+        p = os.path.join(d, 'e2s.txt')
+        rc, out, err = go(['e2s.txt', '--replace', 'e2s::E2S'], d, fault=f'stdout-early:{p},stderr:{p}')
+        check('v37 exit', rc == 2, f'rc={rc} err={err}')
+        check('v37 untouched', get(d, 'e2s.txt') == b'e2s\n', get(d, 'e2s.txt'))
+        check('v37 no message', 'output stream failed' not in err and 'Traceback' not in err
+              and f'{FAULT_ENV}=stderr:' in err, err)
+
+        # v38: a fault path containing a comma cannot be named (pairs are comma-separated), so it
+        # cannot run (exit 2) rather than silently disarming the hook. The tail after the comma
+        # is caught as an unknown kind with no colon (a,b/...) or with one (x,y:z/...), and as
+        # a known kind with no colon (a path ending in ,stdout). The a,b path is the third of
+        # four pairs, between valid ones, so the check is not limited to the first two items or to
+        # the last one (a limit of three items still passes; see the PR)
+        os.mkdir(os.path.join(d, 'a,b'))
+        os.mkdir(os.path.join(d, 'x,y:z'))
+        other = os.path.join(d, 'other.txt')
+        for name in ('a,b/cm.txt', 'x,y:z/cm.txt', 'cm,stdout'):
+            put(d, name, b'cm\n')
+            fault = 'write:' + os.path.join(d, name)
+            if name == 'a,b/cm.txt':
+                fault = f'readback:{other},touch:{other},{fault},readfail:{other}'
+            rc, out, err = go([name, '--replace', 'cm::CM'], d, fault=fault)
+            check(f'v38 {name} exit', rc == 2 and f'cannot run: {FAULT_ENV}' in err and 'contains a comma' in err,
+                  f'rc={rc} err={err}')
+            check(f'v38 {name} untouched', get(d, name) == b'cm\n')
+
+        # v39: a colon inside a fault path is accepted -- only the first ':' ends the kind -- so
+        # the write fault fires (exit 3), not a refusal (exit 2) and not a silent run (exit 0)
+        os.mkdir(os.path.join(d, 'q:r'))
+        put(d, 'q:r/f.txt', b'f\n')
+        rc, out, err = go(['q:r/f.txt', '--replace', 'f::F'], d, fault='write:' + os.path.join(d, 'q:r/f.txt'))
+        check('v39 exit', rc == 3, f'rc={rc} err={err}')
+        check('v39 hook', 'FAULT HOOK ACTIVE' in err and 'failed q:r/f.txt (injected write fault' in err, err)
+        check('v39 untouched', get(d, 'q:r/f.txt') == b'f\n', get(d, 'q:r/f.txt'))
+
+        # v40: a misspelt kind is refused (exit 2) as the only pair, with no comma anywhere: the
+        # first item is checked like the rest, and a spec without a comma is not exempt
+        put(d, 'ty.txt', b'ty\n')
+        rc, out, err = go(['ty.txt', '--replace', 'ty::TY'], d, fault='wirte:' + os.path.join(d, 'ty.txt'))
+        check('v40 exit', rc == 2 and f'cannot run: {FAULT_ENV}' in err and 'a misspelt kind' in err, f'rc={rc} err={err}')
+        check('v40 untouched', get(d, 'ty.txt') == b'ty\n', get(d, 'ty.txt'))
+
     check('run count', runs == RUNS_EXPECTED, f'{runs} run(s), RUNS_EXPECTED is {RUNS_EXPECTED}')
     for f in failures:
         print(f'verify: FAIL {f}')
@@ -965,7 +1054,7 @@ def verify():
 # --- entry ----------------------------------------------------------------------------------
 
 def build_parser():
-    p = argparse.ArgumentParser(prog='patch-literal.py', add_help=True,
+    p = argparse.ArgumentParser(prog='python3 tools/patch-literal.py', add_help=True,
                                 description='literal old->new edits, every one checked before any write')
     p.add_argument('file', nargs='?', help='the file to edit (with --replace)')
     p.add_argument('--replace', action='append', default=[], metavar='OLD::NEW',
@@ -991,6 +1080,7 @@ def main(argv):
     if args.verify:
         return verify()
     try:
+        check_fault_env()
         if args.spec and (args.file or args.replace):
             raise SpecError('give either --spec or FILE --replace, not both')
         if args.spec and args.count is not None:
@@ -1001,7 +1091,7 @@ def main(argv):
             entries = spec_from_replaces(args.file, args.replace, 1 if args.count is None else args.count)
         else:
             raise SpecError('usage: FILE --replace OLD::NEW [...] | --spec SPEC.json | --verify')
-        extra = [f.encode('utf-8') for f in args.forbid]
+        extra = _as_literal_list(args.forbid, '--forbid')
         for entry in entries:
             entry['forbid'] = entry['forbid'] + extra
     except SpecError as exc:
@@ -1016,6 +1106,8 @@ def main(argv):
     except OSError as exc:
         _discard(sys.stdout)
         try:
+            if _fault('stderr', entries[0]['path']):
+                _break_stream(sys.stderr)
             print(f'{TAG}: cannot run: output stream failed before any write ({exc}); nothing written', file=sys.stderr)
         except OSError:
             _discard(sys.stderr)

@@ -2,8 +2,8 @@
 name: unleash-the-agents
 locale: caveman-lite
 source_locale: en
-source_commit: 82c77053
-fence_basis_commit: 82c77053
+source_commit: be74aff5
+fence_basis_commit: be74aff5
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-05-03"
 description: >
@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
@@ -55,6 +55,7 @@ Write a problem brief that any agent can understand regardless of domain experti
 3. **Known constraints**: What you already know, what has already been tried
 4. **Success criteria**: How to recognize a correct hypothesis
 5. **Output template**: The exact format you want responses in
+6. **Sources for every claim**: Say whether each fact comes from the issue, your plan, your own reading or a prior session's notes, and mark an end state you intend to create as intended
 
 ```markdown
 ## Brief: [Problem Title]
@@ -108,25 +109,9 @@ Assign agents to waves. Plan for 4 waves initially — you may not need all of t
 
 Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the value comes from perspective diversity, not individual depth).
 
-#### Option A: TeamCreate (recommended for full unleash)
+#### Option A: Agent tool spawning (recommended)
 
-Use Claude Code's `TeamCreate` tool to set up a coordinated team with task tracking. TeamCreate is a deferred tool — fetch it first via `ToolSearch("select:TeamCreate")`.
-
-1. Create the team:
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. Create a task per agent using `TaskCreate` with the brief and domain-specific framing
-3. Spawn each agent as a teammate using the `Agent` tool with `team_name: "unleash-wave-1"` and `subagent_type` set to the agent's type (e.g., `kabalist`, `geometrist`)
-4. Assign tasks to teammates via `TaskUpdate` with `owner`
-5. Monitor progress via `TaskList` — teammates mark tasks completed as they finish
-6. Between waves, shut down the current team via `SendMessage({ type: "shutdown_request" })` and create the next team with the updated brief (Step 4)
-
-This gives you built-in coordination: a shared task list tracks which agents have responded, teammates can be messaged for follow-up, and the lead manages wave transitions through task assignment.
-
-#### Option B: Raw Agent spawning (simpler, for smaller runs)
-
-For each agent in the wave, spawn it with the brief and a domain-specific framing:
+This is the path for ordinary interactive sessions. For each agent in the wave, spawn it as a subagent via the **Agent tool** (`subagent_type` set to the agent's type, e.g. `kabalist`, `geometrist`) with the brief and a domain-specific framing:
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -137,16 +122,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-Launch all agents in a wave simultaneously using the Agent tool with `run_in_background: true`. Wait for the wave to complete before launching the next wave (to enable inter-wave knowledge injection in Step 4).
+Launch all agents in a wave simultaneously with the Agent tool and `run_in_background: true`, and coordinate them with `SendMessage` under the session's single implicit team. Wait for the wave to complete before launching the next (to enable inter-wave knowledge injection in Step 4).
+
+#### Option B: TeamCreate (FleetView / cloud only)
+
+`TeamCreate` is **deprecated and gated out of ordinary interactive sessions** — `ToolSearch("select:TeamCreate")` returns nothing there, and `team_name` is ignored (the session has a single implicit team). Where it *does* surface (FleetView / cloud), it adds a **named team object** with per-teammate task ownership and a shutdown lifecycle (the `Task*` tools themselves also work in interactive sessions — only the team scoping does not):
+
+1. Create the team: `TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. Create a task per agent with `TaskCreate` (brief + domain-specific framing)
+3. Spawn each agent as a teammate via the `Agent` tool with `subagent_type` set to the agent's type
+4. Assign tasks via `TaskUpdate` with `owner`; monitor with `TaskList`
+5. Between waves, shut down the team via `SendMessage({ type: "shutdown_request" })` and start the next with the updated brief (Step 4)
+
+Built-in team coordination — per-teammate ownership and lifecycle, with status carried across waves — but the team scoping only exists where TeamCreate surfaces. In interactive sessions use Option A.
 
 #### Choosing between options
 
-| | TeamCreate | Raw Agent |
+| | Agent tool (Option A) | TeamCreate (Option B) |
 |---|---|---|
-| Best for | Tier 3 full unleash (40+ agents) | Tier 2 panel (5-10 agents) |
-| Coordination | Task list, messaging, ownership | Fire-and-forget, manual collection |
-| Inter-wave handoff | Task status carries over | Must track manually |
-| Overhead | Higher (team setup per wave) | Lower (single tool call per agent) |
+| Availability | Every session (primary) | FleetView / cloud only (gated) |
+| Best for | All interactive unleashes | Cloud runs wanting a shared task list |
+| Coordination | SendMessage, manual collection | Task list, messaging, ownership |
+| Inter-wave handoff | Track via the brief update | Task status carries over |
 
 **Got:** Each wave returns ~10 structured responses within 2-5 minutes. Agents that fail to respond or return off-format output are noted but do not block the pipeline.
 
@@ -204,7 +201,7 @@ Test the top hypothesis against a null model to ensure the convergence is meanin
 
 **Preferred timing: Wave 3, not post-synthesis.** Including `advocatus-diaboli` in Wave 3 (alongside the inter-wave knowledge injection) is more effective than a standalone adversarial pass after all waves complete. Early challenge lets Waves 4+ refine against the critique rather than piling onto an unchallenged consensus.
 
-If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. For a structured pass, use `TeamCreate` to stand up a review team with both agents working in parallel against the consensus:
+If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. For a structured pass, spawn both agents as parallel subagents via the Agent tool and coordinate them with `SendMessage` against the consensus:
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -226,7 +223,7 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 
 1. Create a GitHub issue per verified hypothesis family (use the `create-github-issues` skill)
 2. Prioritize issues by convergence strength and impact
-3. For each issue, assemble a small team via `TeamCreate`:
+3. For each issue, assemble a small team — read a matching definition and spawn its members as subagents via the Agent tool (`subagent_type`), coordinating with `SendMessage`:
    - If a predefined team definition in `teams/` matches the problem domain, use it
    - If no fitting team exists, default to `opaque-team` (N shapeshifters with adaptive role assignment) — it handles unknown problem shapes without requiring a custom composition
    - Include at least one non-technical agent (e.g., `advocatus-diaboli`, `contemplative`) — they catch implementation risks that technical agents miss
@@ -249,6 +246,7 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 ## Pitfalls
 
 - **Too few examples in the brief**: Agents need 5+ examples to find patterns. With 3 examples, most agents resort to surface-level pattern matching or template echo (repeating the brief back in different words).
+- **Merging sources into one voice**: A brief that blends the issue, your plan, your own reading and a prior session's notes loses the seams between them. An intended end state then reaches the agents as "the issue says…", and they spend their effort looking for a fact that does not exist. Attribute every claim (Step 1, element 6). This was recorded for a peer session, not an unleash wave, in `docs/investigations/lead-support-coordination-2026-09-15.md`.
 - **No verification path**: Without a way to test hypotheses, you cannot distinguish signal from noise. Convergence alone is necessary but not sufficient.
 - **Metaphorical responses**: Domain-specialist agents (mystic, shaman, kabalist) may respond with rich metaphorical reasoning that is hard to parse programmatically. Include "Express your hypothesis as a testable formula or algorithm" in the output template.
 - **Rediscovery across waves**: Without inter-wave knowledge injection, waves 3-7 independently rediscover what waves 1-2 already found. Always update the brief between waves.

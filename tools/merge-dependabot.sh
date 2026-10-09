@@ -23,8 +23,8 @@
 # times, an unreadable PR polled exactly twice), not only what was printed.
 #
 # USAGE
-#     tools/merge-dependabot.sh [--repo OWNER/NAME] [--dry-run] [--max-polls N] [--interval S] [PR...]
-#     tools/merge-dependabot.sh --verify        pin the decision table and the run wiring; no network, no gh
+#     bash tools/merge-dependabot.sh [--repo OWNER/NAME] [--dry-run] [--max-polls N] [--interval S] [PR...]
+#     bash tools/merge-dependabot.sh --verify        pin the decision table and the run wiring; no network, no gh
 #
 #   PR...        numbers to handle, in order. Default: every open PR by app/dependabot, oldest first (up to 200).
 #   --dry-run    print the decision for each PR; merge nothing, comment nothing; exit 0 when done.
