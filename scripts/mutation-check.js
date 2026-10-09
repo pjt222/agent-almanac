@@ -160,7 +160,7 @@ async function runCommand(cmd, timeoutSeconds) {
     // stdin is closed (#819): an inherited open pipe is what let a mutant's test wait forever
     // on a `read` in #816. Nothing in a mutation run should read the terminal.
     const child = spawn(cmd, { shell: true, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
-    const startedAt = Date.now();
+    const startedAt = performance.now(); // monotonic: the wall clock steps on WSL
     activeChild = child;
     let output = '';
     let overflowed = false;
@@ -239,7 +239,7 @@ async function runCommand(cmd, timeoutSeconds) {
     // while the shell ran): the shell's exit is enough, below. Exit first: 'close' normally
     // follows at once, and when a straggler holds the pipes the timer ends the wait above.
     child.on('exit', (status, signal) => {
-      exited = { status, signal, at: Date.now() };
+      exited = { status, signal, at: performance.now() };
       if (!timedOut && !overflowed) return;
       child.stdout.destroy();
       child.stderr.destroy();

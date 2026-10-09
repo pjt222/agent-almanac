@@ -194,9 +194,11 @@ test('a shell still running at --timeout is HUNG, and the run does not wait for 
   // shell's exit is enough once the run was killed. The escaped sleep finishes on its own.
   const { dir } = makeRepo(t, 'alpha\n');
   const test = 'grep -qx alpha notes.md || { setsid sleep 10 & wait; }';
-  const started = Date.now();
+  // A monotonic clock: the wall clock steps on WSL, and a mutant that waited 10.2 s by node:test's
+  // own timer read as 8196 ms by Date.now(). A step back of 3 s more would have passed it.
+  const started = performance.now();
   const r = runTool(dir, ['--file', 'notes.md', '--test', test, '--replace', 'alpha::beta', '--timeout', '1']);
-  const elapsed = Date.now() - started;
+  const elapsed = Math.round(performance.now() - started);
   assert.match(r.out, /^HUNG — /m, r.out);
   assert.ok(elapsed < 7_000, `the run waited ${elapsed} ms for a process outside the group`);
 });
@@ -210,10 +212,10 @@ test('a shell that exits before --timeout keeps its own verdict, and a process t
 
   // Green on the original line, so the baseline settles on 'close'. Red on the mutant, which
   // leaves the straggler behind.
-  let started = Date.now();
+  let started = performance.now();
   const killed = runTool(dir, ['--file', 'notes.md', '--test', 'grep -qx alpha notes.md || { setsid sleep 10 & exit 1; }',
     '--replace', 'alpha::beta', '--timeout', '1']);
-  let elapsed = Date.now() - started;
+  let elapsed = Math.round(performance.now() - started);
   assert.equal(killed.status, 0, killed.out);
   assert.match(killed.out, /^MUTANT KILLED/m, killed.out);
   assert.doesNotMatch(killed.out, /HUNG/, killed.out);
@@ -223,10 +225,10 @@ test('a shell that exits before --timeout keeps its own verdict, and a process t
   assert.equal(git('status', '--porcelain'), '', 'restored');
 
   // The same ordering on the baseline: the shell exits 0 and leaves a straggler, in both runs.
-  started = Date.now();
+  started = performance.now();
   const green = runTool(dir, ['--file', 'notes.md', '--test', 'setsid sleep 10 & exit 0',
     '--replace', 'alpha::beta', '--timeout', '1']);
-  elapsed = Date.now() - started;
+  elapsed = Math.round(performance.now() - started);
   assert.doesNotMatch(green.out, /Baseline HUNG/, green.out);
   assert.match(green.out, /green\./, green.out);
   assert.match(green.out, /\[2\/5\]/, 'the mutation was applied, so the baseline was judged green');
