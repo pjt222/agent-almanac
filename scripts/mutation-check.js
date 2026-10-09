@@ -63,8 +63,9 @@ import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/m
  * How long one test run may take before it is killed and reported HUNG (#819).
  *
  * Measured before it was fixed, as the Sprint 2 decision on #819 required: `npm run test:scripts`
- * took 209.1 s and 192.4 s on the /mnt NTFS mount on 2026-10-02 (load average ~36), so 900 s is
- * about 4.3x the slower run. A cap tighter than the suite would turn every honest run into HUNG.
+ * reported node:test `duration_ms` 208619.92 and 191851.92 (208.6 s and 191.9 s) on the /mnt NTFS
+ * mount on 2026-10-02 (load average ~36), so 900 s is about 4.3x the slower run. A cap tighter
+ * than the suite would turn every honest run into HUNG.
  */
 const DEFAULT_TIMEOUT_SECONDS = 900;
 
