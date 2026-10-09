@@ -446,8 +446,10 @@ a file here, not a third heredoc.
    gate it is most confused with. `verify_in_ci: false` requires a `verify_skip_reason`
 3. Run `npm run check:tools-registry` — parity in three directions (a file without a row, a
    row without a file, anything under `tools/` that is not a plain file) plus the schema and a
-   refusal of any usage line that names a tool without its interpreter (`bash tools/x.sh`, never
-   `tools/x.sh`: every tool is committed non-executable), the required half, inside
+   refusal of a usage line that names a tool without its interpreter (`bash tools/x.sh`, never
+   `tools/x.sh`: every tool is committed non-executable) where the scan looks: at line start
+   after one comment marker, after `usage:`, or in `prog=`. A prompted example row inside a
+   `# USAGE` block (`#   $ tools/x.sh ...`) is not seen. This is the required half, inside
    `validate:integrity` — then `npm run update-readmes`: § Tools and the
    table in `tools/README.md` are generated from the row, so a hand edit to either is stale by
    definition. `check:tools-registry -- --verify` runs every self-test the registry allows in

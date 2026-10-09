@@ -174,8 +174,9 @@ test('usageLineErrors: a tool named without the interpreter its extension requir
     '    python3 tools/demo-tool.sh --verify', //                       8  wrong interpreter
     '    sh tools/demo-tool.sh --verify', //                            9  wrong: /bin/sh is not bash
     '    node tools/other-tool.mjs --verify', //                        10 ok
-    // Lines 11-14 pin the opener's case and where the exemption applies (#811 round 1, S3). Each
-    // is caught by ONE alternative, so a mutant removing that alternative changes this list.
+    // Lines 11-14 pin the opener's case and where the exemption applies (#811 round 1, S3). Lines
+    // 11-13 are each caught by one alternative, so removing it drops the line; line 14 is caught
+    // by none, and gains an error if the name match goes case-insensitive.
     'USAGE: tools/demo-tool.sh <id>', //                                11 bare, after USAGE:
     '#     tools/demo-tool.sh -- Verify the tree', //                   12 bare: the exemption needs a LOWERCASE word
     'usage: tools/demo-tool.sh — see below', //                         13 bare: no title exemption after usage:
