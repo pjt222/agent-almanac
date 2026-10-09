@@ -260,11 +260,21 @@ gh api repos/OWNER/REPO/pulls/PR/reviews \
 # reply files an empty COMMENTED review under YOUR login) and on the sha, re-read
 # here because Step 7's HEAD_SHA lived in its subshell. jq -e exits non-zero when
 # no bot review is on HEAD, so an absent review is refused, never read as "no
-# block". Prints every collapsed block's <summary>, then the suppression entries.
+# block". Prints each collapsed block's <summary> and the suppression entries, in
+# body order. Entries quote code, so the block ends only at a column-0 </details>
+# outside a ``` fence, and the read exits 1 when the entry headers it printed do
+# not add up to the (N) the summary declares.
 if BODY=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
     | jq -er --arg sha "$(git rev-parse HEAD)" \
         '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]" and .commit_id==$sha)]|last|.body'); then
-  printf '%s\n' "$BODY" | awk '/<summary>/{print} /<summary>[^<]*[Ss]uppressed/{p=1; next} /<\/details>/{p=0} p'
+  printf '%s\n' "$BODY" | awk '
+    /<summary>/{print}
+    /<summary>[^<]*[Ss]uppressed/{p=1; f=0; n=$0; sub(/.*\(/,"",n); sub(/\).*/,"",n); want+=n; next}
+    p && /^```/{f=!f}
+    p && !f && /^<\/details>/{p=0}
+    p && !f && /^\*\*[^*]+:[0-9]+/{got++}
+    p
+    END{ if (want != got) { print "block declares " want " entries, " got " printed - read the raw body" > "/dev/stderr"; exit 1 } }'
 else
   echo "no bot review on HEAD, or the read failed — no verdict" >&2; false
 fi
@@ -282,7 +292,7 @@ Interpret the result against how the bot actually reports:
 
 **Expected:** An unambiguous verdict: clean pass (stop), or a concrete list of new threads or suppression entries (triage, then iterate).
 
-**On failure:** When the prose is ambiguous, do not parse it — count unresolved threads with the Step 2 query. The thread count is ground truth for threads; the review body is commentary. The one part of the body the count cannot stand in for is the suppression block, which posts no threads: read it with the second command above, and never infer its absence from a count of zero. If that command refuses, no bot review is on HEAD — return to Step 7 rather than reading the older review.
+**On failure:** When the prose is ambiguous, do not parse it — count unresolved threads with the Step 2 query. The thread count is ground truth for threads; the review body is commentary. The one part of the body the count cannot stand in for is the suppression block, which posts no threads: read it with the second command above, and never infer its absence from a count of zero. If that command refuses, no bot review is on HEAD — return to Step 7 rather than reading the older review. If it prints `block declares N entries, M printed` and exits 1, the read lost entries (an entry quoting a column-0 `</details>` outside a code fence ends the block early) or the entry header changed shape: read the raw body.
 
 ## Validation
 
