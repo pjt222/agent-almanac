@@ -195,7 +195,7 @@ test('a shell still running at --timeout is HUNG, and the run does not wait for 
   const { dir } = makeRepo(t, 'alpha\n');
   const test = 'grep -qx alpha notes.md || { setsid sleep 10 & wait; }';
   // A monotonic clock: the wall clock steps on WSL, and a mutant that waited 10.2 s by node:test's
-  // own timer read as 8196 ms by Date.now(). A step back of 3 s more would have passed it.
+  // own timer read as 8196 ms by Date.now(). A further step back of 1.2 s would have passed it.
   const started = performance.now();
   const r = runTool(dir, ['--file', 'notes.md', '--test', test, '--replace', 'alpha::beta', '--timeout', '1']);
   const elapsed = Math.round(performance.now() - started);

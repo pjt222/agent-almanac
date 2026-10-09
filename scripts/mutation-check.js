@@ -60,7 +60,7 @@ import { parseFailCount, parsePassCount, crashSuspicion } from './lib/mutation-v
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
 /**
- * How long one test run may take before it is killed and reported HUNG (#819).
+ * How long one test run is waited for: then HUNG if still running, else its own status (#819).
  *
  * Measured before it was fixed, as the Sprint 2 decision on #819 required: `npm run test:scripts`
  * reported node:test `duration_ms` 208619.92 and 191851.92 (208.6 s and 191.9 s) on the /mnt NTFS
@@ -84,9 +84,9 @@ Options:
                             ${[...SYNTAX_FREE_EXTENSIONS].join(' ')} proceed with no
                             syntax to check; any other type is refused (#758).
   --test <cmd>              Command whose red/green decides whether the mutant died
-  --timeout <seconds>       Kill the test command's whole process group after this long,
-                            baseline and mutant alike, and report HUNG: inconclusive,
-                            never a kill (#819). Whole seconds, default ${DEFAULT_TIMEOUT_SECONDS}.
+  --timeout <seconds>       Stop waiting after this long, baseline and mutant alike: a run
+                            still going is group-killed and HUNG (inconclusive, never a kill);
+                            one that exited keeps its status (#819). Whole seconds, default ${DEFAULT_TIMEOUT_SECONDS}.
   --delete-matching <str>   Delete lines containing this literal substring
   --replace <old>::<new>    Replace literal <old> with <new>, split at the FIRST '::'. A value
                             containing ':::' is refused as ambiguous: an <old> ending in a
