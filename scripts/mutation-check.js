@@ -313,12 +313,13 @@ if (!/^\d+$/.test(opts.timeout ?? String(DEFAULT_TIMEOUT_SECONDS))
   fail(`--timeout needs a whole number of seconds from 1 to ${MAX_TIMEOUT_SECONDS}`);
 }
 
-// The test runs in its own process group, so a terminal's Ctrl-C no longer reaches it: stop it
-// here. `onInterrupt` restores the file once a mutation exists; before that there is nothing to
-// restore.
+// The test runs in its own process group, so a terminal's Ctrl-C no longer reaches it, and nor
+// does a hangup, which the terminal sends to its foreground group: stop it here. `onInterrupt`
+// restores the file once a mutation exists; before that there is nothing to restore.
 let onInterrupt = (code) => process.exit(code);
 process.on('SIGINT', () => { killGroup(activeChild); onInterrupt(130); });
 process.on('SIGTERM', () => { killGroup(activeChild); onInterrupt(143); });
+process.on('SIGHUP', () => { killGroup(activeChild); onInterrupt(129); });
 
 // ── preconditions ────────────────────────────────────────────────
 

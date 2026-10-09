@@ -159,8 +159,9 @@ test('a mutant whose test hangs is HUNG -- inconclusive, exit 1, never a kill --
   assert.equal(existsSync(marker), false, 'the grandchild outlived the timeout kill');
 });
 
-// Both handlers kill the group; with only SIGINT driven, the SIGTERM one went unasserted.
-for (const [signal, expectedExit] of [['SIGINT', 130], ['SIGTERM', 143]]) {
+// Every handler kills the group; with only SIGINT driven, the SIGTERM one went unasserted. A
+// terminal hangup reaches only the checker's group now, so SIGHUP needs the handler too.
+for (const [signal, expectedExit] of [['SIGINT', 130], ['SIGTERM', 143], ['SIGHUP', 129]]) {
   test(`an interrupt (${signal}) during the mutant run kills the test's process group and restores the file`, async (t) => {
     // The test now runs in a group of its own, so a terminal's Ctrl-C no longer reaches it; the
     // handler has to. Signalled once the grandchild exists, so the mutation is on disk and the
