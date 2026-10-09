@@ -736,7 +736,7 @@ const kindCommand = () => `ls -ld -- ${kindChangedPaths.map(shellWord).join(' ')
 worktreeMoved = reportList('working tree', before.status, after.status) || worktreeMoved;
 
 // Iterating `after` is sufficient ONLY because every status-listed path now gets
-// an entry — including the `(absent)` and `(not-a-regular-file)` sentinels. The
+// an entry — including the `(absent)`, `(symlink:…)` and `(not-a-regular-file)` sentinels. The
 // sentinels are what make this safe: previously a path that stopped being a
 // regular file was skipped from the map entirely, so the comparison never
 // visited it while its status line stayed identical.
@@ -749,10 +749,11 @@ worktreeMoved = reportList('working tree', before.status, after.status) || workt
 // NEW to the status list (an untracked file, a clean file modified or deleted, a
 // conflict) has no `before` entry, so its bytes always "differ"; and a path whose
 // line changed (` M` staged into `MM`) differs too. Every such path's status line
-// moved, so the working-tree diff above already lists it. The heading below is true
+// moved, so the working-tree diff above already lists it. The two headings below are true
 // only of a path whose status lines are byte-identical in both captures, the case this
-// comparison exists for, so it lists those and no others. Detection is unchanged:
-// any differing path still marks the worktree as moved.
+// comparison exists for, so they list those and no others: the bytes heading where both
+// values are hashes, the kind heading for the rest. Detection is unchanged: any
+// differing path still marks the worktree as moved.
 //
 // LINES, plural: git can list one path twice, as a staged delete plus an untracked file
 // of the same name (`D  a` and `?? a`). A map keyed by path kept one of the two, so the
