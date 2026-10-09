@@ -131,6 +131,13 @@ function markerDir(t) {
 /** Wait long enough for a surviving grandchild's `sleep 3` to have finished and written. */
 const outlastGrandchild = () => new Promise((settle) => setTimeout(settle, 4_000));
 
+/**
+ * Start the grandchild, then record that it exists. An absent marker proves the kill reached it
+ * only if it was running: the interrupt test used to signal on `[4/5]`, before the shell had run
+ * its `grep`, so no grandchild ever started and the test passed against 1e7ed10fe as well.
+ */
+const grandchild = (marker) => `(sleep 3 && touch '${marker}') & touch '${marker}.started'`;
+
 test('a mutant whose test hangs is HUNG -- inconclusive, exit 1, never a kill -- and its process group dies', async (t) => {
   // The hang sits one level BELOW the spawned shell: `( ... ) &` forks a subshell, which outlives
   // a kill aimed at the shell alone (measured on #819). A fix that kills only the direct child
@@ -138,7 +145,7 @@ test('a mutant whose test hangs is HUNG -- inconclusive, exit 1, never a kill --
   const marker = markerDir(t);
   const { dir, git } = makeRepo(t, 'alpha\n');
   const before = readFileSync(join(dir, 'notes.md'));
-  const test = `grep -qx alpha notes.md || { (sleep 3 && touch '${marker}') & wait; }`;
+  const test = `grep -qx alpha notes.md || { ${grandchild(marker)}; wait; }`;
   const r = runTool(dir, ['--file', 'notes.md', '--test', test, '--replace', 'alpha::beta', '--timeout', '1']);
   assert.equal(r.status, 1, r.out);
   assert.match(r.out, /^HUNG — /m, r.out);
@@ -147,25 +154,28 @@ test('a mutant whose test hangs is HUNG -- inconclusive, exit 1, never a kill --
   assert.match(r.out, /green\./, 'the baseline itself finished');
   assert.deepEqual(readFileSync(join(dir, 'notes.md')), before, 'restored byte-identical');
   assert.equal(git('status', '--porcelain'), '');
+  assert.ok(existsSync(`${marker}.started`), 'the grandchild was running when the kill came');
   await outlastGrandchild();
   assert.equal(existsSync(marker), false, 'the grandchild outlived the timeout kill');
 });
 
 test('an interrupt during the mutant run kills the test\'s process group and restores the file', async (t) => {
   // The test now runs in a group of its own, so a terminal's Ctrl-C no longer reaches it; the
-  // handler has to. Signalled once `[4/5]` is printed, so the mutation is on disk.
+  // handler has to. Signalled once the grandchild exists, so the mutation is on disk and the
+  // shell is past its `grep`.
   const marker = markerDir(t);
   const { dir, git } = makeRepo(t, 'alpha\n');
-  const test = `grep -qx alpha notes.md || { (sleep 3 && touch '${marker}') & wait; }`;
+  const test = `grep -qx alpha notes.md || { ${grandchild(marker)}; wait; }`;
   const child = spawn(process.execPath, [TOOL, '--file', 'notes.md', '--test', test, '--replace', 'alpha::beta'],
     { cwd: dir, stdio: ['ignore', 'pipe', 'pipe'] });
   let out = '';
   child.stdout.setEncoding('utf8');
-  child.stdout.on('data', (chunk) => {
-    out += chunk;
-    if (out.includes('[4/5]')) child.kill('SIGINT');
-  });
+  child.stdout.on('data', (chunk) => { out += chunk; });
+  const poll = setInterval(() => {
+    if (existsSync(`${marker}.started`)) { clearInterval(poll); child.kill('SIGINT'); }
+  }, 20);
   const [code] = await once(child, 'close');
+  clearInterval(poll);
   assert.equal(code, 130, out);
   assert.equal(readFileSync(join(dir, 'notes.md'), 'utf8'), 'alpha\n', 'restored');
   assert.equal(git('status', '--porcelain'), '');
@@ -213,11 +223,12 @@ test('an output overflow kills the whole process group, not only the shell', asy
   // the run was cut short while the test underneath kept going.
   const marker = markerDir(t);
   const { dir } = makeRepo(t, 'alpha\n');
-  const test = `grep -qx alpha notes.md || { (sleep 3 && touch '${marker}') & head -c 70000000 /dev/zero; wait; }`;
+  const test = `grep -qx alpha notes.md || { ${grandchild(marker)}; head -c 70000000 /dev/zero; wait; }`;
   const r = runTool(dir, ['--file', 'notes.md', '--test', test, '--replace', 'alpha::beta']);
   assert.equal(r.status, 1, r.out.slice(0, 2000));
   assert.match(r.out, /did not complete \(ENOBUFS\)/);
   assert.doesNotMatch(r.out, /MUTANT KILLED/);
+  assert.ok(existsSync(`${marker}.started`), 'the grandchild was running when the kill came');
   await outlastGrandchild();
   assert.equal(existsSync(marker), false, 'the grandchild outlived the overflow kill');
 });
