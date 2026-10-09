@@ -50,7 +50,7 @@ echo "open threads: $OPEN | latest copilot review: $VERDICT"
 
 ## Poll Variant with Exit Codes and Finding Printout
 
-A stricter poll suitable for scripting. It exits `0` when a review newer than the baseline lands, printing any new findings first — a clean re-review and one with findings are both exit `0`, because both are a review that happened. Exit `1` is the timeout. Exit `2` is "nothing to poll for": the timeline carries no `review_requested` event for Copilot on this PR, so no review is coming. Exit `3` is a **no-review** — Copilot posted a review object whose body says no review happened. Two wordings measured here: the quota-limit message (#479, #470) and "Copilot wasn't able to review any files in this pull request" (#506, a lockfile-only PR). Hand the PR to `advocatus-diaboli` rather than reading either as a pass. Exit `4` is a body matching neither the accept marker nor a known no-review wording — the format moved; the body is printed, read it and add the marker rather than removing the guard.
+A stricter poll suitable for scripting. It exits `0` when a review newer than the baseline lands, printing any unresolved threads first — a review with no open threads and one with threads are both exit `0`, because both are a review that happened, and neither is a clean pass until SKILL.md Step 8's block read has run. Exit `1` is the timeout. Exit `2` is "nothing to poll for": the timeline carries no `review_requested` event for Copilot on this PR, so no review is coming. Exit `3` is a **no-review** — Copilot posted a review object whose body says no review happened. Two wordings measured here: the quota-limit message (#479, #470) and "Copilot wasn't able to review any files in this pull request" (#506, a lockfile-only PR). Hand the PR to `advocatus-diaboli` rather than reading either as a pass. Exit `4` is a body matching neither the accept marker nor a known no-review wording — the format moved; the body is printed, read it and add the marker rather than removing the guard.
 
 ```bash
 #!/usr/bin/env bash
@@ -141,7 +141,8 @@ for i in $(seq 1 "$ITER"); do
     esac
     FINDINGS=$(open_threads)
     if [ -z "$FINDINGS" ]; then
-      echo "clean re-review at $LATEST (0 new comments)"; exit 0
+      # No open threads is not yet a clean pass: a suppression block posts none.
+      echo "re-review at $LATEST, no open threads — run SKILL.md Step 8's block read before calling it clean"; exit 0
     fi
     echo "re-review at $LATEST with new findings:"; echo "$FINDINGS"; exit 0
   fi
@@ -151,7 +152,7 @@ echo "timeout: no re-review after $ITER iterations" >&2
 exit 1
 ```
 
-There is no exit-condition asymmetry to manage any more, and that is the point of the shape above. Every completion mode observed on this repository posts a **review object** — 58 of 58 Copilot requests across 52 PRs produced one, zero mismatches — and there are **four** modes, not three: a clean pass (five on #494), findings (#512, #562), a quota refusal (#479, #470), and nothing-to-review (#506). So the reviews list is the only surface the poll reads, the `commit_id` decides whether the review is yours, and the body separates the two modes that ran from the two that did not. `requested_reviewers` is not consulted at all — it omits Bot-type reviewers, so it reads `[]` for a request that landed and for one that never did.
+There is no exit-condition asymmetry to manage any more, and that is the point of the shape above. Every completion mode observed on this repository posts a **review object** — 58 of 58 Copilot requests across 52 PRs produced one, zero mismatches — and there are **four** modes, not three: a clean pass (#491), findings (#512, #562 as threads; five #494 passes only in a suppression block, which a thread count never sees — SKILL.md Step 8), a quota refusal (#479, #470), and nothing-to-review (#506). So the reviews list is the only surface the poll reads, the `commit_id` decides whether the review is yours, and the body separates the two modes that ran from the two that did not. `requested_reviewers` is not consulted at all — it omits Bot-type reviewers, so it reads `[]` for a request that landed and for one that never did.
 
 ## Unresolve a Thread (Undo an Accidental Resolve)
 
