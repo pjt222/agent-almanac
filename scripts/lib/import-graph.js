@@ -4,9 +4,70 @@
  * Extracted from `scripts/check-workflow-generator-inputs.js` (#892), where it was module-private
  * and closed over that script's `--root`. It moved so a second consumer can compare what a
  * loader actually reads against what the source statically imports.
+ *
+ * ## The edges come from V8's own parser (#918)
+ *
+ * They used to come from a line-start regex over source TEXT, which could not tell code from a
+ * comment or a string: `import … from './x.js'` at the start of a line inside a block comment, a
+ * template literal or a backslash-continued string was an edge, and so was `export … from` there.
+ * On the healer check that only widened a path filter. On the import-side-effects probe, graph
+ * membership EXCUSES a module read as the loader's, so a commented-out import followed by a dynamic
+ * `import()` of the same module graded `OK` (#915). The regex also missed edges: a second import
+ * on the same line was invisible to its anchor. It had been narrowed twice already, each time
+ * after a quoted literal in ordinary code was read as an import (#672), which is the history that
+ * says a third regex patch would be a third guess.
+ *
+ * So each module is parsed by `vm.SourceTextModule`, and its edges are the module requests V8
+ * records: import declarations and `export … from`, and nothing else — no comment, no string, no
+ * regex literal, no dynamic `import()`. A scanner over tokens was ruled out by measurement:
+ * `stripCommentsAndStrings` (`scripts/lib/code-tokens.js`) cannot tell a regex literal from a
+ * string. A dependency such as acorn was ruled out because `validate-integrity.yml` runs this with
+ * no `npm ci` (maintainer decision on #918, 2026-09-24).
+ *
+ * ## The flag, and why this module supplies it itself
+ *
+ * `vm.SourceTextModule` exists only under `--experimental-vm-modules`. Measured on Node 18.20.8,
+ * 20.20.2, 22.16.0, 24.20.0 and 25.9.0: `undefined` without the flag on every one, a constructor
+ * with it on every one.
+ *
+ * The flag cannot be switched on from inside a running process, so something has to put it on a
+ * command line. It is put on THIS module's own child rather than on its callers': when the
+ * running process lacks the constructor, `importGraph` re-runs the walk in a child node started
+ * with the flag and reads the result back. The callers are a CI step invoking
+ * `node scripts/check-workflow-generator-inputs.js` bare, an npm script, a test that spawns that
+ * check, the probe, and the probe's own `--verify` children, which it spawns with an explicit
+ * argv; a flag on each of those is five places to remember and a sixth to forget, and
+ * `NODE_OPTIONS` would switch experimental module support on for everything else that process
+ * runs. A caller that already has the flag walks in-process, through the same `walk` the child
+ * runs.
+ *
+ * A child that cannot deliver a graph is an ERROR, never an empty graph: an entry-only set would
+ * make the healer check report `1 module(s) reachable … 0 unlisted` over a graph it never read.
+ *
+ * ## Which field holds the requests
+ *
+ * `moduleRequests` (objects with a `specifier`) where it exists; otherwise only
+ * `dependencySpecifiers` (strings), which every version measured has, with no warning. So the walk
+ * reads `moduleRequests` and falls back. The fallback is the documented-deprecated field: the Node
+ * docs mark `dependencySpecifiers` "Stability: 0 - Deprecated" and give `moduleRequests` "Added
+ * in: v24.4.0, v22.20.0". The fallback is therefore reached on every release inside `engines` that
+ * predates `moduleRequests`: 22.12 to 22.19, all of 23.x, and 24.0 to 24.3. Measured without
+ * `moduleRequests`: 22.16.0, 22.19.0, 23.0.0, 23.11.1, 24.0.0, 24.3.0. Measured with it: 22.20.0,
+ * 24.4.0, 24.20.0, 25.9.0. So the fallback can go only once `engines` excludes all of those, that
+ * is, 22.20 and up on 22.x, no 23.x, and 24.4 and up on 24.x (#918 round 2, N1). Not measured:
+ * 22.12.0 (the `engines` floor), the other 22.x, 23.x and 24.x releases.
  */
-import { readFileSync, existsSync } from 'node:fs';
-import { dirname, relative, resolve as resolvePath } from 'node:path';
+import { readFileSync, existsSync, realpathSync } from 'node:fs';
+import { dirname, extname, relative, resolve as resolvePath } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
+import vm from 'node:vm';
+
+const SELF = fileURLToPath(import.meta.url);
+/** The argument that makes this file, run as a script, act as the walk's child. */
+const CHILD_ARG = '--import-graph-child';
+/** What the child is started with. `--disable-warning` is in every Node inside `engines`. */
+const CHILD_FLAGS = ['--experimental-vm-modules', '--disable-warning=ExperimentalWarning'];
 
 /**
  * Every repo-local module reachable from `entry` by static relative imports, as paths relative
@@ -14,7 +75,7 @@ import { dirname, relative, resolve as resolvePath } from 'node:path';
  *
  * Only relative specifiers are followed: a bare specifier is a package, and packages are
  * covered by the `package.json` / `package-lock.json` entries the filter already carries for
- * exactly this reason.
+ * exactly this reason. A `.json` module is a member and a leaf: it is data, not module source.
  *
  * `root` is a parameter rather than a module-level constant so the walk can serve more than one
  * caller: `check-workflow-generator-inputs.js` passes its `--root`, and a caller outside the
@@ -24,9 +85,58 @@ import { dirname, relative, resolve as resolvePath } from 'node:path';
  * @param {string} entry a path relative to `root`
  * @param {Set<string>} [seen] accumulator; returned, so a caller can seed it
  * @returns {Set<string>} the reachable modules
- * @throws {Error} when `entry` or any relative import it reaches does not exist
+ * @throws {Error} when `entry` or any relative import it reaches does not exist, when a module
+ *   does not parse, or when the walk could not run at all
  */
 export function importGraph(root, entry, seen = new Set()) {
+  if (typeof vm.SourceTextModule === 'function') return walk(root, entry, seen);
+  const child = spawnSync(process.execPath, [...CHILD_FLAGS, SELF, CHILD_ARG], {
+    input: JSON.stringify({ root, entry, seen: [...seen] }),
+    encoding: 'utf8',
+  });
+  let answer = null;
+  try { answer = JSON.parse(child.stdout); } catch { /* stays null, refused below */ }
+  if (child.status !== 0 || answer === null || typeof answer !== 'object') {
+    const how = child.signal ? `was killed by ${child.signal}` : `exited ${child.status}`;
+    throw new Error(`import graph: the parser child (node ${CHILD_FLAGS.join(' ')}) ${how} without a graph: ${failureReason(child)}`);
+  }
+  if (!answer.ok) throw new Error(answer.message);
+  // Into the caller's own set, so the accumulator passed in is the one returned.
+  for (const module of answer.seen) seen.add(module);
+  return seen;
+}
+
+/**
+ * The line of a failed child's stderr that says WHY. Not simply the last line: a crashed node
+ * ends its stderr with a `Node.js vX.Y.Z` footer, which would make every crash read as a version
+ * problem in a module whose design turns on a Node flag. So the first `…Error` line wins (an
+ * uncaught Error, a preload that is missing or throws one). Otherwise every line but the footer,
+ * joined: that is the child's own one-line refusal or `bad option` as they are, and a thrown
+ * non-Error, whose value sits ABOVE a `--trace-uncaught` hint and so is not the last line either.
+ */
+function failureReason(child) {
+  const lines = (child.stderr || '').split('\n').map((line) => line.trim()).filter(Boolean);
+  const errorLine = lines.find((line) => /^\w*Error\b/.test(line));
+  const allButFooter = lines.filter((line) => !/^Node\.js v\d/.test(line)).join(' | ');
+  return errorLine || allButFooter || child.error?.message || 'no output';
+}
+
+/** The static module requests of one module's source, as specifiers. */
+function requestedSpecifiers(text, rel, absolute) {
+  let module;
+  try {
+    module = new vm.SourceTextModule(text, { identifier: absolute });
+  } catch (error) {
+    throw new Error(`cannot parse ${rel} as an ES module: ${error.message}`);
+  }
+  if (Array.isArray(module.moduleRequests)) return module.moduleRequests.map((request) => request.specifier);
+  if (Array.isArray(module.dependencySpecifiers)) return module.dependencySpecifiers;
+  // Neither field: a Node this was never measured on. An empty list here would be the vacuous pass.
+  throw new Error(`import graph: vm.SourceTextModule on node ${process.version} exposes neither moduleRequests nor dependencySpecifiers`);
+}
+
+/** The walk itself. Needs `vm.SourceTextModule`, so it runs in-process only under the flag. */
+function walk(root, entry, seen) {
   const absolute = resolvePath(root, entry);
   const rel = relative(root, absolute).split('\\').join('/');
   if (seen.has(rel)) return seen;
@@ -34,42 +144,41 @@ export function importGraph(root, entry, seen = new Set()) {
     throw new Error(`entry or import does not exist: ${rel}`);
   }
   seen.add(rel);
+  if (extname(absolute) === '.json') return seen;
   const text = readFileSync(absolute, 'utf8');
-  // `export … from './x.js'` is an edge as much as `import` is: a re-exporting barrel module
-  // sits in the graph and its own changes move generated output. The negated character class
-  // spans newlines, so multi-line forms are covered without an `s` flag.
-  //
-  // Two constraints on the span before the specifier, and both are load-bearing.
-  //
-  // ANCHORED ON `from`, because without it the class ran from an `export` keyword straight into
-  // the FUNCTION BODY below and took the first quoted string it found:
-  //
-  //     export function isExcludedId(id) {
-  //       const stem = id.endsWith('.md') ? …
-  //
-  // read as an import of `./lib/.md`, which does not exist, so this check hard-refused —
-  // exiting non-zero even under `--warn`, in a REQUIRED context. It surfaced the first time a
-  // module in the healer's graph exported a function whose body's first quoted literal began
-  // with a dot (#672), and would have recurred for any future one. `import './side-effect.js'`
-  // has no `from`, hence the optional group rather than a required one.
-  //
-  // And the span is `[\w$*,{}\s]`, not `[^'"]`, because anchoring alone did NOT close the
-  // class -- it only narrowed it. Any line-start `export`/`import` whose text contains the word
-  // `from` before a dotted quoted string still matched, so
-  //
-  //     export const probe = 1; // adapted from './old.js'
-  //
-  // reproduced the same hard refusal. Measured on this tree, not argued. The character class
-  // is what an import CLAUSE can actually contain -- identifiers, `*`, `as`, commas, braces,
-  // whitespace -- and it admits the multi-line form (a newline is `\s`) while excluding the
-  // `=`, `;`, `(` and `/` that any statement or comment carrying a stray `from` must have.
-  //
-  // Found by an adversarial reviewer, who named the experiment rather than asserting it; the
-  // planted line refused exactly as predicted.
-  const specifiers = [...text.matchAll(/^\s*(?:import|export)\s(?:[\w$*,{}\s]*?\bfrom\s*)?['"](\.[^'"]+)['"]/gm)]
-    .map((m) => m[1]);
-  for (const specifier of specifiers) {
-    importGraph(root, relative(root, resolvePath(dirname(absolute), specifier)), seen);
+  for (const specifier of requestedSpecifiers(text, rel, absolute)) {
+    if (!specifier.startsWith('.')) continue;
+    walk(root, relative(root, resolvePath(dirname(absolute), specifier)), seen);
   }
   return seen;
+}
+
+/**
+ * The child: read `{ root, entry, seen }` on stdin, walk, and print `{ ok, seen }` or
+ * `{ ok: false, message }` on stdout. A walk error is an ANSWER, exit 0, so its message reaches the
+ * caller verbatim; a non-zero exit is the child failing, and the caller refuses it as such.
+ */
+function runChild() {
+  if (typeof vm.SourceTextModule !== 'function') {
+    // A flag that did not take. Without this refusal the walk below would still run, fail in
+    // `requestedSpecifiers`, and answer `{ ok: false }` at exit 0 with `cannot parse <entry>`:
+    // the caller would blame the module. Exit 3 is the child failing, and the caller says so.
+    // (This file calls `walk`, never `importGraph`, so it cannot re-spawn; keep it that way.)
+    process.stderr.write(`vm.SourceTextModule is unavailable on node ${process.version} even under --experimental-vm-modules\n`);
+    process.exit(3);
+  }
+  const { root, entry, seen } = JSON.parse(readFileSync(0, 'utf8'));
+  let answer;
+  try {
+    answer = { ok: true, seen: [...walk(root, entry, new Set(seen))] };
+  } catch (error) {
+    answer = { ok: false, message: error.message };
+  }
+  process.stdout.write(JSON.stringify(answer));
+}
+
+// Only when THIS file is the script and the argument is present: a caller importing the module is
+// never the child, and neither is this file run by hand without the argument.
+if (process.argv[2] === CHILD_ARG && process.argv[1] && realpathSync(process.argv[1]) === realpathSync(SELF)) {
+  runChild();
 }

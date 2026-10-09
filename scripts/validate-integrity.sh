@@ -530,7 +530,9 @@ done
 # constraint as B13 -- and holds each spawn's type to the sidecar's `// implementing-phases:`
 # declaration: STRICT forward (an implementing type must sit in a listed phase), LENIENT
 # reverse (a listed phase needs at least one such spawn, so a phase may pair a scout with a
-# writer). Phase titles are exact three ways: sidecar == meta == body. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
+# writer). Phase titles are exact three ways: sidecar == meta == body. Since #861 it also
+# fails a spawn whose type can run shell (by capability, not intent: Explore counts) when its
+# prompt does not start with REPO_SAFETY or names no write location. `|| rc=$?` for the reason B13 gives: under `set -e` a bare assignment
 # aborts the script before the findings print. Exit 2 (could not measure) fails like 1.
 echo "--- A7b: Workflow capability contract ---"
 if ! command -v node >/dev/null 2>&1; then

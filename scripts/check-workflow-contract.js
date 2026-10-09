@@ -53,9 +53,9 @@
  * exact mutant class this check exists for (caught in review). The count of `agent(` calls is
  * compared with the count of options objects found, so a spawn whose options are spread from a
  * variable is reported rather than skipped. Measured against the corpus this survives:
- * multi-line options objects carrying trailing `//` comments (batch-generate-waves 283–284),
- * extra keys (`effort: 'high'`, verify-handoff 250), and template-literal labels containing
- * `${…}` braces. A regex literal containing a quote or brace would defeat the mask; none exists
+ * multi-line options objects carrying trailing `//` comments (batch-generate-waves' Generate
+ * spawn), extra keys (`effort: 'high'`, verify-handoff's lens spawn), and template-literal
+ * labels containing `${…}` braces. A regex literal containing a quote or brace would defeat the mask; none exists
  * in the corpus, and a span the walk cannot close is reported as exit 2 rather than guessed. A
  * mask failure that yields a wrong-but-closable span is the residual the parser cannot see.
  *
@@ -66,6 +66,36 @@
  * a missed spawn and a stray `agentType` object cancel. Relatedly, a shared options base reused
  * across spawns (`agent(p, { ...base, label: 'y' })` twice against one literal) IS reported —
  * deliberately, since a spread base defeats the per-spawn classification that is the whole point.
+ *
+ * ## Containment: the preamble and the write location (#861)
+ *
+ * The contract above governs the type a stage DECLARES. It says nothing about what an agent that
+ * can run shell does to the working tree it inherits, and all three shipped workflows spawned such
+ * agents with neither control while this check printed OK. So every spawn whose type can run
+ * shell must have a prompt argument that STARTS with `REPO_SAFETY` (`` `${REPO_SAFETY}… `` or
+ * `REPO_SAFETY + …`) and that names a write location (`WRITE_LOCATION`, or a narrowed
+ * `<PREFIX>_WRITE_LOCATION` such as batch-generate-waves' Generate line).
+ *
+ * The predicate keys on declared CAPABILITY, not on intent and not on the type's name: `Explore`
+ * is advisory and carries Bash, which is the case a "read-only types are exempt" rule gets wrong.
+ * Built-ins by `BUILTIN_SHELL`; an almanac agent by its `tools:` line (Bash, a `Bash(...)` pattern
+ * or `*`). It fails closed: no `tools:` line, or one that is not a one-line list, counts as able.
+ * Both rules key on shell, the write-location one included, so an agent that can Write or Edit but
+ * not run shell gets neither (nine almanac agents have that shape; no shipped workflow spawns
+ * one). That is an open gap, not a closed one: such an agent CAN write where it stands. The Write
+ * tool's schema asks for an absolute path but accepts a relative one and resolves it against the
+ * agent's working directory, the directory it was launched in — the repository, in the measured
+ * case (#861 round 2; verify-handoff warns on a relative path for the same reason). The rule is
+ * not widened to cover it because the line it would demand does not exist yet: WRITE_LOCATION
+ * names a `$DIR` only the preamble's shell block creates, so it would be false for that agent,
+ * and this check, which matches the identifier, would accept it anyway.
+ *
+ * What this reads is the prompt's TEXT between `agent(` and its options object, so its residuals
+ * are textual: a comment inside that span naming WRITE_LOCATION satisfies the second rule; a
+ * preamble added inside a helper the prompt calls (`agent(briefing(d), …)` with the constant
+ * inside `briefing`) is invisible, which is why verify-handoff prepends at the call site; and
+ * whether the `REPO_SAFETY` a file declares is the template's text is not this check's question
+ * — scripts/test/workflow-template.test.js asserts every shipped copy byte-identical.
  *
  * `_template.mjs` is scaffolding and is not read (the shared `isTemplateSegment` predicate,
  * the same one A7 and the symlink sync use — never a private copy of that set).
@@ -86,6 +116,23 @@ export const BUILTIN_INTENT = Object.freeze({
 });
 
 export const INTENT_VALUES = Object.freeze(['advisory', 'implementing']);
+
+/**
+ * Whether each built-in type can run shell commands (#861). Keyed on CAPABILITY, not intent:
+ * `Explore` is advisory and carries Bash, which is exactly the case a "is it read-only" test gets
+ * wrong. `Plan` excludes Edit/Write, not Bash. The two implementing types carry every tool. A
+ * type outside this map is already a finding above, so it never reaches the preamble rule.
+ */
+export const BUILTIN_SHELL = Object.freeze({
+  Explore: true,
+  Plan: true,
+  'general-purpose': true,
+  claude: true,
+});
+
+/** The identifier a Bash-capable spawn's prompt must START with, and the write-location name. */
+export const PREAMBLE_NAME = 'REPO_SAFETY';
+export const WRITE_LOCATION_RE = /\b(?:[A-Z][A-Z0-9_]*_)?WRITE_LOCATION\b/;
 
 export const SIDECAR_IMPLEMENTING_FIELD = 'implementing-phases';
 
@@ -223,6 +270,26 @@ export function parsePhaseCalls(text, masked = maskCode(text)) {
   return calls;
 }
 
+/**
+ * Every `const <name> = \`…\`` declaration in the file, as its exact SOURCE text from `const`
+ * through the closing backtick, with its line. Located in masked text (so a commented-out or
+ * quoted declaration is not one) and sliced from the original, the closing delimiter taken from
+ * the mask, which blanks an escaped backtick inside the literal. Source bytes, not the evaluated
+ * string: the drift test for #861 asks whether a shipped copy is the template's copy, and two
+ * spellings that evaluate alike (`\${` against `$\{`) are still two copies.
+ */
+export function extractConstLiterals(text, name, masked = maskCode(text)) {
+  const found = [];
+  const re = new RegExp(`\\bconst\\s+${name}\\s*=\\s*\``, 'g');
+  for (const m of masked.matchAll(re)) {
+    const open = m.index + m[0].length - 1;
+    const close = masked.indexOf('`', open + 1);
+    if (close === -1) { found.push({ source: null, line: lineOf(text, m.index) }); continue; }
+    found.push({ source: text.slice(m.index, close + 1), line: lineOf(text, m.index) });
+  }
+  return found;
+}
+
 /** Number of `agent(` call sites in the body (masked, so strings and comments do not count). */
 export function countAgentCalls(masked) {
   return (masked.match(/\bagent\s*\(/g) ?? []).length;
@@ -259,9 +326,45 @@ export function parseAgentCalls(text, masked = maskCode(text)) {
       phase: read('phase'),
       isolation: read('isolation'),
       label: read('label'),
+      prompt: readPrompt(text, masked, open),
     });
   }
   return { calls, unclosed };
+}
+
+/**
+ * The prompt argument of the `agent(` call that owns the options object opening at `open`: the
+ * nearest `agent(` before it in masked text, and the ORIGINAL text from the first non-blank
+ * character after that paren up to the object. Starting past masked blanks skips a leading
+ * comment; reading the original is what makes `${REPO_SAFETY}` visible, since the mask blanks
+ * the inside of a template literal. Null when no `agent(` precedes the object — the call-count
+ * comparison already reports that shape.
+ */
+export function readPrompt(text, masked, open) {
+  let owner = -1;
+  for (const m of masked.slice(0, open).matchAll(/\bagent\s*\(/g)) owner = m.index + m[0].length;
+  if (owner === -1) return null;
+  let start = owner;
+  while (start < open && /\s/.test(masked[start])) start++;
+  return text.slice(start, open);
+}
+
+/** True when a prompt argument starts with the preamble: `` `${REPO_SAFETY}… `` or `REPO_SAFETY + …`. */
+export function startsWithPreamble(prompt) {
+  if (prompt === null) return false;
+  return prompt.startsWith(`\`\${${PREAMBLE_NAME}}`) || new RegExp(`^${PREAMBLE_NAME}\\b`).test(prompt);
+}
+
+/**
+ * Whether a type can run shell commands. Built-ins by BUILTIN_SHELL; an almanac agent by the
+ * `tools:` list in its frontmatter — Bash (or a `Bash(...)` pattern, or `*`) means yes. FAIL
+ * CLOSED: an agent with no `tools:` line inherits every tool, and one whose line could not be
+ * read (null in the map) is treated the same, so an unreadable declaration never exempts a spawn.
+ */
+export function canRunShell(type, agentTools = {}) {
+  if (Object.hasOwn(BUILTIN_SHELL, type)) return BUILTIN_SHELL[type];
+  if (!Object.hasOwn(agentTools, type) || agentTools[type] === null) return true;
+  return agentTools[type].some((t) => t === '*' || /^Bash\b/.test(t));
 }
 
 // ── judging ─────────────────────────────────────────────────────────────────
@@ -272,7 +375,7 @@ const setDiff = (a, b) => [...a].filter((x) => !b.has(x));
  * Findings for one workflow. `agentIntents` maps almanac agent id -> the raw `intent:` value.
  * @returns {{findings: string[], unclosed: number[], measured: object}}
  */
-export function checkWorkflow({ path, text, agentIntents }) {
+export function checkWorkflow({ path, text, agentIntents, agentTools = {} }) {
   const findings = [];
   const name = basename(path);
   const masked = maskCode(text);
@@ -284,7 +387,7 @@ export function checkWorkflow({ path, text, agentIntents }) {
   const phaseCalls = parsePhaseCalls(text, masked);
   const { calls, unclosed } = parseAgentCalls(text, masked);
   const agentCallSites = countAgentCalls(masked);
-  const measured = { calls: calls.length, agentCallSites, phaseCalls: phaseCalls.length, phases: metaTitles?.length ?? 0 };
+  const measured = { calls: calls.length, agentCallSites, phaseCalls: phaseCalls.length, phases: metaTitles?.length ?? 0, shell: 0 };
 
   for (const line of unclosed) findings.push(`${name}:${line} agent() options object could not be closed by the parser`);
 
@@ -346,6 +449,18 @@ export function checkWorkflow({ path, text, agentIntents }) {
       noteUnclassified(c);
       continue;
     }
+    // Containment (#861): the contract above governs what a stage DECLARES; a spawn that can
+    // run shell can write wherever it stands, advisory or not. Its prompt must start with the
+    // preamble and name a write location. Keyed on canRunShell, never on intent.
+    if (canRunShell(type, agentTools)) {
+      measured.shell += 1;
+      if (!startsWithPreamble(c.prompt)) {
+        findings.push(`${name}:${c.line} agentType '${type}' can run shell commands but its prompt does not start with ${PREAMBLE_NAME} — prepend \`\${${PREAMBLE_NAME}}\` (copied from workflows/_template.mjs)`);
+      }
+      if (c.prompt === null || !WRITE_LOCATION_RE.test(c.prompt)) {
+        findings.push(`${name}:${c.line} agentType '${type}' can run shell commands but its prompt names no write location — add WRITE_LOCATION (or a narrowed *_WRITE_LOCATION) after the preamble`);
+      }
+    }
     const phase = c.phase.literal ? c.phase.value : null;
     const phaseImplements = phase !== null && implementingPhases.has(phase);
     if (intent === 'implementing' && !phaseImplements) {
@@ -384,6 +499,24 @@ export function readAgentIntents(agentsDir) {
   return intents;
 }
 
+/**
+ * The `tools:` list of every agent file, keyed by stem: an array of names, or null when the line
+ * is present but not a one-line `[a, b]` list (fail closed: canRunShell reads null as "can").
+ * An agent with no `tools:` line is absent from the map, which canRunShell also reads as "can".
+ */
+export function readAgentTools(agentsDir) {
+  const tools = {};
+  for (const f of readdirSync(agentsDir)) {
+    if (!f.endsWith('.md') || isExcludedId(f)) continue;
+    const stem = f.slice(0, -3);
+    const m = readFileSync(join(agentsDir, f), 'utf8').match(/^tools:[ \t]*(.*)$/m);
+    if (!m) continue;
+    const list = m[1].replace(/\r$/, '').trim().match(/^\[(.*)\]$/);
+    tools[stem] = list ? list[1].split(',').map((s) => s.trim()).filter(Boolean) : null;
+  }
+  return tools;
+}
+
 export function listWorkflows(workflowsDir) {
   return readdirSync(workflowsDir)
     .filter((f) => f.endsWith('.mjs') && !isTemplateSegment(f))
@@ -401,9 +534,11 @@ export function main(root) {
     return 2;
   }
   let agentIntents;
+  let agentTools;
   let files;
   try {
     agentIntents = readAgentIntents(agentsDir);
+    agentTools = readAgentTools(agentsDir);
     files = listWorkflows(workflowsDir);
   } catch (err) {
     console.error(`check-workflow-contract: could not read the corpus (${err.code ?? err.message}) — cannot measure`);
@@ -419,6 +554,7 @@ export function main(root) {
   }
   let findings = [];
   let calls = 0;
+  let shell = 0;
   let unclosed = 0;
   for (const path of files) {
     let text;
@@ -428,8 +564,9 @@ export function main(root) {
       console.error(`check-workflow-contract: could not read ${path} (${err.code ?? err.message}) — cannot measure`);
       return 2;
     }
-    const r = checkWorkflow({ path, text, agentIntents });
+    const r = checkWorkflow({ path, text, agentIntents, agentTools });
     calls += r.measured.calls;
+    shell += r.measured.shell;
     unclosed += r.unclosed.length;
     findings = findings.concat(r.findings);
   }
@@ -443,7 +580,7 @@ export function main(root) {
     return 2;
   }
   if (findings.length > 0) return 1;
-  console.log(`OK: ${files.length} workflow(s), ${calls} agent() spawn(s) honour the capability contract; phase titles agree across sidecar, meta and body`);
+  console.log(`OK: ${files.length} workflow(s), ${calls} agent() spawn(s) honour the capability contract, and the ${shell} that can run shell start with ${PREAMBLE_NAME} and name a write location; phase titles agree across sidecar, meta and body`);
   return 0;
 }
 

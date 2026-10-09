@@ -311,14 +311,23 @@ regenerating — regenerating first would have turned the job green and buried i
 ### Contain the agents
 
 **Name a write location in every prompt.** This is the cheapest control, and the
-one that reaches a stage nobody classified as writing at all. One sentence per
-`Bash`-capable stage, naming an absolute path and ruling out the repository root —
-`Write every file you produce under /abs/path; write nothing under the repository
-root` — and it goes into the read-only-by-intent stages too, since those are
-exactly the ones that pollute by inherited working directory alone. It is not the
-preamble's `mktemp -d` restated: that gives a shell block a private directory,
-while this covers every file the agent produces by any tool — a download, a
-report, a fetched dataset — and names the repository root as off limits.
+one that reaches a stage nobody classified as writing at all. One line per
+`Bash`-capable stage, after the preamble, and it goes into the read-only-by-intent
+stages too, since those are exactly the ones that pollute by inherited working
+directory alone. Copy the template's `WRITE_LOCATION` rather than writing your own
+sentence: it names the stage's own `$DIR`, the directory the preamble's `mktemp -d`
+created, and rules out the repository root. It adds two things the preamble does not
+say. It covers every file the agent produces by any tool — a download, a report, a
+fetched dataset — not only a shell block's. And it tells the agent to print that
+path and reuse it literally, because nothing but files carries over between an
+agent's tool calls: in a workflow-spawned agent thread each Bash call starts again in
+the directory the agent was launched in, with `DIR` unset, so a later Write call
+cannot name `$DIR` by the variable. A stage that must also write elsewhere, such as
+one producing artifacts, narrows the line rather than dropping it — "write only
+under <that directory> and your own `$DIR`; nowhere else in the repository" — as a
+`<PREFIX>_WRITE_LOCATION` constant (`batch-generate-waves`' `GENERATE_WRITE_LOCATION`
+is the shape). Integrity check A7b looks for that identifier, so a sentence typed
+into the prompt in its place fails the check.
 
 `workflows/_template.mjs` defines a `REPO_SAFETY` preamble — a plain `const`, not
 an export, since the documented wrap-then-check recipe rewrites only

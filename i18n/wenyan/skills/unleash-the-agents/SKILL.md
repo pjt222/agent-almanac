@@ -2,8 +2,8 @@
 name: unleash-the-agents
 locale: wenyan
 source_locale: en
-source_commit: 82c77053
-fence_basis_commit: 82c77053
+source_commit: be74aff5
+fence_basis_commit: be74aff5
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-05-03"
 description: >
@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
@@ -55,6 +55,7 @@ metadata:
 3. **已知之限**：所已知者、所已試者
 4. **成之準**：如何識正之假設
 5. **出之模**：應之精式
+6. **每言皆標其源**：明每事出於事單、己之謀、己之讀、或前會之記，己所欲成之終態則標為所欲
 
 ```markdown
 ## Brief: [Problem Title]
@@ -108,25 +109,9 @@ grep '  - id: ' agents/_registry.yml | sed 's/.*- id: //' | shuf
 
 每波並發為臣。用 `sonnet` 模以省（其值在見之多元，非各深）。
 
-#### 法甲：TeamCreate（推為全縱）
+#### 法甲：以 Agent 具發之（推）
 
-用 Claude Code 之 `TeamCreate` 立有任之追之合作團。TeamCreate 為延遲之具——先以 `ToolSearch("select:TeamCreate")` 取之。
-
-1. 立團：
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. 每臣以 `TaskCreate` 立一任，含要與域之框
-3. 用 `Agent` 具發每臣為團友，`team_name: "unleash-wave-1"`，`subagent_type` 設為臣之類（如 `kabalist`、`geometrist`）
-4. 以 `TaskUpdate` 之 `owner` 授任於團友
-5. 以 `TaskList` 監進——團友自畢自記之
-6. 波間，以 `SendMessage({ type: "shutdown_request" })` 閉當前團，立次團而更要（第四步）
-
-此給內合作：共任列追何臣已應，團友可訊以續，領以任授管理波之轉。
-
-#### 法乙：原 Agent 之發（簡，為小行）
-
-每波之臣以要與域之框發之：
+此常交互之會之道。波中每臣，以 **Agent 具**發為子臣（`subagent_type` 設為臣之類，如 `kabalist`、`geometrist`），附要與域之框：
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -137,16 +122,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-一波之諸臣以 Agent 具並發，`run_in_background: true`。俟波畢方發次波（俾第四步之波際知識注）。
+一波之諸臣以 Agent 具並發，`run_in_background: true`，以 `SendMessage` 合之於會之唯一隱團。俟波畢方發次波（俾第四步之波際知識注）。
+
+#### 法乙：TeamCreate（唯 FleetView / 雲）
+
+`TeamCreate` **已棄，且閘於常交互之會外**——彼處 `ToolSearch("select:TeamCreate")` 無所返，`team_name` 見忽（會唯一隱團）。其*得*現之處（FleetView / 雲），加一**具名之團**，有每團友之任屬與閉之週期（`Task*` 諸具於交互之會亦行——唯團之範不行）：
+
+1. 立團：`TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. 每臣以 `TaskCreate` 立一任（要 + 域之框）
+3. 用 `Agent` 具發每臣為團友，`subagent_type` 設為臣之類
+4. 以 `TaskUpdate` 之 `owner` 授任；以 `TaskList` 監之
+5. 波間，以 `SendMessage({ type: "shutdown_request" })` 閉團，以更之要始次團（第四步）
+
+內建團之合作——每團友之屬與週期，任狀跨波而承——然團之範唯存於 TeamCreate 得現之處。交互之會用法甲。
 
 #### 二法之擇
 
-| | TeamCreate | 原 Agent |
+| | Agent 具（法甲） | TeamCreate（法乙） |
 |---|---|---|
-| 宜於 | 第三層全縱（40+ 臣）| 第二層板（5-10 臣）|
-| 合作 | 任列、訊、屬 | 發後不顧、手聚 |
-| 波際交接 | 任狀承 | 須手追 |
-| 開銷 | 高（每波設團）| 低（每臣一具呼）|
+| 可得 | 每會（主） | 唯 FleetView / 雲（閘） |
+| 宜於 | 諸交互之縱 | 雲行欲共任列者 |
+| 合作 | SendMessage、手聚 | 任列、訊、屬 |
+| 波際交接 | 以更要追之 | 任狀承 |
 
 得：每波二至五分內返約十結構之應。臣不應或出格者記之而不阻管線。
 
@@ -204,7 +201,7 @@ Do NOT simply restate this finding. Extend, challenge, or refine it.
 
 **宜於第三波，非合成之後。** 第三波納 `advocatus-diaboli`（與波際知識注並）較獨立後對辯之過更效。早挑使第四+波對挑而精，非堆於未挑之共識上。
 
-第三波已含對辯者，此步為終察。否（如諸波無之）發 `advocatus-diaboli`（或 `senior-researcher`）今。為結構之過，用 `TeamCreate` 立評團，二臣並對共識：
+第三波已含對辯者，此步為終察。否（如諸波無之）發 `advocatus-diaboli`（或 `senior-researcher`）今。為結構之過，以 Agent 具並發二臣為子臣，以 `SendMessage` 合之以對共識：
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -226,7 +223,7 @@ What experiment would definitively falsify this hypothesis?
 
 1. 每已驗假設族立 GitHub 事（用 `create-github-issues` 之術）
 2. 依合強與影排之
-3. 每事以 `TeamCreate` 立小團：
+3. 每事組小團——讀合之定義，以 Agent 具（`subagent_type`）發其員為子臣，以 `SendMessage` 合之：
    - `teams/` 中已定之團合疾域者用之
    - 無合者，默用 `opaque-team`（N 個 shapeshifter，適性授角）——其能應未知形而不需訂製
    - 至少一非技術之臣（如 `advocatus-diaboli`、`contemplative`）——其捕技術臣所漏之施險
@@ -249,6 +246,7 @@ What experiment would definitively falsify this hypothesis?
 ## 陷
 
 - **要中例少**：臣需五以上之例方尋形。三例則諸臣多以表面對形或模回（以異辭重述要）
+- **諸源合為一聲**：要混事單、己之謀、己之讀、前會之記者，失其間之縫。所欲之終態遂以「事單云……」達諸臣，臣竭力求不存之事。每言皆標其源（第一步，第六項）。此記於同儕之會，非縱之波，見 `docs/investigations/lead-support-coordination-2026-09-15.md`
 - **無驗之路**：無試假設之法者，不能辨信於噪。合僅必要而非足
 - **隱喻之應**：域家之臣（mystic、shaman、kabalist）或以富隱喻之理應之，難以程解。出之模納「以可試之式或法述假設」
 - **波間之重發**：無波際知識注者，三至七波獨立重發一二波所得。常於波間更要
