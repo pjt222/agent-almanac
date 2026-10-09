@@ -25,7 +25,6 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: "4b566dff7373d55725a0f67abd0746bfa6c53df1"
-  fence_basis_commit: "4b566dff7373d55725a0f67abd0746bfa6c53df1"
   translator: "(untranslated stub)"
   translation_date: "2026-07-10"
 ---
@@ -266,11 +265,21 @@ gh api repos/OWNER/REPO/pulls/PR/reviews \
 # reply files an empty COMMENTED review under YOUR login) and on the sha, re-read
 # here because Step 7's HEAD_SHA lived in its subshell. jq -e exits non-zero when
 # no bot review is on HEAD, so an absent review is refused, never read as "no
-# block". Prints every collapsed block's <summary>, then the suppression entries.
+# block". Prints each collapsed block's <summary> and the suppression entries, in
+# body order. Entries quote code, so the block ends only at a column-0 </details>
+# outside a ``` fence, and the read exits 1 when the entry headers it printed do
+# not add up to the (N) the summary declares.
 if BODY=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
     | jq -er --arg sha "$(git rev-parse HEAD)" \
         '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]" and .commit_id==$sha)]|last|.body'); then
-  printf '%s\n' "$BODY" | awk '/<summary>/{print} /<summary>[^<]*[Ss]uppressed/{p=1; next} /<\/details>/{p=0} p'
+  printf '%s\n' "$BODY" | awk '
+    /<summary>/{print}
+    /<summary>[^<]*[Ss]uppressed/{p=1; f=0; n=$0; sub(/.*\(/,"",n); sub(/\).*/,"",n); want+=n; next}
+    p && /^```/{f=!f}
+    p && !f && /^<\/details>/{p=0}
+    p && !f && /^\*\*[^*]+:[0-9]+/{got++}
+    p
+    END{ if (want != got) { print "block declares " want " entries, " got " printed - read the raw body" > "/dev/stderr"; exit 1 } }'
 else
   echo "no bot review on HEAD, or the read failed — no verdict" >&2; false
 fi
@@ -280,15 +289,15 @@ Interpret the result against how the bot actually reports:
 
 - **`COMMENTED` is the bot's terminal state.** Copilot does not return `APPROVED` or `CHANGES_REQUESTED`; a `COMMENTED` review is not a rejection.
 - **Boilerplate is not a finding, but a no-review is not boilerplate.** A review that never ran wears the same `COMMENTED` state as one that did; only the body tells them apart. The standing "human review recommended" style banner is fixed bot messaging — it does not block the PR. Nor does a zero headline ("generated no comments", "generated no new comments", or `**Comments generated:** 0` in the newer format), but it does not clear the PR either: it does not count the suppression block.
-- **A suppression block is findings without threads.** A collapsed `<details>` block summarised `Suppressed comments (N)` (7 bodies here) or `Comments suppressed due to low confidence (N)` (1, #221) lists entries, each headed `**path:line**`, and attaches **no** review comment: on all 8 reviews carrying one, the attached-comment count equals the headline count, never headline plus block. So neither the headline nor the Step 2 query sees it, and it sits under non-zero headlines too (#221, #494, #537). Of the 16 genuine reviews with a zero headline, 5 carried one: five consecutive #494 passes on five heads, 14 entries, no location repeated, so each pass held new leads. #491's zero headline carried none, so a clean pass without a block exists. The entries are leads, not verdicts: one #494 entry rested on a `git status --porcelain -z` rename writing the destination path second, and git 2.43.0 writes it first. Measured on 8 of 47 genuine reviews, all from April to August 2026; the two newer-format bodies (#736, #755) carry no block, and two samples cannot show the block is gone, so run the read every pass.
-- **Clean pass** = the body carries **"Pull request overview"** *and* the Step 2 thread query returns no unresolved threads *and* the second command above shows no suppression block, or every entry in it was triaged: fixed in its own commit (which re-enters at Step 1, like a new thread) or dismissed with a reason you can state. The "Pull request overview" marker, not "reviewed N out of M", is the separator: across all 76 Copilot review bodies on this repository it appears in 47 of 47 genuine reviews and 0 of 29 no-reviews, while four genuine reviews (#524, #525, #736, #755) carry no "reviewed N out of M" line at all.
+- **A suppression block is findings without threads.** A collapsed `<details>` block summarised `Suppressed comments (N)` (7 bodies here) or `Comments suppressed due to low confidence (N)` (1, #221) lists entries, each headed `**path:line**`, and attaches **no** review comment: on all 8 reviews carrying one, the attached-comment count equals the headline count, never headline plus block. So neither the headline nor the Step 2 query sees it, and it sits under non-zero headlines too (#221, #494, #537). Of the 16 genuine reviews with a zero headline, 5 carried one: five consecutive #494 passes on five heads, 14 entries, no location repeated, so each pass held new leads. #491's zero headline carried none, so a clean pass without a block exists. The entries are leads, not verdicts: one #494 entry rested on a `git status --porcelain -z` rename writing the destination path second; git 2.43.0 writes it first, so the harm it predicted does not occur, yet the code it quoted does drop the rename's origin path, which is #922. The block appears on 8 of 47 genuine reviews, all from April to August 2026; the two newer-format bodies (#736, #755) carry no block, and two samples cannot show the block is gone, so run the read every pass.
+- **Clean pass** = the body carries **"Pull request overview"** *and* the Step 2 thread query returns no unresolved threads *and* the second command above shows no suppression block, or every entry in it was triaged: fixed in its own commit (which re-enters at Step 1, like a new thread) or dismissed with a reason you can state about the code it points at, since a refuted premise dismisses the entry's argument, not the line. The "Pull request overview" marker, not "reviewed N out of M", is the separator: across all 76 Copilot review bodies on this repository it appears in 47 of 47 genuine reviews and 0 of 29 no-reviews, while four genuine reviews (#524, #525, #736, #755) carry no "reviewed N out of M" line at all.
 - **No-review** = a body saying "was unable to review this pull request" (quota) or "wasn't able to review any files in this pull request" (nothing reviewable, #506). Not a pass and not a finding: the review never ran. Hand the PR to `advocatus-diaboli`. **Do not match on one wording** — the guard shipped matching only the first, and #506 was already in this corpus, passing as clean.
 - **Anything else** = stop and read it. A body matching neither the accept marker nor a known no-review wording means the format moved; decide by hand, then add the marker. The accept-list is measured on 76 bodies and survived one format change (August 2026); that is evidence it is stable, not proof.
 - **New threads** = re-enter the loop at **Step 1**, not Step 2. Step 1 is what re-baselines `BASE` and `REQS`; re-entering below it leaves the previous round's review newer than a stale baseline, and the next poll reports *that* review as the new one.
 
 **Expected:** An unambiguous verdict: clean pass (stop), or a concrete list of new threads or suppression entries (triage, then iterate).
 
-**On failure:** When the prose is ambiguous, do not parse it — count unresolved threads with the Step 2 query. The thread count is ground truth for threads; the review body is commentary. The one part of the body the count cannot stand in for is the suppression block, which posts no threads: read it with the second command above, and never infer its absence from a count of zero. If that command refuses, no bot review is on HEAD — return to Step 7 rather than reading the older review.
+**On failure:** When the prose is ambiguous, do not parse it — count unresolved threads with the Step 2 query. The thread count is ground truth for threads; the review body is commentary. The one part of the body the count cannot stand in for is the suppression block, which posts no threads: read it with the second command above, and never infer its absence from a count of zero. If that command refuses, either no bot review is on HEAD (it reads the local `HEAD`, so an unpushed commit refuses too) or the read failed (a 404 body, for one, puts a `jq` error above the refusal) — return to Step 7 rather than reading the older review. If it prints `block declares N entries, M printed` and exits 1, the read lost entries (an entry quoting a column-0 `</details>` outside a code fence ends the block early) or the entry header changed shape: read the raw body.
 
 ## Validation
 
@@ -306,7 +315,7 @@ Interpret the result against how the bot actually reports:
 
 - **ID-type confusion**: The single most common failure. The REST replies endpoint 404s when fed a `PRRT_...` thread node-id; the `resolveReviewThread` mutation errors when fed a numeric comment databaseId. Reply with the databaseId, resolve with the node-id.
 - **Reading `COMMENTED` as a failing verdict**: Copilot never approves; `COMMENTED` plus a "human review recommended" banner is its normal clean output. Treating it as a blocking finding stalls the merge on boilerplate.
-- **Reading a zero headline and an empty thread list as "no findings"**: the opposite error, and the costlier one. A suppression block posts no review threads, so the headline count and the Step 2 query both miss it, and a review that raised problems reads as clean through both. Five consecutive #494 passes said "generated no new comments" while their blocks held 14 entries between them. Run the Step 8 block read every pass, and triage what it prints as you would any reviewer's leads.
+- **Reading a zero headline and an empty thread list as "no findings"**: the opposite error, and the costlier one, because a false pass ships the finding where a false fail only stalls the merge. A suppression block posts no review threads, so the headline count and the Step 2 query both miss it, and a review that raised problems reads as clean through both. Five consecutive #494 passes said "generated no new comments" while their blocks held 14 entries between them. Run the Step 8 block read every pass, and triage what it prints as you would any reviewer's leads.
 - **Polling without a baseline**: The reviews list still contains the pre-fix review, so a poll that merely checks "does a Copilot review exist" succeeds instantly against stale data and reports a false clean pass. Baseline `submitted_at` before re-requesting.
 - **Squashing all fixes into one commit**: Replies can no longer cite a per-finding sha, and the audit trail from finding to fix dissolves. One commit per finding.
 - **Fixing the code but not the claim**: A finding that cites the PR description is only half-fixed by a code change — edit the description too, or the dishonest claim survives and gets re-flagged.
