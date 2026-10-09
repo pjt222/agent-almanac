@@ -256,6 +256,16 @@ test('--timeout takes a whole number of seconds and documents its default', (t) 
   assert.match(help.out, /--timeout <seconds>[\s\S]*default 900\b/, help.out);
 });
 
+test('a run without --timeout uses the documented default of 900 s, and prints the limit in effect', (t) => {
+  // The --help text above pins the constant, not the value a run uses: a default decoupled from
+  // the constant (even an unbounded one, which is #819 again) kept every other test green.
+  const { dir } = makeRepo(t, 'alpha\n');
+  const bare = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta']);
+  assert.match(bare.out, /^ {2}timeout: {2}900 s$/m, bare.out);
+  const given = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--timeout', '7']);
+  assert.match(given.out, /^ {2}timeout: {2}7 s$/m, 'the header prints the parsed value, not the constant');
+});
+
 test('an output overflow kills the whole process group, not only the shell', async (t) => {
   // The overflow guard already killed with SIGKILL, aimed at the shell alone (#819 comment):
   // the run was cut short while the test underneath kept going.

@@ -441,7 +441,10 @@ console.log(`\nmutation-check: ${relFile}`);
 console.log(`  mutation: ${opts.deleteMatching !== undefined
   ? `delete lines containing "${opts.deleteMatching}"`
   : `replace "${replaceFrom}" with "${replaceTo}"`}`);
-console.log(`  test:     ${opts.test}\n`);
+console.log(`  test:     ${opts.test}`);
+// The limit in effect, printed so that the default a run actually uses is visible, and testable,
+// rather than only the one --help documents.
+console.log(`  timeout:  ${timeoutSeconds} s\n`);
 
 console.log('[1/5] baseline (expect green) ...');
 const baseline = await runCommand(opts.test, timeoutSeconds);
