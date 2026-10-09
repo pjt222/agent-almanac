@@ -242,6 +242,16 @@ test('a path whose status line MOVED is not described as one whose line did not 
         git(dir, ['mv', 'src/b.txt', 'src/c.txt']);
       },
       listed: /\n {4}\+ R {2}src\/c\.txt <- src\/b\.txt\n/ },
+    // A tracked file already modified at the snapshot, then swapped for a link to the same bytes.
+    // ` M` becomes ` T`, so the line moved, and neither the bytes heading nor the kind heading
+    // may claim it did not (#921 round 1, F4).
+    { name: 'H: an already-modified tracked file swapped for a symlink',
+      setup: (dir) => writeFileSync(join(dir, 'src', 'a.txt'), 'mine\n', 'utf8'),
+      act: (dir) => {
+        rmSync(join(dir, 'src', 'a.txt'));
+        symlinkSync(outsideFile(t, 'mine.txt', 'mine\n'), join(dir, 'src', 'a.txt'));
+      },
+      listed: /\n {4}\+ {2}T src\/a\.txt\n/ },
   ];
 
   for (const { name, setup, act, listed } of cases) {
@@ -254,7 +264,8 @@ test('a path whose status line MOVED is not described as one whose line did not 
 
     assert.equal(r.status, 1, `${name}: still detected`);
     assert.match(r.stderr, listed, `${name}: listed under working tree`);
-    assert.doesNotMatch(r.stderr, /contents changed|status line did not move|already modified/,
+    assert.doesNotMatch(r.stderr,
+      /contents changed|file type or link target changed|status line did not move|already modified/,
       `${name}: its status line moved, so no heading may say it did not:\n${r.stderr}`);
   }
 });
@@ -333,8 +344,11 @@ test('detects an untracked file swapped for a symlink to a DIRECTORY', async (t)
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1);
-  assert.match(r.stderr, /contents changed/);
-  assert.match(r.stderr, /notes\.md/);
+  assertKindChanged(r, 'notes.md', 'a regular file', `a symlink to ${join(dir, 'elsewhere')}`);
+  // The advised command shows the link itself, not the directory's contents: that is what `-d` is
+  // for, since the link points at a directory.
+  const listing = spawnSync('ls', ['-ld', '--', 'notes.md'], { cwd: dir, encoding: 'utf8' });
+  assert.match(listing.stdout, /^l.* notes\.md -> /, `the advised ls shows the link:\n${listing.stdout}`);
 });
 
 test('detects an untracked file swapped for a DANGLING symlink', async (t) => {
@@ -365,9 +379,22 @@ function outsideFile(t, name, bytes) {
   return path;
 }
 
-/** The contents heading with `notes.md` under it: the line did not move, and the guard says so. */
-const NOTES_UNDER_HEADING =
-  /contents changed \(same status line as at the snapshot, so only the bytes show the write\):\n {4}~ notes\.md\n/;
+/**
+ * The line did not move and the bytes may not have either: what is at the path changed. So the path
+ * is listed under its own heading with both recorded values, and never under the bytes heading,
+ * which would be false (#921 round 1, F4). A declaration, so the test above it can call it.
+ */
+function assertKindChanged(r, path, was, now) {
+  const entry = '\n  file type or link target changed (same status line as at the snapshot):\n' +
+    `    ~ ${path}  (was ${was}, now ${now})\n`;
+  assert.ok(r.stderr.includes(entry), `expected ${path} under the kind heading:\n${r.stderr}`);
+  assert.doesNotMatch(r.stderr, /only the bytes show the write/,
+    `the bytes heading is false for a path whose kind changed:\n${r.stderr}`);
+}
+
+/** The command the guard names for a changed kind, on its own line under its lead. */
+const KIND_COMMAND = (indent, paths) =>
+  `${indent}a file type or link target (run at the repository root):\n${indent}  ls -ld -- ${paths}\n`;
 
 test('detects an untracked file swapped for a symlink to IDENTICAL bytes (#921)', async (t) => {
   // The issue's reproduction. The path was read through the link, so it hashed as its target's
@@ -389,7 +416,16 @@ test('detects an untracked file swapped for a symlink to IDENTICAL bytes (#921)'
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1, `a file swapped for a link verified as unchanged:\n${r.stdout}${r.stderr}`);
-  assert.match(r.stderr, NOTES_UNDER_HEADING);
+  assertKindChanged(r, 'notes.md', 'a regular file', `a symlink to ${target}`);
+  // `git diff` and `git status` show nothing for this, so the advice names a command that does,
+  // in verify and in rebaseline's refusal; and that command does show it.
+  assert.ok(r.stderr.includes(KIND_COMMAND('  ', 'notes.md')), `verify names ls -ld:\n${r.stderr}`);
+  const refusal = guard(dir, ['rebaseline']);
+  assert.equal(refusal.status, 1, `rebaseline refuses a worktree move:\n${refusal.stderr}`);
+  assert.ok(refusal.stderr.includes(KIND_COMMAND('  ', 'notes.md')),
+    `rebaseline names ls -ld:\n${refusal.stderr}`);
+  const listing = spawnSync('ls', ['-ld', '--', 'notes.md'], { cwd: dir, encoding: 'utf8' });
+  assert.ok(listing.stdout.includes(` notes.md -> ${target}`), `the advised ls shows the link:\n${listing.stdout}`);
 });
 
 test('an untracked symlink is recorded by the target it names, and a retarget is detected (#921)', async (t) => {
@@ -412,12 +448,13 @@ test('an untracked symlink is recorded by the target it names, and a retarget is
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1, `a retargeted link verified as unchanged:\n${r.stdout}${r.stderr}`);
-  assert.match(r.stderr, NOTES_UNDER_HEADING);
+  assertKindChanged(r, 'notes.md', `a symlink to ${first}`, `a symlink to ${second}`);
 });
 
 test('an untracked symlink swapped back to a regular file of IDENTICAL bytes is detected (#921)', async (t) => {
   const dir = makeRepo(t);
-  symlinkSync(outsideFile(t, 'target.md', 'my notes\n'), join(dir, 'notes.md'));
+  const target = outsideFile(t, 'target.md', 'my notes\n');
+  symlinkSync(target, join(dir, 'notes.md'));
   guard(dir, ['snapshot']);
 
   const statusBefore = git(dir, ['status', '--porcelain']);
@@ -429,7 +466,7 @@ test('an untracked symlink swapped back to a regular file of IDENTICAL bytes is 
   const r = guard(dir, ['verify']);
 
   assert.equal(r.status, 1, `a link swapped for a file verified as unchanged:\n${r.stdout}${r.stderr}`);
-  assert.match(r.stderr, NOTES_UNDER_HEADING);
+  assertKindChanged(r, 'notes.md', `a symlink to ${target}`, 'a regular file');
 });
 
 test('hashes the DESTINATION path of a rename, not the vanished original', async (t) => {
@@ -517,6 +554,89 @@ test('a rename destination rewritten under the same status line is listed as suc
   assert.equal(r.status, 1);
   assert.match(r.stderr,
     /contents changed \(same status line as at the snapshot, so only the bytes show the write\):\n {4}~ src\/c\.txt\n/);
+});
+
+/** Eight lines, so a copy of it, or the file renamed with a line changed, is still similar enough to pair. */
+const EIGHT_LINES = 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\n';
+
+test('a WORKTREE-column rename destination rewritten under the same status line is listed as such (#899, #922)', async (t) => {
+  // The ` R` counterpart of the `RM` test above. The heading groups a rename line under its
+  // destination whichever column carries the R; read from the first column only, the line was
+  // keyed `src/c.txt <- src/a.txt`, missed, and verify exited 1 naming no path (#921 round 1, F3).
+  const dir = makeRepo(t);
+  writeFileSync(join(dir, 'src', 'a.txt'), EIGHT_LINES, 'utf8');
+  git(dir, ['commit', '-qam', 'eight lines']);
+  renameSync(join(dir, 'src', 'a.txt'), join(dir, 'src', 'c.txt'));
+  writeFileSync(join(dir, 'src', 'c.txt'), `${EIGHT_LINES}mine\n`, 'utf8');
+  git(dir, ['add', '-N', '--', 'src/c.txt']);
+  // Raw, because the helper trims the leading space that is the first column.
+  const rawStatus = () => spawnSync('git', ['status', '--porcelain'], { cwd: dir, encoding: 'utf8' }).stdout;
+  assert.equal(rawStatus(), ' R src/a.txt -> src/c.txt\n', 'precondition: git reports a worktree rename');
+  guard(dir, ['snapshot']);
+
+  writeFileSync(join(dir, 'src', 'c.txt'), `${EIGHT_LINES}rewritten\n`, 'utf8');
+  assert.equal(rawStatus(), ' R src/a.txt -> src/c.txt\n', 'precondition: the status line did not move');
+
+  const r = guard(dir, ['verify']);
+
+  assert.equal(r.status, 1);
+  assert.match(r.stderr,
+    /contents changed \(same status line as at the snapshot, so only the bytes show the write\):\n {4}~ src\/c\.txt\n/);
+});
+
+test('an index-column copy records its origin, not a stray entry (#922, #921 round 1)', async (t) => {
+  // Copies are reported only under `status.renames=copies` (or `diff.renames=copies`), and git
+  // pairs a copy only with a source changed in the same change, hence the edit to a.txt. Without
+  // the C in the check, the origin field became the entry `sr /a.txt` (#921 round 1, F2).
+  const dir = makeRepo(t);
+  git(dir, ['config', 'status.renames', 'copies']);
+  writeFileSync(join(dir, 'src', 'a.txt'), EIGHT_LINES, 'utf8');
+  git(dir, ['commit', '-qam', 'eight lines']);
+  writeFileSync(join(dir, 'src', 'b.txt'), EIGHT_LINES, 'utf8');
+  writeFileSync(join(dir, 'src', 'a.txt'), `${EIGHT_LINES}edited\n`, 'utf8');
+  git(dir, ['add', '-A']);
+  assert.equal(spawnSync('git', ['status', '--porcelain'], { cwd: dir, encoding: 'utf8' }).stdout,
+    'M  src/a.txt\nC  src/a.txt -> src/b.txt\n', 'precondition: git reports an index-column copy');
+  guard(dir, ['snapshot']);
+
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));
+
+  assert.deepEqual(snap.status, ['C  src/b.txt <- src/a.txt', 'M  src/a.txt']);
+  assert.deepEqual(Object.keys(snap.contents).sort(), ['src/a.txt', 'src/b.txt']);
+});
+
+test('a WORKTREE-column copy does not swallow the next entry, so a write to it is seen (#921 round 1)', async (t) => {
+  // ` C` with an intent-to-add destination. Checking the first column only, or R alone, read the
+  // origin field `README.md` as an entry whose code `RE` looked like a rename, so it took the NEXT
+  // entry, ` M notes.txt`, as its own origin. notes.txt then had no content entry, and a stray write
+  // to it verified as unchanged, exit 0 (measured at 1e7ed10fe; #921 round 1, F2).
+  const dir = makeRepo(t);
+  git(dir, ['config', 'status.renames', 'copies']);
+  writeFileSync(join(dir, 'README.md'), EIGHT_LINES, 'utf8');
+  writeFileSync(join(dir, 'notes.txt'), 'notes\n', 'utf8');
+  git(dir, ['add', '-A']);
+  git(dir, ['commit', '-qm', 'readme and notes']);
+  writeFileSync(join(dir, 'REPLY.md'), EIGHT_LINES, 'utf8');
+  writeFileSync(join(dir, 'README.md'), `${EIGHT_LINES}edited\n`, 'utf8');
+  git(dir, ['add', '-N', '--', 'REPLY.md']);
+  writeFileSync(join(dir, 'notes.txt'), 'notes, edited before the run\n', 'utf8');
+  const rawZ = () => spawnSync('git', ['status', '--porcelain', '-uall', '-z'], { cwd: dir, encoding: 'utf8' }).stdout;
+  assert.equal(rawZ(), ' M README.md\0 C REPLY.md\0README.md\0 M notes.txt\0',
+    'precondition: a worktree-column copy whose origin begins with R, then the entry it could swallow');
+  guard(dir, ['snapshot']);
+
+  writeFileSync(join(dir, 'notes.txt'), 'notes, OVERWRITTEN by a stray agent\n', 'utf8');
+  assert.equal(rawZ(), ' M README.md\0 C REPLY.md\0README.md\0 M notes.txt\0',
+    'precondition: the status lines did not move');
+
+  const r = guard(dir, ['verify']);
+
+  // The verdict first, so a regression fails on the false negative itself.
+  assert.equal(r.status, 1, `a write after a worktree copy verified as unchanged:\n${r.stdout}${r.stderr}`);
+  assert.match(r.stderr,
+    /contents changed \(same status line as at the snapshot, so only the bytes show the write\):\n {4}~ notes\.txt\n/);
+  const snap = JSON.parse(readFileSync(snapshotPath(dir), 'utf8'));   // verify keeps the snapshot
+  assert.deepEqual(snap.status, [' C REPLY.md <- README.md', ' M README.md', ' M notes.txt']);
 });
 
 test('detects a new file inside an already-untracked directory', async (t) => {
