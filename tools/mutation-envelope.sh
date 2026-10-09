@@ -128,10 +128,12 @@ if [ "$VERIFY" -eq 1 ]; then
   # A caller's GIT_* reaches every git below. With GIT_DIR and GIT_WORK_TREE exported by the
   # caller, the fixture's `git init` and `git config user.*` wrote into the CALLER's repository
   # (#930 round 2), so the line after the decoy unsets every GIT_*. The decoy, exported first, is
-  # all the check after the fixture commit can see: GIT_DIR, GIT_WORK_TREE,
+  # all a CI run gives the check after the fixture commit to see: GIT_DIR, GIT_WORK_TREE,
   # GIT_CONFIG_COUNT/KEY_0/VALUE_0, and GIT_INDEX_FILE, which names the decoy path so a leaked one
-  # writes the fixture's index there. Only those names are pinned: a scrub that lists exactly them
-  # passes the check as well as this one does (#930 round 3).
+  # writes the fixture's index there. Of those, GIT_DIR, GIT_WORK_TREE, GIT_CONFIG_COUNT and
+  # GIT_INDEX_FILE are pinned one by one; KEY_0/VALUE_0 are inert without GIT_CONFIG_COUNT, so a
+  # scrub that leaves only them set passes too. A scrub that lists those four names passes the
+  # check as well as this one does (#930 round 3).
   export GIT_DIR="${DIR:?}/decoy.git" GIT_WORK_TREE="${DIR:?}/decoy" GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=user.name GIT_CONFIG_VALUE_0=decoy GIT_INDEX_FILE="${DIR:?}/decoy.git"
   unset "${!GIT_@}"
   export GIT_CONFIG_NOSYSTEM=1 HOME="${DIR:?}" XDG_CONFIG_HOME="${DIR:?}/.config"
