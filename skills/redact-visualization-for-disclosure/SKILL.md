@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: investigation
   complexity: intermediate
   language: multi
@@ -108,13 +108,18 @@ python3 tools/redact-artifact.py --type mermaid --mapping /tmp/viz-map.tsv \
 
 For SVG/HTML pass `--type html`: replacements still apply to the whole text, but the verification
 tier additionally parses the document and asserts that no source term survives in a text node or
-an attribute value, reporting the position (`text[2]`, `attr:data-id[0]`) and never the content.
+an attribute value, reporting the position and never the content. A position is a label such as
+`text[N]` or `attr:<name>[N]`, where N is one ordinal counted across the whole document from 1:
+on `<div data-id="acme&#95;secret">acme&#95;secret</div>`, whose character reference hides the
+term from the whole-text check, it reports `attr:data-id[1]` and `text[2]`.
 
 **Expected:** Exit 0, and the redacted artifact has identical structure to the source with
 descriptive stand-ins in every label position. A non-zero exit means the tool refused to hand back
 output it could not verify — exit 1 for a surviving term, 2 for could-not-measure (an empty
-mapping, an unreadable input). Terms that may appear in an encoding your mapping does not spell —
-base64, a different case — go in `--also-deny`, which asserts without substituting.
+mapping, an unreadable input, or markup the structure tier could not examine in full, such as an
+unterminated quote or tag the parser dropped). Terms that may appear in an encoding your mapping
+does not spell — base64, a different case — go in `--also-deny`, which asserts without
+substituting.
 
 **On failure:** If a diff shows a structural change (a dropped edge, a renamed id), the mapping over-matched — scope it to label positions and re-run.
 
@@ -147,7 +152,11 @@ python3 tools/redact-artifact.py --type html --assert-only --mapping /tmp/viz-ma
   echo "rendered image still leaks; re-render from the redacted source"; exit 1; }
 ```
 
-**Expected:** Exit 0 on the rendered image, the redacted source having already been asserted in Step 3. A non-zero exit is the check working: 1 means a term survived into the render, 2 means it refused to run.
+**Expected:** Exit 0 on the rendered image, the redacted source having already been asserted in
+Step 3. A non-zero exit is the check working, and the two codes mean different things: **1** means
+a term survived into the render. **2** is could-not-measure (the causes Step 3 lists) and must
+never be reported as a leak. The `||` branch above says "still leaks", so treat it as covering 1
+only; on 2, fix the input and re-run.
 
 **On failure:** A gate hit means the mapping table is incomplete — add the missing shape to the mapping (Step 2) and the deny-list, then re-run from Step 3. Do not hand-edit the public file to silence the gate.
 
