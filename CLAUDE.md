@@ -42,7 +42,7 @@ When adding or removing skills, agents, teams, or guides, the corresponding regi
 `tools/` is not one of the five content types, which is how a session forgets it exists. The list below is keyed by what you are trying to do, because a session that has lost a tool's name to a compaction still remembers that (§ Adding a Tool).
 
 <!-- AUTO:START:tools -->
-`tools/_registry.yml` catalogues 19 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in three directions — a file without a row, a row without a file, anything under `tools/` that is not a plain file — inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).
+`tools/_registry.yml` catalogues 19 operator utilities under `tools/`, each with a self-test (`verify` in its row). `npm run check:tools-registry` checks every row against disk in three directions — a file without a row, a row without a file, anything under `tools/` that is not a plain file — and refuses a usage line that names a tool without its interpreter (`bash`, `node` or `python3`, by extension), inside `validate:integrity`; a separate, non-required job runs each row's self-test where `verify_in_ci` allows it. **Read this list before writing a helper or a one-off** — a snippet typed a second time in a session gets promoted here, not re-typed a third time (`tools/README.md` § Adding one).
 
 - Packaging a diff and its changed files for an adversarial or subagent reviewer, stamped with the commit it was cut at (BUNDLE_SHA, BUNDLE_STATUS) so a mismatch is refused instead of graded (not for reading a review round's output back in — that is review-findings.mjs or agent-report.mjs) → `tools/review-bundle.sh`
 - Recovering a subagent's report that a truncated notification lost, or waiting for and extracting round N of a continued reviewer (GATE: lines) (not for a Workflow panel's structured output — that is review-findings.mjs) → `tools/agent-report.mjs`
@@ -445,8 +445,12 @@ a file here, not a third heredoc.
    the procedure and has lost the name can still find the file. `not_for` names the tool or
    gate it is most confused with. `verify_in_ci: false` requires a `verify_skip_reason`
 3. Run `npm run check:tools-registry` — parity in three directions (a file without a row, a
-   row without a file, anything under `tools/` that is not a plain file) plus the schema, the
-   required half, inside `validate:integrity` — then `npm run update-readmes`: § Tools and the
+   row without a file, anything under `tools/` that is not a plain file) plus the schema and a
+   refusal of a usage line that names a tool without its interpreter (`bash tools/x.sh`, never
+   `tools/x.sh`: every tool is committed non-executable) where the scan looks: at line start
+   after one comment marker, after `usage:`, or in `prog=`. A prompted example row inside a
+   `# USAGE` block (`#   $ tools/x.sh ...`) is not seen. This is the required half, inside
+   `validate:integrity` — then `npm run update-readmes`: § Tools and the
    table in `tools/README.md` are generated from the row, so a hand edit to either is stale by
    definition. `check:tools-registry -- --verify` runs every self-test the registry allows in
    CI; the non-required `tools-verify` job runs the same thing

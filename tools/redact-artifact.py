@@ -455,7 +455,7 @@ def redact_text(text: str, table: dict[str, str], kind: str, also_deny=(), asser
 
 
 def main(argv: list[str]) -> int:
-    ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0], add_help=True)
+    ap = argparse.ArgumentParser(prog="python3 tools/redact-artifact.py", description=__doc__.strip().splitlines()[0], add_help=True)
     ap.add_argument("input", nargs="?", help="artifact to redact")
     ap.add_argument("-o", "--output", help="write here (default: stdout)")
     ap.add_argument("--in-place", action="store_true", help="overwrite the input")

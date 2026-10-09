@@ -44,9 +44,9 @@
 # once the cause is fixed.
 #
 # USAGE
-#     tools/review-bundle.sh [--base REF] [--out DIR] [--summarise PATHSPEC]... [--body FILE] [--sample N]
-#                            [--since REF] [--include FILE[::DESCRIPTION]]...
-#     tools/review-bundle.sh --verify        self-test in a throwaway repo; exit non-zero if the bundle
+#     bash tools/review-bundle.sh [--base REF] [--out DIR] [--summarise PATHSPEC]... [--body FILE] [--sample N]
+#                                 [--since REF] [--include FILE[::DESCRIPTION]]...
+#     bash tools/review-bundle.sh --verify   self-test in a throwaway repo; exit non-zero if the bundle
 #                                            would omit a changed file or expand a summarised one
 #
 #   --base REF          diff base (default origin/main). The diff is REF...HEAD (merge-base form).
