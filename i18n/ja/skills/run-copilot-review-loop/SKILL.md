@@ -24,7 +24,8 @@ metadata:
   tags: github, copilot, pull-request, code-review, gh-cli, graphql, bot-reviewer
   locale: ja
   source_locale: en
-  source_commit: "4b566dff7373d55725a0f67abd0746bfa6c53df1"
+  source_commit: "bd9b3350b5d74fc77ed690733c31536a3bfeca22"
+  fence_basis_commit: "bd9b3350b5d74fc77ed690733c31536a3bfeca22"
   translator: "(untranslated stub)"
   translation_date: "2026-07-10"
 ---
