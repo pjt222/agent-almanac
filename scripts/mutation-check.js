@@ -159,16 +159,39 @@ async function runCommand(cmd, timeoutSeconds) {
     // stdin is closed (#819): an inherited open pipe is what let a mutant's test wait forever
     // on a `read` in #816. Nothing in a mutation run should read the terminal.
     const child = spawn(cmd, { shell: true, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const startedAt = Date.now();
     activeChild = child;
     let output = '';
     let overflowed = false;
     let timedOut = false;
     let spawnError = null;
     let settled = false;
+    // The shell's own result, recorded when it exits. 'close' can come much later, or never: it
+    // waits for every holder of the pipes, and a process that left the group holds them as long
+    // as it runs.
+    let exited = null;
 
     // A hang is a verdict of its own, never a red run: a caller-side `timeout N` exits 124,
     // which read as MUTANT KILLED for a mutant nothing asserted against (#819).
     const timer = setTimeout(() => {
+      if (exited) {
+        // The shell finished inside the limit and something it started still holds the pipes.
+        // That is not a hang: the shell's status is what gets judged (an overflow or a spawn
+        // error still makes the run inconclusive), and the limit only ends the wait for the
+        // straggler. Calling it HUNG turned `setsid sleep 15 & exit 1` from a real kill into an
+        // inconclusive run, after waiting the full 15 s anyway (#819, round 1). A shell that
+        // exits in the last instant before the limit, with no straggler, can lose the tail of
+        // its output here: the failing count, or crash text the SUSPECT check reads.
+        const status = exited.signal ?? `exit ${exited.status}`;
+        const afterSeconds = ((exited.at - startedAt) / 1000).toFixed(1);
+        console.log(`      the shell ended (${status}) after ${afterSeconds} s, but a process it started still held its output`);
+        console.log(`      at --timeout ${timeoutSeconds} s. It was not waited for past that point.`);
+        killGroup(child); // reaches a straggler still in the group; ESRCH for one that left it
+        child.stdout.destroy();
+        child.stderr.destroy();
+        finish(exited.status, exited.signal);
+        return;
+      }
       timedOut = true;
       killGroup(child);
     }, timeoutSeconds * 1000);
@@ -211,9 +234,11 @@ async function runCommand(cmd, timeoutSeconds) {
       });
     };
     child.on('close', finish);
-    // After a kill of our own, the shell's exit is enough. 'close' waits for every holder of the
-    // pipes, and a process that left the group would hold them open as long as it runs.
+    // Settling is bounded in both orderings. Kill first (the timer or the overflow guard fired
+    // while the shell ran): the shell's exit is enough, below. Exit first: 'close' normally
+    // follows at once, and when a straggler holds the pipes the timer ends the wait above.
     child.on('exit', (status, signal) => {
+      exited = { status, signal, at: Date.now() };
       if (!timedOut && !overflowed) return;
       child.stdout.destroy();
       child.stderr.destroy();
