@@ -261,8 +261,11 @@ verify() {
     fi
   done
 
+  # No denominator: one canary can fail up to two checks and section 5 adds three, so a total
+  # computed from the loop sizes was smaller than what it claimed to count. Every miss above
+  # prints its own verify FAIL line, so the count can be read off the lines it summarises.
   if [ "$missed" -ne 0 ]; then
-    echo "check-redaction --verify: FAILED ($missed of $((seeded + negatives + 1)) checks)" >&2
+    echo "check-redaction --verify: FAILED ($missed check(s), one verify FAIL line above each)" >&2
     return 1
   fi
   echo "check-redaction --verify: OK ($seeded shapes each seeded and caught; $negatives known false positives stay clean; clean exits 0; missing file exits 2; labels only)"
