@@ -2,11 +2,16 @@
  * The position labels `redact-visualization-for-disclosure` Step 3 quotes are labels the tool
  * emits (#901).
  *
- * Step 3 quoted `attr:data-id[0]` for months after `tools/redact-artifact.py` stopped being able
- * to emit it: #867 made the ordinal one counter across the whole document, incremented before
- * each label, so the smallest index is 1. Nothing caught the drift because the only arm about
- * attribute ordinals asserts that two labels differ, not where numbering starts, and no check
- * read the skill at all.
+ * Step 3 quoted `attr:data-id[0]`, a label the tool prints at no first-parent commit of main.
+ * The quote was written in bc555903c, the only revision of `tools/redact-artifact.py` in main's
+ * history that numbered attributes per tag from 0, and two later commits in the same PR (#867)
+ * replaced that numbering before it merged: 026ce8873 numbered attributes across the document
+ * from 1, still apart from text, and 58e09c8eb put text and attribute labels on one counter
+ * across the whole document, incremented before each label, so the smallest index is 1.
+ * Nothing caught the drift because the only `--verify` arm about attribute ordinals asserts that
+ * two labels differ, not where numbering starts, and no check compared the labels the skill
+ * quotes with what the tool prints: the gates that read every SKILL.md, such as the
+ * path-reference check in `validate:integrity`, never run the tool.
  *
  * The pin lives here rather than in the tool's `--verify` because the decision on #901 kept
  * the tool unedited. What is pinned is the PAIRING the skill publishes: the fixture it quotes
