@@ -243,6 +243,16 @@ verify() {
         printf '%s\n' 'the regex anchors on `$` at the end of the line' ;;
     esac > "$tmp/negative.md"
     negatives=$((negatives + 1))
+    # A blank fixture always scans clean, so this row's pass condition is exactly what a row
+    # that tested nothing produces. That happens when a name in the list above has no matching
+    # case label (a typo, a half-done rename) and when an arm's printf loses its text -- the
+    # second writes a lone newline, which a non-empty test (-s) would accept. Section 2 cannot
+    # fail this way: a blank canary exits 0 where 1 is expected.
+    if ! grep -q '[^[:space:]]' "$tmp/negative.md"; then
+      echo "verify FAIL: known false positive '$negative' wrote a blank fixture -- a blank file always scans clean" >&2
+      missed=$((missed + 1))
+      continue
+    fi
     out="$(scan_all "$tmp/negative.md")"; rc=$?
     if [ "$rc" -ne 0 ]; then
       echo "verify FAIL: known false positive '$negative' gave exit $rc, expected 0 (clean)" >&2
