@@ -11,15 +11,15 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: swarm
   complexity: advanced
   language: multi
   tags: swarm, parallel, hypothesis-generation, multi-agent, brainstorming, convergence
   locale: es
   source_locale: en
-  source_commit: 11edabf5
-  fence_basis_commit: 11edabf5
+  source_commit: be74aff5
+  fence_basis_commit: be74aff5
   translator: "Claude + human review"
   translation_date: "2026-05-03"
 ---
@@ -55,6 +55,7 @@ Escribir un brief de problema que cualquier agente pueda entender independientem
 3. **Restricciones conocidas**: Lo que ya sabes, lo que ya se ha intentado
 4. **Criterios de éxito**: Cómo reconocer una hipótesis correcta
 5. **Plantilla de salida**: El formato exacto que quieres en las respuestas
+6. **Fuentes para cada afirmación**: Indicar si cada hecho proviene del issue, de tu plan, de tu propia lectura o de las notas de una sesión anterior, y marcar como intencionado un estado final que pretendes crear
 
 ```markdown
 ## Brief: [Problem Title]
@@ -108,25 +109,9 @@ Asignar agentes a olas. Planificar 4 olas inicialmente — puede que no necesite
 
 Lanzar cada ola como agentes paralelos. Usar el modelo `sonnet` para eficiencia de costo (el valor viene de la diversidad de perspectivas, no de la profundidad individual).
 
-#### Opción A: TeamCreate (recomendado para unleash completo)
+#### Opción A: Spawning con la herramienta Agent (recomendado)
 
-Usar la herramienta `TeamCreate` de Claude Code para configurar un equipo coordinado con rastreo de tareas. TeamCreate es una herramienta diferida — primero hacer fetch vía `ToolSearch("select:TeamCreate")`.
-
-1. Crear el equipo:
-   ```text
-   TeamCreate({ team_name: "unleash-wave-1", description: "Wave 1: open-ended hypothesis generation" })
-   ```
-2. Crear una tarea por agente usando `TaskCreate` con el brief y encuadre específico de dominio
-3. Generar cada agente como teammate usando la herramienta `Agent` con `team_name: "unleash-wave-1"` y `subagent_type` establecido al tipo del agente (p. ej., `kabalist`, `geometrist`)
-4. Asignar tareas a teammates vía `TaskUpdate` con `owner`
-5. Monitorear el progreso vía `TaskList` — los teammates marcan tareas como completadas conforme terminan
-6. Entre olas, apagar el equipo actual vía `SendMessage({ type: "shutdown_request" })` y crear el siguiente equipo con el brief actualizado (Paso 4)
-
-Esto te da coordinación built-in: una lista de tareas compartida rastrea qué agentes han respondido, los teammates pueden ser mensajeados para seguimiento, y el lead gestiona transiciones de ola a través de la asignación de tareas.
-
-#### Opción B: Spawning crudo de Agent (más simple, para ejecuciones más pequeñas)
-
-Para cada agente en la ola, generarlo con el brief y un encuadre específico de dominio:
+Este es el camino para las sesiones interactivas ordinarias. Para cada agente en la ola, generarlo como subagente vía la **herramienta Agent** (`subagent_type` establecido al tipo del agente, p. ej. `kabalist`, `geometrist`) con el brief y un encuadre específico de dominio:
 
 ```text
 Use the [agent-name] agent to analyze this problem through your domain expertise.
@@ -137,16 +122,28 @@ does your tradition recognize in systems that exhibit this kind of threshold beh
 Respond exactly in the requested format.
 ```
 
-Lanzar todos los agentes en una ola simultáneamente usando la herramienta Agent con `run_in_background: true`. Esperar que la ola se complete antes de lanzar la siguiente ola (para habilitar la inyección de conocimiento entre olas en el Paso 4).
+Lanzar todos los agentes en una ola simultáneamente con la herramienta Agent y `run_in_background: true`, y coordinarlos con `SendMessage` bajo el único equipo implícito de la sesión. Esperar que la ola se complete antes de lanzar la siguiente (para habilitar la inyección de conocimiento entre olas en el Paso 4).
+
+#### Opción B: TeamCreate (solo FleetView / cloud)
+
+`TeamCreate` está **obsoleto y excluido de las sesiones interactivas ordinarias** — `ToolSearch("select:TeamCreate")` no devuelve nada allí, y `team_name` se ignora (la sesión tiene un único equipo implícito). Donde *sí* aparece (FleetView / cloud), añade un **objeto de equipo con nombre** con propiedad de tareas por teammate y un ciclo de vida de apagado (las herramientas `Task*` en sí también funcionan en sesiones interactivas — solo el alcance de equipo no):
+
+1. Crear el equipo: `TeamCreate({ description: "Wave 1: open-ended hypothesis generation" })`
+2. Crear una tarea por agente con `TaskCreate` (brief + encuadre específico de dominio)
+3. Generar cada agente como teammate vía la herramienta `Agent` con `subagent_type` establecido al tipo del agente
+4. Asignar tareas vía `TaskUpdate` con `owner`; monitorear con `TaskList`
+5. Entre olas, apagar el equipo vía `SendMessage({ type: "shutdown_request" })` e iniciar el siguiente con el brief actualizado (Paso 4)
+
+Coordinación de equipo built-in — propiedad y ciclo de vida por teammate, con el estado trasladado entre olas — pero el alcance de equipo solo existe donde TeamCreate aparece. En sesiones interactivas usar la Opción A.
 
 #### Eligiendo entre opciones
 
-| | TeamCreate | Raw Agent |
+| | Herramienta Agent (Opción A) | TeamCreate (Opción B) |
 |---|---|---|
-| Mejor para | Tier 3 unleash completo (40+ agentes) | Tier 2 panel (5-10 agentes) |
-| Coordinación | Lista de tareas, mensajería, propiedad | Disparar-y-olvidar, recolección manual |
-| Handoff entre olas | El estado de tareas se traslada | Debe rastrearse manualmente |
-| Sobrecarga | Mayor (configuración de equipo por ola) | Menor (una sola llamada de herramienta por agente) |
+| Disponibilidad | Toda sesión (principal) | Solo FleetView / cloud (restringido) |
+| Mejor para | Todos los unleash interactivos | Ejecuciones en cloud que quieren una lista de tareas compartida |
+| Coordinación | SendMessage, recolección manual | Lista de tareas, mensajería, propiedad |
+| Handoff entre olas | Rastrear vía la actualización del brief | El estado de tareas se traslada |
 
 **Esperado:** Cada ola retorna ~10 respuestas estructuradas dentro de 2-5 minutos. Los agentes que fallan en responder o retornan salida fuera de formato son anotados pero no bloquean el pipeline.
 
@@ -204,7 +201,7 @@ Probar la hipótesis top contra un modelo nulo para asegurar que la convergencia
 
 **Tiempo preferido: Ola 3, no post-síntesis.** Incluir `advocatus-diaboli` en la Ola 3 (junto con la inyección de conocimiento entre olas) es más efectivo que un pase adversarial standalone después de que todas las olas se completen. El desafío temprano deja a las Olas 4+ refinar contra la crítica en lugar de apilarse sobre un consenso no desafiado.
 
-Si el pase adversarial ya fue parte de la Ola 3, este paso se vuelve una verificación final. Si no (p. ej., ejecutaste todas las olas sin él), generar `advocatus-diaboli` (o `senior-researcher`) ahora. Para un pase estructurado, usar `TeamCreate` para levantar un equipo de revisión con ambos agentes trabajando en paralelo contra el consenso:
+Si el pase adversarial ya fue parte de la Ola 3, este paso se vuelve una verificación final. Si no (p. ej., ejecutaste todas las olas sin él), generar `advocatus-diaboli` (o `senior-researcher`) ahora. Para un pase estructurado, generar ambos agentes como subagentes paralelos vía la herramienta Agent y coordinarlos con `SendMessage` contra el consenso:
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -226,7 +223,7 @@ Unleash encuentra problemas; los equipos los resuelven. Convertir las familias d
 
 1. Crear un issue de GitHub por familia de hipótesis verificada (usar la habilidad `create-github-issues`)
 2. Priorizar issues por fuerza de convergencia e impacto
-3. Para cada issue, ensamblar un equipo pequeño vía `TeamCreate`:
+3. Para cada issue, ensamblar un equipo pequeño — leer una definición que coincida y generar sus miembros como subagentes vía la herramienta Agent (`subagent_type`), coordinándolos con `SendMessage`:
    - Si una definición de equipo predefinida en `teams/` coincide con el dominio del problema, usarla
    - Si no existe ningún equipo apropiado, predeterminar a `opaque-team` (N shapeshifters con asignación adaptiva de rol) — maneja formas de problema desconocidas sin requerir una composición personalizada
    - Incluir al menos un agente no-técnico (p. ej., `advocatus-diaboli`, `contemplative`) — atrapan riesgos de implementación que los agentes técnicos pierden
@@ -249,6 +246,7 @@ Unleash encuentra problemas; los equipos los resuelven. Convertir las familias d
 ## Errores Comunes
 
 - **Demasiado pocos ejemplos en el brief**: Los agentes necesitan 5+ ejemplos para encontrar patrones. Con 3 ejemplos, la mayoría de los agentes recurren a coincidencia de patrones de nivel superficial o eco de plantilla (repetir el brief con palabras diferentes).
+- **Fundir las fuentes en una sola voz**: Un brief que mezcla el issue, tu plan, tu propia lectura y las notas de una sesión anterior pierde las costuras entre ellos. Un estado final intencionado llega entonces a los agentes como "el issue dice…", y gastan su esfuerzo buscando un hecho que no existe. Atribuir cada afirmación (Paso 1, elemento 6). Esto se registró para una sesión par, no para una ola de unleash, en `docs/investigations/lead-support-coordination-2026-09-15.md`.
 - **Sin camino de verificación**: Sin una manera de probar hipótesis, no puedes distinguir señal de ruido. La convergencia sola es necesaria pero no suficiente.
 - **Respuestas metafóricas**: Los agentes especialistas de dominio (mystic, shaman, kabalist) pueden responder con razonamiento metafórico rico que es difícil de parsear programáticamente. Incluir "Expresa tu hipótesis como una fórmula o algoritmo comprobable" en la plantilla de salida.
 - **Redescubrimiento entre olas**: Sin inyección de conocimiento entre olas, las olas 3-7 redescubren independientemente lo que las olas 1-2 ya encontraron. Siempre actualizar el brief entre olas.
