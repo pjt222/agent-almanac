@@ -1012,7 +1012,8 @@ def verify():
         # cannot run (exit 2) rather than silently disarming the hook. The tail after the comma
         # is caught as an unknown kind with no colon (a,b/...) or with one (x,y:z/...), and as
         # a known kind with no colon (a path ending in ,stdout). The a,b path is the third of
-        # four pairs, between valid ones, so every pair is checked: not the first two, not the last
+        # four pairs, between valid ones, so the check is not limited to the first two items or to
+        # the last one (a limit of three items still passes; see the PR)
         os.mkdir(os.path.join(d, 'a,b'))
         os.mkdir(os.path.join(d, 'x,y:z'))
         other = os.path.join(d, 'other.txt')
