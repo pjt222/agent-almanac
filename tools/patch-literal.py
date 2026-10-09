@@ -92,7 +92,8 @@ USAGE
     python3 tools/patch-literal.py --verify
 
 `--replace` takes exactly one `::`. scripts/mutation-check.js splits the same argument at its
-FIRST `::` and applies whatever results; this tool splits there too and then refuses (exit 2)
+FIRST `::` (refusing a `:::` run since #783, with `--from`/`--to` as the way out); this tool
+splits there too and then refuses (exit 2)
 the two shapes that split has been measured to mangle. An OLD that itself ends in a colon --
 every Python `if`, `def` or `for` line -- loses that colon to the separator, so NEW begins with
 the stray one: ten of this file's own first twenty mutants came back INVALID (they did not
