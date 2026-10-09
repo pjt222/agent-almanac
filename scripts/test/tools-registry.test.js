@@ -174,19 +174,36 @@ test('usageLineErrors: a tool named without the interpreter its extension requir
     '    python3 tools/demo-tool.sh --verify', //                       8  wrong interpreter
     '    sh tools/demo-tool.sh --verify', //                            9  wrong: /bin/sh is not bash
     '    node tools/other-tool.mjs --verify', //                        10 ok
+    // Lines 11-14 pin the opener's case and where the exemption applies (#811 round 1, S3). Each
+    // is caught by ONE alternative, so a mutant removing that alternative changes this list.
+    'USAGE: tools/demo-tool.sh <id>', //                                11 bare, after USAGE:
+    '#     tools/demo-tool.sh -- Verify the tree', //                   12 bare: the exemption needs a LOWERCASE word
+    'usage: tools/demo-tool.sh — see below', //                         13 bare: no title exemption after usage:
+    'usage: tools/DEMO-TOOL.SH <id>', //                                14 not this scan's: names match as committed
   ].join('\n'));
   writeFileSync(join(root, 'tools/other-tool.mjs'), [
     ' * other-tool.mjs — a title line, not an invocation', //           1  exempt
     "    console.log('usage: other-tool.mjs <id>');", //                2  bare, inside a string
     "    console.log('Usage: node tools/other-tool.mjs <id>');", //     3  ok
+    // Lines 4-6: the JSDoc and // markers, and a capitalised opener (#811 round 1, S2 and S3).
+    ' *   tools/other-tool.mjs <id>', //                                4  bare, JSDoc block
+    '//   other-tool.mjs <id>', //                                      5  bare, // block
+    "    io.error('Usage: other-tool.mjs <id>');", //                   6  bare, after Usage:
   ].join('\n'));
+  const bare = (at, name, interp) => `${at}: names ${name} without its interpreter; every tool is committed non-executable, so the line as printed does not run: write \`${interp} tools/${name}\``;
   assert.deepEqual(usageLineErrors(root, ['tools/demo-tool.sh', 'tools/other-tool.mjs']), [
-    'tools/demo-tool.sh:2: names demo-tool.sh without its interpreter; write `bash tools/demo-tool.sh`',
-    'tools/demo-tool.sh:5: names demo-tool.sh without its interpreter; write `bash tools/demo-tool.sh`',
-    'tools/demo-tool.sh:6: names demo-tool.sh without its interpreter; write `bash tools/demo-tool.sh`',
+    bare('tools/demo-tool.sh:2', 'demo-tool.sh', 'bash'),
+    bare('tools/demo-tool.sh:5', 'demo-tool.sh', 'bash'),
+    bare('tools/demo-tool.sh:6', 'demo-tool.sh', 'bash'),
     'tools/demo-tool.sh:8: runs demo-tool.sh with python3; its extension requires bash',
     'tools/demo-tool.sh:9: runs demo-tool.sh with sh; its extension requires bash',
-    'tools/other-tool.mjs:2: names other-tool.mjs without its interpreter; write `node tools/other-tool.mjs`',
+    bare('tools/demo-tool.sh:11', 'demo-tool.sh', 'bash'),
+    bare('tools/demo-tool.sh:12', 'demo-tool.sh', 'bash'),
+    bare('tools/demo-tool.sh:13', 'demo-tool.sh', 'bash'),
+    bare('tools/other-tool.mjs:2', 'other-tool.mjs', 'node'),
+    bare('tools/other-tool.mjs:4', 'other-tool.mjs', 'node'),
+    bare('tools/other-tool.mjs:5', 'other-tool.mjs', 'node'),
+    bare('tools/other-tool.mjs:6', 'other-tool.mjs', 'node'),
   ]);
   assert.match(usageLineErrors(root, ['tools/odd.rb']).join('\n'), /tools\/odd\.rb: no interpreter is known for `\.rb`/, 'a new kind of tool cannot pass the scan by having no interpreter entry');
 });
@@ -203,7 +220,7 @@ test('usageLineErrors: argparse prints its prog as the usage line, so a .py pars
   ].join('\n'));
   assert.deepEqual(usageLineErrors(root, ['tools/demo-py.py']), [
     "tools/demo-py.py:1: ArgumentParser( without prog= prints sys.argv[0]'s basename as the usage line; pass prog='python3 tools/demo-py.py'",
-    'tools/demo-py.py:2: names demo-py.py without its interpreter; write `python3 tools/demo-py.py`',
+    'tools/demo-py.py:2: names demo-py.py without its interpreter; every tool is committed non-executable, so the line as printed does not run: write `python3 tools/demo-py.py`',
     'tools/demo-py.py:4: runs demo-py.py with node; its extension requires python3',
   ]);
 });
@@ -235,6 +252,7 @@ test('renderClaudeBlock: need-first lines, not_for as a suffix, every TAGS group
   assert.match(block, /catalogues 7 operator utilities/);
   assert.match(block, /1 deprecated tool\(s\)/);
   assert.match(block, /Read this list before writing a helper/);
+  assert.match(block, /and refuses a usage line that names a tool without its interpreter/, 'CLAUDE.md § Tools names the usage refusal, not only parity (#811 round 1, N2)');
   assert.ok(!block.includes('old-tool'), 'a deprecated tool is not recommended');
   assert.throws(() => renderClaudeBlock([ENTRY({ tag: 'misc' })]), /rendered 0 of 1 active tools/, 'a tag outside TAGS cannot vanish from the index silently');
 });
@@ -281,9 +299,14 @@ test('the CLI: exit 0 on a clean tree, 1 naming each defect, 2 when the registry
   out.length = 0;
   const usage = tree([ENTRY()]);
   t.after(() => rmTree(usage));
-  writeFileSync(join(usage, 'tools/demo-tool.sh'), 'usage: tools/demo-tool.sh --verify\n');
+  writeFileSync(join(usage, 'tools/demo-tool.sh'), 'usage: tools/demo-tool.sh --verify\npython3 tools/demo-tool.sh --verify\n');
   assert.equal(checkMain([], capture, usage), 1);
-  assert.match(out.join('\n'), /FAIL: usage line: tools\/demo-tool.sh:1: names demo-tool.sh without its interpreter/);
+  // Whole lines: each message carries its own reason and the CLI appends none, since "committed
+  // non-executable" says nothing about a wrong interpreter (#811 round 1, N3).
+  assert.deepEqual(out.filter((l) => l.startsWith('FAIL: usage line:')), [
+    'FAIL: usage line: tools/demo-tool.sh:1: names demo-tool.sh without its interpreter; every tool is committed non-executable, so the line as printed does not run: write `bash tools/demo-tool.sh`',
+    'FAIL: usage line: tools/demo-tool.sh:2: runs demo-tool.sh with python3; its extension requires bash',
+  ]);
   assert.equal(okLines().length, 0, 'no OK: line when a usage line fails');
 
   // A REPOSITORY, like every other fixture here. While it was not, this arm passed for two
