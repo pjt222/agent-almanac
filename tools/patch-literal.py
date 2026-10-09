@@ -563,7 +563,7 @@ def run(entries, dry_run):
 
 # --- self-test ------------------------------------------------------------------------------
 
-RUNS_EXPECTED = 68  # process runs below; a fixture added or removed must move this with it
+RUNS_EXPECTED = 70  # process runs below; a fixture added or removed must move this with it
 
 
 def verify():
@@ -1011,15 +1011,36 @@ def verify():
         # v38: a fault path containing a comma cannot be named (pairs are comma-separated), so it
         # cannot run (exit 2) rather than silently disarming the hook. The tail after the comma
         # is caught as an unknown kind with no colon (a,b/...) or with one (x,y:z/...), and as
-        # a known kind with no colon (a path ending in ,stdout)
+        # a known kind with no colon (a path ending in ,stdout). The a,b path is the third of
+        # four pairs, between valid ones, so every pair is checked: not the first two, not the last
         os.mkdir(os.path.join(d, 'a,b'))
         os.mkdir(os.path.join(d, 'x,y:z'))
+        other = os.path.join(d, 'other.txt')
         for name in ('a,b/cm.txt', 'x,y:z/cm.txt', 'cm,stdout'):
             put(d, name, b'cm\n')
-            rc, out, err = go([name, '--replace', 'cm::CM'], d, fault='write:' + os.path.join(d, name))
+            fault = 'write:' + os.path.join(d, name)
+            if name == 'a,b/cm.txt':
+                fault = f'readback:{other},touch:{other},{fault},readfail:{other}'
+            rc, out, err = go([name, '--replace', 'cm::CM'], d, fault=fault)
             check(f'v38 {name} exit', rc == 2 and f'cannot run: {FAULT_ENV}' in err and 'contains a comma' in err,
                   f'rc={rc} err={err}')
             check(f'v38 {name} untouched', get(d, name) == b'cm\n')
+
+        # v39: a colon inside a fault path is accepted -- only the first ':' ends the kind -- so
+        # the write fault fires (exit 3), not a refusal (exit 2) and not a silent run (exit 0)
+        os.mkdir(os.path.join(d, 'q:r'))
+        put(d, 'q:r/f.txt', b'f\n')
+        rc, out, err = go(['q:r/f.txt', '--replace', 'f::F'], d, fault='write:' + os.path.join(d, 'q:r/f.txt'))
+        check('v39 exit', rc == 3, f'rc={rc} err={err}')
+        check('v39 hook', 'FAULT HOOK ACTIVE' in err and 'failed q:r/f.txt (injected write fault' in err, err)
+        check('v39 untouched', get(d, 'q:r/f.txt') == b'f\n', get(d, 'q:r/f.txt'))
+
+        # v40: a misspelt kind is refused (exit 2) as the only pair, with no comma anywhere: the
+        # first item is checked like the rest, and a spec without a comma is not exempt
+        put(d, 'ty.txt', b'ty\n')
+        rc, out, err = go(['ty.txt', '--replace', 'ty::TY'], d, fault='wirte:' + os.path.join(d, 'ty.txt'))
+        check('v40 exit', rc == 2 and f'cannot run: {FAULT_ENV}' in err and 'a misspelt kind' in err, f'rc={rc} err={err}')
+        check('v40 untouched', get(d, 'ty.txt') == b'ty\n', get(d, 'ty.txt'))
 
     check('run count', runs == RUNS_EXPECTED, f'{runs} run(s), RUNS_EXPECTED is {RUNS_EXPECTED}')
     for f in failures:
