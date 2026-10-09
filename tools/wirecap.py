@@ -356,7 +356,7 @@ def verify():
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(prog="python3 tools/wirecap.py", description=__doc__)
     parser.add_argument("--port", type=int, default=8787)
     parser.add_argument("--out", default="capture.jsonl")
     parser.add_argument("--verify", action="store_true")

@@ -965,7 +965,7 @@ def verify():
 # --- entry ----------------------------------------------------------------------------------
 
 def build_parser():
-    p = argparse.ArgumentParser(prog='patch-literal.py', add_help=True,
+    p = argparse.ArgumentParser(prog='python3 tools/patch-literal.py', add_help=True,
                                 description='literal old->new edits, every one checked before any write')
     p.add_argument('file', nargs='?', help='the file to edit (with --replace)')
     p.add_argument('--replace', action='append', default=[], metavar='OLD::NEW',
