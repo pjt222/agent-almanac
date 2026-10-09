@@ -72,9 +72,9 @@
  * copy origin is recorded only as text on its status line, and never read on disk.
  *
  * A write THROUGH a listed symlink. A link is compared by the target it names, so when
- * git lists the link (untracked, ` T` or ` M`) and it already existed at the snapshot,
- * a write landing in what it points at reads as unchanged, exit 0: a file outside the
- * repository, an ignored file, or a file the write creates where the link dangled.
+ * git lists the link (any status, either column: `??`, ` T`, ` M`, `A `, `T `) and it already
+ * existed at the snapshot, a write landing in what it points at reads as unchanged, exit 0:
+ * a file outside the repository or ignored, including one created where the link dangled.
  * Before #921 the path was read through the link, and this was caught, by accident: a
  * write through a committed link git does not list, or through a link to a directory,
  * was never caught. The Sprint 2 decision on #921 took that trade.
@@ -725,7 +725,7 @@ function printNoCommitScope() {
 let worktreeMoved = false;
 // Paths whose status lines did not move and whose recorded value is not a hash on both sides, so
 // what is at the path changed rather than its bytes. Kept at this scope for the advice, which
-// names `ls -ld` for them: `cat` reads the same bytes there and `git diff` shows nothing.
+// names `ls -ld` for them: `cat` can read the same bytes there and `git diff` shows nothing.
 let kindChangedPaths = [];
 // The paths are relative to the root, hence the lead. `-d` so a link to a directory is listed as
 // the link, and `--` so a path starting with `-` is not read as an option. On its own line so it
