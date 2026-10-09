@@ -46,8 +46,11 @@
  *
  *   HEAD            a stray commit (the tree looks clean afterwards)
  *   branch          a checkout that moved the working branch
- *   status lines    files appearing, vanishing, or changing state; a rename or copy
- *                   is recorded with its origin, so a swapped origin moves its line
+ *   status lines    files appearing, vanishing, or changing state; a rename is recorded
+ *                   with its origin, so a swapped origin moves its line. A copy carries its
+ *                   origin too, which keeps its two fields read as one entry; git pairs a
+ *                   copy only with a source changed in the same change, so the source's
+ *                   own line moves as well
  *   file contents   a stray write to a file that was ALREADY modified. Comparing
  *                   status lines alone misses this entirely: ` M CLAUDE.md` reads
  *                   identical before and after the overwrite. This repo is
@@ -61,11 +64,20 @@
  *
  * Ignored paths. `git status --porcelain` omits them by design and walking them
  * would mean hashing `node_modules`. A stray write to a gitignored file (in this
- * repo, `CONTINUE_HERE.md`) is invisible here. Every path git does list is compared
- * as it is on disk, without following a link (#921): a regular file by its bytes, a
- * symlink by the target it names and not the bytes it reaches, and anything else (a
- * directory, say) by one marker saying it is not a regular file, so nothing inside it
- * is read.
+ * repo, `CONTINUE_HERE.md`) is invisible here. Every path git lists as an entry is
+ * read with `lstat`, so a link AT the path is not followed, though a link in a parent
+ * directory still is (#921): a regular file by its bytes, a symlink by the target it
+ * names and not the bytes it reaches, and anything else (a directory, say) by one
+ * marker saying it is not a regular file, so nothing inside it is read. A rename or
+ * copy origin is recorded only as text on its status line, and never read on disk.
+ *
+ * A write THROUGH a listed symlink. A link is compared by the target it names, so when
+ * git lists the link (untracked, ` T` or ` M`) and it already existed at the snapshot,
+ * a write landing in what it points at reads as unchanged, exit 0: a file outside the
+ * repository, an ignored file, or a file the write creates where the link dangled.
+ * Before #921 the path was read through the link, and this was caught, by accident: a
+ * write through a committed link git does not list, or through a link to a directory,
+ * was never caught. The Sprint 2 decision on #921 took that trade.
  *
  * A hard link. A regular file is compared by its bytes, so an untracked file replaced
  * by a hard link to identical bytes outside the repository reads as unchanged (measured
@@ -139,8 +151,12 @@ const FORMAT_VERSION = 4;
 /** Sentinel for a repository with no commits yet. */
 const UNBORN = '(unborn)';
 /**
- * A porcelain v1 code for a rename or copy, in either column: its entry carries two paths. With an
- * intent-to-add destination git 2.43 reports a worktree rename, ` R` (#922).
+ * A porcelain v1 code for a rename or copy, in either column: under -z its entry is two fields, the
+ * destination and then the origin. With an intent-to-add destination git 2.43 reports one in the
+ * worktree column: ` R` (#922), or ` C` when `status.renames` (or `diff.renames`, which status
+ * inherits) is `copies`. Checking only the first column read the origin field as an entry of its
+ * own, and an origin whose name begins with R or C then read as a two-field code itself and
+ * swallowed the NEXT entry, so a stray write to that path verified as unchanged (#921 round 1, F2).
  */
 const isRenameOrCopy = (code) => /[RC]/.test(code);
 /** Joins a rename or copy's destination to its origin on a recorded status line (#922). */
@@ -276,6 +292,17 @@ const atRoot = (args) => git(args, { cwd: TOPLEVEL });
 // and untracked paths are hashed, so the snapshot stays small either way — while
 // narrowing the margin on the one comparison the whole tool rests upon.
 const sha = (buffer) => createHash('sha256').update(buffer).digest('hex');
+/** Is a recorded content value the hash of a regular file's bytes, rather than one of the markers below? */
+const isContentHash = (value) => /^[0-9a-f]{64}$/.test(value);
+/** A recorded content value in words, for a path whose kind changed rather than its bytes (#921 round 1). */
+function describeContent(value) {
+  if (typeof value !== 'string') return 'not recorded';
+  if (isContentHash(value)) return 'a regular file';
+  if (value === '(absent)') return 'nothing';
+  if (value === '(not-a-regular-file)') return 'not a regular file';
+  if (value.startsWith('(symlink:')) return `a symlink to ${value.slice('(symlink:'.length, -1)}`;
+  return value;   // `unreadable:<code>`, as recorded
+}
 
 /**
  * Hash of every path git reports as changed or untracked.
@@ -696,6 +723,15 @@ function printNoCommitScope() {
 // and must NEVER accept a worktree move: a stray write is exactly what the guard
 // exists for, and "I merged my own branch" is not a claim about file contents.
 let worktreeMoved = false;
+// Paths whose status lines did not move and whose recorded value is not a hash on both sides, so
+// what is at the path changed rather than its bytes. Kept at this scope for the advice, which
+// names `ls -ld` for them: `cat` reads the same bytes there and `git diff` shows nothing.
+let kindChangedPaths = [];
+// The paths are relative to the root, hence the lead. `-d` so a link to a directory is listed as
+// the link, and `--` so a path starting with `-` is not read as an option. On its own line so it
+// pastes bare, for the reason in the comment above BRANCH_ARGS.
+const KIND_COMMAND_LEAD = 'a file type or link target (run at the repository root)';
+const kindCommand = () => `ls -ld -- ${kindChangedPaths.map(shellWord).join(' ')}`;
 
 worktreeMoved = reportList('working tree', before.status, after.status) || worktreeMoved;
 
@@ -745,9 +781,22 @@ if (contentChanged.length) {
   const afterLines = linesByPath(after);
   const hidden = contentChanged
     .filter((path) => beforeLines.has(path) && beforeLines.get(path) === afterLines.get(path));
-  if (hidden.length) {
+  // A hash on both sides means the bytes moved. Anything else means what is at the path moved: a
+  // file swapped for a link, a link retargeted or swapped back. Its bytes can be identical, so the
+  // bytes heading would be false there; it gets its own, with both values (#921 round 1, F4).
+  const bytesChanged = hidden
+    .filter((path) => isContentHash(before.contents[path]) && isContentHash(after.contents[path]));
+  kindChangedPaths = hidden.filter((path) => !bytesChanged.includes(path));
+  if (bytesChanged.length) {
     console.error('\n  contents changed (same status line as at the snapshot, so only the bytes show the write):');
-    for (const path of hidden) console.error(`    ~ ${path}`);
+    for (const path of bytesChanged) console.error(`    ~ ${path}`);
+  }
+  if (kindChangedPaths.length) {
+    console.error('\n  file type or link target changed (same status line as at the snapshot):');
+    for (const path of kindChangedPaths) {
+      console.error(`    ~ ${path}  (was ${describeContent(before.contents[path])}, ` +
+        `now ${describeContent(after.contents[path])})`);
+    }
   }
 }
 
@@ -797,6 +846,7 @@ if (command === 'rebaseline') {
     console.error('would rebaseline a stray write as the new normal.');
     console.error('\nInspect it first:');
     if (filesMoved) console.error('  git status --porcelain -uall  /  git diff');
+    if (kindChangedPaths.length) console.error(`  ${KIND_COMMAND_LEAD}:\n    ${kindCommand()}`);
     if (flagsMoved) console.error(`  for the index flags (${INDEX_FLAGS_LEGEND}):\n    ${INDEX_FLAGS_COMMAND}`);
     console.error('The snapshot was KEPT, so `npm run guard:verify` still works after you clean up.');
     process.exit(1);
@@ -955,6 +1005,7 @@ if (argv.includes('--release') && !changed) {
  */
 function printWorktreeCommands(indent) {
   if (filesMoved) console.error(`${indent}the working tree:  git diff  /  git status --porcelain -uall`);
+  if (kindChangedPaths.length) console.error(`${indent}${KIND_COMMAND_LEAD}:\n${indent}  ${kindCommand()}`);
   if (flagsMoved) console.error(`${indent}the index flags (${INDEX_FLAGS_LEGEND}):\n${indent}  ${INDEX_FLAGS_COMMAND}`);
 }
 
