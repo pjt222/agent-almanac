@@ -22,10 +22,15 @@
  *
  * Each fixture is a throwaway git repository holding copies of both scaffolders, the parity
  * checker and `scripts/lib`, copied from this checkout at test time — so a `mutation-check`
- * edit to a real scaffolder reaches the fixture. The checker is COPIED, never symlinked: node
- * resolves a symlinked main module to its real path, the checker's run-as-main guard then
- * compares that against the symlink path in `argv[1]`, finds them unequal, and the "check"
- * exits 0 having run nothing — a guard that passes everything.
+ * edit to a real scaffolder, or to the checker, reaches the fixture.
+ *
+ * Symlinks are a subject here, not a hazard to route around (#976 round 1). Node resolves a
+ * symlinked main module to its real path, and the checker's run-as-main guard compared that
+ * against `argv[1]` as a path string, so through a symlinked repository path — or a symlinked
+ * checker file — the "check" exited 0 having run nothing, and both guards passed everything.
+ * The checker's guard now realpaths both sides. `fixture()` still realpaths its own directory,
+ * so every arm that does not say otherwise runs on a physical path; the symlink arms below build
+ * the link themselves and never realpath it.
  *
  * Git isolation: the scaffolders run their own `git`, so they are spawned with `cleanEnv`, which
  * drops every `GIT_*` variable and moves `HOME` and `XDG_CONFIG_HOME` into the fixture (a
@@ -36,7 +41,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import {
-  appendFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync,
+  appendFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, symlinkSync, unlinkSync,
+  writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -98,12 +104,28 @@ function fixture(t, ids) {
   return dir;
 }
 
-/** Run one of the fixture's scaffolders, isolated from the caller's git environment. */
-function run(dir, script, args = []) {
-  const r = spawnSync('bash', [join(dir, 'scripts', script), ...args], {
-    cwd: dir, encoding: 'utf8', env: cleanEnv(dir),
+/**
+ * Run one of the fixture's scaffolders, isolated from the caller's git environment. `via` is the
+ * path the script is invoked through (default: the fixture itself); `env` is merged last.
+ */
+function run(dir, script, args = [], { via = dir, env = {} } = {}) {
+  const r = spawnSync('bash', [join(via, 'scripts', script), ...args], {
+    cwd: via, encoding: 'utf8', env: cleanEnv(dir, env),
   });
   return { status: r.status, out: `${r.stdout}${r.stderr}` };
+}
+
+/**
+ * A symlink to the fixture, in a directory of its own. The returned path is deliberately NOT
+ * realpathed: reaching the repository through it is the shape under test.
+ */
+function linkTo(t, dir) {
+  const container = mkdtempSync(join(tmpdir(), 'scaffolders-link-'));
+  t.after(() => rmTree(container));
+  const link = join(container, 'repo');
+  symlinkSync(dir, link, 'dir');
+  assert.notEqual(realpathSync(link), link, 'precondition: this path reaches the fixture through a symlink');
+  return link;
 }
 
 /** Rewrite the fixture's copy of a scaffolder, insisting the needle occurs exactly once. */
@@ -252,16 +274,91 @@ test('translate-content.sh treats a parity check that could not measure (exit 2)
   assert.equal(existsSync(join(dir, 'i18n/de/skills/demo/SKILL.md')), false);
 });
 
-test('translate-content.sh refuses and removes a target the fence-parity check rejects (#475 guard)', (t) => {
-  const dir = fixture(t, ['demo']);
-  // Corrupt the copy's output inside the ```yaml fence, right after the column-0 `name:` line.
+/** Corrupt the fixture copy's output inside the ```yaml fence, right after the column-0 `name:` line. */
+function corruptTranslateCopy(dir) {
   const cp = 'cp "$SOURCE_FILE" "$TARGET_FILE"';
   inject(dir, 'translate-content.sh', cp,
     `${cp}\nawk '{ print } /^name: Build/ { print "injected: true" }' "$TARGET_FILE" > "$TARGET_FILE.tmp" && mv "$TARGET_FILE.tmp" "$TARGET_FILE"`);
-  const r = run(dir, 'translate-content.sh', ['skills', 'demo', 'de']);
+}
+
+/** The refusal of the corrupted `de` scaffold, whichever path the run reached the fixture through. */
+function assertTranslateRefusedCorruption(dir, r) {
   assert.equal(r.status, 1, `a scaffold failing the parity check must exit 1; output was:\n${r.out}`);
   assert.match(r.out, /FAIL i18n\/de\/skills\/demo\/SKILL\.md:\d+ \[yaml\]/, 'the check reports the corrupted yaml fence');
   assert.match(r.out, /REFUSED[^\n]*i18n\/de\/skills\/demo\/SKILL\.md[^\n]*exit 1/, 'the refusal names the target');
   assert.equal(existsSync(join(dir, 'i18n/de/skills/demo/SKILL.md')), false, 'the rejected scaffold is removed');
-  assert.equal(existsSync(join(dir, 'i18n/de/skills/demo')), false, 'and the directory this run created for it');
+  assert.equal(existsSync(join(dir, 'i18n/de/skills/demo')), false, 'and the leaf directory this run created for it');
+}
+
+test('translate-content.sh refuses and removes a target the fence-parity check rejects (#475 guard)', (t) => {
+  const dir = fixture(t, ['demo']);
+  corruptTranslateCopy(dir);
+  assertTranslateRefusedCorruption(dir, run(dir, 'translate-content.sh', ['skills', 'demo', 'de']));
+});
+
+// --- #475 guard through a symlinked path (#976 round 1) -------------------------------------
+//
+// Before the checker's run-as-main guard realpathed both sides, each of these exited 0 with the
+// corruption written: the checker printed nothing and exited 0, and the scaffolder took that for
+// a pass. `pwd -P` in the scaffolders would have closed the first two and not the third.
+
+test('translate-content.sh refuses a fence-corrupted target when the repository is reached through a symlink (#475 guard)', (t) => {
+  const dir = fixture(t, ['demo']);
+  const link = linkTo(t, dir);
+  corruptTranslateCopy(dir);
+  const r = run(dir, 'translate-content.sh', ['skills', 'demo', 'de'], { via: link });
+  // Instrument check: the scaffolder's ROOT really was the link, or this arm tests a physical path.
+  assert.ok(r.out.includes(`${link}/i18n/de/skills/demo/SKILL.md`), `the run names its target through the link; output was:\n${r.out}`);
+  assertTranslateRefusedCorruption(dir, r);
+});
+
+test('bulk-scaffold-caveman.sh refuses fence-corrupted targets when the repository is reached through a symlink (#475 guard)', (t) => {
+  const dir = fixture(t, ['demo']);
+  const link = linkTo(t, dir);
+  inject(dir, 'bulk-scaffold-caveman.sh', 'in_fm && /^name:/', '/^name:/');
+  const r = run(dir, 'bulk-scaffold-caveman.sh', [], { via: link });
+  assert.notEqual(r.status, 0, `a run whose scaffolds fail the parity check must not exit 0; output was:\n${r.out}`);
+  assert.match(r.out, /Created: 0\b[^\n]*Refused: 6\b/);
+  for (const tier of TIERS) {
+    const rel = `i18n/${tier}/skills/demo/SKILL.md`;
+    assert.match(r.out, new RegExp(`FAIL ${escapeRe(rel)}:\\d+ \\[yaml\\]`), `the check reports ${rel}'s yaml fence`);
+    assert.ok(r.out.includes(`REFUSED: ${link}/${rel}`), `the refusal names ${rel} through the link`);
+    assert.equal(existsSync(join(dir, rel)), false, `${rel} is removed`);
+  }
+});
+
+test('translate-content.sh refuses a fence-corrupted target when the checker it runs is a symlinked file (#475 guard)', (t) => {
+  const dir = fixture(t, ['demo']);
+  // The link's target needs `lib/` and a module-type package.json beside it: node resolves the
+  // checker's imports, and whether `.js` is ESM, from the REAL file's location.
+  const elsewhere = realpathSync(mkdtempSync(join(tmpdir(), 'scaffolders-checker-')));
+  t.after(() => rmTree(elsewhere));
+  mkdirSync(join(elsewhere, 'scripts'));
+  cpSync(join(REPO, 'scripts', 'check-i18n-fence-parity.js'), join(elsewhere, 'scripts', 'check-i18n-fence-parity.js'));
+  cpSync(join(REPO, 'scripts', 'lib'), join(elsewhere, 'scripts', 'lib'), { recursive: true });
+  writeFileSync(join(elsewhere, 'package.json'), '{ "type": "module" }\n');
+  const checker = join(dir, 'scripts', 'check-i18n-fence-parity.js');
+  unlinkSync(checker);
+  symlinkSync(join(elsewhere, 'scripts', 'check-i18n-fence-parity.js'), checker);
+  assert.notEqual(realpathSync(checker), checker, 'precondition: the checker the scaffolder runs is a symlink');
+  corruptTranslateCopy(dir);
+  assertTranslateRefusedCorruption(dir, run(dir, 'translate-content.sh', ['skills', 'demo', 'de']));
+});
+
+test('both scaffolders still scaffold a clean source through a symlinked path: the control row for the symlink refusals', (t) => {
+  // What separates a fixed checker from a guard that merely refuses more: a clean scaffold through
+  // the same link must still be written.
+  const dir = fixture(t, ['demo']);
+  const link = linkTo(t, dir);
+  const single = run(dir, 'translate-content.sh', ['skills', 'demo', 'de'], { via: link });
+  assert.equal(single.status, 0, `a clean source must scaffold through a link; output was:\n${single.out}`);
+  assert.match(single.out, /CREATED/);
+  const english = split(readFileSync(join(dir, 'skills/demo/SKILL.md'), 'utf8')).body;
+  assert.equal(split(readFileSync(join(dir, 'i18n/de/skills/demo/SKILL.md'), 'utf8')).body, english);
+  const bulk = run(dir, 'bulk-scaffold-caveman.sh', [], { via: link });
+  assert.equal(bulk.status, 0, `a clean bulk run must exit 0 through a link; output was:\n${bulk.out}`);
+  assert.match(bulk.out, /Created: 6\b[^\n]*Refused: 0\b/);
+  for (const tier of TIERS) {
+    assert.equal(split(readFileSync(join(dir, `i18n/${tier}/skills/demo/SKILL.md`), 'utf8')).body, english, `${tier} is a byte copy`);
+  }
 });

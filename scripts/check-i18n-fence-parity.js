@@ -62,7 +62,7 @@
  *   node scripts/check-i18n-fence-parity.js --locale de --id X # one file
  */
 
-import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
+import { readFileSync, readdirSync, existsSync, statSync, realpathSync } from 'fs';
 import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { assertNotShallow } from './lib/git-freshness.js';
@@ -568,7 +568,15 @@ function main() {
 // Guarded so the module can be IMPORTED by a test without running the gate. Without this,
 // importing to check anything executes the whole walk — which is why the fifth-tree check
 // was a regex over source text, asserting token presence rather than behaviour. The pattern
-// matches check-readme-translation-parity.js, and it is what dependency-free.test.js relies on.
-if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))) {
+// came from check-readme-translation-parity.js (which still compares path strings), and it is
+// what dependency-free.test.js relies on: an import with no `argv[1]` never reaches realpath.
+//
+// realpath on BOTH sides (#475, #976 round 1). Node gives `import.meta.url` the main module's
+// real path, while `argv[1]` is the path the caller typed; compared as strings, a run through a
+// symlinked repository path — or a symlinked copy of this file — skipped `main()` and exited 0
+// having compared nothing, which the i18n scaffolders took for a pass. No try/catch: a realpath
+// failure must throw (exit 1), never fall through to a silent exit 0. The idiom of
+// build-hermes-distribution.js and tools/agent-report.mjs.
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   main();
 }
