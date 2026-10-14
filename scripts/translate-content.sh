@@ -72,19 +72,25 @@ if [ -f "$TARGET_FILE" ]; then
   exit 0
 fi
 
-# Refuse an English source HEAD does not carry (#617). The copy below takes the WORKING TREE's
-# bytes while both commit fields are stamped with HEAD, so from a source with uncommitted edits
-# -- or an untracked one -- `source_commit` and `fence_basis_commit` would be false at birth.
-# Checked before anything is created, so a refusal writes nothing at all. A git that cannot
-# answer is a refusal too, never a "clean".
-SOURCE_STATUS_RC=0
-SOURCE_STATUS=$(git -C "$ROOT" status --porcelain -- "$SOURCE_FILE") || SOURCE_STATUS_RC=$?
-if [ "$SOURCE_STATUS_RC" -ne 0 ]; then
-  echo "ERROR: git could not report whether $SOURCE_FILE is committed (exit $SOURCE_STATUS_RC); refusing to scaffold"
-  exit 1
-fi
-if [ -n "$SOURCE_STATUS" ]; then
-  echo "REFUSED: $SOURCE_FILE has uncommitted changes (git status --porcelain: $SOURCE_STATUS)"
+# Refuse an English source whose bytes HEAD does not carry (#617). The copy below takes the
+# WORKING TREE's bytes while both commit fields are stamped with HEAD, so unless HEAD carries
+# this path with exactly these bytes, `source_commit` and `fence_basis_commit` are false at birth.
+#
+# The test is that property itself -- HEAD has the path, and its blob is byte-identical to the
+# file -- not `git status`, which reports a source clean when an ignore rule or
+# status.showUntrackedFiles=no hides it, or when a skip-worktree / assume-unchanged flag tells
+# git not to look (#976 round 1). `git show <rev>:<path>` prints the raw blob: no eol
+# conversion, no smudge filter, no textconv without --textconv. A checkout that converts on
+# checkout would therefore be refused here, never waved through; this repository pins
+# `*.md text eol=lf`. A git that cannot answer fails `cat-file -e`, so it refuses too.
+#
+# The pipe cannot fail open under pipefail: cmp reads both inputs to EOF before it reports them
+# equal, so a SIGPIPE on `git show` can only come with a difference, which refuses anyway. That is
+# the opposite of `printf | grep -q` (#972), where the early exit comes with the answer you wanted.
+# Checked before anything is created, so a refusal writes nothing at all.
+SOURCE_REL="${SOURCE_FILE#"$ROOT"/}"
+if ! git -C "$ROOT" cat-file -e "HEAD:./$SOURCE_REL" 2>/dev/null || ! git -C "$ROOT" show "HEAD:./$SOURCE_REL" | cmp -s - "$SOURCE_FILE"; then
+  echo "REFUSED: $SOURCE_FILE is uncommitted: HEAD:$SOURCE_REL is absent, or its bytes differ from the file's"
   echo "  A scaffold stamps source_commit and fence_basis_commit with HEAD ($SOURCE_COMMIT), which does not"
   echo "  carry these bytes (#617). Commit the English source first, then scaffold."
   exit 1

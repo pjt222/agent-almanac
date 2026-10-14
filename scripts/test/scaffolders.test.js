@@ -32,6 +32,11 @@
  * so every arm that does not say otherwise runs on a physical path; the symlink arms below build
  * the link themselves and never realpath it.
  *
+ * #617 is tested as the property AC1 states, not as `git status` output: a scaffold that exists
+ * must carry a body HEAD carries for its source (`assertCarriedByHead`). The arms that hide a
+ * source from `git status` — an ignore rule, a skip-worktree flag, `status.showUntrackedFiles=no`
+ * — are the ones where the two come apart.
+ *
  * Git isolation: the scaffolders run their own `git`, so they are spawned with `cleanEnv`, which
  * drops every `GIT_*` variable and moves `HOME` and `XDG_CONFIG_HOME` into the fixture (a
  * self-test's `cwd` is not isolation — `_git-fixture.js` says why).
@@ -115,6 +120,27 @@ function run(dir, script, args = [], { via = dir, env = {} } = {}) {
   return { status: r.status, out: `${r.stdout}${r.stderr}` };
 }
 
+/** Run git in the fixture, isolated, insisting it succeeds; returns stdout. */
+function gitIn(dir, ...args) {
+  const r = spawnSync('git', ['-C', dir, ...args], { encoding: 'utf8', env: cleanEnv(dir) });
+  assert.equal(r.status, 0, `git ${args.join(' ')} failed in ${dir}: ${r.stderr}`);
+  return r.stdout;
+}
+
+/**
+ * #617 AC1 as an oracle: if `targetRel` was written, the body after its frontmatter must be the
+ * body HEAD carries for `sourceRel` — the bytes its `source_commit` and `fence_basis_commit`
+ * vouch for. Absent is fine here (a refusal); the arm asserts the refusal separately. Read with
+ * `cat-file blob`, not the `git show` the scaffolders use, so the oracle is not the subject.
+ */
+function assertCarriedByHead(dir, targetRel, sourceRel) {
+  if (!existsSync(join(dir, targetRel))) return;
+  const head = spawnSync('git', ['-C', dir, 'cat-file', 'blob', `HEAD:${sourceRel}`], { encoding: 'utf8', env: cleanEnv(dir) });
+  assert.equal(head.status, 0, `${targetRel} was written and stamped with HEAD, yet HEAD carries no ${sourceRel}`);
+  assert.equal(split(readFileSync(join(dir, targetRel), 'utf8')).body, split(head.stdout).body,
+    `${targetRel} was written and stamped with HEAD, yet its body is not the one HEAD carries for ${sourceRel}`);
+}
+
 /**
  * A symlink to the fixture, in a directory of its own. The returned path is deliberately NOT
  * realpathed: reaching the repository through it is the shape under test.
@@ -126,6 +152,32 @@ function linkTo(t, dir) {
   symlinkSync(dir, link, 'dir');
   assert.notEqual(realpathSync(link), link, 'precondition: this path reaches the fixture through a symlink');
   return link;
+}
+
+/**
+ * A PATH entry whose `git` fails every call that asks about a commit's copy of a path
+ * (`HEAD:<path>`) or the worktree's status, and passes everything else to the real git. That is
+ * exactly the scaffolders' source check — the byte test, and the `git status` predicate it
+ * replaced, so the arm reads the same against either — and never the parity checker, whose git
+ * calls are `log`, `rev-parse`, `ls-files`, `check-ignore` and `cat-file --batch` with its specs
+ * on stdin. `git log -1` must keep working: both scaffolders read HEAD with it under `set -e`.
+ */
+function gitFailingSourceChecks(t) {
+  const realGit = spawnSync('sh', ['-c', 'command -v git'], { encoding: 'utf8' }).stdout.trim();
+  assert.ok(realGit.startsWith('/'), `a real git on PATH (got '${realGit}')`);
+  const shimDir = mkdtempSync(join(tmpdir(), 'scaffolders-shim-'));
+  t.after(() => rmTree(shimDir));
+  writeFileSync(join(shimDir, 'git'), [
+    '#!/bin/sh',
+    'for a in "$@"; do',
+    '  case "$a" in',
+    '    HEAD:*|status) echo "fatal: test shim: git cannot answer ($*)" >&2; exit 128 ;;',
+    '  esac',
+    'done',
+    `exec '${realGit}' "$@"`,
+    '',
+  ].join('\n'), { mode: 0o755 });
+  return { PATH: `${shimDir}:${process.env.PATH}` };
 }
 
 /** Rewrite the fixture's copy of a scaffolder, insisting the needle occurs exactly once. */
@@ -361,4 +413,126 @@ test('both scaffolders still scaffold a clean source through a symlinked path: t
   for (const tier of TIERS) {
     assert.equal(split(readFileSync(join(dir, `i18n/${tier}/skills/demo/SKILL.md`), 'utf8')).body, english, `${tier} is a byte copy`);
   }
+});
+
+// --- #617: a source `git status` cannot see is refused too (#976 round 1) -------------------
+//
+// Each shape leaves `git status --porcelain -- <source>` empty while the bytes HEAD carries are
+// not the file's. The oracle is the property, read first: anything written must carry HEAD's
+// body. Then the refusal itself.
+
+const FENCE_LINE = 'name: Build and Push Docker Image';
+
+const HIDDEN_FROM_STATUS = [
+  {
+    shape: 'an untracked source ignored through .git/info/exclude',
+    id: 'fresh',
+    setup(dir) {
+      put(dir, 'skills/fresh/SKILL.md', englishSkill('fresh'));
+      mkdirSync(join(dir, '.git', 'info'), { recursive: true });
+      appendFileSync(join(dir, '.git', 'info', 'exclude'), 'skills/fresh/\n');
+    },
+  },
+  {
+    shape: 'a skip-worktree source with a fence edit',
+    id: 'demo',
+    setup(dir) {
+      gitIn(dir, 'update-index', '--skip-worktree', 'skills/demo/SKILL.md');
+      const path = join(dir, 'skills/demo/SKILL.md');
+      const text = readFileSync(path, 'utf8');
+      assert.equal(text.split(FENCE_LINE).length - 1, 1, 'the fence line occurs once, so the edit is one edit');
+      writeFileSync(path, text.replace(FENCE_LINE, 'name: EDITED-IN-WORKTREE-ONLY'));
+    },
+  },
+  {
+    shape: 'an untracked source under status.showUntrackedFiles=no',
+    id: 'fresh',
+    setup(dir) {
+      gitIn(dir, 'config', 'status.showUntrackedFiles', 'no');
+      put(dir, 'skills/fresh/SKILL.md', englishSkill('fresh'));
+    },
+  },
+];
+
+/** Build the fixture for one hidden-from-status shape, and check the instrument: status sees nothing. */
+function hiddenFixture(t, { id, setup }) {
+  const dir = fixture(t, ['demo']);
+  setup(dir);
+  assert.equal(gitIn(dir, 'status', '--porcelain', '--', `skills/${id}/SKILL.md`), '',
+    'precondition: `git status` reports this source clean, so the arm is about what it cannot see');
+  return dir;
+}
+
+for (const hidden of HIDDEN_FROM_STATUS) {
+  test(`translate-content.sh refuses ${hidden.shape}, which HEAD does not carry byte for byte (#617)`, (t) => {
+    const dir = hiddenFixture(t, hidden);
+    const source = `skills/${hidden.id}/SKILL.md`;
+    const target = `i18n/de/skills/${hidden.id}/SKILL.md`;
+    const r = run(dir, 'translate-content.sh', ['skills', hidden.id, 'de']);
+    assertCarriedByHead(dir, target, source);
+    assert.equal(r.status, 1, `the source must be refused; output was:\n${r.out}`);
+    assert.match(r.out, new RegExp(`REFUSED[^\\n]*${escapeRe(source)}[^\\n]*uncommitted`), 'the refusal names the source');
+    assert.equal(existsSync(join(dir, target)), false, 'nothing is written for it');
+  });
+
+  test(`bulk-scaffold-caveman.sh refuses ${hidden.shape} per source, and still scaffolds the clean one (#617)`, (t) => {
+    const dir = hiddenFixture(t, hidden);
+    const source = `skills/${hidden.id}/SKILL.md`;
+    const r = run(dir, 'bulk-scaffold-caveman.sh');
+    for (const tier of TIERS) {
+      for (const id of new Set(['demo', hidden.id])) {
+        assertCarriedByHead(dir, `i18n/${tier}/skills/${id}/SKILL.md`, `skills/${id}/SKILL.md`);
+      }
+    }
+    assert.notEqual(r.status, 0, `a run that refused a source must not exit 0; output was:\n${r.out}`);
+    assert.match(r.out, /Refused: 6\b/);
+    for (const tier of TIERS) {
+      const target = `i18n/${tier}/skills/${hidden.id}/SKILL.md`;
+      assert.match(r.out, new RegExp(`REFUSED[^\\n]*${escapeRe(target)}[^\\n]*${escapeRe(source)}`), `the refusal names ${target} and its source`);
+      assert.equal(existsSync(join(dir, target)), false, `${target} is not written`);
+      if (hidden.id !== 'demo') assert.ok(existsSync(join(dir, `i18n/${tier}/skills/demo/SKILL.md`)), `${tier}/demo (clean) is scaffolded`);
+    }
+  });
+}
+
+// --- the order and the failure path of the source check (#976 round 1, R1-04) ---------------
+
+test('translate-content.sh SKIPs an existing target before it looks at the source, so a dirty source does not refuse it', (t) => {
+  const dir = fixture(t, ['demo']);
+  const existing = put(dir, 'i18n/de/skills/demo/SKILL.md', 'an existing translation\n');
+  appendFileSync(join(dir, 'skills/demo/SKILL.md'), '\nA line HEAD does not carry.\n');
+  const r = run(dir, 'translate-content.sh', ['skills', 'demo', 'de']);
+  assert.equal(r.status, 0, `a SKIP writes nothing and claims nothing, so it must exit 0; output was:\n${r.out}`);
+  assert.match(r.out, /SKIP/);
+  assert.doesNotMatch(r.out, /REFUSED/);
+  assert.equal(readFileSync(existing, 'utf8'), 'an existing translation\n', 'the existing target is untouched');
+});
+
+test('bulk-scaffold-caveman.sh SKIPs existing targets before it looks at the source, so a dirty source refuses none of them', (t) => {
+  const dir = fixture(t, ['demo']);
+  for (const tier of TIERS) put(dir, `i18n/${tier}/skills/demo/SKILL.md`, `an existing ${tier} translation\n`);
+  appendFileSync(join(dir, 'skills/demo/SKILL.md'), '\nA line HEAD does not carry.\n');
+  const r = run(dir, 'bulk-scaffold-caveman.sh');
+  assert.equal(r.status, 0, `a run that only skipped must exit 0; output was:\n${r.out}`);
+  assert.match(r.out, /Created: 0\b[^\n]*Skipped \(existing\): 6\b[^\n]*Refused: 0\b/);
+  for (const tier of TIERS) {
+    assert.equal(readFileSync(join(dir, `i18n/${tier}/skills/demo/SKILL.md`), 'utf8'), `an existing ${tier} translation\n`, `${tier} is untouched`);
+  }
+});
+
+test('translate-content.sh refuses when git cannot answer for the source, and writes nothing', (t) => {
+  const dir = fixture(t, ['demo']);
+  const r = run(dir, 'translate-content.sh', ['skills', 'demo', 'de'], { env: gitFailingSourceChecks(t) });
+  assert.equal(r.status, 1, `a source git cannot vouch for must be refused; output was:\n${r.out}`);
+  assert.match(r.out, /skills\/demo\/SKILL\.md/, 'the refusal names the source');
+  assert.equal(existsSync(join(dir, 'i18n')), false, 'nothing at all is written');
+});
+
+test('bulk-scaffold-caveman.sh refuses when git cannot answer for the source, and writes nothing', (t) => {
+  const dir = fixture(t, ['demo']);
+  const r = run(dir, 'bulk-scaffold-caveman.sh', [], { env: gitFailingSourceChecks(t) });
+  assert.notEqual(r.status, 0, `a run that refused must not exit 0; output was:\n${r.out}`);
+  assert.match(r.out, /Created: 0\b[^\n]*Refused: 6\b/);
+  assert.match(r.out, /REFUSED[^\n]*skills\/demo\/SKILL\.md/, 'the refusal names the source');
+  assert.equal(existsSync(join(dir, 'i18n')), false, 'nothing at all is written');
 });

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Bulk scaffold caveman/wenyan locale stubs for all skills.
 # Gets source_commit once. Existing targets are skipped before any per-file work; for a target
-# it would create, it asks git once per skill whether the English source is committed (#617)
-# and runs the fence-parity check on the file it wrote (#475). Exits 1 if anything was refused.
+# it would create, it checks once per skill that HEAD carries the English source byte for byte
+# (#617) and runs the fence-parity check on the file it wrote (#475). Exits 1 if anything was
+# refused.
 # Usage: bash scripts/bulk-scaffold-caveman.sh [--dry-run]
 
 set -euo pipefail
@@ -18,8 +19,10 @@ LOCALES=(caveman-lite caveman caveman-ultra wenyan-lite wenyan wenyan-ultra)
 CREATED=0
 SKIPPED=0
 REFUSED=0
-# skill -> clean | uncommitted | unknown. One `git status` per skill, not per locale: the six
-# targets of one skill share one English source.
+# skill -> clean | uncommitted, where "clean" means HEAD carries the English source byte for
+# byte and "uncommitted" is everything else (modified, untracked, ignored, hidden by an index
+# flag, or git could not answer). One comparison per skill, not per locale: the six targets of
+# one skill share one English source.
 declare -A SOURCE_STATE=()
 
 echo "source_commit: $SOURCE_COMMIT  date: $TODAY  dry-run: $DRY_RUN"
@@ -39,27 +42,28 @@ for locale in "${LOCALES[@]}"; do
       continue
     fi
 
-    # Refuse an English source HEAD does not carry (#617): the awk below copies the WORKING
-    # TREE's bytes while both commit fields are stamped with HEAD, so an uncommitted or untracked
-    # source would make `source_commit` and `fence_basis_commit` false at birth. Per source, so
-    # the clean ones are still scaffolded; the run exits 1 at the end. A git that cannot answer
-    # is a refusal, never a "clean". Checked before the dry-run branch, so the preview predicts it.
+    # Refuse an English source whose bytes HEAD does not carry (#617): the awk below copies the
+    # WORKING TREE's bytes while both commit fields are stamped with HEAD. The test is that
+    # property -- HEAD has the path and its blob is byte-identical to the file -- not
+    # `git status`, which an ignore rule, status.showUntrackedFiles=no or a skip-worktree /
+    # assume-unchanged flag makes report "clean" (#976 round 1). translate-content.sh says why the
+    # raw blob is the right side to compare and why the pipe cannot fail open. A git that cannot
+    # answer fails `cat-file -e` and refuses too. Per source, so the clean ones are still
+    # scaffolded; the run exits 1 at the end. Checked before the dry-run branch, so the preview
+    # predicts it.
+    rel="skills/$skill/SKILL.md"
     if [[ -z "${SOURCE_STATE[$skill]:-}" ]]; then
-      status_rc=0
-      source_status=$(git -C "$ROOT" status --porcelain -- "$source") || status_rc=$?
-      if [[ $status_rc -ne 0 ]]; then
-        SOURCE_STATE[$skill]=unknown
-      elif [[ -n "$source_status" ]]; then
-        SOURCE_STATE[$skill]=uncommitted
-      else
+      if git -C "$ROOT" cat-file -e "HEAD:./$rel" 2>/dev/null && git -C "$ROOT" show "HEAD:./$rel" | cmp -s - "$source"; then
         SOURCE_STATE[$skill]=clean
+      else
+        SOURCE_STATE[$skill]=uncommitted
       fi
     fi
     if [[ "${SOURCE_STATE[$skill]}" != clean ]]; then
       if [[ $DRY_RUN -eq 1 ]]; then
-        echo "WOULD REFUSE (${SOURCE_STATE[$skill]} English source): $target <- $source"
+        echo "WOULD REFUSE (uncommitted English source, not byte-identical to HEAD:$rel): $target <- $source"
       else
-        echo "REFUSED: $target -- English source $source is ${SOURCE_STATE[$skill]} (#617); commit it first"
+        echo "REFUSED: $target -- English source $source is uncommitted: HEAD:$rel is absent or differs (#617); commit it first"
       fi
       REFUSED=$((REFUSED + 1))
       continue
