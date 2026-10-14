@@ -111,17 +111,20 @@ for locale in "${LOCALES[@]}"; do
 
     # Post-scaffold guard (#475): the scaffold is a byte copy of committed English, so every
     # frozen fence must match an English revision; a fence the awk above spliced into fails
-    # here. ANY non-zero exit refuses (1 = a fence diverges, 2 = the check could not measure).
-    # Scoped to this target's locale and id: a locale-wide run would also report the
-    # pre-existing #477 backlog, refusing a correct scaffold for another file's divergence.
-    # The rejected target is removed, so a re-run does not SKIP it as existing.
+    # here. ANY non-zero exit refuses: 2 is a scope refusal, and 1 is a finding, a shallow-clone
+    # refusal or an uncaught crash, so the checker's printed output says which, never the code
+    # alone (translate-content.sh, at its guard, says more, including why `--id` matching across
+    # trees can only refuse falsely). Scoped to this target's locale and id: a locale-wide run
+    # would also report the pre-existing #477 backlog, refusing a correct scaffold for another
+    # file's divergence. The rejected target is removed, and so is its leaf directory if this
+    # run created it, so a re-run does not SKIP it as existing.
     parity_rc=0
     parity_out=$(node "$ROOT/scripts/check-i18n-fence-parity.js" --root "$ROOT" --locale "$locale" --id "$skill" 2>&1) || parity_rc=$?
     if [[ $parity_rc -ne 0 ]]; then
       echo "$parity_out"
       rm -f -- "$target"
       if [[ $target_dir_created -eq 1 ]]; then rmdir -- "$target_dir" 2>/dev/null || true; fi
-      echo "REFUSED: $target failed the fence-parity check (exit $parity_rc: 1 = a fence diverges from English, 2 = the check could not run); removed it"
+      echo "REFUSED: $target failed the fence-parity check (exit $parity_rc; 2 = the check refused its scope before comparing anything, any other code: read the check's own output above); removed it"
       REFUSED=$((REFUSED + 1))
       continue
     fi

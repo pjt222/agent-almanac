@@ -294,12 +294,13 @@ test('bulk-scaffold-caveman.sh refuses and removes a target the fence-parity che
   assert.notEqual(r.status, 0, `a run whose scaffolds fail the parity check must not exit 0; output was:\n${r.out}`);
   for (const tier of TIERS) {
     const rel = `i18n/${tier}/skills/demo/SKILL.md`;
-    // The checker's own finding, so the refusal is for the corruption (exit 1), not for a check
-    // that could not run (exit 2) — both refuse, and only one of them is this test's subject.
+    // The checker's own FAIL line, so the refusal is for the corruption. The exit code cannot
+    // say that by itself: 2 is a scope refusal, and 1 is a finding, a shallow-clone refusal or
+    // an uncaught crash. All of them refuse; only the finding is this test's subject.
     assert.match(r.out, new RegExp(`FAIL ${escapeRe(rel)}:\\d+ \\[yaml\\]`), `the check reports ${rel}'s yaml fence`);
     assert.match(r.out, new RegExp(`REFUSED[^\\n]*${escapeRe(rel)}[^\\n]*exit 1`), `the refusal names ${rel}`);
     assert.equal(existsSync(join(dir, rel)), false, `${rel} is removed, so a re-run does not SKIP it as existing`);
-    assert.equal(existsSync(join(dir, dirname(rel))), false, `and the directory this run created for ${rel}`);
+    assert.equal(existsSync(join(dir, dirname(rel))), false, `and the leaf directory this run created for ${rel}`);
   }
 });
 

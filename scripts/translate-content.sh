@@ -96,7 +96,9 @@ if ! git -C "$ROOT" cat-file -e "HEAD:./$SOURCE_REL" 2>/dev/null || ! git -C "$R
   exit 1
 fi
 
-# Create target directory, remembering whether this run made it so a refusal can take it back
+# Create the target directory, remembering whether this run made it, so a refusal can remove
+# it. Only that leaf directory: parents `mkdir -p` makes for a new locale stay behind, empty and
+# untracked.
 TARGET_DIR_CREATED=0
 [ -d "$TARGET_DIR" ] || TARGET_DIR_CREATED=1
 mkdir -p "$TARGET_DIR"
@@ -150,16 +152,28 @@ fi
 # Post-scaffold guard (#475). A scaffold is a byte copy of committed English, so every frozen
 # fence in it must match an English revision; a scaffolder that splices anything into a fence
 # -- as the unscoped `/^name:/` rule in bulk-scaffold-caveman.sh once did, 64 times -- fails
-# here instead of reaching a commit. ANY non-zero exit refuses: 1 is a violation, 2 is "could
-# not measure", and a guard that passed on 2 would pass on a check that ran nothing. The target
-# this run created is removed on refusal, so a re-run does not SKIP it as "already exists".
+# here instead of reaching a commit.
+#
+# ANY non-zero exit refuses. 2 is a scope refusal, made before anything is compared; 1 is a
+# finding, a shallow-clone refusal (assertNotShallow) or an uncaught crash, so it is never read
+# as "a fence diverged" -- the checker's own output, printed above the REFUSED line, says which.
+# A guard that passed on 2 would pass on a check that ran nothing. A consequence: every scaffold
+# refuses in a shallow clone (run `git fetch --unshallow` first).
+#
+# `--id` is matched across content trees: the checker has no tree flag, and one id can name a
+# skill and an agent, a skill and a guide, or a team and a guide. That can only refuse falsely
+# (another tree's mirror diverging), never pass falsely, because this target is always among the
+# files compared.
+#
+# On refusal the target is removed, and so is the leaf directory if this run created it, so a
+# re-run does not SKIP the target as "already exists".
 PARITY_RC=0
 PARITY_OUT=$(node "$ROOT/scripts/check-i18n-fence-parity.js" --root "$ROOT" --locale "$LOCALE" --id "$ID" 2>&1) || PARITY_RC=$?
 if [ "$PARITY_RC" -ne 0 ]; then
   echo "$PARITY_OUT"
   rm -f -- "$TARGET_FILE"
   if [ "$TARGET_DIR_CREATED" -eq 1 ]; then rmdir -- "$TARGET_DIR" 2>/dev/null || true; fi
-  echo "REFUSED: $TARGET_FILE failed the fence-parity check (exit $PARITY_RC: 1 = a fence diverges from English, 2 = the check could not run); removed it."
+  echo "REFUSED: $TARGET_FILE failed the fence-parity check (exit $PARITY_RC; 2 = the check refused its scope before comparing anything, any other code: read the check's own output above); removed it."
   echo "  The check's own output is above; it ran: node scripts/check-i18n-fence-parity.js --locale $LOCALE --id $ID"
   exit 1
 fi
