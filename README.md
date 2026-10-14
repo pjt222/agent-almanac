@@ -92,10 +92,31 @@ Auto-discovers all 373 skills and 76 agents. To use a team, read its definition 
 install appears to succeed and the CLI then cannot start — check with `node --version` first.
 
 ```bash
-npm install -g agent-almanac
-agent-almanac detect              # show frameworks in cwd
-agent-almanac install commit-changes
+npm install -g agent-almanac            # the CLI, with every skill, agent, team and guide in its package
+agent-almanac detect                    # frameworks found in the current directory
+agent-almanac list                      # the catalogue; outside a checkout, the one shipped in the package
+agent-almanac install commit-changes    # refused by default from the npm package (see below)
 ```
+
+Outside a checkout, `list`, `search` and `audit` read the content shipped in the CLI's own
+package. `install` (like `gather` and `sync`) refuses to install from it by default. It installs
+by linking your frameworks' skill folders to the content, and npm says nothing about links it did
+not make: `npm uninstall` leaves links into the package dangling, and `npm update` can break them
+or silently change the content under them. The refusal names the two ways forward:
+
+- **From a clone (recommended).** The links then point at a directory you control. Pass `--source`
+  on every install from that project, not only the first: root detection does not yet follow the
+  links `install` makes, so without the flag the CLI finds the npm package again and refuses.
+  ```bash
+  git clone https://github.com/pjt222/agent-almanac.git ~/agent-almanac
+  agent-almanac install commit-changes --source ~/agent-almanac
+  ```
+- **Into the npm package anyway.** It warns. `agent-almanac audit` reports any link that broke and
+  exits 3, for example after `npm uninstall`; it does not report that an `npm update` changed the
+  content under a link.
+  ```bash
+  agent-almanac install commit-changes --from-package link
+  ```
 
 Reaches 12+ frameworks: Claude Code, Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw. See [cli/README.md](cli/README.md).
 
