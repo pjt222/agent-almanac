@@ -65,14 +65,35 @@ if [ ! -f "$SOURCE_FILE" ]; then
   exit 1
 fi
 
-# Create target directory
-mkdir -p "$TARGET_DIR"
-
-# Check if target already exists
+# Check if target already exists. Before the dirty-source check below, because a SKIP writes
+# nothing and so claims nothing.
 if [ -f "$TARGET_FILE" ]; then
   echo "SKIP: $TARGET_FILE already exists"
   exit 0
 fi
+
+# Refuse an English source HEAD does not carry (#617). The copy below takes the WORKING TREE's
+# bytes while both commit fields are stamped with HEAD, so from a source with uncommitted edits
+# -- or an untracked one -- `source_commit` and `fence_basis_commit` would be false at birth.
+# Checked before anything is created, so a refusal writes nothing at all. A git that cannot
+# answer is a refusal too, never a "clean".
+SOURCE_STATUS_RC=0
+SOURCE_STATUS=$(git -C "$ROOT" status --porcelain -- "$SOURCE_FILE") || SOURCE_STATUS_RC=$?
+if [ "$SOURCE_STATUS_RC" -ne 0 ]; then
+  echo "ERROR: git could not report whether $SOURCE_FILE is committed (exit $SOURCE_STATUS_RC); refusing to scaffold"
+  exit 1
+fi
+if [ -n "$SOURCE_STATUS" ]; then
+  echo "REFUSED: $SOURCE_FILE has uncommitted changes (git status --porcelain: $SOURCE_STATUS)"
+  echo "  A scaffold stamps source_commit and fence_basis_commit with HEAD ($SOURCE_COMMIT), which does not"
+  echo "  carry these bytes (#617). Commit the English source first, then scaffold."
+  exit 1
+fi
+
+# Create target directory, remembering whether this run made it so a refusal can take it back
+TARGET_DIR_CREATED=0
+[ -d "$TARGET_DIR" ] || TARGET_DIR_CREATED=1
+mkdir -p "$TARGET_DIR"
 
 # Copy source to target
 cp "$SOURCE_FILE" "$TARGET_FILE"
@@ -118,6 +139,23 @@ source_commit: $SOURCE_COMMIT\\
 fence_basis_commit: $SOURCE_COMMIT\\
 translator: \"(untranslated stub)\"\\
 translation_date: \"$TODAY\"" "$TARGET_FILE"
+fi
+
+# Post-scaffold guard (#475). A scaffold is a byte copy of committed English, so every frozen
+# fence in it must match an English revision; a scaffolder that splices anything into a fence
+# -- as the unscoped `/^name:/` rule in bulk-scaffold-caveman.sh once did, 64 times -- fails
+# here instead of reaching a commit. ANY non-zero exit refuses: 1 is a violation, 2 is "could
+# not measure", and a guard that passed on 2 would pass on a check that ran nothing. The target
+# this run created is removed on refusal, so a re-run does not SKIP it as "already exists".
+PARITY_RC=0
+PARITY_OUT=$(node "$ROOT/scripts/check-i18n-fence-parity.js" --root "$ROOT" --locale "$LOCALE" --id "$ID" 2>&1) || PARITY_RC=$?
+if [ "$PARITY_RC" -ne 0 ]; then
+  echo "$PARITY_OUT"
+  rm -f -- "$TARGET_FILE"
+  if [ "$TARGET_DIR_CREATED" -eq 1 ]; then rmdir -- "$TARGET_DIR" 2>/dev/null || true; fi
+  echo "REFUSED: $TARGET_FILE failed the fence-parity check (exit $PARITY_RC: 1 = a fence diverges from English, 2 = the check could not run); removed it."
+  echo "  The check's own output is above; it ran: node scripts/check-i18n-fence-parity.js --locale $LOCALE --id $ID"
+  exit 1
 fi
 
 echo "CREATED: $TARGET_FILE (source_commit: $SOURCE_COMMIT, fence_basis_commit: $SOURCE_COMMIT)"
