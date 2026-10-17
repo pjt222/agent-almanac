@@ -8,6 +8,7 @@ description: >
 locale: zh-CN
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -44,13 +45,13 @@ metadata:
 ### 第 1 步：定义比较框架
 
 ```r
-# 定义不同统计量的容差水平
+# Define tolerance levels for different statistics
 tolerances <- list(
-  counts = 0,           # 整数精确匹配
-  proportions = 1e-4,   # 比例精度 0.01%
-  means = 1e-6,         # 均值的数值精度
-  p_values = 1e-4,      # p 值保留 4 位小数
-  confidence_limits = 1e-3  # 置信区间保留 3 位小数
+  counts = 0,           # Exact match for integers
+  proportions = 1e-4,   # 0.01% for proportions
+  means = 1e-6,         # Numeric precision for means
+  p_values = 1e-4,      # 4 decimal places for p-values
+  confidence_limits = 1e-3  # 3 decimal places for CIs
 )
 ```
 
@@ -61,12 +62,12 @@ tolerances <- list(
 ### 第 2 步：创建比较函数
 
 ```r
-#' 使用基于容差的匹配比较两组结果
+#' Compare two result sets with tolerance-based matching
 #'
-#' @param primary 主要分析的结果
-#' @param reference 独立计算的结果
-#' @param tolerances 容差值的命名列表
-#' @return 包含比较结果的数据框
+#' @param primary Results from the primary analysis
+#' @param reference Results from the independent calculation
+#' @param tolerances Named list of tolerance values
+#' @return Data frame with comparison results
 compare_results <- function(primary, reference, tolerances) {
   stopifnot(names(primary) == names(reference))
 
@@ -79,9 +80,9 @@ compare_results <- function(primary, reference, tolerances) {
 
   comparison$absolute_diff <- abs(comparison$primary_value - comparison$reference_value)
   comparison$tolerance <- sapply(comparison$statistic, function(s) {
-    # 匹配到容差类别或使用默认值
+    # Match to tolerance category or use default
     tol <- tolerances[[s]]
-    if (is.null(tol)) tolerances$means  # 默认容差
+    if (is.null(tol)) tolerances$means  # default tolerance
     else tol
   })
 
@@ -100,7 +101,7 @@ compare_results <- function(primary, reference, tolerances) {
 编写通过不同代码路径得到相同结果的独立实现：
 
 ```r
-# 主要分析（位于 R/primary_analysis.R）
+# PRIMARY ANALYSIS (in R/primary_analysis.R)
 primary_analysis <- function(data) {
   model <- lm(endpoint ~ treatment + baseline + sex, data = data)
   coefs <- summary(model)$coefficients
@@ -114,10 +115,10 @@ primary_analysis <- function(data) {
   )
 }
 
-# 独立验证（位于 validation/independent_analysis.R）
-# 由不同分析人员编写或使用不同方法
+# INDEPENDENT VERIFICATION (in validation/independent_analysis.R)
+# Written by a different analyst or using different methodology
 independent_analysis <- function(data) {
-  # 使用矩阵代数代替 lm()
+  # Using matrix algebra instead of lm()
   X <- model.matrix(~ treatment + baseline + sex, data = data)
   y <- data$endpoint
 
@@ -147,19 +148,19 @@ independent_analysis <- function(data) {
 ### 第 4 步：运行比较
 
 ```r
-# 执行两种分析
+# Execute both analyses
 primary_results <- primary_analysis(study_data)
 independent_results <- independent_analysis(study_data)
 
-# 比较
+# Compare
 comparison <- compare_results(primary_results, independent_results, tolerances)
 
-# 报告
-cat("验证比较报告\n")
-cat("============\n")
-cat(sprintf("日期：%s\n", Sys.time()))
-cat(sprintf("总体结论：%s\n\n",
-  ifelse(all(comparison$pass), "全部通过", "发现差异")))
+# Report
+cat("Validation Comparison Report\n")
+cat("============================\n")
+cat(sprintf("Date: %s\n", Sys.time()))
+cat(sprintf("Overall: %s\n\n",
+  ifelse(all(comparison$pass), "ALL PASS", "DISCREPANCIES FOUND")))
 
 print(comparison)
 ```
@@ -173,9 +174,9 @@ print(comparison)
 将 R 输出与 SAS 进行比较时：
 
 ```r
-# 加载 SAS 结果（以 CSV 导出或来自 .sas7bdat）
+# Load SAS results (exported as CSV or from .sas7bdat)
 sas_results <- list(
-  treatment_estimate = 1.2345,  # 来自 SAS PROC GLM 输出
+  treatment_estimate = 1.2345,  # From SAS PROC GLM output
   treatment_se = 0.3456,
   treatment_p = 0.0004,
   n_subjects = 200,
@@ -184,10 +185,10 @@ sas_results <- list(
 
 comparison <- compare_results(primary_results, sas_results, tolerances)
 
-# R 与 SAS 已知的差异来源：
-# - 默认对比编码（R：处理对比，SAS：GLM 参数化）
-# - 中间计算的舍入
-# - 缺失值处理（na.rm 与列表删除）
+# Known sources of difference between R and SAS:
+# - Default contrasts (R: treatment, SAS: GLM parameterization)
+# - Rounding of intermediate calculations
+# - Handling of missing values (na.rm vs listwise deletion)
 ```
 
 **预期结果：** R 与 SAS 的比较结果在容差范围内，任何已知的系统性差异（对比编码、舍入）均已记录并说明。
@@ -202,22 +203,22 @@ comparison <- compare_results(primary_results, sas_results, tolerances)
 # validation/output_comparison_report.R
 sink("validation/output_comparison_report.txt")
 
-cat("输出验证报告\n")
-cat("============\n")
-cat(sprintf("项目：%s\n", project_name))
-cat(sprintf("日期：%s\n", format(Sys.time())))
-cat(sprintf("主要分析人员：%s\n", primary_analyst))
-cat(sprintf("独立分析人员：%s\n", independent_analyst))
-cat(sprintf("R 版本：%s\n\n", R.version.string))
+cat("OUTPUT VALIDATION REPORT\n")
+cat("========================\n")
+cat(sprintf("Project: %s\n", project_name))
+cat(sprintf("Date: %s\n", format(Sys.time())))
+cat(sprintf("Primary Analyst: %s\n", primary_analyst))
+cat(sprintf("Independent Analyst: %s\n", independent_analyst))
+cat(sprintf("R Version: %s\n\n", R.version.string))
 
-cat("比较结果\n")
-cat("--------\n")
+cat("COMPARISON RESULTS\n")
+cat("------------------\n")
 print(comparison, row.names = FALSE)
 
-cat(sprintf("\n总体结论：%s\n",
-  ifelse(all(comparison$pass), "已验证", "发现差异——需要调查")))
+cat(sprintf("\nOVERALL VERDICT: %s\n",
+  ifelse(all(comparison$pass), "VALIDATED", "DISCREPANCIES - INVESTIGATION REQUIRED")))
 
-cat("\n会话信息\n")
+cat("\nSESSION INFO\n")
 print(sessionInfo())
 
 sink()

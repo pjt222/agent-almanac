@@ -9,6 +9,7 @@ description: >
 locale: zh-CN
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -132,14 +133,14 @@ gxp-project/
 ### 第 3 步：使用 renv 锁定依赖项
 
 ```r
-# 使用精确版本初始化 renv
+# Initialize renv with exact versions
 renv::init()
 
-# 安装特定已验证版本
+# Install specific validated versions
 renv::install("dplyr@1.1.4")
 renv::install("ggplot2@3.5.0")
 
-# 快照
+# Snapshot
 renv::snapshot()
 ```
 
@@ -156,7 +157,7 @@ git init
 git add .
 git commit -m "Initial validated project structure"
 
-# 使用签名提交以确保可追溯性
+# Use signed commits for traceability
 git config user.signingkey YOUR_GPG_KEY
 git config commit.gpgsign true
 ```
@@ -204,12 +205,12 @@ git config commit.gpgsign true
 ```r
 # tests/testthat/test-analysis.R
 test_that("primary analysis produces validated results", {
-  # 已知输入 -> 已知输出（双编程验证）
+  # Known input -> known output (double programming validation)
   test_data <- read.csv(test_path("fixtures", "validation_dataset.csv"))
 
   result <- primary_analysis(test_data)
 
-  # 与独立计算的预期值进行比较
+  # Compare against independently calculated expected values
   expect_equal(result$estimate, 2.345, tolerance = 1e-3)
   expect_equal(result$p_value, 0.012, tolerance = 1e-3)
   expect_equal(result$ci_lower, 1.234, tolerance = 1e-3)

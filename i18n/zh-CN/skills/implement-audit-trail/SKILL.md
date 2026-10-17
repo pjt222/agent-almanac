@@ -8,6 +8,7 @@ description: >
 locale: zh-CN
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -46,11 +47,11 @@ metadata:
 创建 `R/audit_log.R`：
 
 ```r
-#' 为会话初始化审计日志
+#' Initialize audit log for a session
 #'
-#' @param log_dir 审计日志文件目录
-#' @param analyst 分析人员姓名
-#' @return 已创建日志文件的路径
+#' @param log_dir Directory for audit log files
+#' @param analyst Name of the analyst
+#' @return Path to the created log file
 init_audit_log <- function(log_dir = "audit_logs", analyst = Sys.info()["user"]) {
   dir.create(log_dir, showWarnings = FALSE, recursive = TRUE)
 
@@ -76,14 +77,14 @@ init_audit_log <- function(log_dir = "audit_logs", analyst = Sys.info()["user"])
   log_file
 }
 
-#' 记录审计事件
+#' Log an audit event
 #'
-#' @param event 事件类型（DATA_IMPORT、TRANSFORM、ANALYSIS、EXPORT 等）
-#' @param description 人可读的描述
-#' @param details 附加详情的命名列表
+#' @param event Event type (DATA_IMPORT, TRANSFORM, ANALYSIS, EXPORT, etc.)
+#' @param description Human-readable description
+#' @param details Named list of additional details
 log_audit_event <- function(event, description, details = list()) {
   log_file <- getOption("audit_log_file")
-  if (is.null(log_file)) stop("审计日志未初始化，请先调用 init_audit_log()。")
+  if (is.null(log_file)) stop("Audit log not initialized. Call init_audit_log() first.")
 
   entry <- list(
     timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z"),
@@ -104,15 +105,15 @@ log_audit_event <- function(event, description, details = list()) {
 ### 第 2 步：添加数据完整性检查
 
 ```r
-#' 计算并记录数据哈希值以进行完整性验证
+#' Compute and log data hash for integrity verification
 #'
-#' @param data 待哈希的数据框
-#' @param label 数据集的描述性标签
-#' @return SHA-256 哈希字符串
+#' @param data Data frame to hash
+#' @param label Descriptive label for the dataset
+#' @return SHA-256 hash string
 hash_data <- function(data, label = "dataset") {
   hash_value <- digest::digest(data, algo = "sha256")
 
-  log_audit_event("DATA_HASH", sprintf("已为 %s 计算哈希值", label), list(
+  log_audit_event("DATA_HASH", sprintf("Hash computed for %s", label), list(
     hash_algorithm = "sha256",
     hash_value = hash_value,
     nrow = nrow(data),
@@ -123,20 +124,20 @@ hash_data <- function(data, label = "dataset") {
   hash_value
 }
 
-#' 根据已记录哈希值验证数据完整性
+#' Verify data integrity against a recorded hash
 #'
-#' @param data 待验证的数据框
-#' @param expected_hash 之前记录的哈希值
-#' @return 表示数据是否匹配的逻辑值
+#' @param data Data frame to verify
+#' @param expected_hash Previously recorded hash
+#' @return Logical indicating whether data matches
 verify_data_integrity <- function(data, expected_hash) {
   current_hash <- digest::digest(data, algo = "sha256")
   match <- identical(current_hash, expected_hash)
 
   log_audit_event("DATA_VERIFY",
-    sprintf("数据完整性检查：%s", ifelse(match, "通过", "失败")),
+    sprintf("Data integrity check: %s", ifelse(match, "PASS", "FAIL")),
     list(expected = expected_hash, actual = current_hash))
 
-  if (!match) warning("数据完整性检查失败")
+  if (!match) warning("Data integrity check FAILED")
   match
 }
 ```
@@ -148,12 +149,12 @@ verify_data_integrity <- function(data, expected_hash) {
 ### 第 3 步：追踪数据转换
 
 ```r
-#' 使用审计日志包装数据转换操作
+#' Wrap a data transformation with audit logging
 #'
-#' @param data 输入数据框
-#' @param transform_fn 待应用的函数
-#' @param description 转换描述
-#' @return 转换后的数据框
+#' @param data Input data frame
+#' @param transform_fn Function to apply
+#' @param description Description of the transformation
+#' @return Transformed data frame
 audited_transform <- function(data, transform_fn, description) {
   input_hash <- digest::digest(data, algo = "sha256")
   input_dim <- dim(data)
@@ -183,11 +184,11 @@ audited_transform <- function(data, transform_fn, description) {
 ### 第 4 步：记录会话环境
 
 ```r
-#' 记录完整的会话信息以确保可重现性
+#' Log complete session information for reproducibility
 log_session_info <- function() {
   si <- sessionInfo()
 
-  log_audit_event("SESSION_INFO", "已记录完整会话环境", list(
+  log_audit_event("SESSION_INFO", "Complete session environment recorded", list(
     r_version = si$R.version$version.string,
     platform = si$platform,
     locale = Sys.getlocale(),
@@ -211,21 +212,21 @@ log_session_info <- function() {
 library(jsonlite)
 library(digest)
 
-# 启动审计追踪
+# Start audit trail
 log_file <- init_audit_log(analyst = "Philipp Thoss")
 
-# 带审计记录的数据导入
+# Import data with audit
 raw_data <- read.csv("data/raw/study_data.csv")
 raw_hash <- hash_data(raw_data, "raw study data")
 
-# 带审计记录的数据转换
+# Transform with audit
 clean_data <- audited_transform(raw_data, function(d) {
   d |>
     dplyr::filter(!is.na(primary_endpoint)) |>
     dplyr::mutate(bmi = weight / (height/100)^2)
 }, "Remove missing endpoints, calculate BMI")
 
-# 运行分析
+# Run analysis
 log_audit_event("ANALYSIS_START", "Primary efficacy analysis")
 model <- lm(primary_endpoint ~ treatment + age + sex, data = clean_data)
 log_audit_event("ANALYSIS_COMPLETE", "Primary efficacy analysis", list(
@@ -234,7 +235,7 @@ log_audit_event("ANALYSIS_COMPLETE", "Primary efficacy analysis", list(
   n_observations = nobs(model)
 ))
 
-# 记录会话信息
+# Log session
 log_session_info()
 ```
 
@@ -247,10 +248,10 @@ log_session_info()
 用 git 补充应用层审计追踪：
 
 ```bash
-# 使用签名提交实现不可否认性
+# Use signed commits for non-repudiation
 git config commit.gpgsign true
 
-# 引用变更控制的描述性提交消息
+# Descriptive commit messages referencing change control
 git commit -m "CHG-042: Add BMI calculation to data processing
 
 Per change request CHG-042, approved by [Name] on [Date].

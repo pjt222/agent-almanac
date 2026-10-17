@@ -3,6 +3,7 @@ name: setup-gxp-r-project
 locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
+fence_basis_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-05-03"
 description: >
@@ -134,11 +135,14 @@ All tests must pass with documented evidence.
 ### 三：用 renv 鎖依
 
 ```r
+# Initialize renv with exact versions
 renv::init()
 
+# Install specific validated versions
 renv::install("dplyr@1.1.4")
 renv::install("ggplot2@3.5.0")
 
+# Snapshot
 renv::snapshot()
 ```
 
@@ -155,6 +159,7 @@ git init
 git add .
 git commit -m "Initial validated project structure"
 
+# Use signed commits for traceability
 git config user.signingkey YOUR_GPG_KEY
 git config commit.gpgsign true
 ```
@@ -200,11 +205,14 @@ Verify that R and required packages are correctly installed.
 ### 六：書自動 OQ/PQ 測
 
 ```r
+# tests/testthat/test-analysis.R
 test_that("primary analysis produces validated results", {
+  # Known input -> known output (double programming validation)
   test_data <- read.csv(test_path("fixtures", "validation_dataset.csv"))
 
   result <- primary_analysis(test_data)
 
+  # Compare against independently calculated expected values
   expect_equal(result$estimate, 2.345, tolerance = 1e-3)
   expect_equal(result$p_value, 0.012, tolerance = 1e-3)
   expect_equal(result$ci_lower, 1.234, tolerance = 1e-3)
