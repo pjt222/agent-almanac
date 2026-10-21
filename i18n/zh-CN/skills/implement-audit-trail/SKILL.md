@@ -142,7 +142,7 @@ verify_data_integrity <- function(data, expected_hash) {
 }
 ```
 
-**预期结果：** `hash_data()` 返回 SHA-256 哈希字符串并记录 `DATA_HASH` 事件。`verify_data_integrity()` 将当前数据与已存储的哈希值进行比较，并记录含通过或失败状态的 `DATA_VERIFY` 事件。
+**预期结果：** `hash_data()` 返回 SHA-256 哈希字符串并记录 `DATA_HASH` 事件。`verify_data_integrity()` 将当前数据与已存储的哈希值进行比较，并记录含 PASS 或 FAIL 状态的 `DATA_VERIFY` 事件。
 
 **失败处理：** 若找不到 `digest::digest()`，安装 `digest` 软件包。若相同数据的哈希值不一致，检查哈希和验证之间的列顺序及数据类型是否一致。
 
