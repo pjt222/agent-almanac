@@ -113,14 +113,27 @@ or silently change the content under them. The refusal names the two ways forwar
   ```
 - **Into the npm package anyway.** It warns. `agent-almanac audit` reports any link that broke and
   exits 3; it does not report that an `npm update` changed the content under a link.
-  `npm uninstall -g` removes the `agent-almanac` command along with the package and leaves the
-  links dangling, so only another install of the CLI can audit them. Remove the links before
-  `npm uninstall -g`: `agent-almanac uninstall <names>` for what `install` or `sync` linked, and
-  `agent-almanac scatter <team>` for what `gather` linked, with `-g` or `--scope` if the install
-  used it. `uninstall` takes no `--from-package`.
   ```bash
   agent-almanac install commit-changes --from-package link
   ```
+  `npm uninstall -g` removes the `agent-almanac` command along with the package and leaves the
+  links dangling, so only another install of the CLI can audit them. Remove the links before
+  `npm uninstall -g`: `agent-almanac uninstall <names>` for what `install` or `sync` linked, and
+  `agent-almanac scatter <team>` for what `gather` linked.
+  - **The same scope and frameworks.** Pass the same `-g` or `--scope` and the same `-f` the
+    install used. Without `-f`, frameworks are detected in the current directory, under `-g` too,
+    so run `uninstall` or `scatter` where `agent-almanac detect` lists the frameworks the install
+    did. `uninstall` takes no `--from-package`.
+  - **Every name.** `<names>` is each skill and agent id on the install's `+` lines: what
+    `--domain`, `--with-deps`, `-a`, `-t` or a manifest's domain or `*` entry expanded to, not the
+    argument you gave the flag. `uninstall` expands nothing and exits 0 whether or not it removed
+    anything, so check afterwards that `agent-almanac list --installed`, with the same scope and
+    frameworks, prints only its heading, `Installed content:`. It lists Claude Code's agents link
+    as `agents`, which `uninstall` skips; any agent id removes that link.
+  - **Before an install from a clone.** A later `install` or `gather` from a clone keeps an
+    existing link into the package (`install` needs `--force` to replace it), so scatter or
+    uninstall it first.
+  - **A link that already dangles** is not removed by `uninstall`; delete it by hand.
 
 Reaches 12+ frameworks: Claude Code, Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw. See [cli/README.md](cli/README.md).
 
