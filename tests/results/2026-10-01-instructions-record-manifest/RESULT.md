@@ -200,7 +200,7 @@ The re-check ran in a `git clone --shared` of `6685d7b18`, with this folder copi
   - F8: `tools/wirecap.py` changed in `513be7731` (2026-10-09).
   - F9: the installed build is now 2.1.306, not 2.1.287.
   - F15 and F16, the Part B live arms, were not re-run. They start `claude -p` sessions and write to `~/.claude`, so a re-run would be a new measurement on 2.1.306, not a regeneration.
-- **Reviewed false positives:** `tools/check-redaction.sh` flags `FACTS.md:147,150` and `FACTS.spec:10,11` as `project-store-slug`. They are the generic `-tmp-tmp-*` glob of the public 2026-09-15 probe stores.
+- **Reviewed false positives:** `tools/check-redaction.sh` flags the F4 and F5 rows of `FACTS.md` and `FACTS.spec` (two lines in each) as `project-store-slug`. They are the generic `-tmp-tmp-*` glob of the public 2026-09-15 probe stores.
 
 **Reworded before the first commit (leak audit, 2026-10-21):**
 - The absent-no-create limit and the first side finding no longer call a project, or the evidence about it, private.
