@@ -1,7 +1,8 @@
 # Replication steps — anthropics/claude-code#82056: is an `instructions` record a manifest?
 
-This document has two parts. Part A re-derives every number in `RESULT.md` and in the draft. It is
-read-only and takes a few minutes. Part B is the wire experiment that draft §4 reports. It
+This document has two parts. Part A re-derives every number in `RESULT.md` and in the draft except
+those of Part B's live arms (F15, F16). It writes only temporary directories and takes a few
+minutes. Part B is the wire experiment that draft §3 reports. It
 **was run on 2026-10-02** (scripts in `partb/`, results under "Part B results" at the end). Each step marked **GATE** must pass before the next one runs. Every prediction
 is declared before any arm runs, and every Part B expectation that rests on extrapolation is
 tagged *[extrapolated]*.
@@ -21,11 +22,21 @@ python3 $D/instructions-census.py --selftest        # must print PASS, exit 0
 python3 $D/census-mutants.py                         # must print "37 of 37 killed", exit 0
 python3 $D/instructions-census.py --exclude-session <this-session-id> \
     --until 2026-10-01T20:30:00Z --gap-detail 40 --label-stores
-bash tools/fact-sheet.sh $D/FACTS.spec $D/FACTS.md   # every cited figure, with its command
+OUT_DIR=$(mktemp -d)   # FACTS.md is the 2026-10-02 record: never write to it
+rg -v '^F1[56] ' $D/FACTS.spec > "$OUT_DIR/partA.spec"   # F15/F16 are Part B's live arms (claude -p, writes ~/.claude)
+bash tools/fact-sheet.sh "$OUT_DIR/partA.spec" "$OUT_DIR/FACTS.regen.md"   # compare with FACTS.md; do not copy over it
 ```
 
+The last three lines regenerate every other cited figure, with its command, into a temporary
+directory. The filter keeps F15 and F16 out of Part A: they start `claude -p` sessions and create
+and remove stores under `~/.claude`, and `FACTS.md` holds their 2026-10-02 output. The only
+`claude` the filtered spec starts is F9's `claude --version`. Run F15 and F16 only as Part B, and
+not while anything else can create a directory under `~/.claude/projects` (a session starting in a
+new directory, a worktree, a `claude -p` probe); "Part B results" says why.
+
 The census reads `~/.claude/projects/*/*.jsonl` and `*/*/subagents/**/*.jsonl`, and stats the user
-`CLAUDE.md` and the index files. It writes nothing except the selftest's temporary fixture.
+`CLAUDE.md` and the index files. It writes nothing except the selftest's temporary fixture;
+`census-mutants.py` and the fact sheet write only temporary directories.
 
 - `--until` pins the cutoff for transcript contents. Gap verdicts that fall back to disk state
   read the disk as it is at run time.
@@ -77,7 +88,7 @@ birth time.
 
 Do not run without `--label-stores` when the output may be published. Neither
 `tools/check-redaction.sh` nor `scripts/lib/store-slug.js` catches the project names in unlabelled
-output (see RESULT.md, side findings).
+output (see RESULT.md, side findings). Filed as #991.
 
 ## Part B — the wire experiment (declared before the run; run 2026-10-02)
 
@@ -205,8 +216,23 @@ and build 2.1.287, remain unconfirmed until arm 1.
 
 Scripts: `partb/stage1.py` (arm 0 and arm 1 gates), `partb/stage2.py` (arms 1–4d in one session),
 `partb/stage3.py` (arm 5 bursts). Run them from that directory with `PARTB_ROOT` pointing outside
-any repository. Arms go under it, request bodies stay in memory, and every store, arm directory and
-`session-env` entry the arms create is removed. FACTS F15 and F16 carry the output.
+any repository. Arms go under it and request bodies stay in memory. Cleanup removes the arm
+directory, the store the directory diff adopted, and the arms' empty `session-env` entries. FACTS
+F15 and F16 carry the output; both runs printed `cleanup: complete`.
+
+**Do not run them while anything else can create a directory under `~/.claude/projects`** (a
+session starting in a new directory, a worktree, a `claude -p` probe). The store is adopted as the
+single new directory under `~/.claude/projects`, and nothing checks that the bootstrap created it.
+If the bootstrap creates none while something else creates exactly one, that store gets a canary
+`memory/MEMORY.md` and is deleted by cleanup. GUARD 3, placed after adoption as in the reprex,
+would not prevent this.
+
+The docstrings of `stage1.py` and `stage2.py` say "Cleanup is fail-closed". That overclaims, and
+the scripts are kept as they ran. A non-empty `session-env` entry is kept and reported as
+`cleanup: INCOMPLETE`, but the script still exits 0. When more than one new store appears, the
+script refuses before adopting any, prints `cleanup: complete`, and leaves the arm's own store on
+disk. Nor do the scripts stop on a failed GATE: `stage2.py` records GATE 2's outcome and goes on
+to score arm 4b either way.
 
 | gate | result |
 |---|---|
@@ -232,11 +258,11 @@ any repository. Arms go under it, request bodies stay in memory, and every store
 Three earlier runs of `stage3.py` gave the same 12 of 12. They are not in FACTS, so only F16's
 run is citable.
 
-The scripts remove the arm directories, the stores the arms created, and the arms' `session-env`
-entries. They do not touch `~/.claude.json` or `~/.claude/tasks`. After the runs, both were checked
-by hand and held no arm entry; that check is not in FACTS.
+The scripts remove the arm directories, the store the directory diff adopted, and the arms' empty
+`session-env` entries. They do not touch `~/.claude.json` or `~/.claude/tasks`. After the runs,
+both were checked by hand and held no arm entry; that check is not in FACTS.
 
-**Deviations from the declared read-out, and why (five, an added arm, and one step not done):**
+**Deviations from the declared read-out, and why (five, an added arm, and two steps not done):**
 
 - **`Bn` selection.** The declared rule required the prompt in the request's *last* message.
   Hooks append their context as trailing `system`-role messages, so the first run selected nothing
@@ -253,6 +279,10 @@ by hand and held no arm entry; that check is not in FACTS.
 - **Added arm.** Arm 4d (edit the project file, then resume) was not declared. It was added to put a
   second mutable type on the wire.
 - **Not done.** The declared listing of active hooks and plugins was not recorded.
+- **Not done.** The Store guard (GUARD 3: the wire's `AutoMem` path is the discovered store) was
+  not implemented as a gate. `stage1.py` prints the comparison; `stage2.py` and `stage3.py` do not
+  compute it. In F15 the `IDX-A` canary reached the wire, and F16's transcripts were read from the
+  adopted store, so both runs used the arms' own store.
 - **Arm 5.** The bursts are simultaneous `-p` resumes and starts against a canned reply, scored on
   the index only. They do not reproduce tonydzi's automated queued resumes on 2.1.266, and 5a
   resumed after an index edit, which tonydzi's resumes did not.

@@ -8,7 +8,7 @@ On recent Claude Code builds, a transcript carries an `attachment.type == "instr
 that lists the instruction files the harness delivered: `files[] = {type, path, content}`, where
 `type` is one of `User`, `Project`, `Local` or `AutoMem`. On this machine records appear from the
 oldest surviving transcript onward (2.1.258). Other machines place the start at 2.1.260–2.1.263,
-or at a date, so the census checks the rail per transcript rather than assuming it.
+or at a date, so the census checks the rail per transcript rather than assuming it. *(As of 2026-10-02; on 2026-10-21 the oldest surviving record is on 2.1.278, see Addendum.)*
 
 Upstream, tonydzi read seven records that list `User` but not `AutoMem`, each between deliveries
 of the same index, as misses: "it existed throughout and simply was not delivered" (5858279003).
@@ -83,7 +83,7 @@ The 40 gaps break down as follows:
 
 - **36** are throwaway `/tmp` arms of `tests/results/2026-09-15-sessionstart-hook-shape/`, all main
   sessions on 2.1.272. That probe writes no index. All 28 leftover stores still hold the probe's
-  transcripts, and each has an empty `memory/`.
+  transcripts, and each has an empty `memory/`. *(As of 2026-10-02; all aged out by 2026-10-21, see Addendum.)*
 - **2** are records of one project. It has no `memory/MEMORY.md` on disk, and no surviving
   transcript contains a Write-tool create of one.
 - **2** were each followed by a Write-tool create of the index, 125 min and 47 min after the
@@ -147,8 +147,9 @@ The full table, the gates and five deviations from the declared read-out are in 
   files separately.
 - "absent-no-create" sees only Write-tool creates. Shell writes, `mv` and lost transcripts are
   invisible to it. The 2 absent-no-create records outside `/tmp` come from one project whose
-  index sits at its store root (not under `memory/`) and was written by a shell command, not the
-  Write tool.
+  index sits at its store root, not under `memory/`, where the census does not look. That, and
+  that a shell command wrote it, is the hand check `REPLICATION.md` Part A step 5 calls for; that
+  check is not in FACTS.
 - Inode birth time is a lower bound on when the current file was created, not the time the index
   first appeared. For that reason gap verdicts rest on transcript Write events first.
 
@@ -157,7 +158,7 @@ The full table, the gates and five deviations from the declared read-out are in 
 - One project's index sits at its store root, not under `memory/`, so no record
   delivers it.
 - 28 `-tmp-tmp-*` stores from 2026-09-15 remain under `~/.claude/projects/`. Each holds probe
-  transcripts and an empty `memory/`.
+  transcripts and an empty `memory/`. *(As of 2026-10-02; none remain on 2026-10-21, see Addendum.)*
 - `tools/check-redaction.sh` and the repository's private-slug detector (`findPrivateStoreSlugs`)
   flag neither a bare store slug nor a `cwd=` project path, which is the shape the unlabelled
   census output takes. This folder relies on `--label-stores` instead. Filed as #991, with a
@@ -179,20 +180,20 @@ The full table, the gates and five deviations from the declared read-out are in 
 
 ### Addendum 2026-10-21: integration re-check
 
-The session that wrote this folder ended on 2026-10-02 without committing it. The folder was committed on 2026-10-21. Three sentences above were reworded after a leak audit (listed at the end); nothing else changed. This addendum re-checks the folder at `6685d7b18`.
+The session that wrote this folder ended on 2026-10-02 without committing it. The folder was committed on 2026-10-21. Three sentences above were reworded after a leak audit; review round 1 then reworded one of them again and added three end-of-line pointers to this addendum (both listed at the end); nothing else above changed. This addendum re-checks the folder at `6685d7b18`.
 
-`FACTS.md` is **not** regenerated. It stays byte for byte the 2026-10-02T15:26Z sheet measured at `1e7ed10fe`, and it is the record for every figure above.
+`FACTS.md` is **not** regenerated. It stays byte for byte the 2026-10-02T15:26Z sheet measured at `1e7ed10fe`, and it is the record for every figure above. `1e7ed10fe` is the HEAD the sheet ran at; this folder was untracked there, and the committed scripts are byte-identical to that untracked copy (`cmp` against a backup taken before the first commit; every script's mtime there precedes 15:26:42Z).
 
 The re-check ran in a `git clone --shared` of `6685d7b18`, with this folder copied in.
 - **Still reproduces identically:**
   - F1: `--selftest` passes.
   - F10: `census-mutants.py` prints "37 of 37 killed; survivors: []".
   - F6, F11, F12 and F17.
-  - T1–T9: none of the quoted upstream comments has been edited.
+  - T1–T8: none of the quoted upstream comments has been edited; T9: DanceNitra's probe files are unchanged since a160b24a4.
 - **No longer reproduces on this machine:**
   - F2, F7, F13, F14 and F18 read transcripts that Claude Code has since deleted. `cleanupPeriodDays` is unset, so the 30-day default applies.
     - 362 of the census's 1,053 records survive: 30 in main sessions and 332 in subagents.
-    - The earliest survivor is from 2026-09-21T09:13Z. The rest age out by about 2026-10-31.
+    - The earliest survivor is from 2026-09-21T09:13Z, on 2.1.278. The rest age out by about 2026-10-31.
     - A control count of 1,084 records after the cutoff shows that the counter still sees the channel.
   - F3: the user `CLAUDE.md` was re-created on 2026-10-07, so its inode and birth time changed.
   - F4 and F5: the 28 `-tmp-tmp-*` stores have aged out; none remain.
@@ -204,3 +205,9 @@ The re-check ran in a `git clone --shared` of `6685d7b18`, with this folder copi
 **Reworded before the first commit (leak audit, 2026-10-21):**
 - The absent-no-create limit and the first side finding no longer call a project, or the evidence about it, private.
 - The redaction side finding now points to #991, which reproduces the gap with a synthetic input.
+
+**Changed in review round 1 (2026-10-21):**
+- The absent-no-create limit now attributes the store-root index and the shell write to the hand check `REPLICATION.md` Part A calls for, and says that check is not in FACTS. The leak-audit wording had stated both as plain fact.
+- End-of-line pointers to this addendum date three present-tense sentences it overtakes: the 2.1.258 floor in the objective, the leftover stores in the gap breakdown, and the stores side finding.
+- In this addendum: T9 is no longer called a quoted comment, and the 2.1.278 floor and the note on `1e7ed10fe` were added.
+- Outside this file: `REPLICATION.md` (Part A no longer writes `FACTS.md` or runs F15 and F16; "Part B results" now says how the store is adopted and when not to run the scripts, what cleanup removes, that the docstrings' "fail-closed" overclaims and no script stops on a failed GATE, and lists a second step not done), comment lines of `FACTS.spec` (no row changed, so `FACTS.md` still matches it), and the draft's header and footer.

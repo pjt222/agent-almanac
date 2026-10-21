@@ -15,14 +15,14 @@ Open before posting (updated 2026-10-21):
 - `FACTS.md` is NOT regenerated. Claude Code's 30-day transcript retention has deleted most of
   the transcripts it read, so it stays as the 2026-10-02 sheet (`RESULT.md`, Addendum 2026-10-21).
 - Fill the `[gist link]` with a link to this folder at the commit.
-- Re-anchor the reply. The manifest sub-thread went quiet on 2026-09-30, and the six comments
-  since then (up to 2026-10-20) are on recall and hooks. Open with one sentence that links
-  5870005304 and 5874997905.
+- Re-anchor the reply. The manifest sub-thread went quiet after 5922245389 (2026-10-01T00:29Z);
+  the six comments since 2026-10-02 (up to 2026-10-20) are on recall and hooks. Open with one
+  sentence that links 5870005304 and 5874997905.
 - 5910419239 (the recall numbers): everyone tagged there except pjt222 has answered. Decline
   it or acknowledge it in one line.
 - Posting is the maintainer's decision.
 
-§4 reports `REPLICATION.md` Part B, run 2026-10-02 (FACTS F15–F17).
+§3 reports `REPLICATION.md` Part B, run 2026-10-02 (FACTS F15–F17).
 
 ---
 
@@ -87,4 +87,4 @@ Two cautions:
 - No `reason: "compaction"` record appeared on the wire. That shape covers 22 of the 24 tagged records here and 3 of DanceNitra's 14. Neither automatic compaction nor a file edit during a live session was exercised.
 - `Project` and `Local` entries are not checked against the files on disk, and `instructions` is not the only channel: 38 `nested_memory` attachments carry nested `CLAUDE.md` files separately.
 
-*Written with AI assistance (Claude Code). Figures about this machine were computed from its transcripts on 2026-10-02. Claude Code's default 30-day retention has since deleted most of those transcripts, so `FACTS.md` is the record. Figures from others are quoted. The census script reads the transcripts under `~/.claude/projects/`, writes nothing outside its selftest fixture, and has a selftest that goes red on broken input; `--exclude-session baeb8d5c --until 2026-10-01T20:30:00Z` reproduced it on 2026-10-02. The wire arms fail closed on every gate and remove the arm directories, stores and session entries they create. [gist link]*
+*Written with AI assistance (Claude Code). Figures about this machine were computed from its transcripts on 2026-10-02. Claude Code's default 30-day retention has since deleted most of those transcripts, so `FACTS.md` is the record. Figures from others are quoted. The census script reads the transcripts under `~/.claude/projects/`, writes nothing outside its selftest fixture, and has a selftest that goes red on broken input; `--exclude-session baeb8d5c --until 2026-10-01T20:30:00Z` reproduced it on 2026-10-02. The wire scripts report gate outcomes rather than stopping on them (F15: GATE 2 PASS). The recorded runs removed the arm directories, stores and `session-env` entries they created (`cleanup: complete`, F15, F16); `~/.claude.json` and `~/.claude/tasks` were checked by hand. [gist link]*

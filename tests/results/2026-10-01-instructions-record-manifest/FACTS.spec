@@ -1,8 +1,8 @@
-# Fact spec for UPSTREAM-DRAFT.md and RESULT.md. Regenerate from the repository root:
-#   bash tools/fact-sheet.sh tests/results/2026-10-01-instructions-record-manifest/FACTS.spec tests/results/2026-10-01-instructions-record-manifest/FACTS.md
+# Fact spec for UPSTREAM-DRAFT.md and RESULT.md. FACTS.md is the 2026-10-02 record and is not regenerated
+# (RESULT.md, Addendum 2026-10-21). To compare, write to a scratch path: see REPLICATION.md Part A.
 # Publishable by construction: store names are opaque labels (--label-stores), home paths go through
-# $HOME, and no private project is named. Facts that need private names live outside the repository.
-# Every command reads; none writes, except --selftest's temporary fixture.
+# $HOME, and no project on this machine is named.
+# Every command reads, except F15/F16, which start `claude -p` and create and remove stores under ~/.claude; --selftest and F10 write only to temporary directories.
 
 F1 the census passes its selftest (incl. plural-field, blind-report and unchanged-file arms) :: python3 tests/results/2026-10-01-instructions-record-manifest/instructions-census.py --selftest
 F2 the census at the cutoff, drafting session excluded, stores labelled :: python3 tests/results/2026-10-01-instructions-record-manifest/instructions-census.py --exclude-session baeb8d5c --until 2026-10-01T20:30:00Z --gap-detail 40 --label-stores
@@ -27,6 +27,7 @@ T8 JhouCode platform :: gh api repos/anthropics/claude-code/issues/comments/5401
 T9 DanceNitra's published result for the 14 sandwiched records: how DanceNitra's probe buckets them, and the buckets :: gh api repos/DanceNitra/agora/contents/probes/instructions_records_without_the_index.py --jq .content | base64 -d | rg -n 'or "untagged"'; gh api repos/DanceNitra/agora/contents/probes/instructions_records_without_the_index.result.json --jq .content | base64 -d | jq -c '{absent_and_bracketed, bracketed_reasons, bracketed_builds, records_after_it_with_index_but_no_user_file}'
 F13 the full first line of the reminder every TAGGED record rendered, with counts (drafting session excluded, cutoff applied) :: python3 -c "import glob,json,os,collections; c=collections.Counter(); h=os.path.expanduser('~/.claude/projects'); fs=glob.glob(h+'/*/*.jsonl')+glob.glob(h+'/*/*/subagents/**/*.jsonl',recursive=True); [c.update([r['rendered'][0]['content'].split(chr(10))[1]]) for f in fs if 'baeb8d5c' not in f for l in open(f,'rb') if b'changed' in l and b'instructions' in l for r in [json.loads(l)] if isinstance(r.get('attachment'),dict) and r['attachment'].get('type')=='instructions' and 'reason' in r['attachment'] and (r.get('timestamp') or '')<='2026-10-01T20:30:00Z' and isinstance(r.get('rendered'),list)]; [print(n, t) for t,n in c.items()]"
 F14 GATE 0: the declared Part B slicer reproduces files[] byte-exactly from each record's rendered text :: python3 tests/results/2026-10-01-instructions-record-manifest/gate0-slicer.py --exclude-session baeb8d5c --until 2026-10-01T20:30:00Z
+# F15 and F16 are Part B's live arms. REPLICATION.md Part A drops them by id (rg -v '^F1[56] '), a denylist: a new row that starts a `claude -p` session must be added to that filter.
 F15 Part B arms 1-4 in one session on the canned-reply server, scored against P1/P2/P3 (set PARTB_ROOT outside any repository) :: cd tests/results/2026-10-01-instructions-record-manifest/partb && python3 stage2.py
 F16 Part B arm 5, concurrent bursts: 6 resumes after an index edit (5a) and 6 fresh starts (5c) :: cd tests/results/2026-10-01-instructions-record-manifest/partb && python3 stage3.py
 F17 negative control: stage2's P2 omitted-still-live check goes red on a request missing earlier-delivered files :: cd tests/results/2026-10-01-instructions-record-manifest/partb && python3 p2-negative-control.py
