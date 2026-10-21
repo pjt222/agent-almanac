@@ -65,14 +65,43 @@ if [ ! -f "$SOURCE_FILE" ]; then
   exit 1
 fi
 
-# Create target directory
-mkdir -p "$TARGET_DIR"
-
-# Check if target already exists
+# Check if target already exists. Before the dirty-source check below, because a SKIP writes
+# nothing and so claims nothing.
 if [ -f "$TARGET_FILE" ]; then
   echo "SKIP: $TARGET_FILE already exists"
   exit 0
 fi
+
+# Refuse an English source whose bytes HEAD does not carry (#617). The copy below takes the
+# WORKING TREE's bytes while both commit fields are stamped with HEAD, so unless HEAD carries
+# this path with exactly these bytes, `source_commit` and `fence_basis_commit` are false at birth.
+#
+# The test is that property itself -- HEAD has the path, and its blob is byte-identical to the
+# file -- not `git status`, which reports a source clean when an ignore rule or
+# status.showUntrackedFiles=no hides it, or when a skip-worktree / assume-unchanged flag tells
+# git not to look (#976 round 1). `git show <rev>:<path>` prints the raw blob: no eol
+# conversion, no smudge filter, no textconv without --textconv. A checkout that converts on
+# checkout would therefore be refused here, never waved through; this repository pins
+# `*.md text eol=lf`. A git that cannot answer fails `cat-file -e`, so it refuses too.
+#
+# The pipe cannot fail open under pipefail: cmp reads both inputs to EOF before it reports them
+# equal, so a SIGPIPE on `git show` can only come with a difference, which refuses anyway. That is
+# the opposite of `printf | grep -q` (#972), where the early exit comes with the answer you wanted.
+# Checked before anything is created, so a refusal writes nothing at all.
+SOURCE_REL="${SOURCE_FILE#"$ROOT"/}"
+if ! git -C "$ROOT" cat-file -e "HEAD:./$SOURCE_REL" 2>/dev/null || ! git -C "$ROOT" show "HEAD:./$SOURCE_REL" | cmp -s - "$SOURCE_FILE"; then
+  echo "REFUSED: $SOURCE_FILE is uncommitted: HEAD:$SOURCE_REL is absent, or its bytes differ from the file's"
+  echo "  A scaffold stamps source_commit and fence_basis_commit with HEAD ($SOURCE_COMMIT), which does not"
+  echo "  carry these bytes (#617). Commit the English source first, then scaffold."
+  exit 1
+fi
+
+# Create the target directory, remembering whether this run made it, so a refusal can remove
+# it. Only that leaf directory: parents `mkdir -p` makes for a new locale stay behind, empty and
+# untracked.
+TARGET_DIR_CREATED=0
+[ -d "$TARGET_DIR" ] || TARGET_DIR_CREATED=1
+mkdir -p "$TARGET_DIR"
 
 # Copy source to target
 cp "$SOURCE_FILE" "$TARGET_FILE"
@@ -118,6 +147,35 @@ source_commit: $SOURCE_COMMIT\\
 fence_basis_commit: $SOURCE_COMMIT\\
 translator: \"(untranslated stub)\"\\
 translation_date: \"$TODAY\"" "$TARGET_FILE"
+fi
+
+# Post-scaffold guard (#475). A scaffold is a byte copy of committed English, so every frozen
+# fence in it must match an English revision; a scaffolder that splices anything into a fence
+# -- as the unscoped `/^name:/` rule in bulk-scaffold-caveman.sh once did, 64 times -- fails
+# here instead of reaching a commit.
+#
+# ANY non-zero exit refuses. 2 is a scope refusal, made before anything is compared; 1 is a
+# finding, a shallow-clone refusal (assertNotShallow) or an uncaught crash, so it is never read
+# as "a fence diverged" -- the checker's own output, printed above the REFUSED line, says which.
+# A guard that passed on 2 would pass on a check that ran nothing. A consequence: every scaffold
+# refuses in a shallow clone (run `git fetch --unshallow` first).
+#
+# `--id` is matched across content trees: the checker has no tree flag, and one id can name a
+# skill and an agent, a skill and a guide, or a team and a guide. That can only refuse falsely
+# (another tree's mirror diverging), never pass falsely, because this target is always among the
+# files compared.
+#
+# On refusal the target is removed, and so is the leaf directory if this run created it, so a
+# re-run does not SKIP the target as "already exists".
+PARITY_RC=0
+PARITY_OUT=$(node "$ROOT/scripts/check-i18n-fence-parity.js" --root "$ROOT" --locale "$LOCALE" --id "$ID" 2>&1) || PARITY_RC=$?
+if [ "$PARITY_RC" -ne 0 ]; then
+  echo "$PARITY_OUT"
+  rm -f -- "$TARGET_FILE"
+  if [ "$TARGET_DIR_CREATED" -eq 1 ]; then rmdir -- "$TARGET_DIR" 2>/dev/null || true; fi
+  echo "REFUSED: $TARGET_FILE failed the fence-parity check (exit $PARITY_RC; 2 = the check refused its scope before comparing anything, any other code: read the check's own output above); removed it."
+  echo "  The check's own output is above; it ran: node scripts/check-i18n-fence-parity.js --locale $LOCALE --id $ID"
+  exit 1
 fi
 
 echo "CREATED: $TARGET_FILE (source_commit: $SOURCE_COMMIT, fence_basis_commit: $SOURCE_COMMIT)"

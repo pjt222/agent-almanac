@@ -1,10 +1,5 @@
 ---
 name: setup-putior-ci
-locale: caveman-lite
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: >
   Set up GitHub Actions CI/CD to automatically regenerate putior workflow
   diagrams on push. Covers workflow YAML creation, R script for diagram
@@ -22,6 +17,12 @@ metadata:
   complexity: intermediate
   language: multi
   tags: putior, ci-cd, github-actions, automation, mermaid, diagram
+  locale: caveman-lite
+  source_locale: en
+  source_commit: "ed7bf8543"
+  fence_basis_commit: "ed7bf8543"
+  translator: "(untranslated stub)"
+  translation_date: "2026-04-19"
 ---
 
 # Set Up putior CI/CD
@@ -52,11 +53,6 @@ Create the workflow YAML file for automated diagram generation.
 ```yaml
 # .github/workflows/update-workflow-diagram.yml
 name: Update Workflow Diagram
-locale: caveman-lite
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   push:

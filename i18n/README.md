@@ -119,6 +119,23 @@ or both — when the prose is translated. Stubs are *detected* by the verdicts o
 not a gate; what it buys is that "which translations has a human actually reviewed?" becomes a
 question the corpus can answer once the remaining scaffold defaults are replaced (#769).
 
+### Caveman and wenyan tiers: the homage attribution is a manual step
+
+The six compressed-prose tiers (`caveman-lite`, `caveman`, `caveman-ultra`, `wenyan-lite`,
+`wenyan`, `wenyan-ultra`) are scaffolded in bulk by `scripts/bulk-scaffold-caveman.sh`. What it
+writes is a byte copy of English, so it stamps the same `"(untranslated stub)"` value as
+`translate:scaffold` (#770); `scripts/test/scaffolders.test.js` holds the two scaffolders to one
+literal.
+
+The tiers' own attribution, `translator: "Julius Brussee homage — caveman"`, is written **by
+hand, in the same commit that compresses the body**, and never by a script: only whoever did the
+compression knows the body now carries it. Replace the stub value on the file's `translator:` line
+in its frontmatter, and nowhere else in the file. Until that commit, the stub value is the true
+one. Two tools act on it: `generate-translation-status.js --verdicts` judges the file by its body
+whatever the field says, and `tools/refresh-untranslated-stubs.mjs` may rewrite the file from
+English. Once the homage value is written, that tool refuses the file, and that refusal is what
+keeps a later refresh from overwriting the compressed prose.
+
 ### Why there are two commit fields
 
 They answer different questions, and a mechanical repair pulls them apart (#552).
