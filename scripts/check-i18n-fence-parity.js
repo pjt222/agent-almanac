@@ -570,6 +570,10 @@ function main() {
 // was a regex over source text, asserting token presence rather than behaviour. The pattern
 // came from check-readme-translation-parity.js (which still compares path strings), and it is
 // what dependency-free.test.js relies on: an import with no `argv[1]` never reaches realpath.
+// An importer whose `argv[1]` names no file (an extensionless main, `node -e … <arg>`) now
+// throws ENOENT at import (#976 round 2, S3E-R2-03). That is accepted here, because a
+// false-returning catch would bring back the silent exit 0 for this file run as main.
+// generate-readmes.js's invokedAsScript() makes the opposite trade for its importers.
 //
 // realpath on BOTH sides (#475, #976 round 1). Node gives `import.meta.url` the main module's
 // real path, while `argv[1]` is the path the caller typed; compared as strings, a run through a

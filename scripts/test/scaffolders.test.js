@@ -159,8 +159,8 @@ function linkTo(t, dir) {
  * (`HEAD:<path>`) or the worktree's status, and passes everything else to the real git. That is
  * exactly the scaffolders' source check — the byte test, and the `git status` predicate it
  * replaced, so the arm reads the same against either — and never the parity checker, whose git
- * calls are `log`, `rev-parse`, `ls-files`, `check-ignore` and `cat-file --batch` with its specs
- * on stdin. `git log -1` must keep working: both scaffolders read HEAD with it under `set -e`.
+ * calls are `rev-parse --is-shallow-repository`, `log` and `cat-file --batch` with its specs on
+ * stdin. `git log -1` must keep working: both scaffolders read HEAD with it under `set -e`.
  */
 function gitFailingSourceChecks(t) {
   const realGit = spawnSync('sh', ['-c', 'command -v git'], { encoding: 'utf8' }).stdout.trim();
