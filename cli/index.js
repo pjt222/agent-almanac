@@ -144,7 +144,7 @@ function guardPackageRoot(ctx, options) {
   // stderr, like the refusal, not reporter.warn(): on stdout this line would
   // precede `gather --json`'s document and make it unparseable. Only this
   // warning moves; reporter.warn() stays on stdout for its other callers.
-  console.error(reporter.chalk.yellow(`  WARN: Linking into the npm package at ${ctx.almanacRoot}. \`npm update\` or \`npm uninstall\` of agent-almanac can break these links; \`agent-almanac audit\` reports any that broke.`));
+  console.error(reporter.chalk.yellow(`  WARN: Linking into the npm package at ${ctx.almanacRoot}. \`npm update\` of agent-almanac can break these links, and \`agent-almanac audit\` reports any that broke; \`npm uninstall\` leaves them dangling and removes that command too.`));
 }
 
 /** Print the refusal and exit 1, the code getContext() uses for a root it cannot use. */

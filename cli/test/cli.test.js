@@ -868,10 +868,14 @@ describe('npm package root (#606)', () => {
     'change the content under them.\n' +
     '    Either install from a clone:      --source <clone>\n' +
     '    or link into the package anyway:  --from-package link';
+  // The warning names what audit can and cannot see (review round 2, R2-2):
+  // `npm uninstall -g` removes the `agent-almanac` command with the package,
+  // so the audit that would report the dangling links is gone too.
   const linkWarning = (root) =>
-    `WARN: Linking into the npm package at ${root}. \`npm update\` or ` +
-    '`npm uninstall` of agent-almanac can break these links; ' +
-    '`agent-almanac audit` reports any that broke.';
+    `WARN: Linking into the npm package at ${root}. \`npm update\` of ` +
+    'agent-almanac can break these links, and `agent-almanac audit` reports ' +
+    'any that broke; `npm uninstall` leaves them dangling and removes that ' +
+    'command too.';
 
   /**
    * Spawn the CLI by absolute path and keep BOTH streams. runAllowFail() keeps

@@ -112,8 +112,9 @@ or silently change the content under them. The refusal names the two ways forwar
   agent-almanac install commit-changes --source ~/agent-almanac
   ```
 - **Into the npm package anyway.** It warns. `agent-almanac audit` reports any link that broke and
-  exits 3, for example after `npm uninstall`; it does not report that an `npm update` changed the
-  content under a link.
+  exits 3; it does not report that an `npm update` changed the content under a link.
+  `npm uninstall -g` removes the `agent-almanac` command along with the package and leaves the
+  links dangling, so only another install of the CLI can audit them.
   ```bash
   agent-almanac install commit-changes --from-package link
   ```
