@@ -134,6 +134,13 @@ function fromPackageOption() {
  * run depends on what is detected in the project, not on anything the user
  * chose (#606, decided by the maintainer 2026-10-14).
  *
+ * With `link`, the warning names the remover to run before `npm uninstall`,
+ * one clause for all three callers, each measured against a packed tarball
+ * (#606, review round 2, R2-2): `uninstall <names>` after install or sync,
+ * `scatter <team>` after gather, either with the install's scope (without
+ * `-g`, `uninstall` skips a `-g` install's links). `uninstall` takes no
+ * `--from-package`.
+ *
  * @param {{ almanacRoot: string }} ctx
  * @param {{ fromPackage?: string }} options
  */
@@ -144,7 +151,7 @@ function guardPackageRoot(ctx, options) {
   // stderr, like the refusal, not reporter.warn(): on stdout this line would
   // precede `gather --json`'s document and make it unparseable. Only this
   // warning moves; reporter.warn() stays on stdout for its other callers.
-  console.error(reporter.chalk.yellow(`  WARN: Linking into the npm package at ${ctx.almanacRoot}. \`npm update\` of agent-almanac can break these links, and \`agent-almanac audit\` reports any that broke; \`npm uninstall\` leaves them dangling and removes that command too.`));
+  console.error(reporter.chalk.yellow(`  WARN: Linking into the npm package at ${ctx.almanacRoot}. \`npm update\` of agent-almanac can break these links, and \`agent-almanac audit\` reports any that broke; \`npm uninstall\` leaves them dangling and removes that command too, so remove them first with the same scope: \`agent-almanac uninstall <names>\`, or \`scatter <team>\` after \`gather\`.`));
 }
 
 /** Print the refusal and exit 1, the code getContext() uses for a root it cannot use. */

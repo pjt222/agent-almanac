@@ -870,12 +870,19 @@ describe('npm package root (#606)', () => {
     '    or link into the package anyway:  --from-package link';
   // The warning names what audit can and cannot see (review round 2, R2-2):
   // `npm uninstall -g` removes the `agent-almanac` command with the package,
-  // so the audit that would report the dangling links is gone too.
+  // so the audit that would report the dangling links is gone too. It then
+  // names the remover, one clause for install, sync and gather, each measured
+  // to leave 0 links before `npm uninstall -g` against a packed tarball, with
+  // a control that leaves them dangling (the maintainer's decision of
+  // 2026-10-21). "the same scope" is measured too: without `-g`, `uninstall`
+  // skips the links a `-g` install made. `uninstall` takes no
+  // `--from-package`, so the clause does not say "the install's flags".
   const linkWarning = (root) =>
     `WARN: Linking into the npm package at ${root}. \`npm update\` of ` +
     'agent-almanac can break these links, and `agent-almanac audit` reports ' +
     'any that broke; `npm uninstall` leaves them dangling and removes that ' +
-    'command too.';
+    'command too, so remove them first with the same scope: ' +
+    '`agent-almanac uninstall <names>`, or `scatter <team>` after `gather`.';
 
   /**
    * Spawn the CLI by absolute path and keep BOTH streams. runAllowFail() keeps
