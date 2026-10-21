@@ -857,10 +857,11 @@ describe('npm package root (#606)', () => {
   // Pinned literally (#606). Both ways forward must be named, and the wording
   // is behaviour: a change to it should go red here and be made on purpose.
   // Each npm command is named with what it does to the links, as measured in
-  // review round 1: `npm uninstall` leaves them dangling; `npm update` leaves
-  // them resolving to the new version's content under npm's default layout and
-  // breaks them under a version-keyed one (`install-strategy=linked`), so it
-  // "can" break them and is not said to.
+  // review rounds 1 and 2: `npm uninstall` leaves them dangling; `npm update`
+  // leaves them resolving to the new version's content under npm's default
+  // layout, except a link to an item the new version removed, which dangles,
+  // and breaks them under a version-keyed one (`install-strategy=linked`), so
+  // it "can" break them and is not said to.
   const refusal = (root) =>
     `ERROR: Not installing from the npm package at ${root}: \`npm uninstall\` leaves ` +
     'links into node_modules dangling, and `npm update` can break them or silently ' +

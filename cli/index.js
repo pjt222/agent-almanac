@@ -123,9 +123,10 @@ function fromPackageOption() {
  * `npm uninstall` leaves links into node_modules dangling, and `npm update` can
  * break them or silently change the content under them: under npm's default
  * layout the package is recreated at the same path, so the links follow the new
- * version without a word; under a version-keyed layout (npm
- * `install-strategy=linked`, measured; pnpm, by inference) the old directory is
- * pruned and they break.
+ * version without a word, except that a link to an item the new version removed
+ * dangles (measured; a renamed or moved item, by inference); under a
+ * version-keyed layout (npm `install-strategy=linked`, measured; pnpm, by
+ * inference) the old directory is pruned and they break.
  * npm says nothing about links it did not make, and `audit` reports only the
  * ones that broke. So the default is to stop and
  * name both ways forward. Every adapter is covered,
