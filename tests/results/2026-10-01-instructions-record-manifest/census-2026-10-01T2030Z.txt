@@ -1,0 +1,99 @@
+records: 1053 {'main': 146, 'subagent': 907} in 999 transcripts; distinct (sessionId, payload) pairs: 141 (main alone: 137; subagent records matching a main pair of their session: 902)
+input: {'nested_memory attachments': 38, 'transcript files in window': 1363}
+builds: 2.1.258 .. 2.1.287 (19 distinct)
+earliest record: 2026-09-02T07:19:33.779Z on 2.1.258; latest: 2026-10-01T20:29:18.439Z
+files[].type: {'User': 1029, 'Project': 1928, 'AutoMem': 1012, 'Local': 2}; User: 1 distinct path(s), 1 distinct content(s)
+
+=== POSITIVE CONTROL: the detector must see the index delivered through this channel
+  AutoMem deliveries: 1012; AutoMem paths not ending memory/MEMORY.md: 0
+  control passed
+
+=== 1. tag x User (records carrying User / records)
+  main untagged        127 /   127
+  main tagged            0 /    19
+  subagent untagged    902 /   902
+  subagent tagged        0 /     5
+  tagged by reason:  {'compaction': 22, 'session_start': 2}
+  tagged by version: {'2.1.258': 1, '2.1.260': 2, '2.1.263': 8, '2.1.266': 4, '2.1.270': 2, '2.1.271': 2, '2.1.272': 1, '2.1.278': 2, '2.1.280': 2}
+  first line of the rendered reminder, by tag (60 chars):
+       21  tagged   Instruction files were re-read after the conversation was co
+        2  tagged   Instruction files were re-read when this session started; th
+        1  tagged   (no rendered field)
+      941  untagged Codebase and user instructions are shown below. Be sure to a
+       88  untagged (no rendered field)
+
+=== 2. delta test: tagged-record files vs their other copies in the same transcript (per record)
+     43  listed: changed
+      1  omitted AutoMem: bracketed unchanged
+     11  omitted Project: bracketed unchanged
+     15  omitted Project: no later copy (unbracketed)
+     10  omitted User: bracketed unchanged
+     14  omitted User: no later copy (unbracketed)
+
+=== 3. untagged records dropping a file an earlier record in the transcript listed
+  0
+
+=== 4. compaction sequence
+     18  main: after auto boundary, next record untagged
+     12  main: after manual boundary, next record untagged
+     17  main: tagged compaction, last boundary before it auto
+      2  main: tagged session_start, last boundary before it auto
+      1  subagent: after auto boundary, in a transcript with no record
+      4  subagent: tagged compaction with no own boundary, parent session's last boundary before it auto
+      1  subagent: tagged compaction with no own boundary, parent session's last boundary before it manual
+      5  subagent: tagged compaction, last boundary before it none
+  boundaries by (population, trigger, build of the record before them):
+        1  main auto 2.1.258
+        1  main auto 2.1.260
+        8  main auto 2.1.263
+        3  main auto 2.1.266
+        2  main auto 2.1.270
+        1  main auto 2.1.271
+        1  main auto 2.1.278
+        1  main auto 2.1.280
+        5  main manual 2.1.258
+        3  main manual 2.1.272
+        2  main manual 2.1.278
+        2  main manual 2.1.281
+
+=== 5. gaps: untagged records with User and no AutoMem
+  total: 40; index delivered earlier in the transcript: 0, later: 1, both (between deliveries): 0; store path source: {'fallback': 39, 'recorded': 1}
+     38  absent-no-create (no index now; no Write-tool create in surviving transcripts)
+      2  created-after (a Write-tool create of the index came later)
+           3  absent-no-create   source=fallback cwd=tmpcwd-04
+           3  absent-no-create   source=fallback cwd=tmpcwd-18
+           3  absent-no-create   source=fallback cwd=tmpcwd-20
+           3  absent-no-create   source=fallback cwd=tmpcwd-24
+           2  absent-no-create   source=fallback cwd=cwd-02
+           1  created-after      source=fallback cwd=cwd-01
+           1  created-after      source=recorded cwd=cwd-03
+           1  absent-no-create   source=fallback cwd=tmpcwd-01
+           1  absent-no-create   source=fallback cwd=tmpcwd-02
+           1  absent-no-create   source=fallback cwd=tmpcwd-03
+           1  absent-no-create   source=fallback cwd=tmpcwd-05
+           1  absent-no-create   source=fallback cwd=tmpcwd-06
+           1  absent-no-create   source=fallback cwd=tmpcwd-07
+           1  absent-no-create   source=fallback cwd=tmpcwd-08
+           1  absent-no-create   source=fallback cwd=tmpcwd-09
+           1  absent-no-create   source=fallback cwd=tmpcwd-10
+           1  absent-no-create   source=fallback cwd=tmpcwd-11
+           1  absent-no-create   source=fallback cwd=tmpcwd-12
+           1  absent-no-create   source=fallback cwd=tmpcwd-13
+           1  absent-no-create   source=fallback cwd=tmpcwd-14
+           1  absent-no-create   source=fallback cwd=tmpcwd-15
+           1  absent-no-create   source=fallback cwd=tmpcwd-16
+           1  absent-no-create   source=fallback cwd=tmpcwd-17
+           1  absent-no-create   source=fallback cwd=tmpcwd-19
+           1  absent-no-create   source=fallback cwd=tmpcwd-21
+           1  absent-no-create   source=fallback cwd=tmpcwd-22
+           1  absent-no-create   source=fallback cwd=tmpcwd-23
+           1  absent-no-create   source=fallback cwd=tmpcwd-25
+           1  absent-no-create   source=fallback cwd=tmpcwd-26
+           1  absent-no-create   source=fallback cwd=tmpcwd-27
+           1  absent-no-create   source=fallback cwd=tmpcwd-28
+    2026-09-11 v2.1.268 created-after (Write create +125 min) earlier=False later=False source=fallback store-01
+    2026-09-02 v2.1.258 created-after (Write create +47 min) earlier=False later=True source=recorded store-02
+
+=== 6. disk side: user CLAUDE.md unchanged through the window = True
+
+gaps: UNEXPLAINED 0; created-after 2; inode-after 0; absent-no-create 38  (of 1029 untagged records)
