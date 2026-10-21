@@ -1,6 +1,6 @@
 name: Validate READMEs
 
-# `scripts/generate-readmes.js` writes twelve committed files, and until now the only
+# `scripts/generate-readmes.js` writes thirteen committed files, and until now the only
 # thing that checked them was `npm run check-readmes` inside `npm test` — which runs
 # in `release.yml` alone, on a tag. So a stale generated README could land on a PR,
 # sit on main, and first surface as a RED RELEASE, blaming the tag rather than the
@@ -26,6 +26,17 @@ name: Validate READMEs
 #   which is the only case nothing else covers. The translations slice of the same
 #   table is additionally gated on every PR by integrity check B13 (#560).
 #
+# The one input that IS listed is `package.json`, and the argument above is why it can be.
+# Its `version` is printed in two outputs, SECURITY.md and `.claude-plugin/plugin.json`
+# (#749), and a version bump is not a contributor's content edit: it is a release step whose
+# recipe already runs the generator (`npm version <v> --no-git-tag-version`, then
+# `npm run update-readmes`). Listing it makes a bump PR that skipped the second step red here,
+# at the PR, instead of at the tag's own `npm test`. Any other edit to the file leaves
+# generated output alone unless it changes something SECURITY.md reads from it (`name`,
+# `files`, the install and pack hooks) — and then regenerating is exactly what that PR owes.
+# Root Dependabot bumps touch it too, so they now run this job; it is job-blocking, not one
+# of the required contexts, and green unless the bump really changes generated output.
+#
 # Not wired into `validate-integrity.sh` on purpose: that job runs with
 # `setup-node` and deliberately NO `npm ci` (integrity check A8 documents the
 # constraint), while `generate-readmes.js` imports js-yaml. It would die at module
@@ -50,6 +61,9 @@ on:
       - 'i18n/README.md'
       - 'tools/README.md'
       - 'SECURITY.md'
+      - '.claude-plugin/plugin.json'
+      # An input, not an output: see the header for why it alone is listed (#749).
+      - 'package.json'
       - '.github/workflows/validate-readmes.yml'
   pull_request:
     paths:
@@ -65,6 +79,9 @@ on:
       - 'i18n/README.md'
       - 'tools/README.md'
       - 'SECURITY.md'
+      - '.claude-plugin/plugin.json'
+      # An input, not an output: see the header for why it alone is listed (#749).
+      - 'package.json'
       - '.github/workflows/validate-readmes.yml'
   # Path filters do not apply to `schedule`, which is the point. Everything above is
   # commit-triggered, so all of it is blind to HEALER FAILURE: if update-readmes.yml goes red

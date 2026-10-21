@@ -41,14 +41,14 @@ The first release to actually reach npm since `1.3.0`. `1.9.0` was tagged on 202
 
 ## [1.9.0] - 2026-08-19
 
-The last release of the JavaScript CLI. The version number is deliberate: `2.0.0` is held for the Rust port (#256), so this line ends at `1.9.x`.
+Opens the last release line of the JavaScript CLI. The version number is deliberate: `2.0.0` is held for the Rust port (#256), so the JavaScript CLI ends with the `1.9.x` line. This tag's own publish failed (`E404`), so the first of the line to reach npm is `1.9.1` — see that section.
 
 **Read the Breaking section before upgrading.** The number says minor; three of the changes below are breaking in fact. Nothing has been released since `1.3.0` (2026-05-04), and the changes accumulated in that window include a Node floor raise. A minor version is a weaker warning than these changes deserve, and this notice is the compensation for it.
 
 ### Breaking
-- **Node.js 22.12.0 or newer is now required** (`engines.node` was `>=18.0.0`). The floor was raised on 2026-06-04 when the CLI moved to commander 15 — a month after `1.3.0` shipped — so this is the first published release that carries it. Node 18 and Node 20 users must upgrade Node; `npm install` will warn rather than fail, so an unattended install can leave a CLI that cannot start.
+- **Node.js 22.12.0 or newer is now required** (`engines.node` was `>=18.0.0`). The floor was raised on 2026-06-04 when the CLI moved to commander 15 — a month after `1.3.0` shipped — so the `1.9.x` line is the first published one that carries it. Node 18 and Node 20 users must upgrade Node; `npm install` will warn rather than fail, so an unattended install can leave a CLI that cannot start.
 - **`almanac audit` now exits non-zero when it finds problems** (#439). It previously exited `0` unconditionally, so any script, CI step, or pre-commit hook that ran `audit` was passing regardless of what the audit said. Those callers will now start failing — which is the point, but it will look like a new breakage rather than a newly visible old one. Adapter crashes are also marked structurally rather than being reported as ordinary findings.
-- **`--version` now reports the real version** (#456). `cli/index.js` hardcoded `.version('0.1.0')`, so the *published* `1.3.0` binary answers `--version` with `0.1.0`, and has answered wrongly for every release since `0.1.0`. Anything that parses `--version` will see it jump from `0.1.0` to `1.9.0`. That jump is this bug being fixed, not a version skip; the value now derives from the package manifest and cannot drift again.
+- **`--version` now reports the real version** (#456). `cli/index.js` hardcoded `.version('0.1.0')`, so the *published* `1.3.0` binary answers `--version` with `0.1.0`, and has answered wrongly for every release since `0.1.0`. Anything that parses `--version` will see it jump from `0.1.0` to the `1.9.x` release installed (`1.9.1` is the first of the line on npm). That jump is this bug being fixed, not a version skip; the value now derives from the package manifest and cannot drift again.
 
 ### Fixed
 - `cli/index.js` — `--version` no longer hardcoded; derived from the manifest (#456). See Breaking.

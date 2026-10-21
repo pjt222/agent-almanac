@@ -1,7 +1,7 @@
 {
   "name": "agent-almanac",
-  "description": "361 agentic skills across 65 domains, 72 agent personas, and 17 team compositions following the agentskills.io open standard",
-  "version": "1.0.0",
+  "description": "373 agentic skills across 67 domains, 76 agent personas, and 22 team compositions following the agentskills.io open standard",
+  "version": "1.9.1",
   "author": {
     "name": "Philipp Thoss",
     "email": "ph.thoss@gmx.de",

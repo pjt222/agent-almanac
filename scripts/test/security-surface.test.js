@@ -31,7 +31,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { rmTree } from './_tmp.js';
-import { initRepo, commitAll, isolateGitEnv } from './_git-fixture.js';
+import { initRepo, commitAll, isolateGitEnv, cleanEnv } from './_git-fixture.js';
 import { scriptFileCount } from '../lib/tree-counts.js';
 import { generateSecuritySurface } from '../generate-readmes.js';
 
@@ -264,6 +264,56 @@ test('the content-tree bullet names its non-documentation files and its executab
   // `skills/_template/` is negated in `files`, so its .md and the Bash it declares are outside
   // the shipped set entirely — the same exclusion the count above relies on.
   assert.ok(!surface.includes('_template'), 'a negated path must not be named as shipped content');
+});
+
+/** The opening "Which artifact this describes" paragraph: everything before the first bullet. */
+const artifactParagraph = (surface) => surface.split('\n')[0];
+
+test('the artifact paragraph does not offer a version check as evidence of matching content (#696)', async (t) => {
+  // `npm view <pkg> version` answering the same number as `package.json` was offered as the
+  // check, and the trap is that it passes while the content differs: measured on 2026-10-14,
+  // npm's `latest` was 1.9.1, `package.json` said 1.9.1, and `git diff --stat v1.9.1 HEAD -- cli/`
+  // listed 18 changed files. A matching version is not matching content.
+  const paragraph = artifactParagraph(generateSecuritySurface({ root: fixture(t) }));
+
+  assert.ok(
+    !paragraph.includes('npm view'),
+    `the artifact paragraph still offers \`npm view\`, whose equal version proves nothing about content (#696):\n${paragraph}`,
+  );
+  assert.match(paragraph, /a matching version number is not evidence of matching content/);
+  // The comparison it points to instead, at the version `package.json` declares — that is the
+  // matching-version case, the one the number cannot settle. Its pathspec is the fixture's
+  // included `files` entries plus `package.json`, the scope the paragraph claims. `-- cli/`
+  // alone was the first revision, and it reported a match while every other shipped tree
+  // differed (#970 review F1: at 3709a294d, cli/ unchanged since v1.3.0 and 438 other shipped
+  // files changed). The negated `!skills/_template/` is deliberately not rendered.
+  assert.ok(
+    paragraph.includes('`git diff v0.0.1 HEAD -- :/skills/ :/cli/ :/package.json`'),
+    `the artifact paragraph does not compare the whole shipped set plus package.json at the declared version:\n${paragraph}`,
+  );
+});
+
+test('the artifact paragraph is static: a release tag and later commits do not move it (#696)', async (t) => {
+  // Static on purpose. `check-readmes` runs in a shallow, tag-less CI checkout, so a drift count
+  // derived from git here would read one number on a maintainer's clone and another in CI, and
+  // the gate would flap. The perturbation below moves both kinds of git-derived value a later
+  // revision might be tempted to publish — what a tag can see, and what the index counts.
+  const dir = fixture(t);
+  const before = artifactParagraph(generateSecuritySurface({ root: dir }));
+
+  const git = (...args) => {
+    const result = spawnSync('git', ['-C', dir, ...args], { encoding: 'utf8', env: cleanEnv(dir) });
+    assert.equal(result.status, 0, `git ${args.join(' ')} failed: ${result.stderr}`);
+  };
+  git('tag', 'v0.0.1');
+  write(dir, { 'cli/index.js': '#!/usr/bin/env node\n// changed after the release\n', 'workflows/three.mjs': '1\n' });
+  commitAll(dir, 'after the release');
+
+  assert.equal(
+    artifactParagraph(generateSecuritySurface({ root: dir })),
+    before,
+    'the artifact paragraph moved with git history; a shallow CI checkout would make check-readmes flap',
+  );
 });
 
 test('a guard that exists to catch drift in this repository fires on a fixture too', async (t) => {

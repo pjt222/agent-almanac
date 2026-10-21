@@ -2,10 +2,10 @@
 /**
  * generate-readmes.js
  *
- * Reads skills/_registry.yml, agents/_registry.yml, teams/_registry.yml,
- * and guides/_registry.yml to auto-generate dynamic sections in README.md,
- * skills/README.md, agents/README.md, CLAUDE.md, guides/README.md,
- * viz/README.md, and teams/README.md.
+ * Reads the registries and `package.json` to generate every file listed in `MANAGED` below
+ * (`--list-outputs` prints them): AUTO-marker sections in the README family, CLAUDE.md and
+ * SECURITY.md, and whole files for the rest — the Claude Code plugin manifest
+ * `.claude-plugin/plugin.json` among them (#749).
  *
  * Usage:
  *   node scripts/generate-readmes.js          # update files in-place
@@ -276,15 +276,24 @@ function generateSkillsIntroStandalone() {
   return `A collection of ${totalSkills} task-level skills following the [Agent Skills open standard](https://agentskills.io) (\`SKILL.md\` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.`;
 }
 
-function generateSkillsTable(linkPrefix) {
+/**
+ * The skills-by-domain table. `domainMap` defaults to the registry the pipeline loaded, and is a
+ * parameter so `scripts/test/skills-table.test.js` can drive the cell shape against a fixture.
+ *
+ * The domain cell is PLAIN TEXT (#796). It linked to `<domain>/`, a leftover of a nested
+ * `skills/<domain>/<skill>/` layout: the tree is flat, so every one of those links was a 404, and
+ * `check-readmes` stayed green because it compares this function's output with itself. A domain
+ * is a registry grouping, not a place, so there is nothing on disk to link it to.
+ */
+export function generateSkillsTable(domainMap = domains) {
   const rows = [];
   rows.push('| Domain | Skills | Description |');
   rows.push('|---|---|---|');
-  for (const [domainId, domainObj] of Object.entries(domains)) {
+  for (const [domainId, domainObj] of Object.entries(domainMap)) {
     const name = domainDisplayName(domainId);
     const count = domainObj.skills.length;
     const desc = domainObj.description;
-    rows.push(`| [${name}](${linkPrefix}${domainId}/) | ${count} | ${desc} |`);
+    rows.push(`| ${name} | ${count} | ${desc} |`);
   }
   return rows.join('\n');
 }
@@ -865,11 +874,41 @@ export function generateSecuritySurface({ root = ROOT } = {}) {
   // sentence stays true whether 1.9.0 is eventually recovered, superseded or abandoned —
   // none of which is decided here.
   //
+  // It does NOT offer an equal version as the check. An earlier revision ended "Check with
+  // `npm view <pkg> version`", and that check passes exactly when it misleads: on 2026-10-14
+  // npm's `latest` and `package.json` both read 1.9.1 while `git diff v1.9.1 HEAD -- cli/`
+  // listed 18 changed files, so the matching number told a researcher they had the code this
+  // document describes when they did not (#696, after #747). The sentence now says a matching
+  // version is not matching content and names the tag comparison instead, at the version
+  // `package.json` declares — the matching-version case, the one the number cannot settle.
+  // It states no drift COUNT: that would be git-derived, a shallow tag-less CI checkout would
+  // compute a different one, and `check-readmes` would flap between the two.
+  //
   // It scopes the WHOLE inventory rather than the CLI bullet alone. `files` ships four
   // content trees beside `cli/`, so "228 of 370 skills declare Bash" carries the identical
   // staleness risk as the adapter list; a per-bullet caveat would have to be repeated on
   // every shipped bullet, which is the multi-site drift class this repository keeps paying
   // for elsewhere.
+  //
+  // The tag comparison has that same scope: its pathspec is the `files` entries this sentence
+  // prints, plus `package.json`, which npm packs whatever `files` says. A first revision
+  // compared `-- cli/` alone, and that passes exactly when it misleads, which is the #696
+  // defect again (#970 review F1): at 3709a294d (2026-06-15) `package.json` read 1.3.0, npm's
+  // newest publish was 1.3.0, `git diff v1.3.0 3709a294d -- cli/` was empty, and the other
+  // shipped trees differed in 438 files. `package.json` belongs in it for two reasons. It
+  // carries the runtime dependency ranges: at 4c92ff487 `commander` had moved from ^14.0.3 to
+  // ^15.0.0 under a byte-identical `cli/`. And an entry dropped from `files` shows in no tree's
+  // diff, only in that file's. The pathspec is read from `package.json`, not from git, so the
+  // sentence stays static. The `!…` negations are NOT rendered as `:!` pathspecs, because an
+  // unquoted `!` is history-expanded in interactive bash and zsh. So an edit confined to a
+  // negated `_template` reports a mismatch while the shipped files match. That error is
+  // conservative, which is the safe direction for a security document.
+  //
+  // Each entry is rendered with git's `:/` (top) magic. git reads a bare pathspec relative to
+  // the current directory and prints nothing when it matches nothing, so the same command run
+  // from `cli/` or `scripts/` reported an empty diff, a false match, while the shipped files
+  // differed (#970 review round 2, F1-R2). `:/` anchors every entry at the top of the tree. A
+  // leading `./` is stripped first, because `:/./x` would match nothing.
   //
   // It enumerates FILES as well as directories. An earlier version filtered `files` to
   // entries ending in `/`, which silently dropped `cli/index.js` — the file
@@ -931,7 +970,7 @@ export function generateSecuritySurface({ root = ROOT } = {}) {
   const toolsSkipped = toolRows.length - toolsInCi;
 
   return [
-    `**Which artifact this describes.** Everything below is derived from **the repository at this revision**, whose \`package.json\` declares version \`${pkg.version ?? '(unset)'}\`. That is not necessarily what \`npm install ${pkg.name ?? '(unnamed)'}\` installs — the published version can lag this tree, and has. Check with \`npm view ${pkg.name ?? '(unnamed)'} version\`. What ships, from \`package.json\`'s own \`files\`: ${shippedList.map((t) => `\`${t}\``).join(', ')}. \`package.json\` ships too — npm always includes it — and it declares no \`preinstall\`/\`install\`/\`postinstall\` hooks, so nothing here executes on install.${packHookClause} Everything else described below (${REPO_ONLY.map((d) => `\`${d}/\``).join(', ')}) exists only in the repository. A vulnerability report against an npm-installed copy is in scope for the shipped list, and may be against older code than this document describes.`,
+    `**Which artifact this describes.** Everything below is derived from **the repository at this revision**, whose \`package.json\` declares version \`${pkg.version ?? '(unset)'}\`. That is not necessarily what \`npm install ${pkg.name ?? '(unnamed)'}\` installs, and a matching version number is not evidence of matching content: this tree can change after a version is published without its version changing. If the copy you have is also \`${pkg.version ?? '(unset)'}\`, compare this tree with that release's tag — \`git diff v${pkg.version ?? '(unset)'} HEAD -- ${[...shippedList, 'package.json'].map((p) => `:/${p.replace(/^\.\//, '')}`).join(' ')}\` — and take an empty diff, not an equal version, as the evidence that the two match. What ships, from \`package.json\`'s own \`files\`: ${shippedList.map((t) => `\`${t}\``).join(', ')}. \`package.json\` ships too — npm always includes it — and it declares no \`preinstall\`/\`install\`/\`postinstall\` hooks, so nothing here executes on install.${packHookClause} Everything else described below (${REPO_ONLY.map((d) => `\`${d}/\``).join(', ')}) exists only in the repository. A vulnerability report against an npm-installed copy is in scope for the shipped list, and may be against older code than this document describes.`,
     '',
     `- **${treeLabel}**: ${nonDoc.length === 0 ? 'Markdown and YAML only' : `mostly Markdown and YAML, plus **${nonDoc.length} files that are not** (${nonDocExtensions.join(', ')})${executable.length ? ` — ${executable.length === 1 ? 'one of them an executable script, ' : `${executable.length} of them executable scripts: `}${executable.map((f) => `\`${f}\``).join(', ')}` : ''}`}. All of it ships — counted from the index, which is what the next commit will contain and what a release is packed from; a local \`npm pack\` packs the working tree instead and can include files this count excludes. ${declaring} of ${ids.length} skills (~${share}%) declare \`Bash\` in their \`allowed-tools\`, meaning they instruct AI agents to execute shell commands when followed. Review any skill before letting an agent execute it.`,
     '- **Visualization pipeline** (`viz/`): A containerized R + Node.js + Vite build system with a Dockerfile, shell scripts, and an icon rendering pipeline. The Docker entrypoint serves content via a Python HTTP server.',
@@ -941,6 +980,87 @@ export function generateSecuritySurface({ root = ROOT } = {}) {
     `- **Tools** (\`tools/\`): ${toolRows.length} operator utilities (${languagePhrase}) catalogued in \`tools/_registry.yml\`, none shipped in the published package and none a merge gate. Each carries a self-test: ${toolsInCi} run in the non-required \`tools-verify\` job, ${toolsSkipped} skipped there with the reason recorded in the registry. ${beyond.length} act beyond this checkout (the tool itself makes a network request or opens a listening socket; a path the caller names is the caller's reach): ${beyondPhrase}.`,
     '- **Claude Code configuration** (`.claude/`): Agent discovery symlinks and permission settings.',
   ].join('\n');
+}
+
+// ── Plugin manifest ──────────────────────────────────────────────
+
+/**
+ * `.claude-plugin/plugin.json`, the manifest a Claude Code marketplace install reads, as the
+ * whole file (#749).
+ *
+ * Fully generated rather than marker-based: JSON has no comments, so it cannot carry an AUTO
+ * pair. It was hand-written until #749 found it stale on all five values it states at once —
+ * `version` 1.0.0 against a `package.json` of 1.9.1, and four totals each behind its registry —
+ * after two earlier hand corrections of its counts (`git log -- .claude-plugin/plugin.json`).
+ * Four of those values are counts the
+ * registries own and the fifth is the version `npm version` moves, so all five are read here;
+ * the release recipe (`npm version <v> --no-git-tag-version`, then `npm run update-readmes`)
+ * then moves the manifest with every other generated surface, and `check-readmes` reddens a
+ * bump that skipped the second step.
+ *
+ * Read from `root`, never from the module-level bindings, the way `generateSecuritySurface`
+ * reads its domains: `scripts/test/plugin-manifest.test.js` drives this against a fixture, and
+ * this repository's registries must not be able to answer for it.
+ *
+ * Every other field is the hand-written file's, moved here unchanged and in its key order. They
+ * stay literals on purpose: `homepage` is the standard the plugin follows, not `package.json`'s,
+ * and renaming the npm package would not be a decision to rename the plugin.
+ *
+ * It does not ship on npm — `package.json` `files` carries no `.claude-plugin/` — so its reader
+ * is a plugin install from a clone, not `npm install`.
+ */
+export function generatePluginManifest({ root = ROOT } = {}) {
+  const pkgPath = resolve(root, 'package.json');
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+  // Refused rather than defaulted: `JSON.stringify` drops an `undefined` value without a word, so
+  // a manifest with no `version` key would be written and every gate would compare it green.
+  if (typeof pkg.version !== 'string' || pkg.version === '') {
+    throw new Error(`${pkgPath} declares no version, so .claude-plugin/plugin.json would carry none`);
+  }
+  // Each total is refused when absent, for the same reason: `undefined agentic skills` would be
+  // written as readily as a number.
+  const total = (rel, key) => {
+    const value = (yaml.load(readFileSync(resolve(root, rel), 'utf8')) ?? {})[key];
+    if (!Number.isInteger(value) || value < 0) {
+      throw new Error(`${rel} carries no integer \`${key}\`, so .claude-plugin/plugin.json cannot state it`);
+    }
+    return value;
+  };
+  const domainMap = skillDomainsAt(root);
+  if (!domainMap || typeof domainMap !== 'object') {
+    throw new Error('skills/_registry.yml carries no `domains` map, so .claude-plugin/plugin.json cannot count them');
+  }
+  const skillCount = total('skills/_registry.yml', 'total_skills');
+  const domainCount = Object.keys(domainMap).length;
+  const agentCount = total('agents/_registry.yml', 'total_agents');
+  const teamCount = total('teams/_registry.yml', 'total_teams');
+
+  const manifest = {
+    name: 'agent-almanac',
+    description: `${skillCount} agentic skills across ${domainCount} domains, ${agentCount} agent personas, and ${teamCount} team compositions following the agentskills.io open standard`,
+    version: pkg.version,
+    author: {
+      name: 'Philipp Thoss',
+      email: 'ph.thoss@gmx.de',
+      url: 'https://github.com/pjt222',
+    },
+    repository: 'https://github.com/pjt222/agent-almanac',
+    homepage: 'https://agentskills.io',
+    license: 'MIT',
+    keywords: [
+      'skills',
+      'agents',
+      'teams',
+      'agentic',
+      'agentskills',
+      'devops',
+      'compliance',
+      'mlops',
+      'r-packages',
+      'esoteric',
+    ],
+  };
+  return `${JSON.stringify(manifest, null, 2)}\n`;
 }
 
 // ── Main ─────────────────────────────────────────────────────────
@@ -963,7 +1083,7 @@ const MANAGED = [
   }) },
   { path: 'skills/README.md', make: (p) => processFile(p, {
     'skills-intro': generateSkillsIntroStandalone,
-    'skills-table': () => generateSkillsTable(''),
+    'skills-table': () => generateSkillsTable(),
   }) },
   { path: 'agents/README.md', make: (p) => processFile(p, {
     'agents-intro': generateAgentsIntroStandalone,
@@ -988,6 +1108,9 @@ const MANAGED = [
   { path: 'viz/README.md', make: (p) => writeGeneratedFile(p, generateVizReadme()) },
   { path: 'teams/README.md', make: (p) => writeGeneratedFile(p, generateTeamsReadme()) },
   { path: 'tests/README.md', make: (p) => writeGeneratedFile(p, generateTestsReadme()) },
+  // The Claude Code plugin manifest (#749). JSON cannot carry AUTO markers, so it is written
+  // whole; see generatePluginManifest. Not a README, and not shipped on npm.
+  { path: '.claude-plugin/plugin.json', make: (p) => writeGeneratedFile(p, generatePluginManifest()) },
   // Marker-based, not fully generated: the rest of i18n/README.md is a hand-written
   // contributor guide. Only the locale table is derived. Its markers MUST exist or the run
   // exits 2 — see the missingMarkers block below.

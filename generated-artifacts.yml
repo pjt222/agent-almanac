@@ -92,9 +92,13 @@ artifacts:
   #   check-readmes  artifact-side plant -> exit 1;                                restored -> 0
 
   - id: readme-family
-    # TWELVE paths, and three of them are not READMEs. Naming this row "the README family" is how
+    # THIRTEEN paths, and four of them are not READMEs. Naming this row "the README family" is how
     # the enumeration hid the fact that this repo's own instruction file is machine-written in
-    # part. The list is `MANAGED` in the generator.
+    # part. The list is `MANAGED` in the generator. The fourth non-README is the Claude Code
+    # plugin manifest (#749): hand-written until it was found stale on its version and all four
+    # counts, and kept in this row rather than one of its own because the rows here key on the
+    # generator, and its generator and gate are this row's. It does not ship on npm; its reader is
+    # a plugin install from a clone.
     paths:
       - README.md
       - CLAUDE.md
@@ -108,6 +112,7 @@ artifacts:
       - tests/README.md
       - i18n/README.md
       - tools/README.md
+      - .claude-plugin/plugin.json
     generator: scripts/generate-readmes.js
     gate:
       kind: regenerate-and-diff

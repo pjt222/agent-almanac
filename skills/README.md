@@ -21,73 +21,73 @@ Browse by domain:
 <!-- AUTO:START:skills-table -->
 | Domain | Skills | Description |
 |---|---|---|
-| [R Packages](r-packages/) | 10 | R package development lifecycle skills |
-| [Jigsawr](jigsawr/) | 5 | jigsawR puzzle package development skills |
-| [Containerization](containerization/) | 10 | Docker and container workflow skills |
-| [Reporting](reporting/) | 5 | Quarto, R Markdown, and publication-ready report skills |
-| [Compliance](compliance/) | 17 | GxP regulatory and validation skills |
-| [Mcp Integration](mcp-integration/) | 6 | MCP server setup and troubleshooting skills |
-| [Web Dev](web-dev/) | 5 | Web development skills for Next.js and modern frontend |
-| [Git](git/) | 11 | Git version control and GitHub workflow skills |
-| [General](general/) | 26 | Cross-cutting development environment and workflow skills |
-| [Citations](citations/) | 3 | Academic and software citation management with R and BibTeX |
-| [Data Serialization](data-serialization/) | 2 | Data serialization formats, schemas, and evolution strategies |
-| [Review](review/) | 11 | Senior-level review skills for research, data, architecture, and design |
-| [Bushcraft](bushcraft/) | 4 | Wilderness survival and primitive skills |
-| [Esoteric](esoteric/) | 29 | Esoteric practices — AI self-directed variants and human-guidance variants |
-| [Design](design/) | 6 | Ornamental design and AI-assisted image generation skills |
-| [Defensive](defensive/) | 6 | Martial arts and applied defensive awareness skills |
-| [Project Management](project-management/) | 6 | Agile and classic project management skills |
-| [Devops](devops/) | 13 | CI/CD, Kubernetes, GitOps, and infrastructure automation skills |
-| [Observability](observability/) | 13 | Monitoring, logging, tracing, alerting, and reliability engineering skills |
-| [Edge Computing](edge-computing/) | 1 | Edge AI deployment, on-device inference, model quantization, and hardware acceleration |
-| [Mlops](mlops/) | 12 | ML experiment tracking, model serving, feature stores, pipelines, and AIOps skills |
-| [Workflow Visualization](workflow-visualization/) | 6 | Workflow annotation and Mermaid diagram generation with putior |
-| [Swarm](swarm/) | 9 | Collective intelligence, emergent coordination, and distributed decision-making strategies |
-| [Morphic](morphic/) | 7 | Adaptive transformation, structural metamorphosis, and reconfiguration strategies |
-| [Alchemy](alchemy/) | 4 | Code and data transmutation through systematic decomposition, purification, and synthesis |
-| [Tcg](tcg/) | 3 | Trading card game grading, deck building, and collection management |
-| [Intellectual Property](intellectual-property/) | 4 | Patent landscape analysis, prior art search, and IP strategy |
-| [Web Scraping](web-scraping/) | 2 | Headless browsing, data extraction, anti-bot evasion, and ethical proxy rotation for consuming web content |
-| [Gardening](gardening/) | 5 | Plant cultivation, soil preparation, garden observation, and hand tool care |
-| [Shiny](shiny/) | 7 | Shiny web application development, modules, testing, and deployment |
-| [Animal Training](animal-training/) | 2 | Canine behavior and obedience training skills |
-| [Mycology](mycology/) | 2 | Fungi identification, cultivation, and mycelial ecology |
-| [Prospecting](prospecting/) | 2 | Mineral identification and precious metal recovery |
-| [Crafting](crafting/) | 1 | Traditional handcraft and artisan skills |
-| [Library Science](library-science/) | 3 | Library cataloging, collection management, and material preservation |
-| [Linguistics](linguistics/) | 1 | Historical and computational linguistics — etymology, philology, and NLP |
-| [Travel](travel/) | 6 | Tour planning, hiking, route visualization, and outdoor trip logistics |
-| [Relocation](relocation/) | 3 | Cross-border EU/DACH relocation planning, documents, and bureaucracy |
-| [A2a Protocol](a2a-protocol/) | 3 | Google A2A agent-to-agent protocol implementation and interoperability |
-| [Geometry](geometry/) | 3 | Classical and computational geometry, trigonometry, and proofs |
-| [Number Theory](number-theory/) | 3 | Prime analysis, modular arithmetic, and Diophantine equations |
-| [Stochastic Processes](stochastic-processes/) | 3 | Markov chains, HMMs, MCMC, and stochastic simulation |
-| [Theoretical Science](theoretical-science/) | 3 | Quantum physics, quantum chemistry, and theoretical mathematics |
-| [Diffusion](diffusion/) | 4 | Cognitive drift-diffusion models and generative AI diffusion models |
-| [Hildegard](hildegard/) | 5 | Hildegard von Bingen medieval polymath knowledge — herbal medicine, holistic health, sacred music, viriditas, and natural history |
-| [Maintenance](maintenance/) | 5 | Codebase cleanup, project tidying, broken reference repair, and issue triage |
-| [Blender](blender/) | 3 | Blender Python API scripting for 3D modeling, scene creation, and rendering |
-| [Visualization](visualization/) | 5 | 2D visualization, image composition, and publication-ready graphics |
-| [3d Printing](3d-printing/) | 3 | Additive manufacturing from model preparation through troubleshooting |
-| [Lapidary](lapidary/) | 4 | Gemstone identification, cutting, polishing, and appraisal |
-| [Entomology](entomology/) | 5 | Insect identification, behavior observation, population surveys, specimen preservation, and citizen science |
-| [Versioning](versioning/) | 4 | Semantic versioning, changelog management, release planning, and dependency auditing |
-| [Spectroscopy](spectroscopy/) | 6 | Spectroscopic technique interpretation and analytical planning for NMR, IR, MS, UV-Vis, and Raman |
-| [Chromatography](chromatography/) | 5 | Chromatographic method development, interpretation, troubleshooting, and ICH Q2 validation |
-| [Gpu Optimization](gpu-optimization/) | 2 | GPU kernel performance analysis, software pipelining, and SASS-level optimization |
-| [Digital Logic](digital-logic/) | 4 | Boolean algebra, logic gates, combinational and sequential circuits, and CPU architecture simulation |
-| [Electromagnetism](electromagnetism/) | 4 | Electric and magnetic fields, Maxwell's equations, electromagnetic induction, and practical electromagnetic devices |
-| [Levitation](levitation/) | 3 | Physical levitation mechanisms including magnetic, acoustic, aerodynamic, and electrostatic |
-| [I18n](i18n/) | 1 | Internationalization and translation workflow skills |
-| [Synoptic](synoptic/) | 4 | Panoramic awareness, cross-domain integration, and simultaneous multi-perspective cognition |
-| [Tensegrity](tensegrity/) | 1 | Tensional integrity systems — force balance, prestress stability, and cross-scale structural analysis from cytoskeleton to architecture |
-| [Cli](cli/) | 4 | CLI tool development — command scaffolding, plugin architecture, terminal output design, and integration testing |
-| [Open Source](open-source/) | 2 | Open-source contribution workflow skills |
-| [Investigation](investigation/) | 9 | Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure |
-| [Memex](memex/) | 5 | Ritual wrappers and umbrella skill for the memex agent-native shared-memory subsystem (markdown source-of-truth + Postgres/pgvector + MCP) — session init, observation logging, pre-commit verification, and milestone slice handoff |
-| [Ocr](ocr/) | 1 | Optical character and handwritten-text recognition — engine selection, benchmarking, and transcription quality measurement |
-| [Agent Commerce](agent-commerce/) | 1 | Agent payment protocols — testing, conformance, and settlement verification for x402 and related rails |
+| R Packages | 10 | R package development lifecycle skills |
+| Jigsawr | 5 | jigsawR puzzle package development skills |
+| Containerization | 10 | Docker and container workflow skills |
+| Reporting | 5 | Quarto, R Markdown, and publication-ready report skills |
+| Compliance | 17 | GxP regulatory and validation skills |
+| Mcp Integration | 6 | MCP server setup and troubleshooting skills |
+| Web Dev | 5 | Web development skills for Next.js and modern frontend |
+| Git | 11 | Git version control and GitHub workflow skills |
+| General | 26 | Cross-cutting development environment and workflow skills |
+| Citations | 3 | Academic and software citation management with R and BibTeX |
+| Data Serialization | 2 | Data serialization formats, schemas, and evolution strategies |
+| Review | 11 | Senior-level review skills for research, data, architecture, and design |
+| Bushcraft | 4 | Wilderness survival and primitive skills |
+| Esoteric | 29 | Esoteric practices — AI self-directed variants and human-guidance variants |
+| Design | 6 | Ornamental design and AI-assisted image generation skills |
+| Defensive | 6 | Martial arts and applied defensive awareness skills |
+| Project Management | 6 | Agile and classic project management skills |
+| Devops | 13 | CI/CD, Kubernetes, GitOps, and infrastructure automation skills |
+| Observability | 13 | Monitoring, logging, tracing, alerting, and reliability engineering skills |
+| Edge Computing | 1 | Edge AI deployment, on-device inference, model quantization, and hardware acceleration |
+| Mlops | 12 | ML experiment tracking, model serving, feature stores, pipelines, and AIOps skills |
+| Workflow Visualization | 6 | Workflow annotation and Mermaid diagram generation with putior |
+| Swarm | 9 | Collective intelligence, emergent coordination, and distributed decision-making strategies |
+| Morphic | 7 | Adaptive transformation, structural metamorphosis, and reconfiguration strategies |
+| Alchemy | 4 | Code and data transmutation through systematic decomposition, purification, and synthesis |
+| Tcg | 3 | Trading card game grading, deck building, and collection management |
+| Intellectual Property | 4 | Patent landscape analysis, prior art search, and IP strategy |
+| Web Scraping | 2 | Headless browsing, data extraction, anti-bot evasion, and ethical proxy rotation for consuming web content |
+| Gardening | 5 | Plant cultivation, soil preparation, garden observation, and hand tool care |
+| Shiny | 7 | Shiny web application development, modules, testing, and deployment |
+| Animal Training | 2 | Canine behavior and obedience training skills |
+| Mycology | 2 | Fungi identification, cultivation, and mycelial ecology |
+| Prospecting | 2 | Mineral identification and precious metal recovery |
+| Crafting | 1 | Traditional handcraft and artisan skills |
+| Library Science | 3 | Library cataloging, collection management, and material preservation |
+| Linguistics | 1 | Historical and computational linguistics — etymology, philology, and NLP |
+| Travel | 6 | Tour planning, hiking, route visualization, and outdoor trip logistics |
+| Relocation | 3 | Cross-border EU/DACH relocation planning, documents, and bureaucracy |
+| A2a Protocol | 3 | Google A2A agent-to-agent protocol implementation and interoperability |
+| Geometry | 3 | Classical and computational geometry, trigonometry, and proofs |
+| Number Theory | 3 | Prime analysis, modular arithmetic, and Diophantine equations |
+| Stochastic Processes | 3 | Markov chains, HMMs, MCMC, and stochastic simulation |
+| Theoretical Science | 3 | Quantum physics, quantum chemistry, and theoretical mathematics |
+| Diffusion | 4 | Cognitive drift-diffusion models and generative AI diffusion models |
+| Hildegard | 5 | Hildegard von Bingen medieval polymath knowledge — herbal medicine, holistic health, sacred music, viriditas, and natural history |
+| Maintenance | 5 | Codebase cleanup, project tidying, broken reference repair, and issue triage |
+| Blender | 3 | Blender Python API scripting for 3D modeling, scene creation, and rendering |
+| Visualization | 5 | 2D visualization, image composition, and publication-ready graphics |
+| 3d Printing | 3 | Additive manufacturing from model preparation through troubleshooting |
+| Lapidary | 4 | Gemstone identification, cutting, polishing, and appraisal |
+| Entomology | 5 | Insect identification, behavior observation, population surveys, specimen preservation, and citizen science |
+| Versioning | 4 | Semantic versioning, changelog management, release planning, and dependency auditing |
+| Spectroscopy | 6 | Spectroscopic technique interpretation and analytical planning for NMR, IR, MS, UV-Vis, and Raman |
+| Chromatography | 5 | Chromatographic method development, interpretation, troubleshooting, and ICH Q2 validation |
+| Gpu Optimization | 2 | GPU kernel performance analysis, software pipelining, and SASS-level optimization |
+| Digital Logic | 4 | Boolean algebra, logic gates, combinational and sequential circuits, and CPU architecture simulation |
+| Electromagnetism | 4 | Electric and magnetic fields, Maxwell's equations, electromagnetic induction, and practical electromagnetic devices |
+| Levitation | 3 | Physical levitation mechanisms including magnetic, acoustic, aerodynamic, and electrostatic |
+| I18n | 1 | Internationalization and translation workflow skills |
+| Synoptic | 4 | Panoramic awareness, cross-domain integration, and simultaneous multi-perspective cognition |
+| Tensegrity | 1 | Tensional integrity systems — force balance, prestress stability, and cross-scale structural analysis from cytoskeleton to architecture |
+| Cli | 4 | CLI tool development — command scaffolding, plugin architecture, terminal output design, and integration testing |
+| Open Source | 2 | Open-source contribution workflow skills |
+| Investigation | 9 | Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure |
+| Memex | 5 | Ritual wrappers and umbrella skill for the memex agent-native shared-memory subsystem (markdown source-of-truth + Postgres/pgvector + MCP) — session init, observation logging, pre-commit verification, and milestone slice handoff |
+| Ocr | 1 | Optical character and handwritten-text recognition — engine selection, benchmarking, and transcription quality measurement |
+| Agent Commerce | 1 | Agent payment protocols — testing, conformance, and settlement verification for x402 and related rails |
 <!-- AUTO:END:skills-table -->
 
 ## SKILL.md Format

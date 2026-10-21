@@ -135,6 +135,11 @@ on:
       # touching no content file and no generator -- nothing here matched, so the healer never
       # ran, and the drift sat until an unrelated push healed it or a release went red. Same
       # rationale as #362 listing the generators: heal at the causing commit.
+      #
+      # package.json is also the VERSION input: SECURITY.md and .claude-plugin/plugin.json both
+      # state it (#749), so a bump that reached main without `npm run update-readmes` heals here.
+      # No `!.claude-plugin/plugin.json` negation: no positive pattern above reaches
+      # .claude-plugin/, so the auto-commit of that output cannot re-trigger this workflow.
       - 'package.json'
       - 'package-lock.json'
   workflow_dispatch:
@@ -178,4 +183,4 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d
         with:
           commit_message: "docs: auto-update README statistics and translation status"
-          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md guides/quick-reference.md viz/README.md tests/README.md i18n/README.md SECURITY.md tools/README.md i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml i18n/caveman-lite/translation_status.yml i18n/caveman/translation_status.yml i18n/caveman-ultra/translation_status.yml i18n/wenyan-lite/translation_status.yml i18n/wenyan/translation_status.yml i18n/wenyan-ultra/translation_status.yml"
+          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md guides/quick-reference.md viz/README.md tests/README.md i18n/README.md SECURITY.md tools/README.md .claude-plugin/plugin.json i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml i18n/caveman-lite/translation_status.yml i18n/caveman/translation_status.yml i18n/caveman-ultra/translation_status.yml i18n/wenyan-lite/translation_status.yml i18n/wenyan/translation_status.yml i18n/wenyan-ultra/translation_status.yml"
