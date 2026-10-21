@@ -127,7 +127,7 @@ two concurrent bursts of 6 sessions each. On this build:
 - A resume writes nothing when nothing changed.
 
 The full table, the gates and five deviations from the declared read-out are in `REPLICATION.md`,
-"Part B results"; the outputs are FACTS F15–F17.
+"Part B results"; the outputs are FACTS F15–F17. *(Review round 2 completed that list without a count; see `REPLICATION.md`.)*
 
 ### What this does not establish
 
@@ -180,7 +180,7 @@ The full table, the gates and five deviations from the declared read-out are in 
 
 ### Addendum 2026-10-21: integration re-check
 
-The session that wrote this folder ended on 2026-10-02 without committing it. The folder was committed on 2026-10-21. Three sentences above were reworded after a leak audit; review round 1 then reworded one of them again and added three end-of-line pointers to this addendum (both listed at the end); nothing else above changed. This addendum re-checks the folder at `6685d7b18`.
+The session that wrote this folder ended on 2026-10-02 without committing it. The folder was committed on 2026-10-21. Three sentences above were reworded after a leak audit; review round 1 then reworded one of them again and added three end-of-line pointers to this addendum, and review round 2 added a fourth (all listed at the end); nothing else above changed. This addendum re-checks the folder at `6685d7b18`.
 
 `FACTS.md` is **not** regenerated. It stays byte for byte the 2026-10-02T15:26Z sheet measured at `1e7ed10fe`, and it is the record for every figure above. `1e7ed10fe` is the HEAD the sheet ran at; this folder was untracked there, and the committed scripts are byte-identical to that untracked copy (`cmp` against a backup taken before the first commit; every script's mtime there precedes 15:26:42Z).
 
@@ -194,7 +194,7 @@ The re-check ran in a `git clone --shared` of `6685d7b18`, with this folder copi
   - F2, F7, F13, F14 and F18 read transcripts that Claude Code has since deleted. `cleanupPeriodDays` is unset, so the 30-day default applies.
     - 362 of the census's 1,053 records survive: 30 in main sessions and 332 in subagents.
     - The earliest survivor is from 2026-09-21T09:13Z, on 2.1.278. The rest age out by about 2026-10-31.
-    - A control count of 1,084 records after the cutoff shows that the counter still sees the channel.
+    - A control count of 1,084 records after the cutoff shows that the counter still sees the channel. That figure comes from the integration audit's counter, which is not in this folder, and is a live count.
   - F3: the user `CLAUDE.md` was re-created on 2026-10-07, so its inode and birth time changed.
   - F4 and F5: the 28 `-tmp-tmp-*` stores have aged out; none remain.
   - F8: `tools/wirecap.py` changed in `513be7731` (2026-10-09).
@@ -211,3 +211,10 @@ The re-check ran in a `git clone --shared` of `6685d7b18`, with this folder copi
 - End-of-line pointers to this addendum date three present-tense sentences it overtakes: the 2.1.258 floor in the objective, the leftover stores in the gap breakdown, and the stores side finding.
 - In this addendum: T9 is no longer called a quoted comment, and the 2.1.278 floor and the note on `1e7ed10fe` were added.
 - Outside this file: `REPLICATION.md` (Part A no longer writes `FACTS.md` or runs F15 and F16; "Part B results" now says how the store is adopted and when not to run the scripts, what cleanup removes, that the docstrings' "fail-closed" overclaims and no script stops on a failed GATE, and lists a second step not done), comment lines of `FACTS.spec` (no row changed, so `FACTS.md` still matches it), and the draft's header and footer.
+
+**Changed in review round 2 (2026-10-21):**
+- An end-of-line pointer on the Part B paragraph above now notes that the deviation list was completed. That paragraph's "five" is the 2026-10-02 count.
+- In this addendum, the 1,084 control count is attributed to the audit's counter.
+- Outside this file:
+  - `REPLICATION.md` now says how to share a regenerated sheet safely. Its deviation list has no count and adds the unenforced slicer conditions, arm 4b's added set and arm 5c. Part A's scope now names `FACTS.md`, and the `__pycache__` side effect is stated.
+  - `FACTS.spec` comments now say the regenerated sheet can print the home directory.

@@ -1,8 +1,11 @@
 # Fact spec for UPSTREAM-DRAFT.md and RESULT.md. FACTS.md is the 2026-10-02 record and is not regenerated
 # (RESULT.md, Addendum 2026-10-21). To compare, write to a scratch path: see REPLICATION.md Part A.
-# Publishable by construction: store names are opaque labels (--label-stores), home paths go through
-# $HOME, and no project on this machine is named.
-# Every command reads, except F15/F16, which start `claude -p` and create and remove stores under ~/.claude; --selftest and F10 write only to temporary directories.
+# The 2026-10-02 sheet (FACTS.md) is publishable: store names are opaque labels (--label-stores), commands
+# name home paths through $HOME, and no project on this machine is named. A regeneration is not publishable
+# as is: where the 2026-09-15 -tmp-tmp-* stores are absent (every other machine, and this one since they
+# aged out), F4 and F5 print the expanded home directory in their error lines under exit 0, and F3 does the
+# same (exit 1) where there is no user CLAUDE.md.
+# Every command reads, except F15/F16, which start `claude -p` and create and remove stores under ~/.claude; --selftest and F10 write only to temporary directories; F17 imports stage2, so Python may leave a gitignored partb/__pycache__.
 
 F1 the census passes its selftest (incl. plural-field, blind-report and unchanged-file arms) :: python3 tests/results/2026-10-01-instructions-record-manifest/instructions-census.py --selftest
 F2 the census at the cutoff, drafting session excluded, stores labelled :: python3 tests/results/2026-10-01-instructions-record-manifest/instructions-census.py --exclude-session baeb8d5c --until 2026-10-01T20:30:00Z --gap-detail 40 --label-stores

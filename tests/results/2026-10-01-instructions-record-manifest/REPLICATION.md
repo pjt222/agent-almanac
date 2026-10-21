@@ -1,8 +1,8 @@
 # Replication steps — anthropics/claude-code#82056: is an `instructions` record a manifest?
 
-This document has two parts. Part A re-derives every number in `RESULT.md` and in the draft except
-those of Part B's live arms (F15, F16). It writes only temporary directories and takes a few
-minutes. Part B is the wire experiment that draft §3 reports. It
+This document has two parts. Part A re-derives every number in `FACTS.md` except those of Part B's
+live arms (F15, F16). It writes only temporary directories (and Python's bytecode cache under
+`partb/`) and takes a few minutes. Part B is the wire experiment that draft §3 reports. It
 **was run on 2026-10-02** (scripts in `partb/`, results under "Part B results" at the end). Each step marked **GATE** must pass before the next one runs. Every prediction
 is declared before any arm runs, and every Part B expectation that rests on extrapolation is
 tagged *[extrapolated]*.
@@ -27,6 +27,10 @@ rg -v '^F1[56] ' $D/FACTS.spec > "$OUT_DIR/partA.spec"   # F15/F16 are Part B's 
 bash tools/fact-sheet.sh "$OUT_DIR/partA.spec" "$OUT_DIR/FACTS.regen.md"   # compare with FACTS.md; do not copy over it
 ```
 
+Before sharing `FACTS.regen.md`, replace your home directory in it: F3, F4 and F5 can print it (see
+`FACTS.spec`). `tools/check-redaction.sh` does not settle this. Its home-path rule matches only
+`/home/<user>/`, and it already exits 1 on `FACTS.md` for the `-tmp-tmp-*` glob.
+
 The last three lines regenerate every other cited figure, with its command, into a temporary
 directory. The filter keeps F15 and F16 out of Part A: they start `claude -p` sessions and create
 and remove stores under `~/.claude`, and `FACTS.md` holds their 2026-10-02 output. The only
@@ -36,7 +40,8 @@ new directory, a worktree, a `claude -p` probe); "Part B results" says why.
 
 The census reads `~/.claude/projects/*/*.jsonl` and `*/*/subagents/**/*.jsonl`, and stats the user
 `CLAUDE.md` and the index files. It writes nothing except the selftest's temporary fixture;
-`census-mutants.py` and the fact sheet write only temporary directories.
+`census-mutants.py` and the fact sheet write only temporary directories (F17's import of `stage2` can
+also leave a gitignored `partb/__pycache__`).
 
 - `--until` pins the cutoff for transcript contents. Gap verdicts that fall back to disk state
   read the disk as it is at run time.
@@ -262,7 +267,7 @@ The scripts remove the arm directories, the store the directory diff adopted, an
 `session-env` entries. They do not touch `~/.claude.json` or `~/.claude/tasks`. After the runs,
 both were checked by hand and held no arm entry; that check is not in FACTS.
 
-**Deviations from the declared read-out, and why (five, an added arm, and two steps not done):**
+**Deviations from the declared read-out, and why** (the cleanup and gate-stop departures are described above the tables):
 
 - **`Bn` selection.** The declared rule required the prompt in the request's *last* message.
   Hooks append their context as trailing `system`-role messages, so the first run selected nothing
@@ -283,9 +288,18 @@ both were checked by hand and held no arm entry; that check is not in FACTS.
   not implemented as a gate. `stage1.py` prints the comparison; `stage2.py` and `stage3.py` do not
   compute it. In F15 the `IDX-A` canary reached the wire, and F16's transcripts were read from the
   adopted store, so both runs used the arms' own store.
+- **Not done.** The slicer's fail-closed conditions are not enforced. In `stage2.py`, an unknown
+  preamble that carries a `Contents of /` header, a missing separator, or a lone unknown label sets
+  `slicer_ok` false, and P1/P2/P3 are still scored. An unknown label next to a known one raises a
+  TypeError. `stage3.py` discards the flag. F15 reports `slicer_ok: true` on every arm it scored;
+  F16 does not compute it.
+- **Arm 4b added set.** Declared: every message after the summary message. `stage2.py` takes every
+  message of the first request after the boundary. The declared rule was not applied, and whether
+  it gives the same verdict was not measured.
 - **Arm 5.** The bursts are simultaneous `-p` resumes and starts against a canned reply, scored on
   the index only. They do not reproduce tonydzi's automated queued resumes on 2.1.266, and 5a
-  resumed after an index edit, which tonydzi's resumes did not.
+  resumed after an index edit, which tonydzi's resumes did not. 5c (six fresh starts at once) was not
+  declared.
 
 **Reading.** On 2.1.287 / linux-x64, in the single-session arms the record lists exactly what each
 request added: untagged records are complete, and tagged records are exactly the changed files.
