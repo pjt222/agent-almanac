@@ -8,6 +8,7 @@ description: >
 locale: zh-CN
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -217,17 +218,17 @@ R 4.5.0 及相关软件包的安装已验证，满足所有规定要求。
 ```r
 # validation/scripts/run_iq.R
 sink("validation/iq/iq_evidence.txt")
-cat("IQ 执行日期：", format(Sys.time()), "\n\n")
+cat("IQ Execution Date:", format(Sys.time()), "\n\n")
 
-cat("IQ-001：R 版本\n")
-cat("结果：", R.version.string, "\n")
-cat("状态：", ifelse(R.version$major == "4" && R.version$minor == "5.0",
-                    "通过", "失败"), "\n\n")
+cat("IQ-001: R Version\n")
+cat("Result:", R.version.string, "\n")
+cat("Status:", ifelse(R.version$major == "4" && R.version$minor == "5.0",
+                      "PASS", "FAIL"), "\n\n")
 
-cat("IQ-002：软件包版本\n")
+cat("IQ-002: Package Versions\n")
 required <- renv::dependencies()
 installed <- installed.packages()
-# ... 比较逻辑
+# ... comparison logic
 sink()
 ```
 

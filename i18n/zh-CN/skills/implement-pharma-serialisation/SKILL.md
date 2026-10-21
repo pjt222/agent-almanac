@@ -9,6 +9,7 @@ description: >
 locale: zh-CN
 source_locale: en
 source_commit: 6f65f316
+fence_basis_commit: 6f65f316
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -75,30 +76,30 @@ metadata:
 ### 第 2 步：设计序列化数据模型
 
 ```sql
--- 核心序列化数据模型
+-- Core serialisation data model
 CREATE TABLE serial_numbers (
     id BIGSERIAL PRIMARY KEY,
     gtin VARCHAR(14) NOT NULL,          -- GS1 GTIN-14
-    serial_number VARCHAR(20) NOT NULL,  -- 每个 GTIN 唯一
+    serial_number VARCHAR(20) NOT NULL,  -- Unique per GTIN
     batch_lot VARCHAR(20) NOT NULL,
     expiry_date DATE NOT NULL,
-    status VARCHAR(20) DEFAULT 'ACTIVE', -- ACTIVE, DECOMMISSIONED, DISPENSED 等
+    status VARCHAR(20) DEFAULT 'ACTIVE', -- ACTIVE, DECOMMISSIONED, DISPENSED, etc.
     created_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE(gtin, serial_number)
 );
 
--- 聚合层级
+-- Aggregation hierarchy
 CREATE TABLE aggregation (
     id BIGSERIAL PRIMARY KEY,
-    parent_code VARCHAR(50) NOT NULL,     -- SSCC 或更高级别代码
+    parent_code VARCHAR(50) NOT NULL,     -- SSCC or higher-level code
     parent_level VARCHAR(10) NOT NULL,    -- CASE, PALLET, BUNDLE
-    child_code VARCHAR(50) NOT NULL,      -- GTIN+序列号或子 SSCC
+    child_code VARCHAR(50) NOT NULL,      -- GTIN+serial or child SSCC
     child_level VARCHAR(10) NOT NULL,     -- UNIT, BUNDLE, CASE
     aggregation_event_id UUID NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- EPCIS 事件
+-- EPCIS events
 CREATE TABLE epcis_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     event_type VARCHAR(30) NOT NULL,      -- ObjectEvent, AggregationEvent, TransactionEvent
@@ -132,20 +133,20 @@ import secrets
 import string
 
 def generate_serial_number(length: int = 20, charset: str = None) -> str:
-    """生成符合 GS1 标准的随机序列号。
+    """Generate a random serial number compliant with GS1 standards.
 
-    EU FMD 要求随机序列号以防止预测。
-    最多 20 个字符，字母数字（GS1 应用标识符 21）。
+    EU FMD requires randomised serial numbers to prevent prediction.
+    Max 20 characters, alphanumeric (GS1 Application Identifier 21).
     """
     if charset is None:
-        # GS1 AI(21) 允许：数字、大写字母、小写字母及部分特殊字符
-        # 大多数实现仅使用字母数字以确保互操作性
+        # GS1 AI(21) allows: digits, uppercase, lowercase, and some special chars
+        # Most implementations use alphanumeric only for interoperability
         charset = string.ascii_uppercase + string.digits
     return ''.join(secrets.choice(charset) for _ in range(length))
 
 
 def generate_serial_batch(gtin: str, batch_lot: str, expiry: str, count: int) -> list:
-    """为生产运行生成一批唯一序列号。"""
+    """Generate a batch of unique serial numbers for a production run."""
     serials = set()
     while len(serials) < count:
         serials.add(generate_serial_number())
@@ -187,13 +188,13 @@ GS1 DataMatrix 使用 FNC1 作为分隔符（GS 字符，ASCII 29）来分隔可
 
 ```python
 def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -> str:
-    """为 DataMatrix 打印编码 GS1 元素字符串。
+    """Encode GS1 element string for DataMatrix printing.
 
-    FNC1（GS 字符 \\x1d）分隔可变长度字段。
-    AI(01) 和 AI(17) 为固定长度，其后无需分隔符。
-    AI(21) 和 AI(10) 为可变长度，需要 FNC1 终止符。
+    FNC1 (GS character \\x1d) separates variable-length fields.
+    AI(01) and AI(17) are fixed length, so no separator needed after them.
+    AI(21) and AI(10) are variable length and need FNC1 terminator.
     """
-    GS = '\x1d'  # GS1 FNC1 / 组分隔符
+    GS = '\x1d'  # GS1 FNC1 / Group Separator
     return f"01{gtin}21{serial}{GS}10{batch}{GS}17{expiry}"
 ```
 
@@ -227,14 +228,14 @@ API 操作：
 实施 VRS 响应端点：
 
 ```python
-# 简化的 VRS 端点（DSCSA 验证）
+# Simplified VRS endpoint (DSCSA verification)
 from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
 @app.get("/verify/{gtin}/{serial}/{lot}/{expiry}")
 async def verify_product(gtin: str, serial: str, lot: str, expiry: str):
-    """DSCSA 产品验证端点。"""
+    """DSCSA product verification endpoint."""
     record = await lookup_serial(gtin, serial)
     if record is None:
         return {"verified": False, "reason": "SERIAL_NOT_FOUND"}
