@@ -114,7 +114,10 @@ or silently change the content under them. The refusal names the two ways forwar
 - **Into the npm package anyway.** It warns. `agent-almanac audit` reports any link that broke and
   exits 3; it does not report that an `npm update` changed the content under a link.
   `npm uninstall -g` removes the `agent-almanac` command along with the package and leaves the
-  links dangling, so only another install of the CLI can audit them.
+  links dangling, so only another install of the CLI can audit them. Remove the links before
+  `npm uninstall -g`: `agent-almanac uninstall <names>` for what `install` or `sync` linked, and
+  `agent-almanac scatter <team>` for what `gather` linked, with `-g` or `--scope` if the install
+  used it. `uninstall` takes no `--from-package`.
   ```bash
   agent-almanac install commit-changes --from-package link
   ```
