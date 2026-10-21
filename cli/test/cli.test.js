@@ -874,15 +874,21 @@ describe('npm package root (#606)', () => {
   // names the remover, one clause for install, sync and gather, each measured
   // to leave 0 links before `npm uninstall -g` against a packed tarball, with
   // a control that leaves them dangling (the maintainer's decision of
-  // 2026-10-21). "the same scope" is measured too: without `-g`, `uninstall`
-  // skips the links a `-g` install made. `uninstall` takes no
-  // `--from-package`, so the clause does not say "the install's flags".
+  // 2026-10-21). "the same scope and frameworks" is measured too (review
+  // round 3, R3-1): without `-g`, `uninstall` skips the links a `-g` install
+  // made, and without the install's `-f`, or a directory where `detect` lists
+  // the frameworks the install did, it skips the links of a framework it does
+  // not detect, under `-g` too. `-f` is named because `uninstall` and
+  // `scatter` accept it; only `--from-package` is left out, because
+  // `uninstall` rejects it.
   const linkWarning = (root) =>
     `WARN: Linking into the npm package at ${root}. \`npm update\` of ` +
     'agent-almanac can break these links, and `agent-almanac audit` reports ' +
     'any that broke; `npm uninstall` leaves them dangling and removes that ' +
-    'command too, so remove them first with the same scope: ' +
-    '`agent-almanac uninstall <names>`, or `scatter <team>` after `gather`.';
+    'command too, so remove them first with the same scope and frameworks ' +
+    '(the install\'s `-g`/`--scope` and `-f`; without `-f`, run it where ' +
+    '`agent-almanac detect` lists the frameworks the install did): ' +
+    '`agent-almanac uninstall <names>`, or `agent-almanac scatter <team>` after `gather`.';
 
   /**
    * Spawn the CLI by absolute path and keep BOTH streams. runAllowFail() keeps
