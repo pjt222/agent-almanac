@@ -123,11 +123,61 @@ Campfire state is stored in `.agent-almanac/state.json` in your current working 
 
 ### Running from Another Project
 
-The CLI auto-detects the almanac root by following `.claude/skills/` symlinks. If running from a directory without symlinks, pass the path explicitly:
+The CLI looks for the almanac root in this order:
+
+1. the current directory, if it holds `skills/_registry.yml`;
+2. `.claude/skills` in the project, and then
+3. `~/.claude/skills` in your home directory, each only when its own real path
+   lies inside a checkout (for example `.claude/skills -> <clone>/skills`). The
+   per-skill links `install` creates (`.claude/skills/<id>`,
+   `.agents/skills/<id>`, …) are never followed, nor is a `~/.claude/skills`
+   holding one link per skill, or a project link to such a directory;
+4. the current directory's parents;
+5. last, the package the CLI itself ships in.
+
+The package is used only when nothing earlier is found. So an npm-installed
+CLI run outside any checkout reads its own content, and `list`, `search`,
+`audit`, `campfire` and `list --installed` need no clone. A project you
+installed into from a clone is not recognised as one, though: it resolves to
+the package, whose catalogue can differ from the clone's, so keep passing
+`--source <clone>` there until detection follows those links (#606). To use a
+particular checkout, pass it explicitly:
 
 ```bash
 agent-almanac campfire --all --source /path/to/agent-almanac
 ```
+
+### Installing from the npm package
+
+When the root found is the npm package itself (a directory inside
+`node_modules`), `install`, `gather` and `sync` refuse by default, dry runs
+included. npm says nothing about links it did not make: `npm uninstall`
+removes that directory and every link into it dangles; `npm update` replaces
+it, so the links either follow the new version silently (except that a link
+to an item it removed dangles) or, in a version-keyed layout (npm
+`install-strategy=linked`, measured; pnpm, by inference), break. There are
+two ways forward:
+
+```bash
+# From a clone: the links point at a directory you control. Pass --source on
+# every later install from the project too: detection does not follow the
+# links install makes, so without it the CLI finds the npm package again.
+git clone https://github.com/pjt222/agent-almanac.git ~/agent-almanac
+agent-almanac install commit-changes --source ~/agent-almanac
+
+# Or link into the npm package anyway (it warns, on stderr), and audit after every npm update
+agent-almanac install commit-changes --from-package link
+agent-almanac audit    # exits 3 on links that broke; it cannot tell that an update changed their content
+```
+
+`--from-package` currently accepts only `link`; any other value is rejected.
+
+A root counts as an npm package when a `node_modules` path segment appears in
+it, as given or as its real path. Two limits follow. The match is
+case-sensitive, so on a case-insensitive filesystem a path typed with
+`Node_Modules` is not caught. And a clone that happens to live under a
+directory named `node_modules` is refused too, with `--from-package link` as
+its only way through.
 
 ## Campfire Architecture
 

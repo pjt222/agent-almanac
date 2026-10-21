@@ -18,14 +18,14 @@
  *   agent-almanac tend                   Health check your campfires
  */
 
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
 // Read the version from the manifest rather than restating it. A hardcoded
 // string drifted three ways (#456): the binary printed 0.1.0, cli/README.md
 // advertised 1.1.0, and the published package was 1.3.0.
 import pkg from '../package.json' with { type: 'json' };
 import { createInterface } from 'readline';
 import { loadRegistries, resolveItems, filterSkills, search, findTeam, findAgent } from './lib/registry.js';
-import { detectAlmanacRoot, resolveTargetDir } from './lib/resolver.js';
+import { detectAlmanacRoot, isNpmPackageRoot, resolveTargetDir } from './lib/resolver.js';
 import { detectFrameworks } from './lib/detector.js';
 import { getAdapter, getAdaptersForDetections, listAdapters } from './adapters/index.js';
 import { installAll, uninstallAll, auditAll, auditExitCode, warnUnsupportedScopes } from './lib/installer.js';
@@ -84,6 +84,91 @@ function getContext(options) {
   return { reg, almanacRoot, scope, scopeExplicit, projectDir, adapters };
 }
 
+// ── Installing from an npm package root (#606) ──────────────────
+
+/**
+ * The modes `--from-package` accepts. Only implemented modes belong here:
+ * commander rejects any other value with its own message and lists exactly
+ * these in the help text, so the help can never offer a mode the CLI lacks.
+ */
+const FROM_PACKAGE_MODES = ['link'];
+
+/**
+ * `--from-package <mode>`, shared by every command that installs.
+ *
+ * Long-only and kebab-case like `--source <path>` and `--with-deps`, with a
+ * `<value>` like `--scope <scope>`. No short letter, because it is an opt-in to
+ * a risk, and no commander default, so an absent flag stays distinguishable
+ * (#607). Named for the situation it governs — the content comes FROM an
+ * installed package — so `--source`, which says where the content is, and this,
+ * which says what to do when that place is npm's, read as a pair.
+ */
+function fromPackageOption() {
+  return new Option(
+    '--from-package <mode>',
+    'Install even though the content root is an npm package (inside node_modules), '
+      + 'which is refused by default. link: symlink into the package; '
+      + 'npm update or npm uninstall can break the links',
+  ).choices(FROM_PACKAGE_MODES);
+}
+
+/**
+ * Refuse to install from an npm package root unless `--from-package` says how.
+ *
+ * Called by every command that installs (install, sync, gather), right after
+ * getContext() and before any item is resolved or anything is written — a dry
+ * run included, since a dry run exists to predict the real one.
+ * One body, so the refusal, the warning and the parameter each live on one line.
+ *
+ * `npm uninstall` leaves links into node_modules dangling, and `npm update` can
+ * break them or silently change the content under them: under npm's default
+ * layout the package is recreated at the same path, so the links follow the new
+ * version without a word, except that a link to an item the new version removed
+ * dangles (measured; a renamed or moved item, by inference); under a
+ * version-keyed layout (npm `install-strategy=linked`, measured; pnpm, by
+ * inference) the old directory is pruned and they break.
+ * npm says nothing about links it did not make, and `audit` reports only the
+ * ones that broke. So the default is to stop and
+ * name both ways forward. Every adapter is covered,
+ * including the few that write files rather than links, because which adapters
+ * run depends on what is detected in the project, not on anything the user
+ * chose (#606, decided by the maintainer 2026-10-14).
+ *
+ * With `link`, the warning names the remover to run before `npm uninstall`,
+ * one clause for all three callers, each measured against a packed tarball
+ * (#606, review rounds 2 and 3, R2-2 and R3-1): `uninstall <names>` after
+ * install or sync, `scatter <team>` after gather, either with the install's
+ * scope and frameworks. Without `-g`, `uninstall` skips a `-g` install's
+ * links. getContext() takes the adapters from `-f`, or else detects them in
+ * the current directory, under `-g` too, so the remover needs the install's
+ * `-f`, or a directory where `detect` lists the frameworks the install did;
+ * the same directory is not enough once a framework's marker is gone.
+ * `uninstall` takes no `--from-package`.
+ *
+ * @param {{ almanacRoot: string }} ctx
+ * @param {{ fromPackage?: string }} options
+ */
+function guardPackageRoot(ctx, options) {
+  if (!isNpmPackageRoot(ctx.almanacRoot)) return;
+  const mode = options.fromPackage;
+  if (mode !== 'link') refusePackageRoot(ctx.almanacRoot);
+  // stderr, like the refusal, not reporter.warn(): on stdout this line would
+  // precede `gather --json`'s document and make it unparseable. Only this
+  // warning moves; reporter.warn() stays on stdout for its other callers.
+  console.error(reporter.chalk.yellow(`  WARN: Linking into the npm package at ${ctx.almanacRoot}. \`npm update\` of agent-almanac can break these links, and \`agent-almanac audit\` reports any that broke; \`npm uninstall\` leaves them dangling and removes that command too, so remove them first with the same scope and frameworks (the install's \`-g\`/\`--scope\` and \`-f\`; without \`-f\`, run it where \`agent-almanac detect\` lists the frameworks the install did): \`agent-almanac uninstall <names>\`, or \`agent-almanac scatter <team>\` after \`gather\`.`));
+}
+
+/** Print the refusal and exit 1, the code getContext() uses for a root it cannot use. */
+function refusePackageRoot(root) {
+  reporter.error(
+    `Not installing from the npm package at ${root}: \`npm uninstall\` leaves links into node_modules `
+      + 'dangling, and `npm update` can break them or silently change the content under them.\n'
+      + '    Either install from a clone:      --source <clone>\n'
+      + '    or link into the package anyway:  --from-package link',
+  );
+  process.exit(1);
+}
+
 // ── install ──────────────────────────────────────────────────────
 
 program
@@ -100,8 +185,10 @@ program
   .option('-n, --dry-run', 'Preview without making changes')
   .option('--force', 'Overwrite existing content')
   .option('--source <path>', 'Path to agent-almanac root')
+  .addOption(fromPackageOption())
   .action(async (names, options) => {
     const ctx = getContext(options);
+    guardPackageRoot(ctx, options);
 
     // If no args, try manifest
     if (names.length === 0 && !options.domain && !options.agent && !options.team) {
@@ -405,6 +492,7 @@ program
   .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('-n, --dry-run', 'Preview without making changes')
   .option('--source <path>', 'Path to agent-almanac root')
+  .addOption(fromPackageOption())
   .action(async (options) => {
     const manifest = loadManifest();
     if (!manifest) {
@@ -413,6 +501,7 @@ program
     }
 
     const ctx = getContext(options);
+    guardPackageRoot(ctx, options);
     const desired = resolveManifest(manifest, ctx.reg);
     const desiredSkillIds = new Set(desired.skills.map(s => s.id));
 
@@ -543,9 +632,11 @@ program
   .option('-q, --quiet', 'No ceremony, just install')
   .option('--json', 'Output as JSON')
   .option('--source <path>', 'Path to agent-almanac root')
+  .addOption(fromPackageOption())
   .addHelpText('after', '\nExamples:\n  agent-almanac gather tending\n  agent-almanac gather r-package-review --ceremonial\n  agent-almanac gather tending --only mystic,gardener')
   .action(async (name, options) => {
     const ctx = getContext(options);
+    guardPackageRoot(ctx, options);
     const state = loadState();
 
     // Resolve team

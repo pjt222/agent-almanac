@@ -92,10 +92,48 @@ Auto-discovers all 373 skills and 76 agents. To use a team, read its definition 
 install appears to succeed and the CLI then cannot start — check with `node --version` first.
 
 ```bash
-npm install -g agent-almanac
-agent-almanac detect              # show frameworks in cwd
-agent-almanac install commit-changes
+npm install -g agent-almanac            # the CLI, with every skill, agent, team and guide in its package
+agent-almanac detect                    # frameworks found in the current directory
+agent-almanac list                      # the catalogue; outside a checkout, the one shipped in the package
+agent-almanac install commit-changes    # refused by default from the npm package (see below)
 ```
+
+Outside a checkout, `list`, `search` and `audit` read the content shipped in the CLI's own
+package. `install` (like `gather` and `sync`) refuses to install from it by default. It installs
+by linking your frameworks' skill folders to the content, and npm says nothing about links it did
+not make: `npm uninstall` leaves links into the package dangling, and `npm update` can break them
+or silently change the content under them. The refusal names the two ways forward:
+
+- **From a clone (recommended).** The links then point at a directory you control. Pass `--source`
+  on every install from that project, not only the first: root detection does not yet follow the
+  links `install` makes, so without the flag the CLI finds the npm package again and refuses.
+  ```bash
+  git clone https://github.com/pjt222/agent-almanac.git ~/agent-almanac
+  agent-almanac install commit-changes --source ~/agent-almanac
+  ```
+- **Into the npm package anyway.** It warns. `agent-almanac audit` reports any link that broke and
+  exits 3; it does not report that an `npm update` changed the content under a link.
+  ```bash
+  agent-almanac install commit-changes --from-package link
+  ```
+  `npm uninstall -g` removes the `agent-almanac` command along with the package and leaves the
+  links dangling, so only another install of the CLI can audit them. Remove the links before
+  `npm uninstall -g`: `agent-almanac uninstall <names>` for what `install` or `sync` linked, and
+  `agent-almanac scatter <team>` for what `gather` linked.
+  - **The same scope and frameworks.** Pass the same `-g` or `--scope` and the same `-f` the
+    install used. Without `-f`, frameworks are detected in the current directory, under `-g` too,
+    so run `uninstall` or `scatter` where `agent-almanac detect` lists the frameworks the install
+    did. `uninstall` takes no `--from-package`.
+  - **Every name.** `<names>` is each skill and agent id on the install's `+` lines: what
+    `--domain`, `--with-deps`, `-a`, `-t` or a manifest's domain or `*` entry expanded to, not the
+    argument you gave the flag. `uninstall` expands nothing and exits 0 whether or not it removed
+    anything, so check afterwards that `agent-almanac list --installed`, with the same scope and
+    frameworks, prints only its heading, `Installed content:`. It lists Claude Code's agents link
+    as `agents`, which `uninstall` skips; any agent id removes that link.
+  - **Before an install from a clone.** A later `install` or `gather` from a clone keeps an
+    existing link into the package (`install` needs `--force` to replace it), so scatter or
+    uninstall it first.
+  - **A link that already dangles** is not removed by `uninstall`; delete it by hand.
 
 Reaches 12+ frameworks: Claude Code, Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw. See [cli/README.md](cli/README.md).
 

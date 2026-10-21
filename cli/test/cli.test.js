@@ -7,10 +7,16 @@
 
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { execSync } from 'child_process';
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { execSync, spawnSync } from 'child_process';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
 import { tmpdir, homedir } from 'os';
-import { isAbsolute, resolve } from 'path';
+import { dirname, isAbsolute, resolve } from 'path';
+// A namespace import, not named ones: isNpmPackageRoot is new in #606, and a
+// named import of an export that does not exist fails the whole file at link
+// time — which would make the red-first run at the base commit report one
+// SyntaxError instead of the individual tests failing for their own reasons.
+import * as resolver from '../lib/resolver.js';
+import { rmTree } from '../../scripts/test/_tmp.js';
 
 // Direct imports for unit tests.
 import { ClaudeCodeAdapter } from '../adapters/claude-code.js';
@@ -811,6 +817,375 @@ describe('audit exit codes end to end (#439)', () => {
 
   it('exits CRASHED when an adapter throws', () => {
     assert.equal(auditStatusIn(resolve(tmpRoot, 'crashed')), AUDIT_EXIT.CRASHED);
+  });
+});
+
+// ── npm package root (#606) ──────────────────────────────────────
+//
+// The npm-installed CLI could not find the content shipped beside it.
+// detectAlmanacRoot() searched the cwd, two `.claude/skills` symlink chains and
+// the cwd's ancestors, and never its own package directory, so README Path 3
+// (`npm install -g agent-almanac`, then `agent-almanac install …`) failed at its
+// third line for every npm user. The fallback fixes that and opens a second
+// problem, decided by the maintainer on 2026-10-14: installing FROM a package
+// root links into node_modules, which `npm uninstall` removes and `npm update`
+// may replace. So every command that installs refuses by default, naming both
+// ways forward, and `--from-package link` opts in.
+//
+// HOME is redirected for every case, in-process and spawned. Strategy 3 traces
+// ~/.claude/skills, and on a machine where that is a symlink into a checkout the
+// fallback cases would pass at the base commit for the wrong reason.
+//
+// The package-root fixture is a real directory at
+// <tmp>/prefix/lib/node_modules/agent-almanac, the shape `npm install -g
+// --prefix` creates, holding a one-skill registry. No `npm pack` runs in this
+// file: #670 measured the 10 s per-spawn cap 79% used. The packed-tarball proof
+// is a separate script with its own timeout.
+describe('npm package root (#606)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  const totalSkills = Object.values(skillsReg.domains)
+    .reduce((sum, domain) => sum + domain.skills.length, 0);
+  let tmpRoot;
+  let fakeHome;
+  let outside;
+  let pkgRoot;
+  let env;
+
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+
+  // Pinned literally (#606). Both ways forward must be named, and the wording
+  // is behaviour: a change to it should go red here and be made on purpose.
+  // Each npm command is named with what it does to the links, as measured in
+  // review rounds 1 and 2: `npm uninstall` leaves them dangling; `npm update`
+  // leaves them resolving to the new version's content under npm's default
+  // layout, except a link to an item the new version removed, which dangles,
+  // and breaks them under a version-keyed one (`install-strategy=linked`), so
+  // it "can" break them and is not said to.
+  const refusal = (root) =>
+    `ERROR: Not installing from the npm package at ${root}: \`npm uninstall\` leaves ` +
+    'links into node_modules dangling, and `npm update` can break them or silently ' +
+    'change the content under them.\n' +
+    '    Either install from a clone:      --source <clone>\n' +
+    '    or link into the package anyway:  --from-package link';
+  // The warning names what audit can and cannot see (review round 2, R2-2):
+  // `npm uninstall -g` removes the `agent-almanac` command with the package,
+  // so the audit that would report the dangling links is gone too. It then
+  // names the remover, one clause for install, sync and gather, each measured
+  // to leave 0 links before `npm uninstall -g` against a packed tarball, with
+  // a control that leaves them dangling (the maintainer's decision of
+  // 2026-10-21). "the same scope and frameworks" is measured too (review
+  // round 3, R3-1): without `-g`, `uninstall` skips the links a `-g` install
+  // made, and without the install's `-f`, or a directory where `detect` lists
+  // the frameworks the install did, it skips the links of a framework it does
+  // not detect, under `-g` too. `-f` is named because `uninstall` and
+  // `scatter` accept it; only `--from-package` is left out, because
+  // `uninstall` rejects it.
+  const linkWarning = (root) =>
+    `WARN: Linking into the npm package at ${root}. \`npm update\` of ` +
+    'agent-almanac can break these links, and `agent-almanac audit` reports ' +
+    'any that broke; `npm uninstall` leaves them dangling and removes that ' +
+    'command too, so remove them first with the same scope and frameworks ' +
+    '(the install\'s `-g`/`--scope` and `-f`; without `-f`, run it where ' +
+    '`agent-almanac detect` lists the frameworks the install did): ' +
+    '`agent-almanac uninstall <names>`, or `agent-almanac scatter <team>` after `gather`.';
+
+  /**
+   * Spawn the CLI by absolute path and keep BOTH streams. runAllowFail() keeps
+   * stdout only, but reporter.error() and commander's usage errors write to
+   * stderr, so a refusal asserted against stdout would match nothing.
+   */
+  function spawnCli(args, cwd) {
+    const res = spawnSync(process.execPath, [cliEntry, ...args],
+      { cwd, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+  }
+
+  /** os.homedir() reads $HOME at call time on POSIX; restore it whatever fn does. */
+  function withFakeHome(fn) {
+    const savedHomeEnv = process.env.HOME;
+    process.env.HOME = fakeHome;
+    try {
+      return fn();
+    } finally {
+      if (savedHomeEnv === undefined) delete process.env.HOME;
+      else process.env.HOME = savedHomeEnv;
+    }
+  }
+
+  /** A fresh project that both universal and claude-code detect: two symlink adapters. */
+  function project(name) {
+    const dir = resolve(tmpRoot, name);
+    mkdirSync(resolve(dir, '.claude'), { recursive: true });
+    return dir;
+  }
+
+  /** Every symlink under `dir` whose resolved target has a node_modules path segment. */
+  function linksIntoNodeModules(dir) {
+    const found = [];
+    const walk = (current) => {
+      for (const entry of readdirSync(current, { withFileTypes: true })) {
+        const entryPath = resolve(current, entry.name);
+        if (entry.isSymbolicLink()) {
+          const target = resolve(dirname(entryPath), readlinkSync(entryPath));
+          if (target.split(/[\\/]+/).includes('node_modules')) found.push(`${entryPath} -> ${target}`);
+        } else if (entry.isDirectory()) {
+          walk(entryPath);
+        }
+      }
+    };
+    walk(dir);
+    return found;
+  }
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-606-')));
+    fakeHome = resolve(tmpRoot, 'home');
+    outside = resolve(tmpRoot, 'outside');
+    mkdirSync(fakeHome, { recursive: true });
+    mkdirSync(outside, { recursive: true });
+
+    pkgRoot = resolve(tmpRoot, 'prefix/lib/node_modules/agent-almanac');
+    mkdirSync(resolve(pkgRoot, 'skills/commit-changes'), { recursive: true });
+    mkdirSync(resolve(pkgRoot, 'agents'), { recursive: true });
+    mkdirSync(resolve(pkgRoot, 'teams'), { recursive: true });
+    copyFileSync(resolve(ROOT, 'skills/commit-changes/SKILL.md'),
+      resolve(pkgRoot, 'skills/commit-changes/SKILL.md'));
+    writeFileSync(resolve(pkgRoot, 'skills/_registry.yml'), [
+      'total_skills: 1',
+      'domains:',
+      '  git:',
+      '    description: fixture',
+      '    skills:',
+      '      - id: commit-changes',
+      '        path: commit-changes/SKILL.md',
+      '',
+    ].join('\n'));
+    // An agent and a team, so `gather` has something to install at the base
+    // commit: its refusal case then fails there because links were created,
+    // not because the team was unknown.
+    writeFileSync(resolve(pkgRoot, 'agents/_registry.yml'), [
+      'total_agents: 1',
+      'agents:',
+      '  - id: fixture-agent',
+      '    path: agents/fixture-agent.md',
+      '    skills:',
+      '      - commit-changes',
+      '',
+    ].join('\n'));
+    writeFileSync(resolve(pkgRoot, 'agents/fixture-agent.md'), '---\nname: fixture-agent\n---\n');
+    writeFileSync(resolve(pkgRoot, 'teams/_registry.yml'), [
+      'total_teams: 1',
+      'teams:',
+      '  - id: fixture-team',
+      '    path: teams/fixture-team.md',
+      '    lead: fixture-agent',
+      '    members:',
+      '      - fixture-agent',
+      '',
+    ].join('\n'));
+    writeFileSync(resolve(pkgRoot, 'teams/fixture-team.md'), '---\nname: fixture-team\n---\n');
+
+    env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
+    delete env.LOCALAPPDATA;
+  });
+
+  after(() => {
+    rmTree(tmpRoot);
+  });
+
+  // ── the fallback ──
+
+  it('detectAlmanacRoot falls back to the package it ships in, outside any checkout', () => {
+    const found = withFakeHome(() => resolver.detectAlmanacRoot(outside));
+    assert.notEqual(found, null, 'no almanac root detected from outside the checkout');
+    assert.equal(realpathSync(found), realpathSync(ROOT));
+  });
+
+  it('accepts a package root only when it holds skills/_registry.yml', () => {
+    const emptyPackage = resolve(tmpRoot, 'empty-package');
+    mkdirSync(emptyPackage, { recursive: true });
+    assert.equal(withFakeHome(() => resolver.detectAlmanacRoot(outside, { packageRoot: emptyPackage })), null);
+    assert.equal(withFakeHome(() => resolver.detectAlmanacRoot(outside, { packageRoot: pkgRoot })), pkgRoot);
+  });
+
+  // The fallback is tried LAST, so a checkout that an earlier strategy finds
+  // still wins over the package. The test above is the control: with nothing
+  // earlier to find, pkgRoot alone answers. Both assertions are needed. From
+  // the checkout itself, strategy 1 answers, which catches the fallback moved
+  // first. From a subdirectory, strategies 1-3 all miss and only the walk-up
+  // (4) finds it, which catches the fallback moved to any place before 4; the
+  // first assertion alone lets that mutant survive (review round 1, F3).
+  it('a checkout found by an earlier strategy beats the package root', () => {
+    const checkout = resolve(tmpRoot, 'checkout-like');
+    const sub = resolve(checkout, 'deep/er');
+    mkdirSync(resolve(checkout, 'skills'), { recursive: true });
+    mkdirSync(sub, { recursive: true });
+    writeFileSync(resolve(checkout, 'skills/_registry.yml'), 'total_skills: 0\ndomains: {}\n');
+    assert.equal(withFakeHome(() => resolver.detectAlmanacRoot(checkout, { packageRoot: pkgRoot })), checkout,
+      'strategy 1 (cwd holds the registry) must beat the package fallback');
+    assert.equal(withFakeHome(() => resolver.detectAlmanacRoot(sub, { packageRoot: pkgRoot })), checkout,
+      'strategy 4 (walk up from cwd) must beat the package fallback');
+  });
+
+  for (const args of [['list'], ['list', '--installed', '-g'], ['audit']]) {
+    it(`${args.join(' ')} runs from outside any checkout`, () => {
+      const { status, stdout, stderr } = spawnCli(args, outside);
+      assert.doesNotMatch(stderr, /Could not detect agent-almanac root/);
+      assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+      if (args.length === 1 && args[0] === 'list') {
+        // The whole registry: the fallback found this checkout, not a fixture.
+        assert.match(stdout, new RegExp(`^${totalSkills} skills:$`, 'm'));
+      } else if (args[0] === 'list') {
+        assert.match(stdout, /^Installed content:$/m);
+      } else {
+        assert.match(stdout, /^Audit results:$/m);
+      }
+    });
+  }
+
+  // ── recognising a package root ──
+
+  it('recognises an npm package root by a node_modules path segment', () => {
+    const cases = [
+      ['/usr/lib/node_modules/agent-almanac', true],
+      ['/home/u/.nvm/versions/node/v22.12.0/lib/node_modules/agent-almanac', true],
+      ['/home/u/project/node_modules/agent-almanac', true],
+      ['/home/u/project/node_modules/.pnpm/agent-almanac@1.9.1/node_modules/agent-almanac', true],
+      ['/home/u/.npm/_npx/0123abcd/node_modules/agent-almanac', true],
+      ['C:\\Users\\u\\AppData\\Roaming\\npm\\node_modules\\agent-almanac', true],
+      ['/home/u/dev/agent-almanac', false],
+      ['/home/u/node_modules_backup/agent-almanac', false],
+      ['C:\\dev\\agent-almanac', false],
+    ];
+    for (const [candidate, expected] of cases) {
+      assert.equal(resolver.isNpmPackageRoot(candidate), expected, candidate);
+    }
+  });
+
+  it('recognises a symlink whose target is an npm package root, and not the checkout', () => {
+    const alias = resolve(tmpRoot, 'alias-to-package');
+    symlinkSync(pkgRoot, alias);
+    assert.equal(resolver.isNpmPackageRoot(alias), true);
+    assert.equal(resolver.isNpmPackageRoot(ROOT), false);
+  });
+
+  // The other direction, and the shape `npm link` makes: a path inside
+  // node_modules that is a symlink to a directory outside any node_modules.
+  // Links an install makes point at the spelling given, so they would run
+  // through node_modules and dangle once npm removes that symlink. Only the
+  // path as given can recognise it; the control proves its real path cannot,
+  // so the test cannot pass on the real-path arm (review round 1, F4).
+  it('recognises an npm-link-shaped package path whose target is outside node_modules', () => {
+    const linkedClone = resolve(tmpRoot, 'linked-clone');
+    mkdirSync(linkedClone, { recursive: true });
+    const linkedPkg = resolve(tmpRoot, 'linkprefix/lib/node_modules/agent-almanac');
+    mkdirSync(dirname(linkedPkg), { recursive: true });
+    symlinkSync(linkedClone, linkedPkg);
+    // Control: only the given spelling can answer true.
+    assert.equal(realpathSync(linkedPkg).split(/[\\/]+/).includes('node_modules'), false, realpathSync(linkedPkg));
+    assert.equal(resolver.isNpmPackageRoot(linkedPkg), true);
+  });
+
+  // ── install from a package root ──
+
+  it('install from a package root refuses by default and links nothing into node_modules', () => {
+    const dir = project('refuse-install');
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes', '--source', pkgRoot], dir);
+    assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
+    assert.deepEqual(linksIntoNodeModules(fakeHome), []);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+  });
+
+  // A dry run refuses too: it exists to predict the real run, and a preview
+  // listing node_modules links the real run would then refuse to make would be
+  // the #607 misdirection. cli/README.md and guardPackageRoot()'s docstring both
+  // promise this, so it is pinned rather than left as prose.
+  it('a dry run from a package root refuses too', () => {
+    const dir = project('refuse-dry-run');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', pkgRoot, '--dry-run'], dir);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assert.doesNotMatch(stdout, /DRY RUN/);
+    assert.deepEqual(linksIntoNodeModules(dir), []);
+  });
+
+  it('with --from-package link, install links into the package and warns', () => {
+    const dir = project('link-install');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'link'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    // stderr, like the refusal: on stdout it would precede `gather --json`'s
+    // document and make it unparseable (review round 1, F2).
+    assert.ok(stderr.includes(linkWarning(pkgRoot)), `link warning missing from stderr:\n${stderr}`);
+    assert.ok(!stdout.includes('Linking into the npm package'), `link warning leaked to stdout:\n${stdout}`);
+    for (const link of ['.agents/skills/commit-changes', '.claude/skills/commit-changes']) {
+      const linkPath = resolve(dir, link);
+      assert.ok(existsSync(linkPath), `${link} was not created or does not resolve`);
+      assert.equal(realpathSync(linkPath), realpathSync(resolve(pkgRoot, 'skills/commit-changes')));
+    }
+    // Control row: the walker the refusal cases rely on does see these links.
+    assert.equal(linksIntoNodeModules(dir).length, 2, linksIntoNodeModules(dir).join('\n'));
+  });
+
+  it('rejects a --from-package mode that is not implemented, before linking anything', () => {
+    const dir = project('unknown-mode');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.deepEqual(linksIntoNodeModules(dir), [], stdout);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.match(stderr, /option '--from-package <mode>' argument 'copy' is invalid\. Allowed choices are link\./);
+  });
+
+  it('install, gather and sync offer --from-package with only the implemented mode', () => {
+    for (const command of ['install', 'gather', 'sync']) {
+      const { status, stdout } = spawnCli([command, '--help'], outside);
+      assert.equal(status, 0, `${command} --help exited ${status}`);
+      const help = stdout.replace(/\s+/g, ' ');
+      assert.match(help, /--from-package <mode> .*\(choices: "link"\)/, `${command} --help:\n${stdout}`);
+      assert.doesNotMatch(help, /copy/i, `${command} --help names an unimplemented mode`);
+    }
+  });
+
+  it('gather refuses from a package root too', () => {
+    const dir = project('refuse-gather');
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--quiet', '--source', pkgRoot], dir);
+    assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+  });
+
+  // `--from-package link` is the documented way to keep the old behaviour, so it
+  // must not break the one machine-readable output among the gated commands.
+  // The project has only `.claude/`, whose adapters print no installer warnings,
+  // so any stdout pollution here is the link warning's.
+  it('gather --json --from-package link keeps stdout a JSON document and warns on stderr', () => {
+    const dir = project('link-gather-json');
+    const { status, stdout, stderr } = spawnCli(
+      ['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'link'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    let doc;
+    assert.doesNotThrow(() => { doc = JSON.parse(stdout); }, `stdout is not one JSON document:\n${stdout}`);
+    assert.equal(doc.team, 'fixture-team');
+    assert.ok(stderr.includes(linkWarning(pkgRoot)), `link warning missing from stderr:\n${stderr}`);
+  });
+
+  it('sync refuses from a package root too', () => {
+    const dir = project('refuse-sync');
+    writeFileSync(resolve(dir, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
+    const { status, stdout, stderr } = spawnCli(['sync', '--source', pkgRoot], dir);
+    assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+  });
+
+  it('a read-only command still runs from a package root', () => {
+    const { status, stdout, stderr } = spawnCli(['list', '--source', pkgRoot], outside);
+    assert.equal(status, 0, `exit ${status}\n${stderr}`);
+    assert.match(stdout, /^1 skills:$/m);
   });
 });
 
