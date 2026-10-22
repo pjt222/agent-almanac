@@ -18,7 +18,7 @@ import { existsSync, readdirSync, lstatSync } from 'fs';
 import { resolve } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
-import { classify, describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
 export class ClaudeCodeAdapter extends FrameworkAdapter {
   static id = 'claude-code';
@@ -114,8 +114,12 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
       // is never touched, nor consulted for a copy marker. It is reported as
       // not installed, without the kept-entry note, because nearly every
       // machine with Claude Code has a real one (S3-B2 F2).
+      // lstat, not classify(): classify() reads a copy marker inside a real
+      // directory, and nothing inside this one is the CLI's to read.
       const teamsLink = resolve(base, 'teams');
-      if (classify(teamsLink).kind !== 'link') return { action: 'skipped', path: teamsLink, details: 'not installed' };
+      let isLink = false;
+      try { isLink = lstatSync(teamsLink).isSymbolicLink(); } catch { /* nothing there */ }
+      if (!isLink) return { action: 'skipped', path: teamsLink, details: 'not installed' };
       return removeEntry(base, 'teams', { dryRun: options.dryRun });
     }
 
