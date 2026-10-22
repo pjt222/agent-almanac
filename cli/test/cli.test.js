@@ -2758,12 +2758,13 @@ describe('link sites: baseline pins (S3-B2 T0)', () => {
       name: 'claude-code (global): a dangling agents link', make: () => new ClaudeCodeAdapter(), scope: 'global',
       build: (sb) => {
         plant(resolve(sb.home, '.claude'), 'agents', sb.gone);
-        // At b3275420a listInstalled() tests the agents link with existsSync,
-        // which follows it, so a dangling one is not listed at all and audit()
-        // reports it as missing rather than broken.
+        // At b3275420a listInstalled() tested the agents link with existsSync,
+        // which follows it, so a dangling one was not listed at all and audit()
+        // reported `No agents symlink` (warning), not a broken link. By lstat
+        // since #993 §2, which makes the broken-agents push reachable (#823).
         return {
-          list: [],
-          audit: { framework: 'Claude Code', ok: [], warnings: ['No agents symlink'], errors: [] },
+          list: [{ id: 'agents', type: 'agent', path: resolve(sb.home, '.claude/agents'), broken: true }],
+          audit: { framework: 'Claude Code', ok: [], warnings: [], errors: ['agents symlink is broken'] },
         };
       },
     },
@@ -2917,4 +2918,66 @@ describe('opencode installs an agent only at <agents>/<id>.md (S3-B2 P2e)', () =
       assert.equal(readFileSync(resolve(agents, 'code-reviewer/notes.md'), 'utf8'), USER_CONTENT);
     });
   });
+});
+
+describe('a dangling link at a link site is seen, removed and replaced (#993 §2, S3-B2 P5)', () => {
+  // At b3275420a every link site tested its path with existsSync, which follows
+  // a link, so a link whose target is gone (after `npm uninstall`, or an
+  // `npm update` that dropped the item) counted as absent. uninstall reported
+  // it "not installed" and left it; install, with or without --force, skipped
+  // the unlink and then failed with EEXIST when symlinkSync met the link. One
+  // site per adapter scope is enough here: the scope only moves the directory.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-dangling-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** A link at the site's path whose target never existed. */
+  const plantDangling = (sb, path) => {
+    mkdirSync(dirname(path), { recursive: true });
+    symlinkSync(sb.gone, path);
+  };
+
+  for (const site of LINK_SITES) {
+    const scope = site.scopes[0];
+
+    it(`${site.site} (${scope}): uninstall removes a dangling link`, async () => {
+      await inLinkSandbox(tmpRoot, `uninstall-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantDangling(sb, path);
+        const shape = { ...UNINSTALL_SHAPE, ...site.uninstallShape };
+        assert.deepEqual(await site.adapter().uninstall(linkItem(site, sb), sb.proj, scope, {}), shape.removed(path));
+        assert.throws(() => lstatSync(path), { code: 'ENOENT' }, 'the dangling link is gone');
+      });
+    });
+
+    it(`${site.site} (${scope}): install --force replaces a dangling link`, async () => {
+      await inLinkSandbox(tmpRoot, `force-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantDangling(sb, path);
+        const details = { ...LINK_DETAILS, ...site.details };
+        assert.deepEqual(
+          await site.adapter().install(linkItem(site, sb), sb.proj, scope, { almanacRoot: sb.src, force: true }),
+          linkResult('created', path, details.created),
+        );
+        assert.equal(readlinkSync(path), expectedLinkText(site, sb, scope));
+      });
+    });
+
+    it(`${site.site} (${scope}): install without --force reports a dangling link as already there and keeps it`, async () => {
+      await inLinkSandbox(tmpRoot, `keep-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantDangling(sb, path);
+        const details = { ...LINK_DETAILS, ...site.details };
+        assert.deepEqual(
+          await site.adapter().install(linkItem(site, sb), sb.proj, scope, { almanacRoot: sb.src }),
+          linkResult('skipped', path, details.exists),
+        );
+        assert.equal(readlinkSync(path), sb.gone, 'without --force the link is left as it was');
+      });
+    });
+  }
 });

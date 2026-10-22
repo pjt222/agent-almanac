@@ -133,7 +133,6 @@ or silently change the content under them. The refusal names the two ways forwar
   - **Before an install from a clone.** A later `install` or `gather` from a clone keeps an
     existing link into the package (`install` needs `--force` to replace it), so scatter or
     uninstall it first.
-  - **A link that already dangles** is not removed by `uninstall`; delete it by hand.
 
 Reaches 12+ frameworks: Claude Code, Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw. See [cli/README.md](cli/README.md).
 

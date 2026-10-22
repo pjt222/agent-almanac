@@ -9,6 +9,7 @@ import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFile
 import { resolve, relative } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
+import { clearForInstall, removeEntry } from '../lib/placement.js';
 
 export class VibeAdapter extends FrameworkAdapter {
   static id = 'vibe';
@@ -37,10 +38,10 @@ export class VibeAdapter extends FrameworkAdapter {
       const targetBase = this._skillsBase(projectDir, scope);
       const targetPath = childPath(targetBase, item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
+      const blocked = clearForInstall(targetPath, { force: options.force });
+      if (blocked) return blocked;
 
       mkdirSync(targetBase, { recursive: true });
-      if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
       const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
       symlinkSync(scope === 'global' ? source : relative(targetBase, source), targetPath);
       return { action: 'created', path: targetPath };
@@ -81,9 +82,7 @@ system_prompt_id = "${item.id}"
     if (item.type === 'skill') {
       const targetPath = childPath(this._skillsBase(projectDir, scope), item.id);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
-      unlinkSync(targetPath);
-      return { action: 'removed', path: targetPath };
+      return removeEntry(targetPath);
     }
 
     if (item.type === 'agent') {

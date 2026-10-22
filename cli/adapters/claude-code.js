@@ -15,6 +15,7 @@ import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync, lstatSync,
 import { resolve, relative } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
+import { classify, clearForInstall, removeEntry } from '../lib/placement.js';
 
 export class ClaudeCodeAdapter extends FrameworkAdapter {
   static id = 'claude-code';
@@ -58,16 +59,10 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
       return { action: 'created', path: targetPath, details: 'dry-run' };
     }
 
-    if (existsSync(targetPath) && !options.force) {
-      return { action: 'skipped', path: targetPath, details: 'already exists' };
-    }
+    const blocked = clearForInstall(targetPath, { force: options.force });
+    if (blocked) return blocked;
 
     mkdirSync(skillsDir, { recursive: true });
-
-    // Remove existing if forcing
-    if (existsSync(targetPath)) {
-      try { unlinkSync(targetPath); } catch { /* ignore */ }
-    }
 
     const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
 
@@ -90,15 +85,10 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
       return { action: 'created', path: agentsLink, details: 'dry-run: agents directory symlink' };
     }
 
-    if (existsSync(agentsLink) && !options.force) {
-      return { action: 'skipped', path: agentsLink, details: 'agents symlink already exists' };
-    }
+    const blocked = clearForInstall(agentsLink, { force: options.force, existsDetails: 'agents symlink already exists' });
+    if (blocked) return blocked;
 
     mkdirSync(base, { recursive: true });
-
-    if (existsSync(agentsLink)) {
-      try { unlinkSync(agentsLink); } catch { /* ignore */ }
-    }
 
     if (scope === 'global') {
       symlinkSync(source, agentsLink);
@@ -127,17 +117,13 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
     if (item.type === 'skill') {
       const targetPath = childPath(resolve(base, 'skills'), item.id);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
-      unlinkSync(targetPath);
-      return { action: 'removed', path: targetPath };
+      return removeEntry(targetPath);
     }
 
     if (item.type === 'agent') {
       const agentsLink = resolve(base, 'agents');
       if (options.dryRun) return { action: 'removed', path: agentsLink, details: 'dry-run' };
-      if (!existsSync(agentsLink)) return { action: 'skipped', path: agentsLink, details: 'not installed' };
-      unlinkSync(agentsLink);
-      return { action: 'removed', path: agentsLink };
+      return removeEntry(agentsLink);
     }
 
     if (item.type === 'team') {
@@ -170,10 +156,12 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
       }
     }
 
-    // Check agents symlink
+    // Check agents symlink. By lstat: existsSync follows the link, so a dangling
+    // one went unlisted and audit() called it missing rather than broken.
     const agentsLink = resolve(base, 'agents');
-    if (existsSync(agentsLink) && lstatSync(agentsLink).isSymbolicLink()) {
-      items.push({ id: 'agents', type: 'agent', path: agentsLink, broken: !existsSync(agentsLink) });
+    const agentsEntry = classify(agentsLink);
+    if (agentsEntry.kind === 'link') {
+      items.push({ id: 'agents', type: 'agent', path: agentsLink, broken: agentsEntry.broken });
     }
 
     // Teams are not symlinked (TeamCreate uses ~/.claude/teams/ for runtime state)

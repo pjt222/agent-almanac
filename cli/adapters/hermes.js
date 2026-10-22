@@ -9,9 +9,10 @@
  * Windows-native default (%LOCALAPPDATA%\hermes, config-verified), then ~/.hermes.
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync, symlinkSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
+import { clearForInstall, removeEntry } from '../lib/placement.js';
 import { resolveHermesHome } from '../lib/hermes-home.js';
 
 export class HermesAdapter extends FrameworkAdapter {
@@ -36,10 +37,10 @@ export class HermesAdapter extends FrameworkAdapter {
       const targetPath = childPath(targetDir, item.id);
 
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
+      const blocked = clearForInstall(targetPath, { force: options.force });
+      if (blocked) return blocked;
 
       mkdirSync(targetDir, { recursive: true });
-      if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
       const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
       symlinkSync(source, targetPath);
       return { action: 'created', path: targetPath };
@@ -48,10 +49,10 @@ export class HermesAdapter extends FrameworkAdapter {
     if (item.type === 'agent') {
       const targetPath = childPath(this._agentsBase(), `${item.id}.md`);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
+      const blocked = clearForInstall(targetPath, { force: options.force });
+      if (blocked) return blocked;
 
       mkdirSync(this._agentsBase(), { recursive: true });
-      if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
       const source = item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`);
       symlinkSync(source, targetPath);
       return { action: 'created', path: targetPath };
@@ -65,17 +66,13 @@ export class HermesAdapter extends FrameworkAdapter {
       const domain = item.domain || 'general';
       const targetPath = childPath(childPath(this._skillsBase(), domain), item.id);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
-      unlinkSync(targetPath);
-      return { action: 'removed', path: targetPath };
+      return removeEntry(targetPath);
     }
 
     if (item.type === 'agent') {
       const targetPath = childPath(this._agentsBase(), `${item.id}.md`);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
-      unlinkSync(targetPath);
-      return { action: 'removed', path: targetPath };
+      return removeEntry(targetPath);
     }
 
     return { action: 'skipped', path: '', details: `${item.type}s not supported` };

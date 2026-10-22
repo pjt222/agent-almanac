@@ -9,6 +9,7 @@
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
 import { resolve, relative } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
+import { classify, clearForInstall } from '../lib/placement.js';
 import { condenseSkill, wrapAsMdc } from '../lib/transformer.js';
 
 export class CursorAdapter extends FrameworkAdapter {
@@ -32,10 +33,10 @@ export class CursorAdapter extends FrameworkAdapter {
     const targetPath = childPath(skillsDir, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
+    const blocked = clearForInstall(targetPath, { force: options.force });
+    if (blocked) return blocked;
 
     mkdirSync(skillsDir, { recursive: true });
-    if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
 
     const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
     symlinkSync(relative(skillsDir, source), targetPath);
@@ -68,12 +69,16 @@ export class CursorAdapter extends FrameworkAdapter {
     const skillPath = childPath(resolve(projectDir, '.cursor/skills'), item.id);
     const rulePath = childPath(resolve(projectDir, '.cursor/rules'), `${item.id}.mdc`);
 
-    for (const p of [skillPath, rulePath]) {
-      if (existsSync(p)) {
-        if (options.dryRun) { results.push(p); continue; }
-        unlinkSync(p);
-        results.push(p);
-      }
+    // skillPath is a link install made, so it is tested by lstat: existsSync
+    // follows a link and misses a dangling one. rulePath is a file
+    // installLegacyRule writes, never a link.
+    const present = [
+      classify(skillPath).kind !== 'absent' ? skillPath : null,
+      existsSync(rulePath) ? rulePath : null,
+    ].filter(Boolean);
+    for (const p of present) {
+      if (!options.dryRun) unlinkSync(p);
+      results.push(p);
     }
 
     if (results.length === 0) return { action: 'skipped', path: '', details: 'not installed' };

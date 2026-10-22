@@ -8,10 +8,11 @@
  * Skills only — agents and teams are framework-specific.
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync, lstatSync, readlinkSync } from 'fs';
+import { existsSync, mkdirSync, symlinkSync, readdirSync, lstatSync, readlinkSync } from 'fs';
 import { resolve, relative } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
+import { clearForInstall, removeEntry } from '../lib/placement.js';
 
 export class UniversalAdapter extends FrameworkAdapter {
   static id = 'universal';
@@ -44,13 +45,8 @@ export class UniversalAdapter extends FrameworkAdapter {
       return { action: 'created', path: targetPath, details: 'dry-run' };
     }
 
-    if (existsSync(targetPath)) {
-      if (!options.force) {
-        return { action: 'skipped', path: targetPath, details: 'already exists' };
-      }
-      // Remove existing to replace
-      try { unlinkSync(targetPath); } catch { /* directory, not symlink */ }
-    }
+    const blocked = clearForInstall(targetPath, { force: options.force });
+    if (blocked) return blocked;
 
     // Ensure parent directory exists
     mkdirSync(targetBase, { recursive: true });
@@ -76,12 +72,7 @@ export class UniversalAdapter extends FrameworkAdapter {
       return { action: 'removed', path: targetPath, details: 'dry-run' };
     }
 
-    if (!existsSync(targetPath)) {
-      return { action: 'skipped', path: targetPath, details: 'not installed' };
-    }
-
-    unlinkSync(targetPath);
-    return { action: 'removed', path: targetPath };
+    return removeEntry(targetPath);
   }
 
   async listInstalled(projectDir, scope) {
