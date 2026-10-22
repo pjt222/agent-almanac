@@ -2325,27 +2325,33 @@ describe('item names stay inside their install directories', () => {
     assert.equal(r.status, 1, `expected exit 1, got ${r.status}\n${r.stdout}\n${r.stderr}`);
     assert.match(r.stderr, /not plain ids/);
     assert.deepEqual(readdirSync(resolve(dir, '.agents/skills')), []);
-    assert.equal(existsSync(resolve(dir, '.agents/escape')), false);
+    // readdirSync, not existsSync: an escaped link the old code made dangles,
+    // and existsSync follows a link, so it would report a dangling one as absent.
+    assert.deepEqual(readdirSync(resolve(dir, '.agents')), ['skills']);
   });
 
   it('a registry id that is not a plain id is refused before anything is linked', () => {
-    const source = resolve(tmpRoot, 'source-with-nested-id');
-    mkdirSync(resolve(source, 'skills/nested/skill'), { recursive: true });
-    writeFileSync(resolve(source, 'skills/nested/skill/SKILL.md'), '---\nname: skill\n---\n');
+    // The id climbs out of skills/: at the base commit this made a link at
+    // .agents/escape, outside .agents/skills, and printed "1 installed".
+    const source = resolve(tmpRoot, 'source-with-escaping-id');
+    mkdirSync(resolve(source, 'skills'), { recursive: true });
+    mkdirSync(resolve(source, 'escape'), { recursive: true });
+    writeFileSync(resolve(source, 'escape/SKILL.md'), '---\nname: escape\n---\n');
     writeFileSync(resolve(source, 'skills/_registry.yml'), [
       'total_skills: 1',
       'domains:',
       '  fixture:',
       '    description: fixture',
       '    skills:',
-      '      - id: nested/skill',
-      '        path: nested/skill/SKILL.md',
+      '      - id: ../escape',
+      '        path: ../escape/SKILL.md',
       '',
     ].join('\n'));
     const dir = project('install-registry');
     const r = spawnCli(['install', '-d', 'fixture', '-f', 'universal', '--source', source], dir);
     assert.equal(r.status, 1, `expected exit 1, got ${r.status}\n${r.stdout}\n${r.stderr}`);
-    assert.match(r.stderr, /"nested\/skill"/, 'the refusal must name the offending id');
+    assert.match(r.stderr, /"\.\.\/escape"/, 'the refusal must name the offending id');
+    assert.deepEqual(readdirSync(resolve(dir, '.agents')), ['skills']);
     assert.deepEqual(readdirSync(resolve(dir, '.agents/skills')), []);
   });
 
@@ -2362,7 +2368,9 @@ describe('item names stay inside their install directories', () => {
         dir, 'project', { almanacRoot: ROOT }),
       /Refusing a path outside/,
     );
-    assert.equal(existsSync(resolve(dir, '.agents/escape')), false);
+    // readdirSync, not existsSync: an escaped link the old code made dangles,
+    // and existsSync follows a link, so it would report a dangling one as absent.
+    assert.deepEqual(readdirSync(resolve(dir, '.agents')), ['skills']);
   });
 
   it('childPath accepts one name and refuses every other shape', () => {
@@ -2387,6 +2395,49 @@ describe('item names stay inside their install directories', () => {
     ];
     assert.ok(ids.length > 500, `census read ${ids.length} ids`);
     assert.deepEqual(ids.filter((id) => !itemId.isPlainItemId(id)), []);
+  });
+
+  it('a registry domain that is not a plain id is refused before anything is linked', () => {
+    // Universal ignores the domain, so only layer 1 can refuse this run.
+    const source = resolve(tmpRoot, 'source-with-dotdot-domain');
+    mkdirSync(resolve(source, 'skills/x'), { recursive: true });
+    writeFileSync(resolve(source, 'skills/x/SKILL.md'), '---\nname: x\n---\n');
+    writeFileSync(resolve(source, 'skills/_registry.yml'), [
+      'total_skills: 1',
+      'domains:',
+      '  "..":',
+      '    description: fixture',
+      '    skills:',
+      '      - id: x',
+      '        path: x/SKILL.md',
+      '',
+    ].join('\n'));
+    const dir = project('install-registry-domain');
+    const r = spawnCli(['install', 'x', '-f', 'universal', '--source', source], dir);
+    assert.equal(r.status, 1, `expected exit 1, got ${r.status}\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /domain "\.\." of "x"/, 'the refusal must name the offending domain');
+    assert.deepEqual(readdirSync(resolve(dir, '.agents/skills')), []);
+  });
+
+  it('the hermes adapter refuses a domain that is not a plain id on its own, without installAll', async () => {
+    // Both hermes sites are exercised: install builds <home>/skills/<domain> as a
+    // directory (hermes.js, install) and uninstall builds <home>/skills/<domain>/<id>.
+    // force: true means a mutant that let the path through would unlink the sentinel.
+    const hermesHome = resolve(tmpRoot, 'hermes-domain');
+    mkdirSync(resolve(hermesHome, 'skills'), { recursive: true });
+    writeFileSync(resolve(hermesHome, 'x'), SENTINEL);
+    const saved = process.env.HERMES_HOME;
+    process.env.HERMES_HOME = hermesHome;
+    try {
+      const adapter = new HermesAdapter();
+      const item = { type: 'skill', id: 'x', domain: '..', sourceDir: resolve(ROOT, 'skills/commit-changes') };
+      await assert.rejects(adapter.uninstall(item, tmpRoot, 'global', {}), /Refusing a path outside/);
+      await assert.rejects(adapter.install(item, tmpRoot, 'global', { force: true, almanacRoot: ROOT }), /Refusing a path outside/);
+      assert.equal(readFileSync(resolve(hermesHome, 'x'), 'utf8'), SENTINEL);
+    } finally {
+      if (saved === undefined) delete process.env.HERMES_HOME;
+      else process.env.HERMES_HOME = saved;
+    }
   });
 
   it('sync leaves a directory entry whose name is not a plain id alone', () => {
