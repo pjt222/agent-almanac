@@ -2988,7 +2988,7 @@ describe('a dangling link at a link site is seen, removed and replaced (#993 §2
 });
 
 describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d)', () => {
-  // The CLI makes only links at these paths. At d3b229f3c uninstall unlinked
+  // The CLI makes only links at these paths. At b3275420a uninstall unlinked
   // whatever regular file it found there, and install --force unlinked it and
   // wrote a link in its place (P2a, P2d). A directory survived only because
   // unlinkSync cannot remove one: uninstall and install --force both reported
