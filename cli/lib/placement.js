@@ -33,7 +33,7 @@ import { createHash } from 'crypto';
 import {
   constants as fsConstants,
   copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync,
-  readlinkSync, renameSync, rmSync, symlinkSync, unlinkSync, writeFileSync,
+  readlinkSync, renameSync, rmdirSync, rmSync, symlinkSync, unlinkSync, writeFileSync,
 } from 'fs';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'path';
 import { childPath } from '../adapters/base.js';
@@ -367,6 +367,16 @@ function refuseUnlessOwned(entryPath, entry, purpose) {
  * renamed into a staging directory beside it, so it leaves its install path in
  * one step. A file's sidecar goes after it; `force`, because the file may be
  * one that never had a sidecar.
+ *
+ * Listings skip a staging directory (isInternalName), so none may be left
+ * without saying so (review round 1: AD-3, DL-4, F2). If the rename fails,
+ * nothing has moved: the empty staging directory is removed and the rename's
+ * error is thrown. If the rename succeeded and deleting the staging directory
+ * fails, the entry has already left its install path, where no later list,
+ * audit or uninstall can see it; the error thrown says so and names the
+ * directory to delete by hand. It throws rather than returning a note because
+ * clearForInstall() does not pass a note on, so `install --force` would leave
+ * the directory in silence.
  */
 function discard(entryPath, isDir) {
   if (!isDir) {
@@ -375,8 +385,18 @@ function discard(entryPath, isDir) {
     return;
   }
   const staging = mkdtempSync(join(dirname(entryPath), STAGING_PREFIX));
-  renameSync(entryPath, join(staging, 'removed'));
-  rmSync(staging, { recursive: true, force: true });
+  try {
+    renameSync(entryPath, join(staging, 'removed'));
+  } catch (err) {
+    // rmdirSync refuses a directory that is not empty; its own failure must not hide the rename's.
+    try { rmdirSync(staging); } catch { /* the rename's error is the one to report */ }
+    throw err;
+  }
+  try {
+    rmSync(staging, { recursive: true, force: true });
+  } catch (err) {
+    throw new Error(`${err.message}; ${entryPath} has left its install path, and what is left of it is in ${staging}: delete that by hand`);
+  }
 }
 
 /**
@@ -557,6 +577,15 @@ function decide(entryPath, entry, force, copyFrom) {
  * putting the old copy back failed too: then it holds that copy, and the
  * error names it (critique F11).
  *
+ * If removing the staging directory fails (for example a read-only
+ * directory inside the copy being replaced), the copy is still in place, so
+ * the result stays `created`, with a note naming the directory to delete by
+ * hand (review round 1, DL-4); a result the re-check returned gets the same
+ * note. If the install was already failing, its own error is reported and
+ * the leftover directory is not named. Only the `created` case is exercised
+ * by a test; the other two need the cleanup to fail after a re-check that
+ * stopped the install or after a copy that failed, which no test arranges.
+ *
  * Not atomic against another writer: an entry that appears at the path
  * between that last check and the rename is replaced if it is a file or an
  * empty directory (rename(2) semantics), and makes the rename fail if it is a
@@ -586,47 +615,63 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
   mkdirSync(base, { recursive: true });
   const staging = mkdtempSync(join(base, STAGING_PREFIX));
   let keepStaging = false;
+  // Set once the copy is in place, or once the re-check stops the install.
+  // While it is null in `finally`, an error is on its way out.
+  let result = null;
   try {
     const staged = join(staging, name);
     const { isDir, files } = copyTree(source, staged);
     writeFileSync(markerPathOf(staged, isDir), serializeMarker({ entry: name, item, copyFrom, sourceRel, files }), { flag: 'wx' });
 
     const current = classify(entryPath);
-    const stopNow = decide(entryPath, current, force, copyFrom);
-    if (stopNow) return stopNow;
-
-    let linkText = null;
-    const replaced = join(staging, 'replaced');
-    const replacedMarker = join(staging, 'replaced-marker');
-    if (current.kind === 'link') {
-      linkText = readlinkSync(entryPath);
-      unlinkSync(entryPath);
-    } else if (current.kind === 'copy') {
-      renameSync(entryPath, replaced);
-      if (!current.isDir) renameSync(sidecarPath(entryPath), replacedMarker);
-    }
-
-    try {
-      if (!isDir) renameSync(sidecarPath(staged), sidecarPath(entryPath));
-      renameSync(staged, entryPath);
-    } catch (err) {
-      try {
-        if (!isDir) rmSync(sidecarPath(entryPath), { force: true });
-        if (current.kind === 'link') symlinkSync(linkText, entryPath);
-        if (current.kind === 'copy') {
-          renameSync(replaced, entryPath);
-          if (!current.isDir) renameSync(replacedMarker, sidecarPath(entryPath));
-        }
-      } catch {
-        keepStaging = true;
-        throw new Error(`${err.message}; what was at ${entryPath} could not be put back and is kept in ${staging}`);
+    result = decide(entryPath, current, force, copyFrom);
+    if (result === null) {
+      let linkText = null;
+      const replaced = join(staging, 'replaced');
+      const replacedMarker = join(staging, 'replaced-marker');
+      if (current.kind === 'link') {
+        linkText = readlinkSync(entryPath);
+        unlinkSync(entryPath);
+      } else if (current.kind === 'copy') {
+        renameSync(entryPath, replaced);
+        if (!current.isDir) renameSync(sidecarPath(entryPath), replacedMarker);
       }
-      throw err;
+
+      try {
+        if (!isDir) renameSync(sidecarPath(staged), sidecarPath(entryPath));
+        renameSync(staged, entryPath);
+      } catch (err) {
+        try {
+          if (!isDir) rmSync(sidecarPath(entryPath), { force: true });
+          if (current.kind === 'link') symlinkSync(linkText, entryPath);
+          if (current.kind === 'copy') {
+            renameSync(replaced, entryPath);
+            if (!current.isDir) renameSync(replacedMarker, sidecarPath(entryPath));
+          }
+        } catch {
+          keepStaging = true;
+          throw new Error(`${err.message}; what was at ${entryPath} could not be put back and is kept in ${staging}`);
+        }
+        throw err;
+      }
+      result = { action: 'created', path: entryPath, details: 'copy' };
     }
-    return { action: 'created', path: entryPath, details: 'copy' };
   } finally {
-    if (!keepStaging) rmSync(staging, { recursive: true, force: true });
+    if (!keepStaging) {
+      try {
+        rmSync(staging, { recursive: true, force: true });
+      } catch (err) {
+        // A leftover staging directory does not undo a copy that is in place:
+        // the result stands, with a note naming what to delete by hand. With
+        // no result, the error on its way out is the one reported.
+        if (result !== null) {
+          const leftover = `could not delete ${staging} (${err.code ?? err.message}); delete it by hand`;
+          result = { ...result, note: result.note ? `${result.note}; ${leftover}` : leftover };
+        }
+      }
+    }
   }
+  return result;
 }
 
 /**

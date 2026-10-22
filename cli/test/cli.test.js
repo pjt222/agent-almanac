@@ -8,7 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync, spawnSync } from 'child_process';
-import { copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
 import { createHash } from 'crypto';
 import { tmpdir, homedir } from 'os';
 import { dirname, isAbsolute, resolve } from 'path';
@@ -4056,6 +4056,115 @@ describe('copy placement: the uninstall guard (#606 part 2)', () => {
         { action: 'skipped', path: entry, reason: 'edited', note: editedNote('replace') });
       assert.equal(lstatSync(entry).isDirectory(), true);
       assert.equal(readFileSync(resolve(entry, 'notes.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+});
+
+describe('copy placement: a remove or replace that fails part way says what it left (review round 1)', () => {
+  // A staging directory is skipped by every listing, so one left behind is
+  // seen by nothing after the run that made it (AD-3, DL-4, F2). Each row
+  // makes one step fail with a mode bit: rename(2) of a directory to another
+  // parent needs write permission on the directory itself, and deleting a
+  // file needs it on the directory holding the file.
+  const NO_MODE_BITS = process.platform === 'win32'
+    ? 'mode bits do not refuse a rename or a delete on Windows'
+    : process.getuid?.() === 0
+      ? 'root ignores mode bits, so the row would pass for the wrong reason'
+      : false;
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-partial-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** Give the sandbox's skill a subdirectory, so one can be made read-only. */
+  const addReferences = (sb) => {
+    mkdirSync(resolve(sb.src, 'skills/commit-changes/references'));
+    writeFileSync(resolve(sb.src, 'skills/commit-changes/references/EXAMPLES.md'), EXAMPLES_TEXT);
+  };
+  const stagingDirs = (base) => readdirSync(base).filter((name) => name.startsWith(placement.STAGING_PREFIX));
+  /** Make every directory under `dir` writable again, wherever a row moved it, so the teardown can delete it. */
+  const unlock = (dir) => {
+    chmodSync(dir, 0o755);
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) unlock(resolve(dir, entry.name));
+    }
+  };
+
+  it('a refused rename leaves no staging directory, and the error is the rename\'s (removeEntry)', { skip: NO_MODE_BITS }, async () => {
+    await inLinkSandbox(tmpRoot, 'rename-refused', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      chmodSync(entry, 0o555);
+      try {
+        assert.throws(() => placement.removeEntry(base, 'commit-changes'), { code: 'EACCES', syscall: 'rename' });
+        assert.deepEqual(readdirSync(base), ['commit-changes'], 'the copy stays, and no staging directory is left beside it');
+      } finally {
+        unlock(base);
+      }
+    });
+  });
+
+  it('a copy that left its path but could not be deleted throws, saying so and naming where it is (removeEntry)', { skip: NO_MODE_BITS }, async () => {
+    await inLinkSandbox(tmpRoot, 'delete-refused', async (sb) => {
+      addReferences(sb);
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      chmodSync(resolve(entry, 'references'), 0o555);
+      try {
+        let thrown = null;
+        try { placement.removeEntry(base, 'commit-changes'); } catch (err) { thrown = err; }
+        const staging = stagingDirs(base);
+        assert.equal(staging.length, 1, `exactly one staging directory: ${staging}`);
+        const tail = `; ${entry} has left its install path, and what is left of it is in ${resolve(base, staging[0])}: delete that by hand`;
+        assert.ok(thrown?.message.endsWith(tail), `expected a message ending ${JSON.stringify(tail)}, got ${thrown?.message}`);
+        assert.equal(existsSync(entry), false, 'the entry has left its install path');
+      } finally {
+        unlock(base);
+      }
+    });
+  });
+
+  it('link-mode install --force over a copy whose rename is refused leaves no staging directory (clearForInstall)', { skip: NO_MODE_BITS }, async () => {
+    await inLinkSandbox(tmpRoot, 'force-rename-refused', async (sb) => {
+      const item = { type: 'skill', id: 'commit-changes', sourceDir: resolve(sb.src, 'skills/commit-changes') };
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      chmodSync(entry, 0o555);
+      try {
+        await assert.rejects(new UniversalAdapter().install(item, sb.proj, 'project', { almanacRoot: sb.src, force: true }),
+          { code: 'EACCES', syscall: 'rename' });
+        assert.deepEqual(readdirSync(base), ['commit-changes'], 'the copy stays, and no staging directory is left beside it');
+      } finally {
+        unlock(base);
+      }
+    });
+  });
+
+  it('install --force --from-package copy over a copy whose old files cannot be deleted reports the new copy, naming the leftover (placeCopy)', { skip: NO_MODE_BITS }, async () => {
+    await inLinkSandbox(tmpRoot, 'replace-cleanup-refused', async (sb) => {
+      addReferences(sb);
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+      chmodSync(resolve(entry, 'references'), 0o555);
+      try {
+        const result = copySkill(sb, base, { force: true });
+        const staging = stagingDirs(base);
+        assert.equal(staging.length, 1, `exactly one staging directory: ${staging}`);
+        assert.deepEqual(result, {
+          action: 'created', path: entry, details: 'copy',
+          note: `could not delete ${resolve(base, staging[0])} (EACCES); delete it by hand`,
+        });
+        assert.equal(JSON.parse(readFileSync(resolve(entry, MARKER_NAME), 'utf8')).package.version, '9.9.9', 'the new copy is in place');
+      } finally {
+        unlock(base);
+      }
     });
   });
 });
