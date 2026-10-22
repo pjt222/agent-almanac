@@ -7,7 +7,7 @@
 
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync } from 'fs';
 import { resolve, relative } from 'path';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 
 export class GeminiAdapter extends FrameworkAdapter {
   static id = 'gemini';
@@ -29,7 +29,7 @@ export class GeminiAdapter extends FrameworkAdapter {
     if (item.type !== 'skill') return { action: 'skipped', path: '', details: 'Gemini supports skills only' };
 
     const skillsDir = this._skillsDir(projectDir);
-    const targetPath = resolve(skillsDir, item.id);
+    const targetPath = childPath(skillsDir, item.id);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
     if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
 
@@ -41,7 +41,7 @@ export class GeminiAdapter extends FrameworkAdapter {
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
-    const targetPath = resolve(this._skillsDir(projectDir), item.id);
+    const targetPath = childPath(this._skillsDir(projectDir), item.id);
     if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
     if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
     unlinkSync(targetPath);

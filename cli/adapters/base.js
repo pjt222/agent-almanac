@@ -5,6 +5,33 @@
  * defaults where possible.
  */
 
+import { basename, dirname, resolve } from 'path';
+
+/**
+ * Join a name derived from an item onto the directory an adapter installs into,
+ * and refuse any name that would not land directly inside that directory.
+ *
+ * Item ids and skill domains come from command-line arguments and from
+ * registries. `resolve(base, name)` follows `..`, separators and absolute paths
+ * out of `base`, and uninstall then unlinks whatever it finds there: before
+ * this, `uninstall ../../README.md -f universal` removed the project's own
+ * README.md. installAll and uninstallAll already refuse such names
+ * (cli/lib/item-id.js). This check holds even when an adapter is called
+ * directly, so the two layers do not depend on each other.
+ *
+ * @param {string} base - The directory the adapter installs into
+ * @param {string} name - A single file or directory name (`<id>`, `<id>.md`, `<domain>`)
+ * @returns {string} The resolved path, directly inside `base`
+ */
+export function childPath(base, name) {
+  const dir = resolve(base);
+  const target = resolve(dir, String(name));
+  if (dirname(target) !== dir || basename(target) !== String(name)) {
+    throw new Error(`Refusing a path outside ${dir}: ${JSON.stringify(String(name))} is not a single file or directory name`);
+  }
+  return target;
+}
+
 /**
  * @typedef {Object} InstallResult
  * @property {string} action - 'created' | 'updated' | 'skipped'
