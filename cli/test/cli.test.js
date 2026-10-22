@@ -885,6 +885,13 @@ describe('npm package root (#606)', () => {
     '    Either install from a clone:      --source <clone>\n' +
     '    or copy out of the package:       --from-package copy\n' +
     '    or link into the package anyway:  --from-package link';
+  // The refusal is the last thing the command prints, so it is pinned at the
+  // end of stderr: a fifth line, a tail on the fourth, or a line printed
+  // after it all go red. `stderr.includes(refusal(root))` was open at the end
+  // and let a fifth line through (review round 1, AD-2). reporter.error()
+  // puts two spaces before the first line.
+  const assertRefusal = (stderr, root) =>
+    assert.deepEqual(stderr.split('\n').slice(-5), [...`  ${refusal(root)}`.split('\n'), ''], `the refusal is not the end of stderr:\n${stderr}`);
   // The warning names what audit can and cannot see (review round 2, R2-2):
   // `npm uninstall -g` removes the `agent-almanac` command with the package,
   // so the audit that would report the dangling links is gone too. It then
@@ -1158,7 +1165,7 @@ describe('npm package root (#606)', () => {
     assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
     assert.deepEqual(linksIntoNodeModules(fakeHome), []);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assertRefusal(stderr, pkgRoot);
   });
 
   // A dry run refuses too: it exists to predict the real run, and a preview
@@ -1170,7 +1177,7 @@ describe('npm package root (#606)', () => {
     const { status, stdout, stderr } = spawnCli(
       ['install', 'commit-changes', '--source', pkgRoot, '--dry-run'], dir);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assertRefusal(stderr, pkgRoot);
     assert.doesNotMatch(stdout, /DRY RUN/);
     assert.deepEqual(linksIntoNodeModules(dir), []);
   });
@@ -1215,8 +1222,10 @@ describe('npm package root (#606)', () => {
       const help = stdout.replace(/\s+/g, ' ');
       assert.ok(help.includes(fromPackageHelp), `${command} --help:\n${stdout}`);
       if (command === 'install') {
+        // Bounded on the right by the next option commander prints, so a tail
+        // on the text goes red too (review round 1, AD-2).
         assert.ok(help.includes('--force Replace existing content: a link, or a copy you have not edited. ' +
-          'Where agent-almanac links or copies, a file or directory it did not make is kept '), stdout);
+          'Where agent-almanac links or copies, a file or directory it did not make is kept --source <path> '), stdout);
       }
     }
   });
@@ -1226,7 +1235,7 @@ describe('npm package root (#606)', () => {
     const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--quiet', '--source', pkgRoot], dir);
     assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assertRefusal(stderr, pkgRoot);
   });
 
   // `--from-package link` is the documented way to keep the old behaviour, so it
@@ -1250,7 +1259,7 @@ describe('npm package root (#606)', () => {
     const { status, stdout, stderr } = spawnCli(['sync', '--source', pkgRoot], dir);
     assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assertRefusal(stderr, pkgRoot);
   });
 
   it('a read-only command still runs from a package root', () => {
