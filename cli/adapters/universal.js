@@ -8,11 +8,11 @@
  * Skills only — agents and teams are framework-specific.
  */
 
-import { existsSync, mkdirSync, symlinkSync, readdirSync, lstatSync, readlinkSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, readdirSync, readlinkSync } from 'fs';
+import { resolve } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
-import { clearForInstall, removeEntry } from '../lib/placement.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
 export class UniversalAdapter extends FrameworkAdapter {
   static id = 'universal';
@@ -45,30 +45,15 @@ export class UniversalAdapter extends FrameworkAdapter {
       return { action: 'created', path: targetPath, details: 'dry-run' };
     }
 
-    const blocked = clearForInstall(targetBase, item.id, { force: options.force });
-    if (blocked) return blocked;
-
-    // Ensure parent directory exists
-    mkdirSync(targetBase, { recursive: true });
-
-    // Use relative symlinks for project scope, absolute for global
-    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-    if (scope === 'global') {
-      symlinkSync(source, targetPath);
-    } else {
-      const rel = relative(targetBase, source);
-      symlinkSync(rel, targetPath);
-    }
-
-    return { action: 'created', path: targetPath };
+    // A link is relative for project scope, absolute for global.
+    return installAt({
+      base: targetBase, name: item.id, item, options, relativeLink: scope !== 'global',
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
-    const targetBase = this._targetBase(projectDir, scope);
-
-    const targetPath = childPath(targetBase, item.id);
-
-    return removeEntry(targetBase, item.id, { dryRun: options.dryRun });
+    return removeEntry(this._targetBase(projectDir, scope), item.id, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir, scope) {
@@ -76,20 +61,16 @@ export class UniversalAdapter extends FrameworkAdapter {
 
     if (!existsSync(targetBase)) return [];
 
-    const entries = readdirSync(targetBase);
+    // Staging directories and markers are the CLI's bookkeeping, not items.
+    const entries = readdirSync(targetBase).filter((name) => !isInternalName(name));
     return entries.map(name => {
       const fullPath = resolve(targetBase, name);
-      const stat = lstatSync(fullPath);
-      const isSymlink = stat.isSymbolicLink();
+      const { kind, fields } = describeEntry(fullPath);
       let target = null;
-      let broken = false;
-      if (isSymlink) {
-        try {
-          target = readlinkSync(fullPath);
-          broken = !existsSync(fullPath);
-        } catch { broken = true; }
+      if (kind === 'link') {
+        try { target = readlinkSync(fullPath); } catch { /* removed since it was listed */ }
       }
-      return { id: name, type: 'skill', path: fullPath, isSymlink, target, broken };
+      return { id: name, type: 'skill', path: fullPath, isSymlink: kind === 'link', target, ...fields };
     });
   }
 

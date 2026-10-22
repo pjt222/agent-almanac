@@ -6,10 +6,10 @@
  * Skills only.
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, mkdirSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
-import { clearForInstall, removeEntry } from '../lib/placement.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 import { condenseSkill, wrapAsMdc } from '../lib/transformer.js';
 
 export class CursorAdapter extends FrameworkAdapter {
@@ -33,14 +33,10 @@ export class CursorAdapter extends FrameworkAdapter {
     const targetPath = childPath(skillsDir, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    const blocked = clearForInstall(skillsDir, item.id, { force: options.force });
-    if (blocked) return blocked;
-
-    mkdirSync(skillsDir, { recursive: true });
-
-    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-    symlinkSync(relative(skillsDir, source), targetPath);
-    return { action: 'created', path: targetPath };
+    return installAt({
+      base: skillsDir, name: item.id, item, options, relativeLink: true,
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
   }
 
   /**
@@ -92,9 +88,9 @@ export class CursorAdapter extends FrameworkAdapter {
     const skillsDir = resolve(projectDir, '.cursor/skills');
     if (existsSync(skillsDir)) {
       for (const name of readdirSync(skillsDir)) {
+        if (isInternalName(name)) continue;
         const fullPath = resolve(skillsDir, name);
-        // existsSync follows the link — false for a broken symlink.
-        items.push({ id: name, type: 'skill', path: fullPath, format: 'skills', broken: !existsSync(fullPath) });
+        items.push({ id: name, type: 'skill', path: fullPath, format: 'skills', ...describeEntry(fullPath).fields });
       }
     }
     const rulesDir = resolve(projectDir, '.cursor/rules');

@@ -5,11 +5,11 @@
  * Agents: ~/.vibe/agents/<id>.toml (global only)
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, mkdirSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
-import { clearForInstall, removeEntry } from '../lib/placement.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
 export class VibeAdapter extends FrameworkAdapter {
   static id = 'vibe';
@@ -38,13 +38,10 @@ export class VibeAdapter extends FrameworkAdapter {
       const targetBase = this._skillsBase(projectDir, scope);
       const targetPath = childPath(targetBase, item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      const blocked = clearForInstall(targetBase, item.id, { force: options.force });
-      if (blocked) return blocked;
-
-      mkdirSync(targetBase, { recursive: true });
-      const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-      symlinkSync(scope === 'global' ? source : relative(targetBase, source), targetPath);
-      return { action: 'created', path: targetPath };
+      return installAt({
+        base: targetBase, name: item.id, item, options, relativeLink: scope !== 'global',
+        source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+      });
     }
 
     if (item.type === 'agent') {
@@ -99,9 +96,9 @@ system_prompt_id = "${item.id}"
     const skillsDir = this._skillsBase(projectDir, scope);
     if (existsSync(skillsDir)) {
       for (const name of readdirSync(skillsDir)) {
+        if (isInternalName(name)) continue;
         const fullPath = resolve(skillsDir, name);
-        // existsSync follows the link, so it is false for a dangling symlink.
-        items.push({ id: name, type: 'skill', path: fullPath, broken: !existsSync(fullPath) });
+        items.push({ id: name, type: 'skill', path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     const agentsDir = this._agentsBase();

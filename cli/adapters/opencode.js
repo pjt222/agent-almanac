@@ -5,11 +5,11 @@
  * Skills and agents supported. No teams.
  */
 
-import { existsSync, mkdirSync, symlinkSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
-import { clearForInstall, removeEntry } from '../lib/placement.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
 export class OpenCodeAdapter extends FrameworkAdapter {
   static id = 'opencode';
@@ -41,14 +41,10 @@ export class OpenCodeAdapter extends FrameworkAdapter {
     const targetPath = childPath(targetBase, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    const blocked = clearForInstall(targetBase, item.id, { force: options.force });
-    if (blocked) return blocked;
-
-    mkdirSync(targetBase, { recursive: true });
-
-    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-    symlinkSync(scope === 'global' ? source : relative(targetBase, source), targetPath);
-    return { action: 'created', path: targetPath };
+    return installAt({
+      base: targetBase, name: item.id, item, options, relativeLink: scope !== 'global',
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
   }
 
   /**
@@ -58,14 +54,12 @@ export class OpenCodeAdapter extends FrameworkAdapter {
    * the agent install report "skipped" without writing the link (S3-B2 P2e).
    */
   _installAgent(item, targetBase, scope, options) {
-    const agentSource = item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`);
     const agentTarget = childPath(targetBase, `${item.id}.md`);
     if (options.dryRun) return { action: 'created', path: agentTarget, details: 'dry-run' };
-    const blocked = clearForInstall(targetBase, `${item.id}.md`, { force: options.force });
-    if (blocked) return blocked;
-    mkdirSync(targetBase, { recursive: true });
-    symlinkSync(scope === 'global' ? agentSource : relative(targetBase, agentSource), agentTarget);
-    return { action: 'created', path: agentTarget };
+    return installAt({
+      base: targetBase, name: `${item.id}.md`, item, options, relativeLink: scope !== 'global',
+      source: item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`),
+    });
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
@@ -80,9 +74,11 @@ export class OpenCodeAdapter extends FrameworkAdapter {
       const dir = this._targetBase(projectDir, scope, type);
       if (!existsSync(dir)) continue;
       for (const name of readdirSync(dir)) {
+        // A copied agent's sidecar marker sits beside it; it is not an agent.
+        if (isInternalName(name)) continue;
         const fullPath = resolve(dir, name);
         const id = name.replace(/\.md$/, '');
-        items.push({ id, type, path: fullPath, broken: !existsSync(fullPath) });
+        items.push({ id, type, path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     return items;

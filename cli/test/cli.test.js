@@ -3755,3 +3755,64 @@ describe('copy placement: the uninstall guard (#606 part 2)', () => {
     });
   });
 });
+
+describe('copy placement at every link site (#606 part 2)', () => {
+  // The AC tests claude-code and universal and leaves the rest to shared
+  // logic; this makes that literal for all twelve sites, at every scope each
+  // declares (critique F4: one row per site, not per adapter, so the three
+  // sites that are not a skill directory are covered too).
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-sites-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  for (const site of LINK_SITES) {
+    for (const scope of site.scopes) {
+      it(`${site.site} (${scope}): install copies, the listing shows the copy alone, uninstall removes it`, async () => {
+        await inLinkSandbox(tmpRoot, `${siteSlug(site)}-${scope}`, async (sb) => {
+          const adapter = site.adapter();
+          const item = linkItem(site, sb);
+          const path = site.path(sb, scope);
+          const opts = { almanacRoot: sb.src, placement: 'copy', copyFrom: COPY_FROM };
+
+          assert.deepEqual(await adapter.install(item, sb.proj, scope, opts), { action: 'created', path, details: 'copy' });
+          assert.equal(lstatSync(path).isSymbolicLink(), false, 'a copy, not a link');
+          assert.deepEqual(placement.readOwnedMarker(path)?.package, COPY_FROM);
+
+          // Exactly one entry: a sidecar or a staging directory is not an item.
+          const listing = await adapter.listInstalled(sb.proj, scope);
+          assert.deepEqual(listing.map((entry) => [entry.path, entry.broken, entry.copy]), [[path, false, COPY_FROM]]);
+
+          assert.deepEqual(await adapter.install(item, sb.proj, scope, opts),
+            { action: 'skipped', path, reason: 'already-copied', note: 'already a copy of agent-almanac 9.9.9' });
+
+          const removed = site.site === 'cursor skill' ? { action: 'removed', path } : { action: 'removed', path, details: 'copy' };
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, {}), removed);
+          assert.deepEqual(readdirSync(dirname(path)), [], 'neither the copy, its marker nor a staging directory is left');
+        });
+      });
+    }
+  }
+
+  it('claude-code\'s audit says the agents directory is a copy', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'claude-code agents directory');
+    await inLinkSandbox(tmpRoot, 'claude-agents-audit', async (sb) => {
+      const adapter = site.adapter();
+      await adapter.install(linkItem(site, sb), sb.proj, 'project', { almanacRoot: sb.src, placement: 'copy', copyFrom: COPY_FROM });
+      assert.deepEqual(await adapter.audit(sb.proj, 'project'),
+        { framework: 'Claude Code', ok: ['agents directory is a copy'], warnings: [], errors: [] });
+    });
+  });
+
+  it('a staging directory a killed copy left behind is not listed', async () => {
+    await inLinkSandbox(tmpRoot, 'staging-left', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      mkdirSync(resolve(base, '.agent-almanac-staging-AbC123/commit-changes'), { recursive: true });
+      writeFileSync(resolve(base, '.agent-almanac-staging-AbC123/commit-changes/SKILL.md'), LINK_FIXTURE.skill);
+      assert.deepEqual(await new UniversalAdapter().listInstalled(sb.proj, 'project'), []);
+    });
+  });
+});

@@ -5,10 +5,10 @@
  * Skills only.
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, readFileSync, writeFileSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
-import { classify, clearForInstall, removeEntry } from '../lib/placement.js';
+import { classify, describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 import { condenseSkill, wrapInMarkers, removeMarkedSection, hasMarkedSection } from '../lib/transformer.js';
 
 export class CopilotAdapter extends FrameworkAdapter {
@@ -38,13 +38,10 @@ export class CopilotAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     const targetPath = childPath(skillsDir, item.id);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    const blocked = clearForInstall(skillsDir, item.id, { force: options.force });
-    if (blocked) return blocked;
-
-    mkdirSync(skillsDir, { recursive: true });
-    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-    symlinkSync(relative(skillsDir, source), targetPath);
-    return { action: 'created', path: targetPath };
+    return installAt({
+      base: skillsDir, name: item.id, item, options, relativeLink: true,
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
@@ -72,12 +69,9 @@ export class CopilotAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     if (existsSync(skillsDir)) {
       for (const name of readdirSync(skillsDir)) {
+        if (isInternalName(name)) continue;
         const fullPath = resolve(skillsDir, name);
-        // existsSync follows the link, so it is false for a dangling symlink.
-        // Real (copied) skill directories resolve, so they are never flagged.
-        let broken = false;
-        try { broken = !existsSync(fullPath); } catch { broken = true; }
-        items.push({ id: name, type: 'skill', path: fullPath, broken });
+        items.push({ id: name, type: 'skill', path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     return items;

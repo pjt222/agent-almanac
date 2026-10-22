@@ -5,10 +5,10 @@
  * Skills only.
  */
 
-import { existsSync, mkdirSync, symlinkSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
-import { clearForInstall, removeEntry } from '../lib/placement.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
 export class GeminiAdapter extends FrameworkAdapter {
   static id = 'gemini';
@@ -32,13 +32,10 @@ export class GeminiAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     const targetPath = childPath(skillsDir, item.id);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    const blocked = clearForInstall(skillsDir, item.id, { force: options.force });
-    if (blocked) return blocked;
-
-    mkdirSync(skillsDir, { recursive: true });
-    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-    symlinkSync(relative(skillsDir, source), targetPath);
-    return { action: 'created', path: targetPath };
+    return installAt({
+      base: skillsDir, name: item.id, item, options, relativeLink: true,
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
@@ -50,8 +47,9 @@ export class GeminiAdapter extends FrameworkAdapter {
     const dir = this._skillsDir(projectDir);
     if (existsSync(dir)) {
       for (const name of readdirSync(dir)) {
+        if (isInternalName(name)) continue;
         const fullPath = resolve(dir, name);
-        items.push({ id: name, type: 'skill', path: fullPath, broken: !existsSync(fullPath) });
+        items.push({ id: name, type: 'skill', path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     return items;

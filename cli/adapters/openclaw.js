@@ -7,11 +7,11 @@
  * Also covers NemoClaw (NVIDIA's OpenClaw + Nemotron + OpenShell stack).
  */
 
-import { existsSync, mkdirSync, symlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
-import { clearForInstall, removeEntry } from '../lib/placement.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 import { condenseAgent, wrapInMarkers, removeMarkedSection, hasMarkedSection } from '../lib/transformer.js';
 
 export class OpenClawAdapter extends FrameworkAdapter {
@@ -39,12 +39,10 @@ export class OpenClawAdapter extends FrameworkAdapter {
     if (item.type === 'skill') {
       const targetPath = childPath(this._workspaceDir(), item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      const blocked = clearForInstall(this._workspaceDir(), item.id, { force: options.force });
-      if (blocked) return blocked;
-      mkdirSync(this._workspaceDir(), { recursive: true });
-      const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-      symlinkSync(source, targetPath);
-      return { action: 'created', path: targetPath };
+      return installAt({
+        base: this._workspaceDir(), name: item.id, item, options, relativeLink: false,
+        source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+      });
     }
 
     if (item.type === 'agent') {
@@ -93,10 +91,9 @@ export class OpenClawAdapter extends FrameworkAdapter {
     const wsDir = this._workspaceDir();
     if (existsSync(wsDir)) {
       for (const name of readdirSync(wsDir)) {
-        if (name === 'AGENTS.md') continue;
+        if (name === 'AGENTS.md' || isInternalName(name)) continue;
         const fullPath = resolve(wsDir, name);
-        // existsSync follows the link — false for a broken symlink.
-        items.push({ id: name, type: 'skill', path: fullPath, broken: !existsSync(fullPath) });
+        items.push({ id: name, type: 'skill', path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     return items;
