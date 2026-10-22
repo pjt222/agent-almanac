@@ -220,10 +220,13 @@ export function printArrival({ teamId, agents, results, ceremonial = false, alre
  * @param {object} options
  * @param {string} options.teamId
  * @param {object[]} options.agents - Reverse order (fire keeper last)
- * @param {object} options.results - { removed: string[], kept: { id, reason }[] }
+ * @param {object} options.results - { removed: string[], kept: { id, reason }[],
+ *   keptEdited?: string[] }. keptEdited: practices whose copies were edited
+ *   since they were copied, so uninstall kept them (#606 part 2).
  * @param {boolean} [options.ceremonial]
  */
 export function printScatter({ teamId, agents, results, ceremonial = false }) {
+  const keptEdited = results.keptEdited || [];
   console.log();
   console.log(C.warm(`Scattering the ${C.flame(teamId)} circle...`));
   console.log();
@@ -255,7 +258,11 @@ export function printScatter({ teamId, agents, results, ceremonial = false }) {
 
     if (ceremonial) {
       for (const skillId of removedSkills) {
-        console.log(`     ${C.spark(GLYPH.spark)} ${skillId} scatters`);
+        if (keptEdited.includes(skillId)) {
+          console.log(`     ${C.spark(GLYPH.spark)} ${skillId} stays ${C.dim('— changed since it was copied')}`);
+        } else {
+          console.log(`     ${C.spark(GLYPH.spark)} ${skillId} scatters`);
+        }
       }
       for (const skillId of keptSkills) {
         const reason = results.kept.find(k => k.id === skillId);
@@ -265,6 +272,14 @@ export function printScatter({ teamId, agents, results, ceremonial = false }) {
   }
 
   console.log();
+  // Without --ceremonial nothing above names a practice, so the ones that
+  // stay are named here, before the fire goes out.
+  if (!ceremonial && keptEdited.length > 0) {
+    const stays = keptEdited.length === 1
+      ? `1 practice stays where it was changed: ${keptEdited[0]}.`
+      : `${keptEdited.length} practices stay where they were changed: ${keptEdited.join(', ')}.`;
+    console.log(`  ${C.dim(stays)}`);
+  }
   const walkOn = remainCount > 0 ? ` ${remainCount} agent${remainCount !== 1 ? 's' : ''} walk${remainCount === 1 ? 's' : ''} on.` : '';
   console.log(`  ${C.warm('The fire goes out.')}${walkOn ? C.dim(walkOn) : ''}`);
   if (canRenderPixelArt()) {

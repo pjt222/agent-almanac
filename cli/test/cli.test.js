@@ -48,6 +48,7 @@ const itemId = await import('../lib/item-id.js').catch(() => ({}));
 // A namespace import for the same reason: placeCopy and the rest of the copy
 // machinery are new in S3-B2, and the module itself predates them.
 import * as placement from '../lib/placement.js';
+import * as campfire from '../lib/campfire-reporter.js';
 import { loadRegistries } from '../lib/registry.js';
 import { makeChalkStub } from '../lib/chalk-stub.js';
 import { detectFrameworks } from '../lib/detector.js';
@@ -860,6 +861,9 @@ describe('npm package root (#606)', () => {
   let fakeHome;
   let outside;
   let pkgRoot;
+  let pkgDrift;
+  let pkgNoVersion;
+  let cloneRoot;
   let env;
 
   // eslint-disable-next-line no-control-regex
@@ -873,11 +877,13 @@ describe('npm package root (#606)', () => {
   // layout, except a link to an item the new version removed, which dangles,
   // and breaks them under a version-keyed one (`install-strategy=linked`), so
   // it "can" break them and is not said to.
+  // Copy is listed before link: the safer of the two out of a package (D5).
   const refusal = (root) =>
     `ERROR: Not installing from the npm package at ${root}: \`npm uninstall\` leaves ` +
     'links into node_modules dangling, and `npm update` can break them or silently ' +
     'change the content under them.\n' +
     '    Either install from a clone:      --source <clone>\n' +
+    '    or copy out of the package:       --from-package copy\n' +
     '    or link into the package anyway:  --from-package link';
   // The warning names what audit can and cannot see (review round 2, R2-2):
   // `npm uninstall -g` removes the `agent-almanac` command with the package,
@@ -900,6 +906,23 @@ describe('npm package root (#606)', () => {
     '(the install\'s `-g`/`--scope` and `-f`; without `-f`, run it where ' +
     '`agent-almanac detect` lists the frameworks the install did): ' +
     '`agent-almanac uninstall <names>`, or `agent-almanac scatter <team>` after `gather`.';
+
+  // The copy mode's NOTE (#606 part 2), one whole stderr line. It carries the
+  // link warning's scope, frameworks and every-name clause (critique F6): a
+  // bare `audit` after a `-g` copy reads the project scope and reports
+  // nothing installed, so the drift warning it promises would fail open.
+  const copyNote = (root, version) =>
+    `  NOTE: Copying from the npm package at ${root} (agent-almanac ${version}). ` +
+    'The copies stay as they are through `npm update` and `npm uninstall`. ' +
+    '`agent-almanac audit` warns when this CLI\'s version differs from theirs, and ' +
+    '`agent-almanac uninstall <names>` (`agent-almanac scatter <team>` after `gather`) ' +
+    'removes a copy only while it is unedited. Run both with the same scope and frameworks ' +
+    '(the install\'s `-g`/`--scope` and `-f`; without `-f`, run them where `agent-almanac detect` ' +
+    'lists the frameworks the install did), and give `uninstall` every id on the install\'s `+` lines.';
+  // The repository's own version: the fixture package records it, so that a
+  // copy from it is the no-drift control against the CLI under test.
+  const PKG_VERSION = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')).version;
+  const copyLine = `    commit-changes skill (copy, agent-almanac ${PKG_VERSION})`;
 
   /**
    * Spawn the CLI by absolute path and keep BOTH streams. runAllowFail() keeps
@@ -930,6 +953,20 @@ describe('npm package root (#606)', () => {
     const dir = resolve(tmpRoot, name);
     mkdirSync(resolve(dir, '.claude'), { recursive: true });
     return dir;
+  }
+
+  /** Every symlink under `dir`, wherever it points: a copy makes none. */
+  function symlinksUnder(dir) {
+    const found = [];
+    const walk = (current) => {
+      for (const entry of readdirSync(current, { withFileTypes: true })) {
+        const entryPath = resolve(current, entry.name);
+        if (entry.isSymbolicLink()) found.push(entryPath);
+        else if (entry.isDirectory()) walk(entryPath);
+      }
+    };
+    walk(dir);
+    return found;
   }
 
   /** Every symlink under `dir` whose resolved target has a node_modules path segment. */
@@ -997,6 +1034,20 @@ describe('npm package root (#606)', () => {
       '',
     ].join('\n'));
     writeFileSync(resolve(pkgRoot, 'teams/fixture-team.md'), '---\nname: fixture-team\n---\n');
+    // What `--from-package copy` records in each copy's marker.
+    writeFileSync(resolve(pkgRoot, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: PKG_VERSION }));
+
+    // The same package at a version this CLI is not, for audit's drift warning;
+    // one whose package.json names no version; and a clone-shaped root that is
+    // not an npm package at all.
+    pkgDrift = resolve(tmpRoot, 'prefix-drift/lib/node_modules/agent-almanac');
+    cpSync(pkgRoot, pkgDrift, { recursive: true });
+    writeFileSync(resolve(pkgDrift, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: '0.0.0-drift' }));
+    pkgNoVersion = resolve(tmpRoot, 'prefix-noversion/lib/node_modules/agent-almanac');
+    cpSync(pkgRoot, pkgNoVersion, { recursive: true });
+    writeFileSync(resolve(pkgNoVersion, 'package.json'), JSON.stringify({ name: 'agent-almanac' }));
+    cloneRoot = resolve(tmpRoot, 'clone/agent-almanac');
+    cpSync(pkgRoot, cloneRoot, { recursive: true });
 
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
     delete env.LOCALAPPDATA;
@@ -1145,19 +1196,28 @@ describe('npm package root (#606)', () => {
   it('rejects a --from-package mode that is not implemented, before linking anything', () => {
     const dir = project('unknown-mode');
     const { status, stdout, stderr } = spawnCli(
-      ['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'copy'], dir);
-    assert.deepEqual(linksIntoNodeModules(dir), [], stdout);
+      ['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'hardlink'], dir);
+    assert.deepEqual(symlinksUnder(dir), [], stdout);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.match(stderr, /option '--from-package <mode>' argument 'copy' is invalid\. Allowed choices are link\./);
+    assert.ok(stderr.includes("error: option '--from-package <mode>' argument 'hardlink' is invalid. Allowed choices are copy, link."), stderr);
   });
 
-  it('install, gather and sync offer --from-package with only the implemented mode', () => {
+  // Pinned whole, with the whitespace commander wraps it with collapsed: the
+  // help is where a user reads what each mode does to their files.
+  it('install, gather and sync offer --from-package with both modes, copy first; install says what --force keeps', () => {
+    const fromPackageHelp = '--from-package <mode> Install even though the content root is an npm package ' +
+      '(inside node_modules), which is refused by default. copy: copy into each framework\'s folder, marked ' +
+      'so that uninstall removes only unedited copies; the copies outlast npm update and npm uninstall. ' +
+      'link: symlink into the package; npm update or npm uninstall can break the links (choices: "copy", "link")';
     for (const command of ['install', 'gather', 'sync']) {
       const { status, stdout } = spawnCli([command, '--help'], outside);
       assert.equal(status, 0, `${command} --help exited ${status}`);
       const help = stdout.replace(/\s+/g, ' ');
-      assert.match(help, /--from-package <mode> .*\(choices: "link"\)/, `${command} --help:\n${stdout}`);
-      assert.doesNotMatch(help, /copy/i, `${command} --help names an unimplemented mode`);
+      assert.ok(help.includes(fromPackageHelp), `${command} --help:\n${stdout}`);
+      if (command === 'install') {
+        assert.ok(help.includes('--force Replace existing content: a link, or a copy you have not edited. ' +
+          'Where agent-almanac links or copies, a file or directory it did not make is kept '), stdout);
+      }
     }
   });
 
@@ -1197,6 +1257,158 @@ describe('npm package root (#606)', () => {
     const { status, stdout, stderr } = spawnCli(['list', '--source', pkgRoot], outside);
     assert.equal(status, 0, `exit ${status}\n${stderr}`);
     assert.match(stdout, /^1 skills:$/m);
+  });
+
+  // ── --from-package copy (#606 part 2) ──
+  //
+  // Wiring and output only: what a copy holds, and what removes it, is pinned
+  // in-process in the "copy placement" blocks below.
+
+  it('with --from-package copy, install copies, notes it on stderr only, makes no link, and list marks each copy', () => {
+    const dir = project('copy-install');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(stderr.split('\n').includes(copyNote(pkgRoot, PKG_VERSION)), `the NOTE is not a whole stderr line:\n${stderr}`);
+    assert.ok(!stdout.includes('Copying from'), `the NOTE leaked to stdout:\n${stdout}`);
+    for (const [entry, adapter] of [['.agents/skills/commit-changes', 'universal'], ['.claude/skills/commit-changes', 'claude-code']]) {
+      const entryPath = resolve(dir, entry);
+      assert.equal(lstatSync(entryPath).isDirectory(), true, `${entry} is not a real directory`);
+      assert.equal(readFileSync(resolve(entryPath, 'SKILL.md'), 'utf8'),
+        readFileSync(resolve(pkgRoot, 'skills/commit-changes/SKILL.md'), 'utf8'));
+      assert.ok(stdout.split('\n').includes(`  + commit-changes [${adapter}] ${entryPath}`), stdout);
+    }
+    assert.deepEqual(symlinksUnder(dir), [], 'a copy makes no link at all');
+
+    const listed = spawnCli(['list', '--installed', '--source', pkgRoot], dir);
+    assert.equal(listed.status, 0, listed.stderr);
+    assert.equal(listed.stdout.split('\n').filter((line) => line === copyLine).length, 2,
+      `both frameworks' sections mark the copy:\n${listed.stdout}`);
+  });
+
+  it('audit warns, and exits 0, when a copy\'s version differs from this CLI\'s', () => {
+    const dir = project('copy-drift');
+    const copied = spawnCli(['install', 'commit-changes', '--source', pkgDrift, '--from-package', 'copy'], dir);
+    assert.equal(copied.status, 0, copied.stderr);
+    // No --source: the reference is the CLI's own package, whatever root it finds.
+    const { status, stdout, stderr } = spawnCli(['audit'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const drift = `WARN 1 copy from agent-almanac 0.0.0-drift, while this CLI is agent-almanac ${PKG_VERSION}: commit-changes`;
+    for (const section of ['Claude Code', 'Universal (.agents/)']) {
+      const lines = auditSection(stdout, section).split('\n').map((line) => line.trim());
+      assert.ok(lines.includes(drift), `${section} lacks ${JSON.stringify(drift)}:\n${stdout}`);
+    }
+  });
+
+  it('uninstall removes an unedited copy, keeps an edited one naming the file, and exits 0', () => {
+    const dir = project('copy-uninstall');
+    const installed = spawnCli(['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(installed.status, 0, installed.stderr);
+    const kept = resolve(dir, '.claude/skills/commit-changes');
+    writeFileSync(resolve(kept, 'SKILL.md'), `${readFileSync(resolve(kept, 'SKILL.md'), 'utf8')}my own line\n`);
+    const { status, stdout, stderr } = spawnCli(['uninstall', 'commit-changes', '--source', pkgRoot], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const lines = stdout.split('\n');
+    assert.ok(lines.includes(`  - commit-changes [universal] ${resolve(dir, '.agents/skills/commit-changes')}`), stdout);
+    assert.ok(lines.includes(`  = commit-changes [claude-code] ${kept}  edited since it was copied (modified: SKILL.md); kept, delete it by hand to remove it`), stdout);
+    assert.equal(existsSync(resolve(dir, '.agents/skills/commit-changes')), false);
+    assert.match(readFileSync(resolve(kept, 'SKILL.md'), 'utf8'), /my own line\n$/);
+  });
+
+  it('gather --json --from-package copy keeps stdout one document; scatter removes the copies, or names the edited one it kept', () => {
+    for (const editFirst of [false, true]) {
+      const dir = project(`copy-gather-${editFirst ? 'edited' : 'clean'}`);
+      const gathered = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
+      assert.equal(gathered.status, 0, `exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+      let doc;
+      assert.doesNotThrow(() => { doc = JSON.parse(gathered.stdout); }, `stdout is not one JSON document:\n${gathered.stdout}`);
+      assert.equal(doc.team, 'fixture-team');
+      assert.ok(gathered.stderr.split('\n').includes(copyNote(pkgRoot, PKG_VERSION)), gathered.stderr);
+      const skill = resolve(dir, '.claude/skills/commit-changes');
+      assert.equal(lstatSync(skill).isDirectory(), true);
+      assert.equal(lstatSync(resolve(dir, '.claude/agents')).isDirectory(), true, 'the agents directory is copied too');
+      assert.deepEqual(symlinksUnder(dir), []);
+      if (editFirst) writeFileSync(resolve(skill, 'notes.md'), USER_CONTENT);
+
+      const scattered = spawnCli(['scatter', 'fixture-team', '-y', '--json', '--source', pkgRoot], dir);
+      assert.equal(scattered.status, 0, `exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
+      assert.deepEqual(JSON.parse(scattered.stdout).copiesKept, editFirst ? ['commit-changes'] : [], `edited first: ${editFirst}`);
+      assert.equal(existsSync(resolve(dir, '.agents/skills/commit-changes')), false);
+      assert.equal(existsSync(resolve(dir, '.claude/agents')), false);
+      assert.equal(existsSync(skill), editFirst, `edited first: ${editFirst}`);
+    }
+  });
+
+  it('gather --from-package copy names, on stderr, a link it kept', () => {
+    // gather never passes --force, so an existing link stays (#993 §3); its
+    // JSON says only "skipped".
+    const dir = project('copy-gather-link');
+    const link = resolve(dir, '.claude/skills/commit-changes');
+    const target = resolve(pkgRoot, 'skills/commit-changes');
+    mkdirSync(dirname(link), { recursive: true });
+    symlinkSync(target, link);
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.doesNotThrow(() => JSON.parse(stdout), stdout);
+    const note = `  NOTE: commit-changes [claude-code] ${link}: a link is here (-> ${target}); ` +
+      '`install --force --from-package copy` replaces it with a copy';
+    assert.ok(stderr.split('\n').includes(note), stderr);
+    assert.equal(lstatSync(link).isSymbolicLink(), true);
+  });
+
+  it('sync and an install from a manifest copy too', () => {
+    for (const command of ['sync', 'install']) {
+      const dir = project(`copy-${command}-manifest`);
+      writeFileSync(resolve(dir, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
+      const { status, stdout, stderr } = spawnCli([command, '--source', pkgRoot, '--from-package', 'copy'], dir);
+      assert.equal(status, 0, `${command}: exit ${status}\n${stdout}\n${stderr}`);
+      for (const entry of ['.agents/skills/commit-changes', '.claude/skills/commit-changes']) {
+        assert.equal(placement.readOwnedMarker(resolve(dir, entry))?.package.version, PKG_VERSION, `${command}: ${entry}`);
+      }
+    }
+  });
+
+  it('copy refuses a content root that is not an npm package, and makes nothing', () => {
+    // Linking instead would downgrade an explicit request for copies (D6, refined).
+    const dir = project('copy-from-clone');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', cloneRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    const line = `  ERROR: Not copying from ${cloneRoot}: it is not an npm package, and \`--from-package copy\` copies ` +
+      'only out of one. Without `--from-package`, install links to it.';
+    assert.ok(stderr.split('\n').includes(line), stderr);
+    assert.deepEqual(readdirSync(dir), ['.claude']);
+  });
+
+  it('link on a content root that is not an npm package says it has no effect, and links as usual', () => {
+    const dir = project('link-from-clone');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', cloneRoot, '--from-package', 'link'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const line = `  NOTE: --from-package link has no effect: ${cloneRoot} is not an npm package; linking as usual.`;
+    assert.ok(stderr.split('\n').includes(line), stderr);
+    assert.equal(realpathSync(resolve(dir, '.claude/skills/commit-changes')), realpathSync(resolve(cloneRoot, 'skills/commit-changes')));
+  });
+
+  it('copy refuses a package whose package.json names no version, and makes nothing', () => {
+    const dir = project('copy-no-version');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', pkgNoVersion, '--from-package', 'copy'], dir);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    const line = `  ERROR: Cannot copy from ${pkgNoVersion}: its package.json names no package and version to record. ` +
+      'Use --source <clone> or --from-package link.';
+    assert.ok(stderr.split('\n').includes(line), stderr);
+    assert.deepEqual(readdirSync(dir), ['.claude']);
+  });
+
+  it('scatter\'s ceremony names a practice whose edited copy it kept', () => {
+    const agents = [{ id: 'fixture-agent', lead: true, skills: ['commit-changes', 'other-skill'] }];
+    const results = { removed: ['commit-changes', 'other-skill'], kept: [], keptAgents: [], keptEdited: ['commit-changes'] };
+    const plain = captureWarnings(() => campfire.printScatter({ teamId: 'fixture-team', agents, results }));
+    assert.ok(plain.includes('1 practice stays where it was changed: commit-changes.'), plain.join('\n'));
+    const ceremonial = captureWarnings(() => campfire.printScatter({ teamId: 'fixture-team', agents, results, ceremonial: true }));
+    assert.ok(ceremonial.includes('✦ commit-changes stays — changed since it was copied'), ceremonial.join('\n'));
+    assert.ok(ceremonial.includes('✦ other-skill scatters'), ceremonial.join('\n'));
   });
 });
 
