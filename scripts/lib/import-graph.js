@@ -55,8 +55,9 @@
  * 24.3. Measured without `moduleRequests`: 22.16.0, 22.19.0, 23.0.0, 23.11.1, 24.0.0, 24.3.0.
  * Measured with it: 22.20.0, 24.4.0, 24.20.0, 25.9.0, 26.11.1. So the fallback could go only once
  * `engines` excluded all of those (#918 round 2, N1). Since #1012 `engines` is `>=26`, which does,
- * so the fallback is dead code on every supported Node; removing it is #1013. Not measured:
- * 22.12.0 (the `engines` floor until #1012), the other 22.x, 23.x and 24.x releases.
+ * so the fallback is dead code on every supported Node; removing it is #1013. That rests on the
+ * docs' "Added in" for every 26.x but 26.11.1. Not measured: 26.0.0 (the floor since #1012),
+ * every other 26.x, and 22.12.0 (the floor until then).
  */
 import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { dirname, extname, relative, resolve as resolvePath } from 'node:path';
