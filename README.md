@@ -120,10 +120,13 @@ or silently change the content under them. The refusal names three ways forward:
   `agent-almanac audit` warns, and exits 0, when the CLI's version differs from the copies' or a
   copy was edited. To update copies, run `install <names> --force --from-package copy`, which
   replaces only copies you have not edited. `agent-almanac uninstall <names>` removes a copy only
-  while every file in it is as copied: it keeps an edited copy and names the changed files, and it
-  never removes a file or directory it did not make. Line endings turned into CRLF, and files an OS
-  or editor drops (`.DS_Store`, `Thumbs.db`, `desktop.ini`, vim swap files, emacs auto-save and lock
-  files, and `.pyc` or `.pyo` files under `__pycache__`), do not count as edits.
+  while every file in it is as copied: it keeps an edited copy and names the changed files. Line
+  endings turned into CRLF do not count as edits. It never removes a file or directory it did not
+  make, with two exceptions: files an OS or editor drops (`.DS_Store`, `Thumbs.db`, `desktop.ini`,
+  vim swap files, emacs auto-save and lock files, and `.pyc` or `.pyo` files under `__pycache__`),
+  which do not count as edits and go with the copy; and a change saved to a copy while `uninstall`,
+  `scatter`, `sync` or `install --force` is checking it, which can be removed or replaced with the
+  copy, because the check and the removal are not one atomic step.
   - **The same scope and frameworks, and every name.** Run `audit` and `uninstall` with the
     install's `-g` or `--scope` and `-f`, or, without `-f`, where `agent-almanac detect` lists the
     frameworks the install did: a bare `audit` after a `-g` install reads the project and reports

@@ -14,8 +14,10 @@
  * install failed with EEXIST when symlinkSync met it (S3-B2 P5).
  *
  * The CLI removes or replaces only what it made: a link, or a copy whose
- * marker names it and whose files are all as copied. Anything else is kept
- * and reported with a note. Before this, the sites unlinked whatever regular
+ * marker names it and whose files are all as copied, OS and editor junk
+ * aside (isJunkPath). Anything else is kept and reported with a note. The
+ * check and the removal are not one atomic step: removeEntry() and
+ * placeCopy() state the window. Before this, the sites unlinked whatever regular
  * file they found (S3-B2 P2a, P2d), and a user's directory survived only
  * because unlinkSync cannot remove one. Copy mode needs a remover that can,
  * so the ownership verdict is the one thing between "remove our copy" and
@@ -404,6 +406,13 @@ function discard(entryPath, isDir) {
  * A link is removed, dangling or not; a copy while unedited. A dry run returns
  * what the real run would.
  *
+ * Not atomic against another writer (review round 1, DL-3): the verdict
+ * reads every file of a copy, and the removal follows it. A change written to
+ * a file after the CLI read it, a file added to a directory after the walk
+ * listed that directory, or a save that replaces a copied file, is not seen,
+ * and is removed with the copy if it lands before the rename (a directory) or
+ * the unlink (a file).
+ *
  * @param {string} base - The directory the entry is in
  * @param {string} name - The entry's name in it
  * @param {{ dryRun?: boolean }} [options]
@@ -432,7 +441,7 @@ export function removeEntry(base, name, { dryRun = false } = {}) {
  * Without --force anything there, a dangling link included, is reported as
  * already there and kept. With --force a link or an unedited copy is removed
  * first, and anything else is kept and reported the way removeEntry() reports
- * it.
+ * it, with the same window between the check and the removal.
  *
  * @param {string} base
  * @param {string} name
@@ -473,8 +482,9 @@ const hashFile = (filePath) => sha256(readFileSync(filePath));
 
 /**
  * Copy `source` to `dest`, which must not exist: directories and regular
- * files only, each file hashed as written. A symlink anywhere, the root
- * included, is refused rather than followed or recreated. fs.cpSync is not
+ * files only, each file hashed as written. A symlink at or below `source`,
+ * `source` itself included, is refused rather than followed or recreated; a
+ * symlinked directory above it is not seen (placeCopy()). fs.cpSync is not
  * used: its `dereference` leaves a link into the source on some of the Node
  * versions this package supports (S3-B2 design § 2.3), which in copy mode
  * would be a link into node_modules.
@@ -593,7 +603,17 @@ function decide(entryPath, entry, force, copyFrom) {
  * between that last check and the rename is replaced if it is a file or an
  * empty directory (rename(2) semantics), and makes the rename fail if it is a
  * non-empty directory (critique F12; the window is the length of two lstat
- * calls).
+ * calls). A copy being replaced has a longer window (review round 1, DL-3):
+ * the re-check reads every file of it, so a change written to a file after
+ * the re-check read it, or a save over it, before the copy is moved aside is
+ * replaced with it. That window is the rest of the re-check's hash walk, not
+ * two lstat calls.
+ *
+ * Containment is lexical (review round 1, E5). contentPath() checks that
+ * `source` is inside `almanacRoot`, and childPath() that the target is inside
+ * `base`, by path text alone: a symlinked ancestor inside the content root is
+ * not resolved, so a source below one is copied from wherever it points. The
+ * walker refuses a symlink at or below `source`, not above it.
  *
  * @param {object} args
  * @param {string} args.base - The directory the entry goes in
