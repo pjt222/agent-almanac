@@ -8,7 +8,8 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync, spawnSync } from 'child_process';
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { createHash } from 'crypto';
 import { tmpdir, homedir } from 'os';
 import { dirname, isAbsolute, resolve } from 'path';
 // A namespace import, not named ones: isNpmPackageRoot is new in #606, and a
@@ -44,6 +45,10 @@ import { FrameworkAdapter } from '../adapters/base.js';
 // individual tests failing for their own reasons.
 import * as adapterBase from '../adapters/base.js';
 const itemId = await import('../lib/item-id.js').catch(() => ({}));
+// A namespace import for the same reason: placeCopy and the rest of the copy
+// machinery are new in S3-B2, and the module itself predates them.
+import * as placement from '../lib/placement.js';
+import * as campfire from '../lib/campfire-reporter.js';
 import { loadRegistries } from '../lib/registry.js';
 import { makeChalkStub } from '../lib/chalk-stub.js';
 import { detectFrameworks } from '../lib/detector.js';
@@ -856,6 +861,9 @@ describe('npm package root (#606)', () => {
   let fakeHome;
   let outside;
   let pkgRoot;
+  let pkgDrift;
+  let pkgNoVersion;
+  let cloneRoot;
   let env;
 
   // eslint-disable-next-line no-control-regex
@@ -869,12 +877,21 @@ describe('npm package root (#606)', () => {
   // layout, except a link to an item the new version removed, which dangles,
   // and breaks them under a version-keyed one (`install-strategy=linked`), so
   // it "can" break them and is not said to.
+  // Copy is listed before link: the safer of the two out of a package (D5).
   const refusal = (root) =>
     `ERROR: Not installing from the npm package at ${root}: \`npm uninstall\` leaves ` +
     'links into node_modules dangling, and `npm update` can break them or silently ' +
     'change the content under them.\n' +
     '    Either install from a clone:      --source <clone>\n' +
+    '    or copy out of the package:       --from-package copy\n' +
     '    or link into the package anyway:  --from-package link';
+  // The refusal is the last thing the command prints, so it is pinned at the
+  // end of stderr: a fifth line, a tail on the fourth, or a line printed
+  // after it all go red. `stderr.includes(refusal(root))` was open at the end
+  // and let a fifth line through (review round 1, AD-2). reporter.error()
+  // puts two spaces before the first line.
+  const assertRefusal = (stderr, root) =>
+    assert.deepEqual(stderr.split('\n').slice(-5), [...`  ${refusal(root)}`.split('\n'), ''], `the refusal is not the end of stderr:\n${stderr}`);
   // The warning names what audit can and cannot see (review round 2, R2-2):
   // `npm uninstall -g` removes the `agent-almanac` command with the package,
   // so the audit that would report the dangling links is gone too. It then
@@ -896,6 +913,23 @@ describe('npm package root (#606)', () => {
     '(the install\'s `-g`/`--scope` and `-f`; without `-f`, run it where ' +
     '`agent-almanac detect` lists the frameworks the install did): ' +
     '`agent-almanac uninstall <names>`, or `agent-almanac scatter <team>` after `gather`.';
+
+  // The copy mode's NOTE (#606 part 2), one whole stderr line. It carries the
+  // link warning's scope, frameworks and every-name clause (critique F6): a
+  // bare `audit` after a `-g` copy reads the project scope and reports
+  // nothing installed, so the drift warning it promises would fail open.
+  const copyNote = (root, version) =>
+    `  NOTE: Copying from the npm package at ${root} (agent-almanac ${version}). ` +
+    'The copies stay as they are through `npm update` and `npm uninstall`. ' +
+    '`agent-almanac audit` warns when this CLI\'s version differs from theirs, and ' +
+    '`agent-almanac uninstall <names>` (`agent-almanac scatter <team>` after `gather`) ' +
+    'removes a copy only while it is unedited. Run both with the same scope and frameworks ' +
+    '(the install\'s `-g`/`--scope` and `-f`; without `-f`, run them where `agent-almanac detect` ' +
+    'lists the frameworks the install did), and give `uninstall` every id on the install\'s `+` lines.';
+  // The repository's own version: the fixture package records it, so that a
+  // copy from it is the no-drift control against the CLI under test.
+  const PKG_VERSION = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')).version;
+  const copyLine = `    commit-changes skill (copy, agent-almanac ${PKG_VERSION})`;
 
   /**
    * Spawn the CLI by absolute path and keep BOTH streams. runAllowFail() keeps
@@ -926,6 +960,20 @@ describe('npm package root (#606)', () => {
     const dir = resolve(tmpRoot, name);
     mkdirSync(resolve(dir, '.claude'), { recursive: true });
     return dir;
+  }
+
+  /** Every symlink under `dir`, wherever it points: a copy makes none. */
+  function symlinksUnder(dir) {
+    const found = [];
+    const walk = (current) => {
+      for (const entry of readdirSync(current, { withFileTypes: true })) {
+        const entryPath = resolve(current, entry.name);
+        if (entry.isSymbolicLink()) found.push(entryPath);
+        else if (entry.isDirectory()) walk(entryPath);
+      }
+    };
+    walk(dir);
+    return found;
   }
 
   /** Every symlink under `dir` whose resolved target has a node_modules path segment. */
@@ -993,6 +1041,20 @@ describe('npm package root (#606)', () => {
       '',
     ].join('\n'));
     writeFileSync(resolve(pkgRoot, 'teams/fixture-team.md'), '---\nname: fixture-team\n---\n');
+    // What `--from-package copy` records in each copy's marker.
+    writeFileSync(resolve(pkgRoot, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: PKG_VERSION }));
+
+    // The same package at a version this CLI is not, for audit's drift warning;
+    // one whose package.json names no version; and a clone-shaped root that is
+    // not an npm package at all.
+    pkgDrift = resolve(tmpRoot, 'prefix-drift/lib/node_modules/agent-almanac');
+    cpSync(pkgRoot, pkgDrift, { recursive: true });
+    writeFileSync(resolve(pkgDrift, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: '0.0.0-drift' }));
+    pkgNoVersion = resolve(tmpRoot, 'prefix-noversion/lib/node_modules/agent-almanac');
+    cpSync(pkgRoot, pkgNoVersion, { recursive: true });
+    writeFileSync(resolve(pkgNoVersion, 'package.json'), JSON.stringify({ name: 'agent-almanac' }));
+    cloneRoot = resolve(tmpRoot, 'clone/agent-almanac');
+    cpSync(pkgRoot, cloneRoot, { recursive: true });
 
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
     delete env.LOCALAPPDATA;
@@ -1103,7 +1165,7 @@ describe('npm package root (#606)', () => {
     assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
     assert.deepEqual(linksIntoNodeModules(fakeHome), []);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assertRefusal(stderr, pkgRoot);
   });
 
   // A dry run refuses too: it exists to predict the real run, and a preview
@@ -1115,7 +1177,7 @@ describe('npm package root (#606)', () => {
     const { status, stdout, stderr } = spawnCli(
       ['install', 'commit-changes', '--source', pkgRoot, '--dry-run'], dir);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assertRefusal(stderr, pkgRoot);
     assert.doesNotMatch(stdout, /DRY RUN/);
     assert.deepEqual(linksIntoNodeModules(dir), []);
   });
@@ -1141,19 +1203,33 @@ describe('npm package root (#606)', () => {
   it('rejects a --from-package mode that is not implemented, before linking anything', () => {
     const dir = project('unknown-mode');
     const { status, stdout, stderr } = spawnCli(
-      ['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'copy'], dir);
-    assert.deepEqual(linksIntoNodeModules(dir), [], stdout);
+      ['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'hardlink'], dir);
+    assert.deepEqual(symlinksUnder(dir), [], stdout);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.match(stderr, /option '--from-package <mode>' argument 'copy' is invalid\. Allowed choices are link\./);
+    assert.ok(stderr.includes("error: option '--from-package <mode>' argument 'hardlink' is invalid. Allowed choices are copy, link."), stderr);
   });
 
-  it('install, gather and sync offer --from-package with only the implemented mode', () => {
+  // Pinned whole, with the whitespace commander wraps it with collapsed: the
+  // help is where a user reads what each mode does to their files.
+  it('install, gather and sync offer --from-package with both modes, copy first; install says what --force keeps', () => {
+    const fromPackageHelp = '--from-package <mode> Install even though the content root is an npm package ' +
+      '(inside node_modules), which is refused by default. copy: copy into each framework\'s folder, marked ' +
+      'so that uninstall checks that a copy is unedited before removing it; the copies outlast npm update ' +
+      'and npm uninstall. ' +
+      'link: symlink into the package; npm update or npm uninstall can break the links (choices: "copy", "link")';
     for (const command of ['install', 'gather', 'sync']) {
       const { status, stdout } = spawnCli([command, '--help'], outside);
       assert.equal(status, 0, `${command} --help exited ${status}`);
       const help = stdout.replace(/\s+/g, ' ');
-      assert.match(help, /--from-package <mode> .*\(choices: "link"\)/, `${command} --help:\n${stdout}`);
-      assert.doesNotMatch(help, /copy/i, `${command} --help names an unimplemented mode`);
+      assert.ok(help.includes(fromPackageHelp), `${command} --help:\n${stdout}`);
+      if (command === 'install') {
+        // Bounded on the right by the next option commander prints, so a tail
+        // on the text goes red too (review round 1, AD-2).
+        assert.ok(help.includes('--force Replace existing content: a link, whoever made it, or a copy you have not edited, ' +
+          'with the OS, editor and Python cache files in it and any directory holding nothing else. ' +
+          'Where agent-almanac links or copies, any other file or directory it did not make is kept, ' +
+          'though a change saved to a copy while --force checks it can be replaced --source <path> '), stdout);
+      }
     }
   });
 
@@ -1162,7 +1238,7 @@ describe('npm package root (#606)', () => {
     const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--quiet', '--source', pkgRoot], dir);
     assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assertRefusal(stderr, pkgRoot);
   });
 
   // `--from-package link` is the documented way to keep the old behaviour, so it
@@ -1186,13 +1262,230 @@ describe('npm package root (#606)', () => {
     const { status, stdout, stderr } = spawnCli(['sync', '--source', pkgRoot], dir);
     assert.deepEqual(linksIntoNodeModules(dir), [], `links into node_modules were created:\n${stdout}`);
     assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.ok(stderr.includes(refusal(pkgRoot)), `refusal text missing from stderr:\n${stderr}`);
+    assertRefusal(stderr, pkgRoot);
   });
 
   it('a read-only command still runs from a package root', () => {
     const { status, stdout, stderr } = spawnCli(['list', '--source', pkgRoot], outside);
     assert.equal(status, 0, `exit ${status}\n${stderr}`);
     assert.match(stdout, /^1 skills:$/m);
+  });
+
+  // ── --from-package copy (#606 part 2) ──
+  //
+  // Wiring and output only: what a copy holds, and what removes it, is pinned
+  // in-process in the "copy placement" blocks below.
+
+  it('with --from-package copy, install copies, notes it on stderr only, makes no link, and list marks each copy', () => {
+    const dir = project('copy-install');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(stderr.split('\n').includes(copyNote(pkgRoot, PKG_VERSION)), `the NOTE is not a whole stderr line:\n${stderr}`);
+    assert.ok(!stdout.includes('Copying from'), `the NOTE leaked to stdout:\n${stdout}`);
+    for (const [entry, adapter] of [['.agents/skills/commit-changes', 'universal'], ['.claude/skills/commit-changes', 'claude-code']]) {
+      const entryPath = resolve(dir, entry);
+      assert.equal(lstatSync(entryPath).isDirectory(), true, `${entry} is not a real directory`);
+      assert.equal(readFileSync(resolve(entryPath, 'SKILL.md'), 'utf8'),
+        readFileSync(resolve(pkgRoot, 'skills/commit-changes/SKILL.md'), 'utf8'));
+      assert.ok(stdout.split('\n').includes(`  + commit-changes [${adapter}] ${entryPath}`), stdout);
+    }
+    assert.deepEqual(symlinksUnder(dir), [], 'a copy makes no link at all');
+
+    const listed = spawnCli(['list', '--installed', '--source', pkgRoot], dir);
+    assert.equal(listed.status, 0, listed.stderr);
+    assert.equal(listed.stdout.split('\n').filter((line) => line === copyLine).length, 2,
+      `both frameworks' sections mark the copy:\n${listed.stdout}`);
+  });
+
+  it('audit warns, and exits 0, when a copy\'s version differs from this CLI\'s', () => {
+    const dir = project('copy-drift');
+    const copied = spawnCli(['install', 'commit-changes', '--source', pkgDrift, '--from-package', 'copy'], dir);
+    assert.equal(copied.status, 0, copied.stderr);
+    // No --source: the reference is the CLI's own package, whatever root it finds.
+    const { status, stdout, stderr } = spawnCli(['audit'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const drift = `WARN 1 copy from agent-almanac 0.0.0-drift, while this CLI is agent-almanac ${PKG_VERSION}: commit-changes`;
+    for (const section of ['Claude Code', 'Universal (.agents/)']) {
+      const lines = auditSection(stdout, section).split('\n').map((line) => line.trim());
+      assert.ok(lines.includes(drift), `${section} lacks ${JSON.stringify(drift)}:\n${stdout}`);
+    }
+  });
+
+  it('uninstall removes an unedited copy, keeps an edited one naming the file, and exits 0', () => {
+    const dir = project('copy-uninstall');
+    const installed = spawnCli(['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(installed.status, 0, installed.stderr);
+    const kept = resolve(dir, '.claude/skills/commit-changes');
+    writeFileSync(resolve(kept, 'SKILL.md'), `${readFileSync(resolve(kept, 'SKILL.md'), 'utf8')}my own line\n`);
+    const { status, stdout, stderr } = spawnCli(['uninstall', 'commit-changes', '--source', pkgRoot], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const lines = stdout.split('\n');
+    assert.ok(lines.includes(`  - commit-changes [universal] ${resolve(dir, '.agents/skills/commit-changes')}`), stdout);
+    assert.ok(lines.includes(`  = commit-changes [claude-code] ${kept}  edited since it was copied (modified: SKILL.md); kept, delete it by hand to remove it`), stdout);
+    assert.equal(existsSync(resolve(dir, '.agents/skills/commit-changes')), false);
+    assert.match(readFileSync(resolve(kept, 'SKILL.md'), 'utf8'), /my own line\n$/);
+  });
+
+  it('gather --json --from-package copy keeps stdout one document; scatter removes the copies, or names the edited one it kept', () => {
+    for (const editFirst of [false, true]) {
+      const dir = project(`copy-gather-${editFirst ? 'edited' : 'clean'}`);
+      const gathered = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
+      assert.equal(gathered.status, 0, `exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+      let doc;
+      assert.doesNotThrow(() => { doc = JSON.parse(gathered.stdout); }, `stdout is not one JSON document:\n${gathered.stdout}`);
+      assert.equal(doc.team, 'fixture-team');
+      assert.ok(gathered.stderr.split('\n').includes(copyNote(pkgRoot, PKG_VERSION)), gathered.stderr);
+      const skill = resolve(dir, '.claude/skills/commit-changes');
+      assert.equal(lstatSync(skill).isDirectory(), true);
+      assert.equal(lstatSync(resolve(dir, '.claude/agents')).isDirectory(), true, 'the agents directory is copied too');
+      assert.deepEqual(symlinksUnder(dir), []);
+      if (editFirst) writeFileSync(resolve(skill, 'notes.md'), USER_CONTENT);
+
+      const scattered = spawnCli(['scatter', 'fixture-team', '-y', '--json', '--source', pkgRoot], dir);
+      assert.equal(scattered.status, 0, `exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
+      assert.deepEqual(JSON.parse(scattered.stdout).copiesKept, editFirst ? ['commit-changes'] : [], `edited first: ${editFirst}`);
+      assert.equal(existsSync(resolve(dir, '.agents/skills/commit-changes')), false);
+      assert.equal(existsSync(resolve(dir, '.claude/agents')), false);
+      assert.equal(existsSync(skill), editFirst, `edited first: ${editFirst}`);
+    }
+  });
+
+  it('gather --from-package copy names, on stderr, a link it kept', () => {
+    // gather never passes --force, so an existing link stays (#993 §3); its
+    // JSON says only "skipped".
+    const dir = project('copy-gather-link');
+    const link = resolve(dir, '.claude/skills/commit-changes');
+    const target = resolve(pkgRoot, 'skills/commit-changes');
+    mkdirSync(dirname(link), { recursive: true });
+    symlinkSync(target, link);
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.doesNotThrow(() => JSON.parse(stdout), stdout);
+    const note = `  NOTE: commit-changes [claude-code] ${link}: a link is here (-> ${target}); ` +
+      '`install --force --from-package copy` replaces it with a copy';
+    assert.ok(stderr.split('\n').includes(note), stderr);
+    assert.equal(lstatSync(link).isSymbolicLink(), true);
+  });
+
+  // Review round 1, F5: three paths of the copy wiring that no test pinned.
+
+  it('a second gather --from-package copy over the same copies prints no NOTE for them', () => {
+    // A copy already at this version is not news: only the copy mode's own NOTE.
+    const dir = project('copy-gather-twice');
+    const args = ['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'];
+    const first = spawnCli(args, dir);
+    assert.equal(first.status, 0, `exit ${first.status}\n${first.stdout}\n${first.stderr}`);
+    const second = spawnCli(args, dir);
+    assert.equal(second.status, 0, `exit ${second.status}\n${second.stdout}\n${second.stderr}`);
+    assert.deepEqual(second.stderr.split('\n').filter((line) => line.startsWith('  NOTE:')), [copyNote(pkgRoot, PKG_VERSION)],
+      second.stderr);
+  });
+
+  it('scatter without --json names the practice whose edited copy it kept', () => {
+    const dir = project('copy-scatter-plain');
+    const gathered = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(gathered.status, 0, `exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+    writeFileSync(resolve(dir, '.claude/skills/commit-changes/notes.md'), USER_CONTENT);
+    const scattered = spawnCli(['scatter', 'fixture-team', '-y', '--source', pkgRoot], dir);
+    assert.equal(scattered.status, 0, `exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
+    assert.ok(scattered.stdout.split('\n').includes('  1 practice stays where it was changed: commit-changes.'), scattered.stdout);
+    assert.equal(existsSync(resolve(dir, '.claude/skills/commit-changes/notes.md')), true);
+  });
+
+  it('scatter --json lists the copies it kept in sorted order', () => {
+    // Two edited copies whose results arrive out of order: the agent lists
+    // commit-changes before a-first-skill (review round 1, F8).
+    const pkgTwo = resolve(tmpRoot, 'prefix-two/lib/node_modules/agent-almanac');
+    cpSync(pkgRoot, pkgTwo, { recursive: true });
+    mkdirSync(resolve(pkgTwo, 'skills/a-first-skill'));
+    writeFileSync(resolve(pkgTwo, 'skills/a-first-skill/SKILL.md'), '---\nname: a-first-skill\n---\nsecond fixture skill\n');
+    writeFileSync(resolve(pkgTwo, 'skills/_registry.yml'), [
+      'total_skills: 2',
+      'domains:',
+      '  git:',
+      '    description: fixture',
+      '    skills:',
+      '      - id: commit-changes',
+      '        path: commit-changes/SKILL.md',
+      '      - id: a-first-skill',
+      '        path: a-first-skill/SKILL.md',
+      '',
+    ].join('\n'));
+    writeFileSync(resolve(pkgTwo, 'agents/_registry.yml'), [
+      'total_agents: 1',
+      'agents:',
+      '  - id: fixture-agent',
+      '    path: agents/fixture-agent.md',
+      '    skills:',
+      '      - commit-changes',
+      '      - a-first-skill',
+      '',
+    ].join('\n'));
+    const dir = project('copy-scatter-sorted');
+    const gathered = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgTwo, '--from-package', 'copy'], dir);
+    assert.equal(gathered.status, 0, `exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+    for (const id of ['commit-changes', 'a-first-skill']) {
+      writeFileSync(resolve(dir, `.claude/skills/${id}/notes.md`), USER_CONTENT);
+    }
+    const scattered = spawnCli(['scatter', 'fixture-team', '-y', '--json', '--source', pkgTwo], dir);
+    assert.equal(scattered.status, 0, `exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
+    assert.deepEqual(JSON.parse(scattered.stdout).copiesKept, ['a-first-skill', 'commit-changes']);
+  });
+
+  it('sync and an install from a manifest copy too', () => {
+    for (const command of ['sync', 'install']) {
+      const dir = project(`copy-${command}-manifest`);
+      writeFileSync(resolve(dir, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
+      const { status, stdout, stderr } = spawnCli([command, '--source', pkgRoot, '--from-package', 'copy'], dir);
+      assert.equal(status, 0, `${command}: exit ${status}\n${stdout}\n${stderr}`);
+      for (const entry of ['.agents/skills/commit-changes', '.claude/skills/commit-changes']) {
+        assert.equal(placement.readOwnedMarker(resolve(dir, entry))?.package.version, PKG_VERSION, `${command}: ${entry}`);
+      }
+    }
+  });
+
+  it('copy refuses a content root that is not an npm package, and makes nothing', () => {
+    // Linking instead would downgrade an explicit request for copies (D6, refined).
+    const dir = project('copy-from-clone');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', cloneRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    const line = `  ERROR: Not copying from ${cloneRoot}: it is not an npm package, and \`--from-package copy\` copies ` +
+      'only out of one. Without `--from-package`, install links to it.';
+    assert.ok(stderr.split('\n').includes(line), stderr);
+    assert.deepEqual(readdirSync(dir), ['.claude']);
+  });
+
+  it('link on a content root that is not an npm package says it has no effect, and links as usual', () => {
+    const dir = project('link-from-clone');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', cloneRoot, '--from-package', 'link'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const line = `  NOTE: --from-package link has no effect: ${cloneRoot} is not an npm package; linking as usual.`;
+    assert.ok(stderr.split('\n').includes(line), stderr);
+    assert.equal(realpathSync(resolve(dir, '.claude/skills/commit-changes')), realpathSync(resolve(cloneRoot, 'skills/commit-changes')));
+  });
+
+  it('copy refuses a package whose package.json names no version, and makes nothing', () => {
+    const dir = project('copy-no-version');
+    const { status, stdout, stderr } = spawnCli(
+      ['install', 'commit-changes', '--source', pkgNoVersion, '--from-package', 'copy'], dir);
+    assert.equal(status, 1, `exit ${status}\n${stdout}\n${stderr}`);
+    const line = `  ERROR: Cannot copy from ${pkgNoVersion}: its package.json names no package and version to record. ` +
+      'Use --source <clone> or --from-package link.';
+    assert.ok(stderr.split('\n').includes(line), stderr);
+    assert.deepEqual(readdirSync(dir), ['.claude']);
+  });
+
+  it('scatter\'s ceremony names a practice whose edited copy it kept', () => {
+    const agents = [{ id: 'fixture-agent', lead: true, skills: ['commit-changes', 'other-skill'] }];
+    const results = { removed: ['commit-changes', 'other-skill'], kept: [], keptAgents: [], keptEdited: ['commit-changes'] };
+    const plain = captureWarnings(() => campfire.printScatter({ teamId: 'fixture-team', agents, results }));
+    assert.ok(plain.includes('1 practice stays where it was changed: commit-changes.'), plain.join('\n'));
+    const ceremonial = captureWarnings(() => campfire.printScatter({ teamId: 'fixture-team', agents, results, ceremonial: true }));
+    assert.ok(ceremonial.includes('✦ commit-changes stays — changed since it was copied'), ceremonial.join('\n'));
+    assert.ok(ceremonial.includes('✦ other-skill scatters'), ceremonial.join('\n'));
   });
 });
 
@@ -2447,5 +2740,1730 @@ describe('item names stay inside their install directories', () => {
     const r = spawnCli(['sync', '-f', 'universal', '--source', ROOT], dir);
     assert.equal(r.status, 0, `expected exit 0, got ${r.status}\n${r.stdout}\n${r.stderr}`);
     assert.equal(readFileSync(resolve(dir, '.agents/skills/My_Notes.md'), 'utf8'), SENTINEL);
+  });
+});
+
+// ── Link sites (S3-B2) ───────────────────────────────────────────
+//
+// Nine adapters make a link into the content root, at twelve sites in three
+// shapes: nine skill directories, the opencode and hermes agent files, and
+// claude-code's whole agents directory. cursor and copilot link too, whatever
+// their declared `strategy` says. The blocks below drive every site in-process,
+// each test in a throwaway tree of its own, so a change to one site's link
+// writer or remover goes red in that site's row and nowhere else. In-process
+// rather than spawned: the property is about the adapters, not about argument
+// parsing, and #670 measured the per-spawn budget as nearly used up.
+
+/** Content for the two items a link can point at. */
+const LINK_FIXTURE = {
+  skill: '---\nname: commit-changes\n---\nfixture skill\n',
+  agent: '---\nname: code-reviewer\n---\nfixture agent\n',
+};
+
+/** What a user wrote into a path an adapter also uses. Every test that plants it asserts it survives. */
+const USER_CONTENT = 'my own file: must survive\n';
+
+/** The `details` most sites put on an install result; claude-code's agents directory has its own. */
+const LINK_DETAILS = {
+  dryRunInstall: 'dry-run',
+  created: undefined,
+  exists: 'already exists',
+};
+
+/**
+ * The uninstall result for each state, for the ten sites that share one shape.
+ * At b3275420a a dry run over an absent item reported "removed" at these ten:
+ * it returned before looking. It reports what the real run does since the
+ * ownership guard, which a dry run has to apply too (S3-B2 P2a).
+ */
+const UNINSTALL_SHAPE = {
+  dryPresent: (path) => ({ action: 'removed', path, details: 'dry-run' }),
+  removed: (path) => ({ action: 'removed', path }),
+  absent: (path) => ({ action: 'skipped', path, details: 'not installed' }),
+  dryAbsent: (path) => ({ action: 'skipped', path, details: 'not installed' }),
+};
+
+/**
+ * Every link site, with the scopes its adapter declares for the content type.
+ * `relTarget` is the link text a project-scope install writes, spelled out
+ * rather than computed with relative(), so a change in how an adapter builds it
+ * cannot be mirrored by the test. A global install links by absolute path.
+ */
+const LINK_SITES = [
+  {
+    site: 'universal skill', adapter: () => new UniversalAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? sb.home : sb.proj, '.agents/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    site: 'claude-code skill', adapter: () => new ClaudeCodeAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? sb.home : sb.proj, '.claude/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    site: 'claude-code agents directory', adapter: () => new ClaudeCodeAdapter(), type: 'agent', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? sb.home : sb.proj, '.claude/agents'),
+    relTarget: '../../src/agents',
+    absTarget: (sb) => resolve(sb.src, 'agents'),
+    details: {
+      dryRunInstall: 'dry-run: agents directory symlink',
+      created: 'agents directory symlink',
+      exists: 'agents symlink already exists',
+    },
+  },
+  {
+    site: 'opencode skill', adapter: () => new OpenCodeAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? resolve(sb.home, '.config/opencode') : resolve(sb.proj, '.opencode'), 'skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    site: 'opencode agent file', adapter: () => new OpenCodeAdapter(), type: 'agent', scopes: ['project', 'global'],
+    // The dry run reports this path too. At b3275420a it reported <agents>/<id>,
+    // without the .md: the agent install ran the skill-shaped steps first (P2e).
+    path: (sb, scope) => resolve(scope === 'global' ? resolve(sb.home, '.config/opencode') : resolve(sb.proj, '.opencode'), 'agents/code-reviewer.md'),
+    relTarget: '../../../src/agents/code-reviewer.md',
+  },
+  {
+    site: 'openclaw skill', adapter: () => new OpenClawAdapter(), type: 'skill', scopes: ['global'],
+    path: (sb) => resolve(sb.home, '.openclaw/workspace/commit-changes'),
+  },
+  {
+    site: 'hermes skill', adapter: () => new HermesAdapter(), type: 'skill', scopes: ['global'],
+    path: (sb) => resolve(sb.hermes, 'skills/git/commit-changes'),
+  },
+  {
+    site: 'hermes agent file', adapter: () => new HermesAdapter(), type: 'agent', scopes: ['global'],
+    path: (sb) => resolve(sb.hermes, 'agents/code-reviewer.md'),
+  },
+  {
+    site: 'vibe skill', adapter: () => new VibeAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? sb.home : sb.proj, '.vibe/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    site: 'gemini skill', adapter: () => new GeminiAdapter(), type: 'skill', scopes: ['project'],
+    path: (sb) => resolve(sb.proj, '.gemini/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    // cursor reports the paths it removed, joined, without details, and an
+    // empty path when it removed nothing.
+    site: 'cursor skill', adapter: () => new CursorAdapter(), type: 'skill', scopes: ['project'],
+    path: (sb) => resolve(sb.proj, '.cursor/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+    uninstallShape: {
+      dryPresent: (path) => ({ action: 'removed', path }),
+      absent: () => ({ action: 'skipped', path: '', details: 'not installed' }),
+      dryAbsent: () => ({ action: 'skipped', path: '', details: 'not installed' }),
+    },
+  },
+  {
+    site: 'copilot skill', adapter: () => new CopilotAdapter(), type: 'skill', scopes: ['project'],
+    path: (sb) => resolve(sb.proj, '.github/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+    uninstallShape: {
+      absent: () => ({ action: 'skipped', path: '', details: 'not installed' }),
+      dryAbsent: () => ({ action: 'skipped', path: '', details: 'not installed' }),
+    },
+  },
+];
+
+/** The registry item a site installs. */
+function linkItem(site, sb) {
+  return site.type === 'skill'
+    ? {
+      type: 'skill', id: 'commit-changes', domain: 'git',
+      sourceDir: resolve(sb.src, 'skills/commit-changes'),
+      sourcePath: resolve(sb.src, 'skills/commit-changes/SKILL.md'),
+    }
+    : { type: 'agent', id: 'code-reviewer', sourcePath: resolve(sb.src, 'agents/code-reviewer.md') };
+}
+
+/** The exact text readlinkSync must return after an install at this site and scope. */
+function expectedLinkText(site, sb, scope) {
+  if (scope === 'project') return site.relTarget;
+  if (site.absTarget) return site.absTarget(sb);
+  return resolve(sb.src, site.type === 'skill' ? 'skills/commit-changes' : 'agents/code-reviewer.md');
+}
+
+/** An install result: `details` is present only when the site reports one. */
+function linkResult(action, path, details) {
+  return details === undefined ? { action, path } : { action, path, details };
+}
+
+/**
+ * Run fn in a fresh tree under `parent`: a content root `src`, a project
+ * `proj`, a home and a Hermes home, with HOME, USERPROFILE and HERMES_HOME
+ * pointed at them and LOCALAPPDATA cleared until fn settles. The global sites
+ * read homedir() and resolveHermesHome() at call time, so this is what steers
+ * them away from the real home. `gone` is a path that never exists, the target
+ * of every dangling link.
+ */
+async function inLinkSandbox(parent, name, fn) {
+  const root = resolve(parent, name);
+  const sb = {
+    root,
+    src: resolve(root, 'src'),
+    proj: resolve(root, 'proj'),
+    home: resolve(root, 'home'),
+    hermes: resolve(root, 'hermes-home'),
+    gone: resolve(root, 'gone'),
+  };
+  mkdirSync(resolve(sb.src, 'skills/commit-changes'), { recursive: true });
+  mkdirSync(resolve(sb.src, 'agents'), { recursive: true });
+  writeFileSync(resolve(sb.src, 'skills/commit-changes/SKILL.md'), LINK_FIXTURE.skill);
+  writeFileSync(resolve(sb.src, 'agents/code-reviewer.md'), LINK_FIXTURE.agent);
+  mkdirSync(sb.proj, { recursive: true });
+  mkdirSync(sb.home, { recursive: true });
+  const saved = {
+    HOME: process.env.HOME,
+    USERPROFILE: process.env.USERPROFILE,
+    HERMES_HOME: process.env.HERMES_HOME,
+    LOCALAPPDATA: process.env.LOCALAPPDATA,
+  };
+  process.env.HOME = sb.home;
+  process.env.USERPROFILE = sb.home;
+  process.env.HERMES_HOME = sb.hermes;
+  delete process.env.LOCALAPPDATA;
+  try {
+    return await fn(sb);
+  } finally {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+}
+
+/** A filesystem-safe name for a site's sandbox. */
+const siteSlug = (site) => site.site.replace(/[^a-z0-9]+/g, '-');
+
+describe('link sites: baseline pins (S3-B2 T0)', () => {
+  // Characterisation, green at b3275420a: what every link site does today,
+  // pinned before S3-B2 rewrites the removers and the listings. A later commit
+  // that changes one of these does it on purpose and edits the pin with it.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-link-t0-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('the site table names every scope each adapter declares for the type', () => {
+    for (const site of LINK_SITES) {
+      assert.deepEqual(site.scopes, site.adapter().scopesFor(site.type), site.site);
+    }
+    assert.equal(LINK_SITES.length, 12);
+    assert.equal(new Set(LINK_SITES.map((site) => site.adapter().constructor.id)).size, 9);
+  });
+
+  for (const site of LINK_SITES) {
+    for (const scope of site.scopes) {
+      it(`${site.site} (${scope}): the link text, and every install and uninstall result`, async () => {
+        await inLinkSandbox(tmpRoot, `${siteSlug(site)}-${scope}`, async (sb) => {
+          const adapter = site.adapter();
+          const item = linkItem(site, sb);
+          const opts = { almanacRoot: sb.src };
+          const path = site.path(sb, scope);
+          const details = { ...LINK_DETAILS, ...site.details };
+          const shape = { ...UNINSTALL_SHAPE, ...site.uninstallShape };
+          const linkText = expectedLinkText(site, sb, scope);
+
+          assert.deepEqual(
+            await adapter.install(item, sb.proj, scope, { ...opts, dryRun: true }),
+            linkResult('created', path, details.dryRunInstall),
+          );
+          assert.throws(() => lstatSync(path), { code: 'ENOENT' }, 'a dry run makes nothing');
+
+          assert.deepEqual(await adapter.install(item, sb.proj, scope, opts), linkResult('created', path, details.created));
+          assert.equal(readlinkSync(path), linkText);
+
+          assert.deepEqual(await adapter.install(item, sb.proj, scope, opts), linkResult('skipped', path, details.exists));
+          assert.deepEqual(
+            await adapter.install(item, sb.proj, scope, { ...opts, force: true }),
+            linkResult('created', path, details.created),
+          );
+          assert.equal(readlinkSync(path), linkText, '--force writes the same link again');
+
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, { dryRun: true }), shape.dryPresent(path));
+          assert.equal(readlinkSync(path), linkText, 'a dry run removes nothing');
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, {}), shape.removed(path));
+          assert.throws(() => lstatSync(path), { code: 'ENOENT' }, 'uninstall removes the link');
+
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, {}), shape.absent(path));
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, { dryRun: true }), shape.dryAbsent(path));
+        });
+      });
+    }
+  }
+
+  // listInstalled() and audit(), each over one link that resolves and one that
+  // dangles, per content directory the adapter lists. claude-code is included
+  // here, which the broken-symlink block above leaves out (#823). Its two rows
+  // split the pair across scopes: the project row holds resolving skill and
+  // agents links beside a dangling skill link, and pins the broken-skill push;
+  // the global row holds one dangling `.claude/agents` link, and pins what that
+  // produces today.
+  const plant = (dir, name, target) => {
+    mkdirSync(dir, { recursive: true });
+    symlinkSync(target, resolve(dir, name));
+  };
+  const skillSource = (sb) => resolve(sb.src, 'skills/commit-changes');
+  const agentSource = (sb) => resolve(sb.src, 'agents/code-reviewer.md');
+  const byPath = (entries) => [...entries].sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
+  /** The two skill links every case plants: good-skill resolves, ghost-skill dangles. */
+  const plantSkills = (sb, dir) => {
+    plant(dir, 'good-skill', skillSource(sb));
+    plant(dir, 'ghost-skill', sb.gone);
+  };
+  const skillEntries = (sb, dir, extra = {}) => [
+    { id: 'ghost-skill', type: 'skill', ...extra, path: resolve(dir, 'ghost-skill'), broken: true },
+    { id: 'good-skill', type: 'skill', ...extra, path: resolve(dir, 'good-skill'), broken: false },
+  ];
+
+  const LIST_CASES = [
+    {
+      name: 'universal (project)', make: () => new UniversalAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.agents/skills');
+        plantSkills(sb, dir);
+        return {
+          list: [
+            { id: 'ghost-skill', type: 'skill', path: resolve(dir, 'ghost-skill'), isSymlink: true, target: sb.gone, broken: true },
+            { id: 'good-skill', type: 'skill', path: resolve(dir, 'good-skill'), isSymlink: true, target: skillSource(sb), broken: false },
+          ],
+          audit: { framework: 'Universal (.agents/)', ok: ['1 skills installed'], warnings: [], errors: ['1 broken symlinks: ghost-skill'] },
+        };
+      },
+    },
+    {
+      name: 'claude-code (project): skills and a resolving agents link', make: () => new ClaudeCodeAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.claude/skills');
+        plantSkills(sb, dir);
+        plant(resolve(sb.proj, '.claude'), 'agents', resolve(sb.src, 'agents'));
+        return {
+          list: [
+            { id: 'agents', type: 'agent', path: resolve(sb.proj, '.claude/agents'), broken: false },
+            ...skillEntries(sb, dir),
+          ],
+          audit: { framework: 'Claude Code', ok: ['1 skills installed', 'agents symlink valid'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'claude-code (global): a dangling agents link', make: () => new ClaudeCodeAdapter(), scope: 'global',
+      build: (sb) => {
+        plant(resolve(sb.home, '.claude'), 'agents', sb.gone);
+        // At b3275420a listInstalled() tested the agents link with existsSync,
+        // which follows it, so a dangling one was not listed at all and audit()
+        // reported `No agents symlink` (warning), not a broken link. By lstat
+        // since #993 §2, which makes the broken-agents push reachable (#823).
+        return {
+          list: [{ id: 'agents', type: 'agent', path: resolve(sb.home, '.claude/agents'), broken: true }],
+          audit: { framework: 'Claude Code', ok: [], warnings: [], errors: ['agents symlink is broken'] },
+        };
+      },
+    },
+    {
+      name: 'opencode (project): skills and agent files', make: () => new OpenCodeAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.opencode/skills');
+        const agents = resolve(sb.proj, '.opencode/agents');
+        plantSkills(sb, dir);
+        plant(agents, 'good-agent.md', agentSource(sb));
+        plant(agents, 'ghost-agent.md', sb.gone);
+        return {
+          list: [
+            { id: 'ghost-agent', type: 'agent', path: resolve(agents, 'ghost-agent.md'), broken: true },
+            { id: 'good-agent', type: 'agent', path: resolve(agents, 'good-agent.md'), broken: false },
+            ...skillEntries(sb, dir),
+          ],
+          audit: { framework: 'OpenCode', ok: ['2 items installed'], warnings: [], errors: ['2 broken links'] },
+        };
+      },
+    },
+    {
+      name: 'openclaw (global)', make: () => new OpenClawAdapter(), scope: 'global',
+      build: (sb) => {
+        const dir = resolve(sb.home, '.openclaw/workspace');
+        plantSkills(sb, dir);
+        return {
+          list: skillEntries(sb, dir),
+          audit: { framework: 'OpenClaw/NemoClaw', ok: ['1 skills in workspace'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'hermes (global): skills and agent files', make: () => new HermesAdapter(), scope: 'global',
+      build: (sb) => {
+        const dir = resolve(sb.hermes, 'skills/git');
+        const agents = resolve(sb.hermes, 'agents');
+        plantSkills(sb, dir);
+        plant(agents, 'good-agent.md', agentSource(sb));
+        plant(agents, 'ghost-agent.md', sb.gone);
+        return {
+          list: [
+            { id: 'ghost-agent', type: 'agent', path: resolve(agents, 'ghost-agent.md'), broken: true },
+            { id: 'good-agent', type: 'agent', path: resolve(agents, 'good-agent.md'), broken: false },
+            ...skillEntries(sb, dir, { domain: 'git' }),
+          ],
+          audit: { framework: 'Hermes Agent', ok: ['2 items installed'], warnings: [], errors: ['2 broken links'] },
+        };
+      },
+    },
+    {
+      name: 'vibe (project)', make: () => new VibeAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.vibe/skills');
+        plantSkills(sb, dir);
+        return {
+          list: skillEntries(sb, dir),
+          audit: { framework: 'Mistral Vibe', ok: ['1 items installed'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'gemini (project)', make: () => new GeminiAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.gemini/skills');
+        plantSkills(sb, dir);
+        return {
+          list: skillEntries(sb, dir),
+          audit: { framework: 'Gemini CLI', ok: ['1 skills installed'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'cursor (project)', make: () => new CursorAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.cursor/skills');
+        plantSkills(sb, dir);
+        return {
+          list: [
+            { id: 'ghost-skill', type: 'skill', path: resolve(dir, 'ghost-skill'), format: 'skills', broken: true },
+            { id: 'good-skill', type: 'skill', path: resolve(dir, 'good-skill'), format: 'skills', broken: false },
+          ],
+          audit: { framework: 'Cursor', ok: ['1 items installed'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'copilot (project)', make: () => new CopilotAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.github/skills');
+        plantSkills(sb, dir);
+        return {
+          list: skillEntries(sb, dir),
+          audit: { framework: 'GitHub Copilot', ok: ['1 skills installed'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+  ];
+
+  for (const c of LIST_CASES) {
+    it(`${c.name}: listInstalled() and audit()`, async () => {
+      await inLinkSandbox(tmpRoot, `list-${c.name.replace(/[^a-z0-9]+/g, '-')}`, async (sb) => {
+        const expected = c.build(sb);
+        const adapter = c.make();
+        assert.deepEqual(byPath(await adapter.listInstalled(sb.proj, c.scope)), byPath(expected.list));
+        assert.deepEqual(await adapter.audit(sb.proj, c.scope), expected.audit);
+      });
+    });
+  }
+});
+
+describe('opencode installs an agent only at <agents>/<id>.md (S3-B2 P2e)', () => {
+  // At b3275420a opencode's install ran its skill-shaped steps for an agent too,
+  // at <agents>/<id> with no extension, before writing the agent's link at
+  // <agents>/<id>.md. So --force unlinked a user's own file at <agents>/<id>,
+  // and a directory there made the agent install report "skipped" without
+  // writing the link (S3-B2 design review, E4 and E4b).
+  const site = LINK_SITES.find((s) => s.site === 'opencode agent file');
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-p2e-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('install --force leaves a user\'s file at <agents>/<id> alone and links <id>.md', async () => {
+    await inLinkSandbox(tmpRoot, 'file', async (sb) => {
+      const agents = resolve(sb.proj, '.opencode/agents');
+      mkdirSync(agents, { recursive: true });
+      writeFileSync(resolve(agents, 'code-reviewer'), USER_CONTENT);
+      const result = await new OpenCodeAdapter().install(
+        linkItem(site, sb), sb.proj, 'project', { almanacRoot: sb.src, force: true },
+      );
+      assert.equal(readFileSync(resolve(agents, 'code-reviewer'), 'utf8'), USER_CONTENT);
+      assert.deepEqual(result, { action: 'created', path: resolve(agents, 'code-reviewer.md') });
+      assert.equal(readlinkSync(resolve(agents, 'code-reviewer.md')), site.relTarget);
+    });
+  });
+
+  it('a directory at <agents>/<id> does not stop the agent install', async () => {
+    await inLinkSandbox(tmpRoot, 'dir', async (sb) => {
+      const agents = resolve(sb.proj, '.opencode/agents');
+      mkdirSync(resolve(agents, 'code-reviewer'), { recursive: true });
+      writeFileSync(resolve(agents, 'code-reviewer/notes.md'), USER_CONTENT);
+      const result = await new OpenCodeAdapter().install(
+        linkItem(site, sb), sb.proj, 'project', { almanacRoot: sb.src },
+      );
+      assert.deepEqual(result, { action: 'created', path: resolve(agents, 'code-reviewer.md') });
+      assert.equal(readlinkSync(resolve(agents, 'code-reviewer.md')), site.relTarget);
+      assert.equal(readFileSync(resolve(agents, 'code-reviewer/notes.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+});
+
+describe('a dangling link at a link site is seen, removed and replaced (#993 §2, S3-B2 P5)', () => {
+  // At b3275420a every link site tested its path with existsSync, which follows
+  // a link, so a link whose target is gone (after `npm uninstall`, or an
+  // `npm update` that dropped the item) counted as absent. uninstall reported
+  // it "not installed" and left it; install, with or without --force, skipped
+  // the unlink and then failed with EEXIST when symlinkSync met the link. One
+  // site per adapter scope is enough here: the scope only moves the directory.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-dangling-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** A link at the site's path whose target never existed. */
+  const plantDangling = (sb, path) => {
+    mkdirSync(dirname(path), { recursive: true });
+    symlinkSync(sb.gone, path);
+  };
+
+  for (const site of LINK_SITES) {
+    const scope = site.scopes[0];
+
+    it(`${site.site} (${scope}): uninstall removes a dangling link`, async () => {
+      await inLinkSandbox(tmpRoot, `uninstall-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantDangling(sb, path);
+        const shape = { ...UNINSTALL_SHAPE, ...site.uninstallShape };
+        assert.deepEqual(await site.adapter().uninstall(linkItem(site, sb), sb.proj, scope, {}), shape.removed(path));
+        assert.throws(() => lstatSync(path), { code: 'ENOENT' }, 'the dangling link is gone');
+      });
+    });
+
+    it(`${site.site} (${scope}): install --force replaces a dangling link`, async () => {
+      await inLinkSandbox(tmpRoot, `force-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantDangling(sb, path);
+        const details = { ...LINK_DETAILS, ...site.details };
+        assert.deepEqual(
+          await site.adapter().install(linkItem(site, sb), sb.proj, scope, { almanacRoot: sb.src, force: true }),
+          linkResult('created', path, details.created),
+        );
+        assert.equal(readlinkSync(path), expectedLinkText(site, sb, scope));
+      });
+    });
+
+    it(`${site.site} (${scope}): install without --force reports a dangling link as already there and keeps it`, async () => {
+      await inLinkSandbox(tmpRoot, `keep-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantDangling(sb, path);
+        const details = { ...LINK_DETAILS, ...site.details };
+        assert.deepEqual(
+          await site.adapter().install(linkItem(site, sb), sb.proj, scope, { almanacRoot: sb.src }),
+          linkResult('skipped', path, details.exists),
+        );
+        assert.equal(readlinkSync(path), sb.gone, 'without --force the link is left as it was');
+      });
+    });
+  }
+});
+
+describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d)', () => {
+  // Before copy mode the CLI made only links at these paths. At b3275420a uninstall unlinked
+  // whatever regular file it found there, and install --force unlinked it and
+  // wrote a link in its place (P2a, P2d). A directory survived only because
+  // unlinkSync cannot remove one: uninstall and install --force both reported
+  // it failed (EISDIR, EEXIST). Now a file or directory the CLI did not make is
+  // kept and reported "skipped" with a note saying why; the note is pinned whole.
+  const KEPT_NOTE = 'not installed by agent-almanac; left in place';
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-user-entry-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** A user's regular file at the site's path. */
+  const plantUserFile = (path) => {
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, USER_CONTENT);
+  };
+  const kept = (path) => ({ action: 'skipped', path, reason: 'foreign', note: KEPT_NOTE });
+
+  for (const site of LINK_SITES) {
+    const scope = site.scopes[0];
+
+    it(`${site.site} (${scope}): uninstall keeps a user's own file, and its dry run says so`, async () => {
+      await inLinkSandbox(tmpRoot, `uninstall-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantUserFile(path);
+        const adapter = site.adapter();
+        const item = linkItem(site, sb);
+        assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, {}), kept(path));
+        assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+        assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, { dryRun: true }), kept(path));
+        assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+      });
+    });
+
+    it(`${site.site} (${scope}): install --force keeps a user's own file`, async () => {
+      await inLinkSandbox(tmpRoot, `force-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantUserFile(path);
+        assert.deepEqual(
+          await site.adapter().install(linkItem(site, sb), sb.proj, scope, { almanacRoot: sb.src, force: true }),
+          kept(path),
+        );
+        assert.equal(lstatSync(path).isSymbolicLink(), false, 'no link was written over it');
+        assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+      });
+    });
+  }
+
+  it('a user\'s own .claude/agents directory is kept by uninstall and by install --force', async () => {
+    // The realistic case: a project's own agents directory at the path where
+    // claude-code links the almanac's. It survived before only because
+    // unlinkSync cannot remove a directory.
+    const site = LINK_SITES.find((s) => s.site === 'claude-code agents directory');
+    await inLinkSandbox(tmpRoot, 'claude-agents-dir', async (sb) => {
+      const path = site.path(sb, 'project');
+      mkdirSync(path, { recursive: true });
+      writeFileSync(resolve(path, 'my-agent.md'), USER_CONTENT);
+      const adapter = site.adapter();
+      const item = linkItem(site, sb);
+      assert.deepEqual(await adapter.uninstall(item, sb.proj, 'project', {}), kept(path));
+      assert.deepEqual(await adapter.install(item, sb.proj, 'project', { almanacRoot: sb.src, force: true }), kept(path));
+      assert.deepEqual(readdirSync(path), ['my-agent.md']);
+      assert.equal(readFileSync(resolve(path, 'my-agent.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('cursor\'s uninstall still reaches its second path, a .mdc rule, beside a kept skill entry, and names the kept one', async () => {
+    // cursor's uninstall looks at two paths: .cursor/skills/<id> and
+    // .cursor/rules/<id>.mdc. What this pins is that a kept entry at the first
+    // does not stop the second, and the `kept <skillPath>: …` note. No CLI
+    // command writes the .mdc (installLegacyRule has no caller), so the rule
+    // planted here stands for a user's own file, and its deletion is
+    // pre-existing behaviour kept on purpose for now, tracked in #998.
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule', async (sb) => {
+      const path = site.path(sb, 'project');
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      plantUserFile(path);
+      mkdirSync(dirname(rule), { recursive: true });
+      writeFileSync(rule, 'legacy rule\n');
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'removed', path: rule, note: `kept ${path}: ${KEPT_NOTE}` },
+      );
+      assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+      assert.equal(existsSync(rule), false);
+    });
+  });
+
+  it('the CLI prints the kept entry with its note, for uninstall and install --force', () => {
+    const root = resolve(tmpRoot, 'cli');
+    const home = resolve(root, 'home');
+    const proj = resolve(root, 'proj');
+    const userFile = resolve(proj, '.opencode/agents/code-reviewer.md');
+    mkdirSync(home, { recursive: true });
+    plantUserFile(userFile);
+    const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
+    delete env.LOCALAPPDATA;
+    const spawnCli = (args) => {
+      const res = spawnSync(process.execPath, [cliEntry, ...args, '-f', 'opencode', '--source', ROOT],
+        { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
+      assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+      return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+    };
+    const line = `  = code-reviewer [opencode] ${userFile}  ${KEPT_NOTE}`;
+
+    const removed = spawnCli(['uninstall', 'code-reviewer']);
+    assert.equal(removed.status, 0, `${removed.stdout}\n${removed.stderr}`);
+    assert.equal(readFileSync(userFile, 'utf8'), USER_CONTENT);
+    assert.ok(removed.stdout.split('\n').includes(line), `missing the whole line ${JSON.stringify(line)} in:\n${removed.stdout}`);
+    assert.ok(removed.stdout.split('\n').includes('  1 skipped'), removed.stdout);
+
+    const forced = spawnCli(['install', '-a', 'code-reviewer', '--force']);
+    assert.equal(forced.status, 0, `${forced.stdout}\n${forced.stderr}`);
+    assert.equal(readFileSync(userFile, 'utf8'), USER_CONTENT);
+    assert.ok(forced.stdout.split('\n').includes(line), `missing the whole line ${JSON.stringify(line)} in:\n${forced.stdout}`);
+  });
+});
+
+describe('sync keeps a user\'s own entry in .agents/skills (S3-B2 P6)', () => {
+  // sync removes every entry in .agents/skills that the manifest does not name,
+  // through uninstallAll and universal's uninstall. At b3275420a that unlinked
+  // a user's regular file there (design review E2). #996 made sync skip names
+  // that are not plain ids, so the fixture is kebab-named: `NOTES.md` would be
+  // kept at the base already. The ownership guard (S3-B2 P2a) is what keeps
+  // this one; this pins it through the command, where the measured loss was.
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-sync-p6-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('a user\'s regular file named like an item survives sync, reported with its note', () => {
+    const home = resolve(tmpRoot, 'home');
+    const proj = resolve(tmpRoot, 'proj');
+    const userFile = resolve(proj, '.agents/skills/my-notes');
+    mkdirSync(home, { recursive: true });
+    mkdirSync(dirname(userFile), { recursive: true });
+    writeFileSync(userFile, USER_CONTENT);
+    writeFileSync(resolve(proj, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
+    const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
+    delete env.LOCALAPPDATA;
+
+    const res = spawnSync(process.execPath, [cliEntry, 'sync', '-f', 'universal', '--source', ROOT],
+      { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    const stdout = stripAnsi(res.stdout);
+    assert.equal(res.status, 0, `${stdout}\n${stripAnsi(res.stderr)}`);
+    assert.equal(readFileSync(userFile, 'utf8'), USER_CONTENT);
+    const line = `  = my-notes [universal] ${userFile}  not installed by agent-almanac; left in place`;
+    assert.ok(stdout.split('\n').includes(line), `missing the whole line ${JSON.stringify(line)} in:\n${stdout}`);
+    assert.equal(lstatSync(resolve(proj, '.agents/skills/commit-changes')).isSymbolicLink(), true, 'the manifest\'s item is linked');
+  });
+});
+
+describe('claude-code\'s team uninstall never removes a real <base>/teams (S3-B2 F2)', () => {
+  // install never writes <base>/teams: at -g that is ~/.claude/teams, where
+  // Claude Code's TeamCreate keeps its runtime state. uninstall of a team, and
+  // so every `scatter`, reaches this branch all the same. At b3275420a it
+  // unlinked whatever was there: a real directory survived only because
+  // unlinkSync cannot remove one (EISDIR, reported failed), and a real file
+  // was deleted. An older CLI did link this path, and audit still calls such a
+  // link stale, so a link is removed; anything else is reported not installed
+  // and left alone, without the kept-entry note, because nearly every machine
+  // with Claude Code has a real one.
+  const team = { type: 'team', id: 'fixture-team' };
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-teams-f2-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  const notInstalled = (path) => ({ action: 'skipped', path, details: 'not installed' });
+
+  it('a real ~/.claude/teams directory and everything in it survive uninstall and its dry run', async () => {
+    await inLinkSandbox(tmpRoot, 'dir', async (sb) => {
+      const teams = resolve(sb.home, '.claude/teams');
+      mkdirSync(resolve(teams, 'live-team'), { recursive: true });
+      writeFileSync(resolve(teams, 'live-team/config.json'), USER_CONTENT);
+      const adapter = new ClaudeCodeAdapter();
+      assert.deepEqual(await adapter.uninstall(team, sb.proj, 'global', {}), notInstalled(teams));
+      assert.deepEqual(await adapter.uninstall(team, sb.proj, 'global', { dryRun: true }), notInstalled(teams));
+      assert.deepEqual(readdirSync(teams), ['live-team']);
+      assert.equal(readFileSync(resolve(teams, 'live-team/config.json'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('a real file at ~/.claude/teams survives uninstall', async () => {
+    await inLinkSandbox(tmpRoot, 'file', async (sb) => {
+      const teams = resolve(sb.home, '.claude/teams');
+      mkdirSync(dirname(teams), { recursive: true });
+      writeFileSync(teams, USER_CONTENT);
+      assert.deepEqual(await new ClaudeCodeAdapter().uninstall(team, sb.proj, 'global', {}), notInstalled(teams));
+      assert.equal(readFileSync(teams, 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('a stale link at ~/.claude/teams is removed, its target left alone', async () => {
+    // Control: the one thing this branch removes, as it did at b3275420a.
+    await inLinkSandbox(tmpRoot, 'link', async (sb) => {
+      const teams = resolve(sb.home, '.claude/teams');
+      const target = resolve(sb.root, 'old-teams');
+      mkdirSync(target, { recursive: true });
+      writeFileSync(resolve(target, 'kept.md'), USER_CONTENT);
+      mkdirSync(dirname(teams), { recursive: true });
+      symlinkSync(target, teams);
+      const adapter = new ClaudeCodeAdapter();
+      assert.deepEqual(await adapter.uninstall(team, sb.proj, 'global', { dryRun: true }),
+        { action: 'removed', path: teams, details: 'dry-run' });
+      assert.equal(lstatSync(teams).isSymbolicLink(), true, 'a dry run removes nothing');
+      assert.deepEqual(await adapter.uninstall(team, sb.proj, 'global', {}), { action: 'removed', path: teams });
+      assert.throws(() => lstatSync(teams), { code: 'ENOENT' });
+      assert.equal(readFileSync(resolve(target, 'kept.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('a dangling link at ~/.claude/teams is removed too', async () => {
+    await inLinkSandbox(tmpRoot, 'dangling', async (sb) => {
+      const teams = resolve(sb.home, '.claude/teams');
+      mkdirSync(dirname(teams), { recursive: true });
+      symlinkSync(sb.gone, teams);
+      assert.deepEqual(await new ClaudeCodeAdapter().uninstall(team, sb.proj, 'global', {}), { action: 'removed', path: teams });
+      assert.throws(() => lstatSync(teams), { code: 'ENOENT' });
+    });
+  });
+});
+
+// ── Copy placement (#606 part 2) ─────────────────────────────────
+//
+// `--from-package copy` puts a copy at a link site instead of a link. The
+// copy carries a marker recording the package and a sha256 per file, and the
+// marker is what lets uninstall tell the CLI's own copy from a user's
+// directory: once a remover can delete directories, it is the only thing that
+// can. These drive cli/lib/placement.js in-process, each test in a throwaway
+// tree (inLinkSandbox). Every note and marker is pinned whole.
+
+/** The package a test copy records. */
+const COPY_FROM = { name: 'agent-almanac', version: '9.9.9' };
+
+/**
+ * `skip` for a row that makes a step fail with a mode bit: false where mode
+ * bits refuse it, otherwise the reason it cannot.
+ */
+const NO_MODE_BITS = process.platform === 'win32'
+  ? 'mode bits do not refuse a rename, a delete or a read on Windows'
+  : process.getuid?.() === 0
+    ? 'root ignores mode bits, so the row would pass for the wrong reason'
+    : false;
+const EXAMPLES_TEXT = 'nested reference file\n';
+const sha256Of = (text) => `sha256:${createHash('sha256').update(text).digest('hex')}`;
+const MARKER_NAME = '.agent-almanac-copy.json';
+
+/** placeCopy of the sandbox's skill into `base`. */
+function copySkill(sb, base, extra = {}) {
+  return placement.placeCopy({
+    base, name: 'commit-changes', source: resolve(sb.src, 'skills/commit-changes'), almanacRoot: sb.src,
+    copyFrom: COPY_FROM, item: { type: 'skill', id: 'commit-changes' }, ...extra,
+  });
+}
+
+/** placeCopy of the sandbox's agent file into `base`. */
+function copyAgentFile(sb, base, extra = {}) {
+  return placement.placeCopy({
+    base, name: 'code-reviewer.md', source: resolve(sb.src, 'agents/code-reviewer.md'), almanacRoot: sb.src,
+    copyFrom: COPY_FROM, item: { type: 'agent', id: 'code-reviewer' }, ...extra,
+  });
+}
+
+const editedNote = (purpose) =>
+  `edited since it was copied (modified: SKILL.md; added: notes.md); kept, delete it by hand to ${purpose} it`;
+
+/** Edit a copied skill the way the edited-copy rows expect: one file changed, one added. */
+function editCopy(entry) {
+  writeFileSync(resolve(entry, 'SKILL.md'), `${LINK_FIXTURE.skill}my own addition\n`);
+  writeFileSync(resolve(entry, 'notes.md'), USER_CONTENT);
+}
+
+describe('copy placement: placeCopy (#606 part 2)', () => {
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-place-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('copies a directory: real entries, the same bytes, a marker recording every file, no staging left', async () => {
+    await inLinkSandbox(tmpRoot, 'dir', async (sb) => {
+      const src = resolve(sb.src, 'skills/commit-changes');
+      mkdirSync(resolve(src, 'references'));
+      writeFileSync(resolve(src, 'references/EXAMPLES.md'), EXAMPLES_TEXT);
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+
+      assert.deepEqual(copySkill(sb, base), { action: 'created', path: entry, details: 'copy' });
+      assert.equal(lstatSync(entry).isDirectory(), true);
+      assert.equal(lstatSync(resolve(entry, 'SKILL.md')).isFile(), true);
+      assert.equal(readFileSync(resolve(entry, 'SKILL.md'), 'utf8'), LINK_FIXTURE.skill);
+      assert.equal(readFileSync(resolve(entry, 'references/EXAMPLES.md'), 'utf8'), EXAMPLES_TEXT);
+
+      const raw = readFileSync(resolve(entry, MARKER_NAME), 'utf8');
+      const { copiedAt } = JSON.parse(raw);
+      assert.match(copiedAt, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/);
+      const expected = {
+        agentAlmanacCopy: 1,
+        entry: 'commit-changes',
+        type: 'skill',
+        id: 'commit-changes',
+        package: { name: 'agent-almanac', version: '9.9.9' },
+        source: 'skills/commit-changes',
+        copiedAt,
+        files: { 'SKILL.md': sha256Of(LINK_FIXTURE.skill), 'references/EXAMPLES.md': sha256Of(EXAMPLES_TEXT) },
+      };
+      // Byte for byte: key order, sorted files, two-space indent, trailing newline (D8).
+      assert.equal(raw, `${JSON.stringify(expected, null, 2)}\n`);
+      assert.equal(raw.includes(sb.root), false, 'the marker carries no absolute path');
+      assert.deepEqual(readdirSync(base), ['commit-changes'], 'no staging directory is left beside it');
+    });
+  });
+
+  it('copies a file, with its marker in a hidden sidecar beside it', async () => {
+    await inLinkSandbox(tmpRoot, 'file', async (sb) => {
+      const base = resolve(sb.proj, '.opencode/agents');
+      const entry = resolve(base, 'code-reviewer.md');
+      assert.deepEqual(copyAgentFile(sb, base), { action: 'created', path: entry, details: 'copy' });
+      assert.equal(lstatSync(entry).isFile(), true);
+      assert.equal(readFileSync(entry, 'utf8'), LINK_FIXTURE.agent);
+      const marker = JSON.parse(readFileSync(resolve(base, `.code-reviewer.md${MARKER_NAME}`), 'utf8'));
+      assert.deepEqual(
+        { entry: marker.entry, type: marker.type, id: marker.id, source: marker.source, files: marker.files },
+        { entry: 'code-reviewer.md', type: 'agent', id: 'code-reviewer', source: 'agents/code-reviewer.md', files: { 'code-reviewer.md': sha256Of(LINK_FIXTURE.agent) } },
+      );
+      assert.deepEqual(readdirSync(base).sort(), [`.code-reviewer.md${MARKER_NAME}`, 'code-reviewer.md']);
+    });
+  });
+
+  it('refuses a symlink in the source, met after a file it already copied, and leaves nothing behind', async () => {
+    // fs.cpSync's `dereference` leaves a link into the source on Node 24 and
+    // 25 (S3-B2 design § 2.3): in copy mode, a link into node_modules.
+    await inLinkSandbox(tmpRoot, 'symlink', async (sb) => {
+      symlinkSync('SKILL.md', resolve(sb.src, 'skills/commit-changes/z-link.md'));
+      const base = resolve(sb.proj, '.agents/skills');
+      assert.throws(() => copySkill(sb, base), {
+        message: 'copy refused: z-link.md is a symlink (copy mode copies regular files only)',
+      });
+      assert.deepEqual(readdirSync(base), [], 'neither a copy nor its staging directory is left');
+    });
+  });
+
+  it('shipped content holds no symlink, so that refusal cannot reach a shipped item', () => {
+    const listing = execSync('git ls-files -s -- skills agents teams guides',
+      { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+    const entries = listing.split('\n').filter(Boolean);
+    // Control: the listing is the corpus, not an empty answer from a wrong cwd.
+    assert.ok(entries.some((line) => line.endsWith('\tskills/commit-changes/SKILL.md')), `${entries.length} entries`);
+    assert.ok(entries.some((line) => line.endsWith('\tagents/_registry.yml')), `${entries.length} entries`);
+    assert.deepEqual(entries.filter((line) => line.startsWith('120000 ')), []);
+  });
+
+  it('refuses a source outside the content root, which a registry entry\'s path can name', async () => {
+    await inLinkSandbox(tmpRoot, 'outside', async (sb) => {
+      const base = resolve(sb.proj, '.opencode/agents');
+      const outsideFile = resolve(sb.root, 'elsewhere.md');
+      writeFileSync(outsideFile, USER_CONTENT);
+      assert.throws(() => placement.placeCopy({
+        base, name: 'code-reviewer.md', source: outsideFile, almanacRoot: sb.src,
+        copyFrom: COPY_FROM, item: { type: 'agent', id: 'code-reviewer' },
+      }), { message: `copy refused: ${outsideFile} is outside the content root ${sb.src}` });
+      assert.equal(existsSync(base), false);
+    });
+  });
+
+  it('without --force keeps what is there and says what it is', async () => {
+    await inLinkSandbox(tmpRoot, 'no-force', async (sb) => {
+      const skillSrc = resolve(sb.src, 'skills/commit-changes');
+
+      const linkBase = resolve(sb.proj, 'link');
+      mkdirSync(linkBase);
+      symlinkSync(skillSrc, resolve(linkBase, 'commit-changes'));
+      assert.deepEqual(copySkill(sb, linkBase), {
+        action: 'skipped', path: resolve(linkBase, 'commit-changes'), reason: 'link-kept',
+        note: `a link is here (-> ${skillSrc}); \`install --force --from-package copy\` replaces it with a copy`,
+      });
+      assert.equal(lstatSync(resolve(linkBase, 'commit-changes')).isSymbolicLink(), true);
+
+      const sameBase = resolve(sb.proj, 'same');
+      copySkill(sb, sameBase);
+      assert.deepEqual(copySkill(sb, sameBase), {
+        action: 'skipped', path: resolve(sameBase, 'commit-changes'), reason: 'already-copied',
+        note: 'already a copy of agent-almanac 9.9.9',
+      });
+
+      const olderBase = resolve(sb.proj, 'older');
+      copySkill(sb, olderBase, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+      assert.deepEqual(copySkill(sb, olderBase), {
+        action: 'skipped', path: resolve(olderBase, 'commit-changes'), reason: 'other-version',
+        note: 'already a copy of agent-almanac 1.0.0; `install --force --from-package copy` replaces it with agent-almanac 9.9.9 if it is unedited',
+      });
+
+      const userBase = resolve(sb.proj, 'user');
+      mkdirSync(resolve(userBase, 'commit-changes'), { recursive: true });
+      writeFileSync(resolve(userBase, 'commit-changes/SKILL.md'), USER_CONTENT);
+      assert.deepEqual(copySkill(sb, userBase), {
+        action: 'skipped', path: resolve(userBase, 'commit-changes'), reason: 'foreign',
+        note: 'not installed by agent-almanac; left in place',
+      });
+      assert.equal(readFileSync(resolve(userBase, 'commit-changes/SKILL.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('with --force replaces a link, a dangling link and an unedited copy', async () => {
+    await inLinkSandbox(tmpRoot, 'force-replace', async (sb) => {
+      const linkBase = resolve(sb.proj, 'link');
+      mkdirSync(linkBase);
+      symlinkSync(resolve(sb.src, 'skills/commit-changes'), resolve(linkBase, 'commit-changes'));
+      const danglingBase = resolve(sb.proj, 'dangling');
+      mkdirSync(danglingBase);
+      symlinkSync(sb.gone, resolve(danglingBase, 'commit-changes'));
+      const olderBase = resolve(sb.proj, 'older');
+      copySkill(sb, olderBase, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+
+      for (const base of [linkBase, danglingBase, olderBase]) {
+        const entry = resolve(base, 'commit-changes');
+        assert.deepEqual(copySkill(sb, base, { force: true }), { action: 'created', path: entry, details: 'copy' }, base);
+        assert.equal(lstatSync(entry).isDirectory(), true, base);
+        assert.equal(JSON.parse(readFileSync(resolve(entry, MARKER_NAME), 'utf8')).package.version, '9.9.9', base);
+        assert.deepEqual(readdirSync(base), ['commit-changes'], `${base}: nothing staged is left`);
+      }
+    });
+  });
+
+  it('with --force replaces an unedited file copy together with its sidecar', async () => {
+    await inLinkSandbox(tmpRoot, 'force-file', async (sb) => {
+      const base = resolve(sb.proj, '.opencode/agents');
+      copyAgentFile(sb, base, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+      assert.deepEqual(copyAgentFile(sb, base, { force: true }),
+        { action: 'created', path: resolve(base, 'code-reviewer.md'), details: 'copy' });
+      const marker = JSON.parse(readFileSync(resolve(base, `.code-reviewer.md${MARKER_NAME}`), 'utf8'));
+      assert.equal(marker.package.version, '9.9.9');
+      assert.deepEqual(readdirSync(base).sort(), [`.code-reviewer.md${MARKER_NAME}`, 'code-reviewer.md']);
+    });
+  });
+
+  it('with --force keeps an edited copy and names the files', async () => {
+    await inLinkSandbox(tmpRoot, 'force-edited', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+      editCopy(entry);
+      assert.deepEqual(copySkill(sb, base, { force: true }),
+        { action: 'skipped', path: entry, reason: 'edited', note: editedNote('replace') });
+      assert.equal(readFileSync(resolve(entry, 'notes.md'), 'utf8'), USER_CONTENT);
+      assert.equal(JSON.parse(readFileSync(resolve(entry, MARKER_NAME), 'utf8')).package.version, '1.0.0');
+      assert.deepEqual(readdirSync(base), ['commit-changes']);
+    });
+  });
+
+  it('with --force keeps a directory it did not write, empty or not', async () => {
+    await inLinkSandbox(tmpRoot, 'force-foreign', async (sb) => {
+      const fullBase = resolve(sb.proj, 'full');
+      mkdirSync(resolve(fullBase, 'commit-changes'), { recursive: true });
+      writeFileSync(resolve(fullBase, 'commit-changes/SKILL.md'), USER_CONTENT);
+      const emptyBase = resolve(sb.proj, 'empty');
+      mkdirSync(resolve(emptyBase, 'commit-changes'), { recursive: true });
+      for (const base of [fullBase, emptyBase]) {
+        assert.deepEqual(copySkill(sb, base, { force: true }), {
+          action: 'skipped', path: resolve(base, 'commit-changes'), reason: 'foreign',
+          note: 'not installed by agent-almanac; left in place',
+        }, base);
+      }
+      assert.equal(readFileSync(resolve(fullBase, 'commit-changes/SKILL.md'), 'utf8'), USER_CONTENT);
+      assert.deepEqual(readdirSync(resolve(emptyBase, 'commit-changes')), []);
+    });
+  });
+});
+
+describe('copy placement: the marker check (#606 part 2)', () => {
+  // Each row starts from a valid copy and breaks the marker in one way. The
+  // first row is the control: without it, a check that rejects everything
+  // would pass every other row.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-marker-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** A fresh copy, its marker rewritten by `change`; returns the entry path. */
+  async function withMarker(name, change, fn) {
+    await inLinkSandbox(tmpRoot, name, async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      const markerPath = resolve(entry, MARKER_NAME);
+      const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
+      change(marker, markerPath, sb);
+      await fn(entry, sb);
+    });
+  }
+
+  it('accepts the marker the copy was written with (control)', async () => {
+    await withMarker('control', () => {}, (entry) => {
+      assert.equal(placement.readOwnedMarker(entry).entry, 'commit-changes');
+      assert.equal(placement.classify(entry).kind, 'copy');
+    });
+  });
+
+  it('a directory with no marker is not a copy, and not an unreadable one', async () => {
+    await withMarker('none', (marker, markerPath) => rmSync(markerPath), (entry) => {
+      assert.equal(placement.readOwnedMarker(entry), null);
+      assert.deepEqual(placement.classify(entry), { kind: 'foreign', isDir: true, markerUnreadable: false });
+    });
+  });
+
+  it('a marker that is not JSON is refused and reported unreadable', async () => {
+    await withMarker('garbage', (marker, markerPath) => writeFileSync(markerPath, 'not json {'), (entry) => {
+      assert.equal(placement.readOwnedMarker(entry), null);
+      assert.deepEqual(placement.classify(entry), { kind: 'foreign', isDir: true, markerUnreadable: true });
+    });
+  });
+
+  it('a marker with another schema value is refused', async () => {
+    await withMarker('schema', (marker, markerPath) => {
+      writeFileSync(markerPath, JSON.stringify({ ...marker, agentAlmanacCopy: 2 }));
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+
+  it('a marker naming another entry is refused', async () => {
+    await withMarker('entry', (marker, markerPath) => {
+      writeFileSync(markerPath, JSON.stringify({ ...marker, entry: 'other-skill' }));
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+
+  it('a marker that is a symlink is refused, even to a valid marker', async () => {
+    await withMarker('symlinked', (marker, markerPath, sb) => {
+      const real = resolve(sb.root, 'real-marker.json');
+      writeFileSync(real, JSON.stringify(marker));
+      rmSync(markerPath);
+      symlinkSync(real, markerPath);
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+
+  it('a marker recording a path with .. is refused', async () => {
+    await withMarker('dotdot', (marker, markerPath) => {
+      writeFileSync(markerPath, JSON.stringify({ ...marker, files: { ...marker.files, '../outside.md': marker.files['SKILL.md'] } }));
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+
+  it('a marker without a package version is refused', async () => {
+    await withMarker('no-version', (marker, markerPath) => {
+      writeFileSync(markerPath, JSON.stringify({ ...marker, package: { name: 'agent-almanac' } }));
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+});
+
+describe('copy placement: what counts as edited (#606 part 2)', () => {
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-diff-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** A fresh copy with a nested file; fn gets the entry and its marker. */
+  async function withCopy(name, fn) {
+    await inLinkSandbox(tmpRoot, name, async (sb) => {
+      const src = resolve(sb.src, 'skills/commit-changes');
+      mkdirSync(resolve(src, 'references'));
+      writeFileSync(resolve(src, 'references/EXAMPLES.md'), EXAMPLES_TEXT);
+      const base = resolve(sb.proj, '.agents/skills');
+      copySkill(sb, base);
+      const entry = resolve(base, 'commit-changes');
+      await fn(entry, placement.readOwnedMarker(entry));
+    });
+  }
+
+  const none = { modified: [], added: [], missing: [] };
+
+  it('names modified, added and missing files, and counts an added link as added', async () => {
+    await withCopy('diff', (entry, marker) => {
+      assert.deepEqual(placement.diffCopy(entry, marker), none, 'control: a fresh copy is unedited');
+      writeFileSync(resolve(entry, 'SKILL.md'), 'rewritten\n');
+      writeFileSync(resolve(entry, 'notes.md'), USER_CONTENT);
+      symlinkSync('SKILL.md', resolve(entry, 'link.md'));
+      rmSync(resolve(entry, 'references/EXAMPLES.md'));
+      assert.deepEqual(placement.diffCopy(entry, marker),
+        { modified: ['SKILL.md'], added: ['link.md', 'notes.md'], missing: ['references/EXAMPLES.md'] });
+    });
+  });
+
+  it('a marker-named file below the root of a copy counts as added: the skip is root-anchored (F7)', async () => {
+    await withCopy('nested-marker', (entry, marker) => {
+      writeFileSync(resolve(entry, `references/${MARKER_NAME}`), USER_CONTENT);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: [`references/${MARKER_NAME}`] });
+    });
+  });
+
+  it('a CRLF-only rewrite is not an edit; one more byte is (D1)', async () => {
+    await withCopy('crlf', (entry, marker) => {
+      const crlf = LINK_FIXTURE.skill.replace(/\n/g, '\r\n');
+      writeFileSync(resolve(entry, 'SKILL.md'), crlf);
+      assert.deepEqual(placement.diffCopy(entry, marker), none);
+      writeFileSync(resolve(entry, 'SKILL.md'), `${crlf}x`);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, modified: ['SKILL.md'] });
+    });
+  });
+
+  it('OS and editor junk the marker does not record is not an edit (D1)', async () => {
+    await withCopy('junk', (entry, marker) => {
+      for (const junk of ['.DS_Store', 'Thumbs.db', 'desktop.ini', '.SKILL.md.swp', '#SKILL.md#', 'references/.DS_Store']) {
+        writeFileSync(resolve(entry, junk), 'junk');
+      }
+      symlinkSync('user@host.1234', resolve(entry, '.#SKILL.md'));
+      mkdirSync(resolve(entry, '__pycache__'));
+      writeFileSync(resolve(entry, '__pycache__/tool.cpython-312.pyc'), 'junk');
+      assert.deepEqual(placement.diffCopy(entry, marker), none);
+      // A `~` backup is not junk (D1-amended): it can hold the only copy of an edit.
+      writeFileSync(resolve(entry, 'SKILL.md~'), USER_CONTENT);
+      writeFileSync(resolve(entry, 'notes.md'), USER_CONTENT);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: ['SKILL.md~', 'notes.md'] },
+        'control: a real file still counts, and so does a ~ backup');
+    });
+  });
+
+  // Review round 1 (AD-1, DL-1, F1): junk was matched against every segment of
+  // a path, so a user's directory named like an editor file hid everything in
+  // it, and uninstall, sync, scatter and install --force deleted those files
+  // with the copy. Junk is now matched by an entry's own name (D1-amended).
+
+  it('a user\'s files under a directory named like junk count as added: junk is matched by an entry\'s own name (D1-amended)', async () => {
+    await withCopy('junk-named-dirs', (entry, marker) => {
+      for (const rel of ['notes~/plan.md', '#drafts#/plan.md', '.#work/plan.md', '.plans.swp/plan.md']) {
+        mkdirSync(resolve(entry, dirname(rel)));
+        writeFileSync(resolve(entry, rel), USER_CONTENT);
+      }
+      assert.deepEqual(placement.diffCopy(entry, marker),
+        { ...none, added: ['#drafts#/plan.md', '.#work/plan.md', '.plans.swp/plan.md', 'notes~/plan.md'] });
+    });
+  });
+
+  it('a user\'s file named like a backup counts as added: `~` is not junk (D1-amended)', async () => {
+    await withCopy('tilde-file', (entry, marker) => {
+      writeFileSync(resolve(entry, 'ideas~'), USER_CONTENT);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: ['ideas~'] });
+    });
+  });
+
+  it('under __pycache__ only bytecode is junk: a user\'s file there counts as added (D1-amended)', async () => {
+    await withCopy('pycache', (entry, marker) => {
+      mkdirSync(resolve(entry, '__pycache__'));
+      writeFileSync(resolve(entry, '__pycache__/x.cpython-312.pyc'), 'junk');
+      writeFileSync(resolve(entry, '__pycache__/x.opt-1.pyo'), 'junk');
+      assert.deepEqual(placement.diffCopy(entry, marker), none, 'control: bytecode alone is junk');
+      writeFileSync(resolve(entry, '__pycache__/notes.md'), USER_CONTENT);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: ['__pycache__/notes.md'] });
+    });
+  });
+
+  it('SKILL.md renamed to SKILL.md~ and edited makes the copy edited (D1-amended)', async () => {
+    // `missing` alone never blocks removal, so this was junk plus a missing
+    // file, and the edit went with the copy (DL-2).
+    await withCopy('renamed-backup', (entry, marker) => {
+      renameSync(resolve(entry, 'SKILL.md'), resolve(entry, 'SKILL.md~'));
+      writeFileSync(resolve(entry, 'SKILL.md~'), USER_CONTENT, { flag: 'a' });
+      assert.deepEqual(placement.diffCopy(entry, marker), { modified: [], added: ['SKILL.md~'], missing: ['SKILL.md'] });
+      assert.deepEqual(placement.ownership(entry, placement.classify(entry), 'remove'), {
+        removable: false, reason: 'edited',
+        note: 'edited since it was copied (added: SKILL.md~); kept, delete it by hand to remove it',
+      });
+    });
+  });
+});
+
+describe('copy placement: the uninstall guard (#606 part 2)', () => {
+  // removeEntry is what uninstall, scatter and sync's remove half reach. Once
+  // it can delete a directory, the marker check is all that keeps a user's
+  // directory, so every row here that keeps something is a row the guard
+  // alone decides.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-guard-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  const KEPT = 'not installed by agent-almanac; left in place';
+
+  it('removes an unedited directory copy and leaves nothing beside it', async () => {
+    await inLinkSandbox(tmpRoot, 'dir', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      copySkill(sb, base);
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes'),
+        { action: 'removed', path: resolve(base, 'commit-changes'), details: 'copy' });
+      assert.deepEqual(readdirSync(base), []);
+    });
+  });
+
+  it('removes an unedited file copy and its sidecar', async () => {
+    await inLinkSandbox(tmpRoot, 'file', async (sb) => {
+      const base = resolve(sb.proj, '.opencode/agents');
+      copyAgentFile(sb, base);
+      assert.deepEqual(placement.removeEntry(base, 'code-reviewer.md'),
+        { action: 'removed', path: resolve(base, 'code-reviewer.md'), details: 'copy' });
+      assert.deepEqual(readdirSync(base), []);
+    });
+  });
+
+  it('keeps an edited copy and names the files; its dry run predicts that', async () => {
+    await inLinkSandbox(tmpRoot, 'edited', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      editCopy(entry);
+      const kept = { action: 'skipped', path: entry, reason: 'edited', note: editedNote('remove') };
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes', { dryRun: true }), kept);
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes'), kept);
+      assert.equal(readFileSync(resolve(entry, 'notes.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('keeps a directory it did not write', async () => {
+    await inLinkSandbox(tmpRoot, 'foreign', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      mkdirSync(resolve(base, 'commit-changes'), { recursive: true });
+      writeFileSync(resolve(base, 'commit-changes/SKILL.md'), USER_CONTENT);
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes'),
+        { action: 'skipped', path: resolve(base, 'commit-changes'), reason: 'foreign', note: KEPT });
+      assert.equal(readFileSync(resolve(base, 'commit-changes/SKILL.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('keeps an empty directory it did not write', async () => {
+    // Nothing in it can count as added, so only the missing marker keeps it.
+    await inLinkSandbox(tmpRoot, 'empty', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      mkdirSync(resolve(base, 'commit-changes'), { recursive: true });
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes'),
+        { action: 'skipped', path: resolve(base, 'commit-changes'), reason: 'foreign', note: KEPT });
+      assert.equal(lstatSync(resolve(base, 'commit-changes')).isDirectory(), true);
+    });
+  });
+
+  it('keeps a copy of a copy made under another name', async () => {
+    // `cp -r` of the CLI's copy carries a marker whose files all match; only
+    // its `entry` says it was not written at this name.
+    await inLinkSandbox(tmpRoot, 'cp-r', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      copySkill(sb, base);
+      cpSync(resolve(base, 'commit-changes'), resolve(base, 'my-variant'), { recursive: true });
+      assert.deepEqual(placement.removeEntry(base, 'my-variant'),
+        { action: 'skipped', path: resolve(base, 'my-variant'), reason: 'foreign', note: KEPT });
+      assert.equal(readFileSync(resolve(base, 'my-variant/SKILL.md'), 'utf8'), LINK_FIXTURE.skill);
+    });
+  });
+
+  it('removes a copy whose only change is a missing file, or CRLF and junk', async () => {
+    await inLinkSandbox(tmpRoot, 'removable', async (sb) => {
+      const missingBase = resolve(sb.proj, 'missing');
+      copySkill(sb, missingBase);
+      rmSync(resolve(missingBase, 'commit-changes/SKILL.md'));
+      const crlfBase = resolve(sb.proj, 'crlf');
+      copySkill(sb, crlfBase);
+      writeFileSync(resolve(crlfBase, 'commit-changes/SKILL.md'), LINK_FIXTURE.skill.replace(/\n/g, '\r\n'));
+      writeFileSync(resolve(crlfBase, 'commit-changes/.DS_Store'), 'junk');
+      for (const base of [missingBase, crlfBase]) {
+        assert.deepEqual(placement.removeEntry(base, 'commit-changes'),
+          { action: 'removed', path: resolve(base, 'commit-changes'), details: 'copy' }, base);
+        assert.deepEqual(readdirSync(base), [], base);
+      }
+    });
+  });
+
+  it('keeps a copy holding a user\'s file under a directory named like junk, or SKILL.md renamed to SKILL.md~ and edited, naming the file (D1-amended)', async () => {
+    // At 2fd66b6f7 each of these was removed, the user's file with it (AD-1, DL-1, DL-2).
+    await inLinkSandbox(tmpRoot, 'junk-shaped', async (sb) => {
+      for (const [dir, rel] of [['emacs-dir', '#drafts#/plan.md'], ['tilde-dir', 'notes~/plan.md'], ['renamed', 'SKILL.md~']]) {
+        const base = resolve(sb.proj, dir);
+        const entry = resolve(base, 'commit-changes');
+        copySkill(sb, base);
+        if (rel === 'SKILL.md~') {
+          renameSync(resolve(entry, 'SKILL.md'), resolve(entry, rel));
+          writeFileSync(resolve(entry, rel), USER_CONTENT, { flag: 'a' });
+        } else {
+          mkdirSync(resolve(entry, dirname(rel)));
+          writeFileSync(resolve(entry, rel), USER_CONTENT);
+        }
+        assert.deepEqual(placement.removeEntry(base, 'commit-changes'), {
+          action: 'skipped', path: entry, reason: 'edited',
+          note: `edited since it was copied (added: ${rel}); kept, delete it by hand to remove it`,
+        }, rel);
+        assert.ok(readFileSync(resolve(entry, rel), 'utf8').endsWith(USER_CONTENT), rel);
+      }
+    });
+  });
+
+  it('claude-code\'s agents copy, where users keep their own agents: archive~/my-agent.md survives uninstall (D1-amended)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'claude-code agents directory');
+    await inLinkSandbox(tmpRoot, 'claude-agents-archive', async (sb) => {
+      const adapter = site.adapter();
+      const item = linkItem(site, sb);
+      const path = site.path(sb, 'project');
+      assert.deepEqual(await adapter.install(item, sb.proj, 'project', { almanacRoot: sb.src, placement: 'copy', copyFrom: COPY_FROM }),
+        { action: 'created', path, details: 'copy' });
+      mkdirSync(resolve(path, 'archive~'));
+      writeFileSync(resolve(path, 'archive~/my-agent.md'), USER_CONTENT);
+      assert.deepEqual(await adapter.uninstall(item, sb.proj, 'project', {}), {
+        action: 'skipped', path, reason: 'edited',
+        note: 'edited since it was copied (added: archive~/my-agent.md); kept, delete it by hand to remove it',
+      });
+      assert.equal(readFileSync(resolve(path, 'archive~/my-agent.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('removeEntry, clearForInstall and placeCopy refuse a name that leaves their directory (F1)', async () => {
+    // A link is the one thing the guard lets the CLI remove without a marker,
+    // so a link outside the directory is what containment alone protects.
+    await inLinkSandbox(tmpRoot, 'containment', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      mkdirSync(base, { recursive: true });
+      const planted = resolve(sb.proj, 'planted-link');
+      symlinkSync(sb.gone, planted);
+      const outside = { message: new RegExp(`^Refusing a path outside ${base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}: `) };
+      assert.throws(() => placement.removeEntry(base, '../../planted-link'), outside);
+      assert.throws(() => placement.clearForInstall(base, '../../planted-link', { force: true }), outside);
+      assert.throws(() => copySkill(sb, base, { name: '../../planted-link', force: true }), outside);
+      assert.equal(lstatSync(planted).isSymbolicLink(), true, 'the link outside the directory survives');
+    });
+  });
+
+  it('link-mode install --force replaces an unedited copy with a link, and keeps an edited one', async () => {
+    // The third path through the guard: clearForInstall, under a plain install --force.
+    await inLinkSandbox(tmpRoot, 'link-force', async (sb) => {
+      const item = { type: 'skill', id: 'commit-changes', sourceDir: resolve(sb.src, 'skills/commit-changes') };
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      const adapter = new UniversalAdapter();
+
+      copySkill(sb, base);
+      assert.deepEqual(await adapter.install(item, sb.proj, 'project', { almanacRoot: sb.src, force: true }),
+        { action: 'created', path: entry });
+      assert.equal(readlinkSync(entry), '../../../src/skills/commit-changes');
+
+      rmSync(entry);
+      copySkill(sb, base);
+      editCopy(entry);
+      assert.deepEqual(await adapter.install(item, sb.proj, 'project', { almanacRoot: sb.src, force: true }),
+        { action: 'skipped', path: entry, reason: 'edited', note: editedNote('replace') });
+      assert.equal(lstatSync(entry).isDirectory(), true);
+      assert.equal(readFileSync(resolve(entry, 'notes.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+});
+
+describe('copy placement: a remove or replace that fails part way says what it left (review round 1)', () => {
+  // A staging directory is skipped by every listing, so one left behind is
+  // seen by nothing after the run that made it (AD-3, DL-4, F2). Each row
+  // makes one step fail with a mode bit: rename(2) of a directory to another
+  // parent needs write permission on the directory itself, and deleting a
+  // file needs it on the directory holding the file.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-partial-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** Give the sandbox's skill a subdirectory, so one can be made read-only. */
+  const addReferences = (sb) => {
+    mkdirSync(resolve(sb.src, 'skills/commit-changes/references'));
+    writeFileSync(resolve(sb.src, 'skills/commit-changes/references/EXAMPLES.md'), EXAMPLES_TEXT);
+  };
+  const stagingDirs = (base) => readdirSync(base).filter((name) => name.startsWith(placement.STAGING_PREFIX));
+  /** Make every directory under `dir` writable again, wherever a row moved it, so the teardown can delete it. */
+  const unlock = (dir) => {
+    chmodSync(dir, 0o755);
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) unlock(resolve(dir, entry.name));
+    }
+  };
+
+  it('a refused rename leaves no staging directory, and the error is the rename\'s (removeEntry)', { skip: NO_MODE_BITS }, async () => {
+    await inLinkSandbox(tmpRoot, 'rename-refused', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      chmodSync(entry, 0o555);
+      try {
+        assert.throws(() => placement.removeEntry(base, 'commit-changes'), { code: 'EACCES', syscall: 'rename' });
+        assert.deepEqual(readdirSync(base), ['commit-changes'], 'the copy stays, and no staging directory is left beside it');
+      } finally {
+        unlock(base);
+      }
+    });
+  });
+
+  it('a copy that left its path but could not be deleted throws, saying so and naming where it is (removeEntry)', { skip: NO_MODE_BITS }, async () => {
+    await inLinkSandbox(tmpRoot, 'delete-refused', async (sb) => {
+      addReferences(sb);
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      chmodSync(resolve(entry, 'references'), 0o555);
+      try {
+        let thrown = null;
+        try { placement.removeEntry(base, 'commit-changes'); } catch (err) { thrown = err; }
+        const staging = stagingDirs(base);
+        assert.equal(staging.length, 1, `exactly one staging directory: ${staging}`);
+        const tail = `; ${entry} has left its install path, and what is left of it is in ${resolve(base, staging[0])}: delete that by hand`;
+        assert.ok(thrown?.message.endsWith(tail), `expected a message ending ${JSON.stringify(tail)}, got ${thrown?.message}`);
+        assert.equal(existsSync(entry), false, 'the entry has left its install path');
+      } finally {
+        unlock(base);
+      }
+    });
+  });
+
+  it('link-mode install --force over a copy whose rename is refused leaves no staging directory (clearForInstall)', { skip: NO_MODE_BITS }, async () => {
+    await inLinkSandbox(tmpRoot, 'force-rename-refused', async (sb) => {
+      const item = { type: 'skill', id: 'commit-changes', sourceDir: resolve(sb.src, 'skills/commit-changes') };
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      chmodSync(entry, 0o555);
+      try {
+        await assert.rejects(new UniversalAdapter().install(item, sb.proj, 'project', { almanacRoot: sb.src, force: true }),
+          { code: 'EACCES', syscall: 'rename' });
+        assert.deepEqual(readdirSync(base), ['commit-changes'], 'the copy stays, and no staging directory is left beside it');
+      } finally {
+        unlock(base);
+      }
+    });
+  });
+
+  it('install --force --from-package copy over a copy whose old files cannot be deleted reports the new copy, naming the leftover (placeCopy)', { skip: NO_MODE_BITS }, async () => {
+    await inLinkSandbox(tmpRoot, 'replace-cleanup-refused', async (sb) => {
+      addReferences(sb);
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+      chmodSync(resolve(entry, 'references'), 0o555);
+      try {
+        const result = copySkill(sb, base, { force: true });
+        const staging = stagingDirs(base);
+        assert.equal(staging.length, 1, `exactly one staging directory: ${staging}`);
+        assert.deepEqual(result, {
+          action: 'created', path: entry, details: 'copy',
+          note: `could not delete ${resolve(base, staging[0])} (EACCES); delete it by hand`,
+        });
+        assert.equal(JSON.parse(readFileSync(resolve(entry, MARKER_NAME), 'utf8')).package.version, '9.9.9', 'the new copy is in place');
+      } finally {
+        unlock(base);
+      }
+    });
+  });
+});
+
+describe('copy placement at every link site (#606 part 2)', () => {
+  // The AC tests claude-code and universal and leaves the rest to shared
+  // logic; this makes that literal for all twelve sites, at every scope each
+  // declares (critique F4: one row per site, not per adapter, so the three
+  // sites that are not a skill directory are covered too).
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-sites-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  for (const site of LINK_SITES) {
+    for (const scope of site.scopes) {
+      it(`${site.site} (${scope}): install copies, the listing shows the copy alone, uninstall removes it`, async () => {
+        await inLinkSandbox(tmpRoot, `${siteSlug(site)}-${scope}`, async (sb) => {
+          const adapter = site.adapter();
+          const item = linkItem(site, sb);
+          const path = site.path(sb, scope);
+          const opts = { almanacRoot: sb.src, placement: 'copy', copyFrom: COPY_FROM };
+
+          assert.deepEqual(await adapter.install(item, sb.proj, scope, opts), { action: 'created', path, details: 'copy' });
+          assert.equal(lstatSync(path).isSymbolicLink(), false, 'a copy, not a link');
+          assert.deepEqual(placement.readOwnedMarker(path)?.package, COPY_FROM);
+
+          // Exactly one entry: a sidecar or a staging directory is not an item.
+          const listing = await adapter.listInstalled(sb.proj, scope);
+          assert.deepEqual(listing.map((entry) => [entry.path, entry.broken, entry.copy]), [[path, false, COPY_FROM]]);
+
+          assert.deepEqual(await adapter.install(item, sb.proj, scope, opts),
+            { action: 'skipped', path, reason: 'already-copied', note: 'already a copy of agent-almanac 9.9.9' });
+
+          const removed = site.site === 'cursor skill' ? { action: 'removed', path } : { action: 'removed', path, details: 'copy' };
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, {}), removed);
+          assert.deepEqual(readdirSync(dirname(path)), [], 'neither the copy, its marker nor a staging directory is left');
+        });
+      });
+    }
+  }
+
+  it('claude-code\'s audit says the agents directory is a copy', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'claude-code agents directory');
+    await inLinkSandbox(tmpRoot, 'claude-agents-audit', async (sb) => {
+      const adapter = site.adapter();
+      await adapter.install(linkItem(site, sb), sb.proj, 'project', { almanacRoot: sb.src, placement: 'copy', copyFrom: COPY_FROM });
+      assert.deepEqual(await adapter.audit(sb.proj, 'project'),
+        { framework: 'Claude Code', ok: ['agents directory is a copy'], warnings: [], errors: [] });
+    });
+  });
+
+  it('a staging directory a killed copy left behind is not listed', async () => {
+    await inLinkSandbox(tmpRoot, 'staging-left', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      mkdirSync(resolve(base, '.agent-almanac-staging-AbC123/commit-changes'), { recursive: true });
+      writeFileSync(resolve(base, '.agent-almanac-staging-AbC123/commit-changes/SKILL.md'), LINK_FIXTURE.skill);
+      assert.deepEqual(await new UniversalAdapter().listInstalled(sb.proj, 'project'), []);
+    });
+  });
+});
+
+describe('audit reports copies: version drift, edits, unreadable markers (#606 part 2)', () => {
+  // auditAll's fifth argument is the running CLI's own package (D3). Every
+  // copy finding is a warning, so the exit code is unchanged (D2).
+  let tmpRoot;
+  const REFERENCE = { name: 'agent-almanac', version: '9.9.9' };
+  const DRIFT = { name: 'agent-almanac', version: '0.0.0-drift' };
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-audit-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** Copy the sandbox's skill into .agents/skills under each name, from `copyFrom`. */
+  const copyInto = (sb, names, copyFrom) => {
+    for (const name of names) {
+      placement.placeCopy({
+        base: resolve(sb.proj, '.agents/skills'), name, source: resolve(sb.src, 'skills/commit-changes'),
+        almanacRoot: sb.src, copyFrom, item: { type: 'skill', id: name },
+      });
+    }
+  };
+
+  it('warns about copies from another version than this CLI\'s, and only with a reference', async () => {
+    await inLinkSandbox(tmpRoot, 'drift', async (sb) => {
+      copyInto(sb, ['second-skill', 'commit-changes'], DRIFT);
+      const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+      assert.deepEqual(entry, {
+        framework: 'Universal (.agents/)',
+        ok: ['2 skills installed', '2 copies from agent-almanac 0.0.0-drift'],
+        warnings: ['2 copies from agent-almanac 0.0.0-drift, while this CLI is agent-almanac 9.9.9: commit-changes, second-skill'],
+        errors: [],
+        crashed: false,
+      });
+      assert.equal(auditExitCode([entry]), AUDIT_EXIT.CLEAN);
+      const [unreferenced] = await auditAll([new UniversalAdapter()], sb.proj, 'project');
+      assert.deepEqual(unreferenced.warnings, [], 'no reference, no drift: every caller that predates it');
+    });
+  });
+
+  it('does not warn about a copy from this CLI\'s own version (control)', async () => {
+    await inLinkSandbox(tmpRoot, 'current', async (sb) => {
+      copyInto(sb, ['commit-changes'], REFERENCE);
+      const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+      assert.deepEqual(entry.ok, ['1 skills installed', '1 copy from agent-almanac 9.9.9']);
+      assert.deepEqual(entry.warnings, []);
+    });
+  });
+
+  it('warns about an edited copy and an unreadable marker, and exits 0', async () => {
+    await inLinkSandbox(tmpRoot, 'edited', async (sb) => {
+      copyInto(sb, ['commit-changes', 'other-skill'], REFERENCE);
+      const skills = resolve(sb.proj, '.agents/skills');
+      editCopy(resolve(skills, 'commit-changes'));
+      writeFileSync(resolve(skills, `other-skill/${MARKER_NAME}`), 'not json {');
+      const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+      assert.deepEqual(entry.warnings, [
+        '1 copy edited since copied, which uninstall keeps: commit-changes',
+        '1 entry with a copy marker agent-almanac cannot read, counted as not installed by it: other-skill',
+      ]);
+      assert.equal(auditExitCode([entry]), AUDIT_EXIT.CLEAN);
+    });
+  });
+
+  it('a copy holding a file it cannot read is reported not checked for edits, beside the other copies\' OK lines', { skip: NO_MODE_BITS }, async () => {
+    // copyFindings() catches one copy's failed hash, so it cannot take the
+    // version lines of the others with it (review round 1, F5: unpinned).
+    await inLinkSandbox(tmpRoot, 'unreadable-file', async (sb) => {
+      copyInto(sb, ['commit-changes', 'other-skill'], REFERENCE);
+      const unreadable = resolve(sb.proj, '.agents/skills/commit-changes/SKILL.md');
+      chmodSync(unreadable, 0o000);
+      try {
+        const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+        assert.deepEqual(entry, {
+          framework: 'Universal (.agents/)',
+          ok: ['2 skills installed', '2 copies from agent-almanac 9.9.9'],
+          warnings: [`1 copy not checked for edits: commit-changes (EACCES: permission denied, open '${unreadable}')`],
+          errors: [],
+          crashed: false,
+        });
+        assert.equal(auditExitCode([entry]), AUDIT_EXIT.CLEAN);
+      } finally {
+        chmodSync(unreadable, 0o644);
+      }
+    });
+  });
+
+  it('a copy outlives its package: with the source gone, audit finds nothing wrong', async () => {
+    await inLinkSandbox(tmpRoot, 'source-gone', async (sb) => {
+      copyInto(sb, ['commit-changes'], REFERENCE);
+      rmTree(sb.src);
+      const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+      assert.deepEqual(entry, {
+        framework: 'Universal (.agents/)',
+        ok: ['1 skills installed', '1 copy from agent-almanac 9.9.9'],
+        warnings: [],
+        errors: [],
+        crashed: false,
+      });
+    });
+  });
+
+  it('a listing that throws is a warning beside the adapter\'s own findings, never a crash (F5)', async () => {
+    class ListThrowsAdapter {
+      static displayName = 'Lister';
+      async audit() { return { framework: 'Lister', ok: [], warnings: [], errors: ['1 broken links'] }; }
+      async listInstalled() { throw new Error('EACCES: cannot list'); }
+    }
+    class AuditOnlyAdapter {
+      static displayName = 'Audit only';
+      async audit() { return { framework: 'Audit only', ok: ['fine'], warnings: [], errors: [] }; }
+    }
+    const results = await auditAll([new ListThrowsAdapter(), new AuditOnlyAdapter()], tmpRoot, 'project', false, REFERENCE);
+    assert.deepEqual(results, [
+      { framework: 'Lister', ok: [], warnings: ['copies not checked: EACCES: cannot list'], errors: ['1 broken links'], crashed: false },
+      { framework: 'Audit only', ok: ['fine'], warnings: [], errors: [], crashed: false },
+    ]);
+    assert.equal(auditExitCode(results), AUDIT_EXIT.FINDINGS, 'the finding survives the failed copy check');
+  });
+
+  it('a listing that is not a list is a warning too, never a crash (#439\'s class)', async () => {
+    // A third-party adapter is duck-typed; the copy findings run outside the
+    // try that decides `crashed`, so they must not throw out of auditAll.
+    class OddListAdapter {
+      static displayName = 'Odd';
+      async audit() { return { framework: 'Odd', ok: ['fine'], warnings: [], errors: [] }; }
+      async listInstalled() { return {}; }
+    }
+    const [entry] = await auditAll([new OddListAdapter()], tmpRoot, 'project', false, REFERENCE);
+    assert.equal(entry.crashed, false);
+    assert.deepEqual(entry.ok, ['fine']);
+    assert.equal(entry.warnings.length, 1, entry.warnings.join('\n'));
+    assert.match(entry.warnings[0], /^copies not checked: /);
+  });
+
+  it('lists each adapter once and hands that listing to its audit', async () => {
+    // On the /mnt 9p mount one claude-code listing of this checkout took
+    // about 2.6 s, so a second listing for the copy findings doubled `audit`.
+    class CountingAdapter extends UniversalAdapter {
+      listings = 0;
+      async listInstalled(...args) { this.listings += 1; return super.listInstalled(...args); }
+    }
+    await inLinkSandbox(tmpRoot, 'list-once', async (sb) => {
+      copyInto(sb, ['commit-changes'], REFERENCE);
+      const adapter = new CountingAdapter();
+      const [entry] = await auditAll([adapter], sb.proj, 'project', false, REFERENCE);
+      assert.equal(adapter.listings, 1);
+      assert.deepEqual(entry.ok, ['1 skills installed', '1 copy from agent-almanac 9.9.9']);
+    });
   });
 });

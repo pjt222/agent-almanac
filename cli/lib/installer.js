@@ -7,6 +7,7 @@
 
 import { warn } from './reporter.js';
 import { assertPlainItemIds } from './item-id.js';
+import { copyDiff } from './placement.js';
 
 /**
  * Warn when the requested scope will not be honoured, per adapter and content
@@ -238,12 +239,21 @@ export async function uninstallAll(resolved, adapters, projectDir, scope, option
  * nothing wrong" (#365). `crashed` carries that distinction structurally, so
  * callers never have to match on the `Audit failed:` message prefix (#439).
  *
+ * Copies made with `--from-package copy` are reported here, for every
+ * adapter at once, after its own audit (copyFindings). They are warnings,
+ * never errors: a stale or edited copy still works, unlike a broken link
+ * (the maintainer's decision D2), so they leave the exit code alone.
+ *
  * @param {import('../adapters/base.js').FrameworkAdapter[]} adapters
  * @param {string} projectDir
  * @param {string} scope
+ * @param {boolean} [scopeExplicit]
+ * @param {{ name: string, version: string }|null} [reference] - The package
+ *   copies are compared against: the running CLI's own (D3). Without it no
+ *   version drift is reported, as for every caller that predates it.
  * @returns {Promise<import('../adapters/base.js').AuditEntry[]>}
  */
-export async function auditAll(adapters, projectDir, scope, scopeExplicit = false) {
+export async function auditAll(adapters, projectDir, scope, scopeExplicit = false, reference = null) {
   const results = [];
 
   // The audit path carries the same silence as the install path. An earlier
@@ -267,12 +277,23 @@ export async function auditAll(adapters, projectDir, scope, scopeExplicit = fals
   }
 
   for (const adapter of adapters) {
+    // Listed once, here, and handed to audit(), which lists only when it is
+    // not given one. The copy findings below need the same listing, and on the
+    // /mnt 9p mount one claude-code listing of this checkout's 373 links took
+    // about 2.6 s (measured 2026-10-22), so listing twice doubled `audit`.
+    // An adapter is not required to list: the #439 ones define audit() alone.
+    let installed;
+    let listError = null;
+    if (typeof adapter.listInstalled === 'function') {
+      try {
+        installed = await adapter.listInstalled(projectDir, scope);
+      } catch (err) {
+        listError = err;
+      }
+    }
+    let result;
     try {
-      const result = await adapter.audit(projectDir, scope);
-      // Normalised here rather than in all 14 adapters: returning from audit()
-      // is what proves the adapter ran to completion, so this is the only place
-      // that can set the flag authoritatively.
-      results.push({ ...result, crashed: false });
+      result = await adapter.audit(projectDir, scope, installed);
     } catch (err) {
       results.push({
         framework: adapter.constructor.displayName,
@@ -282,9 +303,90 @@ export async function auditAll(adapters, projectDir, scope, scopeExplicit = fals
         crashed: true,
         error: err,
       });
+      continue;
     }
+    // Outside the try above, so nothing about a copy can turn an adapter that
+    // audited into a crashed one or cost it its findings (critique F5).
+    let copies = { ok: [], warnings: [] };
+    if (listError) copies = { ok: [], warnings: [`copies not checked: ${listError.message}`] };
+    else if (installed) {
+      // A duck-typed adapter can list anything; whatever it returns must not
+      // throw out of auditAll, which would abort the whole audit (#439).
+      try {
+        copies = copyFindings(installed, reference);
+      } catch (err) {
+        copies = { ok: [], warnings: [`copies not checked: ${err.message}`] };
+      }
+    }
+    // Normalised here rather than in all 14 adapters: returning from audit()
+    // is what proves the adapter ran to completion, so this is the only place
+    // that can set the flag authoritatively.
+    results.push({
+      ...result,
+      ok: [...(result.ok || []), ...copies.ok],
+      warnings: [...(result.warnings || []), ...copies.warnings],
+      crashed: false,
+    });
   }
   return results;
+}
+
+const counted = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+/**
+ * What audit says about the copies one adapter lists (#606 part 2).
+ *
+ * - ok: `<n> copy|copies from <name> <version>`, one line per package version.
+ * - warning: the same copies, `while this CLI is <name> <version>`, when a
+ *   reference is given and differs (D2, D3). A copy outliving the package it
+ *   came from is the point of copy mode, so a missing source is not a finding.
+ * - warning: copies edited since they were copied, which uninstall keeps (D1).
+ * - warning: entries with a copy marker the CLI cannot read.
+ *
+ * Only entries with a readable marker are hashed. A hash that throws becomes
+ * a warning.
+ *
+ * @param {object[]} installed - The adapter's listInstalled()
+ * @param {{ name: string, version: string }|null} reference
+ * @returns {{ ok: string[], warnings: string[] }}
+ */
+function copyFindings(installed, reference) {
+  const versions = new Map();
+  const edited = [];
+  const unreadable = [];
+  const unchecked = [];
+  for (const entry of installed) {
+    if (entry.markerUnreadable) unreadable.push(entry.id);
+    if (!entry.copy) continue;
+    const key = JSON.stringify([entry.copy.name, entry.copy.version]);
+    if (!versions.has(key)) versions.set(key, { ...entry.copy, ids: [] });
+    versions.get(key).ids.push(entry.id);
+    try {
+      const diff = copyDiff(entry.path);
+      if (diff && (diff.modified.length > 0 || diff.added.length > 0)) edited.push(entry.id);
+    } catch (err) {
+      unchecked.push(`${entry.id} (${err.message})`);
+    }
+  }
+
+  const ok = [];
+  const warnings = [];
+  for (const { name, version, ids } of versions.values()) {
+    ok.push(`${counted(ids.length, 'copy', 'copies')} from ${name} ${version}`);
+    if (reference && (name !== reference.name || version !== reference.version)) {
+      warnings.push(`${counted(ids.length, 'copy', 'copies')} from ${name} ${version}, while this CLI is ${reference.name} ${reference.version}: ${ids.sort().join(', ')}`);
+    }
+  }
+  if (edited.length > 0) {
+    warnings.push(`${counted(edited.length, 'copy', 'copies')} edited since copied, which uninstall keeps: ${edited.sort().join(', ')}`);
+  }
+  if (unreadable.length > 0) {
+    warnings.push(`${counted(unreadable.length, 'entry', 'entries')} with a copy marker agent-almanac cannot read, counted as not installed by it: ${unreadable.sort().join(', ')}`);
+  }
+  if (unchecked.length > 0) {
+    warnings.push(`${counted(unchecked.length, 'copy', 'copies')} not checked for edits: ${unchecked.sort().join(', ')}`);
+  }
+  return { ok, warnings };
 }
 
 /**

@@ -6,9 +6,10 @@
  * Skills only.
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, mkdirSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 import { condenseSkill, wrapAsMdc } from '../lib/transformer.js';
 
 export class CursorAdapter extends FrameworkAdapter {
@@ -32,14 +33,10 @@ export class CursorAdapter extends FrameworkAdapter {
     const targetPath = childPath(skillsDir, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
-
-    mkdirSync(skillsDir, { recursive: true });
-    if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
-
-    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-    symlinkSync(relative(skillsDir, source), targetPath);
-    return { action: 'created', path: targetPath };
+    return installAt({
+      base: skillsDir, name: item.id, item, options, relativeLink: true,
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
   }
 
   /**
@@ -65,19 +62,29 @@ export class CursorAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     // Remove from both paths
     const results = [];
-    const skillPath = childPath(resolve(projectDir, '.cursor/skills'), item.id);
+    const skillsDir = resolve(projectDir, '.cursor/skills');
+    const skillPath = childPath(skillsDir, item.id);
     const rulePath = childPath(resolve(projectDir, '.cursor/rules'), `${item.id}.mdc`);
 
-    for (const p of [skillPath, rulePath]) {
-      if (existsSync(p)) {
-        if (options.dryRun) { results.push(p); continue; }
-        unlinkSync(p);
-        results.push(p);
-      }
+    // skillPath goes through removeEntry, which removes a link, dangling or
+    // not, or an unedited copy, and keeps anything else. No CLI command
+    // writes rulePath: installLegacyRule has no caller. A file there is the
+    // user's own, a regular file or a symlink made as skills/README.md
+    // describes. Deleting it here is pre-existing behaviour, kept on purpose
+    // for now and tracked in #998; existsSync also misses a dangling link at
+    // that path.
+    const skill = removeEntry(skillsDir, item.id, { dryRun: options.dryRun });
+    if (skill.action === 'removed') results.push(skillPath);
+    if (existsSync(rulePath)) {
+      if (!options.dryRun) unlinkSync(rulePath);
+      results.push(rulePath);
     }
 
-    if (results.length === 0) return { action: 'skipped', path: '', details: 'not installed' };
-    return { action: 'removed', path: results.join(', ') };
+    if (results.length === 0) {
+      return skill.note ? skill : { action: 'skipped', path: '', details: 'not installed' };
+    }
+    const removed = { action: 'removed', path: results.join(', ') };
+    return skill.note ? { ...removed, note: `kept ${skillPath}: ${skill.note}` } : removed;
   }
 
   async listInstalled(projectDir) {
@@ -85,9 +92,9 @@ export class CursorAdapter extends FrameworkAdapter {
     const skillsDir = resolve(projectDir, '.cursor/skills');
     if (existsSync(skillsDir)) {
       for (const name of readdirSync(skillsDir)) {
+        if (isInternalName(name)) continue;
         const fullPath = resolve(skillsDir, name);
-        // existsSync follows the link — false for a broken symlink.
-        items.push({ id: name, type: 'skill', path: fullPath, format: 'skills', broken: !existsSync(fullPath) });
+        items.push({ id: name, type: 'skill', path: fullPath, format: 'skills', ...describeEntry(fullPath).fields });
       }
     }
     const rulesDir = resolve(projectDir, '.cursor/rules');
@@ -102,8 +109,8 @@ export class CursorAdapter extends FrameworkAdapter {
     return items;
   }
 
-  async audit(projectDir) {
-    const installed = await this.listInstalled(projectDir);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir);
     const broken = installed.filter(i => i.broken).length;
     const valid = installed.length - broken;
     return {

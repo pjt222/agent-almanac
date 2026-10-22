@@ -30,6 +30,7 @@ import { detectFrameworks } from './lib/detector.js';
 import { getAdapter, getAdaptersForDetections, listAdapters } from './adapters/index.js';
 import { installAll, uninstallAll, auditAll, auditExitCode, warnUnsupportedScopes } from './lib/installer.js';
 import { InvalidItemIdError, isPlainItemId } from './lib/item-id.js';
+import { readPackageIdentity } from './lib/placement.js';
 import { loadManifest, resolveManifest, generateManifest, writeManifest } from './lib/manifest.js';
 import { loadState, saveState, recordGather, recordScatter, recordWarm, markWelcomed, getFireStates, getFireState, findSharedSkills } from './lib/state.js';
 import * as campfire from './lib/campfire-reporter.js';
@@ -91,8 +92,10 @@ function getContext(options) {
  * The modes `--from-package` accepts. Only implemented modes belong here:
  * commander rejects any other value with its own message and lists exactly
  * these in the help text, so the help can never offer a mode the CLI lacks.
+ * Copy first: it is the safer of the two out of a package (the maintainer's
+ * decision D5), and commander lists choices in this order.
  */
-const FROM_PACKAGE_MODES = ['link'];
+const FROM_PACKAGE_MODES = ['copy', 'link'];
 
 /**
  * `--from-package <mode>`, shared by every command that installs.
@@ -108,10 +111,18 @@ function fromPackageOption() {
   return new Option(
     '--from-package <mode>',
     'Install even though the content root is an npm package (inside node_modules), '
-      + 'which is refused by default. link: symlink into the package; '
-      + 'npm update or npm uninstall can break the links',
+      + 'which is refused by default. copy: copy into each framework\'s folder, marked so that '
+      + 'uninstall checks that a copy is unedited before removing it; the copies outlast npm update '
+      + 'and npm uninstall. '
+      + 'link: symlink into the package; npm update or npm uninstall can break the links',
   ).choices(FROM_PACKAGE_MODES);
 }
+
+/** `--force`, for the commands that install: what it replaces, and what it keeps. */
+const FORCE_HELP = 'Replace existing content: a link, whoever made it, or a copy you have not edited, '
+  + 'with the OS, editor and Python cache files in it and any directory holding nothing else. '
+  + 'Where agent-almanac links or copies, any other file or directory it did not make is kept, '
+  + 'though a change saved to a copy while --force checks it can be replaced';
 
 /**
  * Refuse to install from an npm package root unless `--from-package` says how.
@@ -146,17 +157,60 @@ function fromPackageOption() {
  * the same directory is not enough once a framework's marker is gone.
  * `uninstall` takes no `--from-package`.
  *
+ * With `copy` (#606 part 2), each item is copied instead, with a marker that
+ * records the package's name and version, read here from its package.json.
+ * The NOTE carries the same scope, frameworks and every-name clause as the
+ * link warning (critique F6): a bare `audit` after a `-g` copy reads the
+ * project scope and reports nothing, which would make the drift warning it
+ * promises fail open.
+ *
+ * Outside an npm package `--from-package` has nothing to govern (D6, refined
+ * by the critique): `copy` refuses, because linking instead would downgrade
+ * an explicit request for copies, and `link` says on stderr that it has no
+ * effect.
+ *
+ * Every line goes to stderr, like the refusal, not through reporter.warn():
+ * on stdout it would precede `gather --json`'s document and make it
+ * unparseable. reporter.warn() stays on stdout for its other callers.
+ *
  * @param {{ almanacRoot: string }} ctx
  * @param {{ fromPackage?: string }} options
+ * @returns {{ placement: 'link' } | { placement: 'copy', copyFrom: { name: string, version: string } }}
  */
 function guardPackageRoot(ctx, options) {
-  if (!isNpmPackageRoot(ctx.almanacRoot)) return;
+  const root = ctx.almanacRoot;
   const mode = options.fromPackage;
-  if (mode !== 'link') refusePackageRoot(ctx.almanacRoot);
-  // stderr, like the refusal, not reporter.warn(): on stdout this line would
-  // precede `gather --json`'s document and make it unparseable. Only this
-  // warning moves; reporter.warn() stays on stdout for its other callers.
-  console.error(reporter.chalk.yellow(`  WARN: Linking into the npm package at ${ctx.almanacRoot}. \`npm update\` of agent-almanac can break these links, and \`agent-almanac audit\` reports any that broke; \`npm uninstall\` leaves them dangling and removes that command too, so remove them first with the same scope and frameworks (the install's \`-g\`/\`--scope\` and \`-f\`; without \`-f\`, run it where \`agent-almanac detect\` lists the frameworks the install did): \`agent-almanac uninstall <names>\`, or \`agent-almanac scatter <team>\` after \`gather\`.`));
+  if (!isNpmPackageRoot(root)) {
+    if (mode === 'copy') {
+      reporter.error(`Not copying from ${root}: it is not an npm package, and \`--from-package copy\` copies only out of one. Without \`--from-package\`, install links to it.`);
+      process.exit(1);
+    }
+    if (mode === 'link') console.error(reporter.chalk.yellow(`  NOTE: --from-package link has no effect: ${root} is not an npm package; linking as usual.`));
+    return { placement: 'link' };
+  }
+  if (mode === 'copy') {
+    const copyFrom = readPackageIdentity(root);
+    if (!copyFrom) {
+      reporter.error(`Cannot copy from ${root}: its package.json names no package and version to record. Use --source <clone> or --from-package link.`);
+      process.exit(1);
+    }
+    console.error(reporter.chalk.yellow(copyNote(root, copyFrom)));
+    return { placement: 'copy', copyFrom };
+  }
+  if (mode !== 'link') refusePackageRoot(root);
+  console.error(reporter.chalk.yellow(`  WARN: Linking into the npm package at ${root}. \`npm update\` of agent-almanac can break these links, and \`agent-almanac audit\` reports any that broke; \`npm uninstall\` leaves them dangling and removes that command too, so remove them first with the same scope and frameworks (the install's \`-g\`/\`--scope\` and \`-f\`; without \`-f\`, run it where \`agent-almanac detect\` lists the frameworks the install did): \`agent-almanac uninstall <names>\`, or \`agent-almanac scatter <team>\` after \`gather\`.`));
+  return { placement: 'link' };
+}
+
+/** The line `--from-package copy` prints on stderr before it copies. */
+function copyNote(root, { name, version }) {
+  return `  NOTE: Copying from the npm package at ${root} (${name} ${version}). `
+    + 'The copies stay as they are through `npm update` and `npm uninstall`. '
+    + '`agent-almanac audit` warns when this CLI\'s version differs from theirs, and '
+    + '`agent-almanac uninstall <names>` (`agent-almanac scatter <team>` after `gather`) removes a copy only while it is unedited. '
+    + 'Run both with the same scope and frameworks (the install\'s `-g`/`--scope` and `-f`; without `-f`, '
+    + 'run them where `agent-almanac detect` lists the frameworks the install did), '
+    + 'and give `uninstall` every id on the install\'s `+` lines.';
 }
 
 /** Print the refusal and exit 1, the code getContext() uses for a root it cannot use. */
@@ -165,9 +219,32 @@ function refusePackageRoot(root) {
     `Not installing from the npm package at ${root}: \`npm uninstall\` leaves links into node_modules `
       + 'dangling, and `npm update` can break them or silently change the content under them.\n'
       + '    Either install from a clone:      --source <clone>\n'
+      + '    or copy out of the package:       --from-package copy\n'
       + '    or link into the package anyway:  --from-package link',
   );
   process.exit(1);
+}
+
+/**
+ * The options every installAll() call passes: the four call sites (install,
+ * install from a manifest, sync and gather) build them here, so the
+ * placement `guardPackageRoot()` chose reaches every adapter.
+ *
+ * @param {ReturnType<typeof getContext>} ctx
+ * @param {{ dryRun?: boolean, force?: boolean }} options - The command's options
+ * @param {ReturnType<typeof guardPackageRoot>} placed
+ * @param {object} [overrides]
+ */
+function installOptions(ctx, options, placed, overrides = {}) {
+  return {
+    dryRun: options.dryRun,
+    force: options.force,
+    almanacRoot: ctx.almanacRoot,
+    scopeExplicit: ctx.scopeExplicit,
+    placement: placed.placement,
+    copyFrom: placed.copyFrom,
+    ...overrides,
+  };
 }
 
 // ── install ──────────────────────────────────────────────────────
@@ -184,12 +261,12 @@ program
   .option('-g, --global', 'Install to global scope')
   .option('--scope <scope>', 'Scope: project, workspace, global (default: project)')
   .option('-n, --dry-run', 'Preview without making changes')
-  .option('--force', 'Overwrite existing content')
+  .option('--force', FORCE_HELP)
   .option('--source <path>', 'Path to agent-almanac root')
   .addOption(fromPackageOption())
   .action(async (names, options) => {
     const ctx = getContext(options);
-    guardPackageRoot(ctx, options);
+    const placed = guardPackageRoot(ctx, options);
 
     // If no args, try manifest
     if (names.length === 0 && !options.domain && !options.agent && !options.team) {
@@ -200,10 +277,8 @@ program
         if (totalItems === 0) { reporter.error('Manifest resolved to 0 items.'); process.exit(1); }
         if (options.dryRun) reporter.printDryRun();
         console.log(`\nInstalling ${totalItems} item(s) from agent-almanac.yml...\n`);
-        const results = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
-          dryRun: options.dryRun, force: options.force, almanacRoot: ctx.almanacRoot,
-          scopeExplicit: ctx.scopeExplicit,
-        });
+        const results = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope,
+          installOptions(ctx, options, placed));
         reporter.printResults(results);
         return;
       }
@@ -229,12 +304,8 @@ program
 
     console.log(`\nInstalling ${totalItems} item(s) to ${ctx.adapters.map(a => a.constructor.displayName).join(', ')}...\n`);
 
-    const results = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
-      dryRun: options.dryRun,
-      force: options.force,
-      almanacRoot: ctx.almanacRoot,
-      scopeExplicit: ctx.scopeExplicit,
-    });
+    const results = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope,
+      installOptions(ctx, options, placed));
 
     reporter.printResults(results);
   });
@@ -311,7 +382,9 @@ program
           console.log(reporter.chalk.bold(`  ${adapter.constructor.displayName}:`));
           for (const item of items) {
             const status = item.broken ? reporter.chalk.red(' (broken)') : '';
-            console.log(`    ${reporter.chalk.cyan(item.id)} ${reporter.chalk.dim(item.type)}${status}`);
+            // A copy made with --from-package copy names the package it came from.
+            const copy = item.copy ? reporter.chalk.dim(` (copy, ${item.copy.name} ${item.copy.version})`) : '';
+            console.log(`    ${reporter.chalk.cyan(item.id)} ${reporter.chalk.dim(item.type)}${status}${copy}`);
           }
         }
       }
@@ -403,7 +476,11 @@ Examples:
     const ctx = getContext(options);
 
     console.log('\nAudit results:\n');
-    const results = await auditAll(ctx.adapters, ctx.projectDir, ctx.scope, ctx.scopeExplicit);
+    // Copies are compared with this CLI's own package (D3): it is always
+    // there, it is what `npm update -g` changes, and it is what
+    // `install --force --from-package copy` copies from outside a checkout.
+    const results = await auditAll(ctx.adapters, ctx.projectDir, ctx.scope, ctx.scopeExplicit,
+      { name: pkg.name, version: pkg.version });
     reporter.printAudit(results);
 
     // An empty result set prints nothing at all, which reads exactly like a
@@ -502,7 +579,7 @@ program
     }
 
     const ctx = getContext(options);
-    guardPackageRoot(ctx, options);
+    const placed = guardPackageRoot(ctx, options);
     const desired = resolveManifest(manifest, ctx.reg);
     const desiredSkillIds = new Set(desired.skills.map(s => s.id));
 
@@ -510,11 +587,8 @@ program
 
     // Install missing
     console.log('\nSync: installing missing items...\n');
-    const installResults = await installAll(desired, ctx.adapters, ctx.projectDir, ctx.scope, {
-      dryRun: options.dryRun,
-      almanacRoot: ctx.almanacRoot,
-      scopeExplicit: ctx.scopeExplicit,
-    });
+    const installResults = await installAll(desired, ctx.adapters, ctx.projectDir, ctx.scope,
+      installOptions(ctx, options, placed));
 
     // Find items to remove (installed but not in manifest) — universal adapter only
     const universalAdapter = ctx.adapters.find(a => a.constructor.id === 'universal');
@@ -640,7 +714,7 @@ program
   .addHelpText('after', '\nExamples:\n  agent-almanac gather tending\n  agent-almanac gather r-package-review --ceremonial\n  agent-almanac gather tending --only mystic,gardener')
   .action(async (name, options) => {
     const ctx = getContext(options);
-    guardPackageRoot(ctx, options);
+    const placed = guardPackageRoot(ctx, options);
     const state = loadState();
 
     // Resolve team
@@ -712,12 +786,8 @@ program
 
     if (options.dryRun) reporter.printDryRun();
 
-    const installResults = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
-      dryRun: options.dryRun,
-      force: false,
-      almanacRoot: ctx.almanacRoot,
-      scopeExplicit: ctx.scopeExplicit,
-    });
+    const installResults = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope,
+      installOptions(ctx, options, placed, { force: false }));
 
     // Categorize results
     const installed = installResults.filter(r => r.action === 'created').map(r => r.item.id);
@@ -750,6 +820,22 @@ program
         ceremonial: options.ceremonial || false,
         alreadyBurning: sharedSkills,
       });
+    }
+
+    // gather never passes --force, so an entry it found in the way stays: a
+    // link that copy mode does not replace by itself, a copy of another
+    // version, an entry agent-almanac did not make. Its ceremony and JSON say
+    // only "skipped", so each is named here (#993 §3 for links; critique F14
+    // for other versions). stderr, so `gather --json` stays one document;
+    // --quiet already printed every note with its result. A copy already at
+    // this version is not news. Nothing here in link mode: without --force,
+    // a link install keeps what it finds without a note.
+    if (!options.quiet) {
+      for (const r of installResults) {
+        if (r.note && r.reason !== 'already-copied') {
+          console.error(reporter.chalk.yellow(`  NOTE: ${r.item.id} [${r.adapter}] ${r.path}: ${r.note}`));
+        }
+      }
     }
 
     // Update state (unless dry-run)
@@ -880,16 +966,24 @@ program
       scopeExplicit: ctx.scopeExplicit,
     });
 
+    // A copy edited since it was copied is kept, not removed (D1). This is
+    // read from what uninstallAll did, not from the plan above, which lists
+    // every item it set out to remove. Sorted, so --json does not depend on
+    // the order the team's agents list their skills (review round 1, F8).
+    const copiesKept = [...new Set(uninstallResults.filter(r => r.reason === 'edited').map(r => r.item.id))].sort();
+
     if (options.json) {
       campfire.printJson({
         team: name,
         skillsRemoved: toRemoveSkills.length,
         skillsKept: keptSkills.length,
         agentsKept: keptAgents.length,
+        copiesKept,
       });
     } else if (options.quiet) {
       reporter.printResults(uninstallResults);
     } else {
+      const skillIds = new Set(toRemoveSkills.map(s => s.id));
       campfire.printScatter({
         teamId: name,
         agents,
@@ -897,6 +991,7 @@ program
           removed: toRemoveSkills.map(s => s.id),
           kept: keptSkills,
           keptAgents,
+          keptEdited: copiesKept.filter(id => skillIds.has(id)),
         },
         ceremonial: options.ceremonial || false,
       });

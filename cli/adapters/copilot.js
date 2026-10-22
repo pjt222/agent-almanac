@@ -5,9 +5,10 @@
  * Skills only.
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, readFileSync, writeFileSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
+import { classify, describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 import { condenseSkill, wrapInMarkers, removeMarkedSection, hasMarkedSection } from '../lib/transformer.js';
 
 export class CopilotAdapter extends FrameworkAdapter {
@@ -37,23 +38,16 @@ export class CopilotAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     const targetPath = childPath(skillsDir, item.id);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
-
-    mkdirSync(skillsDir, { recursive: true });
-    if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
-    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-    symlinkSync(relative(skillsDir, source), targetPath);
-    return { action: 'created', path: targetPath };
+    return installAt({
+      base: skillsDir, name: item.id, item, options, relativeLink: true,
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
     // Remove from skills dir
-    const skillPath = childPath(this._skillsDir(projectDir), item.id);
-    if (existsSync(skillPath)) {
-      if (options.dryRun) return { action: 'removed', path: skillPath, details: 'dry-run' };
-      unlinkSync(skillPath);
-      return { action: 'removed', path: skillPath };
-    }
+    const skillsDir = this._skillsDir(projectDir);
+    if (classify(childPath(skillsDir, item.id)).kind !== 'absent') return removeEntry(skillsDir, item.id, { dryRun: options.dryRun });
 
     // Remove from instructions file
     const instrFile = this._instructionsFile(projectDir);
@@ -75,19 +69,16 @@ export class CopilotAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     if (existsSync(skillsDir)) {
       for (const name of readdirSync(skillsDir)) {
+        if (isInternalName(name)) continue;
         const fullPath = resolve(skillsDir, name);
-        // existsSync follows the link, so it is false for a dangling symlink.
-        // Real (copied) skill directories resolve, so they are never flagged.
-        let broken = false;
-        try { broken = !existsSync(fullPath); } catch { broken = true; }
-        items.push({ id: name, type: 'skill', path: fullPath, broken });
+        items.push({ id: name, type: 'skill', path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     return items;
   }
 
-  async audit(projectDir) {
-    const installed = await this.listInstalled(projectDir);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir);
     const broken = installed.filter(i => i.broken);
     const valid = installed.filter(i => !i.broken);
     return {

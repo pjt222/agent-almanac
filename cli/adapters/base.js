@@ -36,7 +36,13 @@ export function childPath(base, name) {
  * @typedef {Object} InstallResult
  * @property {string} action - 'created' | 'updated' | 'skipped'
  * @property {string} path - The path where content was installed
- * @property {string} [details] - Additional info
+ * @property {string} [details] - Additional info. Not printed. 'copy' on a
+ *   copy made or removed with `--from-package copy`.
+ * @property {string} [reason] - Why a 'skipped' entry was kept
+ *   (cli/lib/placement.js): 'foreign', not something the CLI made; 'edited',
+ *   a copy changed since it was copied; and, for a copy install without
+ *   --force, 'link-kept', 'already-copied' or 'other-version'
+ * @property {string} [note] - Printed after the path, for the user to read
  */
 
 /**
@@ -58,7 +64,13 @@ export class FrameworkAdapter {
   /** @type {string} Human-readable name */
   static displayName = 'Base';
 
-  /** @type {string} Installation strategy: 'symlink' | 'copy' | 'file-per-item' | 'append-to-file' */
+  /**
+   * @type {string} Installation strategy: 'symlink' | 'file-per-item' | 'append-to-file'.
+   *   Copying is not a strategy: `--from-package copy` is a placement chosen
+   *   per install, and every adapter that links can copy instead
+   *   (cli/lib/placement.js). Two of the nine that link declare another
+   *   strategy: cursor ('file-per-item') and copilot ('append-to-file').
+   */
   static strategy = 'symlink';
 
   /** @type {string[]} Supported content types */
@@ -152,9 +164,12 @@ export class FrameworkAdapter {
    * Audit installed content for health issues.
    * @param {string} projectDir
    * @param {string} scope
+   * @param {object[]} [listed] - This adapter's listInstalled() for the same
+   *   directory and scope, when auditAll() has already made it. An adapter
+   *   that lists in its audit uses it instead of listing again.
    * @returns {Promise<AuditEntry>}
    */
-  async audit(projectDir, scope) {
+  async audit(projectDir, scope, listed) {
     return {
       framework: this.constructor.displayName,
       ok: [],

@@ -7,10 +7,11 @@
  * Also covers NemoClaw (NVIDIA's OpenClaw + Nemotron + OpenShell stack).
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 import { condenseAgent, wrapInMarkers, removeMarkedSection, hasMarkedSection } from '../lib/transformer.js';
 
 export class OpenClawAdapter extends FrameworkAdapter {
@@ -38,12 +39,10 @@ export class OpenClawAdapter extends FrameworkAdapter {
     if (item.type === 'skill') {
       const targetPath = childPath(this._workspaceDir(), item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
-      mkdirSync(this._workspaceDir(), { recursive: true });
-      if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
-      const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-      symlinkSync(source, targetPath);
-      return { action: 'created', path: targetPath };
+      return installAt({
+        base: this._workspaceDir(), name: item.id, item, options, relativeLink: false,
+        source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+      });
     }
 
     if (item.type === 'agent') {
@@ -70,11 +69,7 @@ export class OpenClawAdapter extends FrameworkAdapter {
 
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
-      const targetPath = childPath(this._workspaceDir(), item.id);
-      if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
-      unlinkSync(targetPath);
-      return { action: 'removed', path: targetPath };
+      return removeEntry(this._workspaceDir(), item.id, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {
@@ -96,17 +91,16 @@ export class OpenClawAdapter extends FrameworkAdapter {
     const wsDir = this._workspaceDir();
     if (existsSync(wsDir)) {
       for (const name of readdirSync(wsDir)) {
-        if (name === 'AGENTS.md') continue;
+        if (name === 'AGENTS.md' || isInternalName(name)) continue;
         const fullPath = resolve(wsDir, name);
-        // existsSync follows the link — false for a broken symlink.
-        items.push({ id: name, type: 'skill', path: fullPath, broken: !existsSync(fullPath) });
+        items.push({ id: name, type: 'skill', path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     return items;
   }
 
-  async audit(projectDir, scope) {
-    const installed = await this.listInstalled(projectDir, scope);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir, scope);
     const broken = installed.filter(i => i.broken).length;
     const valid = installed.length - broken;
     return {

@@ -5,9 +5,10 @@
  * Skills only.
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
 export class GeminiAdapter extends FrameworkAdapter {
   static id = 'gemini';
@@ -31,21 +32,14 @@ export class GeminiAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     const targetPath = childPath(skillsDir, item.id);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
-
-    mkdirSync(skillsDir, { recursive: true });
-    if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
-    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-    symlinkSync(relative(skillsDir, source), targetPath);
-    return { action: 'created', path: targetPath };
+    return installAt({
+      base: skillsDir, name: item.id, item, options, relativeLink: true,
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
-    const targetPath = childPath(this._skillsDir(projectDir), item.id);
-    if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-    if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
-    unlinkSync(targetPath);
-    return { action: 'removed', path: targetPath };
+    return removeEntry(this._skillsDir(projectDir), item.id, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir) {
@@ -53,15 +47,16 @@ export class GeminiAdapter extends FrameworkAdapter {
     const dir = this._skillsDir(projectDir);
     if (existsSync(dir)) {
       for (const name of readdirSync(dir)) {
+        if (isInternalName(name)) continue;
         const fullPath = resolve(dir, name);
-        items.push({ id: name, type: 'skill', path: fullPath, broken: !existsSync(fullPath) });
+        items.push({ id: name, type: 'skill', path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     return items;
   }
 
-  async audit(projectDir) {
-    const installed = await this.listInstalled(projectDir);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir);
     const broken = installed.filter(i => i.broken);
     const valid = installed.filter(i => !i.broken);
     return {

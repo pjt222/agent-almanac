@@ -5,10 +5,11 @@
  * Agents: ~/.vibe/agents/<id>.toml (global only)
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, mkdirSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
 export class VibeAdapter extends FrameworkAdapter {
   static id = 'vibe';
@@ -37,13 +38,10 @@ export class VibeAdapter extends FrameworkAdapter {
       const targetBase = this._skillsBase(projectDir, scope);
       const targetPath = childPath(targetBase, item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
-
-      mkdirSync(targetBase, { recursive: true });
-      if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
-      const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
-      symlinkSync(scope === 'global' ? source : relative(targetBase, source), targetPath);
-      return { action: 'created', path: targetPath };
+      return installAt({
+        base: targetBase, name: item.id, item, options, relativeLink: scope !== 'global',
+        source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+      });
     }
 
     if (item.type === 'agent') {
@@ -79,11 +77,7 @@ system_prompt_id = "${item.id}"
 
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
-      const targetPath = childPath(this._skillsBase(projectDir, scope), item.id);
-      if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
-      unlinkSync(targetPath);
-      return { action: 'removed', path: targetPath };
+      return removeEntry(this._skillsBase(projectDir, scope), item.id, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {
@@ -102,9 +96,9 @@ system_prompt_id = "${item.id}"
     const skillsDir = this._skillsBase(projectDir, scope);
     if (existsSync(skillsDir)) {
       for (const name of readdirSync(skillsDir)) {
+        if (isInternalName(name)) continue;
         const fullPath = resolve(skillsDir, name);
-        // existsSync follows the link, so it is false for a dangling symlink.
-        items.push({ id: name, type: 'skill', path: fullPath, broken: !existsSync(fullPath) });
+        items.push({ id: name, type: 'skill', path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     const agentsDir = this._agentsBase();
@@ -119,8 +113,8 @@ system_prompt_id = "${item.id}"
     return items;
   }
 
-  async audit(projectDir, scope) {
-    const installed = await this.listInstalled(projectDir, scope);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir, scope);
     // Only skills are symlinked; agent .toml files are generated in place and
     // are flagged broken:false, so they can never be counted here.
     const broken = installed.filter(i => i.broken);

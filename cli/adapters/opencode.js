@@ -5,10 +5,11 @@
  * Skills and agents supported. No teams.
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync, lstatSync } from 'fs';
-import { resolve, relative } from 'path';
+import { existsSync, readdirSync } from 'fs';
+import { resolve } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
+import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
 export class OpenCodeAdapter extends FrameworkAdapter {
   static id = 'opencode';
@@ -34,43 +35,37 @@ export class OpenCodeAdapter extends FrameworkAdapter {
 
   async install(item, projectDir, scope, options = {}) {
     const targetBase = this._targetBase(projectDir, scope, item.type);
+
+    if (item.type === 'agent') return this._installAgent(item, targetBase, scope, options);
+
     const targetPath = childPath(targetBase, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
+    return installAt({
+      base: targetBase, name: item.id, item, options, relativeLink: scope !== 'global',
+      source: item.sourceDir || resolve(options.almanacRoot, 'skills', item.id),
+    });
+  }
 
-    mkdirSync(targetBase, { recursive: true });
-    if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
-
-    const source = item.type === 'skill'
-      ? (item.sourceDir || resolve(options.almanacRoot, 'skills', item.id))
-      : resolve(options.almanacRoot, 'agents');
-
-    if (item.type === 'agent') {
-      // For agents, symlink the individual agent file
-      const agentSource = item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`);
-      const agentTarget = childPath(targetBase, `${item.id}.md`);
-      if (existsSync(agentTarget) && !options.force) return { action: 'skipped', path: agentTarget, details: 'already exists' };
-      if (existsSync(agentTarget)) try { unlinkSync(agentTarget); } catch {}
-      mkdirSync(targetBase, { recursive: true });
-      symlinkSync(scope === 'global' ? agentSource : relative(targetBase, agentSource), agentTarget);
-      return { action: 'created', path: agentTarget };
-    }
-
-    symlinkSync(scope === 'global' ? source : relative(targetBase, source), targetPath);
-    return { action: 'created', path: targetPath };
+  /**
+   * An agent is one file, linked at <agents>/<id>.md. It used to run the
+   * skill-shaped steps of install() first, at <agents>/<id> with no extension:
+   * --force unlinked a user's own file at that path, and a directory there made
+   * the agent install report "skipped" without writing the link (S3-B2 P2e).
+   */
+  _installAgent(item, targetBase, scope, options) {
+    const agentTarget = childPath(targetBase, `${item.id}.md`);
+    if (options.dryRun) return { action: 'created', path: agentTarget, details: 'dry-run' };
+    return installAt({
+      base: targetBase, name: `${item.id}.md`, item, options, relativeLink: scope !== 'global',
+      source: item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`),
+    });
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
     const targetBase = this._targetBase(projectDir, scope, item.type);
-    const targetPath = item.type === 'agent'
-      ? childPath(targetBase, `${item.id}.md`)
-      : childPath(targetBase, item.id);
-
-    if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-    if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
-    unlinkSync(targetPath);
-    return { action: 'removed', path: targetPath };
+    const name = item.type === 'agent' ? `${item.id}.md` : item.id;
+    return removeEntry(targetBase, name, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir, scope) {
@@ -79,16 +74,18 @@ export class OpenCodeAdapter extends FrameworkAdapter {
       const dir = this._targetBase(projectDir, scope, type);
       if (!existsSync(dir)) continue;
       for (const name of readdirSync(dir)) {
+        // A copied agent's sidecar marker sits beside it; it is not an agent.
+        if (isInternalName(name)) continue;
         const fullPath = resolve(dir, name);
         const id = name.replace(/\.md$/, '');
-        items.push({ id, type, path: fullPath, broken: !existsSync(fullPath) });
+        items.push({ id, type, path: fullPath, ...describeEntry(fullPath).fields });
       }
     }
     return items;
   }
 
-  async audit(projectDir, scope) {
-    const installed = await this.listInstalled(projectDir, scope);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir, scope);
     const broken = installed.filter(i => i.broken);
     const valid = installed.filter(i => !i.broken);
     return {

@@ -52,7 +52,10 @@ export function printResults(results) {
                  r.action === 'removed' ? chalk.red('-') :
                  r.action === 'skipped' ? chalk.dim('=') : ' ';
     const framework = chalk.dim(`[${r.adapter}]`);
-    console.log(`  ${icon} ${r.item.id} ${framework} ${chalk.dim(r.path || '')}`);
+    // `note` says why an entry was kept (cli/lib/placement.js). `details` is
+    // never printed, so a reason the user must see goes here.
+    const note = r.note ? `  ${chalk.dim(r.note)}` : '';
+    console.log(`  ${icon} ${r.item.id} ${framework} ${chalk.dim(r.path || '')}${note}`);
   }
 
   for (const r of failed) {
