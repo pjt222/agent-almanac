@@ -74,8 +74,8 @@ export class UniversalAdapter extends FrameworkAdapter {
     });
   }
 
-  async audit(projectDir, scope) {
-    const installed = await this.listInstalled(projectDir, scope);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir, scope);
     const result = {
       framework: UniversalAdapter.displayName,
       ok: [],

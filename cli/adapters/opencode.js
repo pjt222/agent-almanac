@@ -84,8 +84,8 @@ export class OpenCodeAdapter extends FrameworkAdapter {
     return items;
   }
 
-  async audit(projectDir, scope) {
-    const installed = await this.listInstalled(projectDir, scope);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir, scope);
     const broken = installed.filter(i => i.broken);
     const valid = installed.filter(i => !i.broken);
     return {

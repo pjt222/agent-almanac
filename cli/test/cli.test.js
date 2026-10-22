@@ -3816,3 +3816,117 @@ describe('copy placement at every link site (#606 part 2)', () => {
     });
   });
 });
+
+describe('audit reports copies: version drift, edits, unreadable markers (#606 part 2)', () => {
+  // auditAll's fifth argument is the running CLI's own package (D3). Every
+  // copy finding is a warning, so the exit code is unchanged (D2).
+  let tmpRoot;
+  const REFERENCE = { name: 'agent-almanac', version: '9.9.9' };
+  const DRIFT = { name: 'agent-almanac', version: '0.0.0-drift' };
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-audit-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** Copy the sandbox's skill into .agents/skills under each name, from `copyFrom`. */
+  const copyInto = (sb, names, copyFrom) => {
+    for (const name of names) {
+      placement.placeCopy({
+        base: resolve(sb.proj, '.agents/skills'), name, source: resolve(sb.src, 'skills/commit-changes'),
+        almanacRoot: sb.src, copyFrom, item: { type: 'skill', id: name },
+      });
+    }
+  };
+
+  it('warns about copies from another version than this CLI\'s, and only with a reference', async () => {
+    await inLinkSandbox(tmpRoot, 'drift', async (sb) => {
+      copyInto(sb, ['second-skill', 'commit-changes'], DRIFT);
+      const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+      assert.deepEqual(entry, {
+        framework: 'Universal (.agents/)',
+        ok: ['2 skills installed', '2 copies from agent-almanac 0.0.0-drift'],
+        warnings: ['2 copies from agent-almanac 0.0.0-drift, while this CLI is agent-almanac 9.9.9: commit-changes, second-skill'],
+        errors: [],
+        crashed: false,
+      });
+      assert.equal(auditExitCode([entry]), AUDIT_EXIT.CLEAN);
+      const [unreferenced] = await auditAll([new UniversalAdapter()], sb.proj, 'project');
+      assert.deepEqual(unreferenced.warnings, [], 'no reference, no drift: every caller that predates it');
+    });
+  });
+
+  it('does not warn about a copy from this CLI\'s own version (control)', async () => {
+    await inLinkSandbox(tmpRoot, 'current', async (sb) => {
+      copyInto(sb, ['commit-changes'], REFERENCE);
+      const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+      assert.deepEqual(entry.ok, ['1 skills installed', '1 copy from agent-almanac 9.9.9']);
+      assert.deepEqual(entry.warnings, []);
+    });
+  });
+
+  it('warns about an edited copy and an unreadable marker, and exits 0', async () => {
+    await inLinkSandbox(tmpRoot, 'edited', async (sb) => {
+      copyInto(sb, ['commit-changes', 'other-skill'], REFERENCE);
+      const skills = resolve(sb.proj, '.agents/skills');
+      editCopy(resolve(skills, 'commit-changes'));
+      writeFileSync(resolve(skills, `other-skill/${MARKER_NAME}`), 'not json {');
+      const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+      assert.deepEqual(entry.warnings, [
+        '1 copy edited since copied, which uninstall keeps: commit-changes',
+        '1 entry with a copy marker agent-almanac cannot read, counted as not installed by it: other-skill',
+      ]);
+      assert.equal(auditExitCode([entry]), AUDIT_EXIT.CLEAN);
+    });
+  });
+
+  it('a copy outlives its package: with the source gone, audit finds nothing wrong', async () => {
+    await inLinkSandbox(tmpRoot, 'source-gone', async (sb) => {
+      copyInto(sb, ['commit-changes'], REFERENCE);
+      rmTree(sb.src);
+      const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+      assert.deepEqual(entry, {
+        framework: 'Universal (.agents/)',
+        ok: ['1 skills installed', '1 copy from agent-almanac 9.9.9'],
+        warnings: [],
+        errors: [],
+        crashed: false,
+      });
+    });
+  });
+
+  it('a listing that throws is a warning beside the adapter\'s own findings, never a crash (F5)', async () => {
+    class ListThrowsAdapter {
+      static displayName = 'Lister';
+      async audit() { return { framework: 'Lister', ok: [], warnings: [], errors: ['1 broken links'] }; }
+      async listInstalled() { throw new Error('EACCES: cannot list'); }
+    }
+    class AuditOnlyAdapter {
+      static displayName = 'Audit only';
+      async audit() { return { framework: 'Audit only', ok: ['fine'], warnings: [], errors: [] }; }
+    }
+    const results = await auditAll([new ListThrowsAdapter(), new AuditOnlyAdapter()], tmpRoot, 'project', false, REFERENCE);
+    assert.deepEqual(results, [
+      { framework: 'Lister', ok: [], warnings: ['copies not checked: EACCES: cannot list'], errors: ['1 broken links'], crashed: false },
+      { framework: 'Audit only', ok: ['fine'], warnings: [], errors: [], crashed: false },
+    ]);
+    assert.equal(auditExitCode(results), AUDIT_EXIT.FINDINGS, 'the finding survives the failed copy check');
+  });
+
+  it('lists each adapter once and hands that listing to its audit', async () => {
+    // On the /mnt 9p mount one claude-code listing of this checkout took
+    // about 2.6 s, so a second listing for the copy findings doubled `audit`.
+    class CountingAdapter extends UniversalAdapter {
+      listings = 0;
+      async listInstalled(...args) { this.listings += 1; return super.listInstalled(...args); }
+    }
+    await inLinkSandbox(tmpRoot, 'list-once', async (sb) => {
+      copyInto(sb, ['commit-changes'], REFERENCE);
+      const adapter = new CountingAdapter();
+      const [entry] = await auditAll([adapter], sb.proj, 'project', false, REFERENCE);
+      assert.equal(adapter.listings, 1);
+      assert.deepEqual(entry.ok, ['1 skills installed', '1 copy from agent-almanac 9.9.9']);
+    });
+  });
+});

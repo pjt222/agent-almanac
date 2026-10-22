@@ -99,8 +99,8 @@ export class OpenClawAdapter extends FrameworkAdapter {
     return items;
   }
 
-  async audit(projectDir, scope) {
-    const installed = await this.listInstalled(projectDir, scope);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir, scope);
     const broken = installed.filter(i => i.broken).length;
     const valid = installed.length - broken;
     return {

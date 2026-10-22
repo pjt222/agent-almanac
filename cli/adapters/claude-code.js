@@ -154,9 +154,9 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
     return items;
   }
 
-  async audit(projectDir, scope) {
+  async audit(projectDir, scope, listed) {
     const base = this._targetBase(scope, projectDir);
-    const installed = await this.listInstalled(projectDir, scope);
+    const installed = listed ?? await this.listInstalled(projectDir, scope);
     const result = {
       framework: ClaudeCodeAdapter.displayName,
       ok: [],

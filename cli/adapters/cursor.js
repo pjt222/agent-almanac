@@ -105,8 +105,8 @@ export class CursorAdapter extends FrameworkAdapter {
     return items;
   }
 
-  async audit(projectDir) {
-    const installed = await this.listInstalled(projectDir);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir);
     const broken = installed.filter(i => i.broken).length;
     const valid = installed.length - broken;
     return {

@@ -55,8 +55,8 @@ export class GeminiAdapter extends FrameworkAdapter {
     return items;
   }
 
-  async audit(projectDir) {
-    const installed = await this.listInstalled(projectDir);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir);
     const broken = installed.filter(i => i.broken);
     const valid = installed.filter(i => !i.broken);
     return {

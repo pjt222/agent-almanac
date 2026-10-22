@@ -95,8 +95,8 @@ export class HermesAdapter extends FrameworkAdapter {
     return items;
   }
 
-  async audit() {
-    const installed = await this.listInstalled();
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled();
     const broken = installed.filter(i => i.broken);
     const valid = installed.filter(i => !i.broken);
     return {

@@ -113,8 +113,8 @@ system_prompt_id = "${item.id}"
     return items;
   }
 
-  async audit(projectDir, scope) {
-    const installed = await this.listInstalled(projectDir, scope);
+  async audit(projectDir, scope, listed) {
+    const installed = listed ?? await this.listInstalled(projectDir, scope);
     // Only skills are symlinked; agent .toml files are generated in place and
     // are flagged broken:false, so they can never be counted here.
     const broken = installed.filter(i => i.broken);
