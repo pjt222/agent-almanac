@@ -158,7 +158,7 @@ or silently change the content under them. The refusal names three ways forward:
     existing link into the package (`install` needs `--force` to replace it), so scatter or
     uninstall it first.
 
-Reaches 12+ frameworks: Claude Code, Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw. See [cli/README.md](cli/README.md).
+13 adapters: Claude Code, Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw, AI Edge, Copilot, and Universal. Universal's `.agents/skills/` also reaches pi (pi.dev) and any other tool that reads that folder. See [cli/README.md](cli/README.md).
 
 ### Verify
 
