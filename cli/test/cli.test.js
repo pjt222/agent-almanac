@@ -3109,3 +3109,44 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     assert.ok(forced.stdout.split('\n').includes(line), `missing the whole line ${JSON.stringify(line)} in:\n${forced.stdout}`);
   });
 });
+
+describe('sync keeps a user\'s own entry in .agents/skills (S3-B2 P6)', () => {
+  // sync removes every entry in .agents/skills that the manifest does not name,
+  // through uninstallAll and universal's uninstall. At b3275420a that unlinked
+  // a user's regular file there (design review E2). #996 made sync skip names
+  // that are not plain ids, so the fixture is kebab-named: `NOTES.md` would be
+  // kept at the base already. The ownership guard (S3-B2 P2a) is what keeps
+  // this one; this pins it through the command, where the measured loss was.
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-sync-p6-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('a user\'s regular file named like an item survives sync, reported with its note', () => {
+    const home = resolve(tmpRoot, 'home');
+    const proj = resolve(tmpRoot, 'proj');
+    const userFile = resolve(proj, '.agents/skills/my-notes');
+    mkdirSync(home, { recursive: true });
+    mkdirSync(dirname(userFile), { recursive: true });
+    writeFileSync(userFile, USER_CONTENT);
+    writeFileSync(resolve(proj, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
+    const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
+    delete env.LOCALAPPDATA;
+
+    const res = spawnSync(process.execPath, [cliEntry, 'sync', '-f', 'universal', '--source', ROOT],
+      { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    const stdout = stripAnsi(res.stdout);
+    assert.equal(res.status, 0, `${stdout}\n${stripAnsi(res.stderr)}`);
+    assert.equal(readFileSync(userFile, 'utf8'), USER_CONTENT);
+    const line = `  = my-notes [universal] ${userFile}  not installed by agent-almanac; left in place`;
+    assert.ok(stdout.split('\n').includes(line), `missing the whole line ${JSON.stringify(line)} in:\n${stdout}`);
+    assert.equal(lstatSync(resolve(proj, '.agents/skills/commit-changes')).isSymbolicLink(), true, 'the manifest\'s item is linked');
+  });
+});
