@@ -36,7 +36,10 @@ export function childPath(base, name) {
  * @typedef {Object} InstallResult
  * @property {string} action - 'created' | 'updated' | 'skipped'
  * @property {string} path - The path where content was installed
- * @property {string} [details] - Additional info
+ * @property {string} [details] - Additional info. Not printed.
+ * @property {string} [reason] - Why a 'skipped' entry was kept: 'foreign' when
+ *   it is not a link, so not something the CLI made (cli/lib/placement.js)
+ * @property {string} [note] - Printed after the path, for the user to read
  */
 
 /**

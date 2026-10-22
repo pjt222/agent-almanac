@@ -65,14 +65,12 @@ export class HermesAdapter extends FrameworkAdapter {
     if (item.type === 'skill') {
       const domain = item.domain || 'general';
       const targetPath = childPath(childPath(this._skillsBase(), domain), item.id);
-      if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      return removeEntry(targetPath);
+      return removeEntry(targetPath, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {
       const targetPath = childPath(this._agentsBase(), `${item.id}.md`);
-      if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      return removeEntry(targetPath);
+      return removeEntry(targetPath, { dryRun: options.dryRun });
     }
 
     return { action: 'skipped', path: '', details: `${item.type}s not supported` };

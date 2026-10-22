@@ -68,11 +68,7 @@ export class UniversalAdapter extends FrameworkAdapter {
 
     const targetPath = childPath(targetBase, item.id);
 
-    if (options.dryRun) {
-      return { action: 'removed', path: targetPath, details: 'dry-run' };
-    }
-
-    return removeEntry(targetPath);
+    return removeEntry(targetPath, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir, scope) {

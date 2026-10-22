@@ -2477,12 +2477,17 @@ const LINK_DETAILS = {
   exists: 'already exists',
 };
 
-/** The uninstall result for each state, for the ten sites that share one shape. */
+/**
+ * The uninstall result for each state, for the ten sites that share one shape.
+ * At b3275420a a dry run over an absent item reported "removed" at these ten:
+ * it returned before looking. It reports what the real run does since the
+ * ownership guard, which a dry run has to apply too (S3-B2 P2a).
+ */
 const UNINSTALL_SHAPE = {
   dryPresent: (path) => ({ action: 'removed', path, details: 'dry-run' }),
   removed: (path) => ({ action: 'removed', path }),
   absent: (path) => ({ action: 'skipped', path, details: 'not installed' }),
-  dryAbsent: (path) => ({ action: 'removed', path, details: 'dry-run' }),
+  dryAbsent: (path) => ({ action: 'skipped', path, details: 'not installed' }),
 };
 
 /**
@@ -2980,4 +2985,127 @@ describe('a dangling link at a link site is seen, removed and replaced (#993 §2
       });
     });
   }
+});
+
+describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d)', () => {
+  // The CLI makes only links at these paths. At d3b229f3c uninstall unlinked
+  // whatever regular file it found there, and install --force unlinked it and
+  // wrote a link in its place (P2a, P2d). A directory survived only because
+  // unlinkSync cannot remove one: uninstall and install --force both reported
+  // it failed (EISDIR, EEXIST). Now anything that is not a link is kept and
+  // reported "skipped" with a note saying why; the note is pinned whole.
+  const KEPT_NOTE = 'not installed by agent-almanac; left in place';
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-user-entry-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** A user's regular file at the site's path. */
+  const plantUserFile = (path) => {
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, USER_CONTENT);
+  };
+  const kept = (path) => ({ action: 'skipped', path, reason: 'foreign', note: KEPT_NOTE });
+
+  for (const site of LINK_SITES) {
+    const scope = site.scopes[0];
+
+    it(`${site.site} (${scope}): uninstall keeps a user's own file, and its dry run says so`, async () => {
+      await inLinkSandbox(tmpRoot, `uninstall-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantUserFile(path);
+        const adapter = site.adapter();
+        const item = linkItem(site, sb);
+        assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, {}), kept(path));
+        assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+        assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, { dryRun: true }), kept(path));
+        assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+      });
+    });
+
+    it(`${site.site} (${scope}): install --force keeps a user's own file`, async () => {
+      await inLinkSandbox(tmpRoot, `force-${siteSlug(site)}`, async (sb) => {
+        const path = site.path(sb, scope);
+        plantUserFile(path);
+        assert.deepEqual(
+          await site.adapter().install(linkItem(site, sb), sb.proj, scope, { almanacRoot: sb.src, force: true }),
+          kept(path),
+        );
+        assert.equal(lstatSync(path).isSymbolicLink(), false, 'no link was written over it');
+        assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+      });
+    });
+  }
+
+  it('a user\'s own .claude/agents directory is kept by uninstall and by install --force', async () => {
+    // The realistic case: a project's own agents directory at the path where
+    // claude-code links the almanac's. It survived before only because
+    // unlinkSync cannot remove a directory.
+    const site = LINK_SITES.find((s) => s.site === 'claude-code agents directory');
+    await inLinkSandbox(tmpRoot, 'claude-agents-dir', async (sb) => {
+      const path = site.path(sb, 'project');
+      mkdirSync(path, { recursive: true });
+      writeFileSync(resolve(path, 'my-agent.md'), USER_CONTENT);
+      const adapter = site.adapter();
+      const item = linkItem(site, sb);
+      assert.deepEqual(await adapter.uninstall(item, sb.proj, 'project', {}), kept(path));
+      assert.deepEqual(await adapter.install(item, sb.proj, 'project', { almanacRoot: sb.src, force: true }), kept(path));
+      assert.deepEqual(readdirSync(path), ['my-agent.md']);
+      assert.equal(readFileSync(resolve(path, 'my-agent.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('cursor removes its legacy rule beside a kept skill entry and names the kept one', async () => {
+    // cursor removes two paths: the skill link and a legacy .mdc rule the CLI
+    // writes as a file. A user's entry at the first must not stop the second.
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule', async (sb) => {
+      const path = site.path(sb, 'project');
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      plantUserFile(path);
+      mkdirSync(dirname(rule), { recursive: true });
+      writeFileSync(rule, 'legacy rule\n');
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'removed', path: rule, note: `kept ${path}: ${KEPT_NOTE}` },
+      );
+      assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+      assert.equal(existsSync(rule), false);
+    });
+  });
+
+  it('the CLI prints the kept entry with its note, for uninstall and install --force', () => {
+    const root = resolve(tmpRoot, 'cli');
+    const home = resolve(root, 'home');
+    const proj = resolve(root, 'proj');
+    const userFile = resolve(proj, '.opencode/agents/code-reviewer.md');
+    mkdirSync(home, { recursive: true });
+    plantUserFile(userFile);
+    const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
+    delete env.LOCALAPPDATA;
+    const spawnCli = (args) => {
+      const res = spawnSync(process.execPath, [cliEntry, ...args, '-f', 'opencode', '--source', ROOT],
+        { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
+      assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+      return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+    };
+    const line = `  = code-reviewer [opencode] ${userFile}  ${KEPT_NOTE}`;
+
+    const removed = spawnCli(['uninstall', 'code-reviewer']);
+    assert.equal(removed.status, 0, `${removed.stdout}\n${removed.stderr}`);
+    assert.equal(readFileSync(userFile, 'utf8'), USER_CONTENT);
+    assert.ok(removed.stdout.split('\n').includes(line), `missing the whole line ${JSON.stringify(line)} in:\n${removed.stdout}`);
+    assert.ok(removed.stdout.split('\n').includes('  1 skipped'), removed.stdout);
+
+    const forced = spawnCli(['install', '-a', 'code-reviewer', '--force']);
+    assert.equal(forced.status, 0, `${forced.stdout}\n${forced.stderr}`);
+    assert.equal(readFileSync(userFile, 'utf8'), USER_CONTENT);
+    assert.ok(forced.stdout.split('\n').includes(line), `missing the whole line ${JSON.stringify(line)} in:\n${forced.stdout}`);
+  });
 });

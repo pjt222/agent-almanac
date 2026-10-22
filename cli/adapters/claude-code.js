@@ -116,14 +116,12 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
 
     if (item.type === 'skill') {
       const targetPath = childPath(resolve(base, 'skills'), item.id);
-      if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      return removeEntry(targetPath);
+      return removeEntry(targetPath, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {
       const agentsLink = resolve(base, 'agents');
-      if (options.dryRun) return { action: 'removed', path: agentsLink, details: 'dry-run' };
-      return removeEntry(agentsLink);
+      return removeEntry(agentsLink, { dryRun: options.dryRun });
     }
 
     if (item.type === 'team') {

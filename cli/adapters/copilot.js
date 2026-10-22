@@ -50,10 +50,7 @@ export class CopilotAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     // Remove from skills dir
     const skillPath = childPath(this._skillsDir(projectDir), item.id);
-    if (classify(skillPath).kind !== 'absent') {
-      if (options.dryRun) return { action: 'removed', path: skillPath, details: 'dry-run' };
-      return removeEntry(skillPath);
-    }
+    if (classify(skillPath).kind !== 'absent') return removeEntry(skillPath, { dryRun: options.dryRun });
 
     // Remove from instructions file
     const instrFile = this._instructionsFile(projectDir);

@@ -9,7 +9,7 @@
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
 import { resolve, relative } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
-import { classify, clearForInstall } from '../lib/placement.js';
+import { clearForInstall, removeEntry } from '../lib/placement.js';
 import { condenseSkill, wrapAsMdc } from '../lib/transformer.js';
 
 export class CursorAdapter extends FrameworkAdapter {
@@ -69,20 +69,21 @@ export class CursorAdapter extends FrameworkAdapter {
     const skillPath = childPath(resolve(projectDir, '.cursor/skills'), item.id);
     const rulePath = childPath(resolve(projectDir, '.cursor/rules'), `${item.id}.mdc`);
 
-    // skillPath is a link install made, so it is tested by lstat: existsSync
-    // follows a link and misses a dangling one. rulePath is a file
-    // installLegacyRule writes, never a link.
-    const present = [
-      classify(skillPath).kind !== 'absent' ? skillPath : null,
-      existsSync(rulePath) ? rulePath : null,
-    ].filter(Boolean);
-    for (const p of present) {
-      if (!options.dryRun) unlinkSync(p);
-      results.push(p);
+    // skillPath is a link install made, so it goes through removeEntry, which
+    // sees a dangling link and keeps anything that is not a link. rulePath is
+    // a file installLegacyRule writes, never a link: existsSync is right for it.
+    const skill = removeEntry(skillPath, { dryRun: options.dryRun });
+    if (skill.action === 'removed') results.push(skillPath);
+    if (existsSync(rulePath)) {
+      if (!options.dryRun) unlinkSync(rulePath);
+      results.push(rulePath);
     }
 
-    if (results.length === 0) return { action: 'skipped', path: '', details: 'not installed' };
-    return { action: 'removed', path: results.join(', ') };
+    if (results.length === 0) {
+      return skill.note ? skill : { action: 'skipped', path: '', details: 'not installed' };
+    }
+    const removed = { action: 'removed', path: results.join(', ') };
+    return skill.note ? { ...removed, note: `kept ${skillPath}: ${skill.note}` } : removed;
   }
 
   async listInstalled(projectDir) {

@@ -72,8 +72,7 @@ export class OpenClawAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
       const targetPath = childPath(this._workspaceDir(), item.id);
-      if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-      return removeEntry(targetPath);
+      return removeEntry(targetPath, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {

@@ -43,8 +43,7 @@ export class GeminiAdapter extends FrameworkAdapter {
 
   async uninstall(item, projectDir, scope, options = {}) {
     const targetPath = childPath(this._skillsDir(projectDir), item.id);
-    if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-    return removeEntry(targetPath);
+    return removeEntry(targetPath, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir) {

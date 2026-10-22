@@ -74,8 +74,7 @@ export class OpenCodeAdapter extends FrameworkAdapter {
       ? childPath(targetBase, `${item.id}.md`)
       : childPath(targetBase, item.id);
 
-    if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-    return removeEntry(targetPath);
+    return removeEntry(targetPath, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir, scope) {
