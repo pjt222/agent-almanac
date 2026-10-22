@@ -6,6 +6,7 @@
  */
 
 import { warn } from './reporter.js';
+import { assertPlainItemIds } from './item-id.js';
 
 /**
  * Warn when the requested scope will not be honoured, per adapter and content
@@ -118,6 +119,10 @@ export async function installAll(resolved, adapters, projectDir, scope, options)
     ...resolved.teams,
   ];
 
+  // Before anything is written: an id becomes a path segment in every adapter,
+  // so one that is not a plain name refuses the whole run (cli/lib/item-id.js).
+  assertPlainItemIds(allItems);
+
   // Derived from the items actually being installed rather than from the
   // adapter's full contentTypes: an agent-only install must not warn about
   // skills, and vibe's split means the answer differs per type.
@@ -187,6 +192,10 @@ export async function uninstallAll(resolved, adapters, projectDir, scope, option
     ...resolved.agents,
     ...resolved.teams,
   ];
+
+  // Before anything is removed: an unknown name is still handed to the
+  // adapters as a skill id, so a name that is not plain refuses the whole run.
+  assertPlainItemIds(allItems);
 
   warnUnsupportedScopes(adapters, scope, {
     contentTypes: [...new Set(allItems.map((i) => i.type))],
