@@ -156,7 +156,7 @@ removes that directory and every link into it dangles; `npm update` replaces
 it, so the links either follow the new version silently (except that a link
 to an item it removed dangles) or, in a version-keyed layout (npm
 `install-strategy=linked`, measured; pnpm, by inference), break. There are
-two ways forward:
+three ways forward:
 
 ```bash
 # From a clone: the links point at a directory you control. Pass --source on
@@ -165,12 +165,40 @@ two ways forward:
 git clone https://github.com/pjt222/agent-almanac.git ~/agent-almanac
 agent-almanac install commit-changes --source ~/agent-almanac
 
+# Or copy out of the npm package (a NOTE on stderr): the copies outlast npm update and npm uninstall
+agent-almanac install commit-changes --from-package copy
+agent-almanac audit    # warns, exit 0, when a copy's version differs from this CLI's or a copy was edited
+
 # Or link into the npm package anyway (it warns, on stderr), and audit after every npm update
 agent-almanac install commit-changes --from-package link
 agent-almanac audit    # exits 3 on links that broke; it cannot tell that an update changed their content
 ```
 
-`--from-package` currently accepts only `link`; any other value is rejected.
+**Copies.** A copied directory holds a marker, `.agent-almanac-copy.json`; a
+copied agent file has a hidden sidecar beside it,
+`.<name>.agent-almanac-copy.json`. The marker records the package's name and
+version (from its `package.json`), the item, its path in the package, when it
+was copied and a sha256 of every file, and no absolute path, so a project can
+commit its copies. `list --installed` shows a copy as
+`commit-changes skill (copy, agent-almanac 1.9.1)`.
+
+- `uninstall`, `scatter` and `sync` remove a copy only while its marker names it
+  and every recorded file is unchanged, with nothing added. An edited copy is
+  kept, and the changed files are named; delete it by hand to remove it. Not
+  edits: a file whose only change is LF turned into CRLF, and files an OS or
+  editor drops that were not copied (`.DS_Store`, `Thumbs.db`, `desktop.ini`,
+  vim swap files, emacs lock and auto-save files, `*~` backups, `__pycache__`).
+- `install --force --from-package copy` replaces a link or an unedited copy;
+  never an edited copy, and never a file or directory the CLI did not make.
+  Without `--force`, `install` and `gather` keep what is there and say what it
+  is: `gather` on stderr, so `--json` stays one document.
+- `audit` lists copies by version and warns, exit 0, when a copy's version
+  differs from the running CLI's, when a copy was edited, and when a marker
+  cannot be read. Run it, and `uninstall`, with the install's scope and
+  frameworks, as for links.
+- From a root that is not an npm package, `--from-package copy` is refused and
+  `--from-package link` says on stderr that it has no effect.
+- Measured on Linux (WSL), Node 22, 24 and 26. Windows is unmeasured.
 
 A root counts as an npm package when a `node_modules` path segment appears in
 it, as given or as its real path. Two limits follow. The match is

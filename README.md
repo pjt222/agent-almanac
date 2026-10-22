@@ -102,7 +102,7 @@ Outside a checkout, `list`, `search` and `audit` read the content shipped in the
 package. `install` (like `gather` and `sync`) refuses to install from it by default. It installs
 by linking your frameworks' skill folders to the content, and npm says nothing about links it did
 not make: `npm uninstall` leaves links into the package dangling, and `npm update` can break them
-or silently change the content under them. The refusal names the two ways forward:
+or silently change the content under them. The refusal names three ways forward:
 
 - **From a clone (recommended).** The links then point at a directory you control. Pass `--source`
   on every install from that project, not only the first: root detection does not yet follow the
@@ -111,6 +111,23 @@ or silently change the content under them. The refusal names the two ways forwar
   git clone https://github.com/pjt222/agent-almanac.git ~/agent-almanac
   agent-almanac install commit-changes --source ~/agent-almanac
   ```
+- **Copied out of the npm package.** Each item is copied into your frameworks' folders, with a
+  marker that records the package version and a checksum of every file. The copies do not change
+  with `npm update` and stay after `npm uninstall`, so nothing needs removing first.
+  ```bash
+  agent-almanac install commit-changes --from-package copy
+  ```
+  `agent-almanac audit` warns, and exits 0, when the CLI's version differs from the copies' or a
+  copy was edited. To update copies, run `install <names> --force --from-package copy`, which
+  replaces only copies you have not edited. `agent-almanac uninstall <names>` removes a copy only
+  while every file in it is as copied: it keeps an edited copy and names the changed files, and it
+  never removes a file or directory it did not make. Line endings turned into CRLF, and files an OS
+  or editor drops (`.DS_Store`, swap files, `__pycache__`), do not count as edits.
+  - **The same scope and frameworks, and every name.** Run `audit` and `uninstall` with the
+    install's `-g` or `--scope` and `-f`, or, without `-f`, where `agent-almanac detect` lists the
+    frameworks the install did: a bare `audit` after a `-g` install reads the project and reports
+    nothing installed. Give `uninstall` every id on the install's `+` lines, as for links below.
+  - Measured on Linux (WSL); copy mode on Windows is unmeasured.
 - **Into the npm package anyway.** It warns. `agent-almanac audit` reports any link that broke and
   exits 3; it does not report that an `npm update` changed the content under a link.
   ```bash
