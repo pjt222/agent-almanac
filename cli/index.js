@@ -997,6 +997,20 @@ program
       });
     }
 
+    // The ceremony and --json are built from the plan, not from what the
+    // removal did, so each removal that failed is named here: a copy whose
+    // staging directory could not be deleted has left its install path, and no
+    // listing shows it (discard(), #999). stderr, so `scatter --json` stays one
+    // document; --quiet already printed every failure with its result, in the
+    // same words as this line.
+    if (!options.quiet) {
+      for (const r of uninstallResults) {
+        if (r.error) {
+          console.error(`  ${reporter.chalk.red('!')} ${r.item.id} ${reporter.chalk.dim(`[${r.adapter}]`)} ${reporter.chalk.red(r.error)}`);
+        }
+      }
+    }
+
     // Update state
     if (!options.dryRun) {
       recordScatter(state, name);

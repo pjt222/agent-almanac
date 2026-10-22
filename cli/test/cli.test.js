@@ -1393,6 +1393,44 @@ describe('npm package root (#606)', () => {
     assert.equal(existsSync(resolve(dir, '.claude/skills/commit-changes/notes.md')), true);
   });
 
+  it('scatter names a removal that failed once, on stderr, or with its result under --quiet (#999)', { skip: process.platform === 'win32' || process.getuid?.() === 0 }, () => {
+    // A junk-only directory keeps the copy unedited, and at 0o555 the file in
+    // it cannot be deleted: discard() moves the copy into a staging directory,
+    // cannot delete that, and throws an error naming it. The ceremony and
+    // --json are built from the plan, so before #999 only --quiet printed the
+    // error, and the copy was left where no listing shows it. --quiet runs
+    // first: it printed the error before #999 too, so it proves the matcher.
+    for (const mode of [['--quiet'], [], ['--json']]) {
+      const label = mode[0] ?? 'ceremony';
+      const dir = project(`copy-scatter-failed-${label.replace(/^--/, '')}`);
+      const gathered = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
+      assert.equal(gathered.status, 0, `exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+      const base = resolve(dir, '.claude/skills');
+      const junkDir = resolve(base, 'commit-changes/junkdir');
+      mkdirSync(junkDir);
+      writeFileSync(resolve(junkDir, '.DS_Store'), 'x');
+      chmodSync(junkDir, 0o555);
+      try {
+        const scattered = spawnCli(['scatter', 'fixture-team', '-y', ...mode, '--source', pkgRoot], dir);
+        assert.equal(scattered.status, 0, `${label}: exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
+        if (label === '--json') {
+          assert.doesNotThrow(() => JSON.parse(scattered.stdout), `${label}: stdout is not one JSON document:\n${scattered.stdout}`);
+        }
+        const staging = readdirSync(base).filter((name) => name.startsWith('.agent-almanac-staging-'));
+        assert.equal(staging.length, 1, `${label}: ${staging}`);
+        const tail = `; ${resolve(base, 'commit-changes')} has left its install path, ` +
+          `and what is left of it is in ${resolve(base, staging[0])}: delete that by hand`;
+        const named = (text) => text.split('\n').filter((line) => line.startsWith('  ! commit-changes [claude-code] ') && line.endsWith(tail));
+        const [printedOn, silentOn] = label === '--quiet' ? [scattered.stdout, scattered.stderr] : [scattered.stderr, scattered.stdout];
+        const output = `stdout:\n${scattered.stdout}\nstderr:\n${scattered.stderr}`;
+        assert.equal(named(printedOn).length, 1, `${label}: the failed removal is not named once where it should be\n${output}`);
+        assert.equal(named(silentOn).length, 0, `${label}: the failed removal is named twice\n${output}`);
+      } finally {
+        execSync(`chmod -R u+w "${dir}"`);
+      }
+    }
+  });
+
   it('scatter --json lists the copies it kept in sorted order', () => {
     // Two edited copies whose results arrive out of order: the agent lists
     // commit-changes before a-first-skill (review round 1, F8).
