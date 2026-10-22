@@ -8,7 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync, spawnSync } from 'child_process';
-import { copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
 import { createHash } from 'crypto';
 import { tmpdir, homedir } from 'os';
 import { dirname, isAbsolute, resolve } from 'path';
@@ -3815,15 +3815,66 @@ describe('copy placement: what counts as edited (#606 part 2)', () => {
 
   it('OS and editor junk the marker does not record is not an edit (D1)', async () => {
     await withCopy('junk', (entry, marker) => {
-      for (const junk of ['.DS_Store', 'Thumbs.db', 'desktop.ini', '.SKILL.md.swp', '#SKILL.md#', 'SKILL.md~', 'references/.DS_Store']) {
+      for (const junk of ['.DS_Store', 'Thumbs.db', 'desktop.ini', '.SKILL.md.swp', '#SKILL.md#', 'references/.DS_Store']) {
         writeFileSync(resolve(entry, junk), 'junk');
       }
       symlinkSync('user@host.1234', resolve(entry, '.#SKILL.md'));
       mkdirSync(resolve(entry, '__pycache__'));
       writeFileSync(resolve(entry, '__pycache__/tool.cpython-312.pyc'), 'junk');
       assert.deepEqual(placement.diffCopy(entry, marker), none);
+      // A `~` backup is not junk (D1-amended): it can hold the only copy of an edit.
+      writeFileSync(resolve(entry, 'SKILL.md~'), USER_CONTENT);
       writeFileSync(resolve(entry, 'notes.md'), USER_CONTENT);
-      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: ['notes.md'] }, 'control: a real file still counts');
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: ['SKILL.md~', 'notes.md'] },
+        'control: a real file still counts, and so does a ~ backup');
+    });
+  });
+
+  // Review round 1 (AD-1, DL-1, F1): junk was matched against every segment of
+  // a path, so a user's directory named like an editor file hid everything in
+  // it, and uninstall, sync, scatter and install --force deleted those files
+  // with the copy. Junk is now matched by an entry's own name (D1-amended).
+
+  it('a user\'s files under a directory named like junk count as added: junk is matched by an entry\'s own name (D1-amended)', async () => {
+    await withCopy('junk-named-dirs', (entry, marker) => {
+      for (const rel of ['notes~/plan.md', '#drafts#/plan.md', '.#work/plan.md', '.plans.swp/plan.md']) {
+        mkdirSync(resolve(entry, dirname(rel)));
+        writeFileSync(resolve(entry, rel), USER_CONTENT);
+      }
+      assert.deepEqual(placement.diffCopy(entry, marker),
+        { ...none, added: ['#drafts#/plan.md', '.#work/plan.md', '.plans.swp/plan.md', 'notes~/plan.md'] });
+    });
+  });
+
+  it('a user\'s file named like a backup counts as added: `~` is not junk (D1-amended)', async () => {
+    await withCopy('tilde-file', (entry, marker) => {
+      writeFileSync(resolve(entry, 'ideas~'), USER_CONTENT);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: ['ideas~'] });
+    });
+  });
+
+  it('under __pycache__ only bytecode is junk: a user\'s file there counts as added (D1-amended)', async () => {
+    await withCopy('pycache', (entry, marker) => {
+      mkdirSync(resolve(entry, '__pycache__'));
+      writeFileSync(resolve(entry, '__pycache__/x.cpython-312.pyc'), 'junk');
+      writeFileSync(resolve(entry, '__pycache__/x.opt-1.pyo'), 'junk');
+      assert.deepEqual(placement.diffCopy(entry, marker), none, 'control: bytecode alone is junk');
+      writeFileSync(resolve(entry, '__pycache__/notes.md'), USER_CONTENT);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: ['__pycache__/notes.md'] });
+    });
+  });
+
+  it('SKILL.md renamed to SKILL.md~ and edited makes the copy edited (D1-amended)', async () => {
+    // `missing` alone never blocks removal, so this was junk plus a missing
+    // file, and the edit went with the copy (DL-2).
+    await withCopy('renamed-backup', (entry, marker) => {
+      renameSync(resolve(entry, 'SKILL.md'), resolve(entry, 'SKILL.md~'));
+      writeFileSync(resolve(entry, 'SKILL.md~'), USER_CONTENT, { flag: 'a' });
+      assert.deepEqual(placement.diffCopy(entry, marker), { modified: [], added: ['SKILL.md~'], missing: ['SKILL.md'] });
+      assert.deepEqual(placement.ownership(entry, placement.classify(entry), 'remove'), {
+        removable: false, reason: 'edited',
+        note: 'edited since it was copied (added: SKILL.md~); kept, delete it by hand to remove it',
+      });
     });
   });
 });
@@ -3925,6 +3976,47 @@ describe('copy placement: the uninstall guard (#606 part 2)', () => {
           { action: 'removed', path: resolve(base, 'commit-changes'), details: 'copy' }, base);
         assert.deepEqual(readdirSync(base), [], base);
       }
+    });
+  });
+
+  it('keeps a copy holding a user\'s file under a directory named like junk, or SKILL.md renamed to SKILL.md~ and edited, naming the file (D1-amended)', async () => {
+    // At 2fd66b6f7 each of these was removed, the user's file with it (AD-1, DL-1, DL-2).
+    await inLinkSandbox(tmpRoot, 'junk-shaped', async (sb) => {
+      for (const [dir, rel] of [['emacs-dir', '#drafts#/plan.md'], ['tilde-dir', 'notes~/plan.md'], ['renamed', 'SKILL.md~']]) {
+        const base = resolve(sb.proj, dir);
+        const entry = resolve(base, 'commit-changes');
+        copySkill(sb, base);
+        if (rel === 'SKILL.md~') {
+          renameSync(resolve(entry, 'SKILL.md'), resolve(entry, rel));
+          writeFileSync(resolve(entry, rel), USER_CONTENT, { flag: 'a' });
+        } else {
+          mkdirSync(resolve(entry, dirname(rel)));
+          writeFileSync(resolve(entry, rel), USER_CONTENT);
+        }
+        assert.deepEqual(placement.removeEntry(base, 'commit-changes'), {
+          action: 'skipped', path: entry, reason: 'edited',
+          note: `edited since it was copied (added: ${rel}); kept, delete it by hand to remove it`,
+        }, rel);
+        assert.ok(readFileSync(resolve(entry, rel), 'utf8').endsWith(USER_CONTENT), rel);
+      }
+    });
+  });
+
+  it('claude-code\'s agents copy, where users keep their own agents: archive~/my-agent.md survives uninstall (D1-amended)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'claude-code agents directory');
+    await inLinkSandbox(tmpRoot, 'claude-agents-archive', async (sb) => {
+      const adapter = site.adapter();
+      const item = linkItem(site, sb);
+      const path = site.path(sb, 'project');
+      assert.deepEqual(await adapter.install(item, sb.proj, 'project', { almanacRoot: sb.src, placement: 'copy', copyFrom: COPY_FROM }),
+        { action: 'created', path, details: 'copy' });
+      mkdirSync(resolve(path, 'archive~'));
+      writeFileSync(resolve(path, 'archive~/my-agent.md'), USER_CONTENT);
+      assert.deepEqual(await adapter.uninstall(item, sb.proj, 'project', {}), {
+        action: 'skipped', path, reason: 'edited',
+        note: 'edited since it was copied (added: archive~/my-agent.md); kept, delete it by hand to remove it',
+      });
+      assert.equal(readFileSync(resolve(path, 'archive~/my-agent.md'), 'utf8'), USER_CONTENT);
     });
   });
 

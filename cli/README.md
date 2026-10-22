@@ -187,7 +187,8 @@ commit its copies. `list --installed` shows a copy as
   kept, and the changed files are named; delete it by hand to remove it. Not
   edits: a file whose only change is LF turned into CRLF, and files an OS or
   editor drops that were not copied (`.DS_Store`, `Thumbs.db`, `desktop.ini`,
-  vim swap files, emacs lock and auto-save files, `*~` backups, `__pycache__`).
+  vim swap files, emacs auto-save and lock files, and `.pyc` or `.pyo` files
+  under `__pycache__`).
 - `install --force --from-package copy` replaces a link or an unedited copy;
   never an edited copy, and never a file or directory the CLI did not make.
   Without `--force`, `install` and `gather` keep what is there and say what it

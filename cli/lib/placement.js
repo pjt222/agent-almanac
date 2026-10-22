@@ -55,23 +55,49 @@ const SHA256_RE = /^sha256:[0-9a-f]{64}$/;
 /**
  * Names an operating system or an editor drops into a directory. One that the
  * marker does not record does not make a copy "edited" (the maintainer's
- * decision D1, 2026-10-21); a recorded file of such a name is compared like
- * any other. Matched against every segment of a path, so a whole __pycache__
- * directory counts, at any depth.
+ * decision D1, 2026-10-21, amended 2026-10-22 after review round 1); a
+ * recorded file of such a name is compared like any other.
+ *
+ * Matched against an entry's own name only, never against the directories
+ * above it: a user's directory named like one of these (`#drafts#/`,
+ * `.#work/`, `.plans.swp/`) hides nothing, and the files in it count as
+ * added. Python's bytecode is the one case decided by a directory: a `.pyc`
+ * or `.pyo` file under a `__pycache__` directory (PYCACHE_DIR,
+ * BYTECODE_PATTERN), at any depth; any other file there counts as added.
  */
-export const JUNK_NAMES = Object.freeze(['.DS_Store', 'Thumbs.db', 'desktop.ini', '__pycache__']);
+export const JUNK_NAMES = Object.freeze(['.DS_Store', 'Thumbs.db', 'desktop.ini']);
 
-/** Editor files, by name pattern. Same rule as JUNK_NAMES. */
+/**
+ * Editor files, by name pattern. Same rule as JUNK_NAMES. A `~` backup is not
+ * one: it can hold the only copy of a user's edit (D1 names swap files, not
+ * backups).
+ */
 export const JUNK_PATTERNS = Object.freeze([
   /^\..+\.sw[a-p]$/, // vim swap files: .SKILL.md.swp, .SKILL.md.swo, … down to .swa
   /^\.#/, //            emacs lock files: .#SKILL.md
   /^#.+#$/, //          emacs auto-save files: #SKILL.md#
-  /~$/, //              backup files: SKILL.md~
 ]);
 
-/** @param {string} name - One path segment */
+/** The directory Python writes bytecode into; only BYTECODE_PATTERN files under it are junk. */
+export const PYCACHE_DIR = '__pycache__';
+
+/** Python bytecode, junk only under a PYCACHE_DIR. */
+export const BYTECODE_PATTERN = /\.py[co]$/;
+
+/** @param {string} name - An entry's own name */
 export function isJunkName(name) {
   return JUNK_NAMES.includes(name) || JUNK_PATTERNS.some((pattern) => pattern.test(name));
+}
+
+/**
+ * Whether an entry inside a copy that its marker does not record is junk:
+ * by its own name (isJunkName), or as bytecode under a PYCACHE_DIR.
+ * @param {string} rel - The entry's relative POSIX path inside the copy
+ */
+export function isJunkPath(rel) {
+  const segments = rel.split('/');
+  const name = segments.at(-1);
+  return isJunkName(name) || (segments.slice(0, -1).includes(PYCACHE_DIR) && BYTECODE_PATTERN.test(name));
 }
 
 /**
@@ -239,10 +265,12 @@ function walk(root, visit, relDir = '') {
  * - `modified`: a recorded file whose content differs (CRLF-only aside), or
  *   that is no longer a regular file.
  * - `added`: a file, link or other entry the marker does not record, except
- *   junk (isJunkName). Directories are not recorded, so an empty one is not
- *   reported; the files in a new one are.
+ *   junk (isJunkPath, which reads the entry's own name). Directories are not
+ *   recorded, so an empty one is not reported; the files in a new one are.
  * - `missing`: a recorded file that is gone. Missing alone does not make a
- *   copy edited: removing the rest loses nothing of the user's.
+ *   copy edited: removing the rest loses nothing of the user's, unless the
+ *   file was renamed to a junk name (a vim swap or emacs auto-save name) and
+ *   edited there, which is the cost D1 accepts for those names.
  *
  * The marker inside a directory copy is written, not copied, so it is not
  * recorded and is skipped: at the root of the copy only (critique F7). A
@@ -259,7 +287,7 @@ export function diffCopy(entryPath, marker) {
   const seen = new Set();
   const compare = (rel, abs, stat) => {
     if (!Object.hasOwn(recorded, rel)) {
-      if (!rel.split('/').some(isJunkName)) added.push(rel);
+      if (!isJunkPath(rel)) added.push(rel);
       return;
     }
     seen.add(rel);
