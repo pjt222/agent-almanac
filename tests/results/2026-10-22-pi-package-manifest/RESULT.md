@@ -21,6 +21,27 @@ Every source has one fixture added: a root-level `skills/zz-probe.md` with a `na
 - **The prompt figures** are pi's own `formatSkillsForPrompt()` over the loaded skills, with tokens by pi's chars/4 estimate. They include each skill's absolute path, so they vary with the install location.
 - **`pi install <dir>`** wrote `{"packages": ["../npm-manifest/package"]}` into the redirected agent directory's `settings.json` and loaded the same 27 skills. `pi install npm:agent-almanac` itself needs a published version and was not run.
 
+### `pi install npm:agent-almanac` today: 1.9.1 from the registry
+
+The control a pi user meets before a release carries the key. `pi install npm:agent-almanac` ran in a redirected HOME and agent directory, with npm's cache redirected and `npm_config_ignore_scripts=true`. It installed 1.9.1, which has no `pi` key and no `pi-package` keyword:
+
+| Source | Skills | Skills prompt | Diagnostics |
+|---|---|---|---|
+| `pi install npm:agent-almanac` (registry, 1.9.1) | 371 | 273,624 chars at a 93-character sandbox prefix; 226,029 without the paths | 0 |
+
+The output is in `registry-1.9.1.json`.
+
+### How the figures depend on the install path
+
+pi's block names each skill's absolute path exactly once. This was measured by counting each loaded skill's `filePath` in the rendered block: one occurrence each, in every arm. So a figure moves by (prefix length difference) × (skill count) at another install location.
+
+| Arm | Block without the paths | Prefix ahead of `skills/` |
+|---|---|---|
+| npm pack, no manifest (374 skills) | 228,068 characters | 53 characters |
+| npm pack, manifest (27 skills) | 17,081 characters | 59 characters |
+
+At a typical `/home/<user>/.pi/agent/npm/node_modules/agent-almanac/` prefix of 53 characters, all of 1.9.1's skills come to about 258,800 characters, about 64,700 tokens by pi's chars/4 estimate.
+
 The JSON files beside this one hold each arm's output, with the sandbox root replaced by `<sandbox>`.
 
 ## Recipe
@@ -48,6 +69,6 @@ HOME="$H" PI_OFFLINE=1 node measure-package.mjs "$PI" "<project>" "$A"
 
 ## What this does not measure
 
-- **`pi install npm:agent-almanac` from the registry**, which needs a published version with the key.
+- **`pi install npm:agent-almanac` of a version that carries the key**, which needs a publish. 1.9.1 from the registry is measured above.
 - **The gallery listing** that the `pi-package` keyword makes the package eligible for.
 - **Windows and macOS.**
