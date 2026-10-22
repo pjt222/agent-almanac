@@ -3600,7 +3600,7 @@ describe('copy placement: placeCopy (#606 part 2)', () => {
       copySkill(sb, olderBase, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
       assert.deepEqual(copySkill(sb, olderBase), {
         action: 'skipped', path: resolve(olderBase, 'commit-changes'), reason: 'other-version',
-        note: 'already a copy of agent-almanac 1.0.0; `install --force --from-package copy` replaces it with agent-almanac 9.9.9',
+        note: 'already a copy of agent-almanac 1.0.0; `install --force --from-package copy` replaces it with agent-almanac 9.9.9 if it is unedited',
       });
 
       const userBase = resolve(sb.proj, 'user');

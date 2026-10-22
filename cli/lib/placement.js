@@ -546,9 +546,12 @@ function decide(entryPath, entry, force, copyFrom) {
       if (name === copyFrom.name && version === copyFrom.version) {
         return { action: 'skipped', path: entryPath, reason: 'already-copied', note: `already a copy of ${name} ${version}` };
       }
+      // Without --force nothing is hashed, so the note cannot know whether the
+      // copy was edited; --force keeps an edited one (D1), and the note says so
+      // (review round 1, F3).
       return {
         action: 'skipped', path: entryPath, reason: 'other-version',
-        note: `already a copy of ${name} ${version}; ${installCommand} replaces it with ${copyFrom.name} ${copyFrom.version}`,
+        note: `already a copy of ${name} ${version}; ${installCommand} replaces it with ${copyFrom.name} ${copyFrom.version} if it is unedited`,
       };
     }
     return keep(entryPath, { reason: 'foreign', note: FOREIGN_NOTE });
