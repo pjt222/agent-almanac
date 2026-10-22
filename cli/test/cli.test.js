@@ -8,7 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync, spawnSync } from 'child_process';
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
 import { tmpdir, homedir } from 'os';
 import { dirname, isAbsolute, resolve } from 'path';
 // A namespace import, not named ones: isNpmPackageRoot is new in #606, and a
@@ -2448,4 +2448,427 @@ describe('item names stay inside their install directories', () => {
     assert.equal(r.status, 0, `expected exit 0, got ${r.status}\n${r.stdout}\n${r.stderr}`);
     assert.equal(readFileSync(resolve(dir, '.agents/skills/My_Notes.md'), 'utf8'), SENTINEL);
   });
+});
+
+// ── Link sites (S3-B2) ───────────────────────────────────────────
+//
+// Nine adapters make a link into the content root, at twelve sites in three
+// shapes: nine skill directories, the opencode and hermes agent files, and
+// claude-code's whole agents directory. cursor and copilot link too, whatever
+// their declared `strategy` says. The blocks below drive every site in-process,
+// each test in a throwaway tree of its own, so a change to one site's link
+// writer or remover goes red in that site's row and nowhere else. In-process
+// rather than spawned: the property is about the adapters, not about argument
+// parsing, and #670 measured the per-spawn budget as nearly used up.
+
+/** Content for the two items a link can point at. */
+const LINK_FIXTURE = {
+  skill: '---\nname: commit-changes\n---\nfixture skill\n',
+  agent: '---\nname: code-reviewer\n---\nfixture agent\n',
+};
+
+/** The `details` most sites put on an install result; claude-code's agents directory has its own. */
+const LINK_DETAILS = {
+  dryRunInstall: 'dry-run',
+  created: undefined,
+  exists: 'already exists',
+};
+
+/** The uninstall result for each state, for the ten sites that share one shape. */
+const UNINSTALL_SHAPE = {
+  dryPresent: (path) => ({ action: 'removed', path, details: 'dry-run' }),
+  removed: (path) => ({ action: 'removed', path }),
+  absent: (path) => ({ action: 'skipped', path, details: 'not installed' }),
+  dryAbsent: (path) => ({ action: 'removed', path, details: 'dry-run' }),
+};
+
+/**
+ * Every link site, with the scopes its adapter declares for the content type.
+ * `relTarget` is the link text a project-scope install writes, spelled out
+ * rather than computed with relative(), so a change in how an adapter builds it
+ * cannot be mirrored by the test. A global install links by absolute path.
+ */
+const LINK_SITES = [
+  {
+    site: 'universal skill', adapter: () => new UniversalAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? sb.home : sb.proj, '.agents/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    site: 'claude-code skill', adapter: () => new ClaudeCodeAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? sb.home : sb.proj, '.claude/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    site: 'claude-code agents directory', adapter: () => new ClaudeCodeAdapter(), type: 'agent', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? sb.home : sb.proj, '.claude/agents'),
+    relTarget: '../../src/agents',
+    absTarget: (sb) => resolve(sb.src, 'agents'),
+    details: {
+      dryRunInstall: 'dry-run: agents directory symlink',
+      created: 'agents directory symlink',
+      exists: 'agents symlink already exists',
+    },
+  },
+  {
+    site: 'opencode skill', adapter: () => new OpenCodeAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? resolve(sb.home, '.config/opencode') : resolve(sb.proj, '.opencode'), 'skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    site: 'opencode agent file', adapter: () => new OpenCodeAdapter(), type: 'agent', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? resolve(sb.home, '.config/opencode') : resolve(sb.proj, '.opencode'), 'agents/code-reviewer.md'),
+    // At b3275420a the dry run reports <agents>/<id>, without the .md the real
+    // install writes: the agent branch ran the skill-shaped prefix first.
+    dryRunPath: (sb, scope) => resolve(scope === 'global' ? resolve(sb.home, '.config/opencode') : resolve(sb.proj, '.opencode'), 'agents/code-reviewer'),
+    relTarget: '../../../src/agents/code-reviewer.md',
+  },
+  {
+    site: 'openclaw skill', adapter: () => new OpenClawAdapter(), type: 'skill', scopes: ['global'],
+    path: (sb) => resolve(sb.home, '.openclaw/workspace/commit-changes'),
+  },
+  {
+    site: 'hermes skill', adapter: () => new HermesAdapter(), type: 'skill', scopes: ['global'],
+    path: (sb) => resolve(sb.hermes, 'skills/git/commit-changes'),
+  },
+  {
+    site: 'hermes agent file', adapter: () => new HermesAdapter(), type: 'agent', scopes: ['global'],
+    path: (sb) => resolve(sb.hermes, 'agents/code-reviewer.md'),
+  },
+  {
+    site: 'vibe skill', adapter: () => new VibeAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? sb.home : sb.proj, '.vibe/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    site: 'gemini skill', adapter: () => new GeminiAdapter(), type: 'skill', scopes: ['project'],
+    path: (sb) => resolve(sb.proj, '.gemini/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
+    // cursor reports the paths it removed, joined, without details, and an
+    // empty path when it removed nothing.
+    site: 'cursor skill', adapter: () => new CursorAdapter(), type: 'skill', scopes: ['project'],
+    path: (sb) => resolve(sb.proj, '.cursor/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+    uninstallShape: {
+      dryPresent: (path) => ({ action: 'removed', path }),
+      absent: () => ({ action: 'skipped', path: '', details: 'not installed' }),
+      dryAbsent: () => ({ action: 'skipped', path: '', details: 'not installed' }),
+    },
+  },
+  {
+    site: 'copilot skill', adapter: () => new CopilotAdapter(), type: 'skill', scopes: ['project'],
+    path: (sb) => resolve(sb.proj, '.github/skills/commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+    uninstallShape: {
+      absent: () => ({ action: 'skipped', path: '', details: 'not installed' }),
+      dryAbsent: () => ({ action: 'skipped', path: '', details: 'not installed' }),
+    },
+  },
+];
+
+/** The registry item a site installs. */
+function linkItem(site, sb) {
+  return site.type === 'skill'
+    ? {
+      type: 'skill', id: 'commit-changes', domain: 'git',
+      sourceDir: resolve(sb.src, 'skills/commit-changes'),
+      sourcePath: resolve(sb.src, 'skills/commit-changes/SKILL.md'),
+    }
+    : { type: 'agent', id: 'code-reviewer', sourcePath: resolve(sb.src, 'agents/code-reviewer.md') };
+}
+
+/** The exact text readlinkSync must return after an install at this site and scope. */
+function expectedLinkText(site, sb, scope) {
+  if (scope === 'project') return site.relTarget;
+  if (site.absTarget) return site.absTarget(sb);
+  return resolve(sb.src, site.type === 'skill' ? 'skills/commit-changes' : 'agents/code-reviewer.md');
+}
+
+/** An install result: `details` is present only when the site reports one. */
+function linkResult(action, path, details) {
+  return details === undefined ? { action, path } : { action, path, details };
+}
+
+/**
+ * Run fn in a fresh tree under `parent`: a content root `src`, a project
+ * `proj`, a home and a Hermes home, with HOME, USERPROFILE and HERMES_HOME
+ * pointed at them and LOCALAPPDATA cleared until fn settles. The global sites
+ * read homedir() and resolveHermesHome() at call time, so this is what steers
+ * them away from the real home. `gone` is a path that never exists, the target
+ * of every dangling link.
+ */
+async function inLinkSandbox(parent, name, fn) {
+  const root = resolve(parent, name);
+  const sb = {
+    root,
+    src: resolve(root, 'src'),
+    proj: resolve(root, 'proj'),
+    home: resolve(root, 'home'),
+    hermes: resolve(root, 'hermes-home'),
+    gone: resolve(root, 'gone'),
+  };
+  mkdirSync(resolve(sb.src, 'skills/commit-changes'), { recursive: true });
+  mkdirSync(resolve(sb.src, 'agents'), { recursive: true });
+  writeFileSync(resolve(sb.src, 'skills/commit-changes/SKILL.md'), LINK_FIXTURE.skill);
+  writeFileSync(resolve(sb.src, 'agents/code-reviewer.md'), LINK_FIXTURE.agent);
+  mkdirSync(sb.proj, { recursive: true });
+  mkdirSync(sb.home, { recursive: true });
+  const saved = {
+    HOME: process.env.HOME,
+    USERPROFILE: process.env.USERPROFILE,
+    HERMES_HOME: process.env.HERMES_HOME,
+    LOCALAPPDATA: process.env.LOCALAPPDATA,
+  };
+  process.env.HOME = sb.home;
+  process.env.USERPROFILE = sb.home;
+  process.env.HERMES_HOME = sb.hermes;
+  delete process.env.LOCALAPPDATA;
+  try {
+    return await fn(sb);
+  } finally {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+}
+
+/** A filesystem-safe name for a site's sandbox. */
+const siteSlug = (site) => site.site.replace(/[^a-z0-9]+/g, '-');
+
+describe('link sites: baseline pins (S3-B2 T0)', () => {
+  // Characterisation, green at b3275420a: what every link site does today,
+  // pinned before S3-B2 rewrites the removers and the listings. A later commit
+  // that changes one of these does it on purpose and edits the pin with it.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-link-t0-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('the site table names every scope each adapter declares for the type', () => {
+    for (const site of LINK_SITES) {
+      assert.deepEqual(site.scopes, site.adapter().scopesFor(site.type), site.site);
+    }
+    assert.equal(LINK_SITES.length, 12);
+    assert.equal(new Set(LINK_SITES.map((site) => site.adapter().constructor.id)).size, 9);
+  });
+
+  for (const site of LINK_SITES) {
+    for (const scope of site.scopes) {
+      it(`${site.site} (${scope}): the link text, and every install and uninstall result`, async () => {
+        await inLinkSandbox(tmpRoot, `${siteSlug(site)}-${scope}`, async (sb) => {
+          const adapter = site.adapter();
+          const item = linkItem(site, sb);
+          const opts = { almanacRoot: sb.src };
+          const path = site.path(sb, scope);
+          const details = { ...LINK_DETAILS, ...site.details };
+          const shape = { ...UNINSTALL_SHAPE, ...site.uninstallShape };
+          const linkText = expectedLinkText(site, sb, scope);
+
+          assert.deepEqual(
+            await adapter.install(item, sb.proj, scope, { ...opts, dryRun: true }),
+            linkResult('created', site.dryRunPath ? site.dryRunPath(sb, scope) : path, details.dryRunInstall),
+          );
+          assert.throws(() => lstatSync(path), { code: 'ENOENT' }, 'a dry run makes nothing');
+
+          assert.deepEqual(await adapter.install(item, sb.proj, scope, opts), linkResult('created', path, details.created));
+          assert.equal(readlinkSync(path), linkText);
+
+          assert.deepEqual(await adapter.install(item, sb.proj, scope, opts), linkResult('skipped', path, details.exists));
+          assert.deepEqual(
+            await adapter.install(item, sb.proj, scope, { ...opts, force: true }),
+            linkResult('created', path, details.created),
+          );
+          assert.equal(readlinkSync(path), linkText, '--force writes the same link again');
+
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, { dryRun: true }), shape.dryPresent(path));
+          assert.equal(readlinkSync(path), linkText, 'a dry run removes nothing');
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, {}), shape.removed(path));
+          assert.throws(() => lstatSync(path), { code: 'ENOENT' }, 'uninstall removes the link');
+
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, {}), shape.absent(path));
+          assert.deepEqual(await adapter.uninstall(item, sb.proj, scope, { dryRun: true }), shape.dryAbsent(path));
+        });
+      });
+    }
+  }
+
+  // listInstalled() and audit(), each over one link that resolves and one that
+  // dangles, per content directory the adapter lists. claude-code is included
+  // here, which the broken-symlink block above leaves out (#823). Its two rows
+  // split the pair across scopes: the project row holds resolving skill and
+  // agents links beside a dangling skill link, and pins the broken-skill push;
+  // the global row holds one dangling `.claude/agents` link, and pins what that
+  // produces today.
+  const plant = (dir, name, target) => {
+    mkdirSync(dir, { recursive: true });
+    symlinkSync(target, resolve(dir, name));
+  };
+  const skillSource = (sb) => resolve(sb.src, 'skills/commit-changes');
+  const agentSource = (sb) => resolve(sb.src, 'agents/code-reviewer.md');
+  const byPath = (entries) => [...entries].sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
+  /** The two skill links every case plants: good-skill resolves, ghost-skill dangles. */
+  const plantSkills = (sb, dir) => {
+    plant(dir, 'good-skill', skillSource(sb));
+    plant(dir, 'ghost-skill', sb.gone);
+  };
+  const skillEntries = (sb, dir, extra = {}) => [
+    { id: 'ghost-skill', type: 'skill', ...extra, path: resolve(dir, 'ghost-skill'), broken: true },
+    { id: 'good-skill', type: 'skill', ...extra, path: resolve(dir, 'good-skill'), broken: false },
+  ];
+
+  const LIST_CASES = [
+    {
+      name: 'universal (project)', make: () => new UniversalAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.agents/skills');
+        plantSkills(sb, dir);
+        return {
+          list: [
+            { id: 'ghost-skill', type: 'skill', path: resolve(dir, 'ghost-skill'), isSymlink: true, target: sb.gone, broken: true },
+            { id: 'good-skill', type: 'skill', path: resolve(dir, 'good-skill'), isSymlink: true, target: skillSource(sb), broken: false },
+          ],
+          audit: { framework: 'Universal (.agents/)', ok: ['1 skills installed'], warnings: [], errors: ['1 broken symlinks: ghost-skill'] },
+        };
+      },
+    },
+    {
+      name: 'claude-code (project): skills and a resolving agents link', make: () => new ClaudeCodeAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.claude/skills');
+        plantSkills(sb, dir);
+        plant(resolve(sb.proj, '.claude'), 'agents', resolve(sb.src, 'agents'));
+        return {
+          list: [
+            { id: 'agents', type: 'agent', path: resolve(sb.proj, '.claude/agents'), broken: false },
+            ...skillEntries(sb, dir),
+          ],
+          audit: { framework: 'Claude Code', ok: ['1 skills installed', 'agents symlink valid'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'claude-code (global): a dangling agents link', make: () => new ClaudeCodeAdapter(), scope: 'global',
+      build: (sb) => {
+        plant(resolve(sb.home, '.claude'), 'agents', sb.gone);
+        // At b3275420a listInstalled() tests the agents link with existsSync,
+        // which follows it, so a dangling one is not listed at all and audit()
+        // reports it as missing rather than broken.
+        return {
+          list: [],
+          audit: { framework: 'Claude Code', ok: [], warnings: ['No agents symlink'], errors: [] },
+        };
+      },
+    },
+    {
+      name: 'opencode (project): skills and agent files', make: () => new OpenCodeAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.opencode/skills');
+        const agents = resolve(sb.proj, '.opencode/agents');
+        plantSkills(sb, dir);
+        plant(agents, 'good-agent.md', agentSource(sb));
+        plant(agents, 'ghost-agent.md', sb.gone);
+        return {
+          list: [
+            { id: 'ghost-agent', type: 'agent', path: resolve(agents, 'ghost-agent.md'), broken: true },
+            { id: 'good-agent', type: 'agent', path: resolve(agents, 'good-agent.md'), broken: false },
+            ...skillEntries(sb, dir),
+          ],
+          audit: { framework: 'OpenCode', ok: ['2 items installed'], warnings: [], errors: ['2 broken links'] },
+        };
+      },
+    },
+    {
+      name: 'openclaw (global)', make: () => new OpenClawAdapter(), scope: 'global',
+      build: (sb) => {
+        const dir = resolve(sb.home, '.openclaw/workspace');
+        plantSkills(sb, dir);
+        return {
+          list: skillEntries(sb, dir),
+          audit: { framework: 'OpenClaw/NemoClaw', ok: ['1 skills in workspace'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'hermes (global): skills and agent files', make: () => new HermesAdapter(), scope: 'global',
+      build: (sb) => {
+        const dir = resolve(sb.hermes, 'skills/git');
+        const agents = resolve(sb.hermes, 'agents');
+        plantSkills(sb, dir);
+        plant(agents, 'good-agent.md', agentSource(sb));
+        plant(agents, 'ghost-agent.md', sb.gone);
+        return {
+          list: [
+            { id: 'ghost-agent', type: 'agent', path: resolve(agents, 'ghost-agent.md'), broken: true },
+            { id: 'good-agent', type: 'agent', path: resolve(agents, 'good-agent.md'), broken: false },
+            ...skillEntries(sb, dir, { domain: 'git' }),
+          ],
+          audit: { framework: 'Hermes Agent', ok: ['2 items installed'], warnings: [], errors: ['2 broken links'] },
+        };
+      },
+    },
+    {
+      name: 'vibe (project)', make: () => new VibeAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.vibe/skills');
+        plantSkills(sb, dir);
+        return {
+          list: skillEntries(sb, dir),
+          audit: { framework: 'Mistral Vibe', ok: ['1 items installed'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'gemini (project)', make: () => new GeminiAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.gemini/skills');
+        plantSkills(sb, dir);
+        return {
+          list: skillEntries(sb, dir),
+          audit: { framework: 'Gemini CLI', ok: ['1 skills installed'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'cursor (project)', make: () => new CursorAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.cursor/skills');
+        plantSkills(sb, dir);
+        return {
+          list: [
+            { id: 'ghost-skill', type: 'skill', path: resolve(dir, 'ghost-skill'), format: 'skills', broken: true },
+            { id: 'good-skill', type: 'skill', path: resolve(dir, 'good-skill'), format: 'skills', broken: false },
+          ],
+          audit: { framework: 'Cursor', ok: ['1 items installed'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+    {
+      name: 'copilot (project)', make: () => new CopilotAdapter(), scope: 'project',
+      build: (sb) => {
+        const dir = resolve(sb.proj, '.github/skills');
+        plantSkills(sb, dir);
+        return {
+          list: skillEntries(sb, dir),
+          audit: { framework: 'GitHub Copilot', ok: ['1 skills installed'], warnings: [], errors: ['1 broken skill symlinks'] },
+        };
+      },
+    },
+  ];
+
+  for (const c of LIST_CASES) {
+    it(`${c.name}: listInstalled() and audit()`, async () => {
+      await inLinkSandbox(tmpRoot, `list-${c.name.replace(/[^a-z0-9]+/g, '-')}`, async (sb) => {
+        const expected = c.build(sb);
+        const adapter = c.make();
+        assert.deepEqual(byPath(await adapter.listInstalled(sb.proj, c.scope)), byPath(expected.list));
+        assert.deepEqual(await adapter.audit(sb.proj, c.scope), expected.audit);
+      });
+    });
+  }
 });
