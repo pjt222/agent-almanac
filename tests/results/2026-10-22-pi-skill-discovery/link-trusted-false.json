@@ -1,0 +1,16 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "home": "<sandbox>/home",
+ "cwd": "<sandbox>/proj",
+ "agentDir": "<sandbox>/home/.pi/agent",
+ "requestedTrust": false,
+ "isProjectTrusted": false,
+ "skills": [
+  {
+   "name": "review-pull-request",
+   "filePath": "<sandbox>/home/.agents/skills/review-pull-request/SKILL.md"
+  }
+ ],
+ "diagnostics": []
+}
