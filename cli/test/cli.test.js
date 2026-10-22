@@ -2325,8 +2325,8 @@ describe('item names stay inside their install directories', () => {
     assert.equal(r.status, 1, `expected exit 1, got ${r.status}\n${r.stdout}\n${r.stderr}`);
     assert.match(r.stderr, /not plain ids/);
     assert.deepEqual(readdirSync(resolve(dir, '.agents/skills')), []);
-    // readdirSync, not existsSync: an escaped link the old code made dangles,
-    // and existsSync follows a link, so it would report a dangling one as absent.
+    // Mirrors the registry-id test's arm. On this route the base made no link
+    // (Unknown item), so here it is a pin, not red-first evidence.
     assert.deepEqual(readdirSync(resolve(dir, '.agents')), ['skills']);
   });
 
