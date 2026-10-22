@@ -997,8 +997,9 @@ program
       });
     }
 
-    // The ceremony and --json are built from the plan, not from what the
-    // removal did, so each removal that failed is named here: a copy whose
+    // The ceremony's list of practices and --json's skillsRemoved are built
+    // from the plan, not from what the removal did, and neither carries a
+    // failure, so each removal that failed is named here: a copy whose
     // staging directory could not be deleted has left its install path, and no
     // listing shows it (discard(), #999). stderr, so `scatter --json` stays one
     // document. Skipped only where printResults() has already printed every

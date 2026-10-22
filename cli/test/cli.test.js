@@ -1396,13 +1396,14 @@ describe('npm package root (#606)', () => {
     assert.equal(existsSync(resolve(dir, '.claude/skills/commit-changes/notes.md')), true);
   });
 
-  it('scatter names each removal that failed, once, on stderr, or with its result under --quiet (#999)', { skip: process.platform === 'win32' || process.getuid?.() === 0 }, () => {
+  it('scatter names each removal that failed, once, on stderr, or with its result under --quiet without --json (#999)', { skip: process.platform === 'win32' || process.getuid?.() === 0 }, () => {
     // A junk-only directory keeps a copy unedited, and at 0o555 the file in it
     // cannot be deleted: discard() moves the copy into a staging directory,
-    // cannot delete that, and throws an error naming it. The ceremony and
-    // --json are built from the plan, so before #999 only --quiet printed the
-    // error, and the copy was left where no listing shows it. Both copies get
-    // the junk, so two removals fail: every `  ! ` line is counted, which pins
+    // cannot delete that, and throws an error naming it. The ceremony's list
+    // and --json's skillsRemoved come from the plan and carry no failure, so
+    // before #999 only --quiet printed the error, and the copy was left where
+    // no listing shows it. Both copies get the junk, so two removals fail:
+    // every `  ! ` line is counted, which pins
     // "each" (both named) and "only failures" (nothing else named). printResults()
     // prints the failures with the results under --quiet, unless --json takes
     // the output, so `--json --quiet` names them on stderr like the rest
