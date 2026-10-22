@@ -34,6 +34,9 @@ export class OpenCodeAdapter extends FrameworkAdapter {
 
   async install(item, projectDir, scope, options = {}) {
     const targetBase = this._targetBase(projectDir, scope, item.type);
+
+    if (item.type === 'agent') return this._installAgent(item, targetBase, scope, options);
+
     const targetPath = childPath(targetBase, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
@@ -42,23 +45,26 @@ export class OpenCodeAdapter extends FrameworkAdapter {
     mkdirSync(targetBase, { recursive: true });
     if (existsSync(targetPath)) try { unlinkSync(targetPath); } catch {}
 
-    const source = item.type === 'skill'
-      ? (item.sourceDir || resolve(options.almanacRoot, 'skills', item.id))
-      : resolve(options.almanacRoot, 'agents');
-
-    if (item.type === 'agent') {
-      // For agents, symlink the individual agent file
-      const agentSource = item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`);
-      const agentTarget = childPath(targetBase, `${item.id}.md`);
-      if (existsSync(agentTarget) && !options.force) return { action: 'skipped', path: agentTarget, details: 'already exists' };
-      if (existsSync(agentTarget)) try { unlinkSync(agentTarget); } catch {}
-      mkdirSync(targetBase, { recursive: true });
-      symlinkSync(scope === 'global' ? agentSource : relative(targetBase, agentSource), agentTarget);
-      return { action: 'created', path: agentTarget };
-    }
-
+    const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
     symlinkSync(scope === 'global' ? source : relative(targetBase, source), targetPath);
     return { action: 'created', path: targetPath };
+  }
+
+  /**
+   * An agent is one file, linked at <agents>/<id>.md. It used to run the
+   * skill-shaped steps of install() first, at <agents>/<id> with no extension:
+   * --force unlinked a user's own file at that path, and a directory there made
+   * the agent install report "skipped" without writing the link (S3-B2 P2e).
+   */
+  _installAgent(item, targetBase, scope, options) {
+    const agentSource = item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`);
+    const agentTarget = childPath(targetBase, `${item.id}.md`);
+    if (options.dryRun) return { action: 'created', path: agentTarget, details: 'dry-run' };
+    if (existsSync(agentTarget) && !options.force) return { action: 'skipped', path: agentTarget, details: 'already exists' };
+    if (existsSync(agentTarget)) try { unlinkSync(agentTarget); } catch {}
+    mkdirSync(targetBase, { recursive: true });
+    symlinkSync(scope === 'global' ? agentSource : relative(targetBase, agentSource), agentTarget);
+    return { action: 'created', path: agentTarget };
   }
 
   async uninstall(item, projectDir, scope, options = {}) {

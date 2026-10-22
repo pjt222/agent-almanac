@@ -2467,6 +2467,9 @@ const LINK_FIXTURE = {
   agent: '---\nname: code-reviewer\n---\nfixture agent\n',
 };
 
+/** What a user wrote into a path an adapter also uses. Every test that plants it asserts it survives. */
+const USER_CONTENT = 'my own file: must survive\n';
+
 /** The `details` most sites put on an install result; claude-code's agents directory has its own. */
 const LINK_DETAILS = {
   dryRunInstall: 'dry-run',
@@ -2517,10 +2520,9 @@ const LINK_SITES = [
   },
   {
     site: 'opencode agent file', adapter: () => new OpenCodeAdapter(), type: 'agent', scopes: ['project', 'global'],
+    // The dry run reports this path too. At b3275420a it reported <agents>/<id>,
+    // without the .md: the agent install ran the skill-shaped steps first (P2e).
     path: (sb, scope) => resolve(scope === 'global' ? resolve(sb.home, '.config/opencode') : resolve(sb.proj, '.opencode'), 'agents/code-reviewer.md'),
-    // At b3275420a the dry run reports <agents>/<id>, without the .md the real
-    // install writes: the agent branch ran the skill-shaped prefix first.
-    dryRunPath: (sb, scope) => resolve(scope === 'global' ? resolve(sb.home, '.config/opencode') : resolve(sb.proj, '.opencode'), 'agents/code-reviewer'),
     relTarget: '../../../src/agents/code-reviewer.md',
   },
   {
@@ -2672,7 +2674,7 @@ describe('link sites: baseline pins (S3-B2 T0)', () => {
 
           assert.deepEqual(
             await adapter.install(item, sb.proj, scope, { ...opts, dryRun: true }),
-            linkResult('created', site.dryRunPath ? site.dryRunPath(sb, scope) : path, details.dryRunInstall),
+            linkResult('created', path, details.dryRunInstall),
           );
           assert.throws(() => lstatSync(path), { code: 'ENOENT' }, 'a dry run makes nothing');
 
@@ -2871,4 +2873,48 @@ describe('link sites: baseline pins (S3-B2 T0)', () => {
       });
     });
   }
+});
+
+describe('opencode installs an agent only at <agents>/<id>.md (S3-B2 P2e)', () => {
+  // At b3275420a opencode's install ran its skill-shaped steps for an agent too,
+  // at <agents>/<id> with no extension, before writing the agent's link at
+  // <agents>/<id>.md. So --force unlinked a user's own file at <agents>/<id>,
+  // and a directory there made the agent install report "skipped" without
+  // writing the link (S3-B2 design review, E4 and E4b).
+  const site = LINK_SITES.find((s) => s.site === 'opencode agent file');
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-p2e-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('install --force leaves a user\'s file at <agents>/<id> alone and links <id>.md', async () => {
+    await inLinkSandbox(tmpRoot, 'file', async (sb) => {
+      const agents = resolve(sb.proj, '.opencode/agents');
+      mkdirSync(agents, { recursive: true });
+      writeFileSync(resolve(agents, 'code-reviewer'), USER_CONTENT);
+      const result = await new OpenCodeAdapter().install(
+        linkItem(site, sb), sb.proj, 'project', { almanacRoot: sb.src, force: true },
+      );
+      assert.equal(readFileSync(resolve(agents, 'code-reviewer'), 'utf8'), USER_CONTENT);
+      assert.deepEqual(result, { action: 'created', path: resolve(agents, 'code-reviewer.md') });
+      assert.equal(readlinkSync(resolve(agents, 'code-reviewer.md')), site.relTarget);
+    });
+  });
+
+  it('a directory at <agents>/<id> does not stop the agent install', async () => {
+    await inLinkSandbox(tmpRoot, 'dir', async (sb) => {
+      const agents = resolve(sb.proj, '.opencode/agents');
+      mkdirSync(resolve(agents, 'code-reviewer'), { recursive: true });
+      writeFileSync(resolve(agents, 'code-reviewer/notes.md'), USER_CONTENT);
+      const result = await new OpenCodeAdapter().install(
+        linkItem(site, sb), sb.proj, 'project', { almanacRoot: sb.src },
+      );
+      assert.deepEqual(result, { action: 'created', path: resolve(agents, 'code-reviewer.md') });
+      assert.equal(readlinkSync(resolve(agents, 'code-reviewer.md')), site.relTarget);
+      assert.equal(readFileSync(resolve(agents, 'code-reviewer/notes.md'), 'utf8'), USER_CONTENT);
+    });
+  });
 });
