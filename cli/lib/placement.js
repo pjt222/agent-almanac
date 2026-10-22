@@ -382,10 +382,10 @@ function refuseUnlessOwned(entryPath, entry, purpose) {
  * audit or uninstall can see it; the error thrown says so and names the
  * directory to delete by hand. It throws rather than returning a note because
  * clearForInstall() does not pass a note on, so `install --force` would leave
- * the directory in silence. The error reaches the user wherever a failed
- * result is printed: `uninstall`, `sync`, `install --force` and
- * `scatter --quiet`. `scatter`'s ceremony and `--json` print none, so there
- * the directory is left unnamed (#999).
+ * the directory in silence. Every command that removes prints the error:
+ * `uninstall`, `sync` and `install --force` with their results, and `scatter`
+ * with its results under `--quiet` without `--json`, and on stderr otherwise
+ * (#999).
  */
 function discard(entryPath, isDir) {
   if (!isDir) {
