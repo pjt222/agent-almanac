@@ -218,3 +218,5 @@ The re-check ran in a `git clone --shared` of `6685d7b18`, with this folder copi
 - Outside this file:
   - `REPLICATION.md` now says how to share a regenerated sheet safely. Its deviation list has no count and adds the unenforced slicer conditions, arm 4b's added set and arm 5c. Part A's scope now names `FACTS.md`, and the `__pycache__` side effect is stated.
   - `FACTS.spec` comments now say the regenerated sheet can print the home directory.
+
+**Posted (2026-10-22):** the reply went up as [comment 6333086967](https://github.com/anthropics/claude-code/issues/82056#issuecomment-6333086967) after one advocatus-diaboli review pass. The posted text is `POSTED.md`; `UPSTREAM-DRAFT.md` is kept as reviewed in #992, and its status line names the differences.
