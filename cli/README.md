@@ -190,12 +190,12 @@ commit its copies. `list --installed` shows a copy as
   vim swap files, emacs auto-save and lock files, and `.pyc` or `.pyo` files
   under `__pycache__`).
 - `install --force --from-package copy` replaces a link or an unedited copy,
-  never an edited copy. No command removes a file or directory the CLI did
-  not make, with two exceptions: the OS and editor files listed above, which
-  go with the copy they are in; and a change saved to a copy while
-  `uninstall`, `scatter`, `sync` or `install --force` is checking it, which
-  can be removed or replaced with the copy, because the check and the removal
-  are not one atomic step.
+  never an edited copy. Where the CLI links or copies, no command removes a
+  file or directory it did not make, with two exceptions: the OS and editor
+  files listed above, which go with the copy they are in; and a change saved
+  to a copy while `uninstall`, `scatter`, `sync` or `install --force` is
+  checking it, which can be removed or replaced with the copy, because the
+  check and the removal are not one atomic step.
   Without `--force`, `install` and `gather` keep what is there and say what it
   is: `gather` on stderr, so `--json` stays one document.
 - `audit` lists copies by version and warns, exit 0, when a copy's version
