@@ -3286,9 +3286,13 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     });
   });
 
-  it('cursor removes its legacy rule beside a kept skill entry and names the kept one', async () => {
-    // cursor removes two paths: the skill link and a legacy .mdc rule the CLI
-    // writes as a file. A user's entry at the first must not stop the second.
+  it('cursor\'s uninstall still reaches its second path, a .mdc rule, beside a kept skill entry, and names the kept one', async () => {
+    // cursor's uninstall looks at two paths: .cursor/skills/<id> and
+    // .cursor/rules/<id>.mdc. What this pins is that a kept entry at the first
+    // does not stop the second, and the `kept <skillPath>: …` note. No CLI
+    // command writes the .mdc (installLegacyRule has no caller), so the rule
+    // planted here stands for a user's own file, and its deletion is
+    // pre-existing behaviour kept on purpose for now, tracked in #998.
     const site = LINK_SITES.find((s) => s.site === 'cursor skill');
     await inLinkSandbox(tmpRoot, 'cursor-rule', async (sb) => {
       const path = site.path(sb, 'project');
