@@ -112,14 +112,17 @@ function fromPackageOption() {
     '--from-package <mode>',
     'Install even though the content root is an npm package (inside node_modules), '
       + 'which is refused by default. copy: copy into each framework\'s folder, marked so that '
-      + 'uninstall removes only unedited copies; the copies outlast npm update and npm uninstall. '
+      + 'uninstall checks that a copy is unedited before removing it; the copies outlast npm update '
+      + 'and npm uninstall. '
       + 'link: symlink into the package; npm update or npm uninstall can break the links',
   ).choices(FROM_PACKAGE_MODES);
 }
 
-/** `--force`, for the commands that install: what it replaces, and what it never does. */
-const FORCE_HELP = 'Replace existing content: a link, or a copy you have not edited. '
-  + 'Where agent-almanac links or copies, a file or directory it did not make is kept';
+/** `--force`, for the commands that install: what it replaces, and what it keeps. */
+const FORCE_HELP = 'Replace existing content: a link, whoever made it, or a copy you have not edited, '
+  + 'with the OS, editor and Python cache files in it and any directory holding nothing else. '
+  + 'Where agent-almanac links or copies, any other file or directory it did not make is kept, '
+  + 'though a change saved to a copy while --force checks it can be replaced';
 
 /**
  * Refuse to install from an npm package root unless `--from-package` says how.

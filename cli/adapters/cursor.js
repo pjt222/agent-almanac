@@ -67,11 +67,12 @@ export class CursorAdapter extends FrameworkAdapter {
     const rulePath = childPath(resolve(projectDir, '.cursor/rules'), `${item.id}.mdc`);
 
     // skillPath goes through removeEntry, which removes a link, dangling or
-    // not, and keeps anything else. No CLI command writes rulePath:
-    // installLegacyRule has no caller. A file there is the user's own, a
-    // regular file or a symlink made as skills/README.md describes. Deleting
-    // it here is pre-existing behaviour, kept on purpose for now and tracked
-    // in #998; existsSync also misses a dangling link at that path.
+    // not, or an unedited copy, and keeps anything else. No CLI command
+    // writes rulePath: installLegacyRule has no caller. A file there is the
+    // user's own, a regular file or a symlink made as skills/README.md
+    // describes. Deleting it here is pre-existing behaviour, kept on purpose
+    // for now and tracked in #998; existsSync also misses a dangling link at
+    // that path.
     const skill = removeEntry(skillsDir, item.id, { dryRun: options.dryRun });
     if (skill.action === 'removed') results.push(skillPath);
     if (existsSync(rulePath)) {

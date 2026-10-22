@@ -183,19 +183,23 @@ commit its copies. `list --installed` shows a copy as
 `commit-changes skill (copy, agent-almanac 1.9.1)`.
 
 - `uninstall`, `scatter` and `sync` remove a copy only while its marker names it
-  and every recorded file is unchanged, with nothing added. An edited copy is
-  kept, and the changed files are named; delete it by hand to remove it. Not
-  edits: a file whose only change is LF turned into CRLF, and files an OS or
-  editor drops that were not copied (`.DS_Store`, `Thumbs.db`, `desktop.ini`,
-  vim swap files, emacs auto-save and lock files, and `.pyc` or `.pyo` files
-  under `__pycache__`).
+  and every recorded file is unchanged, with no file or link added other than
+  the OS and editor files below. An edited copy is kept, and the changed files
+  are named; delete it by hand to remove it. Not edits: a file whose only
+  change is LF turned into CRLF, and files an OS or editor drops that were not
+  copied (`.DS_Store`, `Thumbs.db`, `desktop.ini`, vim swap files, emacs
+  auto-save and lock files, and `.pyc` or `.pyo` files under `__pycache__`).
 - `install --force --from-package copy` replaces a link or an unedited copy,
-  never an edited copy. Where the CLI links or copies, no command removes a
-  file or directory it did not make, with two exceptions: the OS and editor
-  files listed above, which go with the copy they are in; and a change saved
-  to a copy while `uninstall`, `scatter`, `sync` or `install --force` is
-  checking it, which can be removed or replaced with the copy, because the
-  check and the removal are not one atomic step.
+  never an edited copy. Where the CLI links or copies, a link can be removed
+  by `uninstall`, `scatter` and `sync`, or replaced by `install --force`,
+  whoever made it; what it points to is not touched. Otherwise no command
+  removes a file or directory it did not make, with two exceptions: the OS
+  and editor files listed above, and a directory in a copy with no file or
+  link below it but those (an empty one included), which go with the copy
+  they are in; and a change saved to a copy while `uninstall`, `scatter`,
+  `sync` or `install --force` is checking it, which can be removed or
+  replaced with the copy, because the check and the removal are not one
+  atomic step.
   Without `--force`, `install` and `gather` keep what is there and say what it
   is: `gather` on stderr, so `--json` stays one document.
 - `audit` lists copies by version and warns, exit 0, when a copy's version

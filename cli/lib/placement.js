@@ -13,9 +13,11 @@
  * target is gone used to count as absent: uninstall left it (#993 §2) and
  * install failed with EEXIST when symlinkSync met it (S3-B2 P5).
  *
- * The CLI removes or replaces only what it made: a link, or a copy whose
- * marker names it and whose files are all as copied, OS and editor junk
- * aside (isJunkPath). Anything else is kept and reported with a note. The
+ * The CLI removes or replaces a link, whoever made it (unlinking one loses no
+ * data: ownership()), and otherwise only what it made: a copy whose marker
+ * names it and whose files are all as copied, OS and editor junk aside
+ * (isJunkPath), with any directory in it that holds no other file or link.
+ * Anything else is kept and reported with a note. The
  * check and the removal are not one atomic step: removeEntry() and
  * placeCopy() state the window. Before this, the sites unlinked whatever regular
  * file they found (S3-B2 P2a, P2d), and a user's directory survived only
@@ -332,7 +334,9 @@ function editedNote(diff, purpose) {
  *
  * A link is the CLI's to remove, because unlinking one loses no data even
  * when a user made it. A copy is, while every file in it is as copied and
- * nothing was added. Anything else, and an edited copy, is kept (D1).
+ * no file or link was added, junk aside; diffCopy() does not record
+ * directories, so one holding nothing else goes with the copy. Anything
+ * else, and an edited copy, is kept (D1).
  *
  * @param {string} entryPath
  * @param {ReturnType<typeof classify>} entry - Not 'absent'.
@@ -370,15 +374,18 @@ function refuseUnlessOwned(entryPath, entry, purpose) {
  * one step. A file's sidecar goes after it; `force`, because the file may be
  * one that never had a sidecar.
  *
- * Listings skip a staging directory (isInternalName), so none may be left
- * without saying so (review round 1: AD-3, DL-4, F2). If the rename fails,
+ * Listings skip a staging directory (isInternalName), so a removal that
+ * leaves one must say so (review round 1: AD-3, DL-4, F2). If the rename fails,
  * nothing has moved: the empty staging directory is removed and the rename's
  * error is thrown. If the rename succeeded and deleting the staging directory
  * fails, the entry has already left its install path, where no later list,
  * audit or uninstall can see it; the error thrown says so and names the
  * directory to delete by hand. It throws rather than returning a note because
  * clearForInstall() does not pass a note on, so `install --force` would leave
- * the directory in silence.
+ * the directory in silence. The error reaches the user wherever a failed
+ * result is printed: `uninstall`, `sync`, `install --force` and
+ * `scatter --quiet`. `scatter`'s ceremony and `--json` print none, so there
+ * the directory is left unnamed (#999).
  */
 function discard(entryPath, isDir) {
   if (!isDir) {

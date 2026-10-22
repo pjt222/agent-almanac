@@ -1214,7 +1214,8 @@ describe('npm package root (#606)', () => {
   it('install, gather and sync offer --from-package with both modes, copy first; install says what --force keeps', () => {
     const fromPackageHelp = '--from-package <mode> Install even though the content root is an npm package ' +
       '(inside node_modules), which is refused by default. copy: copy into each framework\'s folder, marked ' +
-      'so that uninstall removes only unedited copies; the copies outlast npm update and npm uninstall. ' +
+      'so that uninstall checks that a copy is unedited before removing it; the copies outlast npm update ' +
+      'and npm uninstall. ' +
       'link: symlink into the package; npm update or npm uninstall can break the links (choices: "copy", "link")';
     for (const command of ['install', 'gather', 'sync']) {
       const { status, stdout } = spawnCli([command, '--help'], outside);
@@ -1224,8 +1225,10 @@ describe('npm package root (#606)', () => {
       if (command === 'install') {
         // Bounded on the right by the next option commander prints, so a tail
         // on the text goes red too (review round 1, AD-2).
-        assert.ok(help.includes('--force Replace existing content: a link, or a copy you have not edited. ' +
-          'Where agent-almanac links or copies, a file or directory it did not make is kept --source <path> '), stdout);
+        assert.ok(help.includes('--force Replace existing content: a link, whoever made it, or a copy you have not edited, ' +
+          'with the OS, editor and Python cache files in it and any directory holding nothing else. ' +
+          'Where agent-almanac links or copies, any other file or directory it did not make is kept, ' +
+          'though a change saved to a copy while --force checks it can be replaced --source <path> '), stdout);
       }
     }
   });
@@ -3278,12 +3281,12 @@ describe('a dangling link at a link site is seen, removed and replaced (#993 §2
 });
 
 describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d)', () => {
-  // The CLI makes only links at these paths. At b3275420a uninstall unlinked
+  // Before copy mode the CLI made only links at these paths. At b3275420a uninstall unlinked
   // whatever regular file it found there, and install --force unlinked it and
   // wrote a link in its place (P2a, P2d). A directory survived only because
   // unlinkSync cannot remove one: uninstall and install --force both reported
-  // it failed (EISDIR, EEXIST). Now anything that is not a link is kept and
-  // reported "skipped" with a note saying why; the note is pinned whole.
+  // it failed (EISDIR, EEXIST). Now a file or directory the CLI did not make is
+  // kept and reported "skipped" with a note saying why; the note is pinned whole.
   const KEPT_NOTE = 'not installed by agent-almanac; left in place';
   const cliEntry = resolve(ROOT, 'cli/index.js');
   // eslint-disable-next-line no-control-regex
