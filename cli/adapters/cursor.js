@@ -33,7 +33,7 @@ export class CursorAdapter extends FrameworkAdapter {
     const targetPath = childPath(skillsDir, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    const blocked = clearForInstall(targetPath, { force: options.force });
+    const blocked = clearForInstall(skillsDir, item.id, { force: options.force });
     if (blocked) return blocked;
 
     mkdirSync(skillsDir, { recursive: true });
@@ -66,13 +66,14 @@ export class CursorAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     // Remove from both paths
     const results = [];
-    const skillPath = childPath(resolve(projectDir, '.cursor/skills'), item.id);
+    const skillsDir = resolve(projectDir, '.cursor/skills');
+    const skillPath = childPath(skillsDir, item.id);
     const rulePath = childPath(resolve(projectDir, '.cursor/rules'), `${item.id}.mdc`);
 
     // skillPath is a link install made, so it goes through removeEntry, which
     // sees a dangling link and keeps anything that is not a link. rulePath is
     // a file installLegacyRule writes, never a link: existsSync is right for it.
-    const skill = removeEntry(skillPath, { dryRun: options.dryRun });
+    const skill = removeEntry(skillsDir, item.id, { dryRun: options.dryRun });
     if (skill.action === 'removed') results.push(skillPath);
     if (existsSync(rulePath)) {
       if (!options.dryRun) unlinkSync(rulePath);

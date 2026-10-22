@@ -38,7 +38,7 @@ export class CopilotAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     const targetPath = childPath(skillsDir, item.id);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    const blocked = clearForInstall(targetPath, { force: options.force });
+    const blocked = clearForInstall(skillsDir, item.id, { force: options.force });
     if (blocked) return blocked;
 
     mkdirSync(skillsDir, { recursive: true });
@@ -49,8 +49,8 @@ export class CopilotAdapter extends FrameworkAdapter {
 
   async uninstall(item, projectDir, scope, options = {}) {
     // Remove from skills dir
-    const skillPath = childPath(this._skillsDir(projectDir), item.id);
-    if (classify(skillPath).kind !== 'absent') return removeEntry(skillPath, { dryRun: options.dryRun });
+    const skillsDir = this._skillsDir(projectDir);
+    if (classify(childPath(skillsDir, item.id)).kind !== 'absent') return removeEntry(skillsDir, item.id, { dryRun: options.dryRun });
 
     // Remove from instructions file
     const instrFile = this._instructionsFile(projectDir);

@@ -41,7 +41,7 @@ export class OpenCodeAdapter extends FrameworkAdapter {
     const targetPath = childPath(targetBase, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    const blocked = clearForInstall(targetPath, { force: options.force });
+    const blocked = clearForInstall(targetBase, item.id, { force: options.force });
     if (blocked) return blocked;
 
     mkdirSync(targetBase, { recursive: true });
@@ -61,7 +61,7 @@ export class OpenCodeAdapter extends FrameworkAdapter {
     const agentSource = item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`);
     const agentTarget = childPath(targetBase, `${item.id}.md`);
     if (options.dryRun) return { action: 'created', path: agentTarget, details: 'dry-run' };
-    const blocked = clearForInstall(agentTarget, { force: options.force });
+    const blocked = clearForInstall(targetBase, `${item.id}.md`, { force: options.force });
     if (blocked) return blocked;
     mkdirSync(targetBase, { recursive: true });
     symlinkSync(scope === 'global' ? agentSource : relative(targetBase, agentSource), agentTarget);
@@ -70,11 +70,8 @@ export class OpenCodeAdapter extends FrameworkAdapter {
 
   async uninstall(item, projectDir, scope, options = {}) {
     const targetBase = this._targetBase(projectDir, scope, item.type);
-    const targetPath = item.type === 'agent'
-      ? childPath(targetBase, `${item.id}.md`)
-      : childPath(targetBase, item.id);
-
-    return removeEntry(targetPath, { dryRun: options.dryRun });
+    const name = item.type === 'agent' ? `${item.id}.md` : item.id;
+    return removeEntry(targetBase, name, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir, scope) {

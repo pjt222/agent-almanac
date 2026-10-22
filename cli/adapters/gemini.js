@@ -32,7 +32,7 @@ export class GeminiAdapter extends FrameworkAdapter {
     const skillsDir = this._skillsDir(projectDir);
     const targetPath = childPath(skillsDir, item.id);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    const blocked = clearForInstall(targetPath, { force: options.force });
+    const blocked = clearForInstall(skillsDir, item.id, { force: options.force });
     if (blocked) return blocked;
 
     mkdirSync(skillsDir, { recursive: true });
@@ -42,8 +42,7 @@ export class GeminiAdapter extends FrameworkAdapter {
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
-    const targetPath = childPath(this._skillsDir(projectDir), item.id);
-    return removeEntry(targetPath, { dryRun: options.dryRun });
+    return removeEntry(this._skillsDir(projectDir), item.id, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir) {

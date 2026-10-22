@@ -45,7 +45,7 @@ export class UniversalAdapter extends FrameworkAdapter {
       return { action: 'created', path: targetPath, details: 'dry-run' };
     }
 
-    const blocked = clearForInstall(targetPath, { force: options.force });
+    const blocked = clearForInstall(targetBase, item.id, { force: options.force });
     if (blocked) return blocked;
 
     // Ensure parent directory exists
@@ -68,7 +68,7 @@ export class UniversalAdapter extends FrameworkAdapter {
 
     const targetPath = childPath(targetBase, item.id);
 
-    return removeEntry(targetPath, { dryRun: options.dryRun });
+    return removeEntry(targetBase, item.id, { dryRun: options.dryRun });
   }
 
   async listInstalled(projectDir, scope) {

@@ -1,39 +1,191 @@
 /**
- * placement.js — What sits at an install path, decided without following a link.
+ * placement.js — What sits at an install path, and how the CLI puts content
+ * there or takes it away, decided without following a link.
  *
- * Nine adapters make a link into the content root: universal, claude-code,
- * opencode, openclaw, hermes, vibe, gemini, cursor and copilot, at twelve sites
- * between them. Each tested its install path with existsSync, which follows a
- * link, so a link whose target is gone counted as absent. uninstall reported
- * it "not installed" and left it (#993 §2), and install, with or without
- * --force, skipped it and then failed with EEXIST when symlinkSync met it
- * (S3-B2 P5). That is the state `npm uninstall` leaves links into the package
- * in, and the state an `npm update` that drops an item leaves one link in.
+ * Nine adapters place content at twelve sites between them: universal,
+ * claude-code, opencode, openclaw, hermes, vibe, gemini, cursor and copilot.
+ * By default each site holds a link into the content root. With
+ * `--from-package copy` it holds a copy instead, marked so that the CLI can
+ * tell its own copy from anything else (#606 part 2). The adapters keep their
+ * own path arithmetic and call these at each site.
  *
- * lstat sees the link itself. The adapters keep their own path arithmetic and
- * call these at each link site.
+ * Every path is tested with lstat. existsSync follows a link, so a link whose
+ * target is gone used to count as absent: uninstall left it (#993 §2) and
+ * install failed with EEXIST when symlinkSync met it (S3-B2 P5).
  *
- * They also used unlinkSync on whatever they found, so uninstall deleted a
- * user's own regular file at an install path and install --force replaced it
- * with a link (S3-B2 P2a, P2d). A user's directory survived only because
- * unlinkSync cannot remove one. The CLI makes only links at these paths, so
- * ownership() keeps anything else, and removeEntry() and clearForInstall()
- * both go through it.
+ * The CLI removes or replaces only what it made: a link, or a copy whose
+ * marker names it and whose files are all as copied. Anything else is kept
+ * and reported with a note. Before this, the sites unlinked whatever regular
+ * file they found (S3-B2 P2a, P2d), and a user's directory survived only
+ * because unlinkSync cannot remove one. Copy mode needs a remover that can,
+ * so the ownership verdict is the one thing between "remove our copy" and
+ * "remove the user's directory". removeEntry(), clearForInstall() and
+ * placeCopy() all reach it through one guard line, refuseUnlessOwned().
+ *
+ * Each of those three takes the directory and the name, not a path, and
+ * builds the path with childPath(), which refuses a name that would leave the
+ * directory (critique F1). The id rule in cli/lib/item-id.js refuses such
+ * names earlier, in installAll and uninstallAll; this holds when an adapter
+ * or this module is called directly.
  */
 
-import { existsSync, lstatSync, unlinkSync } from 'fs';
+import { createHash } from 'crypto';
+import {
+  constants as fsConstants,
+  copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync,
+  readlinkSync, renameSync, rmSync, symlinkSync, unlinkSync, writeFileSync,
+} from 'fs';
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'path';
+import { childPath } from '../adapters/base.js';
 
 /** Printed after the path of an entry the CLI keeps because it did not make it. */
 export const FOREIGN_NOTE = 'not installed by agent-almanac; left in place';
 
+/** The marker inside a copied directory; a copied file's marker is its sidecar (sidecarPath). */
+export const COPY_MARKER = '.agent-almanac-copy.json';
+
+/** Prefix of the directory a copy is staged in, beside its install path. */
+export const STAGING_PREFIX = '.agent-almanac-staging-';
+
+/** The marker's schema version, which is also its discriminator. */
+export const MARKER_SCHEMA = 1;
+
+const SHA256_RE = /^sha256:[0-9a-f]{64}$/;
+
+/**
+ * Names an operating system or an editor drops into a directory. One that the
+ * marker does not record does not make a copy "edited" (the maintainer's
+ * decision D1, 2026-10-21); a recorded file of such a name is compared like
+ * any other. Matched against every segment of a path, so a whole __pycache__
+ * directory counts, at any depth.
+ */
+export const JUNK_NAMES = Object.freeze(['.DS_Store', 'Thumbs.db', 'desktop.ini', '__pycache__']);
+
+/** Editor files, by name pattern. Same rule as JUNK_NAMES. */
+export const JUNK_PATTERNS = Object.freeze([
+  /^\..+\.sw[a-p]$/, // vim swap files: .SKILL.md.swp, .SKILL.md.swo, … down to .swa
+  /^\.#/, //            emacs lock files: .#SKILL.md
+  /^#.+#$/, //          emacs auto-save files: #SKILL.md#
+  /~$/, //              backup files: SKILL.md~
+]);
+
+/** @param {string} name - One path segment */
+export function isJunkName(name) {
+  return JUNK_NAMES.includes(name) || JUNK_PATTERNS.some((pattern) => pattern.test(name));
+}
+
+/**
+ * The sidecar marker of a copied file: `<dir>/.<name>.agent-almanac-copy.json`.
+ * A dotfile ending in `.json`, so a loader globbing `*.md` skips it.
+ * @param {string} filePath
+ */
+export function sidecarPath(filePath) {
+  return join(dirname(filePath), `.${basename(filePath)}${COPY_MARKER}`);
+}
+
+/**
+ * A name in an install directory that is the CLI's own bookkeeping, not an
+ * installed item: a staging directory or a sidecar marker. Listings skip it.
+ * Never used inside a copy's own tree, where such a name is the user's.
+ * @param {string} name
+ */
+export function isInternalName(name) {
+  return name.startsWith(STAGING_PREFIX) || name.endsWith(COPY_MARKER);
+}
+
+const isNonEmptyString = (value) => typeof value === 'string' && value.length > 0;
+
+/**
+ * The package name and version a copy records, read from a content root's
+ * package.json. null when either is missing or not a non-empty string.
+ * @param {string} root
+ * @returns {{ name: string, version: string } | null}
+ */
+export function readPackageIdentity(root) {
+  let manifest;
+  try {
+    manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
+  } catch {
+    return null;
+  }
+  if (!manifest || !isNonEmptyString(manifest.name) || !isNonEmptyString(manifest.version)) return null;
+  return { name: manifest.name, version: manifest.version };
+}
+
+const markerPathOf = (entryPath, isDir) => (isDir ? join(entryPath, COPY_MARKER) : sidecarPath(entryPath));
+
+/** A key of a marker's `files`: a relative POSIX path with no empty, `.` or `..` segment. */
+function isRecordedPath(key) {
+  if (key.includes('\\') || key.includes('\0') || key.startsWith('/')) return false;
+  return key.split('/').every((segment) => segment !== '' && segment !== '.' && segment !== '..');
+}
+
+/**
+ * Whether a parsed marker is one this CLI wrote for this entry. One clause per
+ * line, so a mutant can drop exactly one.
+ */
+function isOwnedMarker(marker, entryPath, isDir) {
+  if (marker === null || typeof marker !== 'object' || Array.isArray(marker)) return false;
+  if (marker.agentAlmanacCopy !== MARKER_SCHEMA) return false;
+  if (marker.entry !== basename(entryPath)) return false;
+  const pkg = marker.package;
+  if (pkg === null || typeof pkg !== 'object' || !isNonEmptyString(pkg.name) || !isNonEmptyString(pkg.version)) return false;
+  const files = marker.files;
+  if (files === null || typeof files !== 'object' || Array.isArray(files)) return false;
+  const keys = Object.keys(files);
+  if (!keys.every((key) => isRecordedPath(key) && typeof files[key] === 'string' && SHA256_RE.test(files[key]))) return false;
+  // A copied file records exactly itself.
+  if (!isDir && !(keys.length === 1 && keys[0] === basename(entryPath))) return false;
+  return true;
+}
+
+/**
+ * Read an entry's marker. `unreadable` is true when something is at the
+ * marker's path but it is not a marker this CLI wrote for this entry: a
+ * symlink or other non-file, text that is not JSON, or JSON that fails
+ * isOwnedMarker(). audit reports those.
+ */
+function readMarker(entryPath, isDir) {
+  const markerPath = markerPathOf(entryPath, isDir);
+  let stat;
+  try {
+    stat = lstatSync(markerPath);
+  } catch {
+    return { marker: null, unreadable: false };
+  }
+  // A marker that is a link is not ours, whatever it points at.
+  if (!stat.isFile()) return { marker: null, unreadable: true };
+  let parsed;
+  try {
+    parsed = JSON.parse(readFileSync(markerPath, 'utf8'));
+  } catch {
+    return { marker: null, unreadable: true };
+  }
+  if (!isOwnedMarker(parsed, entryPath, isDir)) return { marker: null, unreadable: true };
+  return { marker: parsed, unreadable: false };
+}
+
+/**
+ * The marker check: the marker this CLI wrote for the real file or directory
+ * at entryPath, or null.
+ * @param {string} entryPath
+ * @returns {object|null}
+ */
+export function readOwnedMarker(entryPath) {
+  const entry = classify(entryPath);
+  return entry.kind === 'copy' ? entry.marker : null;
+}
+
 /**
  * What is at a path, by lstat.
  *
- * `foreign` is anything that is not a link: a real file or directory. The CLI
- * makes only links at these paths.
+ * - `absent`: nothing.
+ * - `link`: a symbolic link, `broken` when its target is gone.
+ * - `copy`: a real file or directory carrying a marker this CLI wrote for it.
+ * - `foreign`: anything else. `markerUnreadable` says a marker-like file was
+ *   there but is not one.
  *
  * @param {string} entryPath
- * @returns {{ kind: 'absent' } | { kind: 'link', broken: boolean } | { kind: 'foreign' }}
  */
 export function classify(entryPath) {
   let stat;
@@ -46,69 +198,456 @@ export function classify(entryPath) {
     throw err;
   }
   if (stat.isSymbolicLink()) return { kind: 'link', broken: !existsSync(entryPath) };
-  return { kind: 'foreign' };
+  const isDir = stat.isDirectory();
+  if (!isDir && !stat.isFile()) return { kind: 'foreign', isDir: false, markerUnreadable: false };
+  const { marker, unreadable } = readMarker(entryPath, isDir);
+  if (marker) return { kind: 'copy', isDir, marker };
+  return { kind: 'foreign', isDir, markerUnreadable: unreadable };
+}
+
+const sha256 = (bytes) => `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
+
+/**
+ * Whether a file still holds what was copied. A file whose only change is LF
+ * turned into CRLF counts as unchanged (D1): a project that commits its copies
+ * and is checked out with core.autocrlf=true sees exactly that. Only that
+ * direction is tolerated, because the content shipped is LF: this repository
+ * refuses CRLF in committed blobs (validate-line-endings.yml).
+ */
+function sameContent(filePath, recordedHash) {
+  const bytes = readFileSync(filePath);
+  if (sha256(bytes) === recordedHash) return true;
+  if (!bytes.includes(13)) return false;
+  return sha256(Buffer.from(bytes.toString('latin1').replace(/\r\n/g, '\n'), 'latin1')) === recordedHash;
+}
+
+/** Visit every entry under `root`, depth first, as (relative POSIX path, absolute path, lstat). */
+function walk(root, visit, relDir = '') {
+  const absDir = relDir === '' ? root : join(root, ...relDir.split('/'));
+  for (const name of readdirSync(absDir).sort()) {
+    const rel = relDir === '' ? name : `${relDir}/${name}`;
+    const abs = join(absDir, name);
+    const stat = lstatSync(abs);
+    visit(rel, abs, stat);
+    if (stat.isDirectory()) walk(root, visit, rel);
+  }
+}
+
+/**
+ * Compare a copy with its marker.
+ *
+ * - `modified`: a recorded file whose content differs (CRLF-only aside), or
+ *   that is no longer a regular file.
+ * - `added`: a file, link or other entry the marker does not record, except
+ *   junk (isJunkName). Directories are not recorded, so an empty one is not
+ *   reported; the files in a new one are.
+ * - `missing`: a recorded file that is gone. Missing alone does not make a
+ *   copy edited: removing the rest loses nothing of the user's.
+ *
+ * The marker inside a directory copy is written, not copied, so it is not
+ * recorded and is skipped: at the root of the copy only (critique F7). A
+ * file of that name deeper down is the user's and counts as added.
+ *
+ * @param {string} entryPath
+ * @param {object} marker - From readOwnedMarker()
+ * @returns {{ modified: string[], added: string[], missing: string[] }}
+ */
+export function diffCopy(entryPath, marker) {
+  const recorded = marker.files;
+  const modified = [];
+  const added = [];
+  const seen = new Set();
+  const compare = (rel, abs, stat) => {
+    if (!Object.hasOwn(recorded, rel)) {
+      if (!rel.split('/').some(isJunkName)) added.push(rel);
+      return;
+    }
+    seen.add(rel);
+    if (!stat.isFile() || !sameContent(abs, recorded[rel])) modified.push(rel);
+  };
+  const stat = lstatSync(entryPath);
+  if (stat.isDirectory()) {
+    walk(entryPath, (rel, abs, entryStat) => {
+      if (rel === COPY_MARKER) return;
+      if (entryStat.isDirectory()) return;
+      compare(rel, abs, entryStat);
+    });
+  } else {
+    compare(basename(entryPath), entryPath, stat);
+  }
+  const missing = Object.keys(recorded).filter((rel) => !seen.has(rel));
+  return { modified: modified.sort(), added: added.sort(), missing: missing.sort() };
+}
+
+/**
+ * The diff of the copy at entryPath, or null when it is not a copy this CLI
+ * made. For audit, which reports edited copies.
+ * @param {string} entryPath
+ */
+export function copyDiff(entryPath) {
+  const entry = classify(entryPath);
+  return entry.kind === 'copy' ? diffCopy(entryPath, entry.marker) : null;
+}
+
+/** The note for a copy that was edited, naming the files. `purpose`: 'remove' | 'replace'. */
+function editedNote(diff, purpose) {
+  const parts = [];
+  if (diff.modified.length > 0) parts.push(`modified: ${diff.modified.join(', ')}`);
+  if (diff.added.length > 0) parts.push(`added: ${diff.added.join(', ')}`);
+  return `edited since it was copied (${parts.join('; ')}); kept, delete it by hand to ${purpose} it`;
 }
 
 /**
  * The ownership verdict: may the CLI remove or replace this entry?
  *
- * A link is the CLI's to remove, because it is the only thing the CLI makes
- * here, and removing one loses no data even when a user made it. Anything else
- * is a file or directory someone else put there, and is kept. This is the one
- * decision removeEntry() and clearForInstall() share.
+ * A link is the CLI's to remove, because unlinking one loses no data even
+ * when a user made it. A copy is, while every file in it is as copied and
+ * nothing was added. Anything else, and an edited copy, is kept (D1).
  *
+ * @param {string} entryPath
  * @param {ReturnType<typeof classify>} entry - Not 'absent'.
- * @returns {{ removable: true } | { removable: false, reason: 'foreign', note: string }}
+ * @param {'remove'|'replace'} purpose - Words the note for an edited copy.
+ * @returns {{ removable: true } | { removable: false, reason: 'foreign'|'edited', note: string }}
  */
-export function ownership(entry) {
+export function ownership(entryPath, entry, purpose) {
   if (entry.kind === 'link') return { removable: true };
-  return { removable: false, reason: 'foreign', note: FOREIGN_NOTE };
+  if (entry.kind !== 'copy') return { removable: false, reason: 'foreign', note: FOREIGN_NOTE };
+  const diff = diffCopy(entryPath, entry.marker);
+  if (diff.modified.length === 0 && diff.added.length === 0) return { removable: true };
+  return { removable: false, reason: 'edited', note: editedNote(diff, purpose) };
 }
 
-/** The result for an entry ownership() keeps: skipped, with the reason and a printed note. */
+/** The result for an entry the CLI keeps: skipped, with the reason and a printed note. */
 function keep(entryPath, verdict) {
   return { action: 'skipped', path: entryPath, reason: verdict.reason, note: verdict.note };
 }
 
 /**
- * Remove what an uninstall finds at a link site, or keep it and say why. A
- * dangling link is removed like any other. A dry run returns what the real run
- * would, so it predicts a kept entry as kept.
+ * The uninstall guard. null when the CLI may remove or replace what is at
+ * entryPath; otherwise the result that keeps it. removeEntry(),
+ * clearForInstall() and placeCopy() all go through this one line, so a
+ * mutant of it is seen on all three paths (critique F8).
+ */
+function refuseUnlessOwned(entryPath, entry, purpose) {
+  const verdict = ownership(entryPath, entry, purpose);
+  if (!verdict.removable) return keep(entryPath, verdict);
+  return null;
+}
+
+/**
+ * Remove a real file or directory the guard has passed. A directory is first
+ * renamed into a staging directory beside it, so it leaves its install path in
+ * one step. A file's sidecar goes after it; `force`, because the file may be
+ * one that never had a sidecar.
+ */
+function discard(entryPath, isDir) {
+  if (!isDir) {
+    unlinkSync(entryPath);
+    rmSync(sidecarPath(entryPath), { force: true });
+    return;
+  }
+  const staging = mkdtempSync(join(dirname(entryPath), STAGING_PREFIX));
+  renameSync(entryPath, join(staging, 'removed'));
+  rmSync(staging, { recursive: true, force: true });
+}
+
+/**
+ * Remove what an uninstall finds at `<base>/<name>`, or keep it and say why.
+ * A link is removed, dangling or not; a copy while unedited. A dry run returns
+ * what the real run would.
  *
- * @param {string} entryPath
+ * @param {string} base - The directory the entry is in
+ * @param {string} name - The entry's name in it
  * @param {{ dryRun?: boolean }} [options]
  * @returns {import('../adapters/base.js').InstallResult}
  */
-export function removeEntry(entryPath, { dryRun = false } = {}) {
+export function removeEntry(base, name, { dryRun = false } = {}) {
+  const entryPath = childPath(base, name);
   const entry = classify(entryPath);
   if (entry.kind === 'absent') {
     return { action: 'skipped', path: entryPath, details: 'not installed' };
   }
-  const verdict = ownership(entry);
-  if (!verdict.removable) return keep(entryPath, verdict);
+  const kept = refuseUnlessOwned(entryPath, entry, 'remove');
+  if (kept) return kept;
   if (dryRun) return { action: 'removed', path: entryPath, details: 'dry-run' };
-  unlinkSync(entryPath);
-  return { action: 'removed', path: entryPath };
+  if (entry.kind === 'link') {
+    unlinkSync(entryPath);
+    return { action: 'removed', path: entryPath };
+  }
+  discard(entryPath, entry.isDir);
+  return { action: 'removed', path: entryPath, details: 'copy' };
 }
 
 /**
- * Make an install path free for a new link, or say why the install stops.
+ * Make `<base>/<name>` free for a new link, or say why the install stops.
  *
- * Without --force anything at the path, a dangling link included, is reported
- * as already there and kept. With --force a link is unlinked first, and
- * anything else is kept and reported the way removeEntry() reports it.
+ * Without --force anything there, a dangling link included, is reported as
+ * already there and kept. With --force a link or an unedited copy is removed
+ * first, and anything else is kept and reported the way removeEntry() reports
+ * it.
  *
- * @param {string} entryPath
+ * @param {string} base
+ * @param {string} name
  * @param {{ force?: boolean, existsDetails?: string }} [options]
  * @returns {import('../adapters/base.js').InstallResult|null} null when the
  *   path is free to link; otherwise the result the adapter returns as it is.
  */
-export function clearForInstall(entryPath, { force = false, existsDetails = 'already exists' } = {}) {
+export function clearForInstall(base, name, { force = false, existsDetails = 'already exists' } = {}) {
+  const entryPath = childPath(base, name);
   const entry = classify(entryPath);
   if (entry.kind === 'absent') return null;
   if (!force) return { action: 'skipped', path: entryPath, details: existsDetails };
-  const verdict = ownership(entry);
-  if (!verdict.removable) return keep(entryPath, verdict);
-  unlinkSync(entryPath);
+  const kept = refuseUnlessOwned(entryPath, entry, 'replace');
+  if (kept) return kept;
+  if (entry.kind === 'link') unlinkSync(entryPath);
+  else discard(entryPath, entry.isDir);
   return null;
+}
+
+/** A source path as the marker records it: relative to the content root, POSIX. Throws outside the root. */
+function contentPath(almanacRoot, source) {
+  const rel = relative(resolve(almanacRoot), resolve(source));
+  if (rel === '' || rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel)) {
+    throw new Error(`copy refused: ${source} is outside the content root ${almanacRoot}`);
+  }
+  return rel.split(sep).join('/');
+}
+
+/** What lstat says an entry is, for a refusal. */
+function kindWord(stat) {
+  if (stat.isSymbolicLink()) return 'symlink';
+  if (stat.isFIFO()) return 'FIFO';
+  if (stat.isSocket()) return 'socket';
+  return 'device';
+}
+
+const hashFile = (filePath) => sha256(readFileSync(filePath));
+
+/**
+ * Copy `source` to `dest`, which must not exist: directories and regular
+ * files only, each file hashed as written. A symlink anywhere, the root
+ * included, is refused rather than followed or recreated. fs.cpSync is not
+ * used: its `dereference` leaves a link into the source on some of the Node
+ * versions this package supports (S3-B2 design § 2.3), which in copy mode
+ * would be a link into node_modules.
+ *
+ * @returns {{ isDir: boolean, files: Record<string, string> }}
+ */
+function copyTree(source, dest) {
+  const files = {};
+  const rootStat = lstatSync(source);
+  if (rootStat.isFile()) {
+    copyFileSync(source, dest, fsConstants.COPYFILE_EXCL);
+    files[basename(dest)] = hashFile(dest);
+    return { isDir: false, files };
+  }
+  if (!rootStat.isDirectory()) {
+    throw new Error(`copy refused: ${basename(source)} is a ${kindWord(rootStat)} (copy mode copies regular files only)`);
+  }
+  mkdirSync(dest);
+  walk(source, (rel, src, stat) => {
+    const dst = join(dest, ...rel.split('/'));
+    if (stat.isDirectory()) {
+      mkdirSync(dst);
+    } else if (stat.isFile()) {
+      copyFileSync(src, dst, fsConstants.COPYFILE_EXCL);
+      files[rel] = hashFile(dst);
+    } else {
+      throw new Error(`copy refused: ${rel} is a ${kindWord(stat)} (copy mode copies regular files only)`);
+    }
+  });
+  return { isDir: true, files };
+}
+
+/**
+ * The marker, as written: keys in a fixed order, `files` sorted, two-space
+ * indent, a trailing newline, and no absolute path, so a project that commits
+ * its copies gets stable diffs (D8).
+ */
+function serializeMarker({ entry, item, copyFrom, sourceRel, files }) {
+  const marker = {
+    agentAlmanacCopy: MARKER_SCHEMA,
+    entry,
+    type: item.type,
+    id: item.id,
+    package: { name: copyFrom.name, version: copyFrom.version },
+    source: sourceRel,
+    copiedAt: new Date().toISOString(),
+    files: Object.fromEntries(Object.keys(files).sort().map((rel) => [rel, files[rel]])),
+  };
+  return `${JSON.stringify(marker, null, 2)}\n`;
+}
+
+const installCommand = '`install --force --from-package copy`';
+
+/**
+ * What placeCopy() decides about what is already at the path. Returns the
+ * result that stops the install, or null to go ahead.
+ */
+function decide(entryPath, entry, force, copyFrom) {
+  if (entry.kind === 'absent') return null;
+  if (!force) {
+    if (entry.kind === 'link') {
+      return {
+        action: 'skipped', path: entryPath, reason: 'link-kept',
+        note: `a link is here (-> ${readlinkSync(entryPath)}); ${installCommand} replaces it with a copy`,
+      };
+    }
+    if (entry.kind === 'copy') {
+      const { name, version } = entry.marker.package;
+      if (name === copyFrom.name && version === copyFrom.version) {
+        return { action: 'skipped', path: entryPath, reason: 'already-copied', note: `already a copy of ${name} ${version}` };
+      }
+      return {
+        action: 'skipped', path: entryPath, reason: 'other-version',
+        note: `already a copy of ${name} ${version}; ${installCommand} replaces it with ${copyFrom.name} ${copyFrom.version}`,
+      };
+    }
+    return keep(entryPath, { reason: 'foreign', note: FOREIGN_NOTE });
+  }
+  return refuseUnlessOwned(entryPath, entry, 'replace');
+}
+
+/**
+ * Install a copy of `source` at `<base>/<name>` (`--from-package copy`).
+ *
+ * | What is there        | without --force                         | with --force          |
+ * |----------------------|-----------------------------------------|-----------------------|
+ * | nothing              | copy                                    | copy                  |
+ * | a link, even dangling| skipped, note names the link            | replaced by the copy  |
+ * | our unedited copy    | skipped, note names its version         | replaced              |
+ * | our edited copy      | skipped, note names its version         | kept, note names files|
+ * | anything else        | kept, FOREIGN_NOTE                      | kept, FOREIGN_NOTE    |
+ *
+ * The copy is staged in a fresh directory beside the path, on the same
+ * filesystem, with its marker, and renamed into place. A copied directory
+ * appears with its marker in one rename. A copied file's sidecar goes first,
+ * so a crash between the two leaves a stray sidecar and no file, never a file
+ * the CLI cannot recognise. What is there is checked again right before the
+ * swap, and a copy being replaced is moved aside, sidecar with it, and put
+ * back if the swap fails. The staging directory is removed afterwards, unless
+ * putting the old copy back failed too: then it holds that copy, and the
+ * error names it (critique F11).
+ *
+ * Not atomic against another writer: an entry that appears at the path
+ * between that last check and the rename is replaced if it is a file or an
+ * empty directory (rename(2) semantics), and makes the rename fail if it is a
+ * non-empty directory (critique F12; the window is the length of two lstat
+ * calls).
+ *
+ * @param {object} args
+ * @param {string} args.base - The directory the entry goes in
+ * @param {string} args.name - The entry's name there
+ * @param {string} args.source - The file or directory to copy
+ * @param {string} args.almanacRoot - The content root; `source` must be inside it
+ * @param {{ name: string, version: string }} args.copyFrom - The package it is copied from
+ * @param {{ type: string, id: string }} args.item - The registry item, recorded in the marker
+ * @param {boolean} [args.force]
+ * @returns {import('../adapters/base.js').InstallResult}
+ */
+export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, force = false }) {
+  const entryPath = childPath(base, name);
+  if (!copyFrom || !isNonEmptyString(copyFrom.name) || !isNonEmptyString(copyFrom.version)) {
+    throw new Error('copy refused: no package name and version to record');
+  }
+  const sourceRel = contentPath(almanacRoot, source);
+
+  const stop = decide(entryPath, classify(entryPath), force, copyFrom);
+  if (stop) return stop;
+
+  mkdirSync(base, { recursive: true });
+  const staging = mkdtempSync(join(base, STAGING_PREFIX));
+  let keepStaging = false;
+  try {
+    const staged = join(staging, name);
+    const { isDir, files } = copyTree(source, staged);
+    writeFileSync(markerPathOf(staged, isDir), serializeMarker({ entry: name, item, copyFrom, sourceRel, files }), { flag: 'wx' });
+
+    const current = classify(entryPath);
+    const stopNow = decide(entryPath, current, force, copyFrom);
+    if (stopNow) return stopNow;
+
+    let linkText = null;
+    const replaced = join(staging, 'replaced');
+    const replacedMarker = join(staging, 'replaced-marker');
+    if (current.kind === 'link') {
+      linkText = readlinkSync(entryPath);
+      unlinkSync(entryPath);
+    } else if (current.kind === 'copy') {
+      renameSync(entryPath, replaced);
+      if (!current.isDir) renameSync(sidecarPath(entryPath), replacedMarker);
+    }
+
+    try {
+      if (!isDir) renameSync(sidecarPath(staged), sidecarPath(entryPath));
+      renameSync(staged, entryPath);
+    } catch (err) {
+      try {
+        if (!isDir) rmSync(sidecarPath(entryPath), { force: true });
+        if (current.kind === 'link') symlinkSync(linkText, entryPath);
+        if (current.kind === 'copy') {
+          renameSync(replaced, entryPath);
+          if (!current.isDir) renameSync(replacedMarker, sidecarPath(entryPath));
+        }
+      } catch {
+        keepStaging = true;
+        throw new Error(`${err.message}; what was at ${entryPath} could not be put back and is kept in ${staging}`);
+      }
+      throw err;
+    }
+    return { action: 'created', path: entryPath, details: 'copy' };
+  } finally {
+    if (!keepStaging) rmSync(staging, { recursive: true, force: true });
+  }
+}
+
+/**
+ * The fields a listing adds for one entry: `broken` (a link whose target is
+ * gone), `copy` ({ name, version }) for a copy this CLI made, and
+ * `markerUnreadable` only when true. Listings add nothing else, so a listing
+ * of links is what it was before copies existed. `kind` is returned beside
+ * the fields, for the adapter's own filtering.
+ *
+ * @param {string} entryPath
+ * @returns {{ kind: string, fields: { broken: boolean, copy?: { name: string, version: string }, markerUnreadable?: true } }}
+ */
+export function describeEntry(entryPath) {
+  const entry = classify(entryPath);
+  const fields = { broken: entry.kind === 'link' && entry.broken };
+  if (entry.kind === 'copy') fields.copy = { name: entry.marker.package.name, version: entry.marker.package.version };
+  if (entry.markerUnreadable) fields.markerUnreadable = true;
+  return { kind: entry.kind, fields };
+}
+
+/**
+ * Install at `<base>/<name>` the way the options say: a copy when
+ * `options.placement` is 'copy', a link otherwise. A link is relative to
+ * `base` when `relativeLink`, absolute otherwise. Each adapter computes its
+ * paths and returns its own dry-run result; this does the rest.
+ *
+ * @param {object} args
+ * @param {string} args.base
+ * @param {string} args.name
+ * @param {string} args.source
+ * @param {object} args.item
+ * @param {object} args.options - The install options: force, placement, copyFrom, almanacRoot
+ * @param {boolean} args.relativeLink
+ * @param {string} [args.existsDetails] - `details` when a link is already there
+ * @param {string} [args.createdDetails] - `details` when a link was made
+ * @returns {import('../adapters/base.js').InstallResult}
+ */
+export function installAt({ base, name, source, item, options, relativeLink, existsDetails, createdDetails }) {
+  if (options.placement === 'copy') {
+    return placeCopy({
+      base, name, source, item, force: options.force, copyFrom: options.copyFrom, almanacRoot: options.almanacRoot,
+    });
+  }
+  const blocked = clearForInstall(base, name, { force: options.force, existsDetails });
+  if (blocked) return blocked;
+  const entryPath = childPath(base, name);
+  mkdirSync(base, { recursive: true });
+  symlinkSync(relativeLink ? relative(base, source) : source, entryPath);
+  return createdDetails === undefined
+    ? { action: 'created', path: entryPath }
+    : { action: 'created', path: entryPath, details: createdDetails };
 }

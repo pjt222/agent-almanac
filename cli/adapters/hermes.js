@@ -37,7 +37,7 @@ export class HermesAdapter extends FrameworkAdapter {
       const targetPath = childPath(targetDir, item.id);
 
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      const blocked = clearForInstall(targetPath, { force: options.force });
+      const blocked = clearForInstall(targetDir, item.id, { force: options.force });
       if (blocked) return blocked;
 
       mkdirSync(targetDir, { recursive: true });
@@ -49,7 +49,7 @@ export class HermesAdapter extends FrameworkAdapter {
     if (item.type === 'agent') {
       const targetPath = childPath(this._agentsBase(), `${item.id}.md`);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      const blocked = clearForInstall(targetPath, { force: options.force });
+      const blocked = clearForInstall(this._agentsBase(), `${item.id}.md`, { force: options.force });
       if (blocked) return blocked;
 
       mkdirSync(this._agentsBase(), { recursive: true });
@@ -64,13 +64,11 @@ export class HermesAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
       const domain = item.domain || 'general';
-      const targetPath = childPath(childPath(this._skillsBase(), domain), item.id);
-      return removeEntry(targetPath, { dryRun: options.dryRun });
+      return removeEntry(childPath(this._skillsBase(), domain), item.id, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {
-      const targetPath = childPath(this._agentsBase(), `${item.id}.md`);
-      return removeEntry(targetPath, { dryRun: options.dryRun });
+      return removeEntry(this._agentsBase(), `${item.id}.md`, { dryRun: options.dryRun });
     }
 
     return { action: 'skipped', path: '', details: `${item.type}s not supported` };

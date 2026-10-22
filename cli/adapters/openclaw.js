@@ -39,7 +39,7 @@ export class OpenClawAdapter extends FrameworkAdapter {
     if (item.type === 'skill') {
       const targetPath = childPath(this._workspaceDir(), item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      const blocked = clearForInstall(targetPath, { force: options.force });
+      const blocked = clearForInstall(this._workspaceDir(), item.id, { force: options.force });
       if (blocked) return blocked;
       mkdirSync(this._workspaceDir(), { recursive: true });
       const source = item.sourceDir || resolve(options.almanacRoot, 'skills', item.id);
@@ -71,8 +71,7 @@ export class OpenClawAdapter extends FrameworkAdapter {
 
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
-      const targetPath = childPath(this._workspaceDir(), item.id);
-      return removeEntry(targetPath, { dryRun: options.dryRun });
+      return removeEntry(this._workspaceDir(), item.id, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {

@@ -59,7 +59,7 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
       return { action: 'created', path: targetPath, details: 'dry-run' };
     }
 
-    const blocked = clearForInstall(targetPath, { force: options.force });
+    const blocked = clearForInstall(skillsDir, item.id, { force: options.force });
     if (blocked) return blocked;
 
     mkdirSync(skillsDir, { recursive: true });
@@ -85,7 +85,7 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
       return { action: 'created', path: agentsLink, details: 'dry-run: agents directory symlink' };
     }
 
-    const blocked = clearForInstall(agentsLink, { force: options.force, existsDetails: 'agents symlink already exists' });
+    const blocked = clearForInstall(base, 'agents', { force: options.force, existsDetails: 'agents symlink already exists' });
     if (blocked) return blocked;
 
     mkdirSync(base, { recursive: true });
@@ -115,13 +115,11 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
     const base = this._targetBase(scope, projectDir);
 
     if (item.type === 'skill') {
-      const targetPath = childPath(resolve(base, 'skills'), item.id);
-      return removeEntry(targetPath, { dryRun: options.dryRun });
+      return removeEntry(resolve(base, 'skills'), item.id, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {
-      const agentsLink = resolve(base, 'agents');
-      return removeEntry(agentsLink, { dryRun: options.dryRun });
+      return removeEntry(base, 'agents', { dryRun: options.dryRun });
     }
 
     if (item.type === 'team') {
@@ -134,7 +132,7 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
       // machine with Claude Code has a real one (S3-B2 F2).
       const teamsLink = resolve(base, 'teams');
       if (classify(teamsLink).kind !== 'link') return { action: 'skipped', path: teamsLink, details: 'not installed' };
-      return removeEntry(teamsLink, { dryRun: options.dryRun });
+      return removeEntry(base, 'teams', { dryRun: options.dryRun });
     }
 
     return { action: 'skipped', path: '', details: `Unknown type: ${item.type}` };

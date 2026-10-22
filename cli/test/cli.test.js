@@ -8,7 +8,8 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync, spawnSync } from 'child_process';
-import { copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { createHash } from 'crypto';
 import { tmpdir, homedir } from 'os';
 import { dirname, isAbsolute, resolve } from 'path';
 // A namespace import, not named ones: isNpmPackageRoot is new in #606, and a
@@ -44,6 +45,9 @@ import { FrameworkAdapter } from '../adapters/base.js';
 // individual tests failing for their own reasons.
 import * as adapterBase from '../adapters/base.js';
 const itemId = await import('../lib/item-id.js').catch(() => ({}));
+// A namespace import for the same reason: placeCopy and the rest of the copy
+// machinery are new in S3-B2, and the module itself predates them.
+import * as placement from '../lib/placement.js';
 import { loadRegistries } from '../lib/registry.js';
 import { makeChalkStub } from '../lib/chalk-stub.js';
 import { detectFrameworks } from '../lib/detector.js';
@@ -3221,6 +3225,533 @@ describe('claude-code\'s team uninstall never removes a real <base>/teams (S3-B2
       symlinkSync(sb.gone, teams);
       assert.deepEqual(await new ClaudeCodeAdapter().uninstall(team, sb.proj, 'global', {}), { action: 'removed', path: teams });
       assert.throws(() => lstatSync(teams), { code: 'ENOENT' });
+    });
+  });
+});
+
+// ── Copy placement (#606 part 2) ─────────────────────────────────
+//
+// `--from-package copy` puts a copy at a link site instead of a link. The
+// copy carries a marker recording the package and a sha256 per file, and the
+// marker is what lets uninstall tell the CLI's own copy from a user's
+// directory: once a remover can delete directories, it is the only thing that
+// can. These drive cli/lib/placement.js in-process, each test in a throwaway
+// tree (inLinkSandbox). Every note and marker is pinned whole.
+
+/** The package a test copy records. */
+const COPY_FROM = { name: 'agent-almanac', version: '9.9.9' };
+const EXAMPLES_TEXT = 'nested reference file\n';
+const sha256Of = (text) => `sha256:${createHash('sha256').update(text).digest('hex')}`;
+const MARKER_NAME = '.agent-almanac-copy.json';
+
+/** placeCopy of the sandbox's skill into `base`. */
+function copySkill(sb, base, extra = {}) {
+  return placement.placeCopy({
+    base, name: 'commit-changes', source: resolve(sb.src, 'skills/commit-changes'), almanacRoot: sb.src,
+    copyFrom: COPY_FROM, item: { type: 'skill', id: 'commit-changes' }, ...extra,
+  });
+}
+
+/** placeCopy of the sandbox's agent file into `base`. */
+function copyAgentFile(sb, base, extra = {}) {
+  return placement.placeCopy({
+    base, name: 'code-reviewer.md', source: resolve(sb.src, 'agents/code-reviewer.md'), almanacRoot: sb.src,
+    copyFrom: COPY_FROM, item: { type: 'agent', id: 'code-reviewer' }, ...extra,
+  });
+}
+
+const editedNote = (purpose) =>
+  `edited since it was copied (modified: SKILL.md; added: notes.md); kept, delete it by hand to ${purpose} it`;
+
+/** Edit a copied skill the way the edited-copy rows expect: one file changed, one added. */
+function editCopy(entry) {
+  writeFileSync(resolve(entry, 'SKILL.md'), `${LINK_FIXTURE.skill}my own addition\n`);
+  writeFileSync(resolve(entry, 'notes.md'), USER_CONTENT);
+}
+
+describe('copy placement: placeCopy (#606 part 2)', () => {
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-place-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('copies a directory: real entries, the same bytes, a marker recording every file, no staging left', async () => {
+    await inLinkSandbox(tmpRoot, 'dir', async (sb) => {
+      const src = resolve(sb.src, 'skills/commit-changes');
+      mkdirSync(resolve(src, 'references'));
+      writeFileSync(resolve(src, 'references/EXAMPLES.md'), EXAMPLES_TEXT);
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+
+      assert.deepEqual(copySkill(sb, base), { action: 'created', path: entry, details: 'copy' });
+      assert.equal(lstatSync(entry).isDirectory(), true);
+      assert.equal(lstatSync(resolve(entry, 'SKILL.md')).isFile(), true);
+      assert.equal(readFileSync(resolve(entry, 'SKILL.md'), 'utf8'), LINK_FIXTURE.skill);
+      assert.equal(readFileSync(resolve(entry, 'references/EXAMPLES.md'), 'utf8'), EXAMPLES_TEXT);
+
+      const raw = readFileSync(resolve(entry, MARKER_NAME), 'utf8');
+      const { copiedAt } = JSON.parse(raw);
+      assert.match(copiedAt, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/);
+      const expected = {
+        agentAlmanacCopy: 1,
+        entry: 'commit-changes',
+        type: 'skill',
+        id: 'commit-changes',
+        package: { name: 'agent-almanac', version: '9.9.9' },
+        source: 'skills/commit-changes',
+        copiedAt,
+        files: { 'SKILL.md': sha256Of(LINK_FIXTURE.skill), 'references/EXAMPLES.md': sha256Of(EXAMPLES_TEXT) },
+      };
+      // Byte for byte: key order, sorted files, two-space indent, trailing newline (D8).
+      assert.equal(raw, `${JSON.stringify(expected, null, 2)}\n`);
+      assert.equal(raw.includes(sb.root), false, 'the marker carries no absolute path');
+      assert.deepEqual(readdirSync(base), ['commit-changes'], 'no staging directory is left beside it');
+    });
+  });
+
+  it('copies a file, with its marker in a hidden sidecar beside it', async () => {
+    await inLinkSandbox(tmpRoot, 'file', async (sb) => {
+      const base = resolve(sb.proj, '.opencode/agents');
+      const entry = resolve(base, 'code-reviewer.md');
+      assert.deepEqual(copyAgentFile(sb, base), { action: 'created', path: entry, details: 'copy' });
+      assert.equal(lstatSync(entry).isFile(), true);
+      assert.equal(readFileSync(entry, 'utf8'), LINK_FIXTURE.agent);
+      const marker = JSON.parse(readFileSync(resolve(base, `.code-reviewer.md${MARKER_NAME}`), 'utf8'));
+      assert.deepEqual(
+        { entry: marker.entry, type: marker.type, id: marker.id, source: marker.source, files: marker.files },
+        { entry: 'code-reviewer.md', type: 'agent', id: 'code-reviewer', source: 'agents/code-reviewer.md', files: { 'code-reviewer.md': sha256Of(LINK_FIXTURE.agent) } },
+      );
+      assert.deepEqual(readdirSync(base).sort(), [`.code-reviewer.md${MARKER_NAME}`, 'code-reviewer.md']);
+    });
+  });
+
+  it('refuses a symlink in the source, met after a file it already copied, and leaves nothing behind', async () => {
+    // fs.cpSync's `dereference` leaves a link into the source on Node 24 and
+    // 25 (S3-B2 design § 2.3): in copy mode, a link into node_modules.
+    await inLinkSandbox(tmpRoot, 'symlink', async (sb) => {
+      symlinkSync('SKILL.md', resolve(sb.src, 'skills/commit-changes/z-link.md'));
+      const base = resolve(sb.proj, '.agents/skills');
+      assert.throws(() => copySkill(sb, base), {
+        message: 'copy refused: z-link.md is a symlink (copy mode copies regular files only)',
+      });
+      assert.deepEqual(readdirSync(base), [], 'neither a copy nor its staging directory is left');
+    });
+  });
+
+  it('shipped content holds no symlink, so that refusal cannot reach a shipped item', () => {
+    const listing = execSync('git ls-files -s -- skills agents teams guides',
+      { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+    const entries = listing.split('\n').filter(Boolean);
+    // Control: the listing is the corpus, not an empty answer from a wrong cwd.
+    assert.ok(entries.some((line) => line.endsWith('\tskills/commit-changes/SKILL.md')), `${entries.length} entries`);
+    assert.ok(entries.some((line) => line.endsWith('\tagents/_registry.yml')), `${entries.length} entries`);
+    assert.deepEqual(entries.filter((line) => line.startsWith('120000 ')), []);
+  });
+
+  it('refuses a source outside the content root, which a registry entry\'s path can name', async () => {
+    await inLinkSandbox(tmpRoot, 'outside', async (sb) => {
+      const base = resolve(sb.proj, '.opencode/agents');
+      const outsideFile = resolve(sb.root, 'elsewhere.md');
+      writeFileSync(outsideFile, USER_CONTENT);
+      assert.throws(() => placement.placeCopy({
+        base, name: 'code-reviewer.md', source: outsideFile, almanacRoot: sb.src,
+        copyFrom: COPY_FROM, item: { type: 'agent', id: 'code-reviewer' },
+      }), { message: `copy refused: ${outsideFile} is outside the content root ${sb.src}` });
+      assert.equal(existsSync(base), false);
+    });
+  });
+
+  it('without --force keeps what is there and says what it is', async () => {
+    await inLinkSandbox(tmpRoot, 'no-force', async (sb) => {
+      const skillSrc = resolve(sb.src, 'skills/commit-changes');
+
+      const linkBase = resolve(sb.proj, 'link');
+      mkdirSync(linkBase);
+      symlinkSync(skillSrc, resolve(linkBase, 'commit-changes'));
+      assert.deepEqual(copySkill(sb, linkBase), {
+        action: 'skipped', path: resolve(linkBase, 'commit-changes'), reason: 'link-kept',
+        note: `a link is here (-> ${skillSrc}); \`install --force --from-package copy\` replaces it with a copy`,
+      });
+      assert.equal(lstatSync(resolve(linkBase, 'commit-changes')).isSymbolicLink(), true);
+
+      const sameBase = resolve(sb.proj, 'same');
+      copySkill(sb, sameBase);
+      assert.deepEqual(copySkill(sb, sameBase), {
+        action: 'skipped', path: resolve(sameBase, 'commit-changes'), reason: 'already-copied',
+        note: 'already a copy of agent-almanac 9.9.9',
+      });
+
+      const olderBase = resolve(sb.proj, 'older');
+      copySkill(sb, olderBase, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+      assert.deepEqual(copySkill(sb, olderBase), {
+        action: 'skipped', path: resolve(olderBase, 'commit-changes'), reason: 'other-version',
+        note: 'already a copy of agent-almanac 1.0.0; `install --force --from-package copy` replaces it with agent-almanac 9.9.9',
+      });
+
+      const userBase = resolve(sb.proj, 'user');
+      mkdirSync(resolve(userBase, 'commit-changes'), { recursive: true });
+      writeFileSync(resolve(userBase, 'commit-changes/SKILL.md'), USER_CONTENT);
+      assert.deepEqual(copySkill(sb, userBase), {
+        action: 'skipped', path: resolve(userBase, 'commit-changes'), reason: 'foreign',
+        note: 'not installed by agent-almanac; left in place',
+      });
+      assert.equal(readFileSync(resolve(userBase, 'commit-changes/SKILL.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('with --force replaces a link, a dangling link and an unedited copy', async () => {
+    await inLinkSandbox(tmpRoot, 'force-replace', async (sb) => {
+      const linkBase = resolve(sb.proj, 'link');
+      mkdirSync(linkBase);
+      symlinkSync(resolve(sb.src, 'skills/commit-changes'), resolve(linkBase, 'commit-changes'));
+      const danglingBase = resolve(sb.proj, 'dangling');
+      mkdirSync(danglingBase);
+      symlinkSync(sb.gone, resolve(danglingBase, 'commit-changes'));
+      const olderBase = resolve(sb.proj, 'older');
+      copySkill(sb, olderBase, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+
+      for (const base of [linkBase, danglingBase, olderBase]) {
+        const entry = resolve(base, 'commit-changes');
+        assert.deepEqual(copySkill(sb, base, { force: true }), { action: 'created', path: entry, details: 'copy' }, base);
+        assert.equal(lstatSync(entry).isDirectory(), true, base);
+        assert.equal(JSON.parse(readFileSync(resolve(entry, MARKER_NAME), 'utf8')).package.version, '9.9.9', base);
+        assert.deepEqual(readdirSync(base), ['commit-changes'], `${base}: nothing staged is left`);
+      }
+    });
+  });
+
+  it('with --force replaces an unedited file copy together with its sidecar', async () => {
+    await inLinkSandbox(tmpRoot, 'force-file', async (sb) => {
+      const base = resolve(sb.proj, '.opencode/agents');
+      copyAgentFile(sb, base, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+      assert.deepEqual(copyAgentFile(sb, base, { force: true }),
+        { action: 'created', path: resolve(base, 'code-reviewer.md'), details: 'copy' });
+      const marker = JSON.parse(readFileSync(resolve(base, `.code-reviewer.md${MARKER_NAME}`), 'utf8'));
+      assert.equal(marker.package.version, '9.9.9');
+      assert.deepEqual(readdirSync(base).sort(), [`.code-reviewer.md${MARKER_NAME}`, 'code-reviewer.md']);
+    });
+  });
+
+  it('with --force keeps an edited copy and names the files', async () => {
+    await inLinkSandbox(tmpRoot, 'force-edited', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base, { copyFrom: { name: 'agent-almanac', version: '1.0.0' } });
+      editCopy(entry);
+      assert.deepEqual(copySkill(sb, base, { force: true }),
+        { action: 'skipped', path: entry, reason: 'edited', note: editedNote('replace') });
+      assert.equal(readFileSync(resolve(entry, 'notes.md'), 'utf8'), USER_CONTENT);
+      assert.equal(JSON.parse(readFileSync(resolve(entry, MARKER_NAME), 'utf8')).package.version, '1.0.0');
+      assert.deepEqual(readdirSync(base), ['commit-changes']);
+    });
+  });
+
+  it('with --force keeps a directory it did not write, empty or not', async () => {
+    await inLinkSandbox(tmpRoot, 'force-foreign', async (sb) => {
+      const fullBase = resolve(sb.proj, 'full');
+      mkdirSync(resolve(fullBase, 'commit-changes'), { recursive: true });
+      writeFileSync(resolve(fullBase, 'commit-changes/SKILL.md'), USER_CONTENT);
+      const emptyBase = resolve(sb.proj, 'empty');
+      mkdirSync(resolve(emptyBase, 'commit-changes'), { recursive: true });
+      for (const base of [fullBase, emptyBase]) {
+        assert.deepEqual(copySkill(sb, base, { force: true }), {
+          action: 'skipped', path: resolve(base, 'commit-changes'), reason: 'foreign',
+          note: 'not installed by agent-almanac; left in place',
+        }, base);
+      }
+      assert.equal(readFileSync(resolve(fullBase, 'commit-changes/SKILL.md'), 'utf8'), USER_CONTENT);
+      assert.deepEqual(readdirSync(resolve(emptyBase, 'commit-changes')), []);
+    });
+  });
+});
+
+describe('copy placement: the marker check (#606 part 2)', () => {
+  // Each row starts from a valid copy and breaks the marker in one way. The
+  // first row is the control: without it, a check that rejects everything
+  // would pass every other row.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-marker-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** A fresh copy, its marker rewritten by `change`; returns the entry path. */
+  async function withMarker(name, change, fn) {
+    await inLinkSandbox(tmpRoot, name, async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      const markerPath = resolve(entry, MARKER_NAME);
+      const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
+      change(marker, markerPath, sb);
+      await fn(entry, sb);
+    });
+  }
+
+  it('accepts the marker the copy was written with (control)', async () => {
+    await withMarker('control', () => {}, (entry) => {
+      assert.equal(placement.readOwnedMarker(entry).entry, 'commit-changes');
+      assert.equal(placement.classify(entry).kind, 'copy');
+    });
+  });
+
+  it('a directory with no marker is not a copy, and not an unreadable one', async () => {
+    await withMarker('none', (marker, markerPath) => rmSync(markerPath), (entry) => {
+      assert.equal(placement.readOwnedMarker(entry), null);
+      assert.deepEqual(placement.classify(entry), { kind: 'foreign', isDir: true, markerUnreadable: false });
+    });
+  });
+
+  it('a marker that is not JSON is refused and reported unreadable', async () => {
+    await withMarker('garbage', (marker, markerPath) => writeFileSync(markerPath, 'not json {'), (entry) => {
+      assert.equal(placement.readOwnedMarker(entry), null);
+      assert.deepEqual(placement.classify(entry), { kind: 'foreign', isDir: true, markerUnreadable: true });
+    });
+  });
+
+  it('a marker with another schema value is refused', async () => {
+    await withMarker('schema', (marker, markerPath) => {
+      writeFileSync(markerPath, JSON.stringify({ ...marker, agentAlmanacCopy: 2 }));
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+
+  it('a marker naming another entry is refused', async () => {
+    await withMarker('entry', (marker, markerPath) => {
+      writeFileSync(markerPath, JSON.stringify({ ...marker, entry: 'other-skill' }));
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+
+  it('a marker that is a symlink is refused, even to a valid marker', async () => {
+    await withMarker('symlinked', (marker, markerPath, sb) => {
+      const real = resolve(sb.root, 'real-marker.json');
+      writeFileSync(real, JSON.stringify(marker));
+      rmSync(markerPath);
+      symlinkSync(real, markerPath);
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+
+  it('a marker recording a path with .. is refused', async () => {
+    await withMarker('dotdot', (marker, markerPath) => {
+      writeFileSync(markerPath, JSON.stringify({ ...marker, files: { ...marker.files, '../outside.md': marker.files['SKILL.md'] } }));
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+
+  it('a marker without a package version is refused', async () => {
+    await withMarker('no-version', (marker, markerPath) => {
+      writeFileSync(markerPath, JSON.stringify({ ...marker, package: { name: 'agent-almanac' } }));
+    }, (entry) => assert.equal(placement.readOwnedMarker(entry), null));
+  });
+});
+
+describe('copy placement: what counts as edited (#606 part 2)', () => {
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-diff-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  /** A fresh copy with a nested file; fn gets the entry and its marker. */
+  async function withCopy(name, fn) {
+    await inLinkSandbox(tmpRoot, name, async (sb) => {
+      const src = resolve(sb.src, 'skills/commit-changes');
+      mkdirSync(resolve(src, 'references'));
+      writeFileSync(resolve(src, 'references/EXAMPLES.md'), EXAMPLES_TEXT);
+      const base = resolve(sb.proj, '.agents/skills');
+      copySkill(sb, base);
+      const entry = resolve(base, 'commit-changes');
+      await fn(entry, placement.readOwnedMarker(entry));
+    });
+  }
+
+  const none = { modified: [], added: [], missing: [] };
+
+  it('names modified, added and missing files, and counts an added link as added', async () => {
+    await withCopy('diff', (entry, marker) => {
+      assert.deepEqual(placement.diffCopy(entry, marker), none, 'control: a fresh copy is unedited');
+      writeFileSync(resolve(entry, 'SKILL.md'), 'rewritten\n');
+      writeFileSync(resolve(entry, 'notes.md'), USER_CONTENT);
+      symlinkSync('SKILL.md', resolve(entry, 'link.md'));
+      rmSync(resolve(entry, 'references/EXAMPLES.md'));
+      assert.deepEqual(placement.diffCopy(entry, marker),
+        { modified: ['SKILL.md'], added: ['link.md', 'notes.md'], missing: ['references/EXAMPLES.md'] });
+    });
+  });
+
+  it('a marker-named file below the root of a copy counts as added: the skip is root-anchored (F7)', async () => {
+    await withCopy('nested-marker', (entry, marker) => {
+      writeFileSync(resolve(entry, `references/${MARKER_NAME}`), USER_CONTENT);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: [`references/${MARKER_NAME}`] });
+    });
+  });
+
+  it('a CRLF-only rewrite is not an edit; one more byte is (D1)', async () => {
+    await withCopy('crlf', (entry, marker) => {
+      const crlf = LINK_FIXTURE.skill.replace(/\n/g, '\r\n');
+      writeFileSync(resolve(entry, 'SKILL.md'), crlf);
+      assert.deepEqual(placement.diffCopy(entry, marker), none);
+      writeFileSync(resolve(entry, 'SKILL.md'), `${crlf}x`);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, modified: ['SKILL.md'] });
+    });
+  });
+
+  it('OS and editor junk the marker does not record is not an edit (D1)', async () => {
+    await withCopy('junk', (entry, marker) => {
+      for (const junk of ['.DS_Store', 'Thumbs.db', 'desktop.ini', '.SKILL.md.swp', '#SKILL.md#', 'SKILL.md~', 'references/.DS_Store']) {
+        writeFileSync(resolve(entry, junk), 'junk');
+      }
+      symlinkSync('user@host.1234', resolve(entry, '.#SKILL.md'));
+      mkdirSync(resolve(entry, '__pycache__'));
+      writeFileSync(resolve(entry, '__pycache__/tool.cpython-312.pyc'), 'junk');
+      assert.deepEqual(placement.diffCopy(entry, marker), none);
+      writeFileSync(resolve(entry, 'notes.md'), USER_CONTENT);
+      assert.deepEqual(placement.diffCopy(entry, marker), { ...none, added: ['notes.md'] }, 'control: a real file still counts');
+    });
+  });
+});
+
+describe('copy placement: the uninstall guard (#606 part 2)', () => {
+  // removeEntry is what uninstall, scatter and sync's remove half reach. Once
+  // it can delete a directory, the marker check is all that keeps a user's
+  // directory, so every row here that keeps something is a row the guard
+  // alone decides.
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-copy-guard-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  const KEPT = 'not installed by agent-almanac; left in place';
+
+  it('removes an unedited directory copy and leaves nothing beside it', async () => {
+    await inLinkSandbox(tmpRoot, 'dir', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      copySkill(sb, base);
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes'),
+        { action: 'removed', path: resolve(base, 'commit-changes'), details: 'copy' });
+      assert.deepEqual(readdirSync(base), []);
+    });
+  });
+
+  it('removes an unedited file copy and its sidecar', async () => {
+    await inLinkSandbox(tmpRoot, 'file', async (sb) => {
+      const base = resolve(sb.proj, '.opencode/agents');
+      copyAgentFile(sb, base);
+      assert.deepEqual(placement.removeEntry(base, 'code-reviewer.md'),
+        { action: 'removed', path: resolve(base, 'code-reviewer.md'), details: 'copy' });
+      assert.deepEqual(readdirSync(base), []);
+    });
+  });
+
+  it('keeps an edited copy and names the files; its dry run predicts that', async () => {
+    await inLinkSandbox(tmpRoot, 'edited', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      copySkill(sb, base);
+      editCopy(entry);
+      const kept = { action: 'skipped', path: entry, reason: 'edited', note: editedNote('remove') };
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes', { dryRun: true }), kept);
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes'), kept);
+      assert.equal(readFileSync(resolve(entry, 'notes.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('keeps a directory it did not write', async () => {
+    await inLinkSandbox(tmpRoot, 'foreign', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      mkdirSync(resolve(base, 'commit-changes'), { recursive: true });
+      writeFileSync(resolve(base, 'commit-changes/SKILL.md'), USER_CONTENT);
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes'),
+        { action: 'skipped', path: resolve(base, 'commit-changes'), reason: 'foreign', note: KEPT });
+      assert.equal(readFileSync(resolve(base, 'commit-changes/SKILL.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('keeps an empty directory it did not write', async () => {
+    // Nothing in it can count as added, so only the missing marker keeps it.
+    await inLinkSandbox(tmpRoot, 'empty', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      mkdirSync(resolve(base, 'commit-changes'), { recursive: true });
+      assert.deepEqual(placement.removeEntry(base, 'commit-changes'),
+        { action: 'skipped', path: resolve(base, 'commit-changes'), reason: 'foreign', note: KEPT });
+      assert.equal(lstatSync(resolve(base, 'commit-changes')).isDirectory(), true);
+    });
+  });
+
+  it('keeps a copy of a copy made under another name', async () => {
+    // `cp -r` of the CLI's copy carries a marker whose files all match; only
+    // its `entry` says it was not written at this name.
+    await inLinkSandbox(tmpRoot, 'cp-r', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      copySkill(sb, base);
+      cpSync(resolve(base, 'commit-changes'), resolve(base, 'my-variant'), { recursive: true });
+      assert.deepEqual(placement.removeEntry(base, 'my-variant'),
+        { action: 'skipped', path: resolve(base, 'my-variant'), reason: 'foreign', note: KEPT });
+      assert.equal(readFileSync(resolve(base, 'my-variant/SKILL.md'), 'utf8'), LINK_FIXTURE.skill);
+    });
+  });
+
+  it('removes a copy whose only change is a missing file, or CRLF and junk', async () => {
+    await inLinkSandbox(tmpRoot, 'removable', async (sb) => {
+      const missingBase = resolve(sb.proj, 'missing');
+      copySkill(sb, missingBase);
+      rmSync(resolve(missingBase, 'commit-changes/SKILL.md'));
+      const crlfBase = resolve(sb.proj, 'crlf');
+      copySkill(sb, crlfBase);
+      writeFileSync(resolve(crlfBase, 'commit-changes/SKILL.md'), LINK_FIXTURE.skill.replace(/\n/g, '\r\n'));
+      writeFileSync(resolve(crlfBase, 'commit-changes/.DS_Store'), 'junk');
+      for (const base of [missingBase, crlfBase]) {
+        assert.deepEqual(placement.removeEntry(base, 'commit-changes'),
+          { action: 'removed', path: resolve(base, 'commit-changes'), details: 'copy' }, base);
+        assert.deepEqual(readdirSync(base), [], base);
+      }
+    });
+  });
+
+  it('removeEntry, clearForInstall and placeCopy refuse a name that leaves their directory (F1)', async () => {
+    // A link is the one thing the guard lets the CLI remove without a marker,
+    // so a link outside the directory is what containment alone protects.
+    await inLinkSandbox(tmpRoot, 'containment', async (sb) => {
+      const base = resolve(sb.proj, '.agents/skills');
+      mkdirSync(base, { recursive: true });
+      const planted = resolve(sb.proj, 'planted-link');
+      symlinkSync(sb.gone, planted);
+      const outside = { message: new RegExp(`^Refusing a path outside ${base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}: `) };
+      assert.throws(() => placement.removeEntry(base, '../../planted-link'), outside);
+      assert.throws(() => placement.clearForInstall(base, '../../planted-link', { force: true }), outside);
+      assert.throws(() => copySkill(sb, base, { name: '../../planted-link', force: true }), outside);
+      assert.equal(lstatSync(planted).isSymbolicLink(), true, 'the link outside the directory survives');
+    });
+  });
+
+  it('link-mode install --force replaces an unedited copy with a link, and keeps an edited one', async () => {
+    // The third path through the guard: clearForInstall, under a plain install --force.
+    await inLinkSandbox(tmpRoot, 'link-force', async (sb) => {
+      const item = { type: 'skill', id: 'commit-changes', sourceDir: resolve(sb.src, 'skills/commit-changes') };
+      const base = resolve(sb.proj, '.agents/skills');
+      const entry = resolve(base, 'commit-changes');
+      const adapter = new UniversalAdapter();
+
+      copySkill(sb, base);
+      assert.deepEqual(await adapter.install(item, sb.proj, 'project', { almanacRoot: sb.src, force: true }),
+        { action: 'created', path: entry });
+      assert.equal(readlinkSync(entry), '../../../src/skills/commit-changes');
+
+      rmSync(entry);
+      copySkill(sb, base);
+      editCopy(entry);
+      assert.deepEqual(await adapter.install(item, sb.proj, 'project', { almanacRoot: sb.src, force: true }),
+        { action: 'skipped', path: entry, reason: 'edited', note: editedNote('replace') });
+      assert.equal(lstatSync(entry).isDirectory(), true);
+      assert.equal(readFileSync(resolve(entry, 'notes.md'), 'utf8'), USER_CONTENT);
     });
   });
 });

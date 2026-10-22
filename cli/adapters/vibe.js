@@ -38,7 +38,7 @@ export class VibeAdapter extends FrameworkAdapter {
       const targetBase = this._skillsBase(projectDir, scope);
       const targetPath = childPath(targetBase, item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-      const blocked = clearForInstall(targetPath, { force: options.force });
+      const blocked = clearForInstall(targetBase, item.id, { force: options.force });
       if (blocked) return blocked;
 
       mkdirSync(targetBase, { recursive: true });
@@ -80,8 +80,7 @@ system_prompt_id = "${item.id}"
 
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
-      const targetPath = childPath(this._skillsBase(projectDir, scope), item.id);
-      return removeEntry(targetPath, { dryRun: options.dryRun });
+      return removeEntry(this._skillsBase(projectDir, scope), item.id, { dryRun: options.dryRun });
     }
 
     if (item.type === 'agent') {
