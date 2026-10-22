@@ -11,7 +11,7 @@
  * Teams:   (no symlink — definitions read from teams/ at activation time)
  */
 
-import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync, lstatSync, readlinkSync } from 'fs';
+import { existsSync, mkdirSync, symlinkSync, readdirSync, lstatSync, readlinkSync } from 'fs';
 import { resolve, relative } from 'path';
 import { homedir } from 'os';
 import { FrameworkAdapter, childPath } from './base.js';
@@ -125,11 +125,16 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
     }
 
     if (item.type === 'team') {
+      // install never writes <base>/teams: at -g it is ~/.claude/teams, where
+      // TeamCreate keeps its runtime state, and every `scatter` reaches this
+      // branch. An older CLI linked it, and audit() calls such a link stale, so
+      // a link (dangling or not) is removed. Anything else is not the CLI's and
+      // is never touched, nor consulted for a copy marker. It is reported as
+      // not installed, without the kept-entry note, because nearly every
+      // machine with Claude Code has a real one (S3-B2 F2).
       const teamsLink = resolve(base, 'teams');
-      if (options.dryRun) return { action: 'removed', path: teamsLink, details: 'dry-run' };
-      if (!existsSync(teamsLink)) return { action: 'skipped', path: teamsLink, details: 'not installed' };
-      unlinkSync(teamsLink);
-      return { action: 'removed', path: teamsLink };
+      if (classify(teamsLink).kind !== 'link') return { action: 'skipped', path: teamsLink, details: 'not installed' };
+      return removeEntry(teamsLink, { dryRun: options.dryRun });
     }
 
     return { action: 'skipped', path: '', details: `Unknown type: ${item.type}` };

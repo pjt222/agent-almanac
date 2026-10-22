@@ -3150,3 +3150,77 @@ describe('sync keeps a user\'s own entry in .agents/skills (S3-B2 P6)', () => {
     assert.equal(lstatSync(resolve(proj, '.agents/skills/commit-changes')).isSymbolicLink(), true, 'the manifest\'s item is linked');
   });
 });
+
+describe('claude-code\'s team uninstall never removes a real <base>/teams (S3-B2 F2)', () => {
+  // install never writes <base>/teams: at -g that is ~/.claude/teams, where
+  // Claude Code's TeamCreate keeps its runtime state. uninstall of a team, and
+  // so every `scatter`, reaches this branch all the same. At b3275420a it
+  // unlinked whatever was there: a real directory survived only because
+  // unlinkSync cannot remove one (EISDIR, reported failed), and a real file
+  // was deleted. An older CLI did link this path, and audit still calls such a
+  // link stale, so a link is removed; anything else is reported not installed
+  // and left alone, without the kept-entry note, because nearly every machine
+  // with Claude Code has a real one.
+  const team = { type: 'team', id: 'fixture-team' };
+  let tmpRoot;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-teams-f2-')));
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  const notInstalled = (path) => ({ action: 'skipped', path, details: 'not installed' });
+
+  it('a real ~/.claude/teams directory and everything in it survive uninstall and its dry run', async () => {
+    await inLinkSandbox(tmpRoot, 'dir', async (sb) => {
+      const teams = resolve(sb.home, '.claude/teams');
+      mkdirSync(resolve(teams, 'live-team'), { recursive: true });
+      writeFileSync(resolve(teams, 'live-team/config.json'), USER_CONTENT);
+      const adapter = new ClaudeCodeAdapter();
+      assert.deepEqual(await adapter.uninstall(team, sb.proj, 'global', {}), notInstalled(teams));
+      assert.deepEqual(await adapter.uninstall(team, sb.proj, 'global', { dryRun: true }), notInstalled(teams));
+      assert.deepEqual(readdirSync(teams), ['live-team']);
+      assert.equal(readFileSync(resolve(teams, 'live-team/config.json'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('a real file at ~/.claude/teams survives uninstall', async () => {
+    await inLinkSandbox(tmpRoot, 'file', async (sb) => {
+      const teams = resolve(sb.home, '.claude/teams');
+      mkdirSync(dirname(teams), { recursive: true });
+      writeFileSync(teams, USER_CONTENT);
+      assert.deepEqual(await new ClaudeCodeAdapter().uninstall(team, sb.proj, 'global', {}), notInstalled(teams));
+      assert.equal(readFileSync(teams, 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('a stale link at ~/.claude/teams is removed, its target left alone', async () => {
+    // Control: the one thing this branch removes, as it did at b3275420a.
+    await inLinkSandbox(tmpRoot, 'link', async (sb) => {
+      const teams = resolve(sb.home, '.claude/teams');
+      const target = resolve(sb.root, 'old-teams');
+      mkdirSync(target, { recursive: true });
+      writeFileSync(resolve(target, 'kept.md'), USER_CONTENT);
+      mkdirSync(dirname(teams), { recursive: true });
+      symlinkSync(target, teams);
+      const adapter = new ClaudeCodeAdapter();
+      assert.deepEqual(await adapter.uninstall(team, sb.proj, 'global', { dryRun: true }),
+        { action: 'removed', path: teams, details: 'dry-run' });
+      assert.equal(lstatSync(teams).isSymbolicLink(), true, 'a dry run removes nothing');
+      assert.deepEqual(await adapter.uninstall(team, sb.proj, 'global', {}), { action: 'removed', path: teams });
+      assert.throws(() => lstatSync(teams), { code: 'ENOENT' });
+      assert.equal(readFileSync(resolve(target, 'kept.md'), 'utf8'), USER_CONTENT);
+    });
+  });
+
+  it('a dangling link at ~/.claude/teams is removed too', async () => {
+    await inLinkSandbox(tmpRoot, 'dangling', async (sb) => {
+      const teams = resolve(sb.home, '.claude/teams');
+      mkdirSync(dirname(teams), { recursive: true });
+      symlinkSync(sb.gone, teams);
+      assert.deepEqual(await new ClaudeCodeAdapter().uninstall(team, sb.proj, 'global', {}), { action: 'removed', path: teams });
+      assert.throws(() => lstatSync(teams), { code: 'ENOENT' });
+    });
+  });
+});
