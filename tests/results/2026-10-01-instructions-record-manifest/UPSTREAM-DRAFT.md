@@ -1,6 +1,6 @@
 # Comment for `anthropics/claude-code#82056`
 
-**Status: POSTED on 2026-10-22 as [comment 6333086967](https://github.com/anthropics/claude-code/issues/82056#issuecomment-6333086967).** The posted text is `POSTED.md` in this folder, byte for byte. It differs from the draft below by one advocatus-diaboli review pass (2026-10-22): an opening sentence that re-anchors the thread, a line on the recall request, the folder link, and scoping fixes to four sentences and two headings. The draft is kept as it was reviewed in #992. It replies to
+**Status: POSTED on 2026-10-22 as [comment 6333086967](https://github.com/anthropics/claude-code/issues/82056#issuecomment-6333086967).** The posted text is `POSTED.md` in this folder, byte for byte. It differs from the draft below by one advocatus-diaboli review pass (2026-10-22): an opening sentence that re-anchors the thread, a line on the recall request, the folder link, and changes to the three numbered headings, several paragraphs and bullets, one table row and the footer; `diff` the draft's body below the `---` rule against `POSTED.md` to see each one. The draft is kept as it was reviewed in #992. It replies to
 [tonydzi 5874997905](https://github.com/anthropics/claude-code/issues/82056#issuecomment-5874997905)
 and [DanceNitra 5870005304](https://github.com/anthropics/claude-code/issues/82056#issuecomment-5870005304),
 and asks about JhouCode's datum in [5922245389](https://github.com/anthropics/claude-code/issues/82056#issuecomment-5922245389).
