@@ -384,7 +384,8 @@ function refuseUnlessOwned(entryPath, entry, purpose) {
  * clearForInstall() does not pass a note on, so `install --force` would leave
  * the directory in silence. Every command that removes prints the error:
  * `uninstall`, `sync` and `install --force` with their results, and `scatter`
- * with its results under `--quiet` and on stderr otherwise (#999).
+ * with its results under `--quiet` without `--json`, and on stderr otherwise
+ * (#999).
  */
 function discard(entryPath, isDir) {
   if (!isDir) {

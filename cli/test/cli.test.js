@@ -1345,6 +1345,9 @@ describe('npm package root (#606)', () => {
       const scattered = spawnCli(['scatter', 'fixture-team', '-y', '--json', '--source', pkgRoot], dir);
       assert.equal(scattered.status, 0, `exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
       assert.deepEqual(JSON.parse(scattered.stdout).copiesKept, editFirst ? ['commit-changes'] : [], `edited first: ${editFirst}`);
+      // Nothing failed, so nothing is named as failed: an edited copy that is
+      // kept is not a failure (#999, review round 1).
+      assert.deepEqual(scattered.stderr.split('\n').filter((line) => line.startsWith('  ! ')), [], `edited first: ${editFirst}: nothing failed\n${scattered.stderr}`);
       assert.equal(existsSync(resolve(dir, '.agents/skills/commit-changes')), false);
       assert.equal(existsSync(resolve(dir, '.claude/agents')), false);
       assert.equal(existsSync(skill), editFirst, `edited first: ${editFirst}`);
@@ -1393,38 +1396,52 @@ describe('npm package root (#606)', () => {
     assert.equal(existsSync(resolve(dir, '.claude/skills/commit-changes/notes.md')), true);
   });
 
-  it('scatter names a removal that failed once, on stderr, or with its result under --quiet (#999)', { skip: process.platform === 'win32' || process.getuid?.() === 0 }, () => {
-    // A junk-only directory keeps the copy unedited, and at 0o555 the file in
-    // it cannot be deleted: discard() moves the copy into a staging directory,
+  it('scatter names each removal that failed, once, on stderr, or with its result under --quiet (#999)', { skip: process.platform === 'win32' || process.getuid?.() === 0 }, () => {
+    // A junk-only directory keeps a copy unedited, and at 0o555 the file in it
+    // cannot be deleted: discard() moves the copy into a staging directory,
     // cannot delete that, and throws an error naming it. The ceremony and
     // --json are built from the plan, so before #999 only --quiet printed the
-    // error, and the copy was left where no listing shows it. --quiet runs
-    // first: it printed the error before #999 too, so it proves the matcher.
-    for (const mode of [['--quiet'], [], ['--json']]) {
-      const label = mode[0] ?? 'ceremony';
-      const dir = project(`copy-scatter-failed-${label.replace(/^--/, '')}`);
+    // error, and the copy was left where no listing shows it. Both copies get
+    // the junk, so two removals fail: every `  ! ` line is counted, which pins
+    // "each" (both named) and "only failures" (nothing else named). printResults()
+    // prints the failures with the results under --quiet, unless --json takes
+    // the output, so `--json --quiet` names them on stderr like the rest
+    // (review round 1). --quiet runs first: it printed the errors before #999
+    // too, so it proves the matcher.
+    for (const mode of [['--quiet'], [], ['--ceremonial'], ['--json'], ['--json', '--quiet']]) {
+      const label = mode.join(' ') || 'ceremony';
+      const dir = project(`copy-scatter-failed-${label.replace(/--/g, '').replace(/ /g, '-')}`);
       const gathered = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
       assert.equal(gathered.status, 0, `exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
-      const base = resolve(dir, '.claude/skills');
-      const junkDir = resolve(base, 'commit-changes/junkdir');
-      mkdirSync(junkDir);
-      writeFileSync(resolve(junkDir, '.DS_Store'), 'x');
-      chmodSync(junkDir, 0o555);
+      const bases = [['universal', resolve(dir, '.agents/skills')], ['claude-code', resolve(dir, '.claude/skills')]];
+      for (const [, base] of bases) {
+        const junkDir = resolve(base, 'commit-changes/junkdir');
+        mkdirSync(junkDir);
+        writeFileSync(resolve(junkDir, '.DS_Store'), 'x');
+        chmodSync(junkDir, 0o555);
+      }
       try {
         const scattered = spawnCli(['scatter', 'fixture-team', '-y', ...mode, '--source', pkgRoot], dir);
         assert.equal(scattered.status, 0, `${label}: exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
-        if (label === '--json') {
+        if (mode.includes('--json')) {
           assert.doesNotThrow(() => JSON.parse(scattered.stdout), `${label}: stdout is not one JSON document:\n${scattered.stdout}`);
         }
-        const staging = readdirSync(base).filter((name) => name.startsWith('.agent-almanac-staging-'));
-        assert.equal(staging.length, 1, `${label}: ${staging}`);
-        const tail = `; ${resolve(base, 'commit-changes')} has left its install path, ` +
-          `and what is left of it is in ${resolve(base, staging[0])}: delete that by hand`;
-        const named = (text) => text.split('\n').filter((line) => line.startsWith('  ! commit-changes [claude-code] ') && line.endsWith(tail));
-        const [printedOn, silentOn] = label === '--quiet' ? [scattered.stdout, scattered.stderr] : [scattered.stderr, scattered.stdout];
+        const failures = bases.map(([adapter, base]) => {
+          const staging = readdirSync(base).filter((name) => name.startsWith('.agent-almanac-staging-'));
+          assert.equal(staging.length, 1, `${label} [${adapter}]: ${staging}`);
+          const tail = `; ${resolve(base, 'commit-changes')} has left its install path, ` +
+            `and what is left of it is in ${resolve(base, staging[0])}: delete that by hand`;
+          return (line) => line.startsWith(`  ! commit-changes [${adapter}] `) && line.endsWith(tail);
+        });
+        const bangs = (text) => text.split('\n').filter((line) => line.startsWith('  ! '));
+        const withResults = mode.includes('--quiet') && !mode.includes('--json');
+        const [printedOn, silentOn] = withResults ? [scattered.stdout, scattered.stderr] : [scattered.stderr, scattered.stdout];
         const output = `stdout:\n${scattered.stdout}\nstderr:\n${scattered.stderr}`;
-        assert.equal(named(printedOn).length, 1, `${label}: the failed removal is not named once where it should be\n${output}`);
-        assert.equal(named(silentOn).length, 0, `${label}: the failed removal is named twice\n${output}`);
+        for (const named of failures) {
+          assert.equal(bangs(printedOn).filter(named).length, 1, `${label}: a failed removal is not named once where it should be\n${output}`);
+        }
+        assert.equal(bangs(printedOn).length, failures.length, `${label}: a \`!\` line names something that did not fail\n${output}`);
+        assert.deepEqual(bangs(silentOn), [], `${label}: a failed removal is named on the other stream too\n${output}`);
       } finally {
         execSync(`chmod -R u+w "${dir}"`);
       }
