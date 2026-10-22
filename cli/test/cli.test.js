@@ -4126,6 +4126,21 @@ describe('audit reports copies: version drift, edits, unreadable markers (#606 p
     assert.equal(auditExitCode(results), AUDIT_EXIT.FINDINGS, 'the finding survives the failed copy check');
   });
 
+  it('a listing that is not a list is a warning too, never a crash (#439\'s class)', async () => {
+    // A third-party adapter is duck-typed; the copy findings run outside the
+    // try that decides `crashed`, so they must not throw out of auditAll.
+    class OddListAdapter {
+      static displayName = 'Odd';
+      async audit() { return { framework: 'Odd', ok: ['fine'], warnings: [], errors: [] }; }
+      async listInstalled() { return {}; }
+    }
+    const [entry] = await auditAll([new OddListAdapter()], tmpRoot, 'project', false, REFERENCE);
+    assert.equal(entry.crashed, false);
+    assert.deepEqual(entry.ok, ['fine']);
+    assert.equal(entry.warnings.length, 1, entry.warnings.join('\n'));
+    assert.match(entry.warnings[0], /^copies not checked: /);
+  });
+
   it('lists each adapter once and hands that listing to its audit', async () => {
     // On the /mnt 9p mount one claude-code listing of this checkout took
     // about 2.6 s, so a second listing for the copy findings doubled `audit`.

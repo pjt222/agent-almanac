@@ -309,7 +309,15 @@ export async function auditAll(adapters, projectDir, scope, scopeExplicit = fals
     // audited into a crashed one or cost it its findings (critique F5).
     let copies = { ok: [], warnings: [] };
     if (listError) copies = { ok: [], warnings: [`copies not checked: ${listError.message}`] };
-    else if (installed) copies = copyFindings(installed, reference);
+    else if (installed) {
+      // A duck-typed adapter can list anything; whatever it returns must not
+      // throw out of auditAll, which would abort the whole audit (#439).
+      try {
+        copies = copyFindings(installed, reference);
+      } catch (err) {
+        copies = { ok: [], warnings: [`copies not checked: ${err.message}`] };
+      }
+    }
     // Normalised here rather than in all 14 adapters: returning from audit()
     // is what proves the adapter ran to completion, so this is the only place
     // that can set the flag authoritatively.
