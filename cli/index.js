@@ -965,8 +965,9 @@ program
 
     // A copy edited since it was copied is kept, not removed (D1). This is
     // read from what uninstallAll did, not from the plan above, which lists
-    // every item it set out to remove.
-    const copiesKept = [...new Set(uninstallResults.filter(r => r.reason === 'edited').map(r => r.item.id))];
+    // every item it set out to remove. Sorted, so --json does not depend on
+    // the order the team's agents list their skills (review round 1, F8).
+    const copiesKept = [...new Set(uninstallResults.filter(r => r.reason === 'edited').map(r => r.item.id))].sort();
 
     if (options.json) {
       campfire.printJson({

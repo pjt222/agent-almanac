@@ -1365,6 +1365,71 @@ describe('npm package root (#606)', () => {
     assert.equal(lstatSync(link).isSymbolicLink(), true);
   });
 
+  // Review round 1, F5: three paths of the copy wiring that no test pinned.
+
+  it('a second gather --from-package copy over the same copies prints no NOTE for them', () => {
+    // A copy already at this version is not news: only the copy mode's own NOTE.
+    const dir = project('copy-gather-twice');
+    const args = ['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'];
+    const first = spawnCli(args, dir);
+    assert.equal(first.status, 0, `exit ${first.status}\n${first.stdout}\n${first.stderr}`);
+    const second = spawnCli(args, dir);
+    assert.equal(second.status, 0, `exit ${second.status}\n${second.stdout}\n${second.stderr}`);
+    assert.deepEqual(second.stderr.split('\n').filter((line) => line.startsWith('  NOTE:')), [copyNote(pkgRoot, PKG_VERSION)],
+      second.stderr);
+  });
+
+  it('scatter without --json names the practice whose edited copy it kept', () => {
+    const dir = project('copy-scatter-plain');
+    const gathered = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(gathered.status, 0, `exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+    writeFileSync(resolve(dir, '.claude/skills/commit-changes/notes.md'), USER_CONTENT);
+    const scattered = spawnCli(['scatter', 'fixture-team', '-y', '--source', pkgRoot], dir);
+    assert.equal(scattered.status, 0, `exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
+    assert.ok(scattered.stdout.split('\n').includes('  1 practice stays where it was changed: commit-changes.'), scattered.stdout);
+    assert.equal(existsSync(resolve(dir, '.claude/skills/commit-changes/notes.md')), true);
+  });
+
+  it('scatter --json lists the copies it kept in sorted order', () => {
+    // Two edited copies whose results arrive out of order: the agent lists
+    // commit-changes before a-first-skill (review round 1, F8).
+    const pkgTwo = resolve(tmpRoot, 'prefix-two/lib/node_modules/agent-almanac');
+    cpSync(pkgRoot, pkgTwo, { recursive: true });
+    mkdirSync(resolve(pkgTwo, 'skills/a-first-skill'));
+    writeFileSync(resolve(pkgTwo, 'skills/a-first-skill/SKILL.md'), '---\nname: a-first-skill\n---\nsecond fixture skill\n');
+    writeFileSync(resolve(pkgTwo, 'skills/_registry.yml'), [
+      'total_skills: 2',
+      'domains:',
+      '  git:',
+      '    description: fixture',
+      '    skills:',
+      '      - id: commit-changes',
+      '        path: commit-changes/SKILL.md',
+      '      - id: a-first-skill',
+      '        path: a-first-skill/SKILL.md',
+      '',
+    ].join('\n'));
+    writeFileSync(resolve(pkgTwo, 'agents/_registry.yml'), [
+      'total_agents: 1',
+      'agents:',
+      '  - id: fixture-agent',
+      '    path: agents/fixture-agent.md',
+      '    skills:',
+      '      - commit-changes',
+      '      - a-first-skill',
+      '',
+    ].join('\n'));
+    const dir = project('copy-scatter-sorted');
+    const gathered = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgTwo, '--from-package', 'copy'], dir);
+    assert.equal(gathered.status, 0, `exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+    for (const id of ['commit-changes', 'a-first-skill']) {
+      writeFileSync(resolve(dir, `.claude/skills/${id}/notes.md`), USER_CONTENT);
+    }
+    const scattered = spawnCli(['scatter', 'fixture-team', '-y', '--json', '--source', pkgTwo], dir);
+    assert.equal(scattered.status, 0, `exit ${scattered.status}\n${scattered.stdout}\n${scattered.stderr}`);
+    assert.deepEqual(JSON.parse(scattered.stdout).copiesKept, ['a-first-skill', 'commit-changes']);
+  });
+
   it('sync and an install from a manifest copy too', () => {
     for (const command of ['sync', 'install']) {
       const dir = project(`copy-${command}-manifest`);
@@ -3465,6 +3530,16 @@ describe('claude-code\'s team uninstall never removes a real <base>/teams (S3-B2
 
 /** The package a test copy records. */
 const COPY_FROM = { name: 'agent-almanac', version: '9.9.9' };
+
+/**
+ * `skip` for a row that makes a step fail with a mode bit: false where mode
+ * bits refuse it, otherwise the reason it cannot.
+ */
+const NO_MODE_BITS = process.platform === 'win32'
+  ? 'mode bits do not refuse a rename, a delete or a read on Windows'
+  : process.getuid?.() === 0
+    ? 'root ignores mode bits, so the row would pass for the wrong reason'
+    : false;
 const EXAMPLES_TEXT = 'nested reference file\n';
 const sha256Of = (text) => `sha256:${createHash('sha256').update(text).digest('hex')}`;
 const MARKER_NAME = '.agent-almanac-copy.json';
@@ -4079,11 +4154,6 @@ describe('copy placement: a remove or replace that fails part way says what it l
   // makes one step fail with a mode bit: rename(2) of a directory to another
   // parent needs write permission on the directory itself, and deleting a
   // file needs it on the directory holding the file.
-  const NO_MODE_BITS = process.platform === 'win32'
-    ? 'mode bits do not refuse a rename or a delete on Windows'
-    : process.getuid?.() === 0
-      ? 'root ignores mode bits, so the row would pass for the wrong reason'
-      : false;
   let tmpRoot;
 
   before(() => {
@@ -4304,6 +4374,29 @@ describe('audit reports copies: version drift, edits, unreadable markers (#606 p
         '1 entry with a copy marker agent-almanac cannot read, counted as not installed by it: other-skill',
       ]);
       assert.equal(auditExitCode([entry]), AUDIT_EXIT.CLEAN);
+    });
+  });
+
+  it('a copy holding a file it cannot read is reported not checked for edits, beside the other copies\' OK lines', { skip: NO_MODE_BITS }, async () => {
+    // copyFindings() catches one copy's failed hash, so it cannot take the
+    // version lines of the others with it (review round 1, F5: unpinned).
+    await inLinkSandbox(tmpRoot, 'unreadable-file', async (sb) => {
+      copyInto(sb, ['commit-changes', 'other-skill'], REFERENCE);
+      const unreadable = resolve(sb.proj, '.agents/skills/commit-changes/SKILL.md');
+      chmodSync(unreadable, 0o000);
+      try {
+        const [entry] = await auditAll([new UniversalAdapter()], sb.proj, 'project', false, REFERENCE);
+        assert.deepEqual(entry, {
+          framework: 'Universal (.agents/)',
+          ok: ['2 skills installed', '2 copies from agent-almanac 9.9.9'],
+          warnings: [`1 copy not checked for edits: commit-changes (EACCES: permission denied, open '${unreadable}')`],
+          errors: [],
+          crashed: false,
+        });
+        assert.equal(auditExitCode([entry]), AUDIT_EXIT.CLEAN);
+      } finally {
+        chmodSync(unreadable, 0o644);
+      }
     });
   });
 
