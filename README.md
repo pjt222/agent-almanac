@@ -87,9 +87,9 @@ Auto-discovers all 373 skills and 76 agents. To use a team, read its definition 
 
 ### Path 3 — Global CLI (cross-framework)
 
-**Requires Node.js 22.12.0 or newer.** The floor was raised when the CLI moved to commander 15.
-`npm install` only *warns* on an engine mismatch rather than failing, so on Node 18 or 20 the
-install appears to succeed and the CLI then cannot start — check with `node --version` first.
+**Requires Node.js 26 or newer** (`engines` in `package.json`; raised from 22.12 in #1012).
+`npm install` only *warns* on an engine mismatch rather than failing, so on an older Node the
+install appears to succeed on a version the CLI is no longer tested on — check with `node --version` first.
 
 ```bash
 npm install -g agent-almanac            # the CLI, with every skill, agent, team and guide in its package

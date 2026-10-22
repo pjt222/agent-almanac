@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+**Read the Breaking section before upgrading.** It raises the Node floor. `2.0.0` stays held for the Rust port (#256), so the release that ships this keeps the `1.x` number, as `1.9.0` did for the last floor raise, and this notice makes up for it.
+
+### Breaking
+- **Node.js 26 or newer is now required** (`engines.node` was `>=22.12.0`, #1012). Node 22 and Node 24 users must upgrade Node. `npm install` warns rather than fails on an engine mismatch, so an install on an older Node appears to succeed on a version the CLI is no longer tested on. CI, the release workflow and the docs moved to Node 26 in the same change. The maintainer chose the latest Node line, 26, which was not yet LTS on the day it was decided (2026-10-22); Node's even-numbered lines become LTS in late October.
+
 ### Added
 - **`--from-package copy`** (#606, part 2, closing #606 with part 1's #977). `install`, `sync` and `gather` can copy out of the npm package instead of linking into it, so the copies outlast `npm update` and `npm uninstall`. The default from a package root is still to refuse; the refusal now lists clone, copy and link, in that order.
   - **What it writes.** At each of the twelve sites where nine adapters link (universal, claude-code, opencode, openclaw, hermes, vibe, gemini, cursor, copilot), a real copy: a skill directory, claude-code's whole agents directory, or an opencode or hermes agent file. A copied directory holds a marker, `.agent-almanac-copy.json`; a copied file has a hidden sidecar beside it, `.<name>.agent-almanac-copy.json`. The marker is deterministic JSON with no absolute path: the package's name and version from its `package.json`, the item, its package-relative source, the copy time and a sha256 of every file. The copy is staged beside its target and renamed into place. It is written by an `lstat`-based walker that refuses any symlink, not `fs.cpSync`, whose `dereference` leaves a link into the source on Node 24 and 25.

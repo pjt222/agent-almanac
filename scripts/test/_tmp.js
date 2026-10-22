@@ -11,7 +11,8 @@
  * `node:fs`'s own `maxRetries` knob is NOT the fix, and that is measured rather than assumed
  * (`tests/results/2026-09-07-rmsync-enotempty-probe/RESULT.md`): under a child that keeps
  * creating files for 60 ms, Node 24 and 25 clear the error with `maxRetries: 3`, but Node 22.16
- * — the oldest version installed here inside `engines.node`'s `>=22.12.0`; the floor itself was
+ * — the oldest version installed here inside `engines.node`'s `>=22.12.0`, the floor until #1012
+ * (it is `>=26` now); the floor itself was
  * not measured — fails every one of 20 trials with it and merely takes longer, ten retries
  * spending over a second. What differs is therefore WHAT is re-attempted, not for how long:
  * re-invoking `rmSync` re-walks the tree, and did remove the directory in every trial on all
