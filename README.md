@@ -19,7 +19,7 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 - **373 skills** across 67 domains — structured, executable procedures
 - **76 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **22 teams** — predefined multi-agent compositions for complex workflows
-- **35 guides** — human-readable documentation across workflow, infrastructure, reference, design, and investigation
+- **36 guides** — human-readable documentation across workflow, infrastructure, reference, design, and investigation
 - **Interactive visualization** — force-graph explorer with 373 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
@@ -188,7 +188,7 @@ agent-almanac/
   skills/          373 executable procedures across 67 domains
   agents/          76 specialist personas
   teams/           22 multi-agent compositions with 8 coordination patterns
-  guides/          35 human-readable reference docs
+  guides/          36 human-readable reference docs
   viz/             Interactive force-graph explorer with R-generated icons
   tests/           30 test scenarios for validation
   i18n/            Translations (10 locales: de, zh-CN, ja, es, caveman-lite, caveman, caveman-ultra, wenyan-lite, wenyan, wenyan-ultra)
@@ -227,6 +227,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 **Infrastructure**
 
 - [Installation](guides/installation.md) — OS-aware install runbook covering plugin install, global CLI, prereqs, verification, and updating across Linux, macOS, Windows, WSL2, and Codespaces
+- [Almanac Skills in a pi-durable Host](guides/almanac-skills-in-pi-durable.md) — Offer agent-almanac skills to an agent built on pi-durable: a system-prompt section that lists them and the read tool that loads one
 - [Setting Up Your Environment](guides/setting-up-your-environment.md) — WSL2 setup, shell config, MCP server integration, and Claude Code configuration
 - [Symlink Architecture](guides/symlink-architecture.md) — How symlinks enable multi-project discovery of skills, agents, and teams through Claude Code
 - [R Package Development](guides/r-package-development.md) — Package structure, testing, CRAN submission, pkgdown deployment, and renv management

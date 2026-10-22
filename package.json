@@ -102,5 +102,10 @@
     "chalk": "^6.0.0",
     "commander": "^15.0.0",
     "js-yaml": "^5.2.1"
+  },
+  "devDependencies": {
+    "@earendil-works/chord": "1.4.0",
+    "@earendil-works/pi-ai": "1.4.0",
+    "@earendil-works/pi-durable": "1.4.0"
   }
 }
