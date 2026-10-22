@@ -13,7 +13,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, unlinkSync, readdirSync, readFileSync } from 'fs';
 import { resolve } from 'path';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 import { distillSkill, distillAgent, distillTeam, bundleForEdge } from '../lib/edge-transformer.js';
 
 export class AiEdgeAdapter extends FrameworkAdapter {
@@ -40,7 +40,7 @@ export class AiEdgeAdapter extends FrameworkAdapter {
 
   async install(item, projectDir, scope, options = {}) {
     const dir = this._targetDir(projectDir, item.type);
-    const targetPath = resolve(dir, `${item.id}.md`);
+    const targetPath = childPath(dir, `${item.id}.md`);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
     if (existsSync(targetPath) && !options.force) {
@@ -67,7 +67,7 @@ export class AiEdgeAdapter extends FrameworkAdapter {
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
-    const targetPath = resolve(this._targetDir(projectDir, item.type), `${item.id}.md`);
+    const targetPath = childPath(this._targetDir(projectDir, item.type), `${item.id}.md`);
     if (!existsSync(targetPath)) {
       return { action: 'skipped', path: '', details: 'not installed' };
     }

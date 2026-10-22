@@ -14,7 +14,7 @@
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync, lstatSync, readlinkSync } from 'fs';
 import { resolve, relative } from 'path';
 import { homedir } from 'os';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 
 export class ClaudeCodeAdapter extends FrameworkAdapter {
   static id = 'claude-code';
@@ -52,7 +52,7 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
 
   async _installSkill(item, base, scope, options) {
     const skillsDir = resolve(base, 'skills');
-    const targetPath = resolve(skillsDir, item.id);
+    const targetPath = childPath(skillsDir, item.id);
 
     if (options.dryRun) {
       return { action: 'created', path: targetPath, details: 'dry-run' };
@@ -125,7 +125,7 @@ export class ClaudeCodeAdapter extends FrameworkAdapter {
     const base = this._targetBase(scope, projectDir);
 
     if (item.type === 'skill') {
-      const targetPath = resolve(base, 'skills', item.id);
+      const targetPath = childPath(resolve(base, 'skills'), item.id);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
       if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
       unlinkSync(targetPath);

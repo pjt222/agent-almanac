@@ -8,7 +8,7 @@
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { resolve, relative } from 'path';
 import { homedir } from 'os';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 
 export class VibeAdapter extends FrameworkAdapter {
   static id = 'vibe';
@@ -35,7 +35,7 @@ export class VibeAdapter extends FrameworkAdapter {
   async install(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
       const targetBase = this._skillsBase(projectDir, scope);
-      const targetPath = resolve(targetBase, item.id);
+      const targetPath = childPath(targetBase, item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
       if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
 
@@ -49,7 +49,7 @@ export class VibeAdapter extends FrameworkAdapter {
     if (item.type === 'agent') {
       // Vibe uses .toml files for agents — generate a minimal config
       const agentsDir = this._agentsBase();
-      const targetPath = resolve(agentsDir, `${item.id}.toml`);
+      const targetPath = childPath(agentsDir, `${item.id}.toml`);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
       if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
 
@@ -79,7 +79,7 @@ system_prompt_id = "${item.id}"
 
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
-      const targetPath = resolve(this._skillsBase(projectDir, scope), item.id);
+      const targetPath = childPath(this._skillsBase(projectDir, scope), item.id);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
       if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
       unlinkSync(targetPath);
@@ -87,7 +87,7 @@ system_prompt_id = "${item.id}"
     }
 
     if (item.type === 'agent') {
-      const targetPath = resolve(this._agentsBase(), `${item.id}.toml`);
+      const targetPath = childPath(this._agentsBase(), `${item.id}.toml`);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
       if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
       unlinkSync(targetPath);

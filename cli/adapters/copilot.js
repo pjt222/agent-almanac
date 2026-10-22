@@ -7,7 +7,7 @@
 
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { resolve, relative } from 'path';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 import { condenseSkill, wrapInMarkers, removeMarkedSection, hasMarkedSection } from '../lib/transformer.js';
 
 export class CopilotAdapter extends FrameworkAdapter {
@@ -35,7 +35,7 @@ export class CopilotAdapter extends FrameworkAdapter {
 
     // Modern: .github/skills/<id>/ symlink
     const skillsDir = this._skillsDir(projectDir);
-    const targetPath = resolve(skillsDir, item.id);
+    const targetPath = childPath(skillsDir, item.id);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
     if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
 
@@ -48,7 +48,7 @@ export class CopilotAdapter extends FrameworkAdapter {
 
   async uninstall(item, projectDir, scope, options = {}) {
     // Remove from skills dir
-    const skillPath = resolve(this._skillsDir(projectDir), item.id);
+    const skillPath = childPath(this._skillsDir(projectDir), item.id);
     if (existsSync(skillPath)) {
       if (options.dryRun) return { action: 'removed', path: skillPath, details: 'dry-run' };
       unlinkSync(skillPath);

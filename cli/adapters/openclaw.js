@@ -10,7 +10,7 @@
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, readFileSync, writeFileSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { homedir } from 'os';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 import { condenseAgent, wrapInMarkers, removeMarkedSection, hasMarkedSection } from '../lib/transformer.js';
 
 export class OpenClawAdapter extends FrameworkAdapter {
@@ -36,7 +36,7 @@ export class OpenClawAdapter extends FrameworkAdapter {
 
   async install(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
-      const targetPath = resolve(this._workspaceDir(), item.id);
+      const targetPath = childPath(this._workspaceDir(), item.id);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
       if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
       mkdirSync(this._workspaceDir(), { recursive: true });
@@ -70,7 +70,7 @@ export class OpenClawAdapter extends FrameworkAdapter {
 
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
-      const targetPath = resolve(this._workspaceDir(), item.id);
+      const targetPath = childPath(this._workspaceDir(), item.id);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
       if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
       unlinkSync(targetPath);

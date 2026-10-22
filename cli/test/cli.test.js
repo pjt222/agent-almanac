@@ -38,6 +38,13 @@ import {
 import { installAll, uninstallAll, auditAll, auditExitCode, AUDIT_EXIT, warnUnsupportedScopes } from '../lib/installer.js';
 import { getAdapter, listAdapterIds } from '../adapters/index.js';
 import { FrameworkAdapter } from '../adapters/base.js';
+// childPath and cli/lib/item-id.js are new. A named import of a missing export,
+// or any static import of a missing module, fails the whole file at link time,
+// so a red-first run at the base commit would report one error instead of the
+// individual tests failing for their own reasons.
+import * as adapterBase from '../adapters/base.js';
+const itemId = await import('../lib/item-id.js').catch(() => ({}));
+import { loadRegistries } from '../lib/registry.js';
 import { makeChalkStub } from '../lib/chalk-stub.js';
 import { detectFrameworks } from '../lib/detector.js';
 import { buildFireScene } from '../lib/scene.js';
@@ -2263,5 +2270,182 @@ describe('the scope warning is wired into the orchestrators (#607)', () => {
       lines.filter((l) => /--scope/.test(l)), [],
       'a defaulted scope must not produce a warning naming a flag the user never typed',
     );
+  });
+});
+
+describe('item names stay inside their install directories', () => {
+  // Before this, `uninstall ../../README.md -f universal` removed the project's
+  // own README.md and exited 0: an item id becomes a path segment in every
+  // adapter, and resolve() followed it out of the install directory. Two layers
+  // now refuse it: installAll/uninstallAll check every id before anything is
+  // touched (cli/lib/item-id.js), and childPath() in cli/adapters/base.js refuses
+  // a path that leaves its base directory even when an adapter is called
+  // directly. Each layer has its own test below, so a mutant of either one is
+  // caught even while the other still holds.
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+  const SENTINEL = 'sentinel: must survive\n';
+  let tmpRoot;
+  let env;
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-item-id-')));
+    const fakeHome = resolve(tmpRoot, 'home');
+    mkdirSync(fakeHome, { recursive: true });
+    env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes'), NO_COLOR: '1' };
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  function spawnCli(args, cwd) {
+    const res = spawnSync(process.execPath, [cliEntry, ...args], { cwd, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+  }
+
+  /** A project with an (empty) universal skills directory and a sentinel file at its root. */
+  function project(name) {
+    const dir = resolve(tmpRoot, name);
+    mkdirSync(resolve(dir, '.agents/skills'), { recursive: true });
+    writeFileSync(resolve(dir, 'README.md'), SENTINEL);
+    return dir;
+  }
+
+  it('uninstall refuses a name that is not a plain id, and the file it would have reached survives', () => {
+    const dir = project('uninstall-cli');
+    const r = spawnCli(['uninstall', '../../README.md', '-f', 'universal', '--source', ROOT], dir);
+    assert.equal(r.status, 1, `expected exit 1, got ${r.status}\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /not plain ids/, 'the refusal must say why');
+    assert.equal(readFileSync(resolve(dir, 'README.md'), 'utf8'), SENTINEL);
+  });
+
+  it('install refuses a name that is not a plain id and creates nothing', () => {
+    const dir = project('install-cli');
+    const r = spawnCli(['install', '../escape', '-f', 'universal', '--source', ROOT], dir);
+    assert.equal(r.status, 1, `expected exit 1, got ${r.status}\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /not plain ids/);
+    assert.deepEqual(readdirSync(resolve(dir, '.agents/skills')), []);
+    // Mirrors the registry-id test's arm. On this route the base made no link
+    // (Unknown item), so here it is a pin, not red-first evidence.
+    assert.deepEqual(readdirSync(resolve(dir, '.agents')), ['skills']);
+  });
+
+  it('a registry id that is not a plain id is refused before anything is linked', () => {
+    // The id climbs out of skills/: at the base commit this made a link at
+    // .agents/escape, outside .agents/skills, and printed "1 installed".
+    const source = resolve(tmpRoot, 'source-with-escaping-id');
+    mkdirSync(resolve(source, 'skills'), { recursive: true });
+    mkdirSync(resolve(source, 'escape'), { recursive: true });
+    writeFileSync(resolve(source, 'escape/SKILL.md'), '---\nname: escape\n---\n');
+    writeFileSync(resolve(source, 'skills/_registry.yml'), [
+      'total_skills: 1',
+      'domains:',
+      '  fixture:',
+      '    description: fixture',
+      '    skills:',
+      '      - id: ../escape',
+      '        path: ../escape/SKILL.md',
+      '',
+    ].join('\n'));
+    const dir = project('install-registry');
+    const r = spawnCli(['install', '-d', 'fixture', '-f', 'universal', '--source', source], dir);
+    assert.equal(r.status, 1, `expected exit 1, got ${r.status}\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /"\.\.\/escape"/, 'the refusal must name the offending id');
+    assert.deepEqual(readdirSync(resolve(dir, '.agents')), ['skills']);
+    assert.deepEqual(readdirSync(resolve(dir, '.agents/skills')), []);
+  });
+
+  it('the adapter layer refuses on its own, without installAll', async () => {
+    const dir = project('adapter-direct');
+    const adapter = new UniversalAdapter();
+    await assert.rejects(
+      adapter.uninstall({ type: 'skill', id: '../../README.md' }, dir, 'project', {}),
+      /Refusing a path outside/,
+    );
+    assert.equal(readFileSync(resolve(dir, 'README.md'), 'utf8'), SENTINEL);
+    await assert.rejects(
+      adapter.install({ type: 'skill', id: '../escape', sourceDir: resolve(ROOT, 'skills/commit-changes') },
+        dir, 'project', { almanacRoot: ROOT }),
+      /Refusing a path outside/,
+    );
+    // readdirSync, not existsSync: an escaped link the old code made dangles,
+    // and existsSync follows a link, so it would report a dangling one as absent.
+    assert.deepEqual(readdirSync(resolve(dir, '.agents')), ['skills']);
+  });
+
+  it('childPath accepts one name and refuses every other shape', () => {
+    assert.equal(typeof adapterBase.childPath, 'function', 'childPath is exported from cli/adapters/base.js');
+    const base = resolve(tmpRoot, 'base');
+    assert.equal(adapterBase.childPath(base, 'commit-changes'), resolve(base, 'commit-changes'));
+    assert.equal(adapterBase.childPath(base, 'fixture-agent.md'), resolve(base, 'fixture-agent.md'));
+    for (const name of ['..', '.', '', '../x', 'a/b', '/abs', 'x/']) {
+      assert.throws(() => adapterBase.childPath(base, name), /Refusing a path outside/, `must refuse ${JSON.stringify(name)}`);
+    }
+  });
+
+  it('every id and domain in the shipped registries is a plain id', () => {
+    // A census pin: the rule refuses anything else, so a registry entry that
+    // broke it would make the CLI refuse to install or remove that item.
+    assert.equal(typeof itemId.isPlainItemId, 'function', 'isPlainItemId is exported from cli/lib/item-id.js');
+    const reg = loadRegistries(ROOT);
+    const ids = [
+      ...reg.skills.map((s) => s.id), ...reg.domains, ...reg.agents.map((a) => a.id), ...reg.teams.map((t) => t.id),
+      ...reg.agents.flatMap((a) => a.skills || []), ...reg.teams.flatMap((t) => [...(t.members || []), t.lead].filter(Boolean)),
+      ...reg.defaultSkills.map((d) => d.skill),
+    ];
+    assert.ok(ids.length > 500, `census read ${ids.length} ids`);
+    assert.deepEqual(ids.filter((id) => !itemId.isPlainItemId(id)), []);
+  });
+
+  it('a registry domain that is not a plain id is refused before anything is linked', () => {
+    // Universal ignores the domain, so only layer 1 can refuse this run.
+    const source = resolve(tmpRoot, 'source-with-dotdot-domain');
+    mkdirSync(resolve(source, 'skills/x'), { recursive: true });
+    writeFileSync(resolve(source, 'skills/x/SKILL.md'), '---\nname: x\n---\n');
+    writeFileSync(resolve(source, 'skills/_registry.yml'), [
+      'total_skills: 1',
+      'domains:',
+      '  "..":',
+      '    description: fixture',
+      '    skills:',
+      '      - id: x',
+      '        path: x/SKILL.md',
+      '',
+    ].join('\n'));
+    const dir = project('install-registry-domain');
+    const r = spawnCli(['install', 'x', '-f', 'universal', '--source', source], dir);
+    assert.equal(r.status, 1, `expected exit 1, got ${r.status}\n${r.stdout}\n${r.stderr}`);
+    assert.match(r.stderr, /domain "\.\." of "x"/, 'the refusal must name the offending domain');
+    assert.deepEqual(readdirSync(resolve(dir, '.agents/skills')), []);
+  });
+
+  it('the hermes adapter refuses a domain that is not a plain id on its own, without installAll', async () => {
+    // Both hermes sites are exercised: install builds <home>/skills/<domain> as a
+    // directory (hermes.js, install) and uninstall builds <home>/skills/<domain>/<id>.
+    // force: true means a mutant that let the path through would unlink the sentinel.
+    const hermesHome = resolve(tmpRoot, 'hermes-domain');
+    mkdirSync(resolve(hermesHome, 'skills'), { recursive: true });
+    writeFileSync(resolve(hermesHome, 'x'), SENTINEL);
+    const saved = process.env.HERMES_HOME;
+    process.env.HERMES_HOME = hermesHome;
+    try {
+      const adapter = new HermesAdapter();
+      const item = { type: 'skill', id: 'x', domain: '..', sourceDir: resolve(ROOT, 'skills/commit-changes') };
+      await assert.rejects(adapter.uninstall(item, tmpRoot, 'global', {}), /Refusing a path outside/);
+      await assert.rejects(adapter.install(item, tmpRoot, 'global', { force: true, almanacRoot: ROOT }), /Refusing a path outside/);
+      assert.equal(readFileSync(resolve(hermesHome, 'x'), 'utf8'), SENTINEL);
+    } finally {
+      if (saved === undefined) delete process.env.HERMES_HOME;
+      else process.env.HERMES_HOME = saved;
+    }
+  });
+
+  it('sync leaves a directory entry whose name is not a plain id alone', () => {
+    const dir = project('sync');
+    writeFileSync(resolve(dir, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
+    writeFileSync(resolve(dir, '.agents/skills/My_Notes.md'), SENTINEL);
+    const r = spawnCli(['sync', '-f', 'universal', '--source', ROOT], dir);
+    assert.equal(r.status, 0, `expected exit 0, got ${r.status}\n${r.stdout}\n${r.stderr}`);
+    assert.equal(readFileSync(resolve(dir, '.agents/skills/My_Notes.md'), 'utf8'), SENTINEL);
   });
 });

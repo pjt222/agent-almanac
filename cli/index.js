@@ -29,6 +29,7 @@ import { detectAlmanacRoot, isNpmPackageRoot, resolveTargetDir } from './lib/res
 import { detectFrameworks } from './lib/detector.js';
 import { getAdapter, getAdaptersForDetections, listAdapters } from './adapters/index.js';
 import { installAll, uninstallAll, auditAll, auditExitCode, warnUnsupportedScopes } from './lib/installer.js';
+import { InvalidItemIdError, isPlainItemId } from './lib/item-id.js';
 import { loadManifest, resolveManifest, generateManifest, writeManifest } from './lib/manifest.js';
 import { loadState, saveState, recordGather, recordScatter, recordWarm, markWelcomed, getFireStates, getFireState, findSharedSkills } from './lib/state.js';
 import * as campfire from './lib/campfire-reporter.js';
@@ -520,7 +521,10 @@ program
     let removeResults = [];
     if (universalAdapter) {
       const installed = await universalAdapter.listInstalled(ctx.projectDir, ctx.scope);
-      const extra = installed.filter(i => !desiredSkillIds.has(i.id));
+      // A directory entry whose name is not a plain id was not written by this
+      // CLI, which installs plain ids only (cli/lib/item-id.js). Leave it alone
+      // rather than hand it to uninstallAll, which would refuse the whole sync.
+      const extra = installed.filter(i => !desiredSkillIds.has(i.id) && isPlainItemId(i.id));
       if (extra.length > 0) {
         console.log('Sync: removing extra items...\n');
         removeResults = await uninstallAll(
@@ -1013,4 +1017,14 @@ function askYesNo() {
 
 // ── Parse and run ────────────────────────────────────────────────
 
-program.parseAsync();
+// installAll/uninstallAll refuse an item name that is not a plain id before
+// touching anything. Report it as a refusal, exit 1, not as a stack trace;
+// every other error keeps its old behaviour.
+program.parseAsync().catch((err) => {
+  if (err instanceof InvalidItemIdError) {
+    reporter.error(err.message);
+    process.exitCode = 1;
+    return;
+  }
+  throw err;
+});

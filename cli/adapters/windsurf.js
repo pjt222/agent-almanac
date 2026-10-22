@@ -7,7 +7,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, unlinkSync, readFileSync, readdirSync } from 'fs';
 import { resolve } from 'path';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 import { condenseSkill, wrapInMarkers, removeMarkedSection, hasMarkedSection } from '../lib/transformer.js';
 
 export class WindsurfAdapter extends FrameworkAdapter {
@@ -37,7 +37,7 @@ export class WindsurfAdapter extends FrameworkAdapter {
 
     // Directory mode: .windsurf/rules/<id>.md
     const rulesDir = resolve(projectDir, '.windsurf/rules');
-    const targetPath = resolve(rulesDir, `${item.id}.md`);
+    const targetPath = childPath(rulesDir, `${item.id}.md`);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
     if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
 
@@ -68,7 +68,7 @@ export class WindsurfAdapter extends FrameworkAdapter {
 
   async uninstall(item, projectDir, scope, options = {}) {
     // Try directory mode first
-    const rulePath = resolve(projectDir, '.windsurf/rules', `${item.id}.md`);
+    const rulePath = childPath(resolve(projectDir, '.windsurf/rules'), `${item.id}.md`);
     if (existsSync(rulePath)) {
       if (options.dryRun) return { action: 'removed', path: rulePath, details: 'dry-run' };
       unlinkSync(rulePath);

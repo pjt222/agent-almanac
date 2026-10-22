@@ -8,7 +8,7 @@
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync, lstatSync } from 'fs';
 import { resolve, relative } from 'path';
 import { homedir } from 'os';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 
 export class OpenCodeAdapter extends FrameworkAdapter {
   static id = 'opencode';
@@ -34,7 +34,7 @@ export class OpenCodeAdapter extends FrameworkAdapter {
 
   async install(item, projectDir, scope, options = {}) {
     const targetBase = this._targetBase(projectDir, scope, item.type);
-    const targetPath = resolve(targetBase, item.id);
+    const targetPath = childPath(targetBase, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
     if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
@@ -49,7 +49,7 @@ export class OpenCodeAdapter extends FrameworkAdapter {
     if (item.type === 'agent') {
       // For agents, symlink the individual agent file
       const agentSource = item.sourcePath || resolve(options.almanacRoot, 'agents', `${item.id}.md`);
-      const agentTarget = resolve(targetBase, `${item.id}.md`);
+      const agentTarget = childPath(targetBase, `${item.id}.md`);
       if (existsSync(agentTarget) && !options.force) return { action: 'skipped', path: agentTarget, details: 'already exists' };
       if (existsSync(agentTarget)) try { unlinkSync(agentTarget); } catch {}
       mkdirSync(targetBase, { recursive: true });
@@ -64,8 +64,8 @@ export class OpenCodeAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     const targetBase = this._targetBase(projectDir, scope, item.type);
     const targetPath = item.type === 'agent'
-      ? resolve(targetBase, `${item.id}.md`)
-      : resolve(targetBase, item.id);
+      ? childPath(targetBase, `${item.id}.md`)
+      : childPath(targetBase, item.id);
 
     if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
     if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };

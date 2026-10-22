@@ -11,7 +11,7 @@
 
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync } from 'fs';
 import { resolve } from 'path';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 import { resolveHermesHome } from '../lib/hermes-home.js';
 
 export class HermesAdapter extends FrameworkAdapter {
@@ -32,8 +32,8 @@ export class HermesAdapter extends FrameworkAdapter {
   async install(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
       const domain = item.domain || 'general';
-      const targetDir = resolve(this._skillsBase(), domain);
-      const targetPath = resolve(targetDir, item.id);
+      const targetDir = childPath(this._skillsBase(), domain);
+      const targetPath = childPath(targetDir, item.id);
 
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
       if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
@@ -46,7 +46,7 @@ export class HermesAdapter extends FrameworkAdapter {
     }
 
     if (item.type === 'agent') {
-      const targetPath = resolve(this._agentsBase(), `${item.id}.md`);
+      const targetPath = childPath(this._agentsBase(), `${item.id}.md`);
       if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
       if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
 
@@ -63,7 +63,7 @@ export class HermesAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     if (item.type === 'skill') {
       const domain = item.domain || 'general';
-      const targetPath = resolve(this._skillsBase(), domain, item.id);
+      const targetPath = childPath(childPath(this._skillsBase(), domain), item.id);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
       if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
       unlinkSync(targetPath);
@@ -71,7 +71,7 @@ export class HermesAdapter extends FrameworkAdapter {
     }
 
     if (item.type === 'agent') {
-      const targetPath = resolve(this._agentsBase(), `${item.id}.md`);
+      const targetPath = childPath(this._agentsBase(), `${item.id}.md`);
       if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
       if (!existsSync(targetPath)) return { action: 'skipped', path: targetPath, details: 'not installed' };
       unlinkSync(targetPath);

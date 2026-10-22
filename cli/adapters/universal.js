@@ -11,7 +11,7 @@
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, readdirSync, lstatSync, readlinkSync } from 'fs';
 import { resolve, relative } from 'path';
 import { homedir } from 'os';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 
 export class UniversalAdapter extends FrameworkAdapter {
   static id = 'universal';
@@ -38,7 +38,7 @@ export class UniversalAdapter extends FrameworkAdapter {
 
     const targetBase = this._targetBase(projectDir, scope);
 
-    const targetPath = resolve(targetBase, item.id);
+    const targetPath = childPath(targetBase, item.id);
 
     if (options.dryRun) {
       return { action: 'created', path: targetPath, details: 'dry-run' };
@@ -70,7 +70,7 @@ export class UniversalAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     const targetBase = this._targetBase(projectDir, scope);
 
-    const targetPath = resolve(targetBase, item.id);
+    const targetPath = childPath(targetBase, item.id);
 
     if (options.dryRun) {
       return { action: 'removed', path: targetPath, details: 'dry-run' };

@@ -8,7 +8,7 @@
 
 import { existsSync, mkdirSync, symlinkSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
 import { resolve, relative } from 'path';
-import { FrameworkAdapter } from './base.js';
+import { FrameworkAdapter, childPath } from './base.js';
 import { condenseSkill, wrapAsMdc } from '../lib/transformer.js';
 
 export class CursorAdapter extends FrameworkAdapter {
@@ -29,7 +29,7 @@ export class CursorAdapter extends FrameworkAdapter {
 
     // Prefer modern .cursor/skills/ path (symlink)
     const skillsDir = resolve(projectDir, '.cursor/skills');
-    const targetPath = resolve(skillsDir, item.id);
+    const targetPath = childPath(skillsDir, item.id);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
     if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
@@ -49,7 +49,7 @@ export class CursorAdapter extends FrameworkAdapter {
     if (item.type !== 'skill') return { action: 'skipped', path: '', details: 'rules are skills only' };
 
     const rulesDir = resolve(projectDir, '.cursor/rules');
-    const targetPath = resolve(rulesDir, `${item.id}.mdc`);
+    const targetPath = childPath(rulesDir, `${item.id}.mdc`);
 
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run (.mdc)' };
     if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
@@ -65,8 +65,8 @@ export class CursorAdapter extends FrameworkAdapter {
   async uninstall(item, projectDir, scope, options = {}) {
     // Remove from both paths
     const results = [];
-    const skillPath = resolve(projectDir, '.cursor/skills', item.id);
-    const rulePath = resolve(projectDir, '.cursor/rules', `${item.id}.mdc`);
+    const skillPath = childPath(resolve(projectDir, '.cursor/skills'), item.id);
+    const rulePath = childPath(resolve(projectDir, '.cursor/rules'), `${item.id}.mdc`);
 
     for (const p of [skillPath, rulePath]) {
       if (existsSync(p)) {
