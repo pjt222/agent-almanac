@@ -902,6 +902,9 @@ describe('pi adapter, end to end (#1006)', () => {
     assert.equal(existsSync(link) && lstatSync(link).isSymbolicLink(), true, stdout);
     assert.equal(existsSync(resolve(home, '.pi/agent/skills/commit-changes')), false,
       'the install went to the default agent directory, not to $PI_CODING_AGENT_DIR');
+    // audit names the directory it read, the one pi reads too.
+    const audited = spawnCli(['audit', '-f', 'pi', '-g'], resolve(tmpRoot));
+    assert.ok(audited.stdout.includes(`1 skills installed in ${resolve(agentDir, 'skills')}`), audited.stdout);
   });
 
   it('refuses project scope in the home directory, names -g, and writes nothing under ~/.pi/skills/', () => {

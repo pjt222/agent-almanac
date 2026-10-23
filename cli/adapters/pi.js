@@ -103,7 +103,7 @@ export class PiAdapter extends FrameworkAdapter {
     const valid = installed.filter(i => !i.broken);
 
     if (valid.length > 0) {
-      result.ok.push(`${valid.length} skills installed`);
+      result.ok.push(`${valid.length} skills installed in ${this._targetBase(projectDir, scope)}`);
     }
     if (broken.length > 0) {
       result.errors.push(`${broken.length} broken symlinks: ${broken.map(b => b.id).join(', ')}`);
