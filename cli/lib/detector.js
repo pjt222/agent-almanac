@@ -9,6 +9,7 @@ import { existsSync } from 'fs';
 import { resolve } from 'path';
 import { homedir } from 'os';
 import { resolveHermesHome } from './hermes-home.js';
+import { isPiProject } from './pi-agent-dir.js';
 
 /** @typedef {{ id: string, displayName: string, marker: string, scope: string }} Detection */
 
@@ -40,6 +41,10 @@ const RULES = [
   { id: 'gemini', displayName: 'Gemini CLI', check: (dir) => existsSync(resolve(dir, '.gemini')), marker: '.gemini/', scope: 'project' },
   // Mistral Vibe
   { id: 'vibe', displayName: 'Mistral Vibe', check: (dir) => existsSync(resolve(dir, '.vibe')), marker: '.vibe/', scope: 'project' },
+  // pi (pi.dev): a project's .pi/, except at the home directory, where ~/.pi/
+  // is pi's own default agent directory and marks no project (#1006). There is
+  // no global rule: global pi is reached with `-f pi -g`.
+  { id: 'pi', displayName: 'Pi Coding Agent', check: (dir) => isPiProject(dir), marker: '.pi/', scope: 'project' },
   // Aider
   { id: 'aider', displayName: 'Aider', check: (dir) => existsSync(resolve(dir, '.aider.conf.yml')) || existsSync(resolve(dir, 'CONVENTIONS.md')), marker: '.aider.conf.yml or CONVENTIONS.md', scope: 'project' },
 ];
