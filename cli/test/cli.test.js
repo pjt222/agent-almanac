@@ -33,7 +33,8 @@ import { VibeAdapter } from '../adapters/vibe.js';
 // New in #1006, so imported the way item-id.js is below: a missing module then
 // fails the tests that use it, not the whole file at link time.
 const piAgentDir = await import('../lib/pi-agent-dir.js').catch(() => ({}));
-const { PiAdapter } = await import('../adapters/pi.js').catch(() => ({}));
+const piAdapterModule = await import('../adapters/pi.js').catch(() => ({}));
+const { PiAdapter } = piAdapterModule;
 import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-renderer.js';
 import {
   CAMPFIRE_BURNING, CAMPFIRE_EMBERS, CAMPFIRE_COLD,
@@ -965,6 +966,154 @@ describe('pi adapter, end to end (#1006)', () => {
     assert.ok(stdout.split('\n').includes(
       `  = commit-changes [pi] ${target}  project scope in your home directory would write ~/.pi/skills/; install with -g`), stdout);
     assert.equal(existsSync(resolve(home, '.pi/skills')), false);
+  });
+});
+
+// ── pi agents (#1007) ────────────────────────────────────────────
+//
+// pi has no built-in agent loader; its example subagent extension reads
+// <agent-dir>/agents/*.md and hands an agent's `tools` to `pi --tools` and its
+// `model` to `pi --model`. So the adapter generates the file: Claude Code tool
+// names become pi's built-ins, a tool with no built-in is dropped, and `model`
+// is left out. The file is owned through a sidecar marker like a copy, and a
+// link at the path is never touched. In-process, against a fixture content root.
+describe('pi agents (#1007)', () => {
+  let tmpRoot;
+  let src;
+  let agentDir;
+  const saved = {};
+  const agentsBase = () => resolve(agentDir, 'agents');
+  const agentFile = (id) => resolve(agentsBase(), `${id}.md`);
+  const sidecar = (id) => resolve(agentsBase(), `.${id}.md.agent-almanac-copy.json`);
+  const item = (id) => ({ type: 'agent', id, sourcePath: resolve(src, 'agents', `${id}.md`) });
+  const install = (id, extra = {}) => new PiAdapter().install(item(id), tmpRoot, 'global', { almanacRoot: src, ...extra });
+  const uninstall = (id) => new PiAdapter().uninstall(item(id), tmpRoot, 'global', {});
+  /** The generated file's frontmatter and body. */
+  const readGenerated = (id) => {
+    const match = readFileSync(agentFile(id), 'utf8').match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+    assert.ok(match, `no frontmatter in ${agentFile(id)}`);
+    return { fields: yamlLib.load(match[1]), body: match[2] };
+  };
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-pi-agents-')));
+    src = resolve(tmpRoot, 'src');
+    // Outside the home directory, so a resolver that ignored the variable
+    // would write somewhere else.
+    agentDir = resolve(tmpRoot, 'pi-agent');
+    mkdirSync(resolve(src, 'agents'), { recursive: true });
+    mkdirSync(resolve(tmpRoot, 'home'), { recursive: true });
+    writeFileSync(resolve(src, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: '9.9.9-test' }));
+    const agent = (tools, extra = '') => `---\nname: x\ndescription: An agent for the test.\ntools: [${tools}]\nmodel: sonnet\n${extra}---\n\n# Agent\n\nThe body line.\n`;
+    writeFileSync(resolve(src, 'agents/full-agent.md'), agent('Read, Write, Edit, Bash, Grep, Glob, WebFetch'));
+    writeFileSync(resolve(src, 'agents/readonly-agent.md'), agent('Read, Grep, Glob'));
+    writeFileSync(resolve(src, 'agents/web-agent.md'), agent('WebFetch, WebSearch'));
+    for (const key of ['HOME', 'USERPROFILE', 'PI_CODING_AGENT_DIR']) saved[key] = process.env[key];
+    process.env.HOME = resolve(tmpRoot, 'home');
+    process.env.USERPROFILE = resolve(tmpRoot, 'home');
+    process.env.PI_CODING_AGENT_DIR = agentDir;
+  });
+
+  after(() => {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    rmTree(tmpRoot);
+  });
+
+  it('maps Claude Code tool names to pi built-ins, dropping and naming the rest', () => {
+    assert.deepEqual(piAdapterModule.mapAgentTools(['Read', 'Write', 'Edit', 'Bash', 'Grep', 'Glob', 'WebFetch', 'WebSearch', 'Read']), {
+      mapped: ['read', 'write', 'edit', 'bash', 'grep', 'find'],
+      dropped: ['WebFetch', 'WebSearch'],
+    });
+    assert.deepEqual(piAdapterModule.mapAgentTools('Read, Glob'), { mapped: ['read', 'find'], dropped: [] });
+  });
+
+  it('declares agents global-only', () => {
+    assert.deepEqual(new PiAdapter().scopesFor('agent'), ['global']);
+  });
+
+  it('generates <agent-dir>/agents/<id>.md with mapped tools, no model, the body, and a sidecar marker', async () => {
+    const result = await install('full-agent');
+    assert.equal(result.action, 'created', JSON.stringify(result));
+    assert.equal(result.path, agentFile('full-agent'));
+    assert.ok(result.note.startsWith(piAdapterModule.PI_AGENT_NOTE), result.note);
+    assert.ok(result.note.endsWith('tools with no pi built-in were dropped: WebFetch'), result.note);
+    const { fields, body } = readGenerated('full-agent');
+    assert.deepEqual(fields, { name: 'full-agent', description: 'An agent for the test.', tools: 'read, write, edit, bash, grep, find' });
+    assert.ok(body.includes('The body line.'), body);
+    assert.equal(existsSync(sidecar('full-agent')), true);
+    assert.equal(existsSync(resolve(tmpRoot, 'home', '.pi')), false, 'the install ignored $PI_CODING_AGENT_DIR');
+  });
+
+  it('never widens an agent: a read-only agent stays read-only', async () => {
+    await install('readonly-agent');
+    assert.equal(readGenerated('readonly-agent').fields.tools, 'read, grep, find');
+  });
+
+  it('refuses an agent whose tools all lack a pi built-in, and writes nothing', async () => {
+    const result = await install('web-agent');
+    assert.equal(result.action, 'skipped');
+    assert.match(result.note, /none of its tools has a pi built-in \(WebFetch, WebSearch\)/);
+    assert.equal(existsSync(agentFile('web-agent')), false);
+  });
+
+  it('generates the same file under --from-package copy', async () => {
+    rmSync(agentFile('readonly-agent'));
+    rmSync(sidecar('readonly-agent'));
+    const result = await install('readonly-agent', { placement: 'copy', copyFrom: { name: 'agent-almanac', version: '9.9.9-test' } });
+    assert.equal(result.action, 'created');
+    assert.equal(readGenerated('readonly-agent').fields.tools, 'read, grep, find');
+  });
+
+  it('lists only the agents it generated', async () => {
+    writeFileSync(agentFile('users-own'), '---\nname: users-own\ndescription: mine\n---\n');
+    const listed = (await new PiAdapter().listInstalled(tmpRoot, 'global')).filter((entry) => entry.type === 'agent').map((entry) => entry.id).sort();
+    assert.deepEqual(listed, ['full-agent', 'readonly-agent']);
+  });
+
+  it('uninstall removes an unedited generated agent and its sidecar', async () => {
+    const result = await uninstall('readonly-agent');
+    assert.equal(result.action, 'removed', JSON.stringify(result));
+    assert.equal(existsSync(agentFile('readonly-agent')), false);
+    assert.equal(existsSync(sidecar('readonly-agent')), false);
+  });
+
+  it('keeps a user\'s own same-named file on install, install --force and uninstall', async () => {
+    const mine = '---\nname: full-agent-mine\n---\nmine\n';
+    rmSync(agentFile('full-agent'));
+    rmSync(sidecar('full-agent'));
+    writeFileSync(agentFile('full-agent'), mine);
+    for (const result of [await install('full-agent'), await install('full-agent', { force: true }), await uninstall('full-agent')]) {
+      assert.equal(result.action, 'skipped', JSON.stringify(result));
+    }
+    assert.equal(readFileSync(agentFile('full-agent'), 'utf8'), mine);
+    rmSync(agentFile('full-agent'));
+  });
+
+  it('keeps a generated agent the user edited, on install --force and uninstall', async () => {
+    await install('full-agent');
+    writeFileSync(agentFile('full-agent'), `${readFileSync(agentFile('full-agent'), 'utf8')}my own line\n`);
+    for (const result of [await install('full-agent', { force: true }), await uninstall('full-agent')]) {
+      assert.equal(result.action, 'skipped', JSON.stringify(result));
+      assert.equal(result.reason, 'edited');
+    }
+    assert.match(readFileSync(agentFile('full-agent'), 'utf8'), /my own line\n$/);
+    rmSync(agentFile('full-agent'));
+    rmSync(sidecar('full-agent'));
+  });
+
+  it('never removes or replaces a link at the path, even with --force', async () => {
+    const target = resolve(tmpRoot, 'linked-agent.md');
+    writeFileSync(target, '---\nname: full-agent\n---\nlinked\n');
+    symlinkSync(target, agentFile('full-agent'));
+    for (const result of [await install('full-agent', { force: true }), await uninstall('full-agent')]) {
+      assert.equal(result.action, 'skipped', JSON.stringify(result));
+      assert.equal(result.reason, 'foreign');
+    }
+    assert.equal(lstatSync(agentFile('full-agent')).isSymbolicLink(), true);
+    assert.equal(readlinkSync(agentFile('full-agent')), target);
   });
 });
 
