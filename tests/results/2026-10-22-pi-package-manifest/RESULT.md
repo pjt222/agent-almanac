@@ -1,6 +1,6 @@
 # pi loads exactly the curated skills from the agent-almanac package (#1008)
 
-**Measured 2026-10-22** with pi 1.4.0 (`@earendil-works/pi-coding-agent`) on Node v26.11.1, Linux (WSL). The package is this branch at `b8df68680`, packed with `npm pack` (sha256 `ad05537ffa274037…`) and cloned with `git clone`. The branch was then rebased onto #1005's as `124231183`, with `package.json` unchanged.
+**Measured 2026-10-22** with pi 1.4.0 (`@earendil-works/pi-coding-agent`) on Node v26.11.1, Linux (WSL). The package is this branch at `b8df68680` (rebased as `124231183`, the reachable commit with the same `package.json` and `skills/`), packed with `npm pack` (sha256 `ad05537ffa274037…`) and cloned with `git clone`. The branch was then rebased onto #1005's as `124231183`, with `package.json` unchanged.
 
 ## Result
 
@@ -19,7 +19,7 @@ Every source has one fixture added: a root-level `skills/zz-probe.md` with a `na
 - **The manifest arms load exactly `pi.skills`.** The 27 names loaded equal the 27 ids in `package.json`'s `pi.skills`, checked by sorting both.
 - **The controls show what the manifest prevents.** Without the key, pi scans the root of `skills/`, so the probe loads: 373 skills plus the probe. From a clone it also loads the template, `skills/_template/SKILL.md`, as `skill-name-here`: 373 plus probe plus template. `skills/README.md` has no frontmatter and is dropped silently in every arm, with no diagnostic.
 - **The prompt figures** are pi's own `formatSkillsForPrompt()` over the loaded skills, with tokens by pi's chars/4 estimate. They include each skill's absolute path, so they vary with the install location.
-- **`pi install <dir>`** wrote `{"packages": ["../npm-manifest/package"]}` into the redirected agent directory's `settings.json` and loaded the same 27 skills. `pi install npm:agent-almanac` itself needs a published version and was not run.
+- **`pi install <dir>`** wrote `{"packages": ["../npm-manifest/package"]}` into the redirected agent directory's `settings.json` and loaded the same 27 skills. `pi install npm:agent-almanac` of a version that carries the key needs a publish; 1.9.1 from the registry is measured below.
 
 ### `pi install npm:agent-almanac` today: 1.9.1 from the registry
 
@@ -40,7 +40,7 @@ pi's block names each skill's absolute path exactly once. This was measured by c
 | npm pack, no manifest (374 skills) | 228,068 characters | 53 characters |
 | npm pack, manifest (27 skills) | 17,081 characters | 59 characters |
 
-At a typical `/home/<user>/.pi/agent/npm/node_modules/agent-almanac/` prefix of 53 characters, all of 1.9.1's skills come to about 258,800 characters, about 64,700 tokens by pi's chars/4 estimate.
+At a typical `/home/<user>/.pi/agent/npm/node_modules/agent-almanac/` prefix (53 characters with a five-letter user name; prefix lengths here count the trailing slash), all of 1.9.1's skills come to about 258,800 characters, about 64,700 tokens by pi's chars/4 estimate.
 
 The JSON files beside this one hold each arm's output, with the sandbox root replaced by `<sandbox>`.
 
@@ -61,6 +61,10 @@ git clone -q <repo> "$R/git-manifest-clone"
 # per arm: a fresh HOME and agent dir declaring the source, and an empty git project as cwd
 printf '{ "packages": ["%s"] }\n' "<source dir>" > "$H/.pi/agent/settings.json"
 HOME="$H" PI_OFFLINE=1 node measure-package.mjs "$PI" "<project>" "$H/.pi/agent"
+
+# the registry control (1.9.1, no key): npm's cache redirected, install scripts off
+HOME="$H" PI_CODING_AGENT_DIR="$A" npm_config_cache="$R/npm-cache" npm_config_ignore_scripts=true node "$PI/dist/bundle/cli.js" install npm:agent-almanac
+HOME="$H" PI_OFFLINE=1 node measure-package.mjs "$PI" "<project>" "$A"
 
 # the pi install arm
 HOME="$H" PI_CODING_AGENT_DIR="$A" PI_OFFLINE=1 node "$PI/dist/bundle/cli.js" install "$R/npm-manifest/package"

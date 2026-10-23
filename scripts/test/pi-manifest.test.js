@@ -3,8 +3,8 @@
 // pi installs a package (`pi install npm:agent-almanac`) and loads the skills its
 // `package.json` names under `pi.skills`. The maintainer chose a curated set over every
 // skill (2026-10-22): every skill would put about 65,000 tokens of names, descriptions and paths
-// into each pi request (373 skills, pi 1.4.0's formatSkillsForPrompt,
-// tests/results/2026-10-22-pi-package-manifest/RESULT.md).
+// into each pi request (the 373 registered skills plus a probe in the no-manifest npm-pack row of
+// tests/results/2026-10-22-pi-package-manifest/RESULT.md, pi 1.4.0's formatSkillsForPrompt).
 //
 // The list is the curation, so it is pinned here against the tree, not against a copy of
 // itself. Each entry must be an explicit `skills/<id>/SKILL.md`: a directory entry such as

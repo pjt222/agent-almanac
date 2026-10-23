@@ -166,7 +166,7 @@ or silently change the content under them. The refusal names three ways forward:
 pi install npm:agent-almanac            # a curated set of skills, for pi only, from the first release after 1.9.1
 ```
 
-**Needs a release after 1.9.1.** 1.9.1, the version on npm now, has no `pi` key, so pi loads all 371 of its skills, and the install gives no warning. `npm view agent-almanac pi` prints the curated list once a release carries it, and nothing before then.
+**Needs a release after 1.9.1.** 1.9.1 and earlier have no `pi` key, so pi loads every skill they ship (371 in 1.9.1), and the install gives no warning. `npm view agent-almanac pi` prints the curated list for a version that carries it, and nothing for 1.9.1.
 
 The pi package carries a curated set, not every skill. pi lists every installed skill's name, description and path in each request, and all of them would add about 65,000 tokens (measured with pi 1.4.0 in `tests/results/2026-10-22-pi-package-manifest/`; the figure grows with the length of the install path). The set is the AI-welfare skills (`meditate`, `heal`, `breathe`, `rest`, `honesty-humility` and their kin), the reasoning-balance skills (`redirect`, `awareness`, …) and advocatus-diaboli's review skills (`argumentation`, `review-research`, …). `pi.skills` in `package.json` lists them. To narrow it further, use pi's settings filter (`{"source": "npm:agent-almanac", "skills": [...]}`). For any skill outside the set, install it with the CLI (Path 3), since pi also reads the universal adapter's `.agents/skills/`.
 
