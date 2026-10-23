@@ -967,6 +967,16 @@ describe('pi adapter, end to end (#1006)', () => {
       `  = commit-changes [pi] ${target}  project scope in your home directory would write ~/.pi/skills/; install with -g`), stdout);
     assert.equal(existsSync(resolve(home, '.pi/skills')), false);
   });
+
+  it('installs an agent globally under --scope project, says so, and writes nothing under <project>/.pi/ (#1007)', () => {
+    const dir = resolve(tmpRoot, 'agent-scope');
+    mkdirSync(resolve(dir, '.pi'), { recursive: true });
+    const { status, stdout, stderr } = spawnCli(['install', '--agent', 'code-reviewer', '--scope', 'project', '-f', 'pi'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(`${stdout}\n${stderr}`.includes('Pi Coding Agent is global-only; --scope project ignored (installing to global).'), `${stdout}\n${stderr}`);
+    assert.deepEqual(readdirSync(resolve(dir, '.pi')), []);
+    assert.equal(existsSync(resolve(agentDir, 'agents/code-reviewer.md')), true, stdout);
+  });
 });
 
 // ── pi agents (#1007) ────────────────────────────────────────────
