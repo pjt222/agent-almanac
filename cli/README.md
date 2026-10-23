@@ -32,9 +32,9 @@ pi reads its own skill folders, which the pi adapter writes, and the universal a
 - **The universal adapter's:** the project `.agents/skills/`, which pi finds in the working directory and each parent up to the git root, and `~/.agents/skills/`, which pi reads from any directory.
 
 What this means when installing:
-- **Detection.** A project with `.pi/` is detected as a pi project, so a default install there writes a skill into both `.pi/skills/` and `.agents/skills/`. pi loads a skill linked into both from one source once. Two copies (`--from-package copy`) load once too, but pi reports a name collision for the second.
+- **Detection.** A project with `.pi/` is detected as a pi project, so a default install there writes a skill into both `.pi/skills/` and `.agents/skills/`. pi loads a skill linked into both from one source once. Two copies (`--from-package copy`) load once too, from `.pi/skills/`, but pi reports a name collision for the one in `.agents/skills/` ([measured](../tests/results/2026-10-23-pi-skill-overlap/RESULT.md)).
 - **No global detection.** Use `-f pi -g` for `<agent-dir>/skills/`.
-- **The home directory.** At `~` the pi adapter refuses project scope: it would write `~/.pi/skills/`, which is not where pi keeps user skills.
+- **The home directory.** At `~` the pi adapter refuses a project-scope install: it would write `~/.pi/skills/`, which is not where pi keeps user skills. The refusal is a skip (exit 0) with a note naming `-g`, and it covers `install` only; `uninstall` and `audit` at `~` still act on `~/.pi/skills/`.
 
 Project-scope skills load only in a project pi trusts. pi asks before it loads a project's resources (pi's `docs/security.md`). Measured with links and with `--from-package copy` copies: [tests/results/2026-10-22-pi-skill-discovery/RESULT.md](../tests/results/2026-10-22-pi-skill-discovery/RESULT.md).
 

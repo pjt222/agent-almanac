@@ -11,7 +11,7 @@
 | pi's `getAgentDir()`, then `DefaultResourceLoader` (`measure-tilde.mjs`, `measure-tilde.json`) | agent directory `<sandbox>/home/pi-tilde`, skills `commit-changes` from `<sandbox>/home/pi-tilde/skills/commit-changes/SKILL.md`, 0 diagnostics |
 
 - **The two resolvers agree.** pi read its agent directory itself, through `getAgentDir()`, and found the skill the CLI installed. The directory was not passed to it, unlike #1005's recipe.
-- **No literal `~` directory was created** in the working directory, which a resolver without tilde expansion would have done.
+- **No literal `~` directory was created** in the working directory, which a resolver without tilde expansion would have done. `listing.txt` shows the project holding only `.git` and the sandbox home holding `pi-tilde`. It was recorded on a re-run of the recipe the same day, whose `audit` output and non-blank `install` result line matched the files above.
 - **The project was untrusted**, so only user-level folders were read.
 
 The sandbox root is replaced by `<sandbox>` in every file.
@@ -23,4 +23,5 @@ R=$(mktemp -d) && mkdir -p "$R/home" "$R/proj" && git -C "$R/proj" init -q && cd
 HOME="$R/home" PI_CODING_AGENT_DIR='~/pi-tilde' node <repo>/cli/index.js install commit-changes -f pi -g --source <repo>
 HOME="$R/home" PI_CODING_AGENT_DIR='~/pi-tilde' node <repo>/cli/index.js audit -f pi -g --source <repo>
 HOME="$R/home" PI_CODING_AGENT_DIR='~/pi-tilde' PI_OFFLINE=1 node measure-tilde.mjs "$PI" "$R/proj"
+command ls -A "$R/proj"; command ls -A "$R/home"   # listing.txt; `command` skips an ls alias that appends /
 ```
