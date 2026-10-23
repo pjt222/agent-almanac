@@ -23,17 +23,17 @@ The two `js` code blocks below are the files `almanac-skills.mjs` and `host.mjs`
 
 - Node.js: pi-durable requires `>=22.19.0`. This repository, and so the example's test, requires the `engines` floor in its `package.json`, Node 26 or newer.
 - `@earendil-works/pi-durable`, `@earendil-works/pi-ai` and `@earendil-works/chord`, all at `1.4.0`, the version this guide is tested against. pi-durable is marked experimental upstream, so pin exact versions. pi-durable depends on pi-ai and chord at exactly its own version, so move the three together: a host that pins pi-ai at another version gets a second copy of it.
-- `js-yaml`, which the extension imports to read a skill's frontmatter. Install it in your host. agent-almanac depends on it, but that does not make it importable from your code.
+- `js-yaml`, which the extension imports to read a skill's frontmatter. Install it in your host. agent-almanac depends on it, but only a local npm install of agent-almanac, which hoists it, happens to make it importable from your code; a global or pnpm install does not.
 - A directory of skills laid out as `<id>/SKILL.md`. Either:
   - one that `agent-almanac install <ids> --framework universal` wrote, such as `.agents/skills/`;
   - or the `skills/` folder of the installed `agent-almanac` package.
 
-`scripts/test/_pi-durable-example/package.json` lists exactly these four packages, so it can serve as a starting point for a host's own.
+`scripts/test/_pi-durable-example/package.json` lists exactly these four packages, so it can serve as a starting point for a host's own. Its `engines` field is this repository's Node 26 floor; a host needs only pi-durable's `>=22.19.0`.
 
 ## Workflow Overview
 
 1. **Choose the skills.** Every listed skill's name, description and path is in every request, so offer the ones the agent needs, not the whole library.
-2. **Install the extension** below, beside a `read` tool. pi-durable's `createReadTool()` is enough. Its `CodingTools` would also give the model `write`, `edit` and `bash`.
+2. **Install the extension** below, beside a `read` tool. pi-durable's `createReadTool()` is enough to offer the skills. An agent that must also carry one out, such as `commit-changes`, needs the tools that skill uses: pi-durable's `CodingTools` adds `write`, `edit` and `bash`, and the limits under The Host apply to them too.
 3. **Give the tools a working directory**, usually the user's project. The listing carries absolute paths, so a skill is found whatever that directory is.
 4. **Test it with pi-ai's faux provider and `MemoryStorage`**, then swap in a real provider and a durable storage.
 
@@ -142,7 +142,7 @@ openAlmanacHost({ models, storage: new MemoryStorage(), skillsDir, ids, model: {
 
 The `stopReason: 'toolUse'` matters. Without it, the run still finishes, but the harness never executes the scripted call and records no tool result.
 
-`scripts/test/_pi-durable-example/example.test.mjs` does exactly this, with `cwd` set to an empty temporary directory, so only the absolute paths can make the read succeed. It asserts that:
+`scripts/test/_pi-durable-example/example.test.mjs` runs this. It gives the tool call an explicit `id`, takes the path from the listing, and sets `cwd` to an empty temporary directory, so only the absolute paths can make the read succeed. It asserts that:
 - the `available_skills` section reaches the model inside its tag, with the rule for a skill's own paths and each chosen skill's id, absolute path and description;
 - a skill that was not chosen is absent;
 - `read` is the only tool offered;
@@ -157,7 +157,7 @@ For a real model, set a configured provider on `models` instead of the faux one 
 
 - **Agents and teams.** An almanac agent's body could become a conversation's `instructions`, and a team could become a subagent tool; whether and how agent-almanac ships that is a design question of its own (issue #1010).
 - **A packaged extension.** This guide's extension is an example to copy. A version shipped as its own package is issue #1010.
-- **pi, the coding agent.** pi reads skill folders itself; `agent-almanac install --framework universal` reaches it (see `cli/README.md`).
+- **pi, the coding agent.** pi reads skill folders itself, `.agents/skills/` among them (pi's `docs/skills.md`), and `agent-almanac install --framework universal` writes there (`cli/README.md`).
 
 ## Troubleshooting
 
