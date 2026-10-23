@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 <!-- AUTO:START:overview -->
-A documentation-first repository containing 35 guides, a skills library of 373 agentic skills, 76 agent definitions, 22 team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained `.mjs` scripts run by Claude Code's Workflow tool.
+A documentation-first repository containing 36 guides, a skills library of 373 agentic skills, 76 agent definitions, 22 team compositions, and a curated set of code-driven workflow orchestration scripts, following the [Agent Skills open standard](https://agentskills.io). Almost all content is markdown and YAML; workflows are self-contained `.mjs` scripts run by Claude Code's Workflow tool.
 
 The guides serve as the human entry point to the agentic system: practical walkthroughs explaining when, why, and how to interact with agents, teams, skills, and workflows through Claude Code.
 <!-- AUTO:END:overview -->
@@ -32,7 +32,7 @@ These five types complement each other: skills define *how* (procedure, validati
 - `skills/_registry.yml` is the machine-readable catalog of all 373 skills across 67 domains: r-packages (10), jigsawr (5), containerization (10), reporting (5), compliance (17), mcp-integration (6), web-dev (5), git (11), general (26), citations (3), data-serialization (2), review (11), bushcraft (4), esoteric (29), design (6), defensive (6), project-management (6), devops (13), observability (13), edge-computing (1), mlops (12), workflow-visualization (6), swarm (9), morphic (7), alchemy (4), tcg (3), intellectual-property (4), web-scraping (2), gardening (5), shiny (7), animal-training (2), mycology (2), prospecting (2), crafting (1), library-science (3), linguistics (1), travel (6), relocation (3), a2a-protocol (3), geometry (3), number-theory (3), stochastic-processes (3), theoretical-science (3), diffusion (4), hildegard (5), maintenance (5), blender (3), visualization (5), 3d-printing (3), lapidary (4), entomology (5), versioning (4), spectroscopy (6), chromatography (5), gpu-optimization (2), digital-logic (4), electromagnetism (4), levitation (3), i18n (1), synoptic (4), tensegrity (1), cli (4), open-source (2), investigation (9), memex (5), ocr (1), agent-commerce (1).
 - `agents/_registry.yml` is the machine-readable catalog of all 76 agents.
 - `teams/_registry.yml` is the machine-readable catalog of all 22 teams.
-- `guides/_registry.yml` is the machine-readable catalog of all 35 guides across 5 categories.
+- `guides/_registry.yml` is the machine-readable catalog of all 36 guides across 5 categories.
 
 When adding or removing skills, agents, teams, or guides, the corresponding registry must be updated to stay in sync.
 <!-- AUTO:END:registries -->
@@ -648,13 +648,13 @@ contexts — `line-endings`, `integrity`, `skills`, `scripts-test`, `cli-test` �
 so a red one of those does refuse the merge. Every other *gate* in
 `.github/workflows/` is job-blocking only: `readmes`, `tests`, `translations`,
 `content-style`, `yaml-fences`, `banned-invocations`, `content-security`,
-`dreams`, `locales-json` and `tools-verify` all go red visibly on a PR and none stops a merge.
+`dreams`, `locales-json`, `tools-verify` and `pi-durable-example` all go red visibly on a PR and none stops a merge.
 Four further jobs are neither, because they never report on a PR at all —
 `deploy`, `publish`, `release` and `update` trigger on push-to-main or on a tag. And the
 CodeQL analyses are not jobs in `.github/workflows/` in the first place: default
 setup is server-managed and commits no workflow YAML, which is why grepping that
 directory for them finds nothing (`guides/protecting-github-repositories.md`).
-That is 19 job ids across 17 files, five required and fourteen not — counted, not
+That is 20 job ids across 18 files, five required and fifteen not — counted, not
 recalled: the sentence said 17 across 15 while `publish` existed and nobody had re-run
 the count (the one-liner: load every `.github/workflows/*.yml` and list `jobs` keys).
 

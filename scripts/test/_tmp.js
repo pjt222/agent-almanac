@@ -153,9 +153,13 @@ export function guardFindings(files) {
   return { offenders, unclosed };
 }
 
-/** Test-suite files under `root`, recursively, as sorted root-relative paths; directories excluded. */
+/**
+ * Test-suite files under `root`, recursively, as sorted root-relative paths; directories
+ * excluded, and so is anything inside a node_modules: an installed package's own tests are not
+ * this repository's suites (scripts/test/_pi-durable-example/ installs one, #1009).
+ */
 export function suiteFiles(root) {
   return readdirSync(root, { recursive: true })
-    .filter((n) => /\.test\.[cm]?js$/.test(n) && statSync(join(root, n)).isFile())
+    .filter((n) => /\.test\.[cm]?js$/.test(n) && !n.split(/[\\/]/).includes('node_modules') && statSync(join(root, n)).isFile())
     .sort();
 }
