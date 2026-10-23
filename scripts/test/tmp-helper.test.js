@@ -166,14 +166,15 @@ test('the guard report names an offender by file, line and first row, and an unc
   assert.deepEqual(guardFindings([]), { offenders: [], unclosed: [] });
 });
 
-test('the walk is recursive, takes all three extensions, skips directories and returns relative paths — on a temp tree, since this directory is flat and .js-only', (t) => {
+test('the walk is recursive, takes all three extensions, skips directories and node_modules, and returns relative paths — on a temp tree, since this directory is flat and .js-only', (t) => {
   const root = mkdtempSync(join(tmpdir(), 'suite-walk-'));
   t.after(() => rmTree(root));
   mkdirSync(join(root, 'sub', 'deeper'), { recursive: true });
+  mkdirSync(join(root, 'sub', 'node_modules', 'pkg'), { recursive: true });
   mkdirSync(join(root, 'looks.test.js'));                       // a directory named like a suite
   // Created in descending name order, so a walk that dropped its `.sort()` has to rely on the
   // filesystem's own order to pass — which it must not.
-  for (const rel of ['sub/f.js', 'sub/deeper/e.test.mjs', 'sub/d.test.js', 'notes.test.txt', 'helper.js', 'c.test.cjs', 'b.test.mjs', 'a.test.js', '_tmp.js']) {
+  for (const rel of ['sub/node_modules/pkg/vendored.test.js', 'sub/f.js', 'sub/deeper/e.test.mjs', 'sub/d.test.js', 'notes.test.txt', 'helper.js', 'c.test.cjs', 'b.test.mjs', 'a.test.js', '_tmp.js']) {
     writeFileSync(join(root, rel), '', 'utf8');
   }
   assert.deepEqual(suiteFiles(root), ['a.test.js', 'b.test.mjs', 'c.test.cjs', 'sub/d.test.js', 'sub/deeper/e.test.mjs']);

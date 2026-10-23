@@ -1,0 +1,48 @@
+name: pi-durable example
+# Runs the example from guides/almanac-skills-in-pi-durable.md (#1009). Its packages are its own
+# (scripts/test/_pi-durable-example/package.json): pi-ai pulls in about ninety, two of them with
+# install scripts, so no other job installs them, and this one installs them with
+# --ignore-scripts, which the example does not need. The checkout keeps no token in .git/config.
+#
+# Not a required check, so it may be path-filtered: it runs when the example, the helper it
+# imports, or a skill it reads changes. That the guide carries the example byte for byte is
+# checked by scripts/test/pi-durable-guide.test.js inside the required scripts-test, on every
+# pull request.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/test/_pi-durable-example/**'
+      - 'scripts/test/_tmp.js'
+      - 'skills/commit-changes/SKILL.md'
+      - 'skills/review-pull-request/SKILL.md'
+      - '.github/workflows/pi-durable-example.yml'
+  pull_request:
+    paths:
+      - 'scripts/test/_pi-durable-example/**'
+      - 'scripts/test/_tmp.js'
+      - 'skills/commit-changes/SKILL.md'
+      - 'skills/review-pull-request/SKILL.md'
+      - '.github/workflows/pi-durable-example.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pi-durable-example:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts/test/_pi-durable-example
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+          cache: 'npm'
+          cache-dependency-path: scripts/test/_pi-durable-example/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: npm test
