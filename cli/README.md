@@ -20,7 +20,7 @@ Universal skill/agent/team installer through 14 adapters, and through the univer
 | Windsurf | `windsurf.js` | `.windsurf/rules/<id>.md` (generated), or a section appended to `.windsurfrules` when that file exists without `.windsurf/rules/` (project only) |
 | GitHub Copilot | `copilot.js` | `.github/skills/<id>/` (project only) |
 | Gemini CLI | `gemini.js` | `.gemini/skills/<id>/` (project only) |
-| pi | `pi.js` | skills: `.pi/skills/<id>/` (project), `<agent-dir>/skills/<id>/` (global), where `<agent-dir>` is `$PI_CODING_AGENT_DIR`, else `~/.pi/agent`. See [pi](#pi-pidev) |
+| pi | `pi.js` | skills: `.pi/skills/<id>/` (project), `<agent-dir>/skills/<id>/` (global); agents: `<agent-dir>/agents/<id>.md` (global only, generated). `<agent-dir>` is `$PI_CODING_AGENT_DIR`, else `~/.pi/agent`. See [pi](#pi-pidev) |
 | Aider | `aider.js` | a section appended to `CONVENTIONS.md` (project only); its skills also come from Universal |
 
 A skill or agent path above is a link by default, relative in the project and absolute under the home directory. With `--from-package copy` it is a marked copy instead. Generated files and appended sections are never links. An adapter that is project-only or global-only ignores `--scope`.
@@ -35,6 +35,13 @@ What this means when installing:
 - **Detection.** A project with `.pi/` is detected as a pi project, so a default install there writes a skill into both `.pi/skills/` and `.agents/skills/`. pi loads a skill linked into both from one source once. Two copies (`--from-package copy`) load once too, from `.pi/skills/`, but pi reports a name collision for the one in `.agents/skills/` ([measured](../tests/results/2026-10-23-pi-skill-overlap/RESULT.md)).
 - **No global detection.** Use `-f pi -g` for `<agent-dir>/skills/`.
 - **The home directory.** At `~` the pi adapter refuses a project-scope install: it would write `~/.pi/skills/`, which is not where pi keeps user skills. The refusal is a skip (exit 0) with a note naming `-g`, and it covers `install` only; `uninstall` and `audit` at `~` still act on `~/.pi/skills/`.
+- **Agents.** `install --agent <id> -f pi` writes `<agent-dir>/agents/<id>.md` (global only). pi has no built-in agent loader: the file is read by pi's example subagent extension, or a compatible one, which you install by hand per that extension's README. The file is generated rather than linked:
+  - tool names become pi's built-ins (`Read`→`read`, `Write`→`write`, `Edit`→`edit`, `Bash`→`bash`, `Grep`→`grep`, `Glob`→`find`);
+  - a tool with no pi built-in, such as `WebFetch`, is dropped and named;
+  - `model` is left out, so the subagent runs on the model of the session that calls it;
+  - an agent none of whose tools has a pi built-in is not installed.
+
+  `uninstall` and `install --force` remove or replace a generated file only while it is unedited. They never touch a link or your own file at that path.
 
 Project-scope skills load only in a project pi trusts. pi asks before it loads a project's resources (pi's `docs/security.md`). Measured with links and with `--from-package copy` copies: [tests/results/2026-10-22-pi-skill-discovery/RESULT.md](../tests/results/2026-10-22-pi-skill-discovery/RESULT.md).
 
