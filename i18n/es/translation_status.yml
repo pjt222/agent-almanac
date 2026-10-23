@@ -1,5 +1,5 @@
 locale: es
-last_updated: '2026-10-09'
+last_updated: '2026-10-23'
 coverage:
   skills:
     translated: 334
@@ -24,15 +24,15 @@ coverage:
     unjudged: 0
   guides:
     translated: 2
-    total: 35
-    pct: 5.7
+    total: 36
+    pct: 5.6
     stale: 1
     stubs: 2
     unjudged: 1
   total:
     translated: 340
-    total: 506
-    pct: 67.2
+    total: 507
+    pct: 67.1
     stale: 173
     stubs: 46
     unjudged: 2
