@@ -109,8 +109,8 @@ const stripAnsi = (output) => String(output ?? '').replace(ANSI_SGR, '');
  *
  * ## Both reporters, MEASURED (#666)
  *
- * `package.json` permits `node >= 22.12.0` while CI runs 24, and the piped default reporter
- * differs across that range: Node 22 emits **TAP** (`# fail 1`), Node 23+ emits **spec**
+ * Until #1012, `package.json` permitted `node >= 22.12.0` while CI ran 24 (both are 26 now), and
+ * the piped default reporter differs across that range: Node 22 emits **TAP** (`# fail 1`), Node 23+ emits **spec**
  * (`ℹ fail 1`). These patterns were designed against spec alone, so whether a Node-22 user
  * silently got one of the two SUSPECT signals instead of both was an open question — a
  * parse failure disables the share signal by design, correctly, but without telling anyone.

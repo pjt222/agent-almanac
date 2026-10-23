@@ -165,7 +165,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: '26'
           cache: 'npm'
       - run: npm ci
       # Order is load-bearing (#560): the README translations table now reads

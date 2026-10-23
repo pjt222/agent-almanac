@@ -26,7 +26,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: '26'
 
       - name: Scan skill content for secrets and dangerous executables
         run: node scripts/scan-skill-content.js
