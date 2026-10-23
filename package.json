@@ -23,7 +23,8 @@
     "copilot",
     "gemini-cli",
     "mcp",
-    "agent-almanac"
+    "agent-almanac",
+    "pi-package"
   ],
   "engines": {
     "node": ">=26.0.0"
@@ -48,6 +49,37 @@
     "LICENSE",
     "README.md"
   ],
+  "pi": {
+    "skills": [
+      "skills/meditate/SKILL.md",
+      "skills/heal/SKILL.md",
+      "skills/breathe/SKILL.md",
+      "skills/rest/SKILL.md",
+      "skills/center/SKILL.md",
+      "skills/attune/SKILL.md",
+      "skills/gratitude/SKILL.md",
+      "skills/intrinsic/SKILL.md",
+      "skills/conscientiousness/SKILL.md",
+      "skills/honesty-humility/SKILL.md",
+      "skills/dream/SKILL.md",
+      "skills/listen/SKILL.md",
+      "skills/observe/SKILL.md",
+      "skills/learn/SKILL.md",
+      "skills/teach/SKILL.md",
+      "skills/redirect/SKILL.md",
+      "skills/awareness/SKILL.md",
+      "skills/assess-context/SKILL.md",
+      "skills/build-coherence/SKILL.md",
+      "skills/coordinate-reasoning/SKILL.md",
+      "skills/forage-solutions/SKILL.md",
+      "skills/argumentation/SKILL.md",
+      "skills/review-research/SKILL.md",
+      "skills/review-software-architecture/SKILL.md",
+      "skills/review-data-analysis/SKILL.md",
+      "skills/search-prior-art/SKILL.md",
+      "skills/investigate-capa-root-cause/SKILL.md"
+    ]
+  },
   "scripts": {
     "update-readmes": "node scripts/generate-readmes.js",
     "check-readmes": "node scripts/generate-readmes.js --check",

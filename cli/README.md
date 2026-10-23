@@ -2,24 +2,35 @@
 
 [![npm version](https://img.shields.io/npm/v/agent-almanac.svg)](https://www.npmjs.com/package/agent-almanac)
 
-Universal skill/agent/team installer for 12+ agentic CLI frameworks. Detects which AI tools are present in a project and installs content into the correct paths using pluggable adapters.
+Universal skill/agent/team installer through 13 adapters, and through the universal adapter's `.agents/skills/` any other tool that reads that folder, pi among them. Detects which AI tools are present in a project and installs content into the correct paths using pluggable adapters.
 
 ## Supported Frameworks
 
-| Framework | Adapter | Install Path |
-|-----------|---------|-------------|
-| Claude Code | `claude-code.js` | `.claude/skills/`, `.claude/agents/` |
-| Codex (OpenAI) | `codex.js` | `.agents/skills/` |
-| Cursor | `cursor.js` | `.cursor/rules/` |
-| Copilot | `copilot.js` | `.github/copilot-instructions/` |
-| Gemini CLI | `gemini.js` | `.gemini/` |
-| Aider | `aider.js` | `.aider/` |
-| OpenCode | `opencode.js` | `.opencode/` |
-| Windsurf | `windsurf.js` | `.windsurf/` |
-| Vibe | `vibe.js` | `.vibe/` |
-| Hermes | `hermes.js` | `$HERMES_HOME` / `~/.hermes/` (`%LOCALAPPDATA%\hermes` on Windows) |
-| OpenClaw | `openclaw.js` | `.openclaw/` |
-| Universal | `universal.js` | `.agents/skills/` |
+| Framework | Adapter | Install path |
+|-----------|---------|--------------|
+| Universal | `universal.js` | skills: `.agents/skills/<id>/` (project), `~/.agents/skills/<id>/` (global). Read by pi too, see [pi](#pi-pidev) |
+| Claude Code | `claude-code.js` | skills: `.claude/skills/<id>/`; agents: `.claude/agents`, one link to the whole `agents/`; teams are not installed. In the project, or under `~/.claude/` (global) |
+| OpenCode | `opencode.js` | skills: `.opencode/skills/<id>/`, agents: `.opencode/agents/<id>.md` (project); `~/.config/opencode/skills/` and `agents/` (global) |
+| OpenClaw | `openclaw.js` | global only: skills `~/.openclaw/workspace/<id>/`; agents appended to `~/.openclaw/workspace/AGENTS.md` |
+| Hermes | `hermes.js` | global only: skills `<hermes-home>/skills/<domain>/<id>/`, agents `<hermes-home>/agents/<id>.md`. `<hermes-home>` is `$HERMES_HOME`, else `%LOCALAPPDATA%\hermes` on Windows when its `config.yaml` exists, else `~/.hermes` |
+| Mistral Vibe | `vibe.js` | skills: `.vibe/skills/<id>/` (project), `~/.vibe/skills/<id>/` (global); agents: `~/.vibe/agents/<id>.toml` (global only, generated) |
+| OpenAI Codex | `codex.js` | agents appended to `AGENTS.md` (project only); its skills come from Universal |
+| Google AI Edge | `ai-edge.js` | `.ai-edge/skills/`, `agents/` and `teams/<id>.md` (generated, project only); only with `--framework ai-edge`, as nothing detects it |
+| Cursor | `cursor.js` | `.cursor/skills/<id>/` (project only) |
+| Windsurf | `windsurf.js` | `.windsurf/rules/<id>.md` (generated), or a section appended to `.windsurfrules` when that file exists without `.windsurf/rules/` (project only) |
+| GitHub Copilot | `copilot.js` | `.github/skills/<id>/` (project only) |
+| Gemini CLI | `gemini.js` | `.gemini/skills/<id>/` (project only) |
+| Aider | `aider.js` | a section appended to `CONVENTIONS.md` (project only); its skills also come from Universal |
+
+A skill or agent path above is a link by default, relative in the project and absolute under the home directory. With `--from-package copy` it is a marked copy instead. Generated files and appended sections are never links. An adapter that is project-only or global-only ignores `--scope`.
+
+### pi (pi.dev)
+
+There is no pi adapter yet. The universal adapter's folders are the ones pi 1.4.0 reads, so `agent-almanac install` already reaches pi:
+- **The project `.agents/skills/`.** pi searches the working directory and each parent up to the git root.
+- **`~/.agents/skills/`.** pi reads it from any directory.
+
+Project-scope skills load only in a project pi trusts. pi asks before it loads a project's resources (pi's `docs/security.md`). Measured with links and with `--from-package copy` copies: [tests/results/2026-10-22-pi-skill-discovery/RESULT.md](../tests/results/2026-10-22-pi-skill-discovery/RESULT.md).
 
 ## Usage
 
