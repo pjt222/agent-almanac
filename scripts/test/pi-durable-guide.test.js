@@ -42,6 +42,10 @@ test('the example pins the three pi packages at one exact version, and the guide
   for (const name of PI_PACKAGES) {
     assert.equal(lock.packages[`node_modules/${name}`]?.version, versions[0], `the example's lockfile does not hold ${name}@${versions[0]}`);
   }
+  // One copy of each. With equal pins here, a pi package nested under another means npm installed
+  // a second copy, as it would if pi-durable's own exact pins moved on without the other two (#1022).
+  const nested = Object.keys(lock.packages).filter((path) => /node_modules\/.+\/node_modules\/@earendil-works\//.test(path));
+  assert.deepEqual(nested, [], `the example's lockfile holds a second copy of a pi package: ${nested.join(', ')}`);
   const guide = readFileSync(GUIDE, 'utf8');
   assert.ok(guide.includes(`all at \`${versions[0]}\``), `the guide does not name the tested version ${versions[0]}`);
 });
@@ -63,6 +67,22 @@ test('a Dependabot group moves the three pi packages together', () => {
   assert.ok(entry, 'dependabot.yml has no npm entry for /scripts/test/_pi-durable-example');
   // Dependabot patterns are globs where `*` matches any run of characters.
   const matches = (pattern, name) => new RegExp(`^${pattern.split('*').map((part) => part.replace(/[.+?^${}()|[\]\\/]/g, '\\$&')).join('.*')}$`).test(name);
-  const grouping = Object.entries(entry.groups ?? {}).filter(([, group]) => PI_PACKAGES.every((name) => (group.patterns ?? []).some((pattern) => matches(pattern, name))));
-  assert.ok(grouping.length > 0, `no group in that entry matches all of ${PI_PACKAGES.join(', ')}: ${JSON.stringify(entry.groups)}`);
+  // Dependabot's documented group keys (dependabot-options-reference, "groups"): a dependency
+  // goes into the first group it matches, an exclude-pattern overrides a pattern, `applies-to`
+  // defaults to version updates, and `update-types` and `dependency-type` narrow a group. So the
+  // group must be the first version-update group to take each of the three, take every update
+  // type, and not be narrowed to development dependencies: the example declares them under
+  // `dependencies` (#1022).
+  const groups = Object.entries(entry.groups ?? {});
+  const takes = (group, name) => (group['applies-to'] ?? 'version-updates') === 'version-updates'
+    && (group.patterns ?? []).some((pattern) => matches(pattern, name))
+    && !(group['exclude-patterns'] ?? []).some((pattern) => matches(pattern, name));
+  const firstGroups = PI_PACKAGES.map((name) => groups.find(([, group]) => takes(group, name))?.[0] ?? null);
+  assert.ok(firstGroups[0] !== null && firstGroups.every((id) => id === firstGroups[0]),
+    `the three are not all taken first by one version-update group: ${JSON.stringify(Object.fromEntries(PI_PACKAGES.map((name, i) => [name, firstGroups[i]])))}`);
+  const group = entry.groups[firstGroups[0]];
+  assert.ok(group['update-types'] === undefined || ['major', 'minor', 'patch'].every((type) => group['update-types'].includes(type)),
+    `group ${firstGroups[0]} does not take every update type: ${JSON.stringify(group['update-types'])}`);
+  assert.ok(group['dependency-type'] === undefined || group['dependency-type'] === 'production',
+    `group ${firstGroups[0]} is narrowed to ${group['dependency-type']} dependencies`);
 });
