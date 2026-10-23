@@ -21,6 +21,20 @@ import { FrameworkAdapter, childPath } from './base.js';
 import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 import { isHomeDirectory, isPiProject, resolvePiAgentDir } from '../lib/pi-agent-dir.js';
 
+/**
+ * " for <agent-dir>/skills" when $PI_CODING_AGENT_DIR resolves, else nothing.
+ * The home-directory refusal names it as a hint only: a value pi would reject
+ * too, such as a file:// URL with a remote host, must not turn the refusal of
+ * a project-scope install, which never reads the variable, into a failure.
+ */
+function globalSkillsHint() {
+  try {
+    return ` for ${resolve(resolvePiAgentDir(), 'skills')}`;
+  } catch {
+    return '';
+  }
+}
+
 export class PiAdapter extends FrameworkAdapter {
   static id = 'pi';
   static displayName = 'Pi Coding Agent';
@@ -53,7 +67,7 @@ export class PiAdapter extends FrameworkAdapter {
     if (scope !== 'global' && isHomeDirectory(projectDir)) {
       return {
         action: 'skipped', path: targetPath, details: 'home directory',
-        note: `project scope in your home directory would write ~/.pi/skills/; install with -g for ${resolve(resolvePiAgentDir(), 'skills')}`,
+        note: `project scope in your home directory would write ~/.pi/skills/; install with -g${globalSkillsHint()}`,
       };
     }
 

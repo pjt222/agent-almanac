@@ -851,6 +851,34 @@ describe('pi project detection (#1006)', () => {
     assert.equal(existsSync(resolve(tmpRoot, 'home', '.pi')), true);
     assert.equal(piDetected(resolve(tmpRoot, 'home')), false);
   });
+
+  // The two spellings below differ from the directory's own path, so an exact
+  // string comparison would take the home directory for a project. The symlink
+  // case is the one that needs the real-path comparison: resolve() alone strips
+  // a trailing slash but does not follow a link (#1006, review round 1).
+  const withHome = (value, body) => {
+    const before = { HOME: process.env.HOME, USERPROFILE: process.env.USERPROFILE };
+    process.env.HOME = value;
+    process.env.USERPROFILE = value;
+    try {
+      return body();
+    } finally {
+      for (const [key, saved] of Object.entries(before)) {
+        if (saved === undefined) delete process.env[key];
+        else process.env[key] = saved;
+      }
+    }
+  };
+
+  it('does not take the home directory for a pi project when $HOME is a symlink to it', () => {
+    const homeLink = resolve(tmpRoot, 'home-link');
+    symlinkSync(resolve(tmpRoot, 'home'), homeLink);
+    assert.equal(withHome(homeLink, () => piDetected(resolve(tmpRoot, 'home'))), false);
+  });
+
+  it('does not take the home directory for a pi project when $HOME ends in a slash', () => {
+    assert.equal(withHome(`${resolve(tmpRoot, 'home')}/`, () => piDetected(resolve(tmpRoot, 'home'))), false);
+  });
 });
 
 describe('pi adapter, end to end (#1006)', () => {
@@ -862,8 +890,8 @@ describe('pi adapter, end to end (#1006)', () => {
 
   // eslint-disable-next-line no-control-regex
   const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
-  const spawnCli = (args, cwd) => {
-    const res = spawnSync(process.execPath, [cliEntry, ...args, '--source', ROOT], { cwd, env, encoding: 'utf8', timeout: 20000 });
+  const spawnCli = (args, cwd, envOverride = {}) => {
+    const res = spawnSync(process.execPath, [cliEntry, ...args, '--source', ROOT], { cwd, env: { ...env, ...envOverride }, encoding: 'utf8', timeout: 20000 });
     assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
     return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
   };
@@ -914,6 +942,28 @@ describe('pi adapter, end to end (#1006)', () => {
     assert.ok(stdout.split('\n').includes(
       `  = commit-changes [pi] ${target}  project scope in your home directory would write ~/.pi/skills/; ` +
       `install with -g for ${resolve(agentDir, 'skills')}`), stdout);
+    assert.equal(existsSync(resolve(home, '.pi/skills')), false);
+  });
+
+  it('refuses project scope in the home directory when $HOME is a symlink to it', () => {
+    const realHome = resolve(tmpRoot, 'real-home');
+    const homeLink = resolve(tmpRoot, 'home-link');
+    mkdirSync(resolve(realHome, '.pi', 'agent'), { recursive: true });
+    symlinkSync(realHome, homeLink);
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes', '-f', 'pi'], realHome, { HOME: homeLink, USERPROFILE: homeLink });
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(stdout.includes('project scope in your home directory would write ~/.pi/skills/'), stdout);
+    assert.equal(existsSync(resolve(realHome, '.pi/skills')), false);
+  });
+
+  it('still refuses, without naming a directory, when $PI_CODING_AGENT_DIR does not resolve', () => {
+    // pi rejects a file:// URL with a remote host too. Project scope never reads
+    // the variable, so the refusal must not become a failure (#1006, review round 1).
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes', '-f', 'pi'], home, { PI_CODING_AGENT_DIR: 'file://host/pi-agent' });
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const target = resolve(home, '.pi/skills/commit-changes');
+    assert.ok(stdout.split('\n').includes(
+      `  = commit-changes [pi] ${target}  project scope in your home directory would write ~/.pi/skills/; install with -g`), stdout);
     assert.equal(existsSync(resolve(home, '.pi/skills')), false);
   });
 });
@@ -1759,9 +1809,10 @@ describe('npm package root (#606)', () => {
 // as an error, and must not count it as installed. Before #438, six of them
 // returned `errors: []` outright, so a half-destroyed install audited clean.
 // opencode did report the error but still counted the dangling item in `ok`;
-// #445 aligned it, so all nine now split valid from broken the same way.
+// #445 aligned it, so all nine then split valid from broken the same way; pi
+// (#1006), the tenth, does too.
 //
-// Nine adapters split, and this block holds EIGHT cases. claude-code is the one
+// Ten adapters split, and this block holds NINE cases. claude-code is the one
 // left out — and NOT because it is covered. Its direct audit test above (#373)
 // exercises only the healthy path: it audits the real repository root, builds no
 // dangling link, and asserts `errors` is EMPTY, which is exactly what a
@@ -1769,30 +1820,32 @@ describe('npm package root (#606)', () => {
 // (claude-code.js:199) fails nothing — measured with a deletion mutant. It has a
 // second broken branch at :203 that was not mutated; #823 carries both.
 //
-// Both numbers in this paragraph's first sentence — nine, and EIGHT — are prose
-// that no tool reads. A tenth symlink-installing adapter would join uncovered,
-// the shape #447 had, except that there the gap was at least written down.
-// Gating them is #824.
+// Both numbers in this paragraph's first sentence — ten, and NINE — are prose
+// that no tool reads. pi, the tenth symlink-installing adapter, did join
+// uncovered, as this paragraph predicted, until review round 1 of #1006 added
+// its row; an eleventh would too, the shape #447 had. Gating them is #824.
 //
-// universal is the odd one here: alone among the nine it ENUMERATES the broken
-// ids in the error rather than only counting them (the `broken.map(b => b.id)`
-// in universal.js's errors.push — cited by expression, because a line number
-// here was already wrong once: #607 moved the push and the citation did not
-// follow). Its case therefore pins the id list, not just the number —
-// dropping `.map(b => b.id).join(', ')` would keep the count right and still go
-// red (#447).
+// universal and pi are the odd ones here: alone among the ten they ENUMERATE
+// the broken ids in the error rather than only counting them (the
+// `broken.map(b => b.id)` in each adapter's errors.push — cited by expression,
+// because a line number here was already wrong once: #607 moved the push and
+// the citation did not follow). Their cases therefore pin the id list, not just
+// the number — dropping `.map(b => b.id).join(', ')` would keep the count right
+// and still go red (#447).
 //
 // `1 broken skill symlinks` (five rows) and `1 broken links` (opencode) each
 // disagree with themselves on number, as do the ok strings `1 skills installed`,
-// `1 items installed` and `1 skills in workspace`. All of it is pinned
+// `1 items installed`, `1 skills in workspace` and pi's `1 skills installed in
+// <dir>`. All of it is pinned
 // DELIBERATELY — the string is behaviour, so a pluralisation fix should go red
 // here and be made on purpose rather than slipping through unnoticed.
 //
 // Each case builds one valid link and at least one dangling one, and asserts the
 // error and the exact ok string, so neither a regression to `errors: []` nor a
 // drift back to counting totals passes. Seven rows assert the error as an exact
-// string; universal supplies `errAssert` instead — it needs two dangling links
-// for the join to be observable, and their order is not promised (see the row).
+// string; universal and pi supply `errAssert` instead — each needs two dangling
+// links for the join to be observable, and their order is not promised (see
+// twoGhostsEnumerated).
 // hermes builds two of each, one pair per content type. The wording differs
 // by design and follows what each installs: "broken skill symlinks" where only
 // skills are linked, "broken links" for hermes and opencode, which link agents
@@ -1818,6 +1871,26 @@ describe('adapter audits detect broken symlinks', () => {
   const realAgent = resolve(ROOT, 'agents/code-reviewer.md');
   let savedHome;
 
+  // universal and pi enumerate the broken ids; every other adapter only counts
+  // them.
+  //
+  // TWO dangling links, not one. With a single id there is nothing to join, so
+  // `join(', ')` and `join('; ')` produce identical output and a separator
+  // mutant SURVIVES — measured, before universal's row was widened. One id pins
+  // an id; it does not pin an enumeration.
+  //
+  // The assertion splits on ', ' and compares as a set. Splitting is what pins
+  // the separator: under `join('; ')` the split yields one element and the
+  // deepEqual fails. Comparing as a set is what keeps it honest about order —
+  // each adapter enumerates in readdirSync order, which is not specified, so an
+  // exact two-id string would be asserting something neither promises.
+  const twoGhostsEnumerated = (errors) => {
+    assert.equal(errors.length, 1, `expected one error, got: ${JSON.stringify(errors)}`);
+    const enumerated = /^2 broken symlinks: (.+)$/.exec(errors[0]);
+    assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
+    assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
+  };
+
   // path: where the adapter looks, relative to its own base (project or home).
   const cases = [
     { name: 'copilot', base: 'project', dir: '.github/skills', ok: '1 skills installed', err: '1 broken skill symlinks', audit: (d) => new CopilotAdapter().audit(d) },
@@ -1836,34 +1909,26 @@ describe('adapter audits detect broken symlinks', () => {
     // line to valid-only like the rest. One dir is enough here: unlike hermes,
     // its skills and agents flow through the same expression (opencode.js:82).
     { name: 'opencode', base: 'project', dir: '.opencode/skills', ok: '1 items installed', err: '1 broken links', audit: (d) => new OpenCodeAdapter().audit(d, 'project') },
-    // universal enumerates the broken ids; every other adapter only counts them.
-    //
-    // TWO dangling links, not one. With a single id there is nothing to join, so
-    // `join(', ')` and `join('; ')` produce identical output and a separator
-    // mutant SURVIVES — measured, before this was widened. One id pins an id;
-    // it does not pin an enumeration.
-    //
-    // The assertion splits on ', ' and compares as a set. Splitting is what pins
-    // the separator: under `join('; ')` the split yields one element and the
-    // deepEqual fails. Comparing as a set is what keeps it honest about order —
-    // the adapter enumerates in readdirSync order, which is not specified, so an
-    // exact two-id string would be asserting something universal.js does not
-    // promise.
     {
       name: 'universal', base: 'project', dir: '.agents/skills',
       extraGhosts: ['ghost-skill-2'],
       ok: '1 skills installed',
-      errAssert: (errors) => {
-        assert.equal(errors.length, 1, `expected one error, got: ${JSON.stringify(errors)}`);
-        const enumerated = /^2 broken symlinks: (.+)$/.exec(errors[0]);
-        assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
-        assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
-      },
+      errAssert: twoGhostsEnumerated,
       // 'project' is explicit, not load-bearing: _targetBase() returns the project
       // path for any scope that is not 'global', so audit(d) behaves identically
       // here — that mutant survives, measured. Passed anyway so the row states its
       // scope instead of leaning on a default that could change.
       audit: (d) => new UniversalAdapter().audit(d, 'project'),
+    },
+    // pi's ok line names the directory it read (#1006), so it is computed here.
+    // Project scope only: global differs in _targetBase() alone, and the
+    // broken-link branch is the same expression for both.
+    {
+      name: 'pi', base: 'project', dir: '.pi/skills',
+      extraGhosts: ['ghost-skill-2'],
+      ok: `1 skills installed in ${resolve(tmpRoot, 'pi', '.pi/skills')}`,
+      errAssert: twoGhostsEnumerated,
+      audit: (d) => new PiAdapter().audit(d, 'project'),
     },
   ];
 
