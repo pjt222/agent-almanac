@@ -15,7 +15,7 @@ Tested in the Workflow dialect (`node --check` on the wrapped body) and against 
 
 Adapt `scope()` to your kinds, add any preamble your environment requires to `HEAD`, and give verifiers a read-only agent type where your runtime offers one. The skeleton keeps only the generic method: its templates defer to the brief, and its refutation checks are generic. The evidence paths, the classification vocabulary, the domain's refutation checks and the method rules belong in your brief, not in the script.
 
-The skeleton runs no gap unit. Every gap a critic returns goes to the owner batch, and a gap becomes a spec only in a later run, from an id the owner approved (the gap deriver below). A completeness critic sees a stopped or held unit's scope as uncovered and proposes it as a gap, and no rule in code can reliably tell such a gap from a new one. Only the owner can.
+The skeleton runs no gap unit. Every gap a critic returns goes to the owner batch, and a gap becomes a spec only in a later run, from a topic or an id the owner approved (the gap deriver below). A completeness critic sees a stopped or held unit's scope as uncovered and proposes it as a gap, and no rule in code can reliably tell such a gap from a new one. Only the owner can.
 
 ```javascript
 // narrow-units.mjs: pointer-only units, adversarial verify, grouped critics; gaps go to the owner.
@@ -214,7 +214,7 @@ Validate it before every run:
 
 ## Derivers for the other spec kinds
 
-Each one reads a frozen mechanical input and writes specs that carry only pointers. Ids are reduced to `[A-Za-z0-9._-]` where they are derived, because the Step 10 ledger reads them back from the unit log with that class; the Step 2 id check catches a collision.
+Each one reads a frozen input, under `mechanical/` or recorded in `WORK-SHA256SUMS` (SKILL.md Step 2), and writes specs that carry only pointers. Ids are reduced to `[A-Za-z0-9._-]` where they are derived, because the Step 10 ledger reads them back from the unit log with that class; the Step 2 id check catches a collision.
 
 Inventory rows chunked by group (a TSV with a header line, the group in column 2; `rows` are file line numbers):
 
@@ -237,35 +237,61 @@ ls "$MECH/items" | jq -R -s -c 'split("\n") | map(select(endswith(".md")))
 echo "items=$(ls "$MECH/items" | wc -l) specs=$(jq length "$RUN_DIR/specs/files.json")"   # unequal: a file the deriver skipped
 ```
 
-Gap specs from an earlier run's `gaps_for_owner` (written to `gaps/<tag>.json`), for the topics the owner approved and any single gap ids the owner approved, and never a gap the batch marked as covering a stopped or held unit's pointers, whatever its topic:
+Gap specs come only from a gaps file recorded in `WORK-SHA256SUMS` when it was written (Launch sequence), so the question a unit reads is the one the owner approved. The owner's decisions are transcribed from the batch into `owner/`: the topics approved, the single gap ids approved, and the ids the batch marked as covering a stopped or held unit's pointers. A marked id is never derived, whatever its topic, and an approved id that is marked or unknown is refused. A gap a critic flagged with `covers_held` is never derived through its topic, only by its own id. The deriver refuses rather than writing a partial list, and it records its output in the work list:
 
 ```bash
-GAPS="$RUN_DIR/gaps/R1.json"            # the run's gaps_for_owner, written before the batch
-TOPICS="$RUN_DIR/approved-topics.txt"   # topics the owner approved, one per line
-IDS="$RUN_DIR/approved-gaps.txt"        # single gap ids the owner approved, one per line
-MARKED="$RUN_DIR/gaps-over-held.txt"    # gap ids the batch marked as covering stopped or held pointers
-jq -c --rawfile topics "$TOPICS" --rawfile ids "$IDS" --rawfile marked "$MARKED" --arg from "$GAPS" '
-  ($topics | split("\n") | map(select(length > 0))) as $t
-  | ($ids | split("\n") | map(select(length > 0))) as $i
-  | ($marked | split("\n") | map(select(length > 0))) as $m
-  | map(select((.topic as $x | $t | index($x)) or (.id as $x | $i | index($x))))
-  | map(select(.id as $x | $m | index($x) | not))
-  | map({kind: "gap", id: .id, g: .id, from: $from})' "$GAPS" > "$RUN_DIR/specs/gaps.json"
+cd "${RUN_DIR:?}" || exit 1
+TAG=R1                                    # the run whose gaps the owner answered
+GAPS="gaps/$TAG.json"                     # its gaps_for_owner, recorded in WORK-SHA256SUMS when it was written
+TOPICS="owner/$TAG-approved-topics.txt"   # topics the owner approved, one per line (may be empty)
+IDS="owner/$TAG-approved-gaps.txt"        # single gap ids the owner approved, one per line (may be empty)
+MARKED="owner/$TAG-marked-gaps.txt"       # ids the batch marked as covering stopped or held pointers (may be empty)
+OUT="specs/gaps-$TAG.json"
+for f in "$GAPS" "$TOPICS" "$IDS" "$MARKED"; do [ -f "$f" ] || { echo "REFUSED: no $f"; exit 2; }; done
+[ ! -e "$OUT" ] || { echo "REFUSED: $OUT exists; derive a later approval into a new name"; exit 2; }
+sha256sum -c --quiet WORK-SHA256SUMS && awk -v f="$GAPS" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS ||
+  { echo "REFUSED: $GAPS was never recorded, or the work list changed after it was"; exit 1; }
+LISTS='def lines: split("\n") | map(select(length > 0));
+  ($topics | lines) as $t | ($ids | lines) as $i | ($marked | lines) as $m | . as $g'
+bad=$(jq -r --rawfile topics "$TOPICS" --rawfile ids "$IDS" --rawfile marked "$MARKED" "$LISTS"'
+  | ($t[] | select(. as $x | $g | all(.topic != $x)) | "unknown topic \(.)"),
+    ($i[] | select(. as $x | $g | all(.id != $x)) | "unknown id \(.)"),
+    ($i[] | select(. as $x | $m | index($x)) | "marked id \(.)")' "$GAPS") || exit 2
+[ -z "$bad" ] || { printf '%s\n' "$bad" | sed 's/^/REFUSED: /'; exit 1; }
+jq -c --rawfile topics "$TOPICS" --rawfile ids "$IDS" --rawfile marked "$MARKED" --arg from "$GAPS" "$LISTS"'
+  | map(select((.id as $x | $m | index($x)) | not)
+        | select(((.topic as $x | $t | index($x)) and (.covers_held | not)) or (.id as $x | $i | index($x))))
+  | map({kind: "gap", id: .id, g: .id, from: $from})' "$GAPS" > "$OUT" || exit 2
+echo "gaps=$(jq length "$GAPS") derived=$(jq length "$OUT") flagged_in_approved_topics=$(jq --rawfile topics "$TOPICS" --rawfile ids "$IDS" '[.[] | select(.covers_held and (.topic as $x | $topics | split("\n") | index($x)) and ((.id as $x | $ids | split("\n") | index($x)) | not))] | length' "$GAPS")"
+sha256sum "$OUT" >> WORK-SHA256SUMS
 ```
 
-An owner spec re-scopes a stopped unit in the owner's words. Write it to `specs/owner.json` by hand from the batch, then check that each scope is quoted verbatim, on one line, under the unit it names in the batch's Answered section (format in the owner batch skeleton). Any id printed is refused. The check shows that the spec matches an Answered line, not that the line holds the owner's words, so the Answered line cites where the words came from:
+`flagged_in_approved_topics` counts the flagged gaps an approved topic did not derive; each is already listed apart in the batch (B4) for a decision by id.
+
+An owner spec re-scopes a stopped unit in the owner's words. Write it by hand from the batch to a new file `specs/owner-<n>.json`, with `answer` set to the `STOP-<n>` of the Answered line it comes from. The check refuses unless each scope is quoted verbatim on that Answered line, under the unit it names, in the section headed exactly `## Answered`. It exits 1 and names each refused id, says how many owner specs it checked, and records the file in the work list only when nothing is refused. The check shows that the spec matches an Answered line, not that the line holds the owner's words, so the Answered line cites where the words came from:
 
 ```bash
-jq -r '.[] | select(.kind == "owner") | [.id, .unit, .scope] | @tsv' "$RUN_DIR/specs/owner.json" |
-  while IFS="$(printf '\t')" read -r id unit scope; do
-    rg -F -q -- "unit $unit: \"$scope\"" "$RUN_DIR/OWNER-QUESTIONS.md" || echo "REFUSED $id"
-  done
+cd "${RUN_DIR:?}" || exit 1
+OWNER_SPECS="specs/owner-1.json"   # one new file per batch of answers
+[ -f "$OWNER_SPECS" ] || { echo "REFUSED: no $OWNER_SPECS"; exit 2; }
+awk -v f="$OWNER_SPECS" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS && { echo "REFUSED: $OWNER_SPECS was already recorded"; exit 2; }
+sha256sum -c --quiet WORK-SHA256SUMS || { echo 'REFUSED: the work list changed after it was recorded'; exit 1; }
+owner_specs=$(jq -r 'if all(.[]; .kind == "owner") then .[] | [.id, .unit, .scope, .answer] | @tsv
+  else error("a spec in this file is not an owner spec") end' "$OWNER_SPECS") || { echo "REFUSED: $OWNER_SPECS"; exit 2; }
+refused=$(printf '%s\n' "$owner_specs" | while IFS="$(printf '\t')" read -r id unit scope answer; do
+  [ -n "$id" ] || continue
+  NEEDLE="- $answer, unit $unit: \"$scope\" (" awk '/^## /{answered = ($0 == "## Answered")}
+    answered && index($0, ENVIRON["NEEDLE"]) == 1 {found = 1} END {exit !found}' OWNER-QUESTIONS.md || echo "REFUSED $id"
+done)
+echo "owner specs checked: $(printf '%s\n' "$owner_specs" | rg -c . || echo 0)"
+[ -z "$refused" ] || { printf '%s\n' "$refused"; exit 1; }
+sha256sum "$OWNER_SPECS" >> WORK-SHA256SUMS
 ```
 
 ## Brief skeleton
 
 ```text
-FRAME. You are one unit of a review run for <owner>. The run decides <the question>; its purpose
+FRAME. You are one unit of a <review|audit|migration> run for <owner>. The run decides <the question>; its purpose
 is <what the run assembles, and for whom>. Produce <what>; never produce <what not>. Your scope
 is the pointers in your unit; stay inside them.
 
@@ -277,6 +303,7 @@ EVIDENCE. Everything below is already computed; read what your unit needs and do
   Known artifacts: <the ways these files mislead, one line each>
 
 TOOLS. Read-only. <the commands, how to count occurrences, output bounds>. Never execute <X>.
+  Stop notices: <the exact text your runtime writes when it stops or interrupts a subagent>.
 
 METHOD RULES (each names the past mistake it prevents):
   1. A source's own summary is a claim, not evidence: check it against the primary artifact.
@@ -304,11 +331,15 @@ could not determine.
 # <run> owner batch (<date>)
 
 Collected for one answering pass. Each question cites its evidence. A read-only faithfulness
-check ran before presentation; its corrections are folded into the question text.
+check ran before presentation; its corrections are folded into the question text, except a
+gap's question, which a later unit reads as recorded: a gap the check finds wrong is listed
+with the correction and recommended for hold.
 
 ## Answered
 
 - STOP-1, unit <id>: "<the owner's words, verbatim, on one line>" (<where the words came from>, <date>)
+- NORESULT, unit <id>: "<the owner's words>" (<where the words came from>, <date>)
+- RERUN-1, run <tag>: "<the owner's words, naming the units>" (<where the words came from>, <date>)
 
 ## Open
 
@@ -317,30 +348,65 @@ check ran before presentation; its corrections are folded into the question text
   Options: (a) you name a different scope for this unit, (b) you do the work, (c) hold.
   Recommendation: (c).
 - **B2. NORESULT, unit <id>.** No result, and its transcript shows no transient failure.
-  Evidence: UNIT-LOG.txt line <n>, <transcript path>.
-  Options: (a) re-run it once, unchanged, (b) treat it as a stop, (c) hold. Recommendation: (c).
+  Evidence: UNIT-LOG.txt line <n>, <transcript path>, partials/<id>.txt if it wrote one.
+  Options: (a) release it: re-run it once, unchanged, (b) treat it as a stop, (c) hold.
+  Recommendation: (c).
 - **B3. Gaps from run <tag>, topic <topic> (<n> gaps).** Each question in full, with its id, from
   gaps/<tag>.json. Options: (a) approve the topic, (b) approve only ids <...>, (c) hold.
-  Depends on: B1, B2. One such entry per topic.
-- **B4. Gaps from run <tag> over stopped or held scope.** Listed apart and never approved through
-  a topic: each belongs only to its unit's stop entry, option (a). Evidence: gaps-over-held.txt.
+  Recommendation: (c) until B1 and B2 are answered. Depends on: B1, B2. One such entry per topic.
+- **B4. Gaps from run <tag> over stopped or held scope.** Each question in full: the ids the batch
+  marked (owner/<tag>-marked-gaps.txt) and the ids a critic flagged with covers_held. None is
+  approved through its topic. A marked gap belongs only to its unit's stop entry, option (a).
+  Options for a flagged gap the batch did not mark, with the reason it was not marked:
+  (a) approve it by its id, (b) hold. Recommendation: (b).
+- **B5. Re-run of run <tag>.** <why: the brief changed, or a defect>. The run recorded <the stops and
+  missing results>; re-launching its units launches their verifiers and critics again. Its reports
+  were written under the old brief. Options: (a) re-run the units you name, (b) keep the reports,
+  marked as written under the old brief, (c) hold. Recommendation: (c).
 ```
 
 ## Launch sequence
 
-Pilot first, read its reports, then one run per remaining cluster, started together. `HELD` is every id the owner has not released: every stopped id, every no-result id, and every spec whose pointers overlap a stopped unit's. Pass it to every run, including a re-run of the pilot, and keep held ids in the spec lists: a run that does not know an id cannot hold it.
+Pilot first, read its reports, then one run per remaining cluster, started together. Before each launch after the pilot, derive the held list from the unit log: every stopped id, and every no-result or held id without a `RELEASED` line. Take the held ids out of the cluster's spec list, and pass the list as `held`; the spec files keep the ids for Step 10. An id left out of the spec list cannot run even if `held` is forgotten, and the skeleton refuses a `held` that is not an array.
+
+```bash
+cd "${RUN_DIR:?}" || exit 1
+[ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt (Step 1 creates it)'; exit 2; }
+released=$(rg -o '^\S+ RELEASED unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt | sort -u)
+HELD=$( { rg -o '^\S+ STOP-[0-9]+ unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt
+          rg -o '^\S+ (NORESULT|HELD) unit=([A-Za-z0-9._-]+)' -r '$2' UNIT-LOG.txt | sort -u | comm -23 - <(printf '%s\n' "$released"); } |
+        rg -v '^(V-|X-)' | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')
+echo "held=$HELD"
+CLUSTER="specs/rows.json"   # the cluster about to launch
+jq -c --argjson held "$HELD" 'map(select(.id as $x | $held | index($x) | not))' "$CLUSTER"   # pass as specs, with HELD as held
+```
 
 ```javascript
 Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R1', specs: R1, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE } })
-// after the pilot reports pass the Step 7 checks:
-Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R2', specs: R2, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
-Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R3', specs: R3, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
+// After the pilot reports pass the Step 7 checks. A pilot re-run (tag R1b) only if R1 returned all six
+// stop and no-result lists empty; otherwise it goes to the owner batch (B5), and only the units the owner names run again.
+Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R2', specs: R2_UNHELD, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
+Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R3', specs: R3_UNHELD, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
 ```
 
 Each run returns `stopped`, `no_result`, `held`, `verifier_stopped`, `verifier_no_result`, `critic_stopped`, `critic_no_result` and `gaps_for_owner`. Before reading any report, write to the unit log:
 
 - one Step 8 `STOP-<n> unit=<id>` line per `stopped` id;
-- one `NORESULT unit=<id>` line per `no_result` id;
+- one `NORESULT unit=<id>` line per `no_result` id, with its partial moved (Step 8);
 - one `HELD unit=<id>` line per `held` id.
 
-Only `STOP-<n> unit=` and `HELD unit=` lines move a spec in Step 10. Verifier and critic stops and no-results are logged the same way under their labels (`unit=V-<id>-<n>`, `unit=critic-<tag>-<n>`). Step 10 counts spec units only, so these are recorded in the coverage statement and the owner batch rather than in the ledger, and the claim behind a stopped or missing verdict counts as unverified. Write `gaps_for_owner` to `gaps/<tag>.json`; it goes to the owner batch by topic (B3), with any gap over stopped or held scope listed apart (B4).
+Verifier and critic stops and no-results are logged the same way, under the ids the run returns. Those ids are the basenames of the files the agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`), and the ledger and the held list leave them out. Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified.
+
+Write `gaps_for_owner` to `gaps/<tag>.json` and record it before the batch is built, so the questions the owner approves are the ones a later unit reads:
+
+```bash
+cd "${RUN_DIR:?}" || exit 1
+TAG=R1   # after writing the run's gaps_for_owner to gaps/$TAG.json
+awk -v f="gaps/$TAG.json" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS && { echo "REFUSED: gaps/$TAG.json was already recorded"; exit 2; }
+sha256sum -c --quiet WORK-SHA256SUMS || { echo 'REFUSED: the work list changed after it was recorded'; exit 1; }
+jq -e 'type == "array" and all(.[]; (.id | test("^G-[A-Za-z0-9._-]+$")) and (.topic | type == "string") and (.covers_held | type == "boolean"))' \
+  "gaps/$TAG.json" > /dev/null || { echo "REFUSED: gaps/$TAG.json is not a gaps_for_owner list"; exit 1; }
+sha256sum "gaps/$TAG.json" >> WORK-SHA256SUMS
+```
+
+The gaps go to the owner batch by topic (B3). Any gap the batch marks, or a critic flags with `covers_held`, is listed apart (B4).
