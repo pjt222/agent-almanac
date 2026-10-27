@@ -42,7 +42,7 @@ Step 9's read-only faithfulness check is out of scope too; criterion 8 checks th
 
 - [ ] `skills/decompose-into-pointer-units/SKILL.md` and its `references/EXAMPLES.md` exist
 - [ ] `node`, `jq`, `rg` and `sha256sum` are on PATH
-- [ ] A fresh run directory exists: `RUN_DIR=$(mktemp -d)`, with `mechanical/`, `specs/`, `gaps/` and `owner/` inside it and an empty `UNIT-LOG.txt`, as Step 1 creates them
+- [ ] A fresh run directory exists: `RUN_DIR=$(mktemp -d)`, with `mechanical/`, `specs/`, `gaps/`, `owner/` and `repo/` inside it and an empty `UNIT-LOG.txt`, as Step 1 creates them for the first run directory of a job (`PRIOR_RUN=none`)
 - [ ] The fixture below is written to `$RUN_DIR/mechanical/changelog.md`, byte for byte
 
 ```text
@@ -215,7 +215,7 @@ Record timestamps for:
   it with the bullets above. A spec file that skipped the check is not
   recorded, and the ledger refuses it with `the work list changed after it was
   recorded`. If the owner spec is then stopped, expect a `STOP-2` line,
-  `stopped=2`, and no further proposal.
+  `stopped=2`, and no further proposal: no second owner spec citing `STOP-1`.
 - **Variant B: A unit with no result** — after the baseline stop, treat
   `CL1.4.1-02` as returning no result and log it with the Step 8 snippet,
   which writes `NORESULT unit=CL1.4.1-02` and moves its report to
@@ -223,7 +223,8 @@ Record timestamps for:
   `specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0`.
   Planning mode has no transcript to read, so the cause cannot be established:
   expect the unit to stay unaccounted and go to the owner batch, not to be
-  re-run or answered by hand.
+  re-run or answered by hand. A transient release is refused here as well:
+  it needs a transcript file, and the release snippet names none.
 - **Variant C: A reviewer stop** — the addendum names a human reviewer instead
   of a safety classifier. Expect exactly the same handling as the baseline.
 - **Variant D: A gap over stopped work** — after the stop, the observer offers

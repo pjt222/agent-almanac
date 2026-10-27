@@ -9,6 +9,7 @@ Tested in the Workflow dialect (`node --check` on the wrapped body) and against 
 - A stop reported in a unit's, a verifier's or a critic's `stop` field (safety classifier, policy hook or reviewer) was recorded, a missing `stop` field counted as a stop, and a clean report saying it was "never stopped" did not.
 - A stopped unit got no verifier and was not listed as a no-result, a stopped verifier's verdict was not counted, and a stopped critic's gaps were not used.
 - A unit, verifier or critic with no result was recorded with its cause undetermined, and its log line did not say to re-run it as-is. Each stopped or no-result unit, verifier and critic was launched exactly once.
+- A verifier or critic with no result came back in `rerun_prompts` with the exact prompt it was launched with; a stopped one and a unit did not. A `rerun` of it launched that one agent with that prompt and its own schema, and nothing else; its stop or second no-result was recorded, and a critic's gaps came back under the new tag. A rerun of a unit id, with specs, without its prompt or without a tag was refused.
 - A held id was never launched, and every critic was told it was held, as it was told every stopped and no-result id. A `held` argument that is not an array was refused.
 - An input spec of a kind the skeleton does not know (including `raw`), a `cl` spec without `args.source`, and an `owner` spec without its unit, scope and a `STOP-<n>` answer were refused before any agent started.
 - No gap unit ever ran, even when a critic ignored its instructions and proposed a stopped or held unit's scope. Every returned gap carried an id, a topic and a `covers_held` flag, and every returned verifier or critic id was the basename of the file that agent writes.
@@ -36,9 +37,14 @@ const DIR = A.reportDir, BRIEF = A.brief, MECH = A.mech, SOURCE = A.source, TAG 
 if (A.held !== undefined && !Array.isArray(A.held)) throw new Error('args.held must be an array of ids')
 const HELD = new Set(A.held || []) // ids the owner has not released (SKILL.md Step 8)
 const INPUT = Array.isArray(A.specs) ? A.specs : []
+// rerun: { id, prompt }, one verifier or critic launched again, alone, after a transient failure (SKILL.md Step 8).
+const RERUN = A.rerun
+if (RERUN !== undefined && !(RERUN && /^(V|X-accuracy|X-completeness)-[A-Za-z0-9._-]+$/.test(RERUN.id || '')
+  && typeof RERUN.prompt === 'string' && RERUN.prompt && A.tag && !INPUT.length))
+  throw new Error('args.rerun is { id, prompt } for one verifier or critic, with a new tag and no specs; a unit re-runs as a run of its one spec')
 const GROUP = A.criticGroup ?? 15
 const KINDS = new Set(['cl', 'rows', 'file', 'issue', 'gap', 'owner'])
-if (!INPUT.length || !DIR || !BRIEF || !MECH) throw new Error('args.specs, reportDir, brief and mech are required')
+if (RERUN === undefined && (!INPUT.length || !DIR || !BRIEF || !MECH)) throw new Error('args.specs, reportDir, brief and mech are required')
 const unknown = INPUT.filter(s => !KINDS.has(s.kind))
 if (unknown.length) throw new Error(`spec kinds not accepted: ${unknown.map(s => `${s.id}:${s.kind}`).join(', ')}`)
 if (INPUT.some(s => s.kind === 'cl') && !SOURCE) throw new Error('cl specs need args.source, the file their line numbers refer to')
@@ -116,16 +122,46 @@ const runUnit = (s, ph) => agent(
   `${HEAD}\n\n=== YOUR UNIT: ${s.id} ===\nWrite your report to: ${DIR}/${s.id}.txt\nScope: ${scope(s)}\n${STOP_LINE}`,
   { label: s.id, phase: ph, schema: DSCHEMA })
 
-const verify = (r, item, n, ph) => agent(
-  `${HEAD}\n\n=== ADVERSARIAL VERIFY of ${r.unit}, item ${n} ===\nThe report ${r.report_path} claims:\n  ${item}\n`
+const verifyPrompt = (r, item, n) => `${HEAD}\n\n=== ADVERSARIAL VERIFY of ${r.unit}, item ${n} ===\nThe report ${r.report_path} claims:\n  ${item}\n`
   + 'Re-derive it independently from the same evidence and try to REFUTE it: the counter-example, the misread source, '
   + 'the overstated impact, and every refutation check the brief lists. A claim that survives is CONFIRMED.\n'
-  + `Write your re-derivation to: ${DIR}/V-${r.unit}-${n}.txt\n${STOP_LINE}`,
-  { label: `verify ${r.unit}#${n}`, phase: ph, schema: VSCHEMA })
+  + `Write your re-derivation to: ${DIR}/V-${r.unit}-${n}.txt\n${STOP_LINE}`
+const verify = (r, item, n, ph) => agent(verifyPrompt(r, item, n), { label: `verify ${r.unit}#${n}`, phase: ph, schema: VSCHEMA })
 
 // Any stop value but none is a stop, and so is a missing field: recorded, never verified, counted or re-run here.
 const isStop = (x) => x.stop !== 'none'
+const UNDETERMINED = 'cause undetermined: read the transcript by structure before any re-run; only for a transient failure (overload or '
+  + '5xx, rate limit, network timeout) and nothing else, release it (SKILL.md Step 8) and re-run it once, unchanged and alone, under a new '
+  + 'tag; anything else goes to the owner batch'
+const RETRY = 'cause undetermined: read its transcript by structure; only for a transient failure (overload or 5xx, rate limit, network '
+  + 'timeout), release it (SKILL.md Step 8) and re-run it once, alone, with args.rerun, its prompt from rerun_prompts and a new tag; '
+  + 'anything else goes to the owner batch, and until then what it checks stays unchecked'
+const NOT_RERUN = 'do not re-run; its unit and cluster are re-launched only if the owner names them'
+// Several critics often report the same gap: keep its highest-priority copy, and give each an id for the owner batch.
+const forOwner = (critics) => {
+  const seen = new Set()
+  return critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)
+    .filter(g => { const k = g.title.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true })
+    .map((g, i) => ({ ...g, id: `G-${TAG}-${i + 1}` }))
+}
+
+if (RERUN) { // the one agent, with the prompt an earlier run returned for it, and nothing else
+  const isV = RERUN.id.startsWith('V-')
+  const r = await agent(RERUN.prompt, { label: `${isV ? 'verify' : 'critic'} ${RERUN.id} (rerun)`, phase: isV ? 'Verify' : 'Critics', schema: isV ? VSCHEMA : XSCHEMA })
+  const none = r ? [] : [RERUN.id], stop = r && isStop(r) ? [RERUN.id] : []
+  const ok = r && !isStop(r) ? [r] : []
+  if (none.length) log(`NO RESULT from the re-run of ${RERUN.id}: a second no-result goes to the owner batch, do not re-run`)
+  if (stop.length) log(`STOPPED re-run of ${RERUN.id}, record by id; ${NOT_RERUN}`)
+  return { tag: TAG, rerun: RERUN.id, stopped: [], no_result: [], held: [],
+    verifier_stopped: isV ? stop : [], verifier_no_result: isV ? none : [],
+    critic_stopped: isV ? [] : stop, critic_no_result: isV ? [] : none,
+    gaps_for_owner: isV ? [] : forOwner(ok), rerun_prompts: {},
+    verdicts: isV ? ok.map(v => ({ verdict: v.verdict, item: v.item, report: v.report_path })) : [],
+    critics: isV ? [] : ok.map(c => ({ report: c.report_path, corrections: c.corrections })) }
+}
+
 const stopped = [], verifierStopped = [], verifierNoResult = []
+const rerunPrompts = {} // the exact prompt of each verifier and critic with no result, for a transient re-run
 const verifyAll = async (r, s, ph) => {
   if (!r) return null
   if (isStop(r)) { stopped.push(s.id); return null }
@@ -135,7 +171,7 @@ const verifyAll = async (r, s, ph) => {
   const verdicts = [] // assign first: never chain onto await parallel(...)
   raw.forEach((v, i) => {
     const id = `V-${s.id}-${i + 1}` // the basename of the file this verifier writes, as the unit log records it
-    if (!v) verifierNoResult.push(id)
+    if (!v) { verifierNoResult.push(id); rerunPrompts[id] = verifyPrompt(r, items[i], i + 1) }
     else if (isStop(v)) verifierStopped.push(id)
     else verdicts.push(v)
   })
@@ -146,11 +182,8 @@ phase('Review')
 const round1 = await pipeline(SPECS, s => runUnit(s, 'Review'), (r, s) => verifyAll(r, s, 'Verify'))
 const done = round1.filter(Boolean)
 const noResult = SPECS.filter((s, i) => !round1[i] && !stopped.includes(s.id)).map(s => s.id)
-const UNDETERMINED = 'cause undetermined: read the transcript by structure before any re-run; re-run once, unchanged and alone, only for a '
-  + 'transient failure (overload or 5xx, rate limit, network timeout) and nothing else; anything else goes to the owner batch'
-const NOT_RERUN = 'do not re-run; its unit and cluster are re-launched only if the owner names them'
 if (noResult.length) log(`NO RESULT, ${UNDETERMINED}: ${noResult.join(', ')}`)
-if (verifierNoResult.length) log(`NO RESULT from verifier, cause undetermined; its claim stays unverified, ${NOT_RERUN}: ${verifierNoResult.join(', ')}`)
+if (verifierNoResult.length) log(`NO RESULT from verifier, ${RETRY}: ${verifierNoResult.join(', ')}`)
 if (stopped.length) log(`STOPPED, record by id and route to the owner, do not re-run: ${stopped.join(', ')}`)
 if (verifierStopped.length) log(`STOPPED verifier, record by id; its verdict is not counted, ${NOT_RERUN}: ${verifierStopped.join(', ')}`)
 
@@ -167,30 +200,25 @@ const criticIds = groups.map((g, gi) => `X-accuracy-${TAG}-${gi + 1}`).concat(`X
 const HELD_LINE = 'HELD for the owner (stopped, no result or held; set covers_held on any gap whose question covers their pointers):\n'
   + `${[...new Set([...stopped, ...noResult, ...held])].join(', ') || 'none'}`
 const GAP_RULE = 'Give each gap a topic from the brief\'s CLASSIFY categories and a covers_held flag. No gap runs in this run; every gap goes to the owner.'
-const accuracy = groups.map((g, gi) => () => agent(
+const criticPrompts = groups.map((g, gi) =>
   `${HEAD}\n\n=== ACCURACY CRITIC ${TAG}-${gi + 1} over ${g.length} reports ===\nRead EVERY report and verifier file below, `
   + 'benign units included. List each claim that does not hold, with the correction and how to reproduce it, and each pair '
   + `of units that contradict each other. ${GAP_RULE} `
-  + `Write to ${DIR}/${criticIds[gi]}.txt\n${STOP_LINE}\n\n${HELD_LINE}\n\n${digest(g)}`,
-  { label: criticLabels[gi], phase: 'Critics', schema: XSCHEMA }))
-const completeness = () => agent(
+  + `Write to ${DIR}/${criticIds[gi]}.txt\n${STOP_LINE}\n\n${HELD_LINE}\n\n${digest(g)}`).concat(
   `${HEAD}\n\n=== COMPLETENESS CRITIC ${TAG} ===\nRead the spec list, the digest and the mechanical inputs in ${MECH}. `
   + 'What inside this run\'s scope did no unit cover, or cover only by assertion? Return each gap as a self-contained '
   + `question a fresh unit could answer, priority 1 to 3. ${GAP_RULE} `
   + `Write to ${DIR}/${criticIds[criticIds.length - 1]}.txt\n${STOP_LINE}\n\n${HELD_LINE}\n\n`
-  + `SPECS:\n${SPECS.map(s => `- ${s.id} ${s.kind}`).join('\n')}\n\nDIGEST:\n${digest(done)}`,
-  { label: criticLabels[criticLabels.length - 1], phase: 'Critics', schema: XSCHEMA })
-const critRaw = await parallel([...accuracy, completeness])
+  + `SPECS:\n${SPECS.map(s => `- ${s.id} ${s.kind}`).join('\n')}\n\nDIGEST:\n${digest(done)}`)
+const critRaw = await parallel(criticPrompts.map((p, i) => () => agent(p, { label: criticLabels[i], phase: 'Critics', schema: XSCHEMA })))
 const criticNoResult = criticIds.filter((id, i) => !critRaw[i])
+criticIds.forEach((id, i) => { if (!critRaw[i]) rerunPrompts[id] = criticPrompts[i] })
 const criticStopped = criticIds.filter((id, i) => critRaw[i] && isStop(critRaw[i]))
 const critics = critRaw.filter(c => c && !isStop(c))
-if (criticNoResult.length) log(`NO RESULT from critic, cause undetermined; its group stays unchecked, ${NOT_RERUN}: ${criticNoResult.join(', ')}`)
+if (criticNoResult.length) log(`NO RESULT from critic, ${RETRY}: ${criticNoResult.join(', ')}`)
 if (criticStopped.length) log(`STOPPED critic, record by id; its gaps and corrections are not used, ${NOT_RERUN}: ${criticStopped.join(', ')}`)
 
-const seen = new Set() // several critics often report the same gap: keep its highest-priority copy
-const gaps = critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)
-  .filter(g => { const k = g.title.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true })
-  .map((g, i) => ({ ...g, id: `G-${TAG}-${i + 1}` }))
+const gaps = forOwner(critics)
 const byTopic = gaps.reduce((m, g) => ({ ...m, [g.topic]: (m[g.topic] || 0) + 1 }), {})
 if (gaps.length) log(`${gaps.length} gap(s) for the owner batch, by topic: ${Object.entries(byTopic).map(([k, n]) => `${k} ${n}`).join(', ')}; none runs in this run`)
 
@@ -198,7 +226,7 @@ return {
   tag: TAG, stopped, no_result: noResult, held,
   verifier_stopped: verifierStopped, verifier_no_result: verifierNoResult,
   critic_stopped: criticStopped, critic_no_result: criticNoResult,
-  gaps_for_owner: gaps,
+  gaps_for_owner: gaps, rerun_prompts: rerunPrompts,
   units: done.map(x => ({ unit: x.summary.unit, report: x.summary.report_path,
     non_benign: x.summary.non_benign, open: x.summary.open,
     verdicts: x.verdicts.map(v => ({ verdict: v.verdict, item: v.item, report: v.report_path })) })),
@@ -361,41 +389,56 @@ with the correction and recommended for hold.
   (a) approve it by its id, (b) hold. Recommendation: (b).
 - **B5. Re-run of run <tag>.** <why: the brief changed, or a defect>. The run recorded <the stops and
   missing results>; re-launching its units launches their verifiers and critics again. Its reports
-  were written under the old brief. Options: (a) re-run the units you name, (b) keep the reports,
-  marked as written under the old brief, (c) hold. Recommendation: (c).
+  were written under the old brief. Options: (a) re-run the reported units you name (a stopped,
+  no-result or held unit is decided in its own entry), (b) keep the reports, marked as written
+  under the old brief, (c) hold. Recommendation: (c).
+- **B6. HELD, unit <id>, over STOP-<n>.** <the pointers it shares with the stopped unit>.
+  Evidence: UNIT-LOG.txt line <n>, the two specs. It runs only as the stop entry's option (a),
+  unless you rule the overlap out. Options: (a) the pointers do not overlap: release it, (b) hold.
+  Recommendation: (b).
 ```
 
 ## Launch sequence
 
-Pilot first, read its reports, then one run per remaining cluster, started together. Before each launch after the pilot, derive the held list from the unit log: every stopped id, and every no-result or held id without a `RELEASED` line. Take the held ids out of the cluster's spec list, and pass the list as `held`; the spec files keep the ids for Step 10. An id left out of the spec list cannot run even if `held` is forgotten, and the skeleton refuses a `held` that is not an array.
+Pilot first, read its reports, then one run per remaining cluster, started together. Before each launch, the pilot included, build the spec list with this snippet, every launch under a new tag. It derives the held list from the unit log: every stopped id, and every id whose last `NORESULT`, `HELD` or `RELEASED` line is not a release, so a release lifts only the lines before it. Once the job has a stop or a no-result, it also leaves out every unit that already reported, unless a `RERUN` line names that unit for this tag (Step 8 item 2). A transient re-run of a unit therefore lists that unit alone. Take the held ids out of the cluster's spec list, and pass the list as `held`; the spec files keep the ids for Step 10. An id left out of the spec list cannot run even if `held` is forgotten, and the skeleton refuses a `held` that is not an array.
 
 ```bash
 cd "${RUN_DIR:?}" || exit 1
 [ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt (Step 1 creates it)'; exit 2; }
-released=$(rg -o '^\S+ RELEASED unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt | sort -u)
+TAG=R2                      # the run about to launch: a new tag for every launch, re-runs included
+CLUSTER="specs/rows.json"   # the cluster it launches
+ids=$(jq -r '.[].id' "$CLUSTER") || { echo "REFUSED: $CLUSTER is not a spec list"; exit 2; }
 HELD=$( { rg -o '^\S+ STOP-[0-9]+ unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt
-          rg -o '^\S+ (NORESULT|HELD) unit=([A-Za-z0-9._-]+)' -r '$2' UNIT-LOG.txt | sort -u | comm -23 - <(printf '%s\n' "$released"); } |
+          rg -o '^\S+ (NORESULT|HELD|RELEASED) unit=([A-Za-z0-9._-]+)' -r '$1 $2' UNIT-LOG.txt |
+            awk '{h[$2] = ($1 != "RELEASED")} END {for (i in h) if (h[i]) print i}'; } |
         rg -v '^(V-|X-)' | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')
+SKIP=$(if rg -q '^\S+ (STOP-[0-9]+|NORESULT) unit=' UNIT-LOG.txt; then
+         printf '%s\n' "$ids" | while read -r id; do [ -s "$id.txt" ] && echo "$id"; done | sort -u |
+           comm -23 - <(awk -v t="as=$TAG" '$2 ~ /^RERUN-[0-9]+$/ && $4 == t {sub(/^unit=/, "", $3); print $3}' UNIT-LOG.txt | sort -u)
+       fi | jq -R -s -c 'split("\n") | map(select(length > 0))')
 echo "held=$HELD"
-CLUSTER="specs/rows.json"   # the cluster about to launch
-jq -c --argjson held "$HELD" 'map(select(.id as $x | $held | index($x) | not))' "$CLUSTER"   # pass as specs, with HELD as held
+echo "not relaunched, reported already: $SKIP"
+jq -c --argjson held "$HELD" --argjson skip "$SKIP" 'map(select(.id as $x | ($held + $skip) | index($x) | not))' "$CLUSTER"   # pass as specs, with HELD as held
 ```
 
 ```javascript
-Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R1', specs: R1, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE } })
-// After the pilot reports pass the Step 7 checks. A pilot re-run (tag R1b) only if R1 returned all six
-// stop and no-result lists empty; otherwise it goes to the owner batch (B5), and only the units the owner names run again.
+Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R1', specs: R1, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
+// After the pilot reports pass the Step 7 checks. A pilot re-run (tag R1b) only if UNIT-LOG.txt has no STOP or NORESULT
+// line; otherwise it goes to the owner batch (B5), and only the units the owner names run again.
 Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R2', specs: R2_UNHELD, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
 Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R3', specs: R3_UNHELD, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
+// A verifier or critic released for a transient failure (SKILL.md Step 8) re-runs alone, under a new tag:
+Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R2-r1', rerun: { id: 'V-CL1.4.1-02-1', prompt: R2_RESULT.rerun_prompts['V-CL1.4.1-02-1'] } } })
 ```
 
-Each run returns `stopped`, `no_result`, `held`, `verifier_stopped`, `verifier_no_result`, `critic_stopped`, `critic_no_result` and `gaps_for_owner`. Before reading any report, write to the unit log:
+Each run returns `stopped`, `no_result`, `held`, `verifier_stopped`, `verifier_no_result`, `critic_stopped`, `critic_no_result`, `gaps_for_owner` and `rerun_prompts`. Before reading any report, write to the unit log:
 
 - one Step 8 `STOP-<n> unit=<id>` line per `stopped` id;
-- one `NORESULT unit=<id>` line per `no_result` id, with its partial moved (Step 8);
-- one `HELD unit=<id>` line per `held` id.
+- one `NORESULT unit=<id>` line per `no_result` id, with its partial moved (Step 8).
 
-Verifier and critic stops and no-results are logged the same way, under the ids the run returns. Those ids are the basenames of the files the agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`), and the ledger and the held list leave them out. Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified.
+The `held` it returns is the list passed in, already derived from the log, so it is not logged again. A `HELD` line is written only by Step 8 item 6.
+
+Verifier and critic stops and no-results are logged the same way, under the ids the run returns. Those ids are the basenames of the files the agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`), and the ledger and the held list leave them out. Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified until a transient re-run returns one. `rerun_prompts` holds the exact prompt of each verifier and critic with no result, and a `rerun` passes it back unchanged; keep the run's returned value until its no-results are decided.
 
 Write `gaps_for_owner` to `gaps/<tag>.json` and record it before the batch is built, so the questions the owner approves are the ones a later unit reads:
 

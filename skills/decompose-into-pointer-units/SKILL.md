@@ -9,10 +9,10 @@ description: >
   spec kind. Units write reports to files, every non-benign item gets an
   adversarial verifier, grouped critics check the whole set and send their gaps
   to the owner, and a unit stopped by a safety classifier, a policy hook or a
-  reviewer is recorded and routed to the human owner, never re-run or
-  reworded. Use when a job has dozens to hundreds of checkable items, when the work list can be read off
-  changelogs, inventory rows, issue lists or diff files, or when every
-  conclusion must trace back to a pointer a reviewer can re-open.
+  reviewer is recorded and routed to the human owner, never re-run or reworded.
+  Use when a job has dozens to hundreds of checkable items, when the work list
+  can be read off changelogs, inventory rows, issue lists or diff files, or
+  when every conclusion must trace back to a pointer a reviewer can re-open.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent
 metadata:
@@ -42,7 +42,7 @@ Split a job that is too large for one agent into many narrow units without letti
 - **Required**: The question every unit answers and the closed vocabulary it classifies with
 - **Required**: An absolute report directory outside the repository under review
 - **Required**: A human owner who decides stopped units and batched questions
-- **Required**: `node`, `jq` and `rg` on PATH; `gh` when issues are a source; GNU coreutils (`sha256sum`, `xargs -r`). The snippets are written for bash or zsh
+- **Required**: `node`, `jq` and `rg` on PATH; `gh` when issues are a source; GNU coreutils (`sha256sum`, `xargs -r`, `mv --backup`). The snippets are written for bash or zsh
 - **Optional**: Chunk size per spec kind (default: 4-8 source lines or rows per unit; fewer when items are long)
 - **Optional**: Critic group size (default: 15 reports per accuracy critic, an estimate of what one critic reads end to end rather than a measurement; size it against report length and cost with `manage-token-budget`)
 
@@ -56,8 +56,12 @@ Compute every input a unit will cite before any unit runs. Units read these file
 for t in node jq rg sha256sum; do command -v "$t" >/dev/null || { echo "missing: $t" >&2; exit 1; }; done
 RUN_DIR="/abs/path/reports/run-001"   # outside the repository under review
 MECH="$RUN_DIR/mechanical"
-mkdir -p "$MECH" "$RUN_DIR/specs" "$RUN_DIR/gaps" "$RUN_DIR/owner"
-touch "$RUN_DIR/UNIT-LOG.txt"
+mkdir -p "$MECH" "$RUN_DIR/specs" "$RUN_DIR/gaps" "$RUN_DIR/owner" "$RUN_DIR/repo"
+case "${PRIOR_RUN:?set PRIOR_RUN to the previous run directory of this job, or to none}" in   # the unit log carries the job's stops
+  none) touch "$RUN_DIR/UNIT-LOG.txt" ;;
+  *) [ ! -s "$RUN_DIR/UNIT-LOG.txt" ] || { echo 'REFUSED: this run directory already has a unit log'; exit 1; }
+     cp "${PRIOR_RUN:?}/UNIT-LOG.txt" "$RUN_DIR/UNIT-LOG.txt" || exit 1 ;;
+esac
 cp CHANGELOG.md "$MECH/changelog.md"
 gh issue list --label "${TRACKING_LABEL:?}" --state open --json number --jq '.[].number' > "$MECH/issues.txt" || exit 1
 while read -r n; do gh issue view "$n" --json number,title,body,labels > "$MECH/issue-$n.json" || exit 1; done < "$MECH/issues.txt"
@@ -65,7 +69,7 @@ mech_sums() { (cd "${MECH:?}" && find . -type f -print0 | sort -z | xargs -0 -r 
 mech_sums > "$RUN_DIR/MECH-SHA256SUMS"
 ```
 
-**Expected:** `$MECH` holds every input the brief will name. The checksum covers every file under it, subdirectories included, and Steps 7 and 10 re-derive it and compare it byte for byte. A checksum taken at the freeze cannot show what happened before it. At the run directory's top level the only `.txt` files are reports, `V-` and `X-` files and `UNIT-LOG.txt`, because Step 10 reads every other top-level `.txt` as a report. Everything else the lead writes is a `.md` file or goes in a subdirectory: the brief is `BRIEF.md`, and the repository records go under `repo/`, the owner's decisions under `owner/` and no-result partials under `partials/`.
+**Expected:** `$MECH` holds every input the brief will name. The checksum covers every file under it, subdirectories included, and Steps 7 and 10 re-derive it and compare it byte for byte. A checksum taken at the freeze cannot show what happened before it. At the run directory's top level the only `.txt` files are reports, `V-` and `X-` files and `UNIT-LOG.txt`, because Step 10 reads every other top-level `.txt` as a report. Everything else the lead writes is a `.md` file or goes in a subdirectory: the brief is `BRIEF.md`, and the repository records go under `repo/`, the owner's decisions under `owner/` and no-result partials under `partials/`. The unit log belongs to the job, not the directory: the first run directory sets `PRIOR_RUN=none`, and every later one starts from a copy of the previous log, so its held list and ledger still see every stop.
 
 **On failure:** A `missing:` line names a tool to install first. If `gh` fails, the issues are not frozen: stop rather than run with an empty list, or with units reading issue text live. If an input cannot be computed yet, compute it before going on. A unit that derives its own copy of an input creates a second, unreviewed version of the facts.
 
@@ -118,7 +122,7 @@ Other kinds follow the same shape: inventory rows chunked by group, one spec per
 
 **Expected:** `bullets`, `covered` and `unique` are equal; `issues` equals `issue_specs`; both id checks print `true`; `WORK-SHA256SUMS` lists every spec file; each spec holds only `kind`, `id` and pointer fields (an `owner` spec also carries the owner's words, Step 8 item 5), and its id is fixed by the frozen input and the chunk size.
 
-**On failure:** A count mismatch means the parser skipped items (nested bullets, an unusual heading, bullets before the first heading). Fix the parser and regenerate before the work list is recorded. An unsafe id means a deriver did not reduce a name to `[A-Za-z0-9._-]`. After any unit has launched, a regeneration is a re-run (Step 8 item 2). It can move a stopped unit's lines into a spec that still runs, under a surviving id or a new one, and the ledger counts by id, so Step 10 refuses the changed work list instead. Start a new run directory, and once any stop or no-result is recorded, ask the owner first. Never hand-edit a spec file to add a unit.
+**On failure:** A count mismatch means the parser skipped items (nested bullets, an unusual heading, bullets before the first heading). Fix the parser and regenerate before the work list is recorded. An unsafe id means a deriver did not reduce a name to `[A-Za-z0-9._-]`. After any unit has launched, a regeneration is a re-run (Step 8 item 2). It can move a stopped unit's lines into a spec that still runs, under a surviving id or a new one, and the ledger counts by id, so Step 10 refuses a work list changed in place. Start a new run directory with `PRIOR_RUN` set to this one (Step 1), and once any stop or no-result is recorded, ask the owner first. The carried log holds an unchanged spec by its id; a spec whose pointers moved is held only by Step 8 item 6, read against the earlier directory's specs. Never hand-edit a spec file to add a unit.
 
 ### Step 3: Write the Shared Brief Once
 
@@ -224,7 +228,7 @@ done
 echo "pilot reports listed: $n (read each one end to end before launching the rest)"
 ```
 
-Check that each report cites the pointers it was given, that its summary matches the file, that verifiers ran, that every report with a `STOPPED:` line is in the run's `stopped` list, and that no clean report is. Fix the brief or a template. Re-run the pilot under the fixed contract only if no stop and no missing result has been recorded in the job, that is, the pilot returned all six stop and no-result lists empty (`stopped`, `no_result`, `verifier_stopped`, `verifier_no_result`, `critic_stopped`, `critic_no_result`). Otherwise do not re-run it, because re-launching its units launches their verifiers and critics again. It goes to the owner batch, which notes that its reports were written under the old brief, and only the units the owner names run again (Step 8 item 2). Then start the remaining clusters together, one run each, with unique tags, each with its held ids taken out of its spec list and passed as `held` (Step 8; the snippet is in EXAMPLES.md).
+Check that each report cites the pointers it was given, that its summary matches the file, that verifiers ran, that every report with a `STOPPED:` line is in the run's `stopped` list, and that no clean report is. A report whose `STOPPED:` line disagrees with its `stop` field is logged as a stop (`STOP-<n>`, Step 8), so that the unit log stays the one record of stops; then fix the brief or a template. Re-run the pilot under the fixed contract only if `UNIT-LOG.txt` has no `STOP` or `NORESULT` line, which needs all six stop and no-result lists empty (`stopped`, `no_result`, `verifier_stopped`, `verifier_no_result`, `critic_stopped`, `critic_no_result`) and no disagreeing report. Otherwise do not re-run it, because re-launching its units launches their verifiers and critics again. It goes to the owner batch, which notes that its reports were written under the old brief, and only the units the owner names run again (Step 8 item 2). Then start the remaining clusters together, one run each, with unique tags, each with its held ids taken out of its spec list and passed as `held` (Step 8; the snippet is in EXAMPLES.md).
 
 **Expected:** The pilot reports pass every check before any other cluster starts, and the repository's HEAD and status are unchanged.
 
@@ -235,13 +239,13 @@ Check that each report cites the pointers it was given, that its summary matches
 A safety classifier, a policy hook or a human reviewer may stop a unit, a verifier, a critic or the lead's own drafting. A stop is a decision about that work. This step respects it; it is never a puzzle to solve.
 
 1. Record it by id in the unit log: what was stopped, at which stage, and what exists on disk (partial or nothing).
-2. Do not re-run it, do not reword it, and do not reproduce its content by hand. This applies to the lead's own drafting as much as to a unit: stopped text is not re-drafted. Keep whatever partial exists as it is, marked partial, and let the owner decide what happens to it. A partial drafted inside a repository working tree moves, unedited, into the run directory, so that it cannot be committed or continued; the owner batch cites its path. A pilot re-run, a cluster restart, a re-derivation at another chunk size and a gap unit are all re-runs. Once any run in the job has recorded a stop or a missing result, from a unit, a verifier or a critic, nothing that already ran is launched again unless the owner names it, because re-launching a unit launches its verifiers and critics again. Clusters not yet launched still start, with the held list. The one exception is the transient re-run of a no-result below. When the owner names reported units for a re-run, record the answer on a `RERUN-<n>` Answered line (Step 9) and log one `RERUN-<n> unit=<id>` line per unit before launching.
+2. Do not re-run it, do not reword it, and do not reproduce its content by hand. This applies to the lead's own drafting as much as to a unit: stopped text is not re-drafted. Keep whatever partial exists as it is, marked partial, and let the owner decide what happens to it. A partial drafted inside a repository working tree moves, unedited, into the run directory, so that it cannot be committed or continued; the owner batch cites its path. A pilot re-run, a cluster restart, a re-derivation at another chunk size and a gap unit are all re-runs. Once any run in the job has recorded a stop or a missing result, from a unit, a verifier or a critic, nothing that already ran is launched again unless the owner names it, because re-launching a unit launches its verifiers and critics again. Clusters not yet launched still start, with the held list. The one exception is the transient re-run of a no-result below. When the owner names reported units for a re-run, record the answer on a `RERUN-<n>` Answered line (Step 9) and, before launching, log one `RERUN-<n> unit=<id> as=<tag>` line per unit, naming the tag of the launch it authorises. Once the job has a stop or a no-result, the launch snippet (EXAMPLES.md) relaunches a unit that already reported only for such a line.
 3. Put it in the owner batch (Step 9) with plain options: hold, the owner sets a different scope, or the owner does the work.
 4. Continue every other unit. A stop routes to the batch; it does not block the run.
 5. A re-scoped run of that unit happens only if the owner authorises that unit by name. It runs as an `owner` spec (`unit`, `scope`, `answer`) whose scope is the owner's answer copied verbatim from a one-line Answered entry and whose `answer` is that entry's `STOP-<n>`. The owner-spec check in EXAMPLES.md exits 1 on a scope not quoted on that line in the Answered section, and records the spec file only when nothing is refused. The check shows consistency with the batch, not that the words are the owner's, so the Answered entry cites where they came from. An authorisation does not carry over to other units or later stops. If the authorised run is stopped again, propose nothing further; record it and leave the next step to the owner.
-6. A stop binds the unit's pointers, not only its id. Before launching any later spec, add every spec whose pointers overlap a stopped unit's to the held list, to the unit log as `HELD unit=<id>`, and to the owner batch, except an owner spec authorised for that unit under item 5.
+6. A stop binds the unit's pointers, not only its id. Before launching any later spec, add every spec whose pointers overlap a stopped unit's to the held list, to the unit log as `HELD unit=<id> reason=overlaps-STOP-<n>`, and to the owner batch, except an owner spec authorised for that unit under item 5. Such a hold is decided under its stop's entry: it runs only as that entry's option (a), an owner spec in the owner's words, unless the owner rules the overlap out. A `HELD` Answered line releases it only on that ruling, and cites it.
 
-The unit log holds one line per event. Only `STOP-<n> unit=<id>` lines are stops and only `HELD unit=<id>` lines are holds; Step 10 reads nothing else as either. A unit with no result is logged as `NORESULT unit=<id>`. A no-result or held id is released only by a `RELEASED unit=<id>` line; a stop is never released, only re-scoped under item 5. Verifier and critic stops and no-results are logged the same way, under the ids the run returns, which are the basenames of the files those agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`). Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified.
+The unit log holds one line per event. Only `STOP-<n> unit=<id>` lines are stops and only `HELD unit=<id>` lines are holds; Step 10 reads nothing else as either, and only item 6 writes a `HELD` line. A unit with no result is logged as `NORESULT unit=<id>`. A no-result or held id is released only by a `RELEASED unit=<id>` line; a stop is never released, only re-scoped under item 5. A release is an event, not a property of the id: it lifts the `NORESULT` and `HELD` lines before it, and a later no-result or hold holds the id again. Verifier and critic stops and no-results are logged the same way, under the ids the run returns, which are the basenames of the files those agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`). Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified until a transient re-run returns one.
 
 ```bash
 TODAY=$(date +%F)
@@ -249,40 +253,46 @@ printf '%s STOP-%s unit=%s stage=%s written=%s routed=owner-batch\n' \
   "$TODAY" 1 CL1.5.0-02 report-write partial >> "$RUN_DIR/UNIT-LOG.txt"
 ```
 
-A unit, verifier or critic with no result has an undetermined cause: the runtime returns nothing for a subagent that was skipped mid-run or died on an API error, and a stopped subagent can look the same. Log a unit with no result and move any partial report it wrote to `partials/`, so that the ledger keeps it unaccounted and a later release is not refused by its own partial:
+A unit, verifier or critic with no result has an undetermined cause: the runtime returns nothing for a subagent that was skipped mid-run or died on an API error, and a stopped subagent can look the same. Log it and move any partial file it wrote to `partials/`, so that the ledger keeps a unit unaccounted and a later release is not refused by its own partial:
 
 ```bash
-ID=CL1.4.1-02   # the unit with no result
+ID=CL1.4.1-02   # the unit, verifier or critic with no result
 mkdir -p "$RUN_DIR/partials"
-[ ! -e "$RUN_DIR/$ID.txt" ] || mv --backup=numbered "$RUN_DIR/$ID.txt" "$RUN_DIR/partials/$ID.txt"
+[ ! -e "$RUN_DIR/$ID.txt" ] || mv --backup=numbered "$RUN_DIR/$ID.txt" "$RUN_DIR/partials/$ID.txt" ||
+  { echo "REFUSED: $ID.txt was not moved to partials/ (mv --backup needs GNU coreutils)"; exit 1; }
 printf '%s NORESULT unit=%s cause=undetermined\n' "$(date +%F)" "$ID" >> "$RUN_DIR/UNIT-LOG.txt"
 ```
 
 Then read its transcript or error by structure, not by substring. A stop shows as an assistant turn ending in a refusal, or as a stop or interrupt notice that the runtime itself wrote for that subagent (name your runtime's exact notices in the brief's TOOLS section). A subagent that read text containing those strings can carry them anywhere in its output.
 
-- **Transient**: the transcript shows an overload or 5xx response, a rate limit or a network timeout, and nothing else. Release the unit with `BY=transient:<transcript path>` and re-run it once, unchanged and alone.
+- **Transient**: the transcript shows an overload or 5xx response, a rate limit or a network timeout, and nothing else. Release it with `BY=transient:<transcript path>` and re-run it once, unchanged and alone, under a new tag: a unit through the launch snippet, which then lists it alone, and a verifier or critic through the skeleton's `rerun` argument, with the prompt its run returned in `rerun_prompts` (EXAMPLES.md).
 - **Stop**: an error that cites a usage policy, a refusal, a blocked request or a hook is a stop, even when it is labelled as an API error. Add a `STOP-<n> unit=<id>` line.
-- **Otherwise** the cause is not established. Keep the `NORESULT` line, do not re-run or reword it, and put it in the owner batch; it stays unaccounted until the owner answers. A second no-result also goes to the owner batch. Never answer it yourself.
+- **Otherwise** the cause is not established. Keep the `NORESULT` line, do not re-run or reword it, and put it in the owner batch; a unit stays unaccounted until the owner answers.
 
-A verifier or critic with no result is not re-run whatever the cause: its claim stays unverified, or its group unchecked, until the owner decides. A release is written only by this snippet. It refuses an id that has a report, a stopped id, a second transient release of the same id, and an owner release with no Answered line for it:
+A second no-result of the same id goes to the owner batch whatever its cause, and so does a no-result held over a stop since (item 6). Never answer either yourself. Until a verifier or critic returns, its claim stays unverified, or its group unchecked. A release is written only by this snippet. It refuses a missing unit log, an id that has a report, a stopped id, a transient release naming no transcript file or of anything but an id's first no-result with no release or hold since, and an owner release with no unused Answered line for it. The owner arm checks that an Answered line exists, not what it says:
 
 ```bash
 cd "${RUN_DIR:?}" || exit 1
-ID=CL1.4.1-02; BY=owner   # or BY=transient:<transcript path>
+[ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt'; exit 2; }
+ID=CL1.4.1-02; BY=owner   # or BY=transient:<transcript path>; a verifier or critic id the same way
 [ ! -s "$ID.txt" ] || { echo "REFUSED: $ID.txt exists; a release comes before the run"; exit 1; }
 awk -v u="unit=$ID" '$2 ~ /^STOP-[0-9]+$/ && $3 == u {f = 1} END {exit !f}' UNIT-LOG.txt && { echo "REFUSED: $ID is stopped; only an owner spec re-scopes it"; exit 1; }
 case "$BY" in
-  transient:?*) awk -v u="unit=$ID" '$2 == "RELEASED" && $3 == u && $4 ~ /^by=transient:/ {f = 1} END {exit !f}' UNIT-LOG.txt &&
-                  { echo "REFUSED: $ID was already re-run once for a transient cause"; exit 1; } ;;
-  owner) KEY_N="- NORESULT, unit $ID: \"" KEY_H="- HELD, unit $ID: \"" awk '/^## /{answered = ($0 == "## Answered")}
-           answered && (index($0, ENVIRON["KEY_N"]) == 1 || index($0, ENVIRON["KEY_H"]) == 1) {f = 1} END {exit !f}' OWNER-QUESTIONS.md ||
-           { echo "REFUSED: no Answered line releases $ID"; exit 1; } ;;
+  transient:?*) [ -f "${BY#transient:}" ] || { echo "REFUSED: no transcript at ${BY#transient:}"; exit 1; }
+    awk -v u="unit=$ID" '$3 != u {next} $2 == "NORESULT" {n++} $2 == "RELEASED" {s = ""; next} $2 == "NORESULT" || $2 == "HELD" {s = s $2 " "}
+      END {exit !(n == 1 && s == "NORESULT ")}' UNIT-LOG.txt ||
+      { echo "REFUSED: a transient release is for the first no-result of $ID, with no release or hold since"; exit 1; } ;;
+  owner) [ -f OWNER-QUESTIONS.md ] || { echo 'REFUSED: no OWNER-QUESTIONS.md'; exit 2; }
+    answers=$(KEY_N="- NORESULT, unit $ID: \"" KEY_H="- HELD, unit $ID: \"" awk '/^## /{answered = ($0 == "## Answered")}
+      answered && (index($0, ENVIRON["KEY_N"]) == 1 || index($0, ENVIRON["KEY_H"]) == 1) {n++} END {print n + 0}' OWNER-QUESTIONS.md)
+    used=$(awk -v u="unit=$ID" '$2 == "RELEASED" && $3 == u && $4 == "by=owner" {n++} END {print n + 0}' UNIT-LOG.txt)
+    [ "$answers" -gt "$used" ] || { echo "REFUSED: no unused Answered line releases $ID"; exit 1; } ;;
   *) echo 'REFUSED: BY is owner or transient:<transcript path>'; exit 1 ;;
 esac
 printf '%s RELEASED unit=%s by=%s\n' "$(date +%F)" "$ID" "$BY" >> UNIT-LOG.txt
 ```
 
-**Expected:** Every stop has a `STOP-<n> unit=` line and a batch entry; every no-result has a `NORESULT` line, its partial under `partials/`, and either a transient release or a batch entry; every held id has a `HELD` line; nothing that ran was launched again after a stop or no-result without an owner answer naming it.
+**Expected:** Every stop has a `STOP-<n> unit=` line and a batch entry; every no-result has a `NORESULT` line, its partial under `partials/`, and either a transient release or a batch entry; every item-6 hold has a `HELD` line; nothing that ran was launched again after a stop or no-result without an owner answer naming it, except the one transient re-run the release snippet recorded.
 
 **On failure:** If a stopped unit was re-run or reworded by mistake, do not use that output. Log the deviation and tell the owner in the batch.
 
@@ -307,6 +317,7 @@ Compute the coverage statement from files. Never derive it from agents' idle sta
 
 ```bash
 cd "${RUN_DIR:?}" || exit 1
+[ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt'; exit 2; }
 mech_sums | cmp -s - MECH-SHA256SUMS || { echo 'mechanical/ changed during the run'; exit 1; }   # mech_sums: Step 1
 work_sums | sort | cmp -s - <(sort WORK-SHA256SUMS) || { echo 'the work list changed after it was recorded'; exit 1; }   # work_sums: Step 2
 mkdir -p ledger
@@ -314,8 +325,8 @@ find specs -name '*.json' -exec jq -r '.[].id' {} + | sort -u > ledger/ids.txt
 find . -maxdepth 1 -name '*.txt' ! -empty | sed -n 's|^\./||; s/\.txt$//p' | sort -u > ledger/files.txt
 comm -12 ledger/ids.txt ledger/files.txt > ledger/reported.txt
 rg -o '^\S+ STOP-[0-9]+ unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt | sort -u | comm -12 ledger/ids.txt - > ledger/stopped.txt
-rg -o '^\S+ RELEASED unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt | sort -u > ledger/released.txt
-rg -o '^\S+ HELD unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt | sort -u | comm -12 ledger/ids.txt - | comm -23 - ledger/stopped.txt | comm -23 - ledger/released.txt > ledger/held.txt
+rg -o '^\S+ (HELD|RELEASED) unit=([A-Za-z0-9._-]+)' -r '$1 $2' UNIT-LOG.txt | awk '{h[$2] = ($1 == "HELD")} END {for (i in h) if (h[i]) print i}' |
+  sort -u | comm -12 ledger/ids.txt - | comm -23 - ledger/stopped.txt > ledger/held.txt   # the last HELD or RELEASED line decides
 comm -12 ledger/held.txt ledger/reported.txt > ledger/held_ran.txt
 comm -23 ledger/ids.txt ledger/reported.txt | comm -23 - ledger/stopped.txt | comm -23 - ledger/held.txt > ledger/unaccounted.txt
 rg -v '^(V-|X-)' ledger/files.txt | rg -v -x 'UNIT-LOG' | comm -23 - ledger/ids.txt > ledger/extra.txt
@@ -324,7 +335,7 @@ cd ledger && echo "specs=$(wc -l < ids.txt) reported=$(wc -l < reported.txt) sto
 
 **Expected:** Both checksums match; `extra=0` and `held_ran=0`; every unaccounted id is a no-result awaiting the owner or released and not yet re-run, named in the coverage statement and the batch; and `specs` equals the spec total from Step 2 plus any approved gap and owner specs (non-zero). The written coverage statement quotes these seven numbers, lists the stopped and held ids separately, lists verifier and critic stops and no-results with the claims they leave unverified, and names the gaps sent to the owner.
 
-**On failure:** An unaccounted id has no non-empty report, no stop record and no unreleased `HELD` line: apply Step 8's no-result rule before any re-run. A held id with a report ran while held: do not use that report (Step 8 On failure). An extra report belongs to no spec: find what launched it before using it. It catches a run of stopped work under an id no spec carries. A re-run under the stopped id itself, or an approved gap or owner spec over its pointers, does not show here (Step 8 items 5 and 6, Step 9), and a re-launch of reported work leaves no trace in the ledger, which is why Step 8 item 2 logs it as `RERUN`. A stopped unit with a partial report counts as reported: say so next to its id. A mechanical checksum mismatch means an input changed after the freeze: find which before claiming anything. A work-list mismatch means a spec or gaps file was regenerated, edited or added without being recorded. That is a re-run (Step 8 item 2): use no report over the changed pointers until the owner decides.
+**On failure:** An unaccounted id has no non-empty report, no stop record and no `HELD` line after its last release: apply Step 8's no-result rule before any re-run. A held id with a report ran while held: do not use that report (Step 8 On failure). An extra report belongs to no spec: find what launched it before using it. It catches a run of stopped work under an id no spec carries. A re-run under the stopped id itself, or an approved gap or owner spec over its pointers, does not show here (Step 8 items 5 and 6, Step 9), and a re-launch of reported work leaves no trace in the ledger. That is why, once the job has a stop or a no-result, the launch snippet lists a reported unit only for a `RERUN` line naming its tag (Step 8 item 2); a hand-written `RERUN` line passes it, as a hand-written release passes the ledger. A stopped unit with a partial report counts as reported: say so next to its id. A mechanical checksum mismatch means an input changed after the freeze: find which before claiming anything. A work-list mismatch means a spec or gaps file was regenerated, edited or added without being recorded. That is a re-run (Step 8 item 2): use no report over the changed pointers until the owner decides.
 
 ## Validation
 
@@ -332,8 +343,8 @@ cd ledger && echo "specs=$(wc -l < ids.txt) reported=$(wc -l < reported.txt) sto
 - [ ] The Step 2 coverage check printed equal counts, and ids are unique and safe across all clusters
 - [ ] Every prompt is HEAD + id + report path + `scope(spec)` + the stop instruction, and `scope` throws on an unknown kind
 - [ ] One verifier file per non-benign item, grouped accuracy critics, one completeness critic, and every gap sent to the owner batch; no unit outside the input specs ran
-- [ ] Pilot reports were read before the other clusters launched; a run that recorded a stop or a missing result was re-launched only where the owner named it; and the repository's HEAD and status were unchanged after every run
-- [ ] Every stop has a `STOP-<n> unit=` line and a batch entry; no stopped or held unit was re-run, reworded or reproduced without an owner answer naming it; verifier and critic stops and no-results are in the coverage statement
+- [ ] Pilot reports were read before the other clusters launched; once any run had recorded a stop or a missing result, nothing that ran was launched again without an owner answer naming it, except the one transient re-run the release snippet recorded; and the repository's HEAD and status were unchanged after every run
+- [ ] Every stop has a `STOP-<n> unit=` line and a batch entry; no stopped unit was re-run, reworded or reproduced except as an item-5 owner spec, and no held id ran before its `RELEASED` line; verifier and critic stops and no-results are in the coverage statement
 - [ ] Every no-result had its transcript read before any re-run, and every release was written by the release snippet
 - [ ] The owner batch passed the read-only faithfulness check before it was presented
 - [ ] The ledger prints `extra=0` and `held_ran=0`, every unaccounted id is a no-result in the batch or released and not yet re-run, and both checksums still match
