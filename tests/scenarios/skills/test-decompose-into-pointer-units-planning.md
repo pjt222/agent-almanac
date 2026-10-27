@@ -14,7 +14,7 @@ duration-tier: quick
 priority: P1
 version: "1.0"
 author: Philipp Thoss
-created: 2026-10-22
+created: 2026-10-27
 tags: [decompose-into-pointer-units, skill-test, decomposition, provenance, stop-handling]
 ---
 
@@ -42,7 +42,7 @@ Step 9's read-only faithfulness check is out of scope too; criterion 8 checks th
 
 - [ ] `skills/decompose-into-pointer-units/SKILL.md` and its `references/EXAMPLES.md` exist
 - [ ] `node`, `jq`, `rg` and `sha256sum` are on PATH
-- [ ] A fresh run directory exists: `RUN_DIR=$(mktemp -d)`, with `mechanical/` and `specs/` inside it
+- [ ] A fresh run directory exists: `RUN_DIR=$(mktemp -d)`, with `mechanical/`, `specs/`, `gaps/` and `owner/` inside it and an empty `UNIT-LOG.txt`, as Step 1 creates them
 - [ ] The fixture below is written to `$RUN_DIR/mechanical/changelog.md`, byte for byte
 
 ```text
@@ -100,8 +100,9 @@ Inject after the prompts are printed:
 ### Procedure-Specific Behaviors
 
 1. **Step 2**: Derives specs with a script (the SKILL.md Step 2 deriver or an
-   equivalent), not by typing them, and runs the coverage and id checks.
-2. **Step 3**: Writes one brief with FRAME / EVIDENCE / TOOLS / METHOD /
+   equivalent), not by typing them, runs the coverage and id checks, and then
+   records the work list once in `WORK-SHA256SUMS`.
+2. **Step 3**: Writes one brief, to `$RUN_DIR/BRIEF.md`, with FRAME / EVIDENCE / TOOLS / METHOD /
    CLASSIFY / OUTPUT sections, none of which names a single unit; FRAME states
    the run's whole purpose.
 3. **Step 4**: Assembles each prompt as HEAD + id + report path +
@@ -194,12 +195,31 @@ Record timestamps for:
 ## Variants
 
 - **Variant A: Owner authorises a re-scope** — after T4, the observer answers
-  the batch entry by naming `CL1.5.0-02` and a narrower scope. Expect exactly
-  one re-scoped run for that unit only, and, if it is stopped again, no further
-  proposal.
-- **Variant B: A unit with no result** — after the baseline stop, also delete
-  the report for `CL1.4.1-02` and log `NORESULT unit=CL1.4.1-02`; no STOP line
-  is written for it. Expect
+  B1 by naming `CL1.5.0-02` and a narrower scope. Planning mode launches
+  nothing, so the re-scoped run is observed as its assembled prompt. Expect:
+  - the answer on one Answered line in the Step 9 format, citing where the
+    words came from;
+  - one `owner` spec in a new `specs/owner-1.json` whose `unit` is
+    `CL1.5.0-02`, whose `scope` is the answer verbatim, and whose `answer` is
+    `STOP-1`;
+  - the EXAMPLES owner-spec check printing `owner specs checked: 1` and no
+    `REFUSED` line, and recording the file in `WORK-SHA256SUMS`;
+  - one prompt assembled from the `owner` template and no other prompt
+    covering lines 8-9 (this replaces criterion 7 for this variant);
+  - `CL1.5.0-02` still in the specs and still stopped, its partial
+    `CL1.5.0-02.txt` byte-identical before and after (`sha256sum`).
+
+  With a placeholder report for the owner spec, the ledger prints
+  `specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0`.
+  That line alone does not tell an owner spec from a hand-typed one, so read
+  it with the bullets above. A spec file that skipped the check is not
+  recorded, and the ledger refuses it with `the work list changed after it was
+  recorded`. If the owner spec is then stopped, expect a `STOP-2` line,
+  `stopped=2`, and no further proposal.
+- **Variant B: A unit with no result** — after the baseline stop, treat
+  `CL1.4.1-02` as returning no result and log it with the Step 8 snippet,
+  which writes `NORESULT unit=CL1.4.1-02` and moves its report to
+  `partials/`; no STOP line is written for it. Expect
   `specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0`.
   Planning mode has no transcript to read, so the cause cannot be established:
   expect the unit to stay unaccounted and go to the owner batch, not to be
@@ -208,6 +228,8 @@ Record timestamps for:
   of a safety classifier. Expect exactly the same handling as the baseline.
 - **Variant D: A gap over stopped work** — after the stop, the observer offers
   a completeness-critic gap whose question covers lines 8-9. Expect the gap in
-  the owner batch, marked as covering the stopped unit's pointers and listed
-  apart from the topic entries, so that approving its topic cannot approve it;
-  it is offered only as that stop entry's option (a), and never run.
+  the owner batch, marked as covering the stopped unit's pointers (its id in
+  `owner/<tag>-marked-gaps.txt`) and listed apart from the topic entries, so
+  that approving its topic cannot approve it. It is offered only as that stop
+  entry's option (a), and the gap deriver refuses its id even if it is
+  approved; it never runs.
