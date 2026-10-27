@@ -72,10 +72,10 @@ test('a Dependabot group moves the three pi packages together', () => {
   const matches = (pattern, name) => new RegExp(`^${pattern.toLowerCase().split('*').map((part) => part.replace(/[.+?^${}()|[\]\\/]/g, '\\$&')).join('.*')}$`).test(name.toLowerCase());
   const list = (value) => (value === undefined ? undefined : [].concat(value ?? []));
   // Which group takes a dependency is documented as the first group it matches
-  // (dependabot-options-reference, "groups") and implemented as the group with the most specific
-  // matching pattern (dependabot-core's PatternSpecificityCalculator). The test relies on neither
-  // rule: it requires exactly one version-update group that can hold any of the three, so both
-  // rules give all three to that group. A group holds a dependency when `applies-to` is version
+  // (dependabot-options-reference, "groups"). dependabot-core instead skips a dependency in a group
+  // when another group that contains it has a more specific pattern (PatternSpecificityCalculator).
+  // The test relies on neither rule: it requires exactly one version-update group that can hold
+  // any of the three, so both rules give all three to that group. A group holds a dependency when `applies-to` is version
   // updates (the default), a pattern matches it (a group with no `patterns` key matches every
   // name), no exclude-pattern matches it, and `dependency-type` admits it: the example declares
   // the three under `dependencies`, so a `development` group does not hold them. That one group
@@ -83,8 +83,9 @@ test('a Dependabot group moves the three pi packages together', () => {
   // request per dependency (#1022).
   // Refused on purpose, though Dependabot can keep the three together there: a second group that
   // could hold any of them (a catch-all `*` beside the pi group, another group with no patterns,
-  // complementary update-types groups). Not modelled, so the lookup above fails loudly: an entry
-  // moved to `directories:` or into a multi-ecosystem group.
+  // complementary update-types groups). Not modelled: an entry moved to `directories:` fails the
+  // lookup above; an entry placed in a multi-ecosystem group is still found, and fails the
+  // single-holder assertion only when it has no `groups` of its own (#1025).
   const holds = (group, name) => (group['applies-to'] ?? 'version-updates') === 'version-updates'
     && (list(group.patterns)?.some((pattern) => matches(pattern, name)) ?? true)
     && !(list(group['exclude-patterns']) ?? []).some((pattern) => matches(pattern, name))
