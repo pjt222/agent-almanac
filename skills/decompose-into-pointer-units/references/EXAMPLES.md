@@ -143,8 +143,11 @@ const forOwner = (critics) => {
   const kept = new Map()
   for (const g of critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)) {
     const k = g.title.toLowerCase(), first = kept.get(k)
-    if (!first) kept.set(k, { ...g })
-    else first.covers_held = Boolean(first.covers_held || g.covers_held)
+    if (!first) kept.set(k, { ...g, dropped: [] })
+    else {
+      first.covers_held = Boolean(first.covers_held || g.covers_held)
+      first.dropped.push({ question: g.question, covers_held: g.covers_held === true }) // the owner sees what was merged
+    }
   }
   return [...kept.values()].map((g, i) => ({ ...g, id: `G-${TAG}-${i + 1}` }))
 }
@@ -269,7 +272,7 @@ ls "$MECH/items" | jq -R -s -c 'split("\n") | map(select(endswith(".md")))
 echo "items=$(ls "$MECH/items" | wc -l) specs=$(jq length "$RUN_DIR/specs/files.json")"   # unequal: a file the deriver skipped
 ```
 
-Gap specs come only from a gaps file recorded in `WORK-SHA256SUMS` when it was written (Launch sequence), so the question a unit reads is the one the owner approved. The owner's decisions are transcribed from the batch into `owner/`: the topics approved, the single gap ids approved, and the ids the batch marked as covering a stopped or held unit's pointers. A marked id is never derived, whatever its topic, and an approved id that is marked or unknown is refused. A gap a critic flagged with `covers_held` is never derived through its topic, only by its own id. The deriver refuses rather than writing a partial list, and it records its output in the work list:
+Gap specs come only from a gaps file recorded in `WORK-SHA256SUMS` when it was written (Launch sequence), so the question a unit reads is the one the owner approved. The owner's decisions are transcribed from the batch into `owner/`: the topics approved, the single gap ids approved, and the ids the batch marked as covering a stopped or held unit's pointers. A marked id is never derived, whatever its topic, and an approved id that is marked or unknown is refused. A gap a critic flagged with `covers_held`, or that the second read (SKILL.md Step 9) does not call `CLEAR`, is never derived through its topic, only by its own id; a second read that misses a gap, names one twice, names an unknown id or gives another verdict is refused. The deriver refuses rather than writing a partial list, and it records its output in the work list:
 
 ```bash
 cd "${RUN_DIR:?}" || exit 1
@@ -278,21 +281,26 @@ GAPS="gaps/$TAG.json"                     # its gaps_for_owner, recorded in WORK
 TOPICS="owner/$TAG-approved-topics.txt"   # topics the owner approved, one per line (may be empty)
 IDS="owner/$TAG-approved-gaps.txt"        # single gap ids the owner approved, one per line (may be empty)
 MARKED="owner/$TAG-marked-gaps.txt"       # ids the batch marked as covering stopped or held pointers (may be empty)
+SECOND="owner/$TAG-second-read.tsv"       # the independent second read: <id><TAB>COVERS|BORDERLINE|CLEAR, every gap once
 OUT="specs/gaps-$TAG.json"
-for f in "$GAPS" "$TOPICS" "$IDS" "$MARKED"; do [ -f "$f" ] || { echo "REFUSED: no $f"; exit 2; }; done
+for f in "$GAPS" "$TOPICS" "$IDS" "$MARKED" "$SECOND"; do [ -f "$f" ] || { echo "REFUSED: no $f"; exit 2; }; done
 [ ! -e "$OUT" ] || { echo "REFUSED: $OUT exists; derive a later approval into a new name"; exit 2; }
 sha256sum -c --quiet WORK-SHA256SUMS && awk -v f="$GAPS" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS ||
   { echo "REFUSED: $GAPS was never recorded, or the work list changed after it was"; exit 1; }
 LISTS='def lines: split("\n") | map(select(length > 0));
-  ($topics | lines) as $t | ($ids | lines) as $i | ($marked | lines) as $m | . as $g'
-bad=$(jq -r --rawfile topics "$TOPICS" --rawfile ids "$IDS" --rawfile marked "$MARKED" "$LISTS"'
+  ($topics | lines) as $t | ($ids | lines) as $i | ($marked | lines) as $m | ($second | lines | map(split("\t"))) as $s | . as $g'
+bad=$(jq -r --rawfile topics "$TOPICS" --rawfile ids "$IDS" --rawfile marked "$MARKED" --rawfile second "$SECOND" "$LISTS"'
   | ($t[] | select(. as $x | $g | all(.topic != $x)) | "unknown topic \(.)"),
     ($i[] | select(. as $x | $g | all(.id != $x)) | "unknown id \(.)"),
-    ($i[] | select(. as $x | $m | index($x)) | "marked id \(.)")' "$GAPS") || exit 2
+    ($i[] | select(. as $x | $m | index($x)) | "marked id \(.)"),
+    ($s[] | select(length != 2 or (.[1] | IN("COVERS", "BORDERLINE", "CLEAR") | not)) | "bad second-read line \(join("\t"))"),
+    ($g[] | .id as $x | ([$s[] | select(.[0] == $x)] | length) as $n | select($n != 1) | "the second read names \($x) \($n) times"),
+    ($s[] | .[0] as $x | select($g | all(.id != $x)) | "unknown second-read id \($x)")' "$GAPS") || exit 2
 [ -z "$bad" ] || { printf '%s\n' "$bad" | sed 's/^/REFUSED: /'; exit 1; }
-jq -c --rawfile topics "$TOPICS" --rawfile ids "$IDS" --rawfile marked "$MARKED" --arg from "$GAPS" "$LISTS"'
+jq -c --rawfile topics "$TOPICS" --rawfile ids "$IDS" --rawfile marked "$MARKED" --rawfile second "$SECOND" --arg from "$GAPS" "$LISTS"'
   | map(select((.id as $x | $m | index($x)) | not)
-        | select(((.topic as $x | $t | index($x)) and (.covers_held | not)) or (.id as $x | $i | index($x))))
+        | select(((.topic as $x | $t | index($x)) and (.covers_held | not) and (.id as $x | $s | any(.[0] == $x and .[1] == "CLEAR")))
+                 or (.id as $x | $i | index($x))))
   | map({kind: "gap", id: .id, g: .id, from: $from})' "$GAPS" > "$OUT" || exit 2
 echo "gaps=$(jq length "$GAPS") derived=$(jq length "$OUT") flagged_in_approved_topics=$(jq --rawfile topics "$TOPICS" --rawfile ids "$IDS" '[.[] | select(.covers_held and (.topic as $x | $topics | split("\n") | index($x)) and ((.id as $x | $ids | split("\n") | index($x)) | not))] | length' "$GAPS")"
 sha256sum "$OUT" >> WORK-SHA256SUMS
@@ -418,10 +426,11 @@ with the correction and recommended for hold.
   Options: (a) release it: re-run it once, unchanged, (b) treat it as a stop, (c) hold.
   Recommendation: (c).
 - **B3. Gaps from run <tag>, topic <topic> (<n> gaps).** Each question in full, with its id, from
-  gaps/<tag>.json. Options: (a) approve the topic, (b) approve only ids <...>, (c) hold.
+  gaps/<tag>.json, and under it any duplicate it absorbed (`dropped`: question and flag). Options: (a) approve the topic, (b) approve only ids <...>, (c) hold.
   Recommendation: (c) until B1 and B2 are answered. Depends on: B1, B2. One such entry per topic.
-- **B4. Gaps from run <tag> over stopped or held scope.** Each question in full: the ids the batch
-  marked (owner/<tag>-marked-gaps.txt) and the ids a critic flagged with covers_held. None is
+- **B4. Gaps from run <tag> over stopped or held scope.** Each question in full, with its dropped
+  duplicates: the ids the batch marked (owner/<tag>-marked-gaps.txt), the ids a critic flagged with
+  covers_held and the ids the second read did not call CLEAR. None is
   approved through its topic. A marked gap belongs only to its unit's stop entry, option (a).
   Options for a flagged gap the batch did not mark, with the reason it was not marked:
   (a) approve it by its id, (b) hold. Recommendation: (b).

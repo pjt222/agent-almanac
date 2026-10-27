@@ -60,12 +60,14 @@ GAPLIST='[{"id":"G-R1-1","topic":"A","title":"t1","question":"q1","priority":1,"
  {"id":"G-R1-3","topic":"B","title":"t3","question":"q3","priority":2,"covers_held":false},
  {"id":"G-R1-4","topic":"B","title":"t4","question":"q4","priority":2,"covers_held":false},
  {"id":"G-R1-5","topic":"A","title":"t5","question":"q5","priority":1,"covers_held":true}]'
-gapfixture() {   # topics, single ids, marked ids
+ALLCLEAR=$'G-R1-1\tCLEAR\nG-R1-2\tCLEAR\nG-R1-3\tCLEAR\nG-R1-4\tCLEAR\nG-R1-5\tCLEAR\n'
+gapfixture() {   # topics, single ids, marked ids, and the second read (default: every gap CLEAR)
   fresh; printf '%s\n' "$GAPLIST" > "$RUN_DIR/gaps/R1.json"
   run record.sh > /dev/null
   printf '%s' "$1" > "$RUN_DIR/owner/R1-approved-topics.txt"
   printf '%s' "$2" > "$RUN_DIR/owner/R1-approved-gaps.txt"
   printf '%s' "$3" > "$RUN_DIR/owner/R1-marked-gaps.txt"
+  printf '%s' "${4-$ALLCLEAR}" > "$RUN_DIR/owner/R1-second-read.tsv"
 }
 derived() { [ -e "$RUN_DIR/specs/gaps-R1.json" ] && jq -r 'if length == 0 then "empty" else [.[].id] | join(",") end' "$RUN_DIR/specs/gaps-R1.json" || echo none; }
 
@@ -102,6 +104,21 @@ check 'gaps: nothing approved derives nothing' "$(run gaps.sh) $(derived)" 'gaps
 gapfixture $'A\n' $'' $''
 rm "$RUN_DIR/owner/R1-marked-gaps.txt"
 check 'gaps: a missing marks file is refused' "$(run gaps.sh) $(derived)" 'REFUSED: no owner/R1-marked-gaps.txt rc=2 none'
+# The independent second read: every gap named exactly once, and only a CLEAR gap can come through its topic.
+gapfixture $'A\n' $'G-R1-4\n' $'G-R1-2\n' $'G-R1-1\tBORDERLINE\nG-R1-2\tCLEAR\nG-R1-3\tCLEAR\nG-R1-4\tCLEAR\nG-R1-5\tCLEAR\n'
+check 'gaps: a gap the second read does not call CLEAR is not derived through its topic' "$(run gaps.sh > /dev/null; derived)" 'G-R1-4'
+gapfixture $'' $'G-R1-1\n' $'' $'G-R1-1\tCOVERS\nG-R1-2\tCLEAR\nG-R1-3\tCLEAR\nG-R1-4\tCLEAR\nG-R1-5\tCLEAR\n'
+check 'gaps: a gap the second read calls COVERS is derived only by its own id' "$(run gaps.sh > /dev/null; derived)" 'G-R1-1'
+gapfixture $'A\n' $'' $'' $'G-R1-1\tCLEAR\nG-R1-2\tCLEAR\nG-R1-4\tCLEAR\nG-R1-5\tCLEAR\n'
+check 'gaps: a second read that misses a gap is refused, nothing written' "$(run gaps.sh) $(derived)" 'REFUSED: the second read names G-R1-3 0 times rc=1 none'
+gapfixture $'A\n' $'' $'' $'G-R1-1\tCLEAR\nG-R1-2\tCLEAR\nG-R1-3\tCLEAR\nG-R1-3\tCOVERS\nG-R1-4\tCLEAR\nG-R1-5\tCLEAR\n'
+check 'gaps: a second read that names a gap twice is refused' "$(run gaps.sh) $(derived)" 'REFUSED: the second read names G-R1-3 2 times rc=1 none'
+gapfixture $'A\n' $'' $'' "$ALLCLEAR"$'G-R1-9\tCLEAR\n'
+check 'gaps: an unknown id in the second read is refused' "$(run gaps.sh) $(derived)" 'REFUSED: unknown second-read id G-R1-9 rc=1 none'
+gapfixture $'A\n' $'' $'' $'G-R1-1\tMAYBE\nG-R1-2\tCLEAR\nG-R1-3\tCLEAR\nG-R1-4\tCLEAR\nG-R1-5\tCLEAR\n'
+check 'gaps: a verdict other than COVERS, BORDERLINE or CLEAR is refused' "$(run gaps.sh) $(derived)" $'REFUSED: bad second-read line G-R1-1\tMAYBE rc=1 none'
+gapfixture $'A\n' $'' $''; rm "$RUN_DIR/owner/R1-second-read.tsv"
+check 'gaps: a missing second read is refused' "$(run gaps.sh) $(derived)" 'REFUSED: no owner/R1-second-read.tsv rc=2 none'
 gapfixture $'A\n' $'' $''
 jq '.[0].question = "a different question"' "$RUN_DIR/gaps/R1.json" > "$work/changed.json" && mv "$work/changed.json" "$RUN_DIR/gaps/R1.json"
 check 'gaps: a gaps file changed after it was recorded is refused' "$(run gaps.sh | sed 's/.*REFUSED/REFUSED/') $(derived)" 'REFUSED: gaps/R1.json was never recorded, or the work list changed after it was rc=1 none'
@@ -232,6 +249,12 @@ sed -i 's/ as=R2$/ as=R1b/' "$RUN_DIR/UNIT-LOG.txt"
 check 'launch: a RERUN line for another run does not' "$(launch | cut -d'|' -f3)" 'RW-E'
 : > "$RUN_DIR/UNIT-LOG.txt"
 check 'launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run)' "$(launch)" 'held=[]|not relaunched, reported already: []|RW-A,RW-B,RW-C,RW-D,RW-E,RW-F,RW-G,RW-H'
+# A checker's stop or no-result alone, with no unit event, is a stop in the job too (AD4-6's own case, AD5-5).
+printf '%s\n' '2026-10-27 STOP-4 unit=V-RW-A-1 stage=verify written=nothing routed=owner-batch' > "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: a verifier stop alone leaves reported units out' "$(launch)" 'held=[]|not relaunched, reported already: ["RW-A","RW-C"]|RW-B,RW-D,RW-E,RW-F,RW-G,RW-H'
+printf '%s\n' '2026-10-27 NORESULT unit=X-completeness-R1 cause=undetermined' > "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: a critic no-result alone leaves reported units out' "$(launch)" 'held=[]|not relaunched, reported already: ["RW-A","RW-C"]|RW-B,RW-D,RW-E,RW-F,RW-G,RW-H'
+: > "$RUN_DIR/UNIT-LOG.txt"
 # The cluster must be a recorded spec file, readable, and no id may be in two spec entries (AD4-2).
 printf '%s\n' '[{"kind":"rows","id":"RW-X"}]' > "$RUN_DIR/specs/rows2.json"
 sed 's|^CLUSTER="specs/rows.json"|CLUSTER="specs/rows2.json"|' "$work/held.sh" > "$work/held-2.sh"

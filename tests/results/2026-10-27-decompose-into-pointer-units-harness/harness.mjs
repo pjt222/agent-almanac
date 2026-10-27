@@ -244,7 +244,8 @@ for (const [name, specs, extraArgs] of [
   const o = await run({ critics: { 'critic R1-1': `gaps:${JSON.stringify([gap('Same gap', 1, false)])}`, 'completeness R1': `gaps:${JSON.stringify([gap('same gap', 2, true)])}` } });
   const same = (o.result?.gaps_for_owner ?? []).filter((g) => g.title.toLowerCase() === 'same gap');
   check('S20 duplicate gaps', 'one copy is kept, the higher-priority one', same.length === 1 && same[0].priority === 1);
-  check('S20 duplicate gaps', 'a dropped copy\'s covers_held is carried into the kept copy', same.length === 1 && same[0].covers_held === true); }
+  check('S20 duplicate gaps', 'a dropped copy\'s covers_held is carried into the kept copy', same.length === 1 && same[0].covers_held === true);
+  check('S20 duplicate gaps', 'the kept copy lists each dropped copy\'s question and flag, for the owner', same.length === 1 && JSON.stringify(same[0].dropped) === JSON.stringify([{ question: 'q2', covers_held: true }])); }
 
 // S19: an approved gap spec reaches its unit as a pointer to the recorded question, never as the question's text.
 { const o = await run({ specs: [{ kind: 'gap', id: 'G-R0-1', g: 'G-R0-1', from: 'gaps/R0.json' }] });
