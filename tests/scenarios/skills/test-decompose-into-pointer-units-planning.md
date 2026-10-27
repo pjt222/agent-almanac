@@ -199,7 +199,7 @@ Record timestamps for:
   nothing, so the re-scoped run is observed as its assembled prompt. Expect:
   - the answer on one Answered line in the Step 9 format, citing where the
     words came from;
-  - one `owner` spec in a new `specs/owner-1.json` whose `unit` is
+  - one `owner` spec in a new `specs/owner-1.json` whose `id` is `OW-1`, whose `unit` is
     `CL1.5.0-02`, whose `scope` is the answer verbatim, and whose `answer` is
     `STOP-1`;
   - the EXAMPLES owner-spec check printing `owner specs checked: 1` and no
@@ -215,7 +215,8 @@ Record timestamps for:
   it with the bullets above. A spec file that skipped the check is not
   recorded, and the ledger refuses it with `the work list changed after it was
   recorded`. If the owner spec is then stopped, expect a `STOP-2` line,
-  `stopped=2`, and no further proposal: no second owner spec citing `STOP-1`.
+  `stopped=2`, and no further proposal: no second owner spec citing `STOP-1`,
+  which the owner-spec check would refuse.
 - **Variant B: A unit with no result** — after the baseline stop, treat
   `CL1.4.1-02` as returning no result and log it with the Step 8 snippet,
   which writes `NORESULT unit=CL1.4.1-02` and moves its report to

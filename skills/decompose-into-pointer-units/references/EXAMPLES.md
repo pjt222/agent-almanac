@@ -296,7 +296,7 @@ sha256sum "$OUT" >> WORK-SHA256SUMS
 
 `flagged_in_approved_topics` counts the flagged gaps an approved topic did not derive; each is already listed apart in the batch (B4) for a decision by id.
 
-An owner spec re-scopes a stopped unit in the owner's words. Write it by hand from the batch to a new file `specs/owner-<n>.json`, with `answer` set to the `STOP-<n>` of the Answered line it comes from. The check refuses unless each scope is quoted verbatim on that Answered line, under the unit it names, in the section headed exactly `## Answered`. It exits 1 and names each refused id, says how many owner specs it checked, and records the file in the work list only when nothing is refused. The check shows that the spec matches an Answered line, not that the line holds the owner's words, so the Answered line cites where the words came from:
+An owner spec re-scopes a stopped unit in the owner's words. Write it by hand from the batch to a new file `specs/owner-<n>.json`, with an id `OW-<n>` new to the work list and `answer` set to the `STOP-<n>` of the Answered line it comes from. The check refuses unless each scope is quoted verbatim on that Answered line, under the unit it names, in the section headed exactly `## Answered`. It also refuses an id that is not `OW-<n>` or is already in a spec file, and a `STOP-<n>` that a recorded owner spec already cites, or that two specs in the file cite: one stop authorises one owner spec. It exits 1 and names each refused id, says how many owner specs it checked, and records the file in the work list only when nothing is refused. The check shows that the spec matches an Answered line, not that the line holds the owner's words, so the Answered line cites where the words came from:
 
 ```bash
 cd "${RUN_DIR:?}" || exit 1
@@ -306,12 +306,21 @@ awk -v f="$OWNER_SPECS" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS 
 sha256sum -c --quiet WORK-SHA256SUMS || { echo 'REFUSED: the work list changed after it was recorded'; exit 1; }
 owner_specs=$(jq -r 'if all(.[]; .kind == "owner") then .[] | [.id, .unit, .scope, .answer] | @tsv
   else error("a spec in this file is not an owner spec") end' "$OWNER_SPECS") || { echo "REFUSED: $OWNER_SPECS"; exit 2; }
+jq -e 'all(.[]; .id | test("^OW-[0-9]+$"))' "$OWNER_SPECS" > /dev/null || { echo 'REFUSED: an owner spec id is OW-<n>'; exit 2; }
+all_ids=$(find specs -name '*.json' -exec jq -r '.[].id' {} +) || { echo 'REFUSED: a spec file is not a spec list'; exit 2; }
+dup_ids=$(printf '%s\n' "$all_ids" | sort | uniq -d | paste -sd ' ' -)
+[ -z "$dup_ids" ] || { echo "REFUSED: an id is in two spec entries: $dup_ids"; exit 2; }
 refused=$(printf '%s\n' "$owner_specs" | while IFS="$(printf '\t')" read -r id unit scope answer; do
   [ -n "$id" ] || continue
   NEEDLE="- $answer, unit $unit: \"$scope\" (" awk '/^## /{answered = ($0 == "## Answered")}
     answered && index($0, ENVIRON["NEEDLE"]) == 1 {found = 1} END {exit !found}' OWNER-QUESTIONS.md || echo "REFUSED $id"
 done)
 echo "owner specs checked: $(printf '%s\n' "$owner_specs" | rg -c . || echo 0)"
+# A STOP-<n> authorises one owner spec: refuse one cited by a recorded owner spec, or twice in this file.
+used=$(awk '$2 ~ /^specs\// {print $2}' WORK-SHA256SUMS | xargs -r jq -r '.[] | select(.kind == "owner") | .answer') ||
+  { echo 'REFUSED: a recorded spec file is not a spec list'; exit 2; }
+reused=$( { printf '%s\n' "$owner_specs" | cut -f4; printf '%s\n' "$used"; } | sed '/^$/d' | sort | uniq -d | paste -sd ' ' -)
+[ -z "$reused" ] || refused=$(printf '%s\n%s\n' "$refused" "REFUSED: a STOP-<n> authorises one owner spec; already used: $reused" | sed '/^$/d')
 [ -z "$refused" ] || { printf '%s\n' "$refused"; exit 1; }
 sha256sum "$OWNER_SPECS" >> WORK-SHA256SUMS
 ```
@@ -400,14 +409,19 @@ with the correction and recommended for hold.
 
 ## Launch sequence
 
-Pilot first, read its reports, then one run per remaining cluster, started together. Before each launch, the pilot included, build the spec list with this snippet, every launch under a new tag. It derives the held list from the unit log: every stopped id, and every id whose last `NORESULT`, `HELD` or `RELEASED` line is not a release, so a release lifts only the lines before it. Once the job has a stop or a no-result, it also leaves out every unit that already reported, unless a `RERUN` line names that unit for this tag (Step 8 item 2). A transient re-run of a unit therefore lists that unit alone. Take the held ids out of the cluster's spec list, and pass the list as `held`; the spec files keep the ids for Step 10. An id left out of the spec list cannot run even if `held` is forgotten, and the skeleton refuses a `held` that is not an array.
+Pilot first, read its reports, then one run per remaining cluster, started together. Before each launch, the pilot included, build the spec list with this snippet, every launch under a new tag. It refuses a cluster file that is not recorded in the work list, and an id that is in two spec entries, as a re-derivation into a new file leaves. It derives the held list from the unit log: every stopped id, and every id whose last `NORESULT`, `HELD` or `RELEASED` line is not a release, so a release lifts only the lines before it. Once the job has a stop or a no-result, it also leaves out every unit that already reported, unless a `RERUN` line names that unit for this tag (Step 8 item 2). A transient re-run of a unit therefore lists that unit alone. Take the held ids out of the cluster's spec list, and pass the list as `held`; the spec files keep the ids for Step 10. An id left out of the spec list cannot run even if `held` is forgotten, and the skeleton refuses a `held` that is not an array.
 
 ```bash
 cd "${RUN_DIR:?}" || exit 1
 [ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt (Step 1 creates it)'; exit 2; }
 TAG=R2                      # the run about to launch: a new tag for every launch, re-runs included
 CLUSTER="specs/rows.json"   # the cluster it launches
+sha256sum -c --quiet WORK-SHA256SUMS && awk -v f="$CLUSTER" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS ||
+  { echo "REFUSED: $CLUSTER is not a recorded spec file, or the work list changed"; exit 1; }
 ids=$(jq -r '.[].id' "$CLUSTER") || { echo "REFUSED: $CLUSTER is not a spec list"; exit 2; }
+all_ids=$(find specs -name '*.json' -exec jq -r '.[].id' {} +) || { echo 'REFUSED: a spec file is not a spec list'; exit 2; }
+dup_ids=$(printf '%s\n' "$all_ids" | sort | uniq -d | paste -sd ' ' -)
+[ -z "$dup_ids" ] || { echo "REFUSED: an id is in two spec entries: $dup_ids"; exit 1; }   # a re-derivation, or a spec written twice
 HELD=$( { rg -o '^\S+ STOP-[0-9]+ unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt
           rg -o '^\S+ (NORESULT|HELD|RELEASED) unit=([A-Za-z0-9._-]+)' -r '$1 $2' UNIT-LOG.txt |
             awk '{h[$2] = ($1 != "RELEASED")} END {for (i in h) if (h[i]) print i}'; } |
