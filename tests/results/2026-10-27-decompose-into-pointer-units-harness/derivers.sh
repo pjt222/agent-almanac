@@ -19,7 +19,8 @@ node -e '
   const t = require("fs").readFileSync(process.argv[1], "utf8");
   const fences = [...t.matchAll(/```bash\n([\s\S]*?)```/g)].map((m) => m[1]);
   const want = [["rows.sh", "inventory.tsv"], ["items.sh", "$MECH/items"], ["gaps.sh", "approved-topics.txt"],
-    ["owner.sh", "OWNER_SPECS="], ["held.sh", "CLUSTER="], ["record.sh", "is not a gaps_for_owner list"]];
+    ["owner.sh", "OWNER_SPECS="], ["held.sh", "CLUSTER="], ["record.sh", "is not a gaps_for_owner list"],
+    ["added.sh", "ADDED="]];
   for (const [name, anchor] of want) {
     const hits = fences.filter((f) => f.includes(anchor));
     if (hits.length !== 1) { console.error(name + ": anchor " + anchor + " is in " + hits.length + " fences, want 1"); process.exit(2); }
@@ -169,6 +170,32 @@ printf '%s\n' '[{"kind":"owner","id":"OW-2","unit":"CL-B","scope":"only line 6, 
 check 'owner: a STOP-<n> already used by a recorded owner spec is refused, nothing recorded' "$first|$(run owner.sh) $(recorded specs/owner-1.json)" 'owner specs checked: 1 rc=0|owner specs checked: 1 REFUSED: a STOP-<n> authorises one owner spec; already used: STOP-1 rc=1 no'
 ownerfixture "[$OWNER_OK,{\"kind\":\"owner\",\"id\":\"OW-2\",\"unit\":\"CL-B\",\"scope\":\"only line 6, read-only\",\"answer\":\"STOP-1\"}]"
 check 'owner: two owner specs citing one STOP-<n> in one file are refused' "$(run owner.sh) $(recorded specs/owner-1.json)" 'owner specs checked: 2 REFUSED: a STOP-<n> authorises one owner spec; already used: STOP-1 rc=1 no'
+
+# --- specs for items a deriver skipped, added after launch in the same run directory ---
+# fresh() has CL-A on lines 4-5 and CL-B on lines 6-7 of the one source; rows-x.json covers rows 2-3 of inv.tsv.
+addfixture() {   # the added specs file content
+  fresh
+  printf '%s\n' '[{"kind":"rows","id":"RW-X1","file":"inv.tsv","group":"g","rows":[2,3]}]' > "$RUN_DIR/specs/rows-x.json"
+  (cd "$RUN_DIR" && sha256sum specs/rows-x.json >> WORK-SHA256SUMS)
+  printf '%s\n' "$1" > "$RUN_DIR/specs/added-1.json"
+}
+addfixture '[{"kind":"cl","id":"CL-S1","release":"1.0","lines":[8,9]},{"kind":"rows","id":"RW-S1","file":"other.tsv","group":"g","rows":[2]}]'
+check 'added: specs for pointers no spec covers are recorded' "$(run added.sh) $(recorded specs/added-1.json)" 'added specs: 2 rc=0 yes'
+check 'added: a file already recorded is refused, nothing written' "$(run added.sh) lines=$(awk '$2 == "specs/added-1.json"' "$RUN_DIR/WORK-SHA256SUMS" | wc -l | tr -d ' ')" 'REFUSED: specs/added-1.json was already recorded rc=2 lines=1'
+addfixture '[{"kind":"cl","id":"CL-S1","release":"1.0","lines":[7,8]}]'
+check 'added: a line a recorded spec covers is refused, nothing recorded' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: specs/added-1.json covers pointers a spec already covers: cl:7 rc=1 no'
+addfixture '[{"kind":"rows","id":"RW-S1","file":"inv.tsv","group":"g","rows":[3,4]}]'
+check 'added: a row of the same file a recorded spec covers is refused' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: specs/added-1.json covers pointers a spec already covers: rows:inv.tsv:3 rc=1 no'
+addfixture '[{"kind":"cl","id":"CL-S1","release":"1.0","lines":[8]},{"kind":"cl","id":"CL-S2","release":"1.0","lines":[8,9]}]'
+check 'added: a pointer twice in the added file is refused' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: specs/added-1.json covers pointers a spec already covers: cl:8 rc=1 no'
+addfixture '[{"kind":"cl","id":"CL-A","release":"1.0","lines":[8]}]'
+check 'added: an id a spec already carries is refused' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: an id in specs/added-1.json is already in a spec file: CL-A rc=1 no'
+addfixture '[{"kind":"owner","id":"OW-9","unit":"CL-B","scope":"x","answer":"STOP-1"}]'
+check 'added: a spec that is not of a derived kind is refused' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: specs/added-1.json is not a list of derived specs rc=1 no'
+addfixture '[{"kind":"cl","id":"CL-S1","release":"1.0","lines":[8]}]'; printf '[]\n' > "$RUN_DIR/specs/cl.json"
+check 'added: a changed work list is refused' "$(run added.sh | sed 's/.*REFUSED/REFUSED/') $(recorded specs/added-1.json)" 'REFUSED: the work list changed after it was recorded rc=1 no'
+addfixture '[]'; rm "$RUN_DIR/specs/added-1.json"
+check 'added: a missing file is refused' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: no specs/added-1.json rc=2 no'
 
 # --- the held list and the launch list ---
 # The cluster's ids are its own (none is in cl.json). RW-A and RW-C reported; RW-A's verifier was stopped.

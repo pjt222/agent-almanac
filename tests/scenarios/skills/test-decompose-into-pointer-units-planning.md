@@ -42,7 +42,7 @@ Step 9's read-only faithfulness check is out of scope too; criterion 8 checks th
 
 - [ ] `skills/decompose-into-pointer-units/SKILL.md` and its `references/EXAMPLES.md` exist
 - [ ] `node`, `jq`, `rg` and `sha256sum` are on PATH
-- [ ] A fresh run directory exists: `RUN_DIR=$(mktemp -d)`, with `mechanical/`, `specs/`, `gaps/`, `owner/` and `repo/` inside it and an empty `UNIT-LOG.txt`, as Step 1 creates them for the first run directory of a job (`PRIOR_RUN=none`)
+- [ ] A fresh run directory exists: `RUN_DIR=$(mktemp -d)`, with `mechanical/`, `specs/`, `gaps/`, `owner/` and `repo/` inside it and an empty `UNIT-LOG.txt`, as Step 1 creates them
 - [ ] The fixture below is written to `$RUN_DIR/mechanical/changelog.md`, byte for byte
 
 ```text

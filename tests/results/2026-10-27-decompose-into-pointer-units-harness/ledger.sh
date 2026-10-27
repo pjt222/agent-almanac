@@ -5,9 +5,9 @@
 #   bash tests/results/2026-10-27-decompose-into-pointer-units-harness/ledger.sh <SKILL.md> <bash|zsh>
 # Prints one line per check (PASS / FAIL) and exits 1 if any check fails, 2 if a snippet cannot be found.
 # Two departures from byte for byte, both in fresh(): the Step 2 snippet runs at the scenario's chunk 4 (one
-# sed on its argument), and of Step 1 only the tool check, mech_sums and the unit-log case block run (the cp
-# and gh lines need a real repository), with the line that writes MECH-SHA256SUMS re-typed. fresh() starts
-# its unit log with a typed touch; the case block itself runs in the Step 1 rows.
+# sed on its argument), and of Step 1 only the tool check, mech_sums and the refusal of a second freeze run
+# (the cp and gh lines need a real repository), with the mkdir, touch and the line that writes
+# MECH-SHA256SUMS re-typed in fresh().
 set -u
 skill=$1; shell=$2
 work=$(mktemp -d) || exit 2
@@ -28,7 +28,7 @@ node -e '
   }
 ' "$skill" "$work" || exit 2
 rg '^(for t in|mech_sums\(\))' "$work/step1.sh" > "$work/step1-local.sh"   # not the line that writes the sums
-sed -n '/^case "\${PRIOR_RUN/,/^esac/p' "$work/step1.sh" > "$work/step1-carry.sh"   # the unit-log case block
+rg '^\[ ! -e "\$RUN_DIR/MECH-SHA256SUMS" \]' "$work/step1.sh" > "$work/step1-guard.sh"   # the refusal of a second freeze
 rg '^work_sums\(\)' "$work/record.sh" > "$work/worksums-local.sh"
 sed 's/changelog.md" 6 >/changelog.md" 4 >/' "$work/step2.sh" > "$work/step2-chunk4.sh"
 
@@ -66,18 +66,10 @@ check 'baseline ledger' "$(ledger)" 'specs=7 reported=7 stopped=1 held=0 unaccou
 pilot=$(cd "$RUN_DIR" && $shell -c '. "$0"; . "$1"' "$work/step1-local.sh" "$work/step7.sh" 2>&1)
 check 'step 7 pilot glance' "$(printf '%s\n' "$pilot" | sed -n '1,4p' | tr '\n' '|')" 'CL1.5.0-01: VERDICT EVIDENCE OPEN|CL1.5.0-02: VERDICT|CL1.4.1-01: VERDICT EVIDENCE OPEN|pilot reports listed: 3 (read each one end to end before launching the rest)|'
 
-# Step 1's unit log: a later run directory of the job starts from a copy of the earlier one, so its ledger
-# (and the held list, derivers.sh) still sees the stop. PRIOR_RUN must be set; an existing log is kept.
-new="$work/run2"; rm -rf "${new:?}"; cp -r "$RUN_DIR" "$new"; rm "$new/UNIT-LOG.txt"
-carry() { (cd "$new" && RUN_DIR="$new" PRIOR_RUN="$1" $shell "$work/step1-carry.sh" > /dev/null 2>&1); printf 'rc=%s log=%s' "$?" "$([ -e "$new/UNIT-LOG.txt" ] && wc -l < "$new/UNIT-LOG.txt" | tr -d ' ' || echo none)"; }
-check 'step 1: PRIOR_RUN unset is refused, and no unit log is started' "$(carry '')" 'rc=1 log=none'
-check 'step 1: PRIOR_RUN=none starts an empty unit log' "$(carry none)" 'rc=0 log=0'
-rm "$new/UNIT-LOG.txt"
-check 'step 1: a later run directory starts from a copy of the unit log' "$(carry "$RUN_DIR") $(cmp -s "$new/UNIT-LOG.txt" "$RUN_DIR/UNIT-LOG.txt" && echo same)" 'rc=0 log=1 same'
-check 'step 1: an existing unit log is not overwritten' "$(printf 'x\n' >> "$new/UNIT-LOG.txt"; carry "$RUN_DIR")" 'rc=1 log=2'
-sed -i '$d' "$new/UNIT-LOG.txt"
-check 'step 1: with the carried log, a later run directory still counts the stop' "$(RUN_DIR="$new"; ledger)" 'specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0'
-rm -rf "${new:?}"
+# Step 1 freezes a run directory once: the whole job lives in it, and a second freeze would move the record
+# Steps 7 and 10 compare against. A directory not yet frozen (a gh failure before the sums) passes.
+check 'step 1: a frozen run directory is not frozen again' "$(out=$($shell "$work/step1-guard.sh" 2>&1); printf '%s rc=%s' "$out" "$?")" 'REFUSED: this run directory is already frozen rc=1'
+check 'step 1: a run directory not yet frozen passes' "$(mkdir -p "$work/unfrozen"; out=$(RUN_DIR="$work/unfrozen" $shell "$work/step1-guard.sh" 2>&1); printf '%s rc=%s' "$out" "$?")" ' rc=0'
 
 # Variant B: a second unit with no result, which wrote a partial before dying. Logged as NORESULT by the
 # Step 8 snippet, its partial moves to partials/, and it stays unaccounted rather than becoming a stop.

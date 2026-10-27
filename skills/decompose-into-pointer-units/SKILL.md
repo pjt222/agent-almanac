@@ -54,14 +54,11 @@ Compute every input a unit will cite before any unit runs. Units read these file
 
 ```bash
 for t in node jq rg sha256sum; do command -v "$t" >/dev/null || { echo "missing: $t" >&2; exit 1; }; done
-RUN_DIR="/abs/path/reports/run-001"   # outside the repository under review
+RUN_DIR="/abs/path/reports/run-001"   # outside the repository under review; one directory for the whole job
 MECH="$RUN_DIR/mechanical"
+[ ! -e "$RUN_DIR/MECH-SHA256SUMS" ] || { echo 'REFUSED: this run directory is already frozen'; exit 1; }
 mkdir -p "$MECH" "$RUN_DIR/specs" "$RUN_DIR/gaps" "$RUN_DIR/owner" "$RUN_DIR/repo"
-case "${PRIOR_RUN:?set PRIOR_RUN to the previous run directory of this job, or to none}" in   # the unit log carries the job's stops
-  none) touch "$RUN_DIR/UNIT-LOG.txt" ;;
-  *) [ ! -s "$RUN_DIR/UNIT-LOG.txt" ] || { echo 'REFUSED: this run directory already has a unit log'; exit 1; }
-     cp "${PRIOR_RUN:?}/UNIT-LOG.txt" "$RUN_DIR/UNIT-LOG.txt" || exit 1 ;;
-esac
+touch "$RUN_DIR/UNIT-LOG.txt"
 cp CHANGELOG.md "$MECH/changelog.md"
 gh issue list --label "${TRACKING_LABEL:?}" --state open --json number --jq '.[].number' > "$MECH/issues.txt" || exit 1
 while read -r n; do gh issue view "$n" --json number,title,body,labels > "$MECH/issue-$n.json" || exit 1; done < "$MECH/issues.txt"
@@ -69,7 +66,7 @@ mech_sums() { (cd "${MECH:?}" && find . -type f -print0 | sort -z | xargs -0 -r 
 mech_sums > "$RUN_DIR/MECH-SHA256SUMS"
 ```
 
-**Expected:** `$MECH` holds every input the brief will name. The checksum covers every file under it, subdirectories included, and Steps 7 and 10 re-derive it and compare it byte for byte. A checksum taken at the freeze cannot show what happened before it. At the run directory's top level the only `.txt` files are reports, `V-` and `X-` files and `UNIT-LOG.txt`, because Step 10 reads every other top-level `.txt` as a report. Everything else the lead writes is a `.md` file or goes in a subdirectory: the brief is `BRIEF.md`, and the repository records go under `repo/`, the owner's decisions under `owner/` and no-result partials under `partials/`. The unit log belongs to the job, not the directory: the first run directory sets `PRIOR_RUN=none`, and every later one starts from a copy of the previous log, so its held list and ledger still see every stop.
+**Expected:** `$MECH` holds every input the brief will name. The checksum covers every file under it, subdirectories included, and Steps 7 and 10 re-derive it and compare it byte for byte. A checksum taken at the freeze cannot show what happened before it. At the run directory's top level the only `.txt` files are reports, `V-` and `X-` files and `UNIT-LOG.txt`, because Step 10 reads every other top-level `.txt` as a report. Everything else the lead writes is a `.md` file or goes in a subdirectory: the brief is `BRIEF.md`, and the repository records go under `repo/`, the owner's decisions under `owner/` and no-result partials under `partials/`. One run directory holds the whole job: every run of it, its unit log, its owner batch and its reports. A later run launches in the same directory under a new tag. A second directory would not see this one's stops, reports or answers, so there is none; the freeze is refused if the directory is already frozen, and a run of this step that failed before writing the checksum can be repeated.
 
 **On failure:** A `missing:` line names a tool to install first. If `gh` fails, the issues are not frozen: stop rather than run with an empty list, or with units reading issue text live. If an input cannot be computed yet, compute it before going on. A unit that derives its own copy of an input creates a second, unreviewed version of the facts.
 
@@ -122,7 +119,7 @@ Other kinds follow the same shape: inventory rows chunked by group, one spec per
 
 **Expected:** `bullets`, `covered` and `unique` are equal; `issues` equals `issue_specs`; both id checks print `true`; `WORK-SHA256SUMS` lists every spec file; each spec holds only `kind`, `id` and pointer fields (an `owner` spec also carries the owner's words, Step 8 item 5), and its id is fixed by the frozen input and the chunk size.
 
-**On failure:** A count mismatch means the parser skipped items (nested bullets, an unusual heading, bullets before the first heading). Fix the parser and regenerate before the work list is recorded. An unsafe id means a deriver did not reduce a name to `[A-Za-z0-9._-]`. After any unit has launched, a regeneration is a re-run (Step 8 item 2). It can move a stopped unit's lines into a spec that still runs, under a surviving id or a new one, and the ledger counts by id, so Step 10 refuses a work list changed in place. Start a new run directory with `PRIOR_RUN` set to this one (Step 1), and once any stop or no-result is recorded, ask the owner first. The carried log holds an unchanged spec by its id; a spec whose pointers moved is held only by Step 8 item 6, read against the earlier directory's specs. Never hand-edit a spec file to add a unit.
+**On failure:** A count mismatch means the parser skipped items (nested bullets, an unusual heading, bullets before the first heading). Fix the parser and regenerate before the work list is recorded. An unsafe id means a deriver did not reduce a name to `[A-Za-z0-9._-]`. After any unit has launched, the work list is never re-derived. A regeneration is a re-run (Step 8 item 2): it can move a stopped unit's lines into a spec that still runs, under a surviving id or a new one, so Step 10 refuses a work list changed in place, and the launch snippet and Step 10 refuse an id in two spec entries. Fix the deriver, have it write only the items the first derivation skipped to a new spec file with new ids, and record that file with the added-specs check (EXAMPLES.md), which refuses any pointer a recorded spec already covers. The added specs launch as a cluster not yet run, in the same run directory. Never hand-edit a spec file to add a unit.
 
 ### Step 3: Write the Shared Brief Once
 
