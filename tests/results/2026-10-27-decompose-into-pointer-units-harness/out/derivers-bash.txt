@@ -1,0 +1,67 @@
+PASS  bash rows count proof
+PASS  bash rows ids are ledger-safe
+PASS  bash items count proof shows the skipped file
+PASS  bash item ids are ledger-safe
+PASS  bash record: a gaps_for_owner list is recorded
+PASS  bash record: a second record of the same file is refused, nothing written
+PASS  bash record: a list without covers_held is refused and not recorded
+PASS  bash gaps: approved topic plus single id; the marked gap and the flagged gap are not derived through the topic
+PASS  bash gaps: the count line
+PASS  bash gaps: derived specs carry pointers only, from the recorded file
+PASS  bash gaps: the output is recorded in the work list
+PASS  bash gaps: a second derivation into the same name is refused
+PASS  bash gaps: an approved marked id is refused, nothing written
+PASS  bash gaps: an unknown approved id is refused, nothing written
+PASS  bash gaps: an id with a trailing space is refused, not dropped
+PASS  bash gaps: an unknown topic is refused, nothing written
+PASS  bash gaps: a flagged gap the batch did not mark is derived when approved by its id
+PASS  bash gaps: nothing approved derives nothing
+PASS  bash gaps: a missing marks file is refused
+PASS  bash gaps: a gap the second read does not call CLEAR is not derived through its topic
+PASS  bash gaps: a gap the second read calls COVERS is derived only by its own id
+PASS  bash gaps: a second read that misses a gap is refused, nothing written
+PASS  bash gaps: a second read that names a gap twice is refused
+PASS  bash gaps: an unknown id in the second read is refused
+PASS  bash gaps: a verdict other than COVERS, BORDERLINE or CLEAR is refused
+PASS  bash gaps: a missing second read is refused
+PASS  bash gaps: a gaps file changed after it was recorded is refused
+PASS  bash owner: a scope quoted on its Answered line passes and is recorded
+PASS  bash owner: a scope quoted only in Open is refused with exit 1, nothing recorded
+PASS  bash owner: a scope under a nested heading is refused with exit 1, nothing recorded
+PASS  bash owner: a scope under a later heading is refused with exit 1, nothing recorded
+PASS  bash owner: a scope with the wrong STOP number is refused with exit 1, nothing recorded
+PASS  bash owner: a scope on a line with no citation is refused with exit 1, nothing recorded
+PASS  bash owner: a scope under the wrong unit is refused with exit 1, nothing recorded
+PASS  bash owner: an empty list checks nothing and says so
+PASS  bash owner: a non-owner spec in the file is refused
+PASS  bash owner: a missing file is refused
+PASS  bash owner: a file already recorded is refused, nothing written
+PASS  bash owner: an id that is not OW-<n> is refused, nothing recorded
+PASS  bash owner: an id already in the work list is refused, nothing recorded
+PASS  bash owner: a STOP-<n> already used by a recorded owner spec is refused, nothing recorded
+PASS  bash owner: two owner specs citing one STOP-<n> in one file are refused
+PASS  bash added: specs for pointers no spec covers are recorded
+PASS  bash added: a file already recorded is refused, nothing written
+PASS  bash added: a line a recorded spec covers is refused, nothing recorded
+PASS  bash added: a row of the same file a recorded spec covers is refused
+PASS  bash added: a pointer twice in the added file is refused
+PASS  bash added: an id a spec already carries is refused
+PASS  bash added: a spec that is not of a derived kind is refused
+PASS  bash added: a changed work list is refused
+PASS  bash added: a missing file is refused
+PASS  bash held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out
+PASS  bash held: a no-result or a hold logged after a release holds the id again
+PASS  bash launch: after a stop or no-result, a unit that reported is not relaunched
+PASS  bash launch: a RERUN line for this run relaunches the unit it names
+PASS  bash launch: a RERUN line for another run does not
+PASS  bash launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run)
+PASS  bash launch: a verifier stop alone leaves reported units out
+PASS  bash launch: a critic no-result alone leaves reported units out
+PASS  bash launch: an unrecorded cluster file is refused before any list is printed
+PASS  bash launch: an id in two spec files is refused before any list is printed
+PASS  bash launch: a recorded cluster file that is not a spec list is refused before any list is printed
+PASS  bash launch: a unit-log line without its date is refused before any list is printed
+PASS  bash launch: an unreadable unit log is refused before any list is printed
+PASS  bash held: a missing unit log is refused
+
+ALL PASS (bash)

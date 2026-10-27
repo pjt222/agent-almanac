@@ -1,0 +1,64 @@
+PASS  bash step 2 coverage
+PASS  bash step 2 issues
+PASS  bash step 2 id checks
+PASS  bash step 2 records the work list once, and lists every spec file
+PASS  bash a second work list is refused
+PASS  bash baseline ledger
+PASS  bash step 7 pilot glance
+PASS  bash step 1: a frozen run directory is not frozen again
+PASS  bash step 1: a run directory not yet frozen passes
+PASS  bash no-result: a partial that cannot be moved is refused, and nothing is logged
+PASS  bash no-result: its partial moves to partials/ and it stays unaccounted
+PASS  bash empty file is not reported
+PASS  bash release by owner with no Answered line is refused
+PASS  bash release of a stopped id is refused
+PASS  bash release by owner from an Answered line is logged
+PASS  bash released and not yet re-run is unaccounted
+PASS  bash released, then re-run: reported, not held_ran
+PASS  bash release after a report is refused
+PASS  bash a transient release is logged once
+PASS  bash a verifier with no result: its partial moves, and a transient release is logged
+PASS  bash pre-rerun: a released no-result passes
+PASS  bash pre-rerun: a no-result not released is refused
+PASS  bash pre-rerun: a re-run that returned nothing again is refused
+PASS  bash pre-rerun: a checker stopped since its release is refused
+PASS  bash pre-rerun: a checker with nothing logged is refused
+PASS  bash pre-rerun: a checker whose file exists is refused
+PASS  bash release: no unit log is refused, and none is started
+PASS  bash a transient release of a held id with no no-result is refused
+PASS  bash a transient release of a no-result held over a stop since is refused
+PASS  bash a transient release naming no transcript file is refused
+PASS  bash a transient release after an owner release and a second no-result is refused
+PASS  bash a second owner release from the same Answered line is refused
+PASS  bash an answer given before a later hold does not lift that hold
+PASS  bash a no-result answer does not lift a hold logged after it
+PASS  bash a hold answered under another reason is refused
+PASS  bash a pre-run owner hold is released by its own Answered line
+PASS  bash after a transient release and a second no-result, one owner answer releases
+PASS  bash a release with an unknown BY is refused, nothing written
+PASS  bash an owner release with no owner batch is refused
+PASS  bash release: a unit-log line without its date is refused
+PASS  bash ledger: a unit-log line without its date is refused
+PASS  bash release: an unreadable unit log is refused
+PASS  bash ledger: an unreadable unit log is refused
+PASS  bash the documented writers write lines every reader reads
+PASS  bash ledger: no unit log is refused
+PASS  bash a hand-written release does not lift a stop
+PASS  bash reroute under a new id is extra
+PASS  bash verifier, critic and lead files are not extra
+PASS  bash a recorded gap spec without a report is unaccounted
+PASS  bash a recorded gap spec with a report is reported
+PASS  bash held spec is held, not unaccounted
+PASS  bash held spec with a report is held_ran
+PASS  bash a release after a held run is refused, and held_ran stays visible
+PASS  bash a hold released from an unused Answered line is unaccounted until it runs
+PASS  bash an Answered line releases once
+PASS  bash a hold logged after a release holds the id again
+PASS  bash a run under a hold logged after a release is held_ran
+PASS  bash an id in two spec entries is refused, though both files are recorded
+PASS  bash a spec file added without being recorded is refused
+PASS  bash re-derivation at chunk 5 after launch is refused
+PASS  bash restored work list matches again
+PASS  bash changed input refused
+
+ALL PASS (bash)
