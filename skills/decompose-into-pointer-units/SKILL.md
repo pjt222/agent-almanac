@@ -192,15 +192,18 @@ const DSCHEMA = { type: 'object', additionalProperties: false,
 1. **Verify**: one adversarial verifier per non-benign item. It gets the same evidence and is told to refute: the counter-example, the misread source, the overstated impact, and every refutation check the brief lists. It writes `V-<unit>-<n>.txt`. A verifier that reports a stop or returns nothing is recorded; its verdict is not counted, and the claim stays unverified.
 2. **Accuracy critics**: one per group of at most the critic group size (default 15) reports. Each reads every report in its group, benign ones included. Per-item verifiers never see a wrong claim inside a benign verdict.
 3. **Completeness critic**: one per run, over the spec list, the digest and the mechanical inputs. It asks what in scope no unit covered. Every critic is told which ids are held for the owner (stopped, no result or held) and sets a required `covers_held` flag on any gap over their pointers.
-4. **Gaps go to the owner**: sort the critics' gaps by priority and drop exact-title duplicates (after lowercasing, keeping the highest-priority copy; a reworded duplicate is not caught). No gap runs in the run that found it. Every gap goes to the owner batch, and a gap becomes a spec only in a later run, from an id the owner approved. A completeness critic sees a stopped or held unit's scope as uncovered and proposes it, and nothing in code can reliably tell that from a new gap; the owner can. A stopped critic's gaps and corrections are not used. Each gap carries an id, a topic from the brief's CLASSIFY categories, so the owner can approve by topic, and its `covers_held` flag.
+4. **Gaps go to the owner**: sort the critics' gaps by priority and drop exact-title duplicates (after lowercasing, keeping the highest-priority copy, which takes `covers_held` if any copy set it; a reworded duplicate is not caught). No gap runs in the run that found it. Every gap goes to the owner batch, and a gap becomes a spec only in a later run, from an id the owner approved. A completeness critic sees a stopped or held unit's scope as uncovered and proposes it, and nothing in code can reliably tell that from a new gap; the owner can. A stopped critic's gaps and corrections are not used. Each gap carries an id, a topic from the brief's CLASSIFY categories, so the owner can approve by topic, and its `covers_held` flag.
 
 ```javascript
 const groups = []
 for (let i = 0; i < done.length; i += GROUP) groups.push(done.slice(i, i + GROUP))
-const seen = new Set()   // several critics report the same gap: keep its highest-priority copy
-const gaps = critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)
-  .filter(g => !seen.has(g.title.toLowerCase()) && seen.add(g.title.toLowerCase()))
-  .map((g, i) => ({ ...g, id: `G-${TAG}-${i + 1}` }))   // each gap also carries a topic and covers_held
+const kept = new Map()   // several critics report the same gap: keep its highest-priority copy, with any copy's covers_held
+for (const g of critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)) {
+  const k = g.title.toLowerCase(), first = kept.get(k)
+  if (!first) kept.set(k, { ...g })
+  else first.covers_held = Boolean(first.covers_held || g.covers_held)
+}
+const gaps = [...kept.values()].map((g, i) => ({ ...g, id: `G-${TAG}-${i + 1}` }))   // each gap also carries a topic
 if (gaps.length) log(`${gaps.length} gap(s) for the owner batch, by topic; none runs in this run`)
 ```
 

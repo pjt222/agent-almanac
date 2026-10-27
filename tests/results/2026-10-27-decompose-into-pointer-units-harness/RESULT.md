@@ -38,7 +38,7 @@ After round 2 the owner chose to remove the class rather than patch each path: *
 
 Run from the repository root.
 
-- **`harness.mjs <EXAMPLES.md>`** extracts the Workflow skeleton from EXAMPLES.md byte for byte and runs it against mocked `agent`, `pipeline`, `parallel`, `phase` and `log`. It has 19 scenarios and 96 rows, covering:
+- **`harness.mjs <EXAMPLES.md>`** extracts the Workflow skeleton from EXAMPLES.md byte for byte and runs it against mocked `agent`, `pipeline`, `parallel`, `phase` and `log`. It has 20 scenarios and 98 rows, covering:
   - every unit clean, with every gap carrying an id, a topic and a `covers_held` flag, and every critic schema requiring the flag;
   - a stop from each of the three named sources, never listed as a no-result, told to every critic, and logged as not to be re-run;
   - a missing `stop` field, and a clean line that says "never stopped";
@@ -51,7 +51,8 @@ Run from the repository root.
   - for each stopped or no-result unit, verifier and critic: that it was launched exactly once, that its log line says the cause is undetermined or not to re-run it, and that its returned id is the basename of the file it writes;
   - `rerun_prompts`: the exact launched prompt for a verifier or critic with no result, and nothing for a unit, a stopped verifier or a stopped critic;
   - a `rerun` of a verifier and of a critic: one agent, the returned prompt byte for byte, its own schema, a verdict or gaps under the new tag, and a stop or a second no-result recorded; and a rerun of a unit id, with specs, without its prompt or without a tag refused;
-  - an approved gap spec, whose prompt points at the recorded gaps file.
+  - an approved gap spec, whose prompt points at the recorded gaps file;
+  - two critics reporting one gap with different `covers_held` flags: one copy is kept, the higher-priority one, and it carries the flag of the copy dropped.
 
   The mock completeness critic is **disobedient**. It proposes every spec it sees no digest entry for, held or stopped or not, so no row can pass on the strength of the critic obeying its prompt. A missing result field is graded as a failure, not a crash.
 - **`ledger.sh <SKILL.md> <bash|zsh>`** extracts nine SKILL.md snippets, each the one fence holding its anchor, so a moved or duplicated fence is refused (exit 2) rather than run in the wrong place:
@@ -87,16 +88,16 @@ Run from the repository root.
 
 | Check | Output | Result |
 |---|---|---|
-| `harness.mjs` on the skeleton at `51866b250` | `out/harness-at-51866b250.txt` | 80 of 96 rows FAIL |
-| `harness.mjs` on the skeleton at `760f21e5d` | `out/harness-at-760f21e5d.txt` | 56 of 96 rows FAIL, including "no gap unit runs over held scope" and the verifier no-result rows: the round-2 blocking findings, reproduced |
-| `harness.mjs` on the skeleton at `d85a189d7` | `out/harness-at-d85a189d7.txt` | 44 of 96 rows FAIL, including the round-3 rows (held guard, owner answer, `covers_held`, returned ids, log text) |
-| `harness.mjs` on the skeleton at `4164c5457` | `out/harness-at-4164c5457.txt` | 27 of 96 rows FAIL: the round-4 rows (`rerun_prompts`, `rerun`, the checker log text) |
-| `harness.mjs` on the revision | `out/harness-revised.txt` | 96 of 96 PASS |
+| `harness.mjs` on the skeleton at `51866b250` | `out/harness-at-51866b250.txt` | 82 of 98 rows FAIL |
+| `harness.mjs` on the skeleton at `760f21e5d` | `out/harness-at-760f21e5d.txt` | 58 of 98 rows FAIL, including "no gap unit runs over held scope" and the verifier no-result rows: the round-2 blocking findings, reproduced |
+| `harness.mjs` on the skeleton at `d85a189d7` | `out/harness-at-d85a189d7.txt` | 45 of 98 rows FAIL, including the round-3 rows (held guard, owner answer, `covers_held`, returned ids, log text) |
+| `harness.mjs` on the skeleton at `4164c5457` | `out/harness-at-4164c5457.txt` | 28 of 98 rows FAIL: the round-4 rows (`rerun_prompts`, `rerun`, the checker log text) and the duplicate-gap flag |
+| `harness.mjs` on the revision | `out/harness-revised.txt` | 98 of 98 PASS |
 | `derivers.sh` on EXAMPLES.md at `4164c5457`, bash and zsh | `out/derivers-at-4164c5457-bash.txt`, `-zsh.txt` | 13 of 45 rows FAIL under each: the time-ordered held list (AD4-4), the launch rows and the owner-spec id and reuse rows |
 | `derivers.sh` on the revision, bash and zsh | `out/derivers-bash.txt`, `out/derivers-zsh.txt` | 45 of 45 PASS under each |
 | `ledger.sh` on SKILL.md at `4164c5457`, bash and zsh | `out/ledger-at-4164c5457-bash.txt`, `-zsh.txt` | 20 of 47 rows FAIL under each, including "a hold logged after a release holds the id again" (AD4-4 in the ledger) |
 | `ledger.sh` on the revision, bash and zsh | `out/ledger-bash.txt`, `out/ledger-zsh.txt` | 47 of 47 PASS under each |
-| `mutants.py` | `out/mutants.txt` | baseline green; 70 of 70 KILLED, each on its named row |
+| `mutants.py` | `out/mutants.txt` | baseline green; 71 of 71 KILLED, each on its named row |
 
 The harness FAIL sets nest: every row failing at `4164c5457` also fails at `d85a189d7`, every row failing there also fails at `760f21e5d`, and every row failing there also fails at `51866b250`. Each head fails its own round's rows and every later round's, so the counts are not one round's findings each. The eight "ran once" rows pass at all four control heads, because no earlier skeleton re-ran anything in code; mutants M13 to M15, Ma and Mb fail each of them.
 
@@ -128,6 +129,7 @@ The harness FAIL sets nest: every row failing at `4164c5457` also fails at `d85a
 | M24 | not counting a stopped rerun | S17 rerun critic: a stop is recorded and its gaps not used |
 | M25 | "do not re-run" on the stopped-unit log line | stop reviewer: the log says not to re-run the stopped unit |
 | M26 | the gap spec's pointer to the recorded file | S19 gap spec: the prompt points at the recorded gaps file |
+| M27 | carrying a dropped duplicate's `covers_held` into the kept copy | S20 duplicate gaps: a dropped copy's covers_held is carried into the kept copy |
 | Ma | (inserted) a stopped unit re-run in code | stop reviewer: the stopped unit ran once |
 | Mb | (inserted) a stopped verifier re-run in code | S11 verifier stop: 'verify CL-B#1' ran once |
 | D1 | keeping a marked gap out of its topic | the marked gap and the flagged gap are not derived through the topic |

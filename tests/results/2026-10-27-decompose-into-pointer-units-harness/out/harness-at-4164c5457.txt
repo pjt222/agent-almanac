@@ -93,6 +93,8 @@ FAIL  S18 rerun refused: a unit id is refused before any agent
 FAIL  S18 rerun refused: a rerun with specs is refused before any agent
 FAIL  S18 rerun refused: a rerun without its prompt is refused before any agent
 FAIL  S18 rerun refused: a rerun without a tag is refused before any agent
+PASS  S20 duplicate gaps: one copy is kept, the higher-priority one
+FAIL  S20 duplicate gaps: a dropped copy's covers_held is carried into the kept copy
 PASS  S19 gap spec: the prompt points at the recorded gaps file
 
-27 FAIL
+28 FAIL

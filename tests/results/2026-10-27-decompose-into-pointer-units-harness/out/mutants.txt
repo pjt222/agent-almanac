@@ -236,6 +236,8 @@ KILLED  M25 the stopped-unit log line without "do not re-run": exit 1, 3 failing
     FAIL  stop policy-hook: the log says not to re-run the stopped unit
 KILLED  M26 a gap spec that does not point at the recorded file: exit 1, 1 failing row(s); expected row "S19 gap spec: the prompt points at the recorded gaps file"
     FAIL  S19 gap spec: the prompt points at the recorded gaps file
+KILLED  M27 a dropped duplicate's covers_held lost: exit 1, 1 failing row(s); expected row "S20 duplicate gaps: a dropped copy's covers_held is carried into the kept copy"
+    FAIL  S20 duplicate gaps: a dropped copy's covers_held is carried into the kept copy
 KILLED  Ma a stopped unit re-run in code: exit 1, 3 failing row(s); expected row "stop reviewer: the stopped unit ran once"
     FAIL  stop safety-classifier: the stopped unit ran once
     FAIL  stop reviewer: the stopped unit ran once

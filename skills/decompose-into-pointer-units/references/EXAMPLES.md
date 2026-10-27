@@ -137,12 +137,16 @@ const RETRY = 'cause undetermined: read its transcript by structure; only for a 
   + 'timeout), release it (SKILL.md Step 8) and re-run it once, alone, with args.rerun, its prompt from rerun_prompts and a new tag; '
   + 'anything else goes to the owner batch, and until then what it checks stays unchecked'
 const NOT_RERUN = 'do not re-run; its unit and cluster are re-launched only if the owner names them'
-// Several critics often report the same gap: keep its highest-priority copy, and give each an id for the owner batch.
+// Several critics often report the same gap: keep its highest-priority copy, carry into it the covers_held flag of any
+// copy dropped (a lost flag would let the gap be derived through its topic), and give each an id for the owner batch.
 const forOwner = (critics) => {
-  const seen = new Set()
-  return critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)
-    .filter(g => { const k = g.title.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true })
-    .map((g, i) => ({ ...g, id: `G-${TAG}-${i + 1}` }))
+  const kept = new Map()
+  for (const g of critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)) {
+    const k = g.title.toLowerCase(), first = kept.get(k)
+    if (!first) kept.set(k, { ...g })
+    else first.covers_held = Boolean(first.covers_held || g.covers_held)
+  }
+  return [...kept.values()].map((g, i) => ({ ...g, id: `G-${TAG}-${i + 1}` }))
 }
 
 if (RERUN) { // the one agent, with the prompt an earlier run returned for it, and nothing else

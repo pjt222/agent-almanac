@@ -29,7 +29,7 @@ const SOURCE_TEXT = { 'safety-classifier': 'a safety classifier', 'policy-hook':
 
 // One mock run. `units` maps a spec id to its behaviour: clean, stop:<source>, missing-stop,
 // negated-clean or null. `verifiers` maps a verifier label to null or stop:<source>.
-// `critics` maps a critic label to null or stop:<source>. The key '*' applies to every label not named.
+// `critics` maps a critic label to null, stop:<source> or gaps:<JSON list>. The key '*' applies to every label not named.
 async function run({ units = {}, verifiers = {}, critics = {}, specs = SPECS, extraArgs = {} }) {
   const calls = [], logs = [], prompts = {};
   const unitResult = (id, behaviour) => {
@@ -57,6 +57,7 @@ async function run({ units = {}, verifiers = {}, critics = {}, specs = SPECS, ex
     if (label.startsWith('critic ') || label.startsWith('completeness ')) {
       const b = critics[label] ?? critics['*'];
       if (b === 'null') return null;
+      if (b?.startsWith('gaps:')) return { report_path: `/r/${label}.txt`, corrections: [], gaps: JSON.parse(b.slice(5)), stop: 'none' };
       const gaps = label.startsWith('completeness ')
         ? specs.filter((s) => !prompt.includes(`## ${s.id} `)).map((s) => ({ title: `${s.id} uncovered`, question: `cover ${s.id}'s pointers`, priority: 1, topic: 'coverage', covers_held: false }))
         : [{ title: 'Generic gap', question: 'a question about the brief', priority: 2, topic: 'accuracy', covers_held: false }];
@@ -235,6 +236,14 @@ for (const [name, specs, extraArgs] of [
 ]) {
   const o = await run({ specs, extraArgs });
   check('S18 rerun refused', `${name} is refused before any agent`, o.thrown !== null && /rerun/.test(o.thrown.message) && o.calls.length === 0); }
+
+// S20: two critics report one gap (titles equal after lowercasing). The kept, higher-priority copy says covers_held false;
+// the dropped copy says true. The flag must survive the dedupe, or the gap deriver would derive it through its topic.
+{ const gap = (title, priority, flag) => ({ title, question: `q${priority}`, priority, topic: 'coverage', covers_held: flag });
+  const o = await run({ critics: { 'critic R1-1': `gaps:${JSON.stringify([gap('Same gap', 1, false)])}`, 'completeness R1': `gaps:${JSON.stringify([gap('same gap', 2, true)])}` } });
+  const same = (o.result?.gaps_for_owner ?? []).filter((g) => g.title.toLowerCase() === 'same gap');
+  check('S20 duplicate gaps', 'one copy is kept, the higher-priority one', same.length === 1 && same[0].priority === 1);
+  check('S20 duplicate gaps', 'a dropped copy\'s covers_held is carried into the kept copy', same.length === 1 && same[0].covers_held === true); }
 
 // S19: an approved gap spec reaches its unit as a pointer to the recorded question, never as the question's text.
 { const o = await run({ specs: [{ kind: 'gap', id: 'G-R0-1', g: 'G-R0-1', from: 'gaps/R0.json' }] });
