@@ -1,10 +1,10 @@
 locale: ja
-last_updated: '2026-10-23'
+last_updated: '2026-10-27'
 coverage:
   skills:
     translated: 347
-    total: 373
-    pct: 93
+    total: 374
+    pct: 92.8
     stale: 166
     stubs: 21
     unjudged: 2
@@ -31,8 +31,8 @@ coverage:
     unjudged: 1
   total:
     translated: 353
-    total: 507
-    pct: 69.6
+    total: 508
+    pct: 69.5
     stale: 171
     stubs: 32
     unjudged: 3
