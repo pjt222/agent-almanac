@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated": "2026-09-03T15:39:08.058Z",
-    "totalSkills": 372,
-    "totalAgents": 75,
+    "generated": "2026-10-27T09:41:22.433Z",
+    "totalSkills": 374,
+    "totalAgents": 76,
     "totalTeams": 22,
-    "totalNodes": 469,
-    "totalLinks": 1926,
-    "totalAgentLinks": 297,
+    "totalNodes": 472,
+    "totalLinks": 1936,
+    "totalAgentLinks": 301,
     "totalTeamLinks": 73,
     "totalDomains": 67,
     "supportedLocales": [
@@ -57,7 +57,7 @@
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
-      "count": 25
+      "count": 27
     },
     "citations": {
       "description": "Academic and software citation management with R and BibTeX",
@@ -2381,7 +2381,7 @@
       "domain": "git",
       "complexity": "intermediate",
       "language": "multi",
-      "description": "Coordinate with a peer interactive session sharing one git worktree — declare path scope before the first edit, survive a contended index lock, and read a guard slot you did not arm",
+      "description": "Coordinate with a peer interactive session sharing one git worktree — declare path scope before the first edit, survive a contended index lock, read a guard slot you did not arm, and divide the labour when one session leads",
       "tags": [
         "git",
         "coordination",
@@ -3599,6 +3599,59 @@
         "wenyan",
         "wenyan-ultra"
       ]
+    },
+    {
+      "id": "consult-a-decision-oracle",
+      "type": "skill",
+      "title": "Consult a Decision Oracle",
+      "domain": "general",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Add an external probabilistic classifier to a decision path without letting it take over — find the externally-graded rows you already log, measure the separation between the overrides that helped and the ones that harmed, choose an operating point the data licenses, fail open at the call site, and prove it offline with no API key",
+      "tags": [
+        "decision-oracle",
+        "confidence-scalar",
+        "threshold",
+        "classifier",
+        "fail-open",
+        "typed-decision",
+        "measurement",
+        "separation"
+      ],
+      "related": [],
+      "path": "consult-a-decision-oracle/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "decompose-into-pointer-units",
+      "type": "skill",
+      "title": "Decompose Into Pointer Units",
+      "domain": "general",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Run a large review, audit or migration as many narrow agent units derived mechanically from source artifacts, with pointer-only specs, one shared brief, template-assembled prompts, adversarial verifiers, grouped critics, a capped gap round, and stops recorded and routed to the owner rather than re-run",
+      "tags": [
+        "general",
+        "multi-agent",
+        "decomposition",
+        "provenance",
+        "audit",
+        "workflow"
+      ],
+      "related": [
+        "create-workflow",
+        "verify-agent-output",
+        "unleash-the-agents",
+        "create-work-breakdown-structure",
+        "manage-token-budget"
+      ],
+      "path": "decompose-into-pointer-units/SKILL.md",
+      "locales": []
     },
     {
       "id": "manage-bibliography",
@@ -10002,7 +10055,8 @@
         "implement-a2a-server",
         "build-ci-cd-pipeline",
         "troubleshoot-mcp-connection",
-        "review-software-architecture"
+        "review-software-architecture",
+        "test-x402-payment-client"
       ],
       "path": "test-a2a-interop/SKILL.md",
       "locales": [
@@ -15091,6 +15145,40 @@
       "locales": []
     },
     {
+      "id": "agent:adversarial-verifier",
+      "type": "agent",
+      "title": "Adversarial Verifier",
+      "priority": "normal",
+      "description": "Read-only adversarial verifier that re-derives every drafted claim from an already-captured artifact and blocks the unsupported ones",
+      "tags": [
+        "argumentation",
+        "critical-thinking",
+        "devil-advocate",
+        "review",
+        "verification",
+        "disclosure"
+      ],
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "mcp_servers": [],
+      "skills": [
+        "argumentation",
+        "verify-agent-output",
+        "redact-for-public-disclosure",
+        "search-prior-art"
+      ],
+      "path": "agents/adversarial-verifier.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
       "id": "agent:advocatus-diaboli",
       "type": "agent",
       "title": "Advocatus Diaboli",
@@ -15109,6 +15197,7 @@
         "Read",
         "Write",
         "Edit",
+        "Bash",
         "Grep",
         "Glob",
         "WebFetch",
@@ -18538,6 +18627,31 @@
     {
       "source": "choose-loop-wakeup-interval",
       "target": "write-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "decompose-into-pointer-units",
+      "target": "create-workflow",
+      "type": "skill"
+    },
+    {
+      "source": "decompose-into-pointer-units",
+      "target": "verify-agent-output",
+      "type": "skill"
+    },
+    {
+      "source": "decompose-into-pointer-units",
+      "target": "unleash-the-agents",
+      "type": "skill"
+    },
+    {
+      "source": "decompose-into-pointer-units",
+      "target": "create-work-breakdown-structure",
+      "type": "skill"
+    },
+    {
+      "source": "decompose-into-pointer-units",
+      "target": "manage-token-budget",
       "type": "skill"
     },
     {
@@ -22421,6 +22535,11 @@
       "type": "skill"
     },
     {
+      "source": "test-a2a-interop",
+      "target": "test-x402-payment-client",
+      "type": "skill"
+    },
+    {
       "source": "construct-geometric-figure",
       "target": "solve-trigonometric-problem",
       "type": "skill"
@@ -25318,6 +25437,26 @@
     {
       "source": "agent:adaptic",
       "target": "express-insight",
+      "type": "agent"
+    },
+    {
+      "source": "agent:adversarial-verifier",
+      "target": "argumentation",
+      "type": "agent"
+    },
+    {
+      "source": "agent:adversarial-verifier",
+      "target": "verify-agent-output",
+      "type": "agent"
+    },
+    {
+      "source": "agent:adversarial-verifier",
+      "target": "redact-for-public-disclosure",
+      "type": "agent"
+    },
+    {
+      "source": "agent:adversarial-verifier",
+      "target": "search-prior-art",
       "type": "agent"
     },
     {

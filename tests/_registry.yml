@@ -2,7 +2,7 @@
 # Machine-readable catalog of all test scenarios in this library.
 # Keep in sync with the actual test files on disk.
 
-total_tests: 30
+total_tests: 31
 version: "2.0"
 last_updated: "2026-07-11"
 
@@ -311,6 +311,16 @@ tests:
     priority: P1
     description: Commit changes skill in dry-run mode identifies untracked files and drafts message without committing
     tags: [commit-changes, skill-test, git, dry-run, read-only]
+
+  - id: test-decompose-into-pointer-units-planning
+    path: tests/scenarios/skills/test-decompose-into-pointer-units-planning.md
+    test_level: skill
+    target: decompose-into-pointer-units
+    category: E
+    duration_tier: quick
+    priority: P1
+    description: Pointer-unit decomposition in planning mode derives specs by script, proves coverage, and records a stopped unit without re-running it
+    tags: [decompose-into-pointer-units, skill-test, decomposition, provenance, stop-handling]
 
   - id: test-investigate-capa-root-cause
     path: tests/scenarios/skills/test-investigate-capa-root-cause.md
