@@ -1,0 +1,48 @@
+PASS  zsh step 2 coverage
+PASS  zsh step 2 issues
+PASS  zsh step 2 id checks
+PASS  zsh step 2 records the work list once, and lists every spec file
+PASS  zsh a second work list is refused
+PASS  zsh baseline ledger
+PASS  zsh step 7 pilot glance
+FAIL  zsh step 1: PRIOR_RUN unset is refused, and no unit log is started: got [rc=0 log=none] want [rc=1 log=none]
+FAIL  zsh step 1: PRIOR_RUN=none starts an empty unit log: got [rc=0 log=none] want [rc=0 log=0]
+FAIL  zsh step 1: a later run directory starts from a copy of the unit log: got [rc=0 log=none ] want [rc=0 log=1 same]
+FAIL  zsh step 1: an existing unit log is not overwritten: got [rc=0 log=1] want [rc=1 log=2]
+FAIL  zsh step 1: with the carried log, a later run directory still counts the stop: got [specs=7 reported=7 stopped=0 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
+FAIL  zsh no-result: a partial that cannot be moved is refused, and nothing is logged: got [ rc=0 lines=1] want [REFUSED: CL1.4.1-02.txt was not moved to partials/ (mv --backup needs GNU coreutils) rc=1 lines=0]
+PASS  zsh no-result: its partial moves to partials/ and it stays unaccounted
+PASS  zsh empty file is not reported
+FAIL  zsh release by owner with no Answered line is refused: got [REFUSED: no Answered line releases CL1.4.1-02 rc=1] want [REFUSED: no unused Answered line releases CL1.4.1-02 rc=1]
+PASS  zsh release of a stopped id is refused
+PASS  zsh release by owner from an Answered line is logged
+PASS  zsh released and not yet re-run is unaccounted
+PASS  zsh released, then re-run: reported, not held_ran
+PASS  zsh release after a report is refused
+FAIL  zsh a transient release is logged once: got [ rc=0|REFUSED: IS12 was already re-run once for a transient cause rc=1] want [ rc=0|REFUSED: a transient release is for the first no-result of IS12, with no release or hold since rc=1]
+PASS  zsh a verifier with no result: its partial moves, and a transient release is logged
+FAIL  zsh release: no unit log is refused, and none is started: got [awk: fatal: cannot open file `UNIT-LOG.txt' for reading: No such file or directory rc=0 started] want [REFUSED: no UNIT-LOG.txt rc=2 ]
+FAIL  zsh a transient release of a held id with no no-result is refused: got [ rc=0] want [REFUSED: a transient release is for the first no-result of IS15, with no release or hold since rc=1]
+FAIL  zsh a transient release of a no-result held over a stop since is refused: got [ rc=0] want [REFUSED: a transient release is for the first no-result of IS15, with no release or hold since rc=1]
+FAIL  zsh a transient release naming no transcript file is refused: got [ rc=0] want [REFUSED: no transcript at /nonexistent/IS15.jsonl rc=1]
+FAIL  zsh a transient release after an owner release and a second no-result is refused: got [ rc=0] want [REFUSED: a transient release is for the first no-result of CL1.4.1-02, with no release or hold since rc=1]
+FAIL  zsh a second owner release from the same Answered line is refused: got [ rc=0] want [REFUSED: no unused Answered line releases CL1.4.1-02 rc=1]
+FAIL  zsh ledger: no unit log is refused: got [specs=7 reported=7 stopped=0 held=0 unaccounted=0 extra=0 held_ran=0] want [REFUSED: no UNIT-LOG.txt]
+PASS  zsh a hand-written release does not lift a stop
+PASS  zsh reroute under a new id is extra
+PASS  zsh verifier, critic and lead files are not extra
+PASS  zsh a recorded gap spec without a report is unaccounted
+PASS  zsh a recorded gap spec with a report is reported
+PASS  zsh held spec is held, not unaccounted
+PASS  zsh held spec with a report is held_ran
+PASS  zsh a release after a held run is refused, and held_ran stays visible
+PASS  zsh a hold released from an unused Answered line is unaccounted until it runs
+FAIL  zsh an Answered line releases once: got [ rc=0] want [REFUSED: no unused Answered line releases G-R1-1 rc=1]
+FAIL  zsh a hold logged after a release holds the id again: got [specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0] want [specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
+FAIL  zsh a run under a hold logged after a release is held_ran: got [specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
+PASS  zsh a spec file added without being recorded is refused
+PASS  zsh re-derivation at chunk 5 after launch is refused
+FAIL  zsh restored work list matches again: got [specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
+PASS  zsh changed input refused
+
+19 FAIL (zsh)

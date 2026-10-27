@@ -3,7 +3,7 @@ PASS  zsh rows ids are ledger-safe
 PASS  zsh items count proof shows the skipped file
 PASS  zsh item ids are ledger-safe
 PASS  zsh record: a gaps_for_owner list is recorded
-PASS  zsh record: a second record of the same file is refused
+PASS  zsh record: a second record of the same file is refused, nothing written
 PASS  zsh record: a list without covers_held is refused and not recorded
 PASS  zsh gaps: approved topic plus single id; the marked gap and the flagged gap are not derived through the topic
 PASS  zsh gaps: the count line
@@ -28,9 +28,14 @@ PASS  zsh owner: a scope under the wrong unit is refused with exit 1, nothing re
 PASS  zsh owner: an empty list checks nothing and says so
 PASS  zsh owner: a non-owner spec in the file is refused
 PASS  zsh owner: a missing file is refused
-PASS  zsh owner: a file already recorded is refused
-PASS  zsh held: stopped ids and unreleased no-result and held ids; a release does not lift a stop; labels left out
-PASS  zsh held: the cluster list leaves the held ids out
+PASS  zsh owner: a file already recorded is refused, nothing written
+PASS  zsh held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out
+PASS  zsh held: a no-result or a hold logged after a release holds the id again
+PASS  zsh launch: after a stop or no-result, a unit that reported is not relaunched
+PASS  zsh launch: a RERUN line for this run relaunches the unit it names
+PASS  zsh launch: a RERUN line for another run does not
+PASS  zsh launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run)
+PASS  zsh launch: a missing cluster file is refused before any list is printed
 PASS  zsh held: a missing unit log is refused
 
 ALL PASS (zsh)

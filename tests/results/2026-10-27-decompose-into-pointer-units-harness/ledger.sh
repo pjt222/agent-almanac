@@ -5,8 +5,9 @@
 #   bash tests/results/2026-10-27-decompose-into-pointer-units-harness/ledger.sh <SKILL.md> <bash|zsh>
 # Prints one line per check (PASS / FAIL) and exits 1 if any check fails, 2 if a snippet cannot be found.
 # Two departures from byte for byte, both in fresh(): the Step 2 snippet runs at the scenario's chunk 4 (one
-# sed on its argument), and of Step 1 only the tool check and mech_sums run (the cp and gh lines need a real
-# repository), with the line that writes MECH-SHA256SUMS re-typed.
+# sed on its argument), and of Step 1 only the tool check, mech_sums and the unit-log case block run (the cp
+# and gh lines need a real repository), with the line that writes MECH-SHA256SUMS re-typed. fresh() starts
+# its unit log with a typed touch; the case block itself runs in the Step 1 rows.
 set -u
 skill=$1; shell=$2
 work=$(mktemp -d) || exit 2
@@ -27,6 +28,7 @@ node -e '
   }
 ' "$skill" "$work" || exit 2
 rg '^(for t in|mech_sums\(\))' "$work/step1.sh" > "$work/step1-local.sh"   # not the line that writes the sums
+sed -n '/^case "\${PRIOR_RUN/,/^esac/p' "$work/step1.sh" > "$work/step1-carry.sh"   # the unit-log case block
 rg '^work_sums\(\)' "$work/record.sh" > "$work/worksums-local.sh"
 sed 's/changelog.md" 6 >/changelog.md" 4 >/' "$work/step2.sh" > "$work/step2-chunk4.sh"
 
@@ -64,9 +66,27 @@ check 'baseline ledger' "$(ledger)" 'specs=7 reported=7 stopped=1 held=0 unaccou
 pilot=$(cd "$RUN_DIR" && $shell -c '. "$0"; . "$1"' "$work/step1-local.sh" "$work/step7.sh" 2>&1)
 check 'step 7 pilot glance' "$(printf '%s\n' "$pilot" | sed -n '1,4p' | tr '\n' '|')" 'CL1.5.0-01: VERDICT EVIDENCE OPEN|CL1.5.0-02: VERDICT|CL1.4.1-01: VERDICT EVIDENCE OPEN|pilot reports listed: 3 (read each one end to end before launching the rest)|'
 
+# Step 1's unit log: a later run directory of the job starts from a copy of the earlier one, so its ledger
+# (and the held list, derivers.sh) still sees the stop. PRIOR_RUN must be set; an existing log is kept.
+new="$work/run2"; rm -rf "${new:?}"; cp -r "$RUN_DIR" "$new"; rm "$new/UNIT-LOG.txt"
+carry() { (cd "$new" && RUN_DIR="$new" PRIOR_RUN="$1" $shell "$work/step1-carry.sh" > /dev/null 2>&1); printf 'rc=%s log=%s' "$?" "$([ -e "$new/UNIT-LOG.txt" ] && wc -l < "$new/UNIT-LOG.txt" | tr -d ' ' || echo none)"; }
+check 'step 1: PRIOR_RUN unset is refused, and no unit log is started' "$(carry '')" 'rc=1 log=none'
+check 'step 1: PRIOR_RUN=none starts an empty unit log' "$(carry none)" 'rc=0 log=0'
+rm "$new/UNIT-LOG.txt"
+check 'step 1: a later run directory starts from a copy of the unit log' "$(carry "$RUN_DIR") $(cmp -s "$new/UNIT-LOG.txt" "$RUN_DIR/UNIT-LOG.txt" && echo same)" 'rc=0 log=1 same'
+check 'step 1: an existing unit log is not overwritten' "$(printf 'x\n' >> "$new/UNIT-LOG.txt"; carry "$RUN_DIR")" 'rc=1 log=2'
+sed -i '$d' "$new/UNIT-LOG.txt"
+check 'step 1: with the carried log, a later run directory still counts the stop' "$(RUN_DIR="$new"; ledger)" 'specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0'
+rm -rf "${new:?}"
+
 # Variant B: a second unit with no result, which wrote a partial before dying. Logged as NORESULT by the
 # Step 8 snippet, its partial moves to partials/, and it stays unaccounted rather than becoming a stop.
+# Where mv has no --backup (BSD, busybox), the snippet refuses and logs nothing, rather than leaving the partial
+# to count as a report.
 printf 'VERDICT: partial\n' > "$RUN_DIR/CL1.4.1-02.txt"
+mkdir -p "$work/shim"; printf '#!/bin/sh\nexit 1\n' > "$work/shim/mv"; chmod +x "$work/shim/mv"
+before=$(wc -l < "$RUN_DIR/UNIT-LOG.txt")
+check 'no-result: a partial that cannot be moved is refused, and nothing is logged' "$(PATH="$work/shim:$PATH"; export PATH; in_run "$work/noresult.sh") lines=$(( $(wc -l < "$RUN_DIR/UNIT-LOG.txt") - before ))" 'REFUSED: CL1.4.1-02.txt was not moved to partials/ (mv --backup needs GNU coreutils) rc=1 lines=0'
 in_run "$work/noresult.sh" > /dev/null
 check 'no-result: its partial moves to partials/ and it stays unaccounted' "$(ledger) $(cat "$RUN_DIR/partials/CL1.4.1-02.txt")" 'specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0 VERDICT: partial'
 
@@ -75,9 +95,7 @@ check 'no-result: its partial moves to partials/ and it stays unaccounted' "$(le
 check 'empty file is not reported' "$(ledger)" 'specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0'
 rm -f "$RUN_DIR/CL1.4.1-02.txt"
 
-# A later run holds the no-result id; the owner then releases it, and it is re-run.
-printf '2026-10-27 HELD unit=CL1.4.1-02 reason=NORESULT\n' >> "$RUN_DIR/UNIT-LOG.txt"
-check 'a no-result held by a later run is held, not unaccounted' "$(ledger)" 'specs=7 reported=6 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0'
+# The owner releases the no-result, and it is re-run.
 cat > "$RUN_DIR/OWNER-QUESTIONS.md" <<'EOF'
 # run-001 owner batch (2026-10-27)
 
@@ -89,7 +107,7 @@ cat > "$RUN_DIR/OWNER-QUESTIONS.md" <<'EOF'
 
 - NORESULT, unit CL1.4.1-02: "re-run it once, unchanged" (a lead note in the Answered form, 2026-10-27)
 EOF
-check 'release by owner with no Answered line is refused' "$(in_run "$work/release.sh")" 'REFUSED: no Answered line releases CL1.4.1-02 rc=1'
+check 'release by owner with no Answered line is refused' "$(in_run "$work/release.sh")" 'REFUSED: no unused Answered line releases CL1.4.1-02 rc=1'
 mv "$RUN_DIR/CL1.5.0-02.txt" "$work/stopped-partial.txt"   # a stop with nothing on disk, so the report check cannot answer first
 check 'release of a stopped id is refused' "$(in_run "$(as_id release.sh CL1.5.0-02)")" 'REFUSED: CL1.5.0-02 is stopped; only an owner spec re-scopes it rc=1'
 mv "$work/stopped-partial.txt" "$RUN_DIR/CL1.5.0-02.txt"
@@ -100,11 +118,33 @@ printf 'VERDICT: ok\n' > "$RUN_DIR/CL1.4.1-02.txt"
 check 'released, then re-run: reported, not held_ran' "$(ledger)" 'specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0'
 check 'release after a report is refused' "$(in_run "$work/release.sh")" 'REFUSED: CL1.4.1-02.txt exists; a release comes before the run rc=1'
 
-# A transient no-result is released once, by the lead, from its transcript.
+# A transient no-result is released once, by the lead, from its transcript; a verifier or critic the same way.
+mkdir -p "$work/t"; : > "$work/t/IS12.jsonl"; : > "$work/t/V.jsonl"
+transient() { sed "s|BY=owner |BY=transient:$2 |" "$(as_id release.sh "$1")"; }   # the release snippet for id $1, transcript $2
 in_run "$(as_id noresult.sh IS12)" > /dev/null
-sed 's|BY=owner |BY=transient:/t/IS12.jsonl |' "$(as_id release.sh IS12)" > "$work/release-transient.sh"
-check 'a transient release is logged once' "$(in_run "$work/release-transient.sh")|$(in_run "$work/release-transient.sh")" ' rc=0|REFUSED: IS12 was already re-run once for a transient cause rc=1'
+transient IS12 "$work/t/IS12.jsonl" > "$work/release-transient.sh"
+check 'a transient release is logged once' "$(in_run "$work/release-transient.sh")|$(in_run "$work/release-transient.sh")" ' rc=0|REFUSED: a transient release is for the first no-result of IS12, with no release or hold since rc=1'
 printf 'VERDICT: ok\n' > "$RUN_DIR/IS12.txt"
+printf 'partial\n' > "$RUN_DIR/V-CL1.4.0-01-1.txt"
+in_run "$(as_id noresult.sh V-CL1.4.0-01-1)" > /dev/null
+transient V-CL1.4.0-01-1 "$work/t/V.jsonl" > "$work/release-v.sh"
+check 'a verifier with no result: its partial moves, and a transient release is logged' "$(in_run "$work/release-v.sh") $(cat "$RUN_DIR/partials/V-CL1.4.0-01-1.txt") $(rg -c 'RELEASED unit=V-CL1.4.0-01-1 by=transient:' "$RUN_DIR/UNIT-LOG.txt")" ' rc=0 partial 1'
+
+# The rest of the release arms run on a copy of the run directory, so the ledger rows below keep their state.
+side="$work/side"
+in_side() { rm -rf "${side:?}"; cp -r "$RUN_DIR" "$side"; eval "$1"; (RUN_DIR="$side"; export RUN_DIR; in_run "$2"); }
+# No report, so that without the log check the owner arm would answer and write a release into a new log.
+check 'release: no unit log is refused, and none is started' "$(in_side 'rm "$side/UNIT-LOG.txt" "$side/CL1.4.1-02.txt"' "$work/release.sh") $([ -e "$side/UNIT-LOG.txt" ] && echo started)" 'REFUSED: no UNIT-LOG.txt rc=2 '
+transient IS15 "$work/t/IS12.jsonl" > "$work/release-is15.sh"
+check 'a transient release of a held id with no no-result is refused' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 HELD unit=IS15 reason=overlaps-STOP-1\n" >> "$side/UNIT-LOG.txt"' "$work/release-is15.sh")" 'REFUSED: a transient release is for the first no-result of IS15, with no release or hold since rc=1'
+check 'a transient release of a no-result held over a stop since is refused' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 NORESULT unit=IS15 cause=undetermined\n2026-10-27 HELD unit=IS15 reason=overlaps-STOP-2\n" >> "$side/UNIT-LOG.txt"' "$work/release-is15.sh")" 'REFUSED: a transient release is for the first no-result of IS15, with no release or hold since rc=1'
+transient IS15 /nonexistent/IS15.jsonl > "$work/release-notranscript.sh"
+check 'a transient release naming no transcript file is refused' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 NORESULT unit=IS15 cause=undetermined\n" >> "$side/UNIT-LOG.txt"' "$work/release-notranscript.sh")" 'REFUSED: no transcript at /nonexistent/IS15.jsonl rc=1'
+transient CL1.4.1-02 "$work/t/IS12.jsonl" > "$work/release-again.sh"
+check 'a transient release after an owner release and a second no-result is refused' "$(in_side 'rm "$side/CL1.4.1-02.txt"; printf "2026-10-27 NORESULT unit=CL1.4.1-02 cause=undetermined\n" >> "$side/UNIT-LOG.txt"' "$work/release-again.sh")" 'REFUSED: a transient release is for the first no-result of CL1.4.1-02, with no release or hold since rc=1'
+check 'a second owner release from the same Answered line is refused' "$(in_side 'rm "$side/CL1.4.1-02.txt"; printf "2026-10-27 NORESULT unit=CL1.4.1-02 cause=undetermined\n" >> "$side/UNIT-LOG.txt"' "$work/release.sh")" 'REFUSED: no unused Answered line releases CL1.4.1-02 rc=1'
+check 'ledger: no unit log is refused' "$(in_side 'rm "$side/UNIT-LOG.txt"' /dev/null >/dev/null; (RUN_DIR="$side"; ledger))" 'REFUSED: no UNIT-LOG.txt'
+rm -rf "${side:?}"
 
 # A RELEASED line written by hand does not lift a stop.
 printf '2026-10-27 RELEASED unit=CL1.5.0-02 by=owner\n' >> "$RUN_DIR/UNIT-LOG.txt"
@@ -135,8 +175,17 @@ check 'held spec is held, not unaccounted' "$(ledger)" 'specs=8 reported=7 stopp
 printf 'VERDICT: ok\n' > "$RUN_DIR/G-R1-1.txt"
 check 'held spec with a report is held_ran' "$(ledger)" 'specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1'
 sed 's/^ID=CL1.4.1-02/ID=G-R1-1/' "$work/release.sh" > "$work/release-g.sh"
-printf -- '- HELD, unit G-R1-1: "run it" (owner message, 2026-10-27)\n' >> "$RUN_DIR/OWNER-QUESTIONS.md"
+sed -i 's/^- STOP-1, unit CL1.5.0-02: "hold".*$/&\n- HELD, unit G-R1-1: "the overlap is ruled out; run it" (owner message, 2026-10-27)/' "$RUN_DIR/OWNER-QUESTIONS.md"
 check 'a release after a held run is refused, and held_ran stays visible' "$(in_run "$work/release-g.sh") $(ledger)" 'REFUSED: G-R1-1.txt exists; a release comes before the run rc=1 specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1'
+
+# A release is an event: it lifts the hold before it, and a hold logged after it holds the id again.
+rm -f "$RUN_DIR/G-R1-1.txt"
+check 'a hold released from an unused Answered line is unaccounted until it runs' "$(in_run "$work/release-g.sh") $(ledger)" ' rc=0 specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0'
+check 'an Answered line releases once' "$(in_run "$work/release-g.sh")" 'REFUSED: no unused Answered line releases G-R1-1 rc=1'
+printf '2026-10-27 HELD unit=G-R1-1 reason=overlaps-STOP-2\n' >> "$RUN_DIR/UNIT-LOG.txt"
+check 'a hold logged after a release holds the id again' "$(ledger)" 'specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0'
+printf 'VERDICT: ok\n' > "$RUN_DIR/G-R1-1.txt"
+check 'a run under a hold logged after a release is held_ran' "$(ledger)" 'specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1'
 
 # The work list: a spec file added without being recorded, or a re-derivation after launch, is refused.
 printf '[{"kind":"cl","id":"CL-X","release":"1.5.0","lines":[8]}]\n' > "$RUN_DIR/specs/added.json"

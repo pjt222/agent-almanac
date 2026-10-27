@@ -1,12 +1,14 @@
 baseline green: harness.mjs and derivers.sh on EXAMPLES.md, ledger.sh on SKILL.md, under zsh
-KILLED  M1 stop check narrowed to one source: exit 1, 14 failing row(s); expected row "stop reviewer: recorded as stopped"
+KILLED  M1 stop check narrowed to one source: exit 1, 18 failing row(s); expected row "stop reviewer: recorded as stopped"
     FAIL  stop reviewer: recorded as stopped
     FAIL  stop reviewer: no verifier for the stopped unit
+    FAIL  stop reviewer: the log says not to re-run the stopped unit
     FAIL  stop reviewer: no gap unit runs, though the critic proposes the stopped scope
     FAIL  stop reviewer: the completeness critic is told the stopped id is held
     FAIL  stop reviewer: the accuracy critic is told the stopped id is held
     FAIL  stop policy-hook: recorded as stopped
     FAIL  stop policy-hook: no verifier for the stopped unit
+    FAIL  stop policy-hook: the log says not to re-run the stopped unit
     FAIL  stop policy-hook: no gap unit runs, though the critic proposes the stopped scope
     FAIL  stop policy-hook: the completeness critic is told the stopped id is held
     FAIL  stop policy-hook: the accuracy critic is told the stopped id is held
@@ -14,6 +16,8 @@ KILLED  M1 stop check narrowed to one source: exit 1, 14 failing row(s); expecte
     FAIL  S11 verifier stop: recorded in verifier_stopped
     FAIL  S11 verifier stop: its verdict is not counted
     FAIL  S11 verifier stop: the log says not to re-run it
+    FAIL  S16 rerun verifier: a stop is recorded and its verdict not counted
+    FAIL  S17 rerun critic: a stop is recorded and its gaps not used
 KILLED  M2 verifier stop not checked: exit 1, 3 failing row(s); expected row "S11 verifier stop: recorded in verifier_stopped"
     FAIL  S11 verifier stop: recorded in verifier_stopped
     FAIL  S11 verifier stop: its verdict is not counted
@@ -25,7 +29,7 @@ KILLED  M4 held filter removed: exit 1, 1 failing row(s); expected row "S9 held 
 KILLED  M5 verifier no-result not recorded: exit 1, 3 failing row(s); expected row "S10 verifier no result: recorded in verifier_no_result"
     FAIL  S10 verifier no result: recorded in verifier_no_result
     FAIL  S10 verifier no result: the log says the cause is undetermined
-    FAIL  S10 verifier no result: the log says not to re-run it
+    FAIL  S10 verifier no result: the log allows one re-run with args.rerun, for a transient failure only
 KILLED  M6 owner-spec guard removed: exit 1, 2 failing row(s); expected row "an owner spec without its unit is refused"
     FAIL  S13 owner spec: an owner spec without its unit is refused before any agent
     FAIL  S13 owner spec: an owner spec whose answer is not a STOP-<n> is refused before any agent
@@ -58,9 +62,10 @@ KILLED  M15 a stopped or no-result critic re-run in code: exit 1, 2 failing row(
     FAIL  S14 critic stop: 'completeness R1' ran once
 KILLED  M16 the verifier no-result log line dropped: exit 1, 2 failing row(s); expected row "S10 verifier no result: the log says the cause is undetermined"
     FAIL  S10 verifier no result: the log says the cause is undetermined
-    FAIL  S10 verifier no result: the log says not to re-run it
-KILLED  M17 covers_held not required of a gap: exit 1, 1 failing row(s); expected row "every critic schema requires covers_held"
+    FAIL  S10 verifier no result: the log allows one re-run with args.rerun, for a transient failure only
+KILLED  M17 covers_held not required of a gap: exit 1, 2 failing row(s); expected row "every critic schema requires covers_held"
     FAIL  S1 clean: every critic schema requires covers_held
+    FAIL  S17 rerun critic: it runs with the critic schema
 KILLED  D1 marked gaps not excluded from a topic: exit 1, 3 failing row(s); expected row "the marked gap and the flagged gap are not derived through the topic"
     FAIL  zsh gaps: approved topic plus single id; the marked gap and the flagged gap are not derived through the topic: got [G-R1-1,G-R1-2,G-R1-4] want [G-R1-1,G-R1-4]
     FAIL  zsh gaps: the count line: got [gaps=5 derived=3 flagged_in_approved_topics=1 rc=0] want [gaps=5 derived=2 flagged_in_approved_topics=1 rc=0]
@@ -81,17 +86,18 @@ KILLED  D5 owner check exits 0 on a refusal: exit 1, 6 failing row(s); expected 
     FAIL  zsh owner: a scope with the wrong STOP number is refused with exit 1, nothing recorded: got [owner specs checked: 2 REFUSED OW-5 rc=0 yes] want [owner specs checked: 2 REFUSED OW-5 rc=1 no]
     FAIL  zsh owner: a scope on a line with no citation is refused with exit 1, nothing recorded: got [owner specs checked: 2 REFUSED OW-6 rc=0 yes] want [owner specs checked: 2 REFUSED OW-6 rc=1 no]
     FAIL  zsh owner: a scope under the wrong unit is refused with exit 1, nothing recorded: got [owner specs checked: 2 REFUSED OW-7 rc=0 yes] want [owner specs checked: 2 REFUSED OW-7 rc=1 no]
-KILLED  D6 released ids not subtracted from the held list: exit 1, 2 failing row(s); expected row "held: stopped ids and unreleased no-result and held ids"
-    FAIL  zsh held: stopped ids and unreleased no-result and held ids; a release does not lift a stop; labels left out: got [held=["CL-B","CL-D","CL-E","CL-F"]] want [held=["CL-B","CL-D","CL-F"]]
-    FAIL  zsh held: the cluster list leaves the held ids out: got [CL-A,CL-C] want [CL-A,CL-C,CL-E]
+KILLED  D6 a release never lifts a hold in the held list: exit 1, 4 failing row(s); expected row "held: stopped ids and ids whose last no-result, hold or release line is not a release"
+    FAIL  zsh held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out: got [held=["RW-B","RW-D","RW-E","RW-F","RW-G","RW-H","RW-Z"]] want [held=["RW-B","RW-D","RW-F","RW-G","RW-H","RW-Z"]]
+    FAIL  zsh launch: after a stop or no-result, a unit that reported is not relaunched: got [not relaunched, reported already: ["RW-A","RW-C"]|] want [not relaunched, reported already: ["RW-A","RW-C"]|RW-E]
+    FAIL  zsh launch: a RERUN line for this run relaunches the unit it names: got [RW-A] want [RW-A,RW-E]
+    FAIL  zsh launch: a RERUN line for another run does not: got [] want [RW-E]
 KILLED  D7 gap deriver skips the work-list check: exit 1, 1 failing row(s); expected row "gaps: a gaps file changed after it was recorded is refused"
     FAIL  zsh gaps: a gaps file changed after it was recorded is refused: got [gaps=5 derived=2 flagged_in_approved_topics=1 rc=0 G-R1-1,G-R1-2] want [REFUSED: gaps/R1.json was never recorded, or the work list changed after it was rc=1 none]
 KILLED  D8 a gaps file recorded without covers_held: exit 1, 1 failing row(s); expected row "record: a list without covers_held is refused"
     FAIL  zsh record: a list without covers_held is refused and not recorded: got [ rc=0 recorded=yes] want [REFUSED: gaps/R2.json is not a gaps_for_owner list rc=1 recorded=no]
-KILLED  L1 stop pattern unanchored: exit 1, 14 failing row(s); expected row "no-result: its partial moves to partials/ and it stays unaccounted"
+KILLED  L1 stop pattern unanchored: exit 1, 16 failing row(s); expected row "no-result: its partial moves to partials/ and it stays unaccounted"
     FAIL  zsh no-result: its partial moves to partials/ and it stays unaccounted: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0 VERDICT: partial] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0 VERDICT: partial]
     FAIL  zsh empty file is not reported: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
-    FAIL  zsh a no-result held by a later run is held, not unaccounted: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
     FAIL  zsh released and not yet re-run is unaccounted: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
     FAIL  zsh released, then re-run: reported, not held_ran: got [specs=7 reported=7 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
     FAIL  zsh a hand-written release does not lift a stop: got [specs=7 reported=7 stopped=3 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
@@ -102,41 +108,120 @@ KILLED  L1 stop pattern unanchored: exit 1, 14 failing row(s); expected row "no-
     FAIL  zsh held spec is held, not unaccounted: got [specs=8 reported=7 stopped=4 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
     FAIL  zsh held spec with a report is held_ran: got [specs=8 reported=8 stopped=4 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
     FAIL  zsh a release after a held run is refused, and held_ran stays visible: got [REFUSED: G-R1-1.txt exists; a release comes before the run rc=1 specs=8 reported=8 stopped=4 held=0 unaccounted=0 extra=0 held_ran=0] want [REFUSED: G-R1-1.txt exists; a release comes before the run rc=1 specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
+    FAIL  zsh a hold released from an unused Answered line is unaccounted until it runs: got [ rc=0 specs=8 reported=7 stopped=4 held=0 unaccounted=0 extra=0 held_ran=0] want [ rc=0 specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
+    FAIL  zsh a hold logged after a release holds the id again: got [specs=8 reported=7 stopped=4 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
+    FAIL  zsh a run under a hold logged after a release is held_ran: got [specs=8 reported=8 stopped=4 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
     FAIL  zsh restored work list matches again: got [specs=8 reported=8 stopped=4 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
 KILLED  L2 empty files counted: exit 1, 1 failing row(s); expected row "empty file is not reported"
     FAIL  zsh empty file is not reported: got [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
 KILLED  L3 checksum re-check dropped: exit 1, 1 failing row(s); expected row "changed input refused"
     FAIL  zsh changed input refused: got [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1] want [mechanical/ changed during the run]
 KILLED  L4 held ids not subtracted: exit 1, 2 failing row(s); expected row "held spec is held, not unaccounted"
-    FAIL  zsh a no-result held by a later run is held, not unaccounted: got [specs=7 reported=6 stopped=1 held=1 unaccounted=1 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
     FAIL  zsh held spec is held, not unaccounted: got [specs=8 reported=7 stopped=1 held=1 unaccounted=1 extra=0 held_ran=0] want [specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
+    FAIL  zsh a hold logged after a release holds the id again: got [specs=8 reported=7 stopped=1 held=1 unaccounted=1 extra=0 held_ran=0] want [specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
 KILLED  L5 work-list check dropped: exit 1, 2 failing row(s); expected row "re-derivation at chunk 5 after launch is refused"
     FAIL  zsh a spec file added without being recorded is refused: got [specs=9 reported=8 stopped=1 held=1 unaccounted=1 extra=0 held_ran=1] want [the work list changed after it was recorded]
     FAIL  zsh re-derivation at chunk 5 after launch is refused: got [[[4,5,6,7,8],[9]] specs=7 reported=7 stopped=1 held=1 unaccounted=0 extra=1 held_ran=1] want [[[4,5,6,7,8],[9]] the work list changed after it was recorded]
 KILLED  L6 a second work list not refused: exit 1, 1 failing row(s); expected row "a second work list is refused"
     FAIL  zsh a second work list is refused: got [ rc=0] want [REFUSED: the work list is already recorded; a new one is a re-run (Step 8 item 2) rc=2]
-KILLED  L7 released ids not subtracted from held: exit 1, 11 failing row(s); expected row "released and not yet re-run is unaccounted"
-    FAIL  zsh released and not yet re-run is unaccounted: got [specs=7 reported=6 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
-    FAIL  zsh released, then re-run: reported, not held_ran: got [specs=7 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
-    FAIL  zsh a hand-written release does not lift a stop: got [specs=7 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
-    FAIL  zsh reroute under a new id is extra: got [specs=7 reported=7 stopped=1 held=1 unaccounted=0 extra=1 held_ran=1] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=1 held_ran=0]
-    FAIL  zsh verifier, critic and lead files are not extra: got [specs=7 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
-    FAIL  zsh a recorded gap spec without a report is unaccounted: got [specs=8 reported=7 stopped=1 held=1 unaccounted=1 extra=0 held_ran=1] want [specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
-    FAIL  zsh a recorded gap spec with a report is reported: got [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1] want [specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
-    FAIL  zsh held spec is held, not unaccounted: got [specs=8 reported=7 stopped=1 held=2 unaccounted=0 extra=0 held_ran=1] want [specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
-    FAIL  zsh held spec with a report is held_ran: got [specs=8 reported=8 stopped=1 held=2 unaccounted=0 extra=0 held_ran=2] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
-    FAIL  zsh a release after a held run is refused, and held_ran stays visible: got [REFUSED: G-R1-1.txt exists; a release comes before the run rc=1 specs=8 reported=8 stopped=1 held=2 unaccounted=0 extra=0 held_ran=2] want [REFUSED: G-R1-1.txt exists; a release comes before the run rc=1 specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
-    FAIL  zsh restored work list matches again: got [specs=8 reported=8 stopped=1 held=2 unaccounted=0 extra=0 held_ran=2] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
-KILLED  L8 a release after a report not refused: exit 1, 2 failing row(s); expected row "release after a report is refused"
-    FAIL  zsh release after a report is refused: got [ rc=0] want [REFUSED: CL1.4.1-02.txt exists; a release comes before the run rc=1]
-    FAIL  zsh a release after a held run is refused, and held_ran stays visible: got [REFUSED: no Answered line releases G-R1-1 rc=1 specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1] want [REFUSED: G-R1-1.txt exists; a release comes before the run rc=1 specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
-KILLED  L9 a no-result partial left in place: exit 1, 2 failing row(s); expected row "no-result: its partial moves to partials/"
+KILLED  L7 a release never lifts a hold in the ledger: exit 1, 1 failing row(s); expected row "a hold released from an unused Answered line is unaccounted until it runs"
+    FAIL  zsh a hold released from an unused Answered line is unaccounted until it runs: got [ rc=0 specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0] want [ rc=0 specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
+KILLED  L8 a release after a report not refused: exit 1, 3 failing row(s); expected row "release after a report is refused"
+    FAIL  zsh release after a report is refused: got [REFUSED: no unused Answered line releases CL1.4.1-02 rc=1] want [REFUSED: CL1.4.1-02.txt exists; a release comes before the run rc=1]
+    FAIL  zsh a release after a held run is refused, and held_ran stays visible: got [ rc=0 specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [REFUSED: G-R1-1.txt exists; a release comes before the run rc=1 specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
+    FAIL  zsh a hold released from an unused Answered line is unaccounted until it runs: got [REFUSED: no unused Answered line releases G-R1-1 rc=1 specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0] want [ rc=0 specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
+KILLED  L9 a no-result partial left in place: exit 1, 4 failing row(s); expected row "no-result: its partial moves to partials/"
+    FAIL  zsh no-result: a partial that cannot be moved is refused, and nothing is logged: got [ rc=0 lines=1] want [REFUSED: CL1.4.1-02.txt was not moved to partials/ (mv --backup needs GNU coreutils) rc=1 lines=0]
     FAIL  zsh no-result: its partial moves to partials/ and it stays unaccounted: got [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0 ] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0 VERDICT: partial]
-    FAIL  zsh a transient release is logged once: got [REFUSED: IS12.txt exists; a release comes before the run rc=1|REFUSED: IS12.txt exists; a release comes before the run rc=1] want [ rc=0|REFUSED: IS12 was already re-run once for a transient cause rc=1]
+    FAIL  zsh a transient release is logged once: got [REFUSED: IS12.txt exists; a release comes before the run rc=1|REFUSED: IS12.txt exists; a release comes before the run rc=1] want [ rc=0|REFUSED: a transient release is for the first no-result of IS12, with no release or hold since rc=1]
+    FAIL  zsh a verifier with no result: its partial moves, and a transient release is logged: got [REFUSED: V-CL1.4.0-01-1.txt exists; a release comes before the run rc=1  ] want [ rc=0 partial 1]
 KILLED  L10 a stopped id released: exit 1, 1 failing row(s); expected row "release of a stopped id is refused"
-    FAIL  zsh release of a stopped id is refused: got [REFUSED: no Answered line releases CL1.5.0-02 rc=1] want [REFUSED: CL1.5.0-02 is stopped; only an owner spec re-scopes it rc=1]
-KILLED  L11 a second transient release not refused: exit 1, 1 failing row(s); expected row "a transient release is logged once"
-    FAIL  zsh a transient release is logged once: got [ rc=0| rc=0] want [ rc=0|REFUSED: IS12 was already re-run once for a transient cause rc=1]
+    FAIL  zsh release of a stopped id is refused: got [REFUSED: no unused Answered line releases CL1.5.0-02 rc=1] want [REFUSED: CL1.5.0-02 is stopped; only an owner spec re-scopes it rc=1]
+KILLED  L11 a transient release not bound to a first, unreleased no-result: exit 1, 4 failing row(s); expected row "a transient release is logged once"
+    FAIL  zsh a transient release is logged once: got [ rc=0| rc=0] want [ rc=0|REFUSED: a transient release is for the first no-result of IS12, with no release or hold since rc=1]
+    FAIL  zsh a transient release of a held id with no no-result is refused: got [ rc=0] want [REFUSED: a transient release is for the first no-result of IS15, with no release or hold since rc=1]
+    FAIL  zsh a transient release of a no-result held over a stop since is refused: got [ rc=0] want [REFUSED: a transient release is for the first no-result of IS15, with no release or hold since rc=1]
+    FAIL  zsh a transient release after an owner release and a second no-result is refused: got [ rc=0] want [REFUSED: a transient release is for the first no-result of CL1.4.1-02, with no release or hold since rc=1]
 KILLED  L12 an owner release read outside the Answered section: exit 1, 2 failing row(s); expected row "release by owner with no Answered line is refused"
-    FAIL  zsh release by owner with no Answered line is refused: got [ rc=0] want [REFUSED: no Answered line releases CL1.4.1-02 rc=1]
+    FAIL  zsh release by owner with no Answered line is refused: got [ rc=0] want [REFUSED: no unused Answered line releases CL1.4.1-02 rc=1]
     FAIL  zsh release by owner from an Answered line is logged: got [ rc=0 2] want [ rc=0 1]
+KILLED  L13 a release lifts a hold logged after it (Step 10): exit 1, 3 failing row(s); expected row "a hold logged after a release holds the id again"
+    FAIL  zsh a hold logged after a release holds the id again: got [specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0] want [specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
+    FAIL  zsh a run under a hold logged after a release is held_ran: got [specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
+    FAIL  zsh restored work list matches again: got [specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
+KILLED  L14 a transient release without its transcript: exit 1, 1 failing row(s); expected row "a transient release naming no transcript file is refused"
+    FAIL  zsh a transient release naming no transcript file is refused: got [ rc=0] want [REFUSED: no transcript at /nonexistent/IS15.jsonl rc=1]
+KILLED  L15 an Answered line releases more than once: exit 1, 2 failing row(s); expected row "an Answered line releases once"
+    FAIL  zsh a second owner release from the same Answered line is refused: got [ rc=0] want [REFUSED: no unused Answered line releases CL1.4.1-02 rc=1]
+    FAIL  zsh an Answered line releases once: got [ rc=0] want [REFUSED: no unused Answered line releases G-R1-1 rc=1]
+KILLED  L16 a release without a unit log: exit 1, 1 failing row(s); expected row "release: no unit log is refused, and none is started"
+    FAIL  zsh release: no unit log is refused, and none is started: got [awk: fatal: cannot open file `UNIT-LOG.txt' for reading: No such file or directory awk: fatal: cannot open file `UNIT-LOG.txt' for reading: No such file or directory rc=0 started] want [REFUSED: no UNIT-LOG.txt rc=2 ]
+KILLED  L17 a ledger without a unit log: exit 1, 1 failing row(s); expected row "ledger: no unit log is refused"
+    FAIL  zsh ledger: no unit log is refused: got [specs=7 reported=7 stopped=0 held=0 unaccounted=0 extra=0 held_ran=0] want [REFUSED: no UNIT-LOG.txt]
+KILLED  L18 a later run directory starts an empty unit log: exit 1, 3 failing row(s); expected row "step 1: with the carried log, a later run directory still counts the stop"
+    FAIL  zsh step 1: a later run directory starts from a copy of the unit log: got [rc=0 log=0 ] want [rc=0 log=1 same]
+    FAIL  zsh step 1: an existing unit log is not overwritten: got [rc=1 log=1] want [rc=1 log=2]
+    FAIL  zsh step 1: with the carried log, a later run directory still counts the stop: got [specs=7 reported=7 stopped=0 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
+KILLED  L19 an existing unit log overwritten: exit 1, 2 failing row(s); expected row "step 1: an existing unit log is not overwritten"
+    FAIL  zsh step 1: an existing unit log is not overwritten: got [rc=0 log=1] want [rc=1 log=2]
+    FAIL  zsh step 1: with the carried log, a later run directory still counts the stop: got [specs=7 reported=7 stopped=0 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
+KILLED  L20 a failed mv logged as a no-result: exit 1, 1 failing row(s); expected row "no-result: a partial that cannot be moved is refused, and nothing is logged"
+    FAIL  zsh no-result: a partial that cannot be moved is refused, and nothing is logged: got [ rc=0 lines=1] want [REFUSED: CL1.4.1-02.txt was not moved to partials/ (mv --backup needs GNU coreutils) rc=1 lines=0]
+KILLED  L21 a transient release over a hold logged since: exit 1, 1 failing row(s); expected row "a transient release of a no-result held over a stop since is refused"
+    FAIL  zsh a transient release of a no-result held over a stop since is refused: got [ rc=0] want [REFUSED: a transient release is for the first no-result of IS15, with no release or hold since rc=1]
+KILLED  L22 a transient release of a second no-result: exit 1, 1 failing row(s); expected row "a transient release after an owner release and a second no-result is refused"
+    FAIL  zsh a transient release after an owner release and a second no-result is refused: got [ rc=0] want [REFUSED: a transient release is for the first no-result of CL1.4.1-02, with no release or hold since rc=1]
+KILLED  D9 a release lifts a no-result or hold logged after it (held list): exit 1, 5 failing row(s); expected row "held: a no-result or a hold logged after a release holds the id again"
+    FAIL  zsh held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out: got [held=["RW-B","RW-D","RW-F","RW-Z"]] want [held=["RW-B","RW-D","RW-F","RW-G","RW-H","RW-Z"]]
+    FAIL  zsh held: a no-result or a hold logged after a release holds the id again: got [] want [RW-G,RW-H]
+    FAIL  zsh launch: after a stop or no-result, a unit that reported is not relaunched: got [not relaunched, reported already: ["RW-A","RW-C"]|RW-E,RW-G,RW-H] want [not relaunched, reported already: ["RW-A","RW-C"]|RW-E]
+    FAIL  zsh launch: a RERUN line for this run relaunches the unit it names: got [RW-A,RW-E,RW-G,RW-H] want [RW-A,RW-E]
+    FAIL  zsh launch: a RERUN line for another run does not: got [RW-E,RW-G,RW-H] want [RW-E]
+KILLED  D10 reported units relaunched after a stop: exit 1, 3 failing row(s); expected row "launch: after a stop or no-result, a unit that reported is not relaunched"
+    FAIL  zsh launch: after a stop or no-result, a unit that reported is not relaunched: got [not relaunched, reported already: ["RW-A","RW-C"]|RW-A,RW-C,RW-E] want [not relaunched, reported already: ["RW-A","RW-C"]|RW-E]
+    FAIL  zsh launch: a RERUN line for this run relaunches the unit it names: got [RW-A,RW-C,RW-E] want [RW-A,RW-E]
+    FAIL  zsh launch: a RERUN line for another run does not: got [RW-A,RW-C,RW-E] want [RW-E]
+KILLED  D11 a RERUN line not bound to its tag: exit 1, 1 failing row(s); expected row "launch: a RERUN line for another run does not"
+    FAIL  zsh launch: a RERUN line for another run does not: got [RW-A,RW-E] want [RW-E]
+KILLED  D12 reported units held back with no stop in the job: exit 1, 1 failing row(s); expected row "launch: with no stop or no-result in the job, reported units relaunch"
+    FAIL  zsh launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run): got [held=[]|not relaunched, reported already: ["RW-A","RW-C"]|RW-B,RW-D,RW-E,RW-F,RW-G,RW-H] want [held=[]|not relaunched, reported already: []|RW-A,RW-B,RW-C,RW-D,RW-E,RW-F,RW-G,RW-H]
+KILLED  D13 an unreadable cluster not refused: exit 1, 1 failing row(s); expected row "launch: a missing cluster file is refused before any list is printed"
+    FAIL  zsh launch: a missing cluster file is refused before any list is printed: got [jq: error: Could not open file specs/rows.json: No such file or directory held=[] not relaunched, reported already: [] jq: error: Could not open file specs/rows.json: No such file or directory rc=2] want [REFUSED: specs/rows.json is not a spec list rc=2]
+KILLED  M18 a rerun prompt that is not the launched one: exit 1, 1 failing row(s); expected row "S10 verifier no result: its rerun prompt is the prompt it was launched with"
+    FAIL  S10 verifier no result: its rerun prompt is the prompt it was launched with
+KILLED  M19 a stopped critic given a rerun prompt: exit 1, 1 failing row(s); expected row "S14 critic stop: a stopped critic has no rerun prompt"
+    FAIL  S14 critic stop: a stopped critic has no rerun prompt
+KILLED  M20 a rerun that runs the whole skeleton too: exit 1, 12 failing row(s); expected row "S16 rerun verifier: exactly one agent runs"
+    FAIL  S16 rerun verifier: exactly one agent runs
+    FAIL  S16 rerun verifier: it runs the returned prompt, byte for byte
+    FAIL  S16 rerun verifier: it runs with the verifier schema
+    FAIL  S16 rerun verifier: its verdict is returned
+    FAIL  S16 rerun verifier: a second no-result is recorded, with no rerun prompt
+    FAIL  S16 rerun verifier: a stop is recorded and its verdict not counted
+    FAIL  S17 rerun critic: exactly one agent runs, and no gap unit
+    FAIL  S17 rerun critic: it runs the returned prompt, byte for byte
+    FAIL  S17 rerun critic: it runs with the critic schema
+    FAIL  S17 rerun critic: its gaps carry ids under the new tag, a topic and a covers_held flag
+    FAIL  S17 rerun critic: a stop is recorded and its gaps not used
+    FAIL  S17 rerun critic: a second no-result is recorded, with no rerun prompt
+KILLED  M21 a rerun of a unit id: exit 1, 1 failing row(s); expected row "S18 rerun refused: a unit id is refused before any agent"
+    FAIL  S18 rerun refused: a unit id is refused before any agent
+KILLED  M22 a rerun alongside specs: exit 1, 1 failing row(s); expected row "S18 rerun refused: a rerun with specs is refused before any agent"
+    FAIL  S18 rerun refused: a rerun with specs is refused before any agent
+KILLED  M23 a verifier rerun under the critic schema: exit 1, 1 failing row(s); expected row "S16 rerun verifier: it runs with the verifier schema"
+    FAIL  S16 rerun verifier: it runs with the verifier schema
+KILLED  M24 a stopped rerun counted: exit 1, 2 failing row(s); expected row "S17 rerun critic: a stop is recorded and its gaps not used"
+    FAIL  S16 rerun verifier: a stop is recorded and its verdict not counted
+    FAIL  S17 rerun critic: a stop is recorded and its gaps not used
+KILLED  M25 the stopped-unit log line without "do not re-run": exit 1, 3 failing row(s); expected row "stop reviewer: the log says not to re-run the stopped unit"
+    FAIL  stop safety-classifier: the log says not to re-run the stopped unit
+    FAIL  stop reviewer: the log says not to re-run the stopped unit
+    FAIL  stop policy-hook: the log says not to re-run the stopped unit
+KILLED  M26 a gap spec that does not point at the recorded file: exit 1, 1 failing row(s); expected row "S19 gap spec: the prompt points at the recorded gaps file"
+    FAIL  S19 gap spec: the prompt points at the recorded gaps file
+KILLED  Ma a stopped unit re-run in code: exit 1, 3 failing row(s); expected row "stop reviewer: the stopped unit ran once"
+    FAIL  stop safety-classifier: the stopped unit ran once
+    FAIL  stop reviewer: the stopped unit ran once
+    FAIL  stop policy-hook: the stopped unit ran once
+KILLED  Mb a stopped verifier re-run in code: exit 1, 1 failing row(s); expected row "S11 verifier stop: 'verify CL-B#1' ran once"
+    FAIL  S11 verifier stop: 'verify CL-B#1' ran once

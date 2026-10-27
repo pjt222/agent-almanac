@@ -5,9 +5,14 @@ PASS  bash step 2 records the work list once, and lists every spec file
 PASS  bash a second work list is refused
 PASS  bash baseline ledger
 PASS  bash step 7 pilot glance
+PASS  bash step 1: PRIOR_RUN unset is refused, and no unit log is started
+PASS  bash step 1: PRIOR_RUN=none starts an empty unit log
+PASS  bash step 1: a later run directory starts from a copy of the unit log
+PASS  bash step 1: an existing unit log is not overwritten
+PASS  bash step 1: with the carried log, a later run directory still counts the stop
+PASS  bash no-result: a partial that cannot be moved is refused, and nothing is logged
 PASS  bash no-result: its partial moves to partials/ and it stays unaccounted
 PASS  bash empty file is not reported
-PASS  bash a no-result held by a later run is held, not unaccounted
 PASS  bash release by owner with no Answered line is refused
 PASS  bash release of a stopped id is refused
 PASS  bash release by owner from an Answered line is logged
@@ -15,6 +20,14 @@ PASS  bash released and not yet re-run is unaccounted
 PASS  bash released, then re-run: reported, not held_ran
 PASS  bash release after a report is refused
 PASS  bash a transient release is logged once
+PASS  bash a verifier with no result: its partial moves, and a transient release is logged
+PASS  bash release: no unit log is refused, and none is started
+PASS  bash a transient release of a held id with no no-result is refused
+PASS  bash a transient release of a no-result held over a stop since is refused
+PASS  bash a transient release naming no transcript file is refused
+PASS  bash a transient release after an owner release and a second no-result is refused
+PASS  bash a second owner release from the same Answered line is refused
+PASS  bash ledger: no unit log is refused
 PASS  bash a hand-written release does not lift a stop
 PASS  bash reroute under a new id is extra
 PASS  bash verifier, critic and lead files are not extra
@@ -23,6 +36,10 @@ PASS  bash a recorded gap spec with a report is reported
 PASS  bash held spec is held, not unaccounted
 PASS  bash held spec with a report is held_ran
 PASS  bash a release after a held run is refused, and held_ran stays visible
+PASS  bash a hold released from an unused Answered line is unaccounted until it runs
+PASS  bash an Answered line releases once
+PASS  bash a hold logged after a release holds the id again
+PASS  bash a run under a hold logged after a release is held_ran
 PASS  bash a spec file added without being recorded is refused
 PASS  bash re-derivation at chunk 5 after launch is refused
 PASS  bash restored work list matches again

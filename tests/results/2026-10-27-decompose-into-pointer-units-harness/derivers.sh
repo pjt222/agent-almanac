@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # derivers.sh: run the shell snippets of skills/decompose-into-pointer-units/references/EXAMPLES.md that
 # derive, record or check a work list, extracted byte for byte, on small fixtures, under the shell named
-# in $2 (bash or zsh): the rows and item derivers, the gap deriver, the owner-spec check, the held-list
-# derivation and the gaps-file record.
+# in $2 (bash or zsh): the rows and item derivers, the gap deriver, the owner-spec check, the launch snippet
+# (held list and launch list) and the gaps-file record.
 # Usage (from the repository root):
 #   bash tests/results/2026-10-27-decompose-into-pointer-units-harness/derivers.sh <EXAMPLES.md> <bash|zsh>
 # Prints one line per check (PASS / FAIL) and exits 1 if any check fails, 2 if a snippet cannot be found.
@@ -19,7 +19,7 @@ node -e '
   const t = require("fs").readFileSync(process.argv[1], "utf8");
   const fences = [...t.matchAll(/```bash\n([\s\S]*?)```/g)].map((m) => m[1]);
   const want = [["rows.sh", "inventory.tsv"], ["items.sh", "$MECH/items"], ["gaps.sh", "approved-topics.txt"],
-    ["owner.sh", "OWNER_SPECS="], ["held.sh", "RELEASED unit="], ["record.sh", "is not a gaps_for_owner list"]];
+    ["owner.sh", "OWNER_SPECS="], ["held.sh", "CLUSTER="], ["record.sh", "is not a gaps_for_owner list"]];
   for (const [name, anchor] of want) {
     const hits = fences.filter((f) => f.includes(anchor));
     if (hits.length !== 1) { console.error(name + ": anchor " + anchor + " is in " + hits.length + " fences, want 1"); process.exit(2); }
@@ -71,7 +71,7 @@ derived() { [ -e "$RUN_DIR/specs/gaps-R1.json" ] && jq -r 'if length == 0 then "
 # --- recording a gaps file ---
 fresh; printf '%s\n' "$GAPLIST" > "$RUN_DIR/gaps/R1.json"
 check 'record: a gaps_for_owner list is recorded' "$(run record.sh) recorded=$(recorded gaps/R1.json)" ' rc=0 recorded=yes'
-check 'record: a second record of the same file is refused' "$(run record.sh)" 'REFUSED: gaps/R1.json was already recorded rc=2'
+check 'record: a second record of the same file is refused, nothing written' "$(run record.sh) lines=$(awk '$2 == "gaps/R1.json"' "$RUN_DIR/WORK-SHA256SUMS" | wc -l | tr -d ' ')" 'REFUSED: gaps/R1.json was already recorded rc=2 lines=1'
 printf '%s\n' '[{"id":"G-R2-1","topic":"A","title":"t","question":"q","priority":1}]' > "$RUN_DIR/gaps/R2.json"
 sed 's/TAG=R1 /TAG=R2 /' "$work/record.sh" > "$work/record-r2.sh"
 check 'record: a list without covers_held is refused and not recorded' "$(run record-r2.sh) recorded=$(recorded gaps/R2.json)" 'REFUSED: gaps/R2.json is not a gaps_for_owner list rc=1 recorded=no'
@@ -152,24 +152,45 @@ check 'owner: a non-owner spec in the file is refused' "$(run owner.sh | sed 's/
 ownerfixture "[$OWNER_OK]"; rm "$RUN_DIR/specs/owner-1.json"
 check 'owner: a missing file is refused' "$(run owner.sh)" 'REFUSED: no specs/owner-1.json rc=2'
 ownerfixture "[$OWNER_OK]"; run owner.sh > /dev/null
-check 'owner: a file already recorded is refused' "$(run owner.sh)" 'REFUSED: specs/owner-1.json was already recorded rc=2'
+check 'owner: a file already recorded is refused, nothing written' "$(run owner.sh) lines=$(awk '$2 == "specs/owner-1.json"' "$RUN_DIR/WORK-SHA256SUMS" | wc -l | tr -d ' ')" 'REFUSED: specs/owner-1.json was already recorded rc=2 lines=1'
 
-# --- the held list ---
+# --- the held list and the launch list ---
+# The cluster's ids are its own (none is in cl.json). RW-A and RW-C reported; RW-A's verifier was stopped.
+# RW-G no-results again after its release, and RW-H is held again by a later stop after its release.
 fresh
-printf '%s\n' '[{"kind":"cl","id":"CL-A"},{"kind":"cl","id":"CL-B"},{"kind":"cl","id":"CL-C"},{"kind":"cl","id":"CL-D"},{"kind":"cl","id":"CL-E"},{"kind":"cl","id":"CL-F"}]' > "$RUN_DIR/specs/rows.json"
+printf '%s\n' '[{"kind":"rows","id":"RW-A"},{"kind":"rows","id":"RW-B"},{"kind":"rows","id":"RW-C"},{"kind":"rows","id":"RW-D"},{"kind":"rows","id":"RW-E"},{"kind":"rows","id":"RW-F"},{"kind":"rows","id":"RW-G"},{"kind":"rows","id":"RW-H"}]' > "$RUN_DIR/specs/rows.json"
 cat > "$RUN_DIR/UNIT-LOG.txt" <<'EOF'
-2026-10-27 STOP-1 unit=CL-B stage=report-write written=partial routed=owner-batch
-2026-10-27 NORESULT unit=CL-D cause=undetermined
-2026-10-27 NORESULT unit=CL-E cause=undetermined
-2026-10-27 RELEASED unit=CL-E by=owner
-2026-10-27 HELD unit=CL-F reason=overlaps-STOP-1
-2026-10-27 STOP-2 unit=V-CL-A-1 stage=verify written=nothing routed=owner-batch
+2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch
+2026-10-27 NORESULT unit=RW-D cause=undetermined
+2026-10-27 NORESULT unit=RW-E cause=undetermined
+2026-10-27 RELEASED unit=RW-E by=owner
+2026-10-27 HELD unit=RW-F reason=overlaps-STOP-1
+2026-10-27 STOP-2 unit=V-RW-A-1 stage=verify written=nothing routed=owner-batch
 2026-10-27 NORESULT unit=X-accuracy-R1-1 cause=undetermined
-2026-10-27 RELEASED unit=CL-B by=owner
+2026-10-27 RELEASED unit=RW-B by=owner
+2026-10-27 NORESULT unit=RW-G cause=undetermined
+2026-10-27 RELEASED unit=RW-G by=transient:/t/RW-G.jsonl
+2026-10-27 NORESULT unit=RW-G cause=undetermined
+2026-10-27 HELD unit=RW-H reason=overlaps-STOP-1
+2026-10-27 RELEASED unit=RW-H by=owner
+2026-10-27 STOP-3 unit=RW-Z stage=report-write written=nothing routed=owner-batch
+2026-10-27 HELD unit=RW-H reason=overlaps-STOP-3
 EOF
-out=$($shell "$work/held.sh" 2>&1)
-check 'held: stopped ids and unreleased no-result and held ids; a release does not lift a stop; labels left out' "$(printf '%s\n' "$out" | sed -n 1p)" 'held=["CL-B","CL-D","CL-F"]'
-check 'held: the cluster list leaves the held ids out' "$(printf '%s\n' "$out" | sed -n 2p | jq -r '[.[].id] | join(",")')" 'CL-A,CL-C,CL-E'
+printf 'VERDICT: ok\n' > "$RUN_DIR/RW-A.txt"; printf 'VERDICT: ok\n' > "$RUN_DIR/RW-C.txt"
+launch() { out=$($shell "$work/held.sh" 2>&1); printf '%s|%s|%s' "$(printf '%s\n' "$out" | sed -n 1p)" "$(printf '%s\n' "$out" | sed -n 2p)" "$(printf '%s\n' "$out" | sed -n 3p | jq -r '[.[].id] | join(",")' 2>/dev/null)"; }
+out=$(launch)
+check 'held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out' "${out%%|*}" 'held=["RW-B","RW-D","RW-F","RW-G","RW-H","RW-Z"]'
+check 'held: a no-result or a hold logged after a release holds the id again' "$(printf '%s' "${out%%|*}" | sed 's/^held=//' | jq -r 'map(select(. == "RW-G" or . == "RW-H")) | join(",")')" 'RW-G,RW-H'
+check 'launch: after a stop or no-result, a unit that reported is not relaunched' "${out#*|}" 'not relaunched, reported already: ["RW-A","RW-C"]|RW-E'
+printf '2026-10-27 RERUN-1 unit=RW-A as=R2\n' >> "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: a RERUN line for this run relaunches the unit it names' "$(launch | cut -d'|' -f3)" 'RW-A,RW-E'
+sed -i 's/ as=R2$/ as=R1b/' "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: a RERUN line for another run does not' "$(launch | cut -d'|' -f3)" 'RW-E'
+: > "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run)' "$(launch)" 'held=[]|not relaunched, reported already: []|RW-A,RW-B,RW-C,RW-D,RW-E,RW-F,RW-G,RW-H'
+mv "$RUN_DIR/specs/rows.json" "$work/rows.json"
+check 'launch: a missing cluster file is refused before any list is printed' "$(run held.sh | sed 's/^jq: error[^R]*REFUSED/REFUSED/')" 'REFUSED: specs/rows.json is not a spec list rc=2'
+mv "$work/rows.json" "$RUN_DIR/specs/rows.json"
 rm "$RUN_DIR/UNIT-LOG.txt"
 check 'held: a missing unit log is refused' "$(run held.sh)" 'REFUSED: no UNIT-LOG.txt (Step 1 creates it) rc=2'
 

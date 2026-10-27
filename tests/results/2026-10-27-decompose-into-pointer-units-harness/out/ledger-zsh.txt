@@ -5,9 +5,14 @@ PASS  zsh step 2 records the work list once, and lists every spec file
 PASS  zsh a second work list is refused
 PASS  zsh baseline ledger
 PASS  zsh step 7 pilot glance
+PASS  zsh step 1: PRIOR_RUN unset is refused, and no unit log is started
+PASS  zsh step 1: PRIOR_RUN=none starts an empty unit log
+PASS  zsh step 1: a later run directory starts from a copy of the unit log
+PASS  zsh step 1: an existing unit log is not overwritten
+PASS  zsh step 1: with the carried log, a later run directory still counts the stop
+PASS  zsh no-result: a partial that cannot be moved is refused, and nothing is logged
 PASS  zsh no-result: its partial moves to partials/ and it stays unaccounted
 PASS  zsh empty file is not reported
-PASS  zsh a no-result held by a later run is held, not unaccounted
 PASS  zsh release by owner with no Answered line is refused
 PASS  zsh release of a stopped id is refused
 PASS  zsh release by owner from an Answered line is logged
@@ -15,6 +20,14 @@ PASS  zsh released and not yet re-run is unaccounted
 PASS  zsh released, then re-run: reported, not held_ran
 PASS  zsh release after a report is refused
 PASS  zsh a transient release is logged once
+PASS  zsh a verifier with no result: its partial moves, and a transient release is logged
+PASS  zsh release: no unit log is refused, and none is started
+PASS  zsh a transient release of a held id with no no-result is refused
+PASS  zsh a transient release of a no-result held over a stop since is refused
+PASS  zsh a transient release naming no transcript file is refused
+PASS  zsh a transient release after an owner release and a second no-result is refused
+PASS  zsh a second owner release from the same Answered line is refused
+PASS  zsh ledger: no unit log is refused
 PASS  zsh a hand-written release does not lift a stop
 PASS  zsh reroute under a new id is extra
 PASS  zsh verifier, critic and lead files are not extra
@@ -23,6 +36,10 @@ PASS  zsh a recorded gap spec with a report is reported
 PASS  zsh held spec is held, not unaccounted
 PASS  zsh held spec with a report is held_ran
 PASS  zsh a release after a held run is refused, and held_ran stays visible
+PASS  zsh a hold released from an unused Answered line is unaccounted until it runs
+PASS  zsh an Answered line releases once
+PASS  zsh a hold logged after a release holds the id again
+PASS  zsh a run under a hold logged after a release is held_ran
 PASS  zsh a spec file added without being recorded is refused
 PASS  zsh re-derivation at chunk 5 after launch is refused
 PASS  zsh restored work list matches again
