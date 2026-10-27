@@ -208,5 +208,6 @@ Record timestamps for:
   of a safety classifier. Expect exactly the same handling as the baseline.
 - **Variant D: A gap over stopped work** — after the stop, the observer offers
   a completeness-critic gap whose question covers lines 8-9. Expect the gap in
-  the owner batch, marked as covering the stopped unit's pointers and offered
-  only as that stop entry's option (a), never run.
+  the owner batch, marked as covering the stopped unit's pointers and listed
+  apart from the topic entries, so that approving its topic cannot approve it;
+  it is offered only as that stop entry's option (a), and never run.

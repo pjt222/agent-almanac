@@ -11,7 +11,7 @@ Tested in the Workflow dialect (`node --check` on the wrapped body) and against 
 - A unit, verifier or critic with no result was recorded with its cause undetermined and was not marked for re-run.
 - A held id was never launched and was reported to the completeness critic.
 - An input spec of a kind the skeleton does not know (including `raw`), a `cl` spec without `args.source`, and an `owner` spec without its unit, scope and answer were refused before any agent started.
-- No gap unit ever ran, even when a critic ignored its instructions and proposed a stopped or held unit's scope.
+- No gap unit ever ran, even when a critic ignored its instructions and proposed a stopped or held unit's scope, and every returned gap carried an id and a topic.
 
 Adapt `scope()` to your kinds, add any preamble your environment requires to `HEAD`, and give verifiers a read-only agent type where your runtime offers one. The skeleton keeps only the generic method: its templates defer to the brief, and its refutation checks are generic. The evidence paths, the classification vocabulary, the domain's refutation checks and the method rules belong in your brief, not in the script.
 
@@ -59,7 +59,7 @@ const scope = (s) => {
     case 'rows': return `lines ${s.rows.join(', ')} of ${MECH}/${s.file} (group ${s.group}). Benign rows go in one compact table; full VERDICT blocks only for rows the brief says to classify.`
     case 'file': return `the file ${MECH}/${s.path}. Examine each entry it lists.`
     case 'issue': return `issue #${s.n} as frozen in ${MECH}/issue-${s.n}.json. Answer the brief's question for it, using the names the issue gives as search terms, with evidence.`
-    case 'gap': return `gap ${s.g}: item ${s.g} of ${s.from}, approved by the owner. Answer it as asked.`
+    case 'gap': return `gap ${s.g} in ${s.from} (read its question there), approved by the owner. Answer it as asked.`
     case 'owner': return `owner-authorised re-scope of ${s.unit}: ${s.scope} (answer: ${s.answer}; the scope text is the owner's, verbatim)`
     default: throw new Error(`unknown spec kind ${s.kind}`)
   }
@@ -97,9 +97,10 @@ const XSCHEMA = {
     report_path: { type: 'string' },
     corrections: { type: 'array', items: { type: 'string', maxLength: 600 } },
     gaps: { type: 'array', items: {
-      type: 'object', additionalProperties: false, required: ['title', 'question', 'priority'],
+      type: 'object', additionalProperties: false, required: ['title', 'question', 'priority', 'topic'],
       properties: {
         title: { type: 'string', maxLength: 120 },
+        topic: { type: 'string', maxLength: 60, description: 'one of the brief\'s CLASSIFY categories' },
         question: { type: 'string', maxLength: 1200 },
         priority: { type: 'integer', description: '1 = could change a verdict; 3 = cosmetic' },
       } } },
@@ -159,12 +160,13 @@ const criticLabels = groups.map((g, gi) => `critic ${TAG}-${gi + 1}`).concat(`co
 const accuracy = groups.map((g, gi) => () => agent(
   `${HEAD}\n\n=== ACCURACY CRITIC ${TAG}-${gi + 1} over ${g.length} reports ===\nRead EVERY report and verifier file below, `
   + 'benign units included. List each claim that does not hold, with the correction and how to reproduce it, and each pair '
-  + `of units that contradict each other. Write to ${DIR}/X-accuracy-${TAG}-${gi + 1}.txt\n${STOP_LINE}\n\n${digest(g)}`,
+  + 'of units that contradict each other. Give each gap a topic from the brief\'s CLASSIFY categories. '
+  + `Write to ${DIR}/X-accuracy-${TAG}-${gi + 1}.txt\n${STOP_LINE}\n\n${digest(g)}`,
   { label: criticLabels[gi], phase: 'Critics', schema: XSCHEMA }))
 const completeness = () => agent(
   `${HEAD}\n\n=== COMPLETENESS CRITIC ${TAG} ===\nRead the spec list, the digest and the mechanical inputs in ${MECH}. `
   + 'What inside this run\'s scope did no unit cover, or cover only by assertion? Return each gap as a self-contained '
-  + `question a fresh unit could answer, priority 1 to 3. No gap runs in this run; every gap goes to the owner. `
+  + `question a fresh unit could answer, priority 1 to 3, with a topic from the brief\'s CLASSIFY categories. No gap runs in this run; every gap goes to the owner. `
   + `Write to ${DIR}/X-completeness-${TAG}.txt\n${STOP_LINE}\n\n`
   + `HELD for the owner (stopped, no result or held; mark any gap over their pointers as such):\n${[...new Set([...stopped, ...noResult, ...held])].join(', ') || 'none'}\n\n`
   + `SPECS:\n${SPECS.map(s => `- ${s.id} ${s.kind}`).join('\n')}\n\nDIGEST:\n${digest(done)}`,
@@ -179,7 +181,9 @@ if (criticStopped.length) log(`STOPPED critic, record by label; its gaps and cor
 const seen = new Set() // several critics often report the same gap: keep its highest-priority copy
 const gaps = critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)
   .filter(g => { const k = g.title.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true })
-if (gaps.length) log(`${gaps.length} gap(s) returned for the owner batch; none runs in this run`)
+  .map((g, i) => ({ id: `G-${TAG}-${i + 1}`, ...g }))
+const byTopic = gaps.reduce((m, g) => ({ ...m, [g.topic]: (m[g.topic] || 0) + 1 }), {})
+if (gaps.length) log(`${gaps.length} gap(s) for the owner batch, by topic: ${Object.entries(byTopic).map(([k, n]) => `${k} ${n}`).join(', ')}; none runs in this run`)
 
 return {
   tag: TAG, stopped, no_result: noResult, held,
@@ -224,14 +228,20 @@ ls "$MECH/items" | jq -R -s -c 'split("\n") | map(select(endswith(".md")))
 echo "items=$(ls "$MECH/items" | wc -l) specs=$(jq length "$RUN_DIR/specs/files.json")"   # unequal: a file the deriver skipped
 ```
 
-Gap ids from an earlier completeness critic file whose items start with `G<n>.`, limited to the ids the owner approved in the batch, and never one the batch marked as covering a stopped or held unit's pointers:
+Gap specs from an earlier run's `gaps_for_owner` (written to `gaps/<tag>.json`), for the topics the owner approved and any single gap ids the owner approved, and never a gap the batch marked as covering a stopped or held unit's pointers, whatever its topic:
 
 ```bash
-PRIOR_GAPS="/abs/path/reports/run-000/X-completeness-R1.txt"
-APPROVED="$RUN_DIR/approved-gaps.txt"   # gap ids the owner approved, one per line
-rg -o '^(G[0-9]+)\.' -r '$1' "$PRIOR_GAPS" | sort -u > "$RUN_DIR/prior-gap-ids.txt"
-sort -u "$APPROVED" | comm -12 "$RUN_DIR/prior-gap-ids.txt" - | jq -R -s -c --arg from "$PRIOR_GAPS" \
-  'split("\n") | map(select(length > 0)) | map({kind: "gap", id: ., g: ., from: $from})' > "$RUN_DIR/specs/gaps.json"
+GAPS="$RUN_DIR/gaps/R1.json"            # the run's gaps_for_owner, written before the batch
+TOPICS="$RUN_DIR/approved-topics.txt"   # topics the owner approved, one per line
+IDS="$RUN_DIR/approved-gaps.txt"        # single gap ids the owner approved, one per line
+MARKED="$RUN_DIR/gaps-over-held.txt"    # gap ids the batch marked as covering stopped or held pointers
+jq -c --rawfile topics "$TOPICS" --rawfile ids "$IDS" --rawfile marked "$MARKED" --arg from "$GAPS" '
+  ($topics | split("\n") | map(select(length > 0))) as $t
+  | ($ids | split("\n") | map(select(length > 0))) as $i
+  | ($marked | split("\n") | map(select(length > 0))) as $m
+  | map(select((.topic as $x | $t | index($x)) or (.id as $x | $i | index($x))))
+  | map(select(.id as $x | $m | index($x) | not))
+  | map({kind: "gap", id: .id, g: .id, from: $from})' "$GAPS" > "$RUN_DIR/specs/gaps.json"
 ```
 
 An owner spec re-scopes a stopped unit in the owner's words. Write it to `specs/owner.json` by hand from the batch, then check that each scope is quoted verbatim, on one line, under the unit it names in the batch's Answered section (format in the owner batch skeleton). Any id printed is refused. The check shows that the spec matches an Answered line, not that the line holds the owner's words, so the Answered line cites where the words came from:
@@ -300,10 +310,11 @@ check ran before presentation; its corrections are folded into the question text
 - **B2. NORESULT, unit <id>.** No result, and its transcript shows no transient failure.
   Evidence: UNIT-LOG.txt line <n>, <transcript path>.
   Options: (a) re-run it once, unchanged, (b) treat it as a stop, (c) hold. Recommendation: (c).
-- **B3. Gaps from run <tag>.** Each gap's question in full, from X-completeness-<tag>.txt and
-  X-accuracy-<tag>-*.txt. A gap whose question covers a stopped or held unit's pointers is
-  marked and not offered here: it belongs only to that unit's stop entry, option (a).
-  Options: (a) approve gap ids <...>, (b) hold. Depends on: B1, B2.
+- **B3. Gaps from run <tag>, topic <topic> (<n> gaps).** Each question in full, with its id, from
+  gaps/<tag>.json. Options: (a) approve the topic, (b) approve only ids <...>, (c) hold.
+  Depends on: B1, B2. One such entry per topic.
+- **B4. Gaps from run <tag> over stopped or held scope.** Listed apart and never approved through
+  a topic: each belongs only to its unit's stop entry, option (a). Evidence: gaps-over-held.txt.
 ```
 
 ## Launch sequence
@@ -323,4 +334,4 @@ Each run returns `stopped`, `no_result`, `held`, `verifier_stopped`, `verifier_n
 - one `NORESULT unit=<id>` line per `no_result` id;
 - one `HELD unit=<id>` line per `held` id.
 
-Only `STOP-<n> unit=` and `HELD unit=` lines move a spec in Step 10. Verifier and critic stops and no-results are logged the same way under their labels (`unit=V-<id>-<n>`, `unit=critic-<tag>-<n>`). Step 10 counts spec units only, so these are recorded in the coverage statement and the owner batch rather than in the ledger, and the claim behind a stopped or missing verdict counts as unverified. `gaps_for_owner` goes to the owner batch as B3.
+Only `STOP-<n> unit=` and `HELD unit=` lines move a spec in Step 10. Verifier and critic stops and no-results are logged the same way under their labels (`unit=V-<id>-<n>`, `unit=critic-<tag>-<n>`). Step 10 counts spec units only, so these are recorded in the coverage statement and the owner batch rather than in the ledger, and the claim behind a stopped or missing verdict counts as unverified. Write `gaps_for_owner` to `gaps/<tag>.json`; it goes to the owner batch by topic (B3), with any gap over stopped or held scope listed apart (B4).
