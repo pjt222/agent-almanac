@@ -2,10 +2,35 @@ PASS  zsh rows count proof
 PASS  zsh rows ids are ledger-safe
 PASS  zsh items count proof shows the skipped file
 PASS  zsh item ids are ledger-safe
-PASS  zsh approved topic plus single id, marked gap excluded
-PASS  zsh derived gap specs carry pointers only
-PASS  zsh a marked gap is never derived, even when approved singly
-PASS  zsh nothing approved derives nothing
-PASS  zsh owner check refuses a scope not quoted under its unit
+PASS  zsh record: a gaps_for_owner list is recorded
+PASS  zsh record: a second record of the same file is refused
+PASS  zsh record: a list without covers_held is refused and not recorded
+PASS  zsh gaps: approved topic plus single id; the marked gap and the flagged gap are not derived through the topic
+PASS  zsh gaps: the count line
+PASS  zsh gaps: derived specs carry pointers only, from the recorded file
+PASS  zsh gaps: the output is recorded in the work list
+PASS  zsh gaps: a second derivation into the same name is refused
+PASS  zsh gaps: an approved marked id is refused, nothing written
+PASS  zsh gaps: an unknown approved id is refused, nothing written
+PASS  zsh gaps: an id with a trailing space is refused, not dropped
+PASS  zsh gaps: an unknown topic is refused, nothing written
+PASS  zsh gaps: a flagged gap the batch did not mark is derived when approved by its id
+PASS  zsh gaps: nothing approved derives nothing
+PASS  zsh gaps: a missing marks file is refused
+PASS  zsh gaps: a gaps file changed after it was recorded is refused
+PASS  zsh owner: a scope quoted on its Answered line passes and is recorded
+PASS  zsh owner: a scope quoted only in Open is refused with exit 1, nothing recorded
+PASS  zsh owner: a scope under a nested heading is refused with exit 1, nothing recorded
+PASS  zsh owner: a scope under a later heading is refused with exit 1, nothing recorded
+PASS  zsh owner: a scope with the wrong STOP number is refused with exit 1, nothing recorded
+PASS  zsh owner: a scope on a line with no citation is refused with exit 1, nothing recorded
+PASS  zsh owner: a scope under the wrong unit is refused with exit 1, nothing recorded
+PASS  zsh owner: an empty list checks nothing and says so
+PASS  zsh owner: a non-owner spec in the file is refused
+PASS  zsh owner: a missing file is refused
+PASS  zsh owner: a file already recorded is refused
+PASS  zsh held: stopped ids and unreleased no-result and held ids; a release does not lift a stop; labels left out
+PASS  zsh held: the cluster list leaves the held ids out
+PASS  zsh held: a missing unit log is refused
 
 ALL PASS (zsh)

@@ -1,16 +1,31 @@
 PASS  bash step 2 coverage
 PASS  bash step 2 issues
 PASS  bash step 2 id checks
+PASS  bash step 2 records the work list once, and lists every spec file
+PASS  bash a second work list is refused
 PASS  bash baseline ledger
 PASS  bash step 7 pilot glance
-PASS  bash no-result stays unaccounted
+PASS  bash no-result: its partial moves to partials/ and it stays unaccounted
 PASS  bash empty file is not reported
+PASS  bash a no-result held by a later run is held, not unaccounted
+PASS  bash release by owner with no Answered line is refused
+PASS  bash release of a stopped id is refused
+PASS  bash release by owner from an Answered line is logged
+PASS  bash released and not yet re-run is unaccounted
+PASS  bash released, then re-run: reported, not held_ran
+PASS  bash release after a report is refused
+PASS  bash a transient release is logged once
+PASS  bash a hand-written release does not lift a stop
 PASS  bash reroute under a new id is extra
-PASS  bash verifier and critic files are not extra
-PASS  bash approved gap spec without a report is unaccounted
-PASS  bash approved gap spec with a report is reported
+PASS  bash verifier, critic and lead files are not extra
+PASS  bash a recorded gap spec without a report is unaccounted
+PASS  bash a recorded gap spec with a report is reported
 PASS  bash held spec is held, not unaccounted
 PASS  bash held spec with a report is held_ran
+PASS  bash a release after a held run is refused, and held_ran stays visible
+PASS  bash a spec file added without being recorded is refused
+PASS  bash re-derivation at chunk 5 after launch is refused
+PASS  bash restored work list matches again
 PASS  bash changed input refused
 
 ALL PASS (bash)

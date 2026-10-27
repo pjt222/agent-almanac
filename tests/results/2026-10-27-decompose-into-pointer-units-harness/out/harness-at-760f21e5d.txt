@@ -1,45 +1,69 @@
 PASS  S1 clean: no stop, no missing result
 PASS  S1 clean: a verifier per unit
 FAIL  S1 clean: gaps are returned for the owner
-FAIL  S1 clean: every gap carries an id and a topic
+FAIL  S1 clean: every gap carries an id, a topic and a covers_held flag
+FAIL  S1 clean: every critic schema requires covers_held
 FAIL  S1 clean: no gap unit runs
 PASS  stop safety-classifier: recorded as stopped
 PASS  stop safety-classifier: no verifier for the stopped unit
 PASS  stop safety-classifier: the stopped unit ran once
+PASS  stop safety-classifier: the stopped unit is not listed under no_result
 FAIL  stop safety-classifier: no gap unit runs, though the critic proposes the stopped scope
 PASS  stop safety-classifier: the completeness critic is told the stopped id is held
+FAIL  stop safety-classifier: the accuracy critic is told the stopped id is held
 PASS  stop reviewer: recorded as stopped
 PASS  stop reviewer: no verifier for the stopped unit
 PASS  stop reviewer: the stopped unit ran once
+PASS  stop reviewer: the stopped unit is not listed under no_result
 FAIL  stop reviewer: no gap unit runs, though the critic proposes the stopped scope
 PASS  stop reviewer: the completeness critic is told the stopped id is held
+FAIL  stop reviewer: the accuracy critic is told the stopped id is held
 PASS  stop policy-hook: recorded as stopped
 PASS  stop policy-hook: no verifier for the stopped unit
 PASS  stop policy-hook: the stopped unit ran once
+PASS  stop policy-hook: the stopped unit is not listed under no_result
 FAIL  stop policy-hook: no gap unit runs, though the critic proposes the stopped scope
 PASS  stop policy-hook: the completeness critic is told the stopped id is held
+FAIL  stop policy-hook: the accuracy critic is told the stopped id is held
 PASS  S5 missing stop field: treated as stopped
 PASS  S6 negated clean line: not recorded as stopped
 PASS  S7 no result: listed under no_result
 PASS  S7 no result: the log does not say to re-run as-is
 PASS  S7 no result: the log says the cause is undetermined
+PASS  S7 no result: the unit ran once
+PASS  S7 no result: the completeness critic is told the no-result id is held
 PASS  S7 no result: no gap unit runs
 PASS  S8 raw input spec: refused before any agent
 PASS  S9 held id: never launched
 FAIL  S9 held id: returned as held, including an id outside this run
 FAIL  S9 held id: the critic is told an id outside this run
+FAIL  S9 held id: the accuracy critic is told the held ids
 FAIL  S9 held id: no gap unit runs over held scope
 FAIL  S10 verifier no result: recorded in verifier_no_result
+PASS  S10 verifier no result: its id is the basename of the file it writes
 PASS  S10 verifier no result: no verdict counted for it
+PASS  S10 verifier no result: 'verify CL-B#1' ran once
+FAIL  S10 verifier no result: the log says the cause is undetermined
+FAIL  S10 verifier no result: the log says not to re-run it
 FAIL  S10 verifier no result: no gap unit runs
 FAIL  S11 verifier stop: recorded in verifier_stopped
 FAIL  S11 verifier stop: its verdict is not counted
+PASS  S11 verifier stop: 'verify CL-B#1' ran once
+FAIL  S11 verifier stop: the log says not to re-run it
 PASS  S12 cl without source: refused before any agent
 PASS  S13 owner spec: the owner scope is in the prompt verbatim
 FAIL  S13 owner spec: the prompt names the unit and points at the answer
 FAIL  S13 owner spec: an owner spec without its unit is refused before any agent
+FAIL  S13 owner spec: an owner spec whose answer is not a STOP-<n> is refused before any agent
 FAIL  S14 critic no result: recorded in critic_no_result
+PASS  S14 critic no result: its id is the basename of the file it writes
+PASS  S14 critic no result: 'critic R1-1' ran once
+FAIL  S14 critic no result: the log says the cause is undetermined and not to re-run it
 FAIL  S14 critic stop: recorded in critic_stopped
+PASS  S14 critic stop: 'completeness R1' ran once
+FAIL  S14 critic stop: the log says not to re-run it
 PASS  S14 critic stop: its gaps are not used
+FAIL  S15 held not an array: a string is refused before any agent
+FAIL  S15 held not an array: an object is refused before any agent
 
-17 FAIL
+30 FAIL
