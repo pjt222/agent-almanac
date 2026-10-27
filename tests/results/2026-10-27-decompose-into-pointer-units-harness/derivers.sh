@@ -150,7 +150,7 @@ check 'owner: an empty list checks nothing and says so' "$(run owner.sh)" 'owner
 ownerfixture "[$OWNER_OK,{\"kind\":\"cl\",\"id\":\"CL-X\",\"release\":\"1.0\",\"lines\":[8]}]"
 check 'owner: a non-owner spec in the file is refused' "$(run owner.sh | sed 's/jq: error[^R]*REFUSED/REFUSED/') $(recorded specs/owner-1.json)" 'REFUSED: specs/owner-1.json rc=2 no'
 ownerfixture "[$OWNER_OK]"; rm "$RUN_DIR/specs/owner-1.json"
-check 'owner: a missing file is refused' "$(run owner.sh)" 'REFUSED: no specs/owner-1.json rc=2'
+check 'owner: a missing file is refused' "$(run owner.sh) $(recorded specs/owner-1.json)" 'REFUSED: no specs/owner-1.json rc=2 no'
 ownerfixture "[$OWNER_OK]"; run owner.sh > /dev/null
 check 'owner: a file already recorded is refused, nothing written' "$(run owner.sh) lines=$(awk '$2 == "specs/owner-1.json"' "$RUN_DIR/WORK-SHA256SUMS" | wc -l | tr -d ' ')" 'REFUSED: specs/owner-1.json was already recorded rc=2 lines=1'
 
