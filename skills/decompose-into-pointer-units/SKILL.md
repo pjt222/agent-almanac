@@ -245,12 +245,21 @@ A safety classifier, a policy hook or a human reviewer may stop a unit, a verifi
 5. A re-scoped run of that unit happens only if the owner authorises that unit by name. It runs as an `owner` spec (`id` `OW-<n>`, new to the work list, `unit`, `scope`, `answer`) whose scope is the owner's answer copied verbatim from a one-line Answered entry and whose `answer` is that entry's `STOP-<n>`. The owner-spec check in EXAMPLES.md exits 1 on a scope not quoted on that line in the Answered section, and records the spec file only when nothing is refused. The check shows consistency with the batch, not that the words are the owner's, so the Answered entry cites where they came from. An authorisation does not carry over to other units or later stops: a `STOP-<n>` authorises one owner spec, and the check refuses a second one citing it, in the same file or a later one. If the authorised run is stopped again, propose nothing further; record it and leave the next step to the owner.
 6. A stop binds the unit's pointers, not only its id. Before launching any later spec, add every spec whose pointers overlap a stopped unit's to the held list, to the unit log as `HELD unit=<id> reason=overlaps-STOP-<n>`, and to the owner batch, except an owner spec authorised for that unit under item 5. Such a hold is decided under its stop's entry: it runs only as that entry's option (a), an owner spec in the owner's words, unless the owner rules the overlap out. A `HELD` Answered line releases it only on that ruling, and cites it.
 
-The unit log holds one line per event. Only `STOP-<n> unit=<id>` lines are stops and only `HELD unit=<id>` lines are holds; Step 10 reads nothing else as either, and only item 6 writes a `HELD` line. A unit with no result is logged as `NORESULT unit=<id>`. A no-result or held id is released only by a `RELEASED unit=<id>` line; a stop is never released, only re-scoped under item 5. A release is an event, not a property of the id: it lifts the `NORESULT` and `HELD` lines before it, and a later no-result or hold holds the id again. Verifier and critic stops and no-results are logged the same way, under the ids the run returns, which are the basenames of the files those agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`). Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified until a transient re-run returns one.
+The unit log holds one line per event, and every line starts with its date and a space, as each `printf` below writes it. Every reader takes the kind from the second field, so a line without its date would be invisible to all of them; each reader refuses a log that holds one. Only `STOP-<n> unit=<id>` lines are stops and only `HELD unit=<id>` lines are holds; Step 10 reads nothing else as either. A `HELD` line is written for item 6, with `reason=overlaps-STOP-<n>`, or before the first launch with `reason=owner`, for work the owner keeps back and for the specs over a stop outside any unit, such as the lead's own drafting, so that every held list and every critic sees it. A unit with no result is logged as `NORESULT unit=<id>`. A no-result or held id is released only by a `RELEASED unit=<id>` line; a stop is never released, only re-scoped under item 5. A release is an event, not a property of the id: it lifts the `NORESULT` and `HELD` lines before it, and a later no-result or hold holds the id again. Verifier and critic stops and no-results are logged the same way, under the ids the run returns, which are the basenames of the files those agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`). Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified until a transient re-run returns one.
 
 ```bash
 TODAY=$(date +%F)
 printf '%s STOP-%s unit=%s stage=%s written=%s routed=owner-batch\n' \
   "$TODAY" 1 CL1.5.0-02 report-write partial >> "$RUN_DIR/UNIT-LOG.txt"
+```
+
+The other hand-written lines, each before the launch it bears on:
+
+```bash
+TODAY=$(date +%F)
+printf '%s HELD unit=%s reason=overlaps-STOP-%s\n' "$TODAY" IS15 1 >> "$RUN_DIR/UNIT-LOG.txt"   # item 6
+printf '%s HELD unit=%s reason=owner\n' "$TODAY" CL1.4.0-01 >> "$RUN_DIR/UNIT-LOG.txt"         # held by the owner before any run
+printf '%s RERUN-%s unit=%s as=%s\n' "$TODAY" 1 CL1.4.1-01 R2 >> "$RUN_DIR/UNIT-LOG.txt"       # item 2: the launch tagged R2
 ```
 
 A unit, verifier or critic with no result has an undetermined cause: the runtime returns nothing for a subagent that was skipped mid-run or died on an API error, and a stopped subagent can look the same. Log it and move any partial file it wrote to `partials/`, so that the ledger keeps a unit unaccounted and a later release is not refused by its own partial:
@@ -274,6 +283,7 @@ A second no-result of the same id goes to the owner batch whatever its cause, an
 ```bash
 cd "${RUN_DIR:?}" || exit 1
 [ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt'; exit 2; }
+rg -q -v '^[0-9]{4}-[0-9]{2}-[0-9]{2} ' UNIT-LOG.txt; [ $? -eq 1 ] || { echo 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date'; exit 2; }   # rg: 1 = every line dated
 ID=CL1.4.1-02; BY=owner   # or BY=transient:<transcript path>; a verifier or critic id the same way
 [ ! -s "$ID.txt" ] || { echo "REFUSED: $ID.txt exists; a release comes before the run"; exit 1; }
 awk -v u="unit=$ID" '$2 ~ /^STOP-[0-9]+$/ && $3 == u {f = 1} END {exit !f}' UNIT-LOG.txt && { echo "REFUSED: $ID is stopped; only an owner spec re-scopes it"; exit 1; }
@@ -283,10 +293,19 @@ case "$BY" in
       END {exit !(n == 1 && s == "NORESULT ")}' UNIT-LOG.txt ||
       { echo "REFUSED: a transient release is for the first no-result of $ID, with no release or hold since"; exit 1; } ;;
   owner) [ -f OWNER-QUESTIONS.md ] || { echo 'REFUSED: no OWNER-QUESTIONS.md'; exit 2; }
-    answers=$(KEY_N="- NORESULT, unit $ID: \"" KEY_H="- HELD, unit $ID: \"" awk '/^## /{answered = ($0 == "## Answered")}
-      answered && (index($0, ENVIRON["KEY_N"]) == 1 || index($0, ENVIRON["KEY_H"]) == 1) {n++} END {print n + 0}' OWNER-QUESTIONS.md)
-    used=$(awk -v u="unit=$ID" '$2 == "RELEASED" && $3 == u && $4 == "by=owner" {n++} END {print n + 0}' UNIT-LOG.txt)
-    [ "$answers" -gt "$used" ] || { echo "REFUSED: no unused Answered line releases $ID"; exit 1; } ;;
+    # Answered lines for this id, one per line: "NORESULT", or "HELD <reason>" as the hold's line names it
+    answers=$(ID="$ID" awk '/^## /{answered = ($0 == "## Answered")} !answered {next}
+      index($0, "- NORESULT, unit " ENVIRON["ID"] ": \"") == 1 {print "NORESULT"}
+      index($0, "- HELD, unit " ENVIRON["ID"] ", ") == 1 {r = substr($0, length("- HELD, unit " ENVIRON["ID"] ", ") + 1); sub(/: ".*/, "", r); print "HELD " r}' OWNER-QUESTIONS.md)
+    # what this release lifts: the no-result and every hold, by reason, logged since the id's last release
+    open=$(awk -v u="unit=$ID" '$3 != u {next} $2 == "RELEASED" {delete h; nr = 0; next} $2 == "NORESULT" {nr = 1}
+      $2 == "HELD" {r = $4; sub(/^reason=/, "", r); h[r] = 1} END {if (nr) print "NORESULT"; for (r in h) print "HELD " r}' UNIT-LOG.txt)
+    [ -n "$open" ] || { echo "REFUSED: $ID has no no-result or hold to release"; exit 1; }
+    unanswered=$(printf '%s\n' "$open" | rg '^HELD ' | sort -u | comm -23 - <(printf '%s\n' "$answers" | rg '^HELD ' | sort -u) | paste -sd ',' -)
+    [ -z "$unanswered" ] || { echo "REFUSED: no Answered line releases $ID from: $unanswered"; exit 1; }
+    need=$(awk -v u="unit=$ID" '$3 != u {next} $2 == "NORESULT" {n++} $2 == "RELEASED" && $4 ~ /^by=transient:/ {n--} END {print n + 0}' UNIT-LOG.txt)
+    have=$(printf '%s\n' "$answers" | awk '$0 == "NORESULT" {n++} END {print n + 0}')
+    ! printf '%s\n' "$open" | rg -q '^NORESULT$' || [ "$have" -ge "$need" ] || { echo "REFUSED: no unused Answered line releases $ID"; exit 1; } ;;
   *) echo 'REFUSED: BY is owner or transient:<transcript path>'; exit 1 ;;
 esac
 printf '%s RELEASED unit=%s by=%s\n' "$(date +%F)" "$ID" "$BY" >> UNIT-LOG.txt
@@ -298,7 +317,7 @@ printf '%s RELEASED unit=%s by=%s\n' "$(date +%F)" "$ID" "$BY" >> UNIT-LOG.txt
 
 ### Step 9: Batch Owner Questions With a Faithfulness Check
 
-Collect every decision the owner must make in one `OWNER-QUESTIONS.md` in the run directory. Each question has an id, short context, cited evidence paths, options and a recommendation. For a stop entry the recommendation is hold: no option proposes a narrower, reworded or rerouted scope, and another unit's output is never offered as covering stopped work. Before presenting the batch, run a read-only faithfulness check. One checker per group of questions compares each factual sentence and each recommendation with the cited files and current tracker state. A completeness pass lists dependencies between questions and open items that no question covers. Checkers never read a stopped unit's content. Present gaps by topic: one entry per topic with its count and every question in full, and the owner approves or holds a topic as a whole, or names single gap ids. Before any answer, mark every gap whose question covers a stopped or held unit's pointers and write the marked ids to `owner/<tag>-marked-gaps.txt` (it may be empty, and must exist). Marking is the lead's reading of each question against the held pointers, so it can miss one. The critic's own `covers_held` flag is the second, independent signal, and the gap deriver honours both in code. List marked and flagged gaps apart. A marked gap is never approved: it belongs only to its unit's stop entry, option (a). A flagged gap the batch did not mark is approved only by its id, with the reason it was not marked. The owner who approves a topic still sees every question in it. A checker correction to a gap's question is not folded into the question, because a later unit reads the question as recorded; list it beside the gap and recommend hold. Record each answer on one line in the Answered section: `- STOP-<n>, unit <id>: "<owner's words verbatim>" (<where the words came from>, <date>)` for a stop, the same with `NORESULT` or `HELD` in place of `STOP-<n>` for a no-result or held id, and `- RERUN-<n>, run <tag>: "<owner's words>" (<where>, <date>)` for a re-run of reported work. The owner-spec check and the release snippet read these lines. Transcribe topic and id approvals to `owner/<tag>-approved-topics.txt` and `owner/<tag>-approved-gaps.txt` for the gap deriver.
+Collect every decision the owner must make in one `OWNER-QUESTIONS.md` in the run directory. Each question has an id, short context, cited evidence paths, options and a recommendation. For a stop entry the recommendation is hold: no option proposes a narrower, reworded or rerouted scope, and another unit's output is never offered as covering stopped work. Before presenting the batch, run a read-only faithfulness check. One checker per group of questions compares each factual sentence and each recommendation with the cited files and current tracker state. A completeness pass lists dependencies between questions and open items that no question covers. Checkers never read a stopped unit's content. Present gaps by topic: one entry per topic with its count and every question in full, and the owner approves or holds a topic as a whole, or names single gap ids. Before any answer, mark every gap whose question covers a stopped or held unit's pointers and write the marked ids to `owner/<tag>-marked-gaps.txt` (it may be empty, and must exist). Marking is the lead's reading of each question against the held pointers, so it can miss one. The critic's own `covers_held` flag is the second, independent signal, and the gap deriver honours both in code. List marked and flagged gaps apart. A marked gap is never approved: it belongs only to its unit's stop entry, option (a). A flagged gap the batch did not mark is approved only by its id, with the reason it was not marked. The owner who approves a topic still sees every question in it. A checker correction to a gap's question is not folded into the question, because a later unit reads the question as recorded; list it beside the gap and recommend hold. Record each answer on one line in the Answered section: `- STOP-<n>, unit <id>: "<owner's words verbatim>" (<where the words came from>, <date>)` for a stop, the same with `NORESULT` in place of `STOP-<n>` for a no-result, `- HELD, unit <id>, <reason>: "<owner's words>" (<where>, <date>)` for a hold, its reason as its `HELD` line names it (`overlaps-STOP-<n>` or `owner`), and `- RERUN-<n>, run <tag>: "<owner's words>" (<where>, <date>)` for a re-run of reported work. An owner release lifts only what has an answer: each hold logged since the id's last release needs its own line under its reason, so an answer given before a later hold does not lift it, and a no-result needs a `NORESULT` line not yet used by an earlier owner release. The owner-spec check and the release snippet read these lines. Transcribe topic and id approvals to `owner/<tag>-approved-topics.txt` and `owner/<tag>-approved-gaps.txt` for the gap deriver.
 
 ```markdown
 - **B1. STOP-1, unit CL1.5.0-02.** Stopped while writing its report; report partial.
@@ -318,6 +337,7 @@ Compute the coverage statement from files. Never derive it from agents' idle sta
 ```bash
 cd "${RUN_DIR:?}" || exit 1
 [ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt'; exit 2; }
+rg -q -v '^[0-9]{4}-[0-9]{2}-[0-9]{2} ' UNIT-LOG.txt; [ $? -eq 1 ] || { echo 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date'; exit 2; }   # rg: 1 = every line dated
 mech_sums | cmp -s - MECH-SHA256SUMS || { echo 'mechanical/ changed during the run'; exit 1; }   # mech_sums: Step 1
 work_sums | sort | cmp -s - <(sort WORK-SHA256SUMS) || { echo 'the work list changed after it was recorded'; exit 1; }   # work_sums: Step 2
 all_ids=$(find specs -name '*.json' -exec jq -r '.[].id' {} +) || { echo 'a spec file is not a spec list'; exit 1; }

@@ -19,8 +19,8 @@ node -e '
   const t = require("fs").readFileSync(process.argv[1], "utf8");
   const fences = [...t.matchAll(/```([a-z]+)\n([\s\S]*?)```/g)].map((m) => m[2]);
   const want = [["step1.sh", "mech_sums()"], ["derive-specs.mjs", "readFileSync(file"], ["step2.sh", "bullets="],
-    ["record.sh", "work_sums()"], ["step7.sh", "PILOT="], ["step8.sh", "STOP-%s"], ["noresult.sh", "NORESULT unit=%s"],
-    ["release.sh", "RELEASED unit=%s"], ["step10.sh", "ledger/ids.txt"]];
+    ["record.sh", "work_sums()"], ["step7.sh", "PILOT="], ["step8.sh", "routed=owner-batch"], ["noresult.sh", "NORESULT unit=%s"],
+    ["release.sh", "RELEASED unit=%s"], ["step10.sh", "ledger/ids.txt"], ["writers.sh", "reason=owner"]];
   for (const [name, anchor] of want) {
     const hits = fences.filter((f) => f.includes(anchor));
     if (hits.length !== 1) { console.error(name + ": anchor " + anchor + " is in " + hits.length + " fences, want 1"); process.exit(2); }
@@ -135,6 +135,25 @@ check 'a transient release naming no transcript file is refused' "$(in_side 'rm 
 transient CL1.4.1-02 "$work/t/IS12.jsonl" > "$work/release-again.sh"
 check 'a transient release after an owner release and a second no-result is refused' "$(in_side 'rm "$side/CL1.4.1-02.txt"; printf "2026-10-27 NORESULT unit=CL1.4.1-02 cause=undetermined\n" >> "$side/UNIT-LOG.txt"' "$work/release-again.sh")" 'REFUSED: a transient release is for the first no-result of CL1.4.1-02, with no release or hold since rc=1'
 check 'a second owner release from the same Answered line is refused' "$(in_side 'rm "$side/CL1.4.1-02.txt"; printf "2026-10-27 NORESULT unit=CL1.4.1-02 cause=undetermined\n" >> "$side/UNIT-LOG.txt"' "$work/release.sh")" 'REFUSED: no unused Answered line releases CL1.4.1-02 rc=1'
+# The owner arm is bound to what it releases: each hold since the last release by its reason, a no-result by
+# a NORESULT Answered line not yet used (AD5-2). IS15 has no report in each of these copies.
+owner_is15() { sed "s|^- STOP-1, unit CL1.5.0-02: \"hold\".*$|&\\n$1|" "$side/OWNER-QUESTIONS.md" > "$side/oq" && mv "$side/oq" "$side/OWNER-QUESTIONS.md"; }
+as_id release.sh IS15 > /dev/null
+check 'an answer given before a later hold does not lift that hold' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 HELD unit=IS15 reason=overlaps-STOP-1\n2026-10-27 HELD unit=IS15 reason=overlaps-STOP-2\n" >> "$side/UNIT-LOG.txt"; owner_is15 "- HELD, unit IS15, overlaps-STOP-1: \"ruled out\" (owner message, 2026-10-27)"' "$work/release.sh.IS15")" 'REFUSED: no Answered line releases IS15 from: HELD overlaps-STOP-2 rc=1'
+check 'a no-result answer does not lift a hold logged after it' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 NORESULT unit=IS15 cause=undetermined\n2026-10-27 HELD unit=IS15 reason=overlaps-STOP-2\n" >> "$side/UNIT-LOG.txt"; owner_is15 "- NORESULT, unit IS15: \"re-run it once\" (owner message, 2026-10-27)"' "$work/release.sh.IS15")" 'REFUSED: no Answered line releases IS15 from: HELD overlaps-STOP-2 rc=1'
+check 'a hold answered under another reason is refused' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 HELD unit=IS15 reason=overlaps-STOP-1\n" >> "$side/UNIT-LOG.txt"; owner_is15 "- HELD, unit IS15, owner: \"run it\" (owner message, 2026-10-27)"' "$work/release.sh.IS15")" 'REFUSED: no Answered line releases IS15 from: HELD overlaps-STOP-1 rc=1'
+check 'a pre-run owner hold is released by its own Answered line' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 HELD unit=IS15 reason=owner\n" >> "$side/UNIT-LOG.txt"; owner_is15 "- HELD, unit IS15, owner: \"run it\" (owner message, 2026-10-27)"' "$work/release.sh.IS15") $(rg -c 'RELEASED unit=IS15 by=owner' "$side/UNIT-LOG.txt")" ' rc=0 1'
+check 'after a transient release and a second no-result, one owner answer releases' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 NORESULT unit=IS15 cause=undetermined\n2026-10-27 RELEASED unit=IS15 by=transient:/t/x\n2026-10-27 NORESULT unit=IS15 cause=undetermined\n" >> "$side/UNIT-LOG.txt"; owner_is15 "- NORESULT, unit IS15: \"once more\" (owner message, 2026-10-27)"' "$work/release.sh.IS15")" ' rc=0'
+sed 's/^ID=CL1.4.1-02; BY=owner /ID=IS15; BY=foo /' "$work/release.sh" > "$work/release-by.sh"
+check 'a release with an unknown BY is refused, nothing written' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 NORESULT unit=IS15 cause=undetermined\n" >> "$side/UNIT-LOG.txt"' "$work/release-by.sh") $(rg -c 'RELEASED unit=IS15' "$side/UNIT-LOG.txt" || echo 0)" 'REFUSED: BY is owner or transient:<transcript path> rc=1 0'
+check 'an owner release with no owner batch is refused' "$(in_side 'rm "$side/IS15.txt" "$side/OWNER-QUESTIONS.md"; printf "2026-10-27 NORESULT unit=IS15 cause=undetermined\n" >> "$side/UNIT-LOG.txt"' "$work/release.sh.IS15")" 'REFUSED: no OWNER-QUESTIONS.md rc=2'
+# A line without its date is invisible to every reader, so each reader refuses the log (R5-1).
+check 'release: a unit-log line without its date is refused' "$(in_side 'rm "$side/IS15.txt"; printf "2026-10-27 NORESULT unit=IS15 cause=undetermined\nHELD unit=IS15 reason=overlaps-STOP-1\n" >> "$side/UNIT-LOG.txt"' "$(transient IS15 "$work/t/IS12.jsonl" > "$work/release-dl.sh"; printf '%s' "$work/release-dl.sh")")" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date rc=2'
+check 'ledger: a unit-log line without its date is refused' "$(in_side 'printf "HELD unit=IS15 reason=overlaps-STOP-1\n" >> "$side/UNIT-LOG.txt"' /dev/null >/dev/null; (RUN_DIR="$side"; ledger))" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date'
+# An unreadable log is refused too (not as root, which reads any file: there this row fails loudly).
+check 'release: an unreadable unit log is refused' "$(in_side 'rm "$side/CL1.4.1-02.txt"; chmod 000 "$side/UNIT-LOG.txt"' "$work/release.sh" | sed 's/.*REFUSED/REFUSED/'; chmod 600 "$side/UNIT-LOG.txt")" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date rc=2'
+check 'ledger: an unreadable unit log is refused' "$(in_side 'chmod 000 "$side/UNIT-LOG.txt"' /dev/null >/dev/null; (RUN_DIR="$side"; ledger); chmod 600 "$side/UNIT-LOG.txt")" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date'
+check 'the documented writers write lines every reader reads' "$(in_side 'rm "$side/IS15.txt"' "$work/writers.sh" >/dev/null; (RUN_DIR="$side"; ledger))" 'specs=7 reported=6 stopped=1 held=2 unaccounted=0 extra=0 held_ran=1'
 check 'ledger: no unit log is refused' "$(in_side 'rm "$side/UNIT-LOG.txt"' /dev/null >/dev/null; (RUN_DIR="$side"; ledger))" 'REFUSED: no UNIT-LOG.txt'
 rm -rf "${side:?}"
 
@@ -167,13 +186,13 @@ check 'held spec is held, not unaccounted' "$(ledger)" 'specs=8 reported=7 stopp
 printf 'VERDICT: ok\n' > "$RUN_DIR/G-R1-1.txt"
 check 'held spec with a report is held_ran' "$(ledger)" 'specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1'
 sed 's/^ID=CL1.4.1-02/ID=G-R1-1/' "$work/release.sh" > "$work/release-g.sh"
-sed -i 's/^- STOP-1, unit CL1.5.0-02: "hold".*$/&\n- HELD, unit G-R1-1: "the overlap is ruled out; run it" (owner message, 2026-10-27)/' "$RUN_DIR/OWNER-QUESTIONS.md"
+sed -i 's/^- STOP-1, unit CL1.5.0-02: "hold".*$/&\n- HELD, unit G-R1-1, overlaps-STOP-1: "the overlap is ruled out; run it" (owner message, 2026-10-27)/' "$RUN_DIR/OWNER-QUESTIONS.md"
 check 'a release after a held run is refused, and held_ran stays visible' "$(in_run "$work/release-g.sh") $(ledger)" 'REFUSED: G-R1-1.txt exists; a release comes before the run rc=1 specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1'
 
 # A release is an event: it lifts the hold before it, and a hold logged after it holds the id again.
 rm -f "$RUN_DIR/G-R1-1.txt"
 check 'a hold released from an unused Answered line is unaccounted until it runs' "$(in_run "$work/release-g.sh") $(ledger)" ' rc=0 specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0'
-check 'an Answered line releases once' "$(in_run "$work/release-g.sh")" 'REFUSED: no unused Answered line releases G-R1-1 rc=1'
+check 'an Answered line releases once' "$(in_run "$work/release-g.sh")" 'REFUSED: G-R1-1 has no no-result or hold to release rc=1'
 printf '2026-10-27 HELD unit=G-R1-1 reason=overlaps-STOP-2\n' >> "$RUN_DIR/UNIT-LOG.txt"
 check 'a hold logged after a release holds the id again' "$(ledger)" 'specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0'
 printf 'VERDICT: ok\n' > "$RUN_DIR/G-R1-1.txt"

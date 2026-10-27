@@ -241,6 +241,11 @@ check 'launch: an id in two spec files is refused before any list is printed' "$
 printf 'not json\n' > "$RUN_DIR/specs/rows2.json"; (cd "$RUN_DIR" && sed -i '/ specs\/rows2.json$/d' WORK-SHA256SUMS && sha256sum specs/rows2.json >> WORK-SHA256SUMS)
 check 'launch: a recorded cluster file that is not a spec list is refused before any list is printed' "$(run held-2.sh | sed 's/.*REFUSED/REFUSED/')" 'REFUSED: specs/rows2.json is not a spec list rc=2'
 rm "$RUN_DIR/specs/rows2.json"; (cd "$RUN_DIR" && sed -i '/ specs\/rows2.json$/d' WORK-SHA256SUMS)
+printf '%s\n' '2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch' 'HELD unit=RW-C reason=overlaps-STOP-1' > "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: a unit-log line without its date is refused before any list is printed' "$(run held.sh)" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date rc=2'
+printf '%s\n' '2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch' > "$RUN_DIR/UNIT-LOG.txt"; chmod 000 "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: an unreadable unit log is refused before any list is printed' "$(run held.sh | sed 's/.*REFUSED/REFUSED/')" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date rc=2'
+chmod 600 "$RUN_DIR/UNIT-LOG.txt"
 rm "$RUN_DIR/UNIT-LOG.txt"
 check 'held: a missing unit log is refused' "$(run held.sh)" 'REFUSED: no UNIT-LOG.txt (Step 1 creates it) rc=2'
 

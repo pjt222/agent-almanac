@@ -404,6 +404,7 @@ with the correction and recommended for hold.
 
 - STOP-1, unit <id>: "<the owner's words, verbatim, on one line>" (<where the words came from>, <date>)
 - NORESULT, unit <id>: "<the owner's words>" (<where the words came from>, <date>)
+- HELD, unit <id>, overlaps-STOP-2: "<the owner's ruling on that overlap>" (<where the words came from>, <date>)
 - RERUN-1, run <tag>: "<the owner's words, naming the units>" (<where the words came from>, <date>)
 
 ## Open
@@ -432,7 +433,8 @@ with the correction and recommended for hold.
 - **B6. HELD, unit <id>, over STOP-<n>.** <the pointers it shares with the stopped unit>.
   Evidence: UNIT-LOG.txt line <n>, the two specs. It runs only as the stop entry's option (a),
   unless you rule the overlap out. Options: (a) the pointers do not overlap: release it, (b) hold.
-  Recommendation: (b).
+  Recommendation: (b). Its answer is recorded as `- HELD, unit <id>, overlaps-STOP-<n>: ...`; a hold
+  over another stop, or one you set before any run (`owner`), is a separate entry with its own answer.
 ```
 
 ## Launch sequence
@@ -442,6 +444,7 @@ Pilot first, read its reports, then one run per remaining cluster, started toget
 ```bash
 cd "${RUN_DIR:?}" || exit 1
 [ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt (Step 1 creates it)'; exit 2; }
+rg -q -v '^[0-9]{4}-[0-9]{2}-[0-9]{2} ' UNIT-LOG.txt; [ $? -eq 1 ] || { echo 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date'; exit 2; }   # rg: 1 = every line dated
 TAG=R2                      # the run about to launch: a new tag for every launch, re-runs included
 CLUSTER="specs/rows.json"   # the cluster it launches
 sha256sum -c --quiet WORK-SHA256SUMS && awk -v f="$CLUSTER" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS ||
