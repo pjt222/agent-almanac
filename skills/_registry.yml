@@ -521,7 +521,7 @@ domains:
         path: decompose-into-pointer-units/SKILL.md
         complexity: advanced
         language: multi
-        description: Run a large review, audit or migration as many narrow agent units derived mechanically from source artifacts, with pointer-only specs, one shared brief, template-assembled prompts, adversarial verifiers, grouped critics, a capped gap round, and stops recorded and routed to the owner rather than re-run
+        description: Run a large review, audit or migration as many narrow agent units derived mechanically from source artifacts, with pointer-only specs, one shared brief, template-assembled prompts, adversarial verifiers, grouped critics whose gaps go to the owner, and stops recorded and routed to the owner rather than re-run
 
   citations:
     description: Academic and software citation management with R and BibTeX

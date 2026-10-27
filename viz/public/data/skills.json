@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-10-27T09:41:22.433Z",
+    "generated": "2026-10-27T14:20:11.020Z",
     "totalSkills": 374,
     "totalAgents": 76,
     "totalTeams": 22,
@@ -3634,7 +3634,7 @@
       "domain": "general",
       "complexity": "advanced",
       "language": "multi",
-      "description": "Run a large review, audit or migration as many narrow agent units derived mechanically from source artifacts, with pointer-only specs, one shared brief, template-assembled prompts, adversarial verifiers, grouped critics, a capped gap round, and stops recorded and routed to the owner rather than re-run",
+      "description": "Run a large review, audit or migration as many narrow agent units derived mechanically from source artifacts, with pointer-only specs, one shared brief, template-assembled prompts, adversarial verifiers, grouped critics whose gaps go to the owner, and stops recorded and routed to the owner rather than re-run",
       "tags": [
         "general",
         "multi-agent",
