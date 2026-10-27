@@ -130,12 +130,12 @@ const verify = (r, item, n, ph) => agent(verifyPrompt(r, item, n), { label: `ver
 
 // Any stop value but none is a stop, and so is a missing field: recorded, never verified, counted or re-run here.
 const isStop = (x) => x.stop !== 'none'
-const UNDETERMINED = 'cause undetermined: read the transcript by structure before any re-run; only for a transient failure (overload or '
-  + '5xx, rate limit, network timeout) and nothing else, release it (SKILL.md Step 8) and re-run it once, unchanged and alone, under a new '
-  + 'tag; anything else goes to the owner batch'
-const RETRY = 'cause undetermined: read its transcript by structure; only for a transient failure (overload or 5xx, rate limit, network '
-  + 'timeout), release it (SKILL.md Step 8) and re-run it once, alone, with args.rerun, its prompt from rerun_prompts and a new tag; '
-  + 'anything else goes to the owner batch, and until then what it checks stays unchecked'
+const CAUSES = 'overload or 5xx, rate limit, a usage or quota limit notice from the runtime, network timeout'
+const UNDETERMINED = `cause undetermined: read the transcript by structure before any re-run; only for a transient failure (${CAUSES}) `
+  + 'and nothing else, release it (SKILL.md Step 8) and re-run it once, unchanged and alone, under a new tag; anything else goes to the owner batch'
+const RETRY = `cause undetermined: read its transcript by structure before any re-run; only for a transient failure (${CAUSES}) and `
+  + 'nothing else, release it and pass the pre-rerun check (SKILL.md Step 8), then re-run it once, unchanged and alone, with args.rerun, '
+  + 'its prompt from rerun_prompts and a new tag; anything else goes to the owner batch, and until then what it checks stays unchecked'
 const NOT_RERUN = 'do not re-run; its unit and cluster are re-launched only if the owner names them'
 // Several critics often report the same gap: keep its highest-priority copy, carry into it the covers_held flag of any
 // copy dropped (a lost flag would let the gap be derived through its topic), and give each an id for the owner batch.
@@ -472,8 +472,8 @@ Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R1', specs: R1, reportD
 // line; otherwise it goes to the owner batch (B5), and only the units the owner names run again.
 Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R2', specs: R2_UNHELD, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
 Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R3', specs: R3_UNHELD, reportDir: DIR, brief: BRIEF, mech: MECH, source: SOURCE, held: HELD } })
-// A verifier or critic released for a transient failure (SKILL.md Step 8) re-runs alone, under a new tag:
-Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R2-r1', rerun: { id: 'V-CL1.4.1-02-1', prompt: R2_RESULT.rerun_prompts['V-CL1.4.1-02-1'] } } })
+// A verifier or critic released for a transient failure re-runs alone, under a new tag, once the pre-rerun check passes (SKILL.md Step 8):
+Workflow({ scriptPath: 'narrow-units.mjs', args: { tag: 'R2-r1', rerun: { id: 'V-<id>-<n>', prompt: R2_RESULT.rerun_prompts['V-<id>-<n>'] } } })
 ```
 
 Each run returns `stopped`, `no_result`, `held`, `verifier_stopped`, `verifier_no_result`, `critic_stopped`, `critic_no_result`, `gaps_for_owner` and `rerun_prompts`. Before reading any report, write to the unit log:
@@ -481,9 +481,9 @@ Each run returns `stopped`, `no_result`, `held`, `verifier_stopped`, `verifier_n
 - one Step 8 `STOP-<n> unit=<id>` line per `stopped` id;
 - one `NORESULT unit=<id>` line per `no_result` id, with its partial moved (Step 8).
 
-The `held` it returns is the list passed in, already derived from the log, so it is not logged again. A `HELD` line is written only by Step 8 item 6.
+The `held` it returns is the list passed in, already derived from the log, so it is not logged again. A `HELD` line is written only as Step 8 says: for item 6, or for an owner hold before the first launch.
 
-Verifier and critic stops and no-results are logged the same way, under the ids the run returns. Those ids are the basenames of the files the agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`), and the ledger and the held list leave them out. Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified until a transient re-run returns one. `rerun_prompts` holds the exact prompt of each verifier and critic with no result, and a `rerun` passes it back unchanged; keep the run's returned value until its no-results are decided.
+Verifier and critic stops and no-results are logged the same way, under the ids the run returns. Those ids are the basenames of the files the agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`), and the ledger and the held list leave them out. Step 10 counts spec units only, so these go into the coverage statement and the owner batch, and the claim behind a stopped or missing verdict counts as unverified until a transient re-run returns one. `rerun_prompts` holds the exact prompt of each verifier and critic with no result, and a `rerun` passes it back unchanged; keep the run's returned value until its no-results are decided. A critic's prompt grows with the run, so check it is whole (it ends with the last digest line) before passing it back; a result truncated in a notification is read whole from the workflow journal. A critic's prompt also carries its first run's HELD line, so mark its re-run's gaps against the current held list (Step 9).
 
 Write `gaps_for_owner` to `gaps/<tag>.json` and record it before the batch is built, so the questions the owner approves are the ones a later unit reads:
 

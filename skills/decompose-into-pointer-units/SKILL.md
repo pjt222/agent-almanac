@@ -188,7 +188,7 @@ const DSCHEMA = { type: 'object', additionalProperties: false,
 
 1. **Verify**: one adversarial verifier per non-benign item. It gets the same evidence and is told to refute: the counter-example, the misread source, the overstated impact, and every refutation check the brief lists. It writes `V-<unit>-<n>.txt`. A verifier that reports a stop or returns nothing is recorded; its verdict is not counted, and the claim stays unverified.
 2. **Accuracy critics**: one per group of at most the critic group size (default 15) reports. Each reads every report in its group, benign ones included. Per-item verifiers never see a wrong claim inside a benign verdict.
-3. **Completeness critic**: one per run, over the spec list, the digest and the mechanical inputs. It asks what in scope no unit covered. Every critic is told which ids are held for the owner (stopped, no result or held) and sets a required `covers_held` flag on any gap over their pointers.
+3. **Completeness critic**: one per run, over the spec list, the digest and the mechanical inputs. It asks what in scope no unit covered. Every critic is told which ids are held for the owner (stopped, no result or held) when its run starts, and sets a required `covers_held` flag on any gap over their pointers. A critic re-run through `rerun` is told its first run's list, so a stop or hold logged since reaches its gaps only through the marking (Step 9).
 4. **Gaps go to the owner**: sort the critics' gaps by priority and drop exact-title duplicates (after lowercasing, keeping the highest-priority copy, which takes `covers_held` if any copy set it; a reworded duplicate is not caught). No gap runs in the run that found it. Every gap goes to the owner batch, and a gap becomes a spec only in a later run, from an id the owner approved. A completeness critic sees a stopped or held unit's scope as uncovered and proposes it, and nothing in code can reliably tell that from a new gap; the owner can. A stopped critic's gaps and corrections are not used. Each gap carries an id, a topic from the brief's CLASSIFY categories, so the owner can approve by topic, and its `covers_held` flag.
 
 ```javascript
@@ -232,7 +232,7 @@ Check that each report cites the pointers it was given, that its summary matches
 
 **Expected:** The pilot reports pass every check before any other cluster starts, and the repository's HEAD and status are unchanged.
 
-**On failure:** A defect found after all clusters launched must be fixed once per cluster. Stop runs that started early and fix. Restart a run only if no run in the job has recorded a stop or a missing result; otherwise it goes to the owner batch as above. A run stopped from outside may not return its lists, so read its reports for `STOPPED:` lines and its transcripts before deciding.
+**On failure:** A defect found after all clusters launched must be fixed once per cluster. Stop runs that started early and fix. Restart a run only if no run in the job has recorded a stop or a missing result; otherwise it goes to the owner batch as above. A run stopped from outside may not return its lists, so read its reports for `STOPPED:` lines and its transcripts before deciding. A run that returns nothing at all, halted from outside or by a usage limit, leaves no lists and no `rerun_prompts`: log a no-result (Step 8) for each of its units, verifiers and critics that has no file. A checker's prompt is then the first message of its transcript in the workflow journal, passed back whole; one that cannot be recovered whole goes to the owner batch.
 
 ### Step 8: Respect a Stop
 
@@ -274,7 +274,7 @@ printf '%s NORESULT unit=%s cause=undetermined\n' "$(date +%F)" "$ID" >> "$RUN_D
 
 Then read its transcript or error by structure, not by substring. A stop shows as an assistant turn ending in a refusal, or as a stop or interrupt notice that the runtime itself wrote for that subagent (name your runtime's exact notices in the brief's TOOLS section). A subagent that read text containing those strings can carry them anywhere in its output.
 
-- **Transient**: the transcript shows an overload or 5xx response, a rate limit or a network timeout, and nothing else. Release it with `BY=transient:<transcript path>` and re-run it once, unchanged and alone, under a new tag: a unit through the launch snippet, which then lists it alone, and a verifier or critic through the skeleton's `rerun` argument, with the prompt its run returned in `rerun_prompts` (EXAMPLES.md).
+- **Transient**: the transcript shows an overload or 5xx response, a rate limit, a usage or quota limit notice written by the runtime, or a network timeout, and nothing else. Release it with `BY=transient:<transcript path>` and re-run it once, unchanged and alone, under a new tag: a unit through the launch snippet, and a verifier or critic, once the pre-rerun check below passes, through the skeleton's `rerun` argument, with the prompt its run returned in `rerun_prompts` (EXAMPLES.md).
 - **Stop**: an error that cites a usage policy, a refusal, a blocked request or a hook is a stop, even when it is labelled as an API error. Add a `STOP-<n> unit=<id>` line.
 - **Otherwise** the cause is not established. Keep the `NORESULT` line, do not re-run or reword it, and put it in the owner batch; a unit stays unaccounted until the owner answers.
 
@@ -309,6 +309,19 @@ case "$BY" in
   *) echo 'REFUSED: BY is owner or transient:<transcript path>'; exit 1 ;;
 esac
 printf '%s RELEASED unit=%s by=%s\n' "$(date +%F)" "$ID" "$BY" >> UNIT-LOG.txt
+```
+
+The skeleton cannot read the unit log, so before a verifier or critic re-runs through `rerun`, this check binds the re-run to its release. It passes only an id whose last no-result, hold or release line is a release, with no stop and no file of its own:
+
+```bash
+cd "${RUN_DIR:?}" || exit 1
+ID=V-CL1.4.1-02-1   # the verifier or critic about to re-run through args.rerun
+[ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt'; exit 2; }
+rg -q -v '^[0-9]{4}-[0-9]{2}-[0-9]{2} ' UNIT-LOG.txt; [ $? -eq 1 ] || { echo 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date'; exit 2; }   # rg: 1 = every line dated
+[ ! -s "$ID.txt" ] || { echo "REFUSED: $ID.txt exists; it has a result"; exit 1; }
+awk -v u="unit=$ID" '$3 != u {next} $2 ~ /^STOP-[0-9]+$/ {s = 1} $2 == "NORESULT" || $2 == "HELD" || $2 == "RELEASED" {l = $2}
+  END {exit !(!s && l == "RELEASED")}' UNIT-LOG.txt || { echo "REFUSED: $ID is stopped, or has no release since its last no-result"; exit 1; }
+echo "rerun $ID: released, not stopped, no result yet"
 ```
 
 **Expected:** Every stop has a `STOP-<n> unit=` line and a batch entry; every no-result has a `NORESULT` line, its partial under `partials/`, and either a transient release or a batch entry; every item-6 hold has a `HELD` line; nothing that ran was launched again after a stop or no-result without an owner answer naming it, except the one transient re-run the release snippet recorded.

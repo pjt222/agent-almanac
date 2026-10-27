@@ -127,6 +127,7 @@ for (const source of ['safety-classifier', 'reviewer', 'policy-hook']) {
   check('S7 no result', 'listed under no_result', o.result?.no_result?.includes('CL-B'));
   check('S7 no result', 'the log does not say to re-run as-is', !o.logs.some((l) => /re-run as-is/i.test(l)));
   check('S7 no result', 'the log says the cause is undetermined', o.logs.some((l) => /cause undetermined/i.test(l)));
+  check('S7 no result', 'the log allows one re-run, unchanged and alone, for a transient failure and nothing else', logMatches(o, /NO RESULT, cause undetermined[^\n]*only for a transient failure[^\n]*and nothing else[^\n]*re-run it once, unchanged and alone, under a new tag[^\n]*CL-B/));
   check('S7 no result', 'the unit ran once', ranOnce(o, 'CL-B'));
   check('S7 no result', 'a unit gets no rerun prompt; it re-runs as a run of its one spec', noPrompt(o, 'CL-B'));
   check('S7 no result', 'the completeness critic is told the no-result id is held', /HELD[^\n]*\n[^\n]*CL-B/.test(o.prompts['completeness R1'] ?? ''));
@@ -151,7 +152,7 @@ for (const source of ['safety-classifier', 'reviewer', 'policy-hook']) {
   check('S10 verifier no result', 'no verdict counted for it', (o.result?.units?.find((u) => u.unit === 'CL-B')?.verdicts ?? [1]).length === 0);
   check('S10 verifier no result', "'verify CL-B#1' ran once", ranOnce(o, 'verify CL-B#1'));
   check('S10 verifier no result', 'the log says the cause is undetermined', logMatches(o, /NO RESULT from verifier, cause undetermined[^\n]*V-CL-B-1/));
-  check('S10 verifier no result', 'the log allows one re-run with args.rerun, for a transient failure only', logMatches(o, /NO RESULT from verifier, cause undetermined[^\n]*transient[^\n]*args\.rerun[^\n]*V-CL-B-1/) && !logMatches(o, /re-run as-is/i));
+  check('S10 verifier no result', 'the log allows one re-run with args.rerun, for a transient failure only', logMatches(o, /NO RESULT from verifier, cause undetermined[^\n]*only for a transient failure[^\n]*and nothing else[^\n]*re-run it once, unchanged and alone, with args\.rerun[^\n]*V-CL-B-1/) && !logMatches(o, /re-run as-is/i));
   check('S10 verifier no result', 'its rerun prompt is the prompt it was launched with', promptIsLaunched(o, 'V-CL-B-1', 'verify CL-B#1'));
   check('S10 verifier no result', 'no gap unit runs', noGapUnit(o)); }
 
@@ -184,7 +185,7 @@ for (const source of ['safety-classifier', 'reviewer', 'policy-hook']) {
   check('S14 critic no result', 'recorded in critic_no_result', o.result?.critic_no_result?.includes('X-accuracy-R1-1'));
   check('S14 critic no result', 'its id is the basename of the file it writes', (o.prompts['critic R1-1'] ?? '').includes('/r/X-accuracy-R1-1.txt'));
   check('S14 critic no result', "'critic R1-1' ran once", ranOnce(o, 'critic R1-1'));
-  check('S14 critic no result', 'the log allows one re-run with args.rerun, for a transient failure only', logMatches(o, /NO RESULT from critic, cause undetermined[^\n]*transient[^\n]*args\.rerun[^\n]*X-accuracy-R1-1/) && !logMatches(o, /re-run as-is/i));
+  check('S14 critic no result', 'the log allows one re-run with args.rerun, for a transient failure only', logMatches(o, /NO RESULT from critic, cause undetermined[^\n]*only for a transient failure[^\n]*and nothing else[^\n]*re-run it once, unchanged and alone, with args\.rerun[^\n]*X-accuracy-R1-1/) && !logMatches(o, /re-run as-is/i));
   check('S14 critic no result', 'its rerun prompt is the prompt it was launched with', promptIsLaunched(o, 'X-accuracy-R1-1', 'critic R1-1'));
   check('S14 critic stop', 'recorded in critic_stopped', o.result?.critic_stopped?.includes('X-completeness-R1'));
   check('S14 critic stop', "'completeness R1' ran once", ranOnce(o, 'completeness R1'));

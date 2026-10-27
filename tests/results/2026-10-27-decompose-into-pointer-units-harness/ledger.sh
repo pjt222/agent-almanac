@@ -20,7 +20,8 @@ node -e '
   const fences = [...t.matchAll(/```([a-z]+)\n([\s\S]*?)```/g)].map((m) => m[2]);
   const want = [["step1.sh", "mech_sums()"], ["derive-specs.mjs", "readFileSync(file"], ["step2.sh", "bullets="],
     ["record.sh", "work_sums()"], ["step7.sh", "PILOT="], ["step8.sh", "routed=owner-batch"], ["noresult.sh", "NORESULT unit=%s"],
-    ["release.sh", "RELEASED unit=%s"], ["step10.sh", "ledger/ids.txt"], ["writers.sh", "reason=owner"]];
+    ["release.sh", "RELEASED unit=%s"], ["step10.sh", "ledger/ids.txt"], ["writers.sh", "reason=owner"],
+    ["prerun.sh", "it has a result"]];
   for (const [name, anchor] of want) {
     const hits = fences.filter((f) => f.includes(anchor));
     if (hits.length !== 1) { console.error(name + ": anchor " + anchor + " is in " + hits.length + " fences, want 1"); process.exit(2); }
@@ -121,6 +122,21 @@ printf 'partial\n' > "$RUN_DIR/V-CL1.4.0-01-1.txt"
 in_run "$(as_id noresult.sh V-CL1.4.0-01-1)" > /dev/null
 transient V-CL1.4.0-01-1 "$work/t/V.jsonl" > "$work/release-v.sh"
 check 'a verifier with no result: its partial moves, and a transient release is logged' "$(in_run "$work/release-v.sh") $(cat "$RUN_DIR/partials/V-CL1.4.0-01-1.txt") $(rg -c 'RELEASED unit=V-CL1.4.0-01-1 by=transient:' "$RUN_DIR/UNIT-LOG.txt")" ' rc=0 partial 1'
+
+# Before a verifier or critic re-runs through args.rerun, the pre-rerun check reads the log: only a released
+# no-result with no file and no stop passes (AD5-4). V-CL1.4.0-01-1 was released for a transient cause above.
+prerun() { sed "s/^ID=V-CL1.4.1-02-1 /ID=$1 /" "$work/prerun.sh" > "$work/prerun-$1.sh"; printf '%s' "$work/prerun-$1.sh"; }
+check 'pre-rerun: a released no-result passes' "$(in_run "$(prerun V-CL1.4.0-01-1)")" 'rerun V-CL1.4.0-01-1: released, not stopped, no result yet rc=0'
+printf '2026-10-27 NORESULT unit=X-accuracy-R1-1 cause=undetermined\n' >> "$RUN_DIR/UNIT-LOG.txt"
+check 'pre-rerun: a no-result not released is refused' "$(in_run "$(prerun X-accuracy-R1-1)")" 'REFUSED: X-accuracy-R1-1 is stopped, or has no release since its last no-result rc=1'
+printf '2026-10-27 RELEASED unit=X-accuracy-R1-1 by=transient:/t/x\n2026-10-27 NORESULT unit=X-accuracy-R1-1 cause=undetermined\n' >> "$RUN_DIR/UNIT-LOG.txt"
+check 'pre-rerun: a re-run that returned nothing again is refused' "$(in_run "$(prerun X-accuracy-R1-1)")" 'REFUSED: X-accuracy-R1-1 is stopped, or has no release since its last no-result rc=1'
+printf '2026-10-27 NORESULT unit=V-CL1.4.0-02-1 cause=undetermined\n2026-10-27 RELEASED unit=V-CL1.4.0-02-1 by=transient:/t/x\n2026-10-27 STOP-3 unit=V-CL1.4.0-02-1 stage=verify written=nothing routed=owner-batch\n' >> "$RUN_DIR/UNIT-LOG.txt"
+check 'pre-rerun: a checker stopped since its release is refused' "$(in_run "$(prerun V-CL1.4.0-02-1)")" 'REFUSED: V-CL1.4.0-02-1 is stopped, or has no release since its last no-result rc=1'
+check 'pre-rerun: a checker with nothing logged is refused' "$(in_run "$(prerun V-CL1.4.0-03-1)")" 'REFUSED: V-CL1.4.0-03-1 is stopped, or has no release since its last no-result rc=1'
+printf 'CONFIRMED\n' > "$RUN_DIR/V-CL1.4.0-01-1.txt"
+check 'pre-rerun: a checker whose file exists is refused' "$(in_run "$(prerun V-CL1.4.0-01-1)")" 'REFUSED: V-CL1.4.0-01-1.txt exists; it has a result rc=1'
+rm "$RUN_DIR/V-CL1.4.0-01-1.txt"
 
 # The rest of the release arms run on a copy of the run directory, so the ledger rows below keep their state.
 side="$work/side"
