@@ -1,0 +1,32 @@
+PASS  S1 clean: no stop, no missing result
+PASS  S1 clean: a verifier per unit
+PASS  S1 clean: the gap round runs
+PASS  stop safety-classifier: recorded as stopped
+PASS  stop safety-classifier: no verifier for the stopped unit
+PASS  stop safety-classifier: the stopped unit ran once
+FAIL  stop safety-classifier: no gap unit runs while a unit is stopped
+FAIL  stop safety-classifier: the completeness critic is told the stopped id is held
+FAIL  stop reviewer: recorded as stopped
+FAIL  stop reviewer: no verifier for the stopped unit
+PASS  stop reviewer: the stopped unit ran once
+FAIL  stop reviewer: no gap unit runs while a unit is stopped
+FAIL  stop reviewer: the completeness critic is told the stopped id is held
+FAIL  stop policy-hook: recorded as stopped
+FAIL  stop policy-hook: no verifier for the stopped unit
+PASS  stop policy-hook: the stopped unit ran once
+FAIL  stop policy-hook: no gap unit runs while a unit is stopped
+FAIL  stop policy-hook: the completeness critic is told the stopped id is held
+FAIL  S5 missing stop field: treated as stopped
+FAIL  S6 negated clean line: not recorded as stopped
+PASS  S7 no result: listed under no_result
+FAIL  S7 no result: the log does not say to re-run as-is
+FAIL  S7 no result: the log says the cause is undetermined
+FAIL  S7 no result: no gap unit runs
+FAIL  S8 raw input spec: refused before any agent
+FAIL  S9 held id: never launched
+FAIL  S9 held id: returned as held
+FAIL  S10 gap unit no result: reported in gap_no_result
+FAIL  S10 gap unit no result: gap specs are returned
+FAIL  S11 cl without source: refused before any agent
+
+21 FAIL

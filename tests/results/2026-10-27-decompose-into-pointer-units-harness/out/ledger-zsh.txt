@@ -1,0 +1,14 @@
+PASS  zsh step 2 coverage
+PASS  zsh step 2 issues
+PASS  zsh step 2 id checks
+PASS  zsh baseline ledger
+PASS  zsh step 7 pilot glance
+PASS  zsh no-result stays unaccounted
+PASS  zsh empty file is not reported
+PASS  zsh reroute under a new id is extra
+PASS  zsh verifier and critic files are not extra
+PASS  zsh gap unit without a report is unaccounted
+PASS  zsh gap unit with a report is reported
+PASS  zsh changed input refused
+
+ALL PASS (zsh)
