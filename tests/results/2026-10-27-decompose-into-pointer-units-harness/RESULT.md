@@ -13,7 +13,7 @@ The skill's central rule is that a stopped unit is never re-run, reworded or rer
   - a ledger that counted any `unit=` token as a stop.
 - **Round 2**, at `760f21e5d`: the same class one level down. The gap round could still run over a held id's scope, or while a verifier or critic had returned nothing, because the only guard was an instruction to the critic.
 
-After round 2 the owner chose to remove the class rather than patch each path: **no gap runs in the run that found it.** Critics' gaps go to the owner batch, and a gap becomes a spec only in a later run, from an id the owner approved. This record checks the revision, and keeps the checks so a later edit can be re-measured.
+After round 2 the owner chose to remove the class rather than patch each path: **no gap runs in the run that found it.** Critics' gaps go to the owner batch, and a gap becomes a spec only in a later run, from an id the owner approved. The owner then chose to **approve by topic**: each gap carries a topic from the brief's CLASSIFY categories, and the batch has one entry per topic. A gap marked as covering stopped or held pointers is listed apart and can never be approved through its topic. This record checks the revision, and keeps the checks so a later edit can be re-measured.
 
 ### Environment
 
@@ -27,8 +27,8 @@ After round 2 the owner chose to remove the class rather than patch each path: *
 
 Run from the repository root.
 
-- **`harness.mjs <EXAMPLES.md>`** extracts the Workflow skeleton from EXAMPLES.md byte for byte and runs it against mocked `agent`, `pipeline`, `parallel`, `phase` and `log`. It has 14 scenarios and 42 rows, covering:
-  - every unit clean;
+- **`harness.mjs <EXAMPLES.md>`** extracts the Workflow skeleton from EXAMPLES.md byte for byte and runs it against mocked `agent`, `pipeline`, `parallel`, `phase` and `log`. It has 14 scenarios and 43 rows, covering:
+  - every unit clean, with every gap carrying an id and a topic;
   - a stop from each of the three named sources;
   - a missing `stop` field, and a clean line that says "never stopped";
   - a unit with no result;
@@ -48,17 +48,22 @@ Run from the repository root.
   - an owner-approved gap spec, with and without a report;
   - a held spec, with and without a report;
   - a mechanical input changed after the freeze.
-- **`mutants.py`** first requires both checks to be green on the unmutated files; otherwise it refuses (exit 2). It then breaks one guard at a time in a temporary copy. A mutant counts as killed only when the check exits 1 with a failing row that names the guard's own row. Any other non-zero exit is INCONCLUSIVE.
+- **`derivers.sh <EXAMPLES.md> <bash|zsh>`** runs the four deriver snippets of EXAMPLES.md byte for byte, each fence checked for an anchor line, on small fixtures. Its 9 rows cover:
+  - the count proofs and ledger-safe ids of the rows and item derivers;
+  - gap specs by topic: an approved topic plus an approved single id, minus a gap marked as over held scope, even when that gap is approved singly;
+  - the owner-spec check, which refuses a scope not quoted under its own unit.
+- **`mutants.py`** first requires all three checks to be green on the unmutated files; otherwise it refuses (exit 2). It then breaks one guard at a time in a temporary copy. A mutant counts as killed only when the check exits 1 with a failing row that names the guard's own row. Any other non-zero exit is INCONCLUSIVE.
 
 ### Results
 
 | Check | Output | Result |
 |---|---|---|
-| `harness.mjs` on the skeleton at `51866b250` | `out/harness-at-51866b250.txt` | 34 of 42 rows FAIL |
-| `harness.mjs` on the skeleton at `760f21e5d` | `out/harness-at-760f21e5d.txt` | 16 of 42 rows FAIL, including "no gap unit runs over held scope" and the verifier no-result rows: the round-2 blocking findings, reproduced |
-| `harness.mjs` on the revision | `out/harness-revised.txt` | 42 of 42 PASS |
+| `harness.mjs` on the skeleton at `51866b250` | `out/harness-at-51866b250.txt` | 35 of 43 rows FAIL |
+| `harness.mjs` on the skeleton at `760f21e5d` | `out/harness-at-760f21e5d.txt` | 17 of 43 rows FAIL, including "no gap unit runs over held scope" and the verifier no-result rows: the round-2 blocking findings, reproduced |
+| `harness.mjs` on the revision | `out/harness-revised.txt` | 43 of 43 PASS |
+| `derivers.sh` under bash and zsh | `out/derivers-bash.txt`, `out/derivers-zsh.txt` | 9 of 9 PASS under each |
 | `ledger.sh` under bash and zsh | `out/ledger-bash.txt`, `out/ledger-zsh.txt` | 14 of 14 PASS under each |
-| `mutants.py` | `out/mutants.txt` | baseline green; 12 of 12 KILLED, each on its named row |
+| `mutants.py` | `out/mutants.txt` | baseline green; 14 of 14 KILLED, each on its named row |
 
 | Mutant | Guard removed | Killed on the row |
 |---|---|---|
@@ -70,6 +75,8 @@ Run from the repository root.
 | M6 | the owner-spec guard | an owner spec without its unit is refused |
 | M7 | dropping a stopped critic's gaps | S14 critic stop: its gaps are not used |
 | M8 | (inserted) a gap unit run in the same run | no gap unit runs (7 rows) |
+| D1 | excluding gaps marked as over held scope | a marked gap is never derived |
+| D2 | binding the owner check to its unit | owner check refuses a scope not quoted under its unit |
 | L1 | the anchor on `STOP-<n> unit=` | no-result stays unaccounted |
 | L2 | `! -empty` | empty file is not reported |
 | L3 | the checksum re-check | changed input refused |

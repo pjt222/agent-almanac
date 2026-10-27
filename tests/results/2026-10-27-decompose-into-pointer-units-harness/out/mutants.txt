@@ -1,4 +1,4 @@
-baseline green: harness.mjs on EXAMPLES.md, ledger.sh on SKILL.md under zsh
+baseline green: harness.mjs and derivers.sh on EXAMPLES.md, ledger.sh on SKILL.md, under zsh
 KILLED  M1 stop check narrowed to one source: exit 1, 11 failing row(s); expected row "stop reviewer: recorded as stopped"
     FAIL  stop reviewer: recorded as stopped
     FAIL  stop reviewer: no verifier for the stopped unit
@@ -32,6 +32,11 @@ KILLED  M8 a gap unit run in the same run: exit 1, 7 failing row(s); expected ro
     FAIL  S7 no result: no gap unit runs
     FAIL  S9 held id: no gap unit runs over held scope
     FAIL  S10 verifier no result: no gap unit runs
+KILLED  D1 marked gaps not excluded: exit 1, 2 failing row(s); expected row "a marked gap is never derived"
+    FAIL  zsh approved topic plus single id, marked gap excluded: got [G-R1-1,G-R1-2,G-R1-4] want [G-R1-1,G-R1-4]
+    FAIL  zsh a marked gap is never derived, even when approved singly: got [G-R1-1,G-R1-2,G-R1-4] want [G-R1-1,G-R1-4]
+KILLED  D2 owner check not bound to its unit: exit 1, 1 failing row(s); expected row "owner check refuses a scope not quoted under its unit"
+    FAIL  zsh owner check refuses a scope not quoted under its unit: got [REFUSED OW-2 ] want [REFUSED OW-2 REFUSED OW-3 ]
 KILLED  L1 stop pattern unanchored: exit 1, 8 failing row(s); expected row "no-result stays unaccounted"
     FAIL  zsh no-result stays unaccounted: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
     FAIL  zsh empty file is not reported: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]

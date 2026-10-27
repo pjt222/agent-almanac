@@ -56,8 +56,8 @@ async function run({ units = {}, verifiers = {}, critics = {}, specs = SPECS, ex
       const b = critics[label];
       if (b === 'null') return null;
       const gaps = label.startsWith('completeness ')
-        ? specs.filter((s) => !prompt.includes(`## ${s.id} `)).map((s) => ({ title: `${s.id} uncovered`, question: `cover ${s.id}'s pointers`, priority: 1 }))
-        : [{ title: 'Generic gap', question: 'a question about the brief', priority: 2 }];
+        ? specs.filter((s) => !prompt.includes(`## ${s.id} `)).map((s) => ({ title: `${s.id} uncovered`, question: `cover ${s.id}'s pointers`, priority: 1, topic: 'coverage' }))
+        : [{ title: 'Generic gap', question: 'a question about the brief', priority: 2, topic: 'accuracy' }];
       return { report_path: `/r/${label}.txt`, corrections: [], gaps, stop: b?.startsWith('stop:') ? b.slice(5) : 'none' };
     }
     return unitResult(label, units[label] ?? 'clean');
@@ -86,6 +86,7 @@ const noGapUnit = (o) => o.extraUnits.length === 0;
   check('S1 clean', 'no stop, no missing result', o.result && (o.result.stopped ?? []).length === 0 && Array.isArray(o.result.no_result) && o.result.no_result.length === 0);
   check('S1 clean', 'a verifier per unit', o.calls.filter((c) => c.startsWith('verify CL-')).length === 3);
   check('S1 clean', 'gaps are returned for the owner', (o.result?.gaps_for_owner ?? []).length > 0);
+  check('S1 clean', 'every gap carries an id and a topic', (o.result?.gaps_for_owner ?? []).length > 0 && o.result.gaps_for_owner.every((g) => /^G-R1-\d+$/.test(g.id) && typeof g.topic === 'string' && g.topic.length > 0));
   check('S1 clean', 'no gap unit runs', noGapUnit(o)); }
 
 // S2-S4: a stop from each named source. Recorded, never verified, its scope never run as a gap.

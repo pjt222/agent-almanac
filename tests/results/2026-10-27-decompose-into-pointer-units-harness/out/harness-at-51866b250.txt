@@ -1,6 +1,7 @@
 FAIL  S1 clean: no stop, no missing result
 PASS  S1 clean: a verifier per unit
 FAIL  S1 clean: gaps are returned for the owner
+FAIL  S1 clean: every gap carries an id and a topic
 FAIL  S1 clean: no gap unit runs
 PASS  stop safety-classifier: recorded as stopped
 PASS  stop safety-classifier: no verifier for the stopped unit
@@ -41,4 +42,4 @@ FAIL  S14 critic no result: recorded in critic_no_result
 FAIL  S14 critic stop: recorded in critic_stopped
 PASS  S14 critic stop: its gaps are not used
 
-34 FAIL
+35 FAIL

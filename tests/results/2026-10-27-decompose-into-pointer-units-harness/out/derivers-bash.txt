@@ -1,0 +1,11 @@
+PASS  bash rows count proof
+PASS  bash rows ids are ledger-safe
+PASS  bash items count proof shows the skipped file
+PASS  bash item ids are ledger-safe
+PASS  bash approved topic plus single id, marked gap excluded
+PASS  bash derived gap specs carry pointers only
+PASS  bash a marked gap is never derived, even when approved singly
+PASS  bash nothing approved derives nothing
+PASS  bash owner check refuses a scope not quoted under its unit
+
+ALL PASS (bash)

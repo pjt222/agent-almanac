@@ -1,6 +1,7 @@
 PASS  S1 clean: no stop, no missing result
 PASS  S1 clean: a verifier per unit
 PASS  S1 clean: gaps are returned for the owner
+PASS  S1 clean: every gap carries an id and a topic
 PASS  S1 clean: no gap unit runs
 PASS  stop safety-classifier: recorded as stopped
 PASS  stop safety-classifier: no verifier for the stopped unit
