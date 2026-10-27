@@ -225,7 +225,7 @@ Record timestamps for:
   Planning mode has no transcript to read, so the cause cannot be established:
   expect the unit to stay unaccounted and go to the owner batch, not to be
   re-run or answered by hand. A transient release is refused here as well:
-  it needs a transcript file, and the release snippet names none.
+  it needs a transcript file, and planning mode has none to name.
 - **Variant C: A reviewer stop** — the addendum names a human reviewer instead
   of a safety classifier. Expect exactly the same handling as the baseline.
 - **Variant D: A gap over stopped work** — after the stop, the observer offers

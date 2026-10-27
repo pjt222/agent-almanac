@@ -17,6 +17,13 @@ PASS  zsh gaps: an unknown topic is refused, nothing written
 PASS  zsh gaps: a flagged gap the batch did not mark is derived when approved by its id
 PASS  zsh gaps: nothing approved derives nothing
 PASS  zsh gaps: a missing marks file is refused
+PASS  zsh gaps: a gap the second read does not call CLEAR is not derived through its topic
+PASS  zsh gaps: a gap the second read calls COVERS is derived only by its own id
+PASS  zsh gaps: a second read that misses a gap is refused, nothing written
+PASS  zsh gaps: a second read that names a gap twice is refused
+PASS  zsh gaps: an unknown id in the second read is refused
+PASS  zsh gaps: a verdict other than COVERS, BORDERLINE or CLEAR is refused
+PASS  zsh gaps: a missing second read is refused
 PASS  zsh gaps: a gaps file changed after it was recorded is refused
 PASS  zsh owner: a scope quoted on its Answered line passes and is recorded
 PASS  zsh owner: a scope quoted only in Open is refused with exit 1, nothing recorded
@@ -33,15 +40,28 @@ PASS  zsh owner: an id that is not OW-<n> is refused, nothing recorded
 PASS  zsh owner: an id already in the work list is refused, nothing recorded
 PASS  zsh owner: a STOP-<n> already used by a recorded owner spec is refused, nothing recorded
 PASS  zsh owner: two owner specs citing one STOP-<n> in one file are refused
+PASS  zsh added: specs for pointers no spec covers are recorded
+PASS  zsh added: a file already recorded is refused, nothing written
+PASS  zsh added: a line a recorded spec covers is refused, nothing recorded
+PASS  zsh added: a row of the same file a recorded spec covers is refused
+PASS  zsh added: a pointer twice in the added file is refused
+PASS  zsh added: an id a spec already carries is refused
+PASS  zsh added: a spec that is not of a derived kind is refused
+PASS  zsh added: a changed work list is refused
+PASS  zsh added: a missing file is refused
 PASS  zsh held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out
 PASS  zsh held: a no-result or a hold logged after a release holds the id again
 PASS  zsh launch: after a stop or no-result, a unit that reported is not relaunched
 PASS  zsh launch: a RERUN line for this run relaunches the unit it names
 PASS  zsh launch: a RERUN line for another run does not
 PASS  zsh launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run)
+PASS  zsh launch: a verifier stop alone leaves reported units out
+PASS  zsh launch: a critic no-result alone leaves reported units out
 PASS  zsh launch: an unrecorded cluster file is refused before any list is printed
 PASS  zsh launch: an id in two spec files is refused before any list is printed
 PASS  zsh launch: a recorded cluster file that is not a spec list is refused before any list is printed
+PASS  zsh launch: a unit-log line without its date is refused before any list is printed
+PASS  zsh launch: an unreadable unit log is refused before any list is printed
 PASS  zsh held: a missing unit log is refused
 
 ALL PASS (zsh)

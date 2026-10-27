@@ -37,6 +37,7 @@ PASS  S6 negated clean line: not recorded as stopped
 PASS  S7 no result: listed under no_result
 PASS  S7 no result: the log does not say to re-run as-is
 PASS  S7 no result: the log says the cause is undetermined
+PASS  S7 no result: the log allows one re-run, unchanged and alone, for a transient failure and nothing else
 PASS  S7 no result: the unit ran once
 PASS  S7 no result: a unit gets no rerun prompt; it re-runs as a run of its one spec
 PASS  S7 no result: the completeness critic is told the no-result id is held
@@ -95,6 +96,7 @@ PASS  S18 rerun refused: a rerun without its prompt is refused before any agent
 PASS  S18 rerun refused: a rerun without a tag is refused before any agent
 PASS  S20 duplicate gaps: one copy is kept, the higher-priority one
 PASS  S20 duplicate gaps: a dropped copy's covers_held is carried into the kept copy
+PASS  S20 duplicate gaps: the kept copy lists each dropped copy's question and flag, for the owner
 PASS  S19 gap spec: the prompt points at the recorded gaps file
 
 ALL PASS

@@ -5,11 +5,8 @@ PASS  zsh step 2 records the work list once, and lists every spec file
 PASS  zsh a second work list is refused
 PASS  zsh baseline ledger
 PASS  zsh step 7 pilot glance
-PASS  zsh step 1: PRIOR_RUN unset is refused, and no unit log is started
-PASS  zsh step 1: PRIOR_RUN=none starts an empty unit log
-PASS  zsh step 1: a later run directory starts from a copy of the unit log
-PASS  zsh step 1: an existing unit log is not overwritten
-PASS  zsh step 1: with the carried log, a later run directory still counts the stop
+PASS  zsh step 1: a frozen run directory is not frozen again
+PASS  zsh step 1: a run directory not yet frozen passes
 PASS  zsh no-result: a partial that cannot be moved is refused, and nothing is logged
 PASS  zsh no-result: its partial moves to partials/ and it stays unaccounted
 PASS  zsh empty file is not reported
@@ -21,12 +18,30 @@ PASS  zsh released, then re-run: reported, not held_ran
 PASS  zsh release after a report is refused
 PASS  zsh a transient release is logged once
 PASS  zsh a verifier with no result: its partial moves, and a transient release is logged
+PASS  zsh pre-rerun: a released no-result passes
+PASS  zsh pre-rerun: a no-result not released is refused
+PASS  zsh pre-rerun: a re-run that returned nothing again is refused
+PASS  zsh pre-rerun: a checker stopped since its release is refused
+PASS  zsh pre-rerun: a checker with nothing logged is refused
+PASS  zsh pre-rerun: a checker whose file exists is refused
 PASS  zsh release: no unit log is refused, and none is started
 PASS  zsh a transient release of a held id with no no-result is refused
 PASS  zsh a transient release of a no-result held over a stop since is refused
 PASS  zsh a transient release naming no transcript file is refused
 PASS  zsh a transient release after an owner release and a second no-result is refused
 PASS  zsh a second owner release from the same Answered line is refused
+PASS  zsh an answer given before a later hold does not lift that hold
+PASS  zsh a no-result answer does not lift a hold logged after it
+PASS  zsh a hold answered under another reason is refused
+PASS  zsh a pre-run owner hold is released by its own Answered line
+PASS  zsh after a transient release and a second no-result, one owner answer releases
+PASS  zsh a release with an unknown BY is refused, nothing written
+PASS  zsh an owner release with no owner batch is refused
+PASS  zsh release: a unit-log line without its date is refused
+PASS  zsh ledger: a unit-log line without its date is refused
+PASS  zsh release: an unreadable unit log is refused
+PASS  zsh ledger: an unreadable unit log is refused
+PASS  zsh the documented writers write lines every reader reads
 PASS  zsh ledger: no unit log is refused
 PASS  zsh a hand-written release does not lift a stop
 PASS  zsh reroute under a new id is extra
