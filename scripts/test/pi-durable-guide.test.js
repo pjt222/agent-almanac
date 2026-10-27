@@ -42,6 +42,11 @@ test('the example pins the three pi packages at one exact version, and the guide
   for (const name of PI_PACKAGES) {
     assert.equal(lock.packages[`node_modules/${name}`]?.version, versions[0], `the example's lockfile does not hold ${name}@${versions[0]}`);
   }
+  // One copy of each. pi-durable pins every other @earendil-works package exactly, so with equal
+  // pins here, one nested under another means npm installed a second copy, as it would if
+  // pi-durable's own pins moved on without the example's (#1022).
+  const nested = Object.keys(lock.packages).filter((path) => /node_modules\/.+\/node_modules\/@earendil-works\//.test(path));
+  assert.deepEqual(nested, [], `the example's lockfile holds a second copy of an @earendil-works package (pi-durable pins all of them exactly): ${nested.join(', ')}`);
   const guide = readFileSync(GUIDE, 'utf8');
   assert.ok(guide.includes(`all at \`${versions[0]}\``), `the guide does not name the tested version ${versions[0]}`);
 });
@@ -61,8 +66,38 @@ test('a Dependabot group moves the three pi packages together', () => {
   const config = yamlLib.load(readFileSync(join(REPO_ROOT, '.github', 'dependabot.yml'), 'utf8'));
   const entry = config.updates.find((update) => update['package-ecosystem'] === 'npm' && update.directory === '/scripts/test/_pi-durable-example');
   assert.ok(entry, 'dependabot.yml has no npm entry for /scripts/test/_pi-durable-example');
-  // Dependabot patterns are globs where `*` matches any run of characters.
-  const matches = (pattern, name) => new RegExp(`^${pattern.split('*').map((part) => part.replace(/[.+?^${}()|[\]\\/]/g, '\\$&')).join('.*')}$`).test(name);
-  const grouping = Object.entries(entry.groups ?? {}).filter(([, group]) => PI_PACKAGES.every((name) => (group.patterns ?? []).some((pattern) => matches(pattern, name))));
-  assert.ok(grouping.length > 0, `no group in that entry matches all of ${PI_PACKAGES.join(', ')}: ${JSON.stringify(entry.groups)}`);
+  // Dependabot patterns are globs where `*` matches any run of characters, compared
+  // case-insensitively (dependabot-core's WildcardMatcher). A list key may hold a single string,
+  // and a key written with no value holds nothing.
+  const matches = (pattern, name) => new RegExp(`^${pattern.toLowerCase().split('*').map((part) => part.replace(/[.+?^${}()|[\]\\/]/g, '\\$&')).join('.*')}$`).test(name.toLowerCase());
+  const list = (value) => (value === undefined ? undefined : [].concat(value ?? []));
+  // Which group takes a dependency is documented as the first group it matches
+  // (dependabot-options-reference, "groups"). dependabot-core instead skips a dependency in a group
+  // when another group that contains it has a more specific pattern (PatternSpecificityCalculator).
+  // The test relies on neither rule: it requires exactly one version-update group that can hold
+  // any of the three, so both rules give all three to that group. A group holds a dependency when `applies-to` is version
+  // updates (the default), a pattern matches it (a group with no `patterns` key matches every
+  // name), no exclude-pattern matches it, and `dependency-type` admits it: the example declares
+  // the three under `dependencies`, so a `development` group does not hold them. That one group
+  // must hold all three, take every update type, and not set `group-by`, which opens one pull
+  // request per dependency (#1022).
+  // Refused on purpose, though Dependabot can keep the three together there: a second group that
+  // could hold any of them (a catch-all `*` beside the pi group, another group with no patterns,
+  // complementary update-types groups). Not modelled: an entry moved to `directories:` fails the
+  // lookup above; an entry placed in a multi-ecosystem group is still found, and fails the
+  // single-holder assertion only when it has no `groups` of its own (#1025).
+  const holds = (group, name) => (group['applies-to'] ?? 'version-updates') === 'version-updates'
+    && (list(group.patterns)?.some((pattern) => matches(pattern, name)) ?? true)
+    && !(list(group['exclude-patterns']) ?? []).some((pattern) => matches(pattern, name))
+    && (group['dependency-type'] ?? 'production') === 'production';
+  const holders = Object.entries(entry.groups ?? {}).filter(([, group]) => PI_PACKAGES.some((name) => holds(group, name)));
+  assert.equal(holders.length, 1,
+    `exactly one version-update group may hold the pi packages, found ${JSON.stringify(holders.map(([id]) => id))} among ${JSON.stringify(entry.groups ?? {})}`);
+  const [id, group] = holders[0];
+  assert.ok(PI_PACKAGES.every((name) => holds(group, name)),
+    `group ${id} does not hold all three: ${JSON.stringify(Object.fromEntries(PI_PACKAGES.map((name) => [name, holds(group, name)])))}`);
+  const types = list(group['update-types']);
+  assert.ok(types === undefined || ['major', 'minor', 'patch'].every((type) => types.includes(type)),
+    `group ${id} does not take every update type: ${JSON.stringify(types)}`);
+  assert.equal(group['group-by'], undefined, `group ${id} sets group-by, which opens one pull request per dependency`);
 });
