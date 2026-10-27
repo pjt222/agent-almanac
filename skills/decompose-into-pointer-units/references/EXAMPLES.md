@@ -7,11 +7,11 @@ Extended material for [SKILL.md](../SKILL.md): a complete Workflow skeleton, der
 Tested in the Workflow dialect (`node --check` on the wrapped body) and against mocked `agent` / `pipeline` / `parallel` primitives. In the mock:
 
 - A stop reported in a unit's, a verifier's or a critic's `stop` field (safety classifier, policy hook or reviewer) was recorded, a missing `stop` field counted as a stop, and a clean report saying it was "never stopped" did not.
-- A stopped unit got no verifier, a stopped verifier's verdict was not counted, and a stopped critic's gaps were not used.
-- A unit, verifier or critic with no result was recorded with its cause undetermined and was not marked for re-run.
-- A held id was never launched and was reported to the completeness critic.
-- An input spec of a kind the skeleton does not know (including `raw`), a `cl` spec without `args.source`, and an `owner` spec without its unit, scope and answer were refused before any agent started.
-- No gap unit ever ran, even when a critic ignored its instructions and proposed a stopped or held unit's scope, and every returned gap carried an id and a topic.
+- A stopped unit got no verifier and was not listed as a no-result, a stopped verifier's verdict was not counted, and a stopped critic's gaps were not used.
+- A unit, verifier or critic with no result was recorded with its cause undetermined, and its log line did not say to re-run it as-is. Each stopped or no-result unit, verifier and critic was launched exactly once.
+- A held id was never launched, and every critic was told it was held, as it was told every stopped and no-result id. A `held` argument that is not an array was refused.
+- An input spec of a kind the skeleton does not know (including `raw`), a `cl` spec without `args.source`, and an `owner` spec without its unit, scope and a `STOP-<n>` answer were refused before any agent started.
+- No gap unit ever ran, even when a critic ignored its instructions and proposed a stopped or held unit's scope. Every returned gap carried an id, a topic and a `covers_held` flag, and every returned verifier or critic id was the basename of the file that agent writes.
 
 Adapt `scope()` to your kinds, add any preamble your environment requires to `HEAD`, and give verifiers a read-only agent type where your runtime offers one. The skeleton keeps only the generic method: its templates defer to the brief, and its refutation checks are generic. The evidence paths, the classification vocabulary, the domain's refutation checks and the method rules belong in your brief, not in the script.
 
@@ -32,7 +32,9 @@ export const meta = {
 
 const A = (typeof args === 'string') ? JSON.parse(args) : (args || {})
 const DIR = A.reportDir, BRIEF = A.brief, MECH = A.mech, SOURCE = A.source, TAG = A.tag || 'R'
-const HELD = new Set(Array.isArray(A.held) ? A.held : []) // ids the owner has not released (SKILL.md Step 8)
+// A held list that is not an array would otherwise hold nothing and launch every stopped id passed in specs.
+if (A.held !== undefined && !Array.isArray(A.held)) throw new Error('args.held must be an array of ids')
+const HELD = new Set(A.held || []) // ids the owner has not released (SKILL.md Step 8)
 const INPUT = Array.isArray(A.specs) ? A.specs : []
 const GROUP = A.criticGroup ?? 15
 const KINDS = new Set(['cl', 'rows', 'file', 'issue', 'gap', 'owner'])
@@ -40,12 +42,13 @@ if (!INPUT.length || !DIR || !BRIEF || !MECH) throw new Error('args.specs, repor
 const unknown = INPUT.filter(s => !KINDS.has(s.kind))
 if (unknown.length) throw new Error(`spec kinds not accepted: ${unknown.map(s => `${s.id}:${s.kind}`).join(', ')}`)
 if (INPUT.some(s => s.kind === 'cl') && !SOURCE) throw new Error('cl specs need args.source, the file their line numbers refer to')
-if (INPUT.some(s => s.kind === 'owner' && !(s.unit && s.scope && s.answer))) throw new Error('an owner spec names its unit, scope and answer')
+if (INPUT.some(s => s.kind === 'owner' && !(s.unit && s.scope && /^STOP-\d+$/.test(s.answer || ''))))
+  throw new Error('an owner spec names its unit, its scope, and as answer the STOP-<n> of its Answered line')
 const SPECS = INPUT.filter(s => !HELD.has(s.id))
 const held = [...HELD]
 if (held.length) log(`HELD for the owner, not launched: ${held.join(', ')}`)
 
-const HEAD = `You are one narrow unit in a larger review run.
+const HEAD = `You are one narrow unit in a larger run.
 FIRST read the shared brief in full and follow it exactly: ${BRIEF}
 Stay inside your scope; if something outside it looks relevant, say so in one line and do not pursue it.
 Do not create, edit or comment on issues, and do not commit. Structured fields are short paraphrased prose, never raw code.`
@@ -59,8 +62,8 @@ const scope = (s) => {
     case 'rows': return `lines ${s.rows.join(', ')} of ${MECH}/${s.file} (group ${s.group}). Benign rows go in one compact table; full VERDICT blocks only for rows the brief says to classify.`
     case 'file': return `the file ${MECH}/${s.path}. Examine each entry it lists.`
     case 'issue': return `issue #${s.n} as frozen in ${MECH}/issue-${s.n}.json. Answer the brief's question for it, using the names the issue gives as search terms, with evidence.`
-    case 'gap': return `gap ${s.g} in ${s.from} (read its question there), approved by the owner. Answer it as asked.`
-    case 'owner': return `owner-authorised re-scope of ${s.unit}: ${s.scope} (answer: ${s.answer}; the scope text is the owner's, verbatim)`
+    case 'gap': return `the question with id ${s.g} in ${DIR}/${s.from}, approved by the owner. Answer it as asked.`
+    case 'owner': return `owner-authorised re-scope of ${s.unit}: ${s.scope} (the owner's words, verbatim, from the Answered line ${s.answer})`
     default: throw new Error(`unknown spec kind ${s.kind}`)
   }
 }
@@ -97,12 +100,13 @@ const XSCHEMA = {
     report_path: { type: 'string' },
     corrections: { type: 'array', items: { type: 'string', maxLength: 600 } },
     gaps: { type: 'array', items: {
-      type: 'object', additionalProperties: false, required: ['title', 'question', 'priority', 'topic'],
+      type: 'object', additionalProperties: false, required: ['title', 'question', 'priority', 'topic', 'covers_held'],
       properties: {
         title: { type: 'string', maxLength: 120 },
         topic: { type: 'string', maxLength: 60, description: 'one of the brief\'s CLASSIFY categories' },
         question: { type: 'string', maxLength: 1200 },
         priority: { type: 'integer', description: '1 = could change a verdict; 3 = cosmetic' },
+        covers_held: { type: 'boolean', description: 'true if the question covers a pointer of an id on the HELD line' },
       } } },
     stop: STOP_FIELD,
   },
@@ -130,7 +134,7 @@ const verifyAll = async (r, s, ph) => {
   const raw = await parallel(items.map((item, i) => () => verify(r, item, i + 1, ph)))
   const verdicts = [] // assign first: never chain onto await parallel(...)
   raw.forEach((v, i) => {
-    const id = `${s.id}#${i + 1}`
+    const id = `V-${s.id}-${i + 1}` // the basename of the file this verifier writes, as the unit log records it
     if (!v) verifierNoResult.push(id)
     else if (isStop(v)) verifierStopped.push(id)
     else verdicts.push(v)
@@ -142,12 +146,13 @@ phase('Review')
 const round1 = await pipeline(SPECS, s => runUnit(s, 'Review'), (r, s) => verifyAll(r, s, 'Verify'))
 const done = round1.filter(Boolean)
 const noResult = SPECS.filter((s, i) => !round1[i] && !stopped.includes(s.id)).map(s => s.id)
-const UNDETERMINED = 'cause undetermined: read the transcript by structure before any re-run; re-run once, unchanged, only for a transient '
-  + 'failure (overload or 5xx, rate limit, network timeout, structured-output retry exhaustion); anything else goes to the owner batch'
+const UNDETERMINED = 'cause undetermined: read the transcript by structure before any re-run; re-run once, unchanged and alone, only for a '
+  + 'transient failure (overload or 5xx, rate limit, network timeout) and nothing else; anything else goes to the owner batch'
+const NOT_RERUN = 'do not re-run; its unit and cluster are re-launched only if the owner names them'
 if (noResult.length) log(`NO RESULT, ${UNDETERMINED}: ${noResult.join(', ')}`)
-if (verifierNoResult.length) log(`NO RESULT from verifier, ${UNDETERMINED}: ${verifierNoResult.join(', ')}`)
+if (verifierNoResult.length) log(`NO RESULT from verifier, cause undetermined; its claim stays unverified, ${NOT_RERUN}: ${verifierNoResult.join(', ')}`)
 if (stopped.length) log(`STOPPED, record by id and route to the owner, do not re-run: ${stopped.join(', ')}`)
-if (verifierStopped.length) log(`STOPPED verifier, record by id; its verdict is not counted: ${verifierStopped.join(', ')}`)
+if (verifierStopped.length) log(`STOPPED verifier, record by id; its verdict is not counted, ${NOT_RERUN}: ${verifierStopped.join(', ')}`)
 
 const digest = (rows) => rows.map(x => `## ${x.summary.unit} ${x.summary.report_path}\n`
   + x.summary.non_benign.map(t => `  NB ${t.slice(0, 200)}`).join('\n')
@@ -156,32 +161,36 @@ const digest = (rows) => rows.map(x => `## ${x.summary.unit} ${x.summary.report_
 phase('Critics')
 const groups = []
 for (let i = 0; i < done.length; i += GROUP) groups.push(done.slice(i, i + GROUP))
+// Display labels for the progress view; the returned ids are the basenames of the files the critics write.
 const criticLabels = groups.map((g, gi) => `critic ${TAG}-${gi + 1}`).concat(`completeness ${TAG}`)
+const criticIds = groups.map((g, gi) => `X-accuracy-${TAG}-${gi + 1}`).concat(`X-completeness-${TAG}`)
+const HELD_LINE = 'HELD for the owner (stopped, no result or held; set covers_held on any gap whose question covers their pointers):\n'
+  + `${[...new Set([...stopped, ...noResult, ...held])].join(', ') || 'none'}`
+const GAP_RULE = 'Give each gap a topic from the brief\'s CLASSIFY categories and a covers_held flag. No gap runs in this run; every gap goes to the owner.'
 const accuracy = groups.map((g, gi) => () => agent(
   `${HEAD}\n\n=== ACCURACY CRITIC ${TAG}-${gi + 1} over ${g.length} reports ===\nRead EVERY report and verifier file below, `
   + 'benign units included. List each claim that does not hold, with the correction and how to reproduce it, and each pair '
-  + 'of units that contradict each other. Give each gap a topic from the brief\'s CLASSIFY categories. '
-  + `Write to ${DIR}/X-accuracy-${TAG}-${gi + 1}.txt\n${STOP_LINE}\n\n${digest(g)}`,
+  + `of units that contradict each other. ${GAP_RULE} `
+  + `Write to ${DIR}/${criticIds[gi]}.txt\n${STOP_LINE}\n\n${HELD_LINE}\n\n${digest(g)}`,
   { label: criticLabels[gi], phase: 'Critics', schema: XSCHEMA }))
 const completeness = () => agent(
   `${HEAD}\n\n=== COMPLETENESS CRITIC ${TAG} ===\nRead the spec list, the digest and the mechanical inputs in ${MECH}. `
   + 'What inside this run\'s scope did no unit cover, or cover only by assertion? Return each gap as a self-contained '
-  + `question a fresh unit could answer, priority 1 to 3, with a topic from the brief\'s CLASSIFY categories. No gap runs in this run; every gap goes to the owner. `
-  + `Write to ${DIR}/X-completeness-${TAG}.txt\n${STOP_LINE}\n\n`
-  + `HELD for the owner (stopped, no result or held; mark any gap over their pointers as such):\n${[...new Set([...stopped, ...noResult, ...held])].join(', ') || 'none'}\n\n`
+  + `question a fresh unit could answer, priority 1 to 3. ${GAP_RULE} `
+  + `Write to ${DIR}/${criticIds[criticIds.length - 1]}.txt\n${STOP_LINE}\n\n${HELD_LINE}\n\n`
   + `SPECS:\n${SPECS.map(s => `- ${s.id} ${s.kind}`).join('\n')}\n\nDIGEST:\n${digest(done)}`,
   { label: criticLabels[criticLabels.length - 1], phase: 'Critics', schema: XSCHEMA })
 const critRaw = await parallel([...accuracy, completeness])
-const criticNoResult = criticLabels.filter((label, i) => !critRaw[i])
-const criticStopped = criticLabels.filter((label, i) => critRaw[i] && isStop(critRaw[i]))
+const criticNoResult = criticIds.filter((id, i) => !critRaw[i])
+const criticStopped = criticIds.filter((id, i) => critRaw[i] && isStop(critRaw[i]))
 const critics = critRaw.filter(c => c && !isStop(c))
-if (criticNoResult.length) log(`NO RESULT from critic, ${UNDETERMINED}: ${criticNoResult.join(', ')}`)
-if (criticStopped.length) log(`STOPPED critic, record by label; its gaps and corrections are not used: ${criticStopped.join(', ')}`)
+if (criticNoResult.length) log(`NO RESULT from critic, cause undetermined; its group stays unchecked, ${NOT_RERUN}: ${criticNoResult.join(', ')}`)
+if (criticStopped.length) log(`STOPPED critic, record by id; its gaps and corrections are not used, ${NOT_RERUN}: ${criticStopped.join(', ')}`)
 
 const seen = new Set() // several critics often report the same gap: keep its highest-priority copy
 const gaps = critics.flatMap(c => c.gaps || []).sort((a, b) => a.priority - b.priority)
   .filter(g => { const k = g.title.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true })
-  .map((g, i) => ({ id: `G-${TAG}-${i + 1}`, ...g }))
+  .map((g, i) => ({ ...g, id: `G-${TAG}-${i + 1}` }))
 const byTopic = gaps.reduce((m, g) => ({ ...m, [g.topic]: (m[g.topic] || 0) + 1 }), {})
 if (gaps.length) log(`${gaps.length} gap(s) for the owner batch, by topic: ${Object.entries(byTopic).map(([k, n]) => `${k} ${n}`).join(', ')}; none runs in this run`)
 
