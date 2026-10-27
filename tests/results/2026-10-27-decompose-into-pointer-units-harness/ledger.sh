@@ -125,7 +125,7 @@ check 'a verifier with no result: its partial moves, and a transient release is 
 
 # Before a verifier or critic re-runs through args.rerun, the pre-rerun check reads the log: only a released
 # no-result with no file and no stop passes (AD5-4). V-CL1.4.0-01-1 was released for a transient cause above.
-prerun() { sed "s/^ID=V-CL1.4.1-02-1 /ID=$1 /" "$work/prerun.sh" > "$work/prerun-$1.sh"; printf '%s' "$work/prerun-$1.sh"; }
+prerun() { sed "s/^ID=V-CL1.5.0-01-1 /ID=$1 /" "$work/prerun.sh" > "$work/prerun-$1.sh"; printf '%s' "$work/prerun-$1.sh"; }
 check 'pre-rerun: a released no-result passes' "$(in_run "$(prerun V-CL1.4.0-01-1)")" 'rerun V-CL1.4.0-01-1: released, not stopped, no result yet rc=0'
 printf '2026-10-27 NORESULT unit=X-accuracy-R1-1 cause=undetermined\n' >> "$RUN_DIR/UNIT-LOG.txt"
 check 'pre-rerun: a no-result not released is refused' "$(in_run "$(prerun X-accuracy-R1-1)")" 'REFUSED: X-accuracy-R1-1 is stopped, or has no release since its last no-result rc=1'

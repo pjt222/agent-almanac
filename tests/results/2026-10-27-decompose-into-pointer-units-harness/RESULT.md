@@ -42,7 +42,7 @@ After round 2 the owner chose to remove the class rather than patch each path: *
 
 ### Method
 
-Run from the repository root.
+Run from the repository root, as a user other than root. Three rows (two in `ledger.sh`, one in `derivers.sh`) make the unit log unreadable with `chmod 000`, which root reads anyway, so as root those rows fail and `mutants.py` refuses its baseline.
 
 - **`harness.mjs <EXAMPLES.md>`** extracts the Workflow skeleton from EXAMPLES.md byte for byte and runs it against mocked `agent`, `pipeline`, `parallel`, `phase` and `log`. It has 20 scenarios and 100 rows, covering:
   - every unit clean, with every gap carrying an id, a topic and a `covers_held` flag, and every critic schema requiring the flag;
@@ -71,12 +71,12 @@ Run from the repository root.
 
   They run byte for byte with two departures: the Step 2 snippet runs at the scenario's chunk 4 (one `sed` on its argument), and of Step 1 only the tool check, `mech_sums` and the freeze refusal run, because the `cp` and `gh` lines need a real repository; the mkdir, touch and the line that writes `MECH-SHA256SUMS` are re-typed. It drives them on the test scenario's fixture through 62 rows:
   - the baseline, a second work list refused, and a second freeze refused;
-  - a no-result whose partial moves to `partials/`, a partial that cannot be moved (a `mv` without `--backup`) refused with nothing logged, and an empty placeholder;
+  - a no-result whose partial moves to `partials/`, a partial that cannot be moved (a stand-in `mv` that fails, as one without `--backup` does) refused with nothing logged, and an empty placeholder;
   - a release refused without an Answered line or on a stopped id, a release from an Answered line, the re-run after it, and a release refused after a report;
   - a transient release, refused the second time, and a transient release of a verifier's no-result;
   - the pre-rerun check: a released no-result passes; no release, a second no-result, a stop since the release, nothing logged and an existing file are refused;
   - releases refused with no unit log, for a held id with no no-result, for a no-result held over a stop since, without a transcript file, after an owner release and a second no-result, from an Answered line already used, with an unknown `BY`, and with no owner batch;
-  - the owner release bound to each hold: an answer given before a later hold does not lift it, a no-result answer does not lift a later hold, an answer under another reason is refused, a pre-run owner hold is released by its own answer, and after a transient release one owner answer releases a second no-result;
+  - the owner release bound to each hold: an answer given before a later hold under another reason does not lift it, a no-result answer does not lift a later hold, an answer under another reason is refused, a pre-run owner hold is released by its own answer, and after a transient release one owner answer releases a second no-result;
   - an undated line refused by the release and by Step 10, an unreadable log refused by both, the documented writers read by every reader, and Step 10 refused with no unit log;
   - a hand-written release that does not lift a stop;
   - a report under a new id, and verifier, critic and lead files that are not reports;
@@ -109,7 +109,7 @@ Run from the repository root.
 
 The harness FAIL sets nest: every row failing at a later head also fails at each earlier one. Each head fails its own round's rows and every later round's, so the counts are not one round's findings each. The eight "ran once" rows pass at every control head, because no earlier skeleton re-ran anything in code; mutants M13 to M15, Ma and Mb fail each of them.
 
-`derivers.sh` and `ledger.sh` now extract snippets that earlier heads do not have, so they refuse (exit 2) on those heads and have no control outputs here. Their round-4 controls, measured with the round-4 versions of the scripts, are in `out/` at `dd032a01b`. Rows for a changed snippet were run against the commit before the change and failed there, except rows that pin behaviour the snippet already had (an unknown `BY`, a missing batch, the checker-only launch cases, a gap the second read calls `COVERS` derived by its id) and sanctioned paths (a release after a transient release and a second no-result). Rows for a new snippet (the added-specs check, the writers, the pre-rerun check) cannot run on an earlier commit. Mutants pin both kinds.
+`derivers.sh` and `ledger.sh` now extract snippets that earlier heads do not have, so they refuse (exit 2) on those heads and have no control outputs here. Their controls at `4164c5457` are in `out/` at `dd032a01b`, measured with the scripts as committed there (45 and 47 rows; 13 and 20 FAIL under each shell). Rows for a changed snippet were run against the commit before the change and failed there, except rows that pin behaviour the snippet already had (an unknown `BY`, a missing batch, the checker-only launch cases, a gap the second read calls `COVERS` derived by its id) and sanctioned paths (a release after a transient release and a second no-result). Rows for a new snippet (the added-specs check, the writers, the pre-rerun check) cannot run on an earlier commit. Mutants pin both kinds.
 
 Four mutants are killed on their message only, because a later guard refuses the same case: D13 (the all-files id check refuses the malformed cluster), D33 (jq refuses the missing second read), L16 (the date check refuses the missing log) and L28 (the owner arm finds no answer). Each guard is defence in depth.
 
@@ -253,5 +253,8 @@ Twenty defects in this record's own instruments were found and fixed before any 
 - A `RELEASED` line written by hand, not by the snippet, bypasses the snippet's refusals. A hand-written release of a stopped id changes nothing (ledger row), but one written after a held run hides `held_ran`. The owner-spec check shows that a spec matches an unused Answered line, not that its words are the owner's.
 - A `rerun` launches the prompt it is given and checks only the id's form, a non-empty prompt, a tag and that no specs are passed. The pre-rerun check reads the log, but nothing checks that the prompt passed back is the one returned, and a second rerun before the first's outcome is logged passes it. A critic re-run is told its first run's held list.
 - The owner arm checks that an Answered line names each open hold's reason and that enough `NORESULT` answers exist, not what the answers say; a `NORESULT` line written twice can release a later no-result. Every `RERUN` line is written by hand, and nothing compares it with its Answered line.
+- A `HELD` Answered line is matched by its reason and is not used up by a release, as a `NORESULT` line is, so an earlier answer also lifts a later hold under the same reason. Step 9 says to release a re-held id only on a new answer; nothing in code enforces it.
+- The added-specs check reads pointers with jq, and a spec entry without its pointer field, or with one that is not a list, stops jq part way: the pointers after it in the same file go uncompared, and the check exits 0. That takes a deriver bug; the fix is in #1026. Pointers are compared as written, so a path spelled differently by the fixed deriver is caught only by Step 8 item 6's reading.
+- A run that returns nothing leaves no summaries, so the verifiers of a unit whose report is whole cannot be named: its non-benign items go into the coverage statement as unverified.
 - How the live runtime words a usage or quota limit notice was not measured. The rule treats a runtime-written limit notice as transient and an error citing a usage policy as a stop, so it depends on the two being told apart in the transcript.
 - Planning mode (`tests/scenarios/skills/test-decompose-into-pointer-units-planning.md`) launches no agent, so it does not exercise the skeleton. The harness does.
