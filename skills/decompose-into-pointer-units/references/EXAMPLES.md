@@ -44,8 +44,9 @@ const scope = (s) => {
     case 'cl': return `lines ${s.lines.join(', ')} of ${SOURCE} (release ${s.release}). For each line, say in one line whether it touches anything in the brief's CLASSIFY list; examine the lines that do.`
     case 'rows': return `lines ${s.rows.join(', ')} of ${MECH}/${s.file} (group ${s.group}). Benign rows go in one compact table; full VERDICT blocks only for rows the brief says to classify.`
     case 'file': return `the file ${MECH}/${s.path}. Examine each entry it lists.`
-    case 'issue': return `issue #${s.n}. Answer the brief's question for it, using the names the issue gives as search terms, with evidence.`
+    case 'issue': return `issue #${s.n} as frozen in ${MECH}/issue-${s.n}.json. Answer the brief's question for it, using the names the issue gives as search terms, with evidence.`
     case 'gap': return `gap ${s.g}: item ${s.g} of ${s.from}, approved by the owner. Answer it as asked.`
+    case 'owner': return `${s.scope} (authorised by the owner in ${s.answer}; the scope text is the owner's, verbatim)`
     case 'raw': return s.question // written by a critic in this run, never by the lead
     default: throw new Error(`unknown spec kind ${s.kind}`)
   }
@@ -204,6 +205,7 @@ One spec per file in a directory of per-item files (here `$MECH/items`):
 ```bash
 ls "$MECH/items" | jq -R -s -c 'split("\n") | map(select(endswith(".md")))
   | map({kind: "file", id: "IT-\(rtrimstr(".md") | gsub("[^A-Za-z0-9._-]"; "_"))", path: "items/\(.)"})' > "$RUN_DIR/specs/files.json"
+echo "items=$(ls "$MECH/items" | wc -l) specs=$(jq length "$RUN_DIR/specs/files.json")"   # unequal: a file the deriver skipped
 ```
 
 Gap ids from an earlier completeness critic file whose items start with `G<n>.`, limited to the ids the owner approved in the batch. A completeness critic proposes a stopped unit's scope as a gap, so no gap becomes a spec without that approval:
@@ -225,6 +227,7 @@ is the pointers in your unit; stay inside them.
 
 EVIDENCE. Everything below is already computed; read what your unit needs and do not redo it.
   mechanical/<source>         <what it holds>; line numbers in units refer to it
+  mechanical/issue-<n>.json   each tracked issue as frozen in Step 1
   mechanical/inventory.tsv    one row per <item>, column 2 is the group
   mechanical/items/<id>.md    one file per <item under review>
   Known artifacts: <the ways these files mislead, one line each>

@@ -121,5 +121,12 @@ for (const source of ['safety-classifier', 'reviewer', 'policy-hook']) {
 { const o = await run({ extraArgs: { source: undefined } });
   check('S11 cl without source', 'refused before any agent', o.thrown !== null && o.calls.length === 0); }
 
+// S12: an owner-authorised re-scope runs as an owner spec, its scope the owner's words verbatim.
+{ const owner = { kind: 'owner', id: 'OW-1', scope: 'only lines 8 and 9, read-only, no decoding', answer: 'OWNER-QUESTIONS.md B1' };
+  const o = await run({ specs: [...SPECS, owner] });
+  const prompt = o.prompts['OW-1'] ?? '';
+  check('S12 owner spec', 'the owner scope is in the prompt verbatim', prompt.includes(owner.scope));
+  check('S12 owner spec', 'the prompt points at the owner answer', prompt.includes(`authorised by the owner in ${owner.answer}`)); }
+
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAIL`}`);
 process.exit(failures === 0 ? 0 : 1);

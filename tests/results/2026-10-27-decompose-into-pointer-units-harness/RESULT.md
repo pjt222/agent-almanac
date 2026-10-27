@@ -25,7 +25,7 @@ This record checks the revision against those paths, and keeps the checks so a l
 
 Run from the repository root.
 
-- `harness.mjs <EXAMPLES.md>` extracts the Workflow skeleton from EXAMPLES.md byte for byte and runs it against mocked `agent`, `pipeline`, `parallel`, `phase` and `log`. It has eleven scenarios: every unit clean; a stop from each of the three sources the skill names; a summary without a `stop` field; a clean line that says "never stopped"; a unit with no result; a `raw` input spec; a held id; a gap unit with no result; and a `cl` spec without `args.source`. The mock completeness critic proposes every spec it sees no digest entry for, unless the prompt marks that id as held. That is a literal reading of its prompt, and it is how the reroute was found.
+- `harness.mjs <EXAMPLES.md>` extracts the Workflow skeleton from EXAMPLES.md byte for byte and runs it against mocked `agent`, `pipeline`, `parallel`, `phase` and `log`. It has twelve scenarios: every unit clean; a stop from each of the three sources the skill names; a summary without a `stop` field; a clean line that says "never stopped"; a unit with no result; a `raw` input spec; a held id; a gap unit with no result; a `cl` spec without `args.source`; and an `owner` spec carrying an owner-authorised re-scope. The mock completeness critic proposes every spec it sees no digest entry for, unless the prompt marks that id as held. That is a literal reading of its prompt, and it is how the reroute was found.
 - `ledger.sh <SKILL.md> <bash|zsh>` extracts the Step 1, 2, 7, 8 and 10 snippets from SKILL.md byte for byte. It runs them on the test scenario's fixture: a baseline with one stop, a logged no-result, an empty placeholder file, a report under a new id, verifier and critic files, a gap unit with and without a report, and a mechanical input changed after the freeze.
 - `mutants.py` breaks one guard at a time in a temporary copy and runs the matching check. A mutant counts as killed only when the check exits 1 with a failing row. Any other non-zero exit is reported as INCONCLUSIVE.
 
@@ -33,8 +33,8 @@ Run from the repository root.
 
 | Check | Output | Result |
 |---|---|---|
-| `harness.mjs` on the skeleton at `51866b250` | `out/harness-at-51866b250.txt` | the control: 21 of 30 assertions FAIL. The all-clean scenario passes, a safety-classifier stop is recorded and gets no verifier as it did at that head, and every other stop-handling path fails |
-| `harness.mjs` on the revised skeleton | `out/harness-revised.txt` | 30 PASS |
+| `harness.mjs` on the skeleton at `51866b250` | `out/harness-at-51866b250.txt` | the control: 23 of 32 assertions FAIL. The all-clean scenario passes, a safety-classifier stop is recorded and gets no verifier as it did at that head, and every other stop-handling path fails, as does the `owner` kind, which did not exist there |
+| `harness.mjs` on the revised skeleton | `out/harness-revised.txt` | 32 PASS |
 | `ledger.sh` under bash | `out/ledger-bash.txt` | 12 PASS |
 | `ledger.sh` under zsh | `out/ledger-zsh.txt` | 12 PASS |
 | `mutants.py` | `out/mutants.txt` | 7 of 7 KILLED |

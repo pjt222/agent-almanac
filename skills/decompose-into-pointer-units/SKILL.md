@@ -44,7 +44,7 @@ Split a job that is too large for one agent into many narrow units without letti
 - **Required**: A human owner who decides stopped units and batched questions
 - **Required**: `node`, `jq` and `rg` on PATH; `gh` when issues are a source; GNU `sha256sum` (on macOS, `shasum -a 256`). The snippets are written for bash or zsh
 - **Optional**: Chunk size per spec kind (default: 4-8 source lines or rows per unit; fewer when items are long)
-- **Optional**: Critic group size (default: 15 reports per accuracy critic, about what one critic reads end to end; size it against cost with `manage-token-budget`)
+- **Optional**: Critic group size (default: 15 reports per accuracy critic, an estimate of what one critic reads end to end rather than a measurement; size it against report length and cost with `manage-token-budget`)
 - **Optional**: Gap-round cap (default: 6 gap units per run; size it against cost)
 
 ## Procedure
@@ -60,13 +60,14 @@ MECH="$RUN_DIR/mechanical"
 mkdir -p "$MECH" "$RUN_DIR/specs" "$RUN_DIR/gapspecs"
 cp CHANGELOG.md "$MECH/changelog.md"
 gh issue list --label "${TRACKING_LABEL:?}" --state open --json number --jq '.[].number' > "$MECH/issues.txt" || exit 1
+while read -r n; do gh issue view "$n" --json number,title,body,labels > "$MECH/issue-$n.json" || exit 1; done < "$MECH/issues.txt"
 mech_sums() { (cd "${MECH:?}" && find . -type f -print0 | sort -z | xargs -0 -r sha256sum); }
 mech_sums > "$RUN_DIR/MECH-SHA256SUMS"
 ```
 
 **Expected:** `$MECH` holds every input the brief will name. The checksum covers every file under it, subdirectories included, and Steps 7 and 10 re-derive it and compare it byte for byte. A checksum taken at the freeze cannot show what happened before it.
 
-**On failure:** A `missing:` line names a tool to install first. If `gh` fails, the issue list is not frozen: stop rather than run with an empty list. If an input cannot be computed yet, compute it before going on. A unit that derives its own copy of an input creates a second, unreviewed version of the facts.
+**On failure:** A `missing:` line names a tool to install first. If `gh` fails, the issues are not frozen: stop rather than run with an empty list, or with units reading issue text live. If an input cannot be computed yet, compute it before going on. A unit that derives its own copy of an input creates a second, unreviewed version of the facts.
 
 ### Step 2: Derive the Work List With a Script
 
@@ -105,7 +106,7 @@ jq -s 'add | map(.id) | length == (unique | length)' "$RUN_DIR"/specs/*.json   #
 jq -s 'add | all(.id | test("^[A-Za-z0-9._-]+$"))' "$RUN_DIR"/specs/*.json   # ids readable back from the unit log
 ```
 
-Other kinds follow the same shape: inventory rows chunked by group, one spec per item file, and owner-approved gap IDs from a prior critic file. See [EXAMPLES.md](references/EXAMPLES.md).
+Other kinds follow the same shape: inventory rows chunked by group, one spec per item file, and owner-approved gap IDs from a prior critic file. See [EXAMPLES.md](references/EXAMPLES.md). Give each deriver its own count proof, and compare the sets of source items, not only their counts, when a deriver filters differently from the command that counts.
 
 **Expected:** `bullets`, `covered` and `unique` are equal; `issues` equals `issue_specs`; both id checks print `true`; each spec holds only `kind`, `id` and pointer fields, and its id is fixed by the frozen input and the chunk size.
 
@@ -138,11 +139,11 @@ OUTPUT    Sections that each start a line with VERDICT:, EVIDENCE: or OPEN:, in 
 A script builds each prompt from a fixed HEAD (read the brief first, stay in scope, no side effects such as commits or issue edits), the unit id, its report path, `scope(spec)` and the stop instruction. `scope` holds one neutral template per kind that only fills in pointers.
 
 ```javascript
-// HEAD, SOURCE (args.source), DIR and STOP_LINE as in the EXAMPLES skeleton
+// HEAD, SOURCE (args.source), MECH, DIR and STOP_LINE as in the EXAMPLES skeleton
 const scope = (s) => {
   switch (s.kind) {
     case 'cl': return `lines ${s.lines.join(', ')} of ${SOURCE} (release ${s.release}). For each line, say whether it touches anything in the brief's CLASSIFY list; examine the lines that do.`
-    case 'issue': return `issue #${s.n}. Answer the brief's question for it, using the names the issue gives as search terms, with evidence.`
+    case 'issue': return `issue #${s.n} as frozen in ${MECH}/issue-${s.n}.json. Answer the brief's question for it, using the names the issue gives as search terms, with evidence.`
     case 'raw': return s.question   // written by a critic in this run, never by the lead
     default: throw new Error(`unknown spec kind ${s.kind}`)
   }
@@ -152,7 +153,7 @@ const prompt = (s) => `${HEAD}\n\n=== YOUR UNIT: ${s.id} ===\nWrite your report 
 
 [EXAMPLES.md](references/EXAMPLES.md) carries a tested Workflow skeleton of this shape. Write your own from it with `create-workflow`.
 
-**Expected:** Any prompt can be rebuilt from its spec, the brief and the template. Two units of the same input kind differ only in pointers; gap units (`G-*`) carry critic text and are returned by the run for review.
+**Expected:** Any prompt can be rebuilt from its spec, the brief and the template. Two units of the same input kind differ only in pointers; gap units (`G-*`) carry critic text and are returned by the run for review, and an `owner` unit carries the owner's answer verbatim.
 
 **On failure:** An unknown kind throws before any agent starts, and so do an input spec of kind `raw` (lead prose) and a `cl` spec without `args.source`. If a kind needs per-unit prose to make sense, split the kind or add a pointer field.
 
@@ -179,7 +180,7 @@ const DSCHEMA = { type: 'object', additionalProperties: false,
 1. **Verify**: one adversarial verifier per non-benign item. It gets the same evidence and is told to refute: the counter-example, the misread source, the overstated impact, and every refutation check the brief lists. It writes `V-<unit>-<n>.txt`.
 2. **Accuracy critics**: one per group of at most 15 reports. Each reads every report in its group, benign ones included. Per-item verifiers never see a wrong claim inside a benign verdict.
 3. **Completeness critic**: one per run, over the spec list, the digest and the mechanical inputs. It asks what in scope no unit covered, and it is told which ids are held for the owner (stopped, no result, or held), so that it proposes no gap over their pointers.
-4. **Gap round**: sort the critics' gaps by priority, merge duplicates, run the top N as `raw` units, and log every gap the cap drops. If any unit in the run was stopped or returned no result, the gap round does not run and its gaps go to the owner batch: a completeness critic sees that unit's scope as uncovered and proposes it. Holding on a no-result as well is a fail-closed choice, because a missing result can hide a stop.
+4. **Gap round**: sort the critics' gaps by priority, drop exact-title duplicates (after lowercasing, keeping the highest-priority copy; a reworded duplicate is not caught), run the top N as `raw` units, and log every gap the cap drops. If any unit in the run was stopped or returned no result, the gap round does not run and its gaps go to the owner batch: a completeness critic sees that unit's scope as uncovered and proposes it. Holding on a no-result as well is a fail-closed choice, because a missing result can hide a stop.
 
 ```javascript
 const holdGaps = stopped.length + noResult.length > 0   // a missing result can hide a stop
@@ -230,7 +231,7 @@ A safety classifier, a policy hook or a human reviewer may stop a unit, a verifi
 2. Do not re-run it, do not reword it, and do not reproduce its content by hand. This applies to the lead's own drafting as much as to a unit: stopped text is not re-drafted. Keep whatever partial exists as it is, marked partial, and let the owner decide what happens to it. A pilot re-run, a cluster restart, a re-derivation at another chunk size and a gap unit are all re-runs.
 3. Put it in the owner batch (Step 9) with plain options: hold, the owner sets a different scope, or the owner does the work.
 4. Continue every other unit. A stop routes to the batch; it does not block the run.
-5. A re-scoped run of that unit happens only if the owner authorises that unit by name. An authorisation does not carry over to other units or later stops. If the authorised run is stopped again, propose nothing further; record it and leave the next step to the owner.
+5. A re-scoped run of that unit happens only if the owner authorises that unit by name. It runs as an `owner` spec whose scope is the owner's answer copied verbatim, with a pointer to that answer, so the one prompt not built from pointers is still traceable to the owner's words. An authorisation does not carry over to other units or later stops. If the authorised run is stopped again, propose nothing further; record it and leave the next step to the owner.
 6. A stop binds the unit's pointers, not only its id. Before launching any later spec, add every spec whose pointers overlap a stopped unit's to the `held` list and to the owner batch.
 
 The unit log holds one line per event, and only `STOP-<n> unit=<id>` lines are stops; Step 10 reads nothing else as one. A unit with no result is logged as `NORESULT unit=<id>`.
@@ -285,7 +286,7 @@ cd ledger && echo "specs=$(wc -l < ids.txt) reported=$(wc -l < reported.txt) sto
 
 ## Validation
 
-- [ ] Every spec file was produced by a script from `mechanical/`; no input spec carries text beyond pointers, and gap specs (`G-*`) carry critic text returned for review
+- [ ] Every spec file was produced by a script from `mechanical/`; no input spec carries text beyond pointers except an `owner` spec, whose scope is the owner's answer verbatim, and gap specs (`G-*`) carry critic text returned for review
 - [ ] The Step 2 coverage check printed equal counts, and ids are unique and safe across all clusters
 - [ ] Every prompt is HEAD + id + report path + `scope(spec)` + the stop instruction, and `scope` throws on an unknown kind
 - [ ] One verifier file per non-benign item, grouped accuracy critics, one completeness critic, and a log line for every gap not run or held

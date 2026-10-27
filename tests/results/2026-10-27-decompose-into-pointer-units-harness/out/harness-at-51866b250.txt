@@ -28,5 +28,7 @@ FAIL  S9 held id: returned as held
 FAIL  S10 gap unit no result: reported in gap_no_result
 FAIL  S10 gap unit no result: gap specs are returned
 FAIL  S11 cl without source: refused before any agent
+FAIL  S12 owner spec: the owner scope is in the prompt verbatim
+FAIL  S12 owner spec: the prompt points at the owner answer
 
-21 FAIL
+23 FAIL

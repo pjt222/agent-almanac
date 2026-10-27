@@ -28,5 +28,7 @@ PASS  S9 held id: returned as held
 PASS  S10 gap unit no result: reported in gap_no_result
 PASS  S10 gap unit no result: gap specs are returned
 PASS  S11 cl without source: refused before any agent
+PASS  S12 owner spec: the owner scope is in the prompt verbatim
+PASS  S12 owner spec: the prompt points at the owner answer
 
 ALL PASS
