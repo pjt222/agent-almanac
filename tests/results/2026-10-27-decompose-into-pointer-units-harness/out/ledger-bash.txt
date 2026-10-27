@@ -7,8 +7,10 @@ PASS  bash no-result stays unaccounted
 PASS  bash empty file is not reported
 PASS  bash reroute under a new id is extra
 PASS  bash verifier and critic files are not extra
-PASS  bash gap unit without a report is unaccounted
-PASS  bash gap unit with a report is reported
+PASS  bash approved gap spec without a report is unaccounted
+PASS  bash approved gap spec with a report is reported
+PASS  bash held spec is held, not unaccounted
+PASS  bash held spec with a report is held_ran
 PASS  bash changed input refused
 
 ALL PASS (bash)

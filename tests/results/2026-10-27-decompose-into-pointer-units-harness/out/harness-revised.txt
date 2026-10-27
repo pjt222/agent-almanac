@@ -1,20 +1,21 @@
 PASS  S1 clean: no stop, no missing result
 PASS  S1 clean: a verifier per unit
-PASS  S1 clean: the gap round runs
+PASS  S1 clean: gaps are returned for the owner
+PASS  S1 clean: no gap unit runs
 PASS  stop safety-classifier: recorded as stopped
 PASS  stop safety-classifier: no verifier for the stopped unit
 PASS  stop safety-classifier: the stopped unit ran once
-PASS  stop safety-classifier: no gap unit runs while a unit is stopped
+PASS  stop safety-classifier: no gap unit runs, though the critic proposes the stopped scope
 PASS  stop safety-classifier: the completeness critic is told the stopped id is held
 PASS  stop reviewer: recorded as stopped
 PASS  stop reviewer: no verifier for the stopped unit
 PASS  stop reviewer: the stopped unit ran once
-PASS  stop reviewer: no gap unit runs while a unit is stopped
+PASS  stop reviewer: no gap unit runs, though the critic proposes the stopped scope
 PASS  stop reviewer: the completeness critic is told the stopped id is held
 PASS  stop policy-hook: recorded as stopped
 PASS  stop policy-hook: no verifier for the stopped unit
 PASS  stop policy-hook: the stopped unit ran once
-PASS  stop policy-hook: no gap unit runs while a unit is stopped
+PASS  stop policy-hook: no gap unit runs, though the critic proposes the stopped scope
 PASS  stop policy-hook: the completeness critic is told the stopped id is held
 PASS  S5 missing stop field: treated as stopped
 PASS  S6 negated clean line: not recorded as stopped
@@ -24,11 +25,20 @@ PASS  S7 no result: the log says the cause is undetermined
 PASS  S7 no result: no gap unit runs
 PASS  S8 raw input spec: refused before any agent
 PASS  S9 held id: never launched
-PASS  S9 held id: returned as held
-PASS  S10 gap unit no result: reported in gap_no_result
-PASS  S10 gap unit no result: gap specs are returned
-PASS  S11 cl without source: refused before any agent
-PASS  S12 owner spec: the owner scope is in the prompt verbatim
-PASS  S12 owner spec: the prompt points at the owner answer
+PASS  S9 held id: returned as held, including an id outside this run
+PASS  S9 held id: the critic is told an id outside this run
+PASS  S9 held id: no gap unit runs over held scope
+PASS  S10 verifier no result: recorded in verifier_no_result
+PASS  S10 verifier no result: no verdict counted for it
+PASS  S10 verifier no result: no gap unit runs
+PASS  S11 verifier stop: recorded in verifier_stopped
+PASS  S11 verifier stop: its verdict is not counted
+PASS  S12 cl without source: refused before any agent
+PASS  S13 owner spec: the owner scope is in the prompt verbatim
+PASS  S13 owner spec: the prompt names the unit and points at the answer
+PASS  S13 owner spec: an owner spec without its unit is refused before any agent
+PASS  S14 critic no result: recorded in critic_no_result
+PASS  S14 critic stop: recorded in critic_stopped
+PASS  S14 critic stop: its gaps are not used
 
 ALL PASS
