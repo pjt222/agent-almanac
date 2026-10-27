@@ -29,13 +29,19 @@ PASS  bash owner: an empty list checks nothing and says so
 PASS  bash owner: a non-owner spec in the file is refused
 PASS  bash owner: a missing file is refused
 PASS  bash owner: a file already recorded is refused, nothing written
+PASS  bash owner: an id that is not OW-<n> is refused, nothing recorded
+PASS  bash owner: an id already in the work list is refused, nothing recorded
+PASS  bash owner: a STOP-<n> already used by a recorded owner spec is refused, nothing recorded
+PASS  bash owner: two owner specs citing one STOP-<n> in one file are refused
 PASS  bash held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out
 PASS  bash held: a no-result or a hold logged after a release holds the id again
 PASS  bash launch: after a stop or no-result, a unit that reported is not relaunched
 PASS  bash launch: a RERUN line for this run relaunches the unit it names
 PASS  bash launch: a RERUN line for another run does not
 PASS  bash launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run)
-PASS  bash launch: a missing cluster file is refused before any list is printed
+PASS  bash launch: an unrecorded cluster file is refused before any list is printed
+PASS  bash launch: an id in two spec files is refused before any list is printed
+PASS  bash launch: a recorded cluster file that is not a spec list is refused before any list is printed
 PASS  bash held: a missing unit log is refused
 
 ALL PASS (bash)

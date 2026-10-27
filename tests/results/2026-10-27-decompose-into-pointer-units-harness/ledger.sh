@@ -187,6 +187,13 @@ check 'a hold logged after a release holds the id again' "$(ledger)" 'specs=8 re
 printf 'VERDICT: ok\n' > "$RUN_DIR/G-R1-1.txt"
 check 'a run under a hold logged after a release is held_ran' "$(ledger)" 'specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1'
 
+# A re-derivation at chunk 5 written to a new file and appended to the record, so that both checksums
+# hold: the id it shares with the first derivation is refused (AD4-2).
+printf '[{"kind":"cl","id":"CL1.5.0-01","release":"1.5.0","lines":[4,5,6,7,8]}]\n' > "$RUN_DIR/specs/cl2.json"
+(cd "$RUN_DIR" && sha256sum specs/cl2.json >> WORK-SHA256SUMS)
+check 'an id in two spec entries is refused, though both files are recorded' "$(ledger)" 'an id is in two spec entries: CL1.5.0-01'
+rm "$RUN_DIR/specs/cl2.json"; (cd "$RUN_DIR" && sed -i '/ specs\/cl2.json$/d' WORK-SHA256SUMS)
+
 # The work list: a spec file added without being recorded, or a re-derivation after launch, is refused.
 printf '[{"kind":"cl","id":"CL-X","release":"1.5.0","lines":[8]}]\n' > "$RUN_DIR/specs/added.json"
 check 'a spec file added without being recorded is refused' "$(ledger)" 'the work list changed after it was recorded'

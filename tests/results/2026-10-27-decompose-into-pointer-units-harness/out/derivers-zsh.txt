@@ -29,13 +29,19 @@ PASS  zsh owner: an empty list checks nothing and says so
 PASS  zsh owner: a non-owner spec in the file is refused
 PASS  zsh owner: a missing file is refused
 PASS  zsh owner: a file already recorded is refused, nothing written
+PASS  zsh owner: an id that is not OW-<n> is refused, nothing recorded
+PASS  zsh owner: an id already in the work list is refused, nothing recorded
+PASS  zsh owner: a STOP-<n> already used by a recorded owner spec is refused, nothing recorded
+PASS  zsh owner: two owner specs citing one STOP-<n> in one file are refused
 PASS  zsh held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out
 PASS  zsh held: a no-result or a hold logged after a release holds the id again
 PASS  zsh launch: after a stop or no-result, a unit that reported is not relaunched
 PASS  zsh launch: a RERUN line for this run relaunches the unit it names
 PASS  zsh launch: a RERUN line for another run does not
 PASS  zsh launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run)
-PASS  zsh launch: a missing cluster file is refused before any list is printed
+PASS  zsh launch: an unrecorded cluster file is refused before any list is printed
+PASS  zsh launch: an id in two spec files is refused before any list is printed
+PASS  zsh launch: a recorded cluster file that is not a spec list is refused before any list is printed
 PASS  zsh held: a missing unit log is refused
 
 ALL PASS (zsh)

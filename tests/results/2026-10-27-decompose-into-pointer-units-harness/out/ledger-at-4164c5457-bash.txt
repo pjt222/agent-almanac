@@ -40,9 +40,10 @@ PASS  bash a hold released from an unused Answered line is unaccounted until it 
 FAIL  bash an Answered line releases once: got [ rc=0] want [REFUSED: no unused Answered line releases G-R1-1 rc=1]
 FAIL  bash a hold logged after a release holds the id again: got [specs=8 reported=7 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0] want [specs=8 reported=7 stopped=1 held=1 unaccounted=0 extra=0 held_ran=0]
 FAIL  bash a run under a hold logged after a release is held_ran: got [specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
+FAIL  bash an id in two spec entries is refused, though both files are recorded: got [specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [an id is in two spec entries: CL1.5.0-01]
 PASS  bash a spec file added without being recorded is refused
 PASS  bash re-derivation at chunk 5 after launch is refused
 FAIL  bash restored work list matches again: got [specs=8 reported=8 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=8 reported=8 stopped=1 held=1 unaccounted=0 extra=0 held_ran=1]
 PASS  bash changed input refused
 
-19 FAIL (bash)
+20 FAIL (bash)

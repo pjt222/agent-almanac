@@ -40,6 +40,7 @@ PASS  zsh a hold released from an unused Answered line is unaccounted until it r
 PASS  zsh an Answered line releases once
 PASS  zsh a hold logged after a release holds the id again
 PASS  zsh a run under a hold logged after a release is held_ran
+PASS  zsh an id in two spec entries is refused, though both files are recorded
 PASS  zsh a spec file added without being recorded is refused
 PASS  zsh re-derivation at chunk 5 after launch is refused
 PASS  zsh restored work list matches again

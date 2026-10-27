@@ -40,6 +40,7 @@ PASS  bash a hold released from an unused Answered line is unaccounted until it 
 PASS  bash an Answered line releases once
 PASS  bash a hold logged after a release holds the id again
 PASS  bash a run under a hold logged after a release is held_ran
+PASS  bash an id in two spec entries is refused, though both files are recorded
 PASS  bash a spec file added without being recorded is refused
 PASS  bash re-derivation at chunk 5 after launch is refused
 PASS  bash restored work list matches again

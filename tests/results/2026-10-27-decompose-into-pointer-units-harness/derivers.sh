@@ -115,6 +115,7 @@ ownerfixture() {   # the owner specs file content
 
 - STOP-1, unit CL-B: "only line 6, read-only" (owner message, 2026-10-27)
 - STOP-2, unit CL-A: "line 4 only" no citation
+- STOP-6, unit CL-F: "line 9 only" (owner message, 2026-10-27)
 
 ## Open
 
@@ -140,7 +141,7 @@ for arm in \
   'under a later heading|{"kind":"owner","id":"OW-4","unit":"CL-E","scope":"after the section","answer":"STOP-4"}' \
   'with the wrong STOP number|{"kind":"owner","id":"OW-5","unit":"CL-B","scope":"only line 6, read-only","answer":"STOP-2"}' \
   'on a line with no citation|{"kind":"owner","id":"OW-6","unit":"CL-A","scope":"line 4 only","answer":"STOP-2"}' \
-  'under the wrong unit|{"kind":"owner","id":"OW-7","unit":"CL-A","scope":"only line 6, read-only","answer":"STOP-1"}'; do
+  'under the wrong unit|{"kind":"owner","id":"OW-7","unit":"CL-A","scope":"line 9 only","answer":"STOP-6"}'; do
   name=${arm%%|*}; spec=${arm#*|}; id=$(printf '%s' "$spec" | jq -r .id)
   ownerfixture "[$OWNER_OK,$spec]"
   check "owner: a scope $name is refused with exit 1, nothing recorded" "$(run owner.sh) $(recorded specs/owner-1.json)" "owner specs checked: 2 REFUSED $id rc=1 no"
@@ -153,12 +154,28 @@ ownerfixture "[$OWNER_OK]"; rm "$RUN_DIR/specs/owner-1.json"
 check 'owner: a missing file is refused' "$(run owner.sh) $(recorded specs/owner-1.json)" 'REFUSED: no specs/owner-1.json rc=2 no'
 ownerfixture "[$OWNER_OK]"; run owner.sh > /dev/null
 check 'owner: a file already recorded is refused, nothing written' "$(run owner.sh) lines=$(awk '$2 == "specs/owner-1.json"' "$RUN_DIR/WORK-SHA256SUMS" | wc -l | tr -d ' ')" 'REFUSED: specs/owner-1.json was already recorded rc=2 lines=1'
+# An owner spec's id is OW-<n>, and no id is in two spec entries (R4-2).
+ownerfixture '[{"kind":"owner","id":"OW 1","unit":"CL-B","scope":"only line 6, read-only","answer":"STOP-1"}]'
+check 'owner: an id that is not OW-<n> is refused, nothing recorded' "$(run owner.sh) $(recorded specs/owner-1.json)" 'REFUSED: an owner spec id is OW-<n> rc=2 no'
+ownerfixture "[$OWNER_OK]"; run owner.sh > /dev/null
+printf '%s\n' '[{"kind":"owner","id":"OW-1","unit":"CL-F","scope":"line 9 only","answer":"STOP-6"}]' > "$RUN_DIR/specs/owner-2.json"
+sed 's|^OWNER_SPECS="specs/owner-1.json"|OWNER_SPECS="specs/owner-2.json"|' "$work/owner.sh" > "$work/owner-2.sh"
+check 'owner: an id already in the work list is refused, nothing recorded' "$(run owner-2.sh) $(recorded specs/owner-2.json)" 'REFUSED: an id is in two spec entries: OW-1 rc=2 no'
+# A STOP-<n> authorises one owner spec, in a later file of any name or in the same file (AD4-3).
+ownerfixture "[$OWNER_OK]"; mv "$RUN_DIR/specs/owner-1.json" "$RUN_DIR/specs/owner.json"
+sed 's|^OWNER_SPECS="specs/owner-1.json"|OWNER_SPECS="specs/owner.json"|' "$work/owner.sh" > "$work/owner-plain.sh"
+first=$(run owner-plain.sh)
+printf '%s\n' '[{"kind":"owner","id":"OW-2","unit":"CL-B","scope":"only line 6, read-only","answer":"STOP-1"}]' > "$RUN_DIR/specs/owner-1.json"
+check 'owner: a STOP-<n> already used by a recorded owner spec is refused, nothing recorded' "$first|$(run owner.sh) $(recorded specs/owner-1.json)" 'owner specs checked: 1 rc=0|owner specs checked: 1 REFUSED: a STOP-<n> authorises one owner spec; already used: STOP-1 rc=1 no'
+ownerfixture "[$OWNER_OK,{\"kind\":\"owner\",\"id\":\"OW-2\",\"unit\":\"CL-B\",\"scope\":\"only line 6, read-only\",\"answer\":\"STOP-1\"}]"
+check 'owner: two owner specs citing one STOP-<n> in one file are refused' "$(run owner.sh) $(recorded specs/owner-1.json)" 'owner specs checked: 2 REFUSED: a STOP-<n> authorises one owner spec; already used: STOP-1 rc=1 no'
 
 # --- the held list and the launch list ---
 # The cluster's ids are its own (none is in cl.json). RW-A and RW-C reported; RW-A's verifier was stopped.
 # RW-G no-results again after its release, and RW-H is held again by a later stop after its release.
 fresh
 printf '%s\n' '[{"kind":"rows","id":"RW-A"},{"kind":"rows","id":"RW-B"},{"kind":"rows","id":"RW-C"},{"kind":"rows","id":"RW-D"},{"kind":"rows","id":"RW-E"},{"kind":"rows","id":"RW-F"},{"kind":"rows","id":"RW-G"},{"kind":"rows","id":"RW-H"}]' > "$RUN_DIR/specs/rows.json"
+(cd "$RUN_DIR" && sha256sum specs/rows.json >> WORK-SHA256SUMS)   # recorded, as Step 2 records every spec file
 cat > "$RUN_DIR/UNIT-LOG.txt" <<'EOF'
 2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch
 2026-10-27 NORESULT unit=RW-D cause=undetermined
@@ -188,9 +205,15 @@ sed -i 's/ as=R2$/ as=R1b/' "$RUN_DIR/UNIT-LOG.txt"
 check 'launch: a RERUN line for another run does not' "$(launch | cut -d'|' -f3)" 'RW-E'
 : > "$RUN_DIR/UNIT-LOG.txt"
 check 'launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run)' "$(launch)" 'held=[]|not relaunched, reported already: []|RW-A,RW-B,RW-C,RW-D,RW-E,RW-F,RW-G,RW-H'
-mv "$RUN_DIR/specs/rows.json" "$work/rows.json"
-check 'launch: a missing cluster file is refused before any list is printed' "$(run held.sh | sed 's/^jq: error[^R]*REFUSED/REFUSED/')" 'REFUSED: specs/rows.json is not a spec list rc=2'
-mv "$work/rows.json" "$RUN_DIR/specs/rows.json"
+# The cluster must be a recorded spec file, readable, and no id may be in two spec entries (AD4-2).
+printf '%s\n' '[{"kind":"rows","id":"RW-X"}]' > "$RUN_DIR/specs/rows2.json"
+sed 's|^CLUSTER="specs/rows.json"|CLUSTER="specs/rows2.json"|' "$work/held.sh" > "$work/held-2.sh"
+check 'launch: an unrecorded cluster file is refused before any list is printed' "$(run held-2.sh)" 'REFUSED: specs/rows2.json is not a recorded spec file, or the work list changed rc=1'
+printf '%s\n' '[{"kind":"rows","id":"RW-A"}]' > "$RUN_DIR/specs/rows2.json"; (cd "$RUN_DIR" && sha256sum specs/rows2.json >> WORK-SHA256SUMS)
+check 'launch: an id in two spec files is refused before any list is printed' "$(run held.sh)" 'REFUSED: an id is in two spec entries: RW-A rc=1'
+printf 'not json\n' > "$RUN_DIR/specs/rows2.json"; (cd "$RUN_DIR" && sed -i '/ specs\/rows2.json$/d' WORK-SHA256SUMS && sha256sum specs/rows2.json >> WORK-SHA256SUMS)
+check 'launch: a recorded cluster file that is not a spec list is refused before any list is printed' "$(run held-2.sh | sed 's/.*REFUSED/REFUSED/')" 'REFUSED: specs/rows2.json is not a spec list rc=2'
+rm "$RUN_DIR/specs/rows2.json"; (cd "$RUN_DIR" && sed -i '/ specs\/rows2.json$/d' WORK-SHA256SUMS)
 rm "$RUN_DIR/UNIT-LOG.txt"
 check 'held: a missing unit log is refused' "$(run held.sh)" 'REFUSED: no UNIT-LOG.txt (Step 1 creates it) rc=2'
 

@@ -29,13 +29,19 @@ PASS  bash owner: an empty list checks nothing and says so
 PASS  bash owner: a non-owner spec in the file is refused
 PASS  bash owner: a missing file is refused
 PASS  bash owner: a file already recorded is refused, nothing written
+FAIL  bash owner: an id that is not OW-<n> is refused, nothing recorded: got [owner specs checked: 1 rc=0 yes] want [REFUSED: an owner spec id is OW-<n> rc=2 no]
+FAIL  bash owner: an id already in the work list is refused, nothing recorded: got [owner specs checked: 1 rc=0 yes] want [REFUSED: an id is in two spec entries: OW-1 rc=2 no]
+FAIL  bash owner: a STOP-<n> already used by a recorded owner spec is refused, nothing recorded: got [owner specs checked: 1 rc=0|owner specs checked: 1 rc=0 yes] want [owner specs checked: 1 rc=0|owner specs checked: 1 REFUSED: a STOP-<n> authorises one owner spec; already used: STOP-1 rc=1 no]
+FAIL  bash owner: two owner specs citing one STOP-<n> in one file are refused: got [owner specs checked: 2 rc=0 yes] want [owner specs checked: 2 REFUSED: a STOP-<n> authorises one owner spec; already used: STOP-1 rc=1 no]
 FAIL  bash held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out: got [held=["RW-B","RW-D","RW-F","RW-Z"]] want [held=["RW-B","RW-D","RW-F","RW-G","RW-H","RW-Z"]]
 FAIL  bash held: a no-result or a hold logged after a release holds the id again: got [] want [RW-G,RW-H]
 FAIL  bash launch: after a stop or no-result, a unit that reported is not relaunched: got [[{"kind":"rows","id":"RW-A"},{"kind":"rows","id":"RW-C"},{"kind":"rows","id":"RW-E"},{"kind":"rows","id":"RW-G"},{"kind":"rows","id":"RW-H"}]|] want [not relaunched, reported already: ["RW-A","RW-C"]|RW-E]
 FAIL  bash launch: a RERUN line for this run relaunches the unit it names: got [] want [RW-A,RW-E]
 FAIL  bash launch: a RERUN line for another run does not: got [] want [RW-E]
 FAIL  bash launch: with no stop or no-result in the job, reported units relaunch (a clean pilot re-run): got [held=[]|[{"kind":"rows","id":"RW-A"},{"kind":"rows","id":"RW-B"},{"kind":"rows","id":"RW-C"},{"kind":"rows","id":"RW-D"},{"kind":"rows","id":"RW-E"},{"kind":"rows","id":"RW-F"},{"kind":"rows","id":"RW-G"},{"kind":"rows","id":"RW-H"}]|] want [held=[]|not relaunched, reported already: []|RW-A,RW-B,RW-C,RW-D,RW-E,RW-F,RW-G,RW-H]
-FAIL  bash launch: a missing cluster file is refused before any list is printed: got [held=[] jq: error: Could not open file specs/rows.json: No such file or directory rc=2] want [REFUSED: specs/rows.json is not a spec list rc=2]
+FAIL  bash launch: an unrecorded cluster file is refused before any list is printed: got [held=[] [{"kind":"rows","id":"RW-X"}] rc=0] want [REFUSED: specs/rows2.json is not a recorded spec file, or the work list changed rc=1]
+FAIL  bash launch: an id in two spec files is refused before any list is printed: got [held=[] [{"kind":"rows","id":"RW-A"},{"kind":"rows","id":"RW-B"},{"kind":"rows","id":"RW-C"},{"kind":"rows","id":"RW-D"},{"kind":"rows","id":"RW-E"},{"kind":"rows","id":"RW-F"},{"kind":"rows","id":"RW-G"},{"kind":"rows","id":"RW-H"}] rc=0] want [REFUSED: an id is in two spec entries: RW-A rc=1]
+FAIL  bash launch: a recorded cluster file that is not a spec list is refused before any list is printed: got [held=[] jq: parse error: Invalid numeric literal at line 1, column 4 rc=5] want [REFUSED: specs/rows2.json is not a spec list rc=2]
 PASS  bash held: a missing unit log is refused
 
-7 FAIL (bash)
+13 FAIL (bash)
