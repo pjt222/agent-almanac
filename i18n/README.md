@@ -7,16 +7,16 @@ This directory contains translations of agent-almanac content into multiple lang
 <!-- AUTO:START:i18n-locales -->
 | Code | Language | Skills | Agents | Teams | Guides | Translated | Stale |
 |---|---|---|---|---|---|---|---|
-| de | Deutsch | 340/374 | 3/76 | 1/22 | 2/36 | 346/508 (68.1%) | 176 |
-| zh-CN | 简体中文 | 346/374 | 3/76 | 1/22 | 2/36 | 352/508 (69.3%) | 177 |
-| ja | 日本語 | 347/374 | 3/76 | 1/22 | 2/36 | 353/508 (69.5%) | 171 |
-| es | Español | 334/374 | 3/76 | 1/22 | 2/36 | 340/508 (66.9%) | 173 |
+| de | Deutsch | 340/374 | 3/76 | 1/22 | 2/36 | 346/508 (68.1%) | 177 |
+| zh-CN | 简体中文 | 346/374 | 3/76 | 1/22 | 2/36 | 352/508 (69.3%) | 178 |
+| ja | 日本語 | 347/374 | 3/76 | 1/22 | 2/36 | 353/508 (69.5%) | 172 |
+| es | Español | 334/374 | 3/76 | 1/22 | 2/36 | 340/508 (66.9%) | 174 |
 | caveman-lite | Caveman Lite | 346/374 | 0/76 | 0/22 | 0/36 | 346/508 (68.1%) | 308 |
 | caveman | Caveman | 346/374 | 0/76 | 0/22 | 0/36 | 346/508 (68.1%) | 308 |
 | caveman-ultra | Caveman Ultra | 346/374 | 0/76 | 0/22 | 0/36 | 346/508 (68.1%) | 308 |
 | wenyan-lite | 文言文輕 | 345/374 | 0/76 | 0/22 | 0/36 | 345/508 (67.9%) | 307 |
 | wenyan | 文言文 | 345/374 | 0/76 | 0/22 | 0/36 | 345/508 (67.9%) | 307 |
-| wenyan-ultra | 文言文極 | 345/374 | 0/76 | 0/22 | 0/36 | 345/508 (67.9%) | 304 |
+| wenyan-ultra | 文言文極 | 345/374 | 0/76 | 0/22 | 0/36 | 345/508 (67.9%) | 305 |
 <!-- AUTO:END:i18n-locales -->
 
 Generated from `i18n/_config.yml` and each locale's `translation_status.yml` — the same
