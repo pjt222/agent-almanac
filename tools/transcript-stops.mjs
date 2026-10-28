@@ -387,9 +387,15 @@ function verify() {
     check('files: clean and transient exit 0, each line with result=?', r4.status === 0 && r4.stdout.split('\n').filter((l) => /\tresult=\?\t/.test(l)).length === 2);
     const broken = join(dir, 'broken.jsonl');
     writeFileSync(broken, '{"partial": tru');
-    check('a transcript with no parseable line exits 2', cli(fileA, broken).status === 2);
-    check('no argument, an unknown flag, a missing path, or a directory beside a file: exit 2',
-      cli().status === 2 && cli('--strict', fileA).status === 2 && cli(join(dir, 'absent.jsonl')).status === 2 && cli(green, fileA).status === 2);
+    // Each refusal names its own reason: an exit code alone cannot tell them apart, since an
+    // unparseable file would also fail the role check, and an unknown flag read as a path would
+    // also be missing.
+    const r6 = cli(fileA, broken);
+    check('a transcript with no parseable line exits 2, saying so', r6.status === 2 && /broken\.jsonl: no parseable JSON line/.test(r6.stderr));
+    const r7 = cli('--strict', fileA);
+    check('an unknown flag exits 2 as a flag, not as a missing path', r7.status === 2 && /unknown flag --strict/.test(r7.stderr));
+    check('no argument, a missing path, or a directory beside a file: exit 2',
+      cli().status === 2 && cli(join(dir, 'absent.jsonl')).status === 2 && cli(green, fileA).status === 2);
     check('`--` ends the flags', cli('--', fileA).status === 0);
   } finally {
     rmSync(dir, { recursive: true, force: true });
