@@ -1,0 +1,17 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "skills": [
+  {
+   "name": "commit-changes",
+   "filePath": "<sandbox>/proj/.pi/skills/commit-changes/SKILL.md"
+  }
+ ],
+ "diagnostics": [
+  {
+   "type": "collision",
+   "message": "name \"commit-changes\" collision",
+   "path": "<sandbox>/proj/.agents/skills/commit-changes/SKILL.md"
+  }
+ ]
+}

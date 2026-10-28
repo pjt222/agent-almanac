@@ -1,0 +1,16 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "home": "<sandbox>/home-copy",
+ "cwd": "<sandbox>/proj-copy",
+ "agentDir": "<sandbox>/home-copy/.pi/agent",
+ "requestedTrust": true,
+ "isProjectTrusted": true,
+ "skills": [
+  {
+   "name": "commit-changes",
+   "filePath": "<sandbox>/proj-copy/.agents/skills/commit-changes/SKILL.md"
+  }
+ ],
+ "diagnostics": []
+}
