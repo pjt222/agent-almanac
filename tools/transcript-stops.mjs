@@ -82,7 +82,9 @@
  * The format belongs to another program and moves. The self-test pins the shapes measured, not
  * the runtime, and its fixtures are synthetic records in those shapes. No real transcript is
  * copied: real ones carry other work's content, and a stopped turn's content is what Step 8
- * forbids reproducing.
+ * forbids reproducing. So a runtime that renamed a stop field would make every stop read clean
+ * here, with the self-test still green. After a runtime upgrade, run the tool on a transcript
+ * known to hold a stop, and see it read `stop`, before trusting a `clean`.
  */
 
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, rmSync, statSync, readdirSync } from 'node:fs';
