@@ -63,10 +63,11 @@ jobs:
       # `npm whoami` to ask about, and npm's documentation says it "is not a check of trusted
       # publishing permissions". The exchange runs inside `npm publish`, in the dry run below as
       # well, but npm logs its outcome only at verbose level. So both npm steps run with
-      # `--loglevel verbose`, and the `npm verbose oidc` lines say whether it worked; no `oidc` line at
-      # all means npm skipped the exchange, because the job had no `id-token: write`. npm does not
-      # check a trusted publisher when it is saved, so a dispatch dry run after configuring one is
-      # the first check that it matches. What no rehearsal can test is the upload itself, the PUT.
+      # `--loglevel verbose`, and the `npm verbose oidc` lines say whether it worked. No `oidc`
+      # line at all means npm skipped the exchange, because the job had no `id-token: write`.
+      # npm does not check a trusted publisher when it is saved, so a dispatch dry run after
+      # configuring one is the first check that it matches. What no rehearsal can test is the
+      # upload itself, the PUT.
 
       # `npm publish --dry-run`, NOT `npm pack --dry-run`, and the difference is the whole value of
       # the rehearsal. Measured: `pack --dry-run` runs `prepack` alone, while `publish --dry-run`
