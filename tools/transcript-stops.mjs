@@ -15,8 +15,8 @@
  * strings (a CLI binary's string pool, another transcript, a page quoting one) carries them into
  * its tool results at any offset, offset 0 included. A clean transcript measured here has a
  * tool_result whose text BEGINS with the stop notice. So no signal below is a text match, not
- * even an anchored one. The signals, as Claude Code writes them (transcripts written by 2.1.278
- * to 2.1.311, read 2026-10-28):
+ * even an anchored one. The signals, as Claude Code writes them (read 2026-10-28 over transcripts
+ * written by 2.1.278 to 2.1.312; the stop records themselves by 2.1.281, 2.1.306 and 2.1.311):
  *
  *   refusal      an `assistant` record whose message.stop_reason is "refusal": the API's own
  *                verdict, message.stop_details.category naming the classifier. Counted once per
