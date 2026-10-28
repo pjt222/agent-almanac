@@ -3,8 +3,8 @@
  "node": "v26.11.1",
  "agentDir": "<sandbox>/install-agent",
  "skillCount": 28,
- "promptChars": 22608,
- "promptTokensCharsOver4": 5652,
+ "promptChars": 22542,
+ "promptTokensCharsOver4": 5636,
  "skills": [
   {
    "name": "argumentation",

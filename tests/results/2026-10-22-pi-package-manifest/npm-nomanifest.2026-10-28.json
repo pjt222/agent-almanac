@@ -3,8 +3,8 @@
  "node": "v26.11.1",
  "agentDir": "<sandbox>/home-npm-nomanifest/.pi/agent",
  "skillCount": 375,
- "promptChars": 294077,
- "promptTokensCharsOver4": 73520,
+ "promptChars": 294011,
+ "promptTokensCharsOver4": 73503,
  "skills": [
   {
    "name": "adapt-architecture",

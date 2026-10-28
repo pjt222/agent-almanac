@@ -79,27 +79,27 @@ HOME="$H" PI_OFFLINE=1 node measure-package.mjs "$PI" "<project>" "$A"
 
 ## Re-measurement, 2026-10-28: 28 skills
 
-**What changed.** On 2026-10-28 the maintainer added `bootstrap-agent-identity` to `pi.skills` (`66a4f9a4c`). The branch also merged `main` (`24d78e36c`), which holds 374 skills.
+**What changed.** On 2026-10-28 the maintainer added `bootstrap-agent-identity` to `pi.skills` (`66a4f9a4c`). #1034 then removed the every-session trigger from the descriptions of `bootstrap-agent-identity` and `attune`. The branch merged `main` (`f6cbcf5f8`), which holds 374 skills and #1034.
 
-**How it was run.** The five branch arms above were re-run at `66a4f9a4c` with the same pi 1.4.0 and Node v26.11.1. They followed the recipe above, with one difference: the clone was shallow (`git clone --depth 1 --branch feat/1008-pi-manifest`).
-- **The pack:** made from the worktree at that commit. Its sha256 was not recorded.
-- **The review re-run:** made from a clean clone at `7a23e2424`, whose `package.json` and `skills/` equal `66a4f9a4c`'s. It gave the same figures without the paths.
+**How it was run.** The five branch arms above were re-run at `f6cbcf5f8` with the same pi 1.4.0 and Node v26.11.1. They followed the recipe above, with one difference: the clone was shallow (`git clone --depth 1 --branch feat/1008-pi-manifest`).
+- **The pack:** made from the worktree at that commit, whose `git status` showed no change to tracked files. Its sha256 was not recorded.
+- **An earlier run:** made at `66a4f9a4c`, before #1034, and matched without the paths by a review re-run from a clean clone at `7a23e2424`. This run differs from it only by #1034's two shorter descriptions.
 - **Not re-run:** the registry control, because it measures the published 1.9.1.
 
 The outputs are the `*.2026-10-28.json` files beside this one. The rows and files above are the first run's.
 
 | Source | `pi` key | Skills loaded | Root probe | Template | Skills prompt | Prefix ahead of `skills/` | Without the paths | Diagnostics |
 |---|---|---|---|---|---|---|---|---|
-| unpacked `npm pack` | yes | 28 | not loaded | not shipped | 22,608 chars | 144 characters | 17,789 chars | 0 |
-| unpacked `npm pack` | removed | 375 | loaded | not shipped | 294,077 chars | 138 characters | 229,092 chars | 0 |
-| `git clone` | yes | 28 | not loaded | not loaded | 22,552 chars | 142 characters | 17,789 chars | 0 |
-| `git clone` | removed | 376 | loaded | loaded | 294,712 chars | 138 characters | 229,564 chars | 0 |
-| `pi install <unpacked npm pack>` | yes | 28 | not loaded | not shipped | 22,608 chars | 144 characters | 17,789 chars | 0 |
+| unpacked `npm pack` | yes | 28 | not loaded | not shipped | 22,542 chars | 144 characters | 17,723 chars | 0 |
+| unpacked `npm pack` | removed | 375 | loaded | not shipped | 294,011 chars | 138 characters | 229,026 chars | 0 |
+| `git clone` | yes | 28 | not loaded | not loaded | 22,486 chars | 142 characters | 17,723 chars | 0 |
+| `git clone` | removed | 376 | loaded | loaded | 294,646 chars | 138 characters | 229,498 chars | 0 |
+| `pi install <unpacked npm pack>` | yes | 28 | not loaded | not shipped | 22,542 chars | 144 characters | 17,723 chars | 0 |
 
 - **The manifest arms load exactly `pi.skills`.** The 28 names loaded equal the 28 ids, checked by sorting both. `pi install <dir>` wrote `{"packages": ["../npm-manifest/package"]}` again.
 - **Without the key** the root probe loads beside the 374 skills, and from a clone the template too.
-- **Each skill's path occurs once in pi's block.** This run counted it in both npm arms (28 of 28, 375 of 375); the review re-run counted it in all five arms.
-- **Compare the two runs without the paths.** This run's sandbox prefix is longer than the first run's, so the totals do not compare. Without the paths, the 27 skills took 17,081 characters and the 28 take 17,789. The other 27 skills' names and descriptions are the same in both runs. So the 708 characters are `bootstrap-agent-identity`'s own, about 180 tokens by pi's chars/4, plus its path.
+- **Each skill's path occurs once in pi's block.** This run counted it in both npm arms (28 of 28, 375 of 375). At `66a4f9a4c` the review re-run counted it in all five arms.
+- **Compare the two runs without the paths.** This run's sandbox prefix is longer than the first run's, so the totals do not compare. Without the paths, the 27 skills took 17,081 characters and the 28 take 17,723. Of the 28, only `attune` and `bootstrap-agent-identity` have a different name or description between the two runs. So the 642-character difference is `bootstrap-agent-identity`'s entry, less the 31 characters #1034 took off `attune`'s description. The new entry is 673 characters, about 170 tokens by pi's chars/4, plus its path.
 - **At the typical 53-character install prefix** of "How the figures depend on the install path", projected from the figures without the paths:
-  - the 28 skills come to about 20,060 characters (5,015 tokens);
-  - the 375 no-key entries, 374 skills and the probe, come to about 262,200 characters (about 65,550 tokens).
+  - the 28 skills come to about 19,990 characters (about 5,000 tokens);
+  - the 375 no-key entries, 374 skills and the probe, come to about 262,100 characters (about 65,500 tokens).

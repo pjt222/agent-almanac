@@ -3,8 +3,8 @@
  "node": "v26.11.1",
  "agentDir": "<sandbox>/home-git-manifest/.pi/agent",
  "skillCount": 28,
- "promptChars": 22552,
- "promptTokensCharsOver4": 5638,
+ "promptChars": 22486,
+ "promptTokensCharsOver4": 5622,
  "skills": [
   {
    "name": "argumentation",
