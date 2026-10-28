@@ -6,14 +6,14 @@ description: >
   detection, calibration through centering and attunement, and identity
   verification for coherence. Addresses the cold-start problem where an agent
   must reconstruct who it is and what it was doing from evidence rather than
-  memory. Use at the start of every new session, after a session interruption
+  memory. Use after a session interruption
   or crash, when agent behavior feels inconsistent with prior sessions, or
   when persistent memory and current context appear contradictory.
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: morphic
   complexity: intermediate
   language: natural
@@ -32,7 +32,6 @@ The bootstrap is not about restoring a previous self. It is about constructing a
 
 ## When to Use
 
-- At the start of every new session — before any substantive work begins
 - After a session interruption, crash, or context window reset
 - When agent behavior feels inconsistent with prior sessions (identity drift across restarts)
 - When persistent memory (MEMORY.md) and current context appear contradictory
