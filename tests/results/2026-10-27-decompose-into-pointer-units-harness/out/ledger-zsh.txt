@@ -39,6 +39,10 @@ PASS  zsh a release with an unknown BY is refused, nothing written
 PASS  zsh an owner release with no owner batch is refused
 PASS  zsh release: a unit-log line without its date is refused
 PASS  zsh ledger: a unit-log line without its date is refused
+PASS  zsh release: a unit-log line with two spaces after its date is refused
+PASS  zsh ledger: a unit-log line with two spaces after its date is refused
+PASS  zsh pre-rerun: control, the copy passes without the line below
+PASS  zsh pre-rerun: a unit-log line with two spaces after its date is refused
 PASS  zsh release: an unreadable unit log is refused
 PASS  zsh ledger: an unreadable unit log is refused
 PASS  zsh the documented writers write lines every reader reads

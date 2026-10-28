@@ -209,6 +209,14 @@ addfixture '[{"kind":"cl","id":"CL-A","release":"1.0","lines":[8]}]'
 check 'added: an id a spec already carries is refused' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: an id in specs/added-1.json is already in a spec file: CL-A rc=1 no'
 addfixture '[{"kind":"owner","id":"OW-9","unit":"CL-B","scope":"x","answer":"STOP-1"}]'
 check 'added: a spec that is not of a derived kind is refused' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: specs/added-1.json is not a list of derived specs rc=1 no'
+# jq stops at a spec without its pointers, so the specs after it would go uncompared: CL-S1 overlaps CL-B's
+# line 7 and RW-X1 covers the row RW-S1 adds (AD6-2).
+addfixture '[{"kind":"cl","id":"CL-S0","release":"1.0"},{"kind":"cl","id":"CL-S1","release":"1.0","lines":[7,8]}]'
+check 'added: a spec without its pointers is refused, nothing recorded' "$(run added.sh | sed 's/.*REFUSED/REFUSED/') $(recorded specs/added-1.json)" 'REFUSED: specs/added-1.json has a spec without its pointers rc=1 no'
+addfixture '[{"kind":"rows","id":"RW-S1","file":"inv.tsv","group":"g","rows":[3]}]'
+printf '%s\n' '[{"kind":"rows","id":"RW-X0","file":"inv.tsv","group":"g"},{"kind":"rows","id":"RW-X1","file":"inv.tsv","group":"g","rows":[2,3]}]' > "$RUN_DIR/specs/rows-x.json"
+(cd "$RUN_DIR" && sed -i '/ specs\/rows-x.json$/d' WORK-SHA256SUMS && sha256sum specs/rows-x.json >> WORK-SHA256SUMS)
+check 'added: a recorded spec file with a spec without its pointers is refused, nothing recorded' "$(run added.sh | sed 's/.*REFUSED/REFUSED/') $(recorded specs/added-1.json)" 'REFUSED: a recorded spec file is not a spec list rc=2 no'
 addfixture '[{"kind":"cl","id":"CL-S1","release":"1.0","lines":[8]}]'; printf '[]\n' > "$RUN_DIR/specs/cl.json"
 check 'added: a changed work list is refused' "$(run added.sh | sed 's/.*REFUSED/REFUSED/') $(recorded specs/added-1.json)" 'REFUSED: the work list changed after it was recorded rc=1 no'
 addfixture '[]'; rm "$RUN_DIR/specs/added-1.json"
@@ -265,9 +273,12 @@ printf 'not json\n' > "$RUN_DIR/specs/rows2.json"; (cd "$RUN_DIR" && sed -i '/ s
 check 'launch: a recorded cluster file that is not a spec list is refused before any list is printed' "$(run held-2.sh | sed 's/.*REFUSED/REFUSED/')" 'REFUSED: specs/rows2.json is not a spec list rc=2'
 rm "$RUN_DIR/specs/rows2.json"; (cd "$RUN_DIR" && sed -i '/ specs\/rows2.json$/d' WORK-SHA256SUMS)
 printf '%s\n' '2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch' 'HELD unit=RW-C reason=overlaps-STOP-1' > "$RUN_DIR/UNIT-LOG.txt"
-check 'launch: a unit-log line without its date is refused before any list is printed' "$(run held.sh)" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date rc=2'
+check 'launch: a unit-log line without its date is refused before any list is printed' "$(run held.sh)" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, one space and its kind rc=2'
+# Two spaces after the date would hide RW-C's hold from the launch's rg readers, which match one (AD6-7).
+printf '%s\n' '2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch' '2026-10-27  HELD unit=RW-C reason=overlaps-STOP-1' > "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: a unit-log line with two spaces after its date is refused before any list is printed' "$(run held.sh)" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, one space and its kind rc=2'
 printf '%s\n' '2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch' > "$RUN_DIR/UNIT-LOG.txt"; chmod 000 "$RUN_DIR/UNIT-LOG.txt"
-check 'launch: an unreadable unit log is refused before any list is printed' "$(run held.sh | sed 's/.*REFUSED/REFUSED/')" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date rc=2'
+check 'launch: an unreadable unit log is refused before any list is printed' "$(run held.sh | sed 's/.*REFUSED/REFUSED/')" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, one space and its kind rc=2'
 chmod 600 "$RUN_DIR/UNIT-LOG.txt"
 rm "$RUN_DIR/UNIT-LOG.txt"
 check 'held: a missing unit log is refused' "$(run held.sh)" 'REFUSED: no UNIT-LOG.txt (Step 1 creates it) rc=2'
