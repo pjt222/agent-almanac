@@ -83,7 +83,7 @@ HOME="$H" PI_OFFLINE=1 node measure-package.mjs "$PI" "<project>" "$A"
 
 **How it was run.** The five branch arms above were re-run at `f6cbcf5f8` with the same pi 1.4.0 and Node v26.11.1. They followed the recipe above, with one difference: the clone was shallow (`git clone --depth 1 --branch feat/1008-pi-manifest`).
 - **The pack:** made from the worktree at that commit, whose `git status` showed no change to tracked files. Its sha256 was not recorded.
-- **An earlier run:** made at `66a4f9a4c`, before #1034, and matched without the paths by a review re-run from a clean clone at `7a23e2424`. This run differs from it only by #1034's two shorter descriptions.
+- **An earlier run:** made at `66a4f9a4c`, before #1034 (its outputs are at `29fe3304d`), and matched without the paths by a review re-run from a clean clone at `7a23e2424`. This run differs from it only by #1034's two shorter descriptions.
 - **Not re-run:** the registry control, because it measures the published 1.9.1.
 
 The outputs are the `*.2026-10-28.json` files beside this one. The rows and files above are the first run's.
