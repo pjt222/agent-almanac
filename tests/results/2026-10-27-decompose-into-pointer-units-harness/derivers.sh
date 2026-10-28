@@ -223,7 +223,8 @@ addfixture '[{"kind":"rows","id":"RW-S1","file":"inv.tsv","group":"g","rows":[5]
 printf '%s\n' '[{"kind":"rows","id":"RW-Y0","file":"inv.tsv","group":"g"},{"kind":"rows","id":"RW-Y1","file":"inv.tsv","group":"g","rows":[5]}]' > "$RUN_DIR/specs/a-rows.json"
 (cd "$RUN_DIR" && find specs gaps -name '*.json' ! -name 'added-1.json' -print0 | sort -z | xargs -0 -r sha256sum > WORK-SHA256SUMS)
 check 'added: a broken recorded spec file read before a good one is refused, nothing recorded' "$(run added.sh | sed 's/.*REFUSED/REFUSED/') $(recorded specs/added-1.json)" 'REFUSED: a recorded spec file is not a spec list rc=2 no'
-# The added file holds one JSON list: a second text, here after an owner spec, is read by neither check alone (A1-2).
+# The added file holds one JSON list: with a second text, the kind check took its exit from that text and dropped
+# its verdict on the owner spec in the first (A1-2).
 addfixture "$(printf '%s\n%s' '[{"kind":"owner","id":"OW-9","unit":"CL-B","scope":"x","answer":"STOP-1"}]' '[{"kind":"cl","id":"CL-S9","release":"1.0","lines":[12]}]')"
 check 'added: a second JSON text in the added file is refused, nothing recorded' "$(run added.sh) $(recorded specs/added-1.json)" 'REFUSED: specs/added-1.json is not a list of derived specs rc=1 no'
 # A file, issue or rows spec without its field read as file:null, issue:null or rows:null:<n>, which no
