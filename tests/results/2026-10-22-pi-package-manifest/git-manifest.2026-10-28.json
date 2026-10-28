@@ -1,0 +1,123 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "agentDir": "<sandbox>/home-git-manifest/.pi/agent",
+ "skillCount": 28,
+ "promptChars": 22486,
+ "promptTokensCharsOver4": 5622,
+ "skills": [
+  {
+   "name": "argumentation",
+   "filePath": "<sandbox>/git-manifest-clone/skills/argumentation/SKILL.md"
+  },
+  {
+   "name": "assess-context",
+   "filePath": "<sandbox>/git-manifest-clone/skills/assess-context/SKILL.md"
+  },
+  {
+   "name": "attune",
+   "filePath": "<sandbox>/git-manifest-clone/skills/attune/SKILL.md"
+  },
+  {
+   "name": "awareness",
+   "filePath": "<sandbox>/git-manifest-clone/skills/awareness/SKILL.md"
+  },
+  {
+   "name": "bootstrap-agent-identity",
+   "filePath": "<sandbox>/git-manifest-clone/skills/bootstrap-agent-identity/SKILL.md"
+  },
+  {
+   "name": "breathe",
+   "filePath": "<sandbox>/git-manifest-clone/skills/breathe/SKILL.md"
+  },
+  {
+   "name": "build-coherence",
+   "filePath": "<sandbox>/git-manifest-clone/skills/build-coherence/SKILL.md"
+  },
+  {
+   "name": "center",
+   "filePath": "<sandbox>/git-manifest-clone/skills/center/SKILL.md"
+  },
+  {
+   "name": "conscientiousness",
+   "filePath": "<sandbox>/git-manifest-clone/skills/conscientiousness/SKILL.md"
+  },
+  {
+   "name": "coordinate-reasoning",
+   "filePath": "<sandbox>/git-manifest-clone/skills/coordinate-reasoning/SKILL.md"
+  },
+  {
+   "name": "dream",
+   "filePath": "<sandbox>/git-manifest-clone/skills/dream/SKILL.md"
+  },
+  {
+   "name": "forage-solutions",
+   "filePath": "<sandbox>/git-manifest-clone/skills/forage-solutions/SKILL.md"
+  },
+  {
+   "name": "gratitude",
+   "filePath": "<sandbox>/git-manifest-clone/skills/gratitude/SKILL.md"
+  },
+  {
+   "name": "heal",
+   "filePath": "<sandbox>/git-manifest-clone/skills/heal/SKILL.md"
+  },
+  {
+   "name": "honesty-humility",
+   "filePath": "<sandbox>/git-manifest-clone/skills/honesty-humility/SKILL.md"
+  },
+  {
+   "name": "intrinsic",
+   "filePath": "<sandbox>/git-manifest-clone/skills/intrinsic/SKILL.md"
+  },
+  {
+   "name": "investigate-capa-root-cause",
+   "filePath": "<sandbox>/git-manifest-clone/skills/investigate-capa-root-cause/SKILL.md"
+  },
+  {
+   "name": "learn",
+   "filePath": "<sandbox>/git-manifest-clone/skills/learn/SKILL.md"
+  },
+  {
+   "name": "listen",
+   "filePath": "<sandbox>/git-manifest-clone/skills/listen/SKILL.md"
+  },
+  {
+   "name": "meditate",
+   "filePath": "<sandbox>/git-manifest-clone/skills/meditate/SKILL.md"
+  },
+  {
+   "name": "observe",
+   "filePath": "<sandbox>/git-manifest-clone/skills/observe/SKILL.md"
+  },
+  {
+   "name": "redirect",
+   "filePath": "<sandbox>/git-manifest-clone/skills/redirect/SKILL.md"
+  },
+  {
+   "name": "rest",
+   "filePath": "<sandbox>/git-manifest-clone/skills/rest/SKILL.md"
+  },
+  {
+   "name": "review-data-analysis",
+   "filePath": "<sandbox>/git-manifest-clone/skills/review-data-analysis/SKILL.md"
+  },
+  {
+   "name": "review-research",
+   "filePath": "<sandbox>/git-manifest-clone/skills/review-research/SKILL.md"
+  },
+  {
+   "name": "review-software-architecture",
+   "filePath": "<sandbox>/git-manifest-clone/skills/review-software-architecture/SKILL.md"
+  },
+  {
+   "name": "search-prior-art",
+   "filePath": "<sandbox>/git-manifest-clone/skills/search-prior-art/SKILL.md"
+  },
+  {
+   "name": "teach",
+   "filePath": "<sandbox>/git-manifest-clone/skills/teach/SKILL.md"
+  }
+ ],
+ "diagnostics": []
+}
