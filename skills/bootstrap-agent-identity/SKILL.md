@@ -32,6 +32,7 @@ The bootstrap is not about restoring a previous self. It is about constructing a
 
 ## When to Use
 
+- At the start of a session when it is unclear whether earlier work should be resumed — before any substantive work begins
 - After a session interruption, crash, or context window reset
 - When agent behavior feels inconsistent with prior sessions (identity drift across restarts)
 - When persistent memory (MEMORY.md) and current context appear contradictory

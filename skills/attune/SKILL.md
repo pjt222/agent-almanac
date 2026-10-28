@@ -5,14 +5,14 @@ description: >
   are working with. Goes beyond user-intent alignment (solving the right
   problem) to genuine attunement (meeting the person where they are). Maps
   communication style, expertise depth, emotional register, and implicit
-  preferences from conversational evidence. Use at the start of a new session,
+  preferences from conversational evidence. Use
   when communication feels mismatched, after receiving unexpected feedback, or
   when transitioning between very different users or contexts.
 license: MIT
 allowed-tools: Read
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: esoteric
   complexity: intermediate
   language: natural
@@ -25,7 +25,7 @@ Calibrate to the person — reading communication style, expertise depth, emotio
 
 ## When to Use
 
-- At the start of a new session — calibrate before the first substantive response
+- At the start of a session with someone whose preferences are not yet known — calibrate before the first substantive response
 - When communication feels mismatched — too formal, too casual, too detailed, too sparse
 - After receiving unexpected feedback — the mismatch reveals an attunement gap
 - When transitioning between very different contexts (e.g., technical debugging to creative brainstorming)
