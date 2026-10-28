@@ -25,12 +25,13 @@ on:
         # `default: true` is LOAD-BEARING, not cosmetic. GitHub's default for a boolean input with
         # no `default:` is `false`, so deleting this line makes an API dispatch that omits the
         # input publish for real. It is the difference between failing safe and failing open.
-        description: 'Rehearse the publish — authenticate and pack, but do not publish or release'
+        description: 'Rehearse the publish — pack and run its hooks, but do not publish or release'
         type: boolean
         default: true
 
 permissions:
-  contents: write
+  contents: write   # gh release create
+  id-token: write   # npm trusted publishing (#1033): npm publish exchanges this job's OIDC token
 
 jobs:
   release:
@@ -38,11 +39,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # No package cache. A cache entry written by another workflow on main would be restored into
+      # the job that holds the OIDC permission, and setup-node's documentation advises against
+      # caching in publishing workflows for that reason. It saved little: four packages.
       - uses: actions/setup-node@v7
         with:
           node-version: '26'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          package-manager-cache: false
 
       - run: npm ci
 
@@ -53,30 +57,17 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # WHO ARE WE, asked before we try to write. `npm publish` failing with E404 on a PUT is
-      # npm's deliberate response to an unauthorised write — it returns 404 rather than 403 so
-      # the response cannot be used to probe which private packages exist.
-      #
-      # What this actually separates, stated at its real width rather than the flattering one:
-      # token-DEAD from token-ALIVE. An expired, revoked, or empty `NODE_AUTH_TOKEN` yields
-      # ENEEDAUTH here. A read-only token, and a granular token whose package list omits this
-      # package, are both perfectly valid credentials for a READ — so `whoami` prints a healthy
-      # username and the PUT still 404s. No npm command short of publishing tests write access,
-      # and that is the permanent boundary of what this step can diagnose.
-      #
-      # `continue-on-error` is CONDITIONAL, and the condition is the whole point. On the tag path
-      # a hard failure here would turn a diagnostic into a new failure mode — a transient registry
-      # hiccup would refuse a release that would otherwise have succeeded — so it stays advisory.
-      # On the dispatch path there is no release to refuse: the run exists precisely to answer
-      # "would a release work?", and re-dispatching after a hiccup costs nothing. An unconditional
-      # `true` here made a dry run against a dead token conclude SUCCESS with the ENEEDAUTH folded
-      # away in a collapsed log — reporting green over the exact fault class this file was built
-      # to surface.
-      - name: Who is the runner (advisory on a tag, a gate on a dry run)
-        continue-on-error: ${{ github.event_name == 'push' }}
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # NO SEPARATE AUTH STEP, deliberately (#1033). The job publishes through npm trusted
+      # publishing: it holds no npm credential, and `npm publish` exchanges this job's GitHub OIDC
+      # token (`id-token: write`, above) for a short-lived publish token. So there is nothing for
+      # `npm whoami` to ask about, and npm's documentation says it "is not a check of trusted
+      # publishing permissions". The exchange runs inside `npm publish`, in the dry run below as
+      # well, but npm logs its outcome only at verbose level. So both npm steps run with
+      # `--loglevel verbose`, and the `npm verbose oidc` lines say whether it worked. No `oidc`
+      # line at all means npm skipped the exchange, because the job had no `id-token: write`.
+      # npm does not check a trusted publisher when it is saved, so a dispatch dry run after
+      # configuring one is the first check that it matches. What no rehearsal can test is the
+      # upload itself, the PUT.
 
       # `npm publish --dry-run`, NOT `npm pack --dry-run`, and the difference is the whole value of
       # the rehearsal. Measured: `pack --dry-run` runs `prepack` alone, while `publish --dry-run`
@@ -89,9 +80,7 @@ jobs:
       # this itself, so running it here would only spend the CLI suite a third time.
       - name: Rehearse the publish (everything the real publish does except the PUT)
         if: github.event_name == 'workflow_dispatch'
-        run: npm publish --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --dry-run --loglevel verbose
 
       # THE TAG IS NOT THE VERSION. `npm publish` takes the version from package.json and never
       # looks at the ref; `gh release create` takes its title from the ref and never looks at the
@@ -133,18 +122,23 @@ jobs:
       # corresponding to no ref marker at all, and this repo's stated threat model is the
       # agent-driven accident, where a stray `-f dry_run=false` is one flag against a deliberate
       # multi-step tag push.
+      #
+      # It authenticates through npm trusted publishing (#1033), with no stored token, and npm
+      # attaches provenance itself, so there is no `--provenance` flag. If the exchange fails, for a
+      # trusted publisher that does not match this owner, repository or workflow file, npm does not
+      # stop with ENEEDAUTH. setup-node's `.npmrc` leaves the literal `${NODE_AUTH_TOKEN}` as the
+      # token, and the PUT fails, typically with E404, which npm returns for an unauthorised write
+      # rather than 403. Read the `npm verbose oidc` lines first.
       - name: Publish to npm
         if: >-
           github.event_name == 'push' ||
           (github.event_name == 'workflow_dispatch' &&
           !inputs.dry_run &&
           startsWith(github.ref, 'refs/tags/'))
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --loglevel verbose
 
       # Same condition as the publish, deliberately. Guarding this on `push` alone meant the exact
-      # scenario the dispatch was built for — tag pushed, tests green, publish died, token fixed,
+      # scenario the dispatch was built for — tag pushed, tests green, publish died, auth fixed,
       # re-run — ended with the package on npm and no GitHub release, and nothing red to say so.
       # A recovery that completes half the release is not a recovery.
       - name: Create GitHub Release
