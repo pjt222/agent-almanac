@@ -25,7 +25,6 @@ metadata:
   locale: es
   source_locale: en
   source_commit: 7738c1623
-  fence_basis_commit: 7738c1623
   translator: "(untranslated stub)"
   translation_date: "2026-10-28"
 ---
@@ -145,6 +144,8 @@ OUTPUT    Sections that each start a line with VERDICT:, EVIDENCE: or OPEN:, in 
           none. Say what you could not determine.
 ```
 
+The snippets read the section names `VERDICT:`, `EVIDENCE:`, `OPEN:` and `STOPPED:`, the stop values and the owner batch's `## Answered` heading (Step 9) literally, so a translated brief or batch keeps them in English.
+
 **Expected:** One brief, saved as `$RUN_DIR/BRIEF.md` (Step 1 says why not `.txt`), under about 200 lines; FRAME states the run's whole purpose; no sentence in it names a single unit.
 
 **On failure:** A rule that applies to one kind only belongs in that kind's template (Step 4). A rule that applies to one unit only is a sign that the spec kind is wrong.
@@ -247,12 +248,15 @@ Check that each report cites the pointers it was given, that its summary matches
 
 A safety classifier, a policy hook or a human reviewer may stop a unit, a verifier, a critic or the lead's own drafting. A stop is a decision about that work. This step respects it; it is never a puzzle to solve.
 
+A run reports its stops in its lists and in each report's `stop` field, but the field is the agent's account of itself: an agent refused part way can still finish its report and write `none`. So after every run, before Step 9 and before any later launch, read the transcript of every unit, verifier and critic the run launched by structure, as defined for a no-result below, and log every stop found there with the writer below, with `stage=after-run`, and `written=whole` when its report is complete, whatever the field says.
+
 1. Record it by id in the unit log: what was stopped, at which stage, and what exists on disk (partial or nothing).
 2. Do not re-run it, do not reword it, and do not reproduce its content by hand. This applies to the lead's own drafting as much as to a unit: stopped text is not re-drafted. Keep whatever partial exists as it is, marked partial, and let the owner decide what happens to it. A partial drafted inside a repository working tree moves, unedited, into the run directory, so that it cannot be committed or continued; the owner batch cites its path. A pilot re-run, a cluster restart, a re-derivation at another chunk size and a gap unit are all re-runs. Once any run in the job has recorded a stop or a missing result, from a unit, a verifier or a critic, nothing that already ran is launched again unless the owner names it, because re-launching a unit launches its verifiers and critics again. Clusters not yet launched still start, with the held list. The one exception is the transient re-run of a no-result below. When the owner names reported units for a re-run, record the answer on a `RERUN-<n>` Answered line (Step 9) and, before launching, log one `RERUN-<n> unit=<id> as=<tag>` line per unit, naming the tag of the launch it authorises. Once the job has a stop or a no-result, the launch snippet (EXAMPLES.md) relaunches a unit that already reported only for such a line.
 3. Put it in the owner batch (Step 9) with plain options: hold, the owner sets a different scope, or the owner does the work.
 4. Continue every other unit. A stop routes to the batch; it does not block the run.
 5. A re-scoped run of that unit happens only if the owner authorises that unit by name. It runs as an `owner` spec (`id` `OW-<n>`, new to the work list, `unit`, `scope`, `answer`) whose scope is the owner's answer copied verbatim from a one-line Answered entry and whose `answer` is that entry's `STOP-<n>`. The owner-spec check in EXAMPLES.md exits 1 on a scope not quoted on that line in the Answered section, and records the spec file only when nothing is refused. The check shows consistency with the batch, not that the words are the owner's, so the Answered entry cites where they came from. An authorisation does not carry over to other units or later stops: a `STOP-<n>` authorises one owner spec, and the check refuses a second one citing it, in the same file or a later one. If the authorised run is stopped again, propose nothing further; record it and leave the next step to the owner.
 6. A stop binds the unit's pointers, not only its id. Before launching any later spec, add every spec whose pointers overlap a stopped unit's to the held list, to the unit log as `HELD unit=<id> reason=overlaps-STOP-<n>`, and to the owner batch, except an owner spec authorised for that unit under item 5. Such a hold is decided under its stop's entry: it runs only as that entry's option (a), an owner spec in the owner's words, unless the owner rules the overlap out. A `HELD` Answered line releases it only on that ruling, and cites it.
+7. A stop found after the run reaches work that already read the unit as clean. Its report counts as reported and is listed under stopped (Step 10). Its verifiers' verdicts count as stopped ones, so the claims they cover stay unverified, and the pre-rerun check below refuses to re-run a verifier of a stopped unit. Critic entries and gaps that cite it are listed apart in the owner batch, which names every verifier and critic that read it; a critic whose group holds it re-runs only if the owner names it. Step 9's marking and second read, which read the unit log, catch gaps over its pointers once its line is written.
 
 The unit log holds one line per event, and every line starts with its date, its kind and `unit=`, one space apart, as each `printf` below writes it. Every reader takes the kind from the second field, so a line without its date would be invisible to all of them, and the `rg` readers match exactly one space on each side of the kind, so a line spaced any other way would be invisible to those; each reader refuses a log that holds either. Only `STOP-<n> unit=<id>` lines are stops and only `HELD unit=<id>` lines are holds; Step 10 reads nothing else as either. A `HELD` line is written for item 6, with `reason=overlaps-STOP-<n>`, or before the first launch with `reason=owner`, for work the owner keeps back and for the specs over a stop outside any unit, such as the lead's own drafting, so that every held list and every critic sees it. A unit with no result is logged as `NORESULT unit=<id>`. A no-result or held id is released only by a `RELEASED unit=<id>` line; a stop is never released, only re-scoped under item 5. A release is an event, not a property of the id: it lifts the `NORESULT` and `HELD` lines before it, and a later no-result or hold holds the id again. Verifier and critic stops and no-results are logged the same way, under the ids the run returns, which are the basenames of the files those agents write (`V-<id>-<n>`, `X-accuracy-<tag>-<n>`, `X-completeness-<tag>`). Step 10 counts spec units only, so these go into the coverage statement and the owner batch; the claim behind a stopped verdict stays unverified, and the claim behind a missing one until a transient re-run returns a verdict.
 
@@ -320,7 +324,7 @@ esac
 printf '%s RELEASED unit=%s by=%s\n' "$(date +%F)" "$ID" "$BY" >> UNIT-LOG.txt
 ```
 
-The skeleton cannot read the unit log, so before a verifier or critic re-runs through `rerun`, this check binds the re-run to its release. It passes only an id whose last no-result, hold or release line is a release, with no stop and no file of its own:
+The skeleton cannot read the unit log, so before a verifier or critic re-runs through `rerun`, this check binds the re-run to its release. It passes only an id whose last no-result, hold or release line is a release, with no stop and no file of its own, and refuses a verifier whose unit is stopped:
 
 ```bash
 cd "${RUN_DIR:?}" || exit 1
@@ -328,6 +332,8 @@ ID=V-CL1.5.0-01-1   # the verifier or critic about to re-run through args.rerun
 [ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt'; exit 2; }
 rg -q -v '^[0-9]{4}-[0-9]{2}-[0-9]{2} \S+ unit=' UNIT-LOG.txt; [ $? -eq 1 ] || { echo 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, its kind and unit=, one space apart'; exit 2; }   # rg: 1 = every line dated
 [ ! -s "$ID.txt" ] || { echo "REFUSED: $ID.txt exists; it has a result"; exit 1; }
+case $ID in V-*) U=${ID#V-}; U=${U%-*}; awk -v u="unit=$U" '$2 ~ /^STOP-[0-9]+$/ && $3 == u {f = 1} END {exit !f}' UNIT-LOG.txt &&
+  { echo "REFUSED: $ID verifies $U, which is stopped"; exit 1; } ;; esac   # V-<unit>-<n>: its unit stopped, after the run too
 awk -v u="unit=$ID" '$3 != u {next} $2 ~ /^STOP-[0-9]+$/ {s = 1} $2 == "NORESULT" || $2 == "HELD" || $2 == "RELEASED" {l = $2}
   END {exit !(!s && l == "RELEASED")}' UNIT-LOG.txt || { echo "REFUSED: $ID is stopped, or has no release since its last no-result"; exit 1; }
 echo "rerun $ID: released, not stopped, no result yet"
@@ -390,7 +396,7 @@ cd ledger && echo "specs=$(wc -l < ids.txt) reported=$(wc -l < reported.txt) sto
 - [ ] One verifier file per non-benign item, grouped accuracy critics, one completeness critic, and every gap sent to the owner batch; no unit outside the input specs ran
 - [ ] Pilot reports were read before the other clusters launched; once any run had recorded a stop or a missing result, nothing that ran was launched again without an owner answer naming it, except the one transient re-run the release snippet recorded; and the repository's HEAD and status were unchanged after every run
 - [ ] Every stop has a `STOP-<n> unit=` line and a batch entry; no stopped unit was re-run, reworded or reproduced except as an item-5 owner spec, and no held id ran before its `RELEASED` line; verifier and critic stops and no-results are in the coverage statement
-- [ ] Every no-result had its transcript read before any re-run, and every release was written by the release snippet
+- [ ] Every transcript of every run was read by structure before Step 9, and every no-result's before its re-run; every release was written by the release snippet
 - [ ] The owner batch passed the read-only faithfulness check before it was presented, and the independent second read named every gap once
 - [ ] The ledger prints `extra=0` and `held_ran=0`, every unaccounted id is a no-result in the batch or released and not yet re-run, and both checksums still match
 
@@ -400,7 +406,7 @@ cd ledger && echo "specs=$(wc -l < ids.txt) reported=$(wc -l < reported.txt) sto
 - **One critic for the whole run**: A single critic cannot read hundreds of reports; it skims the digest and misses the wrong claim inside a benign verdict. Group critics small enough that each reads every report in its group (default 15).
 - **Idle or no result read as answered**: An agent that went idle has not necessarily written its report, and a unit with no result answered by hand is a guess. Reconcile from files (Step 10), and apply Step 8's no-result rule before any re-run.
 - **Using narrow splits to get past a stop**: Narrowing is a scoping tool. It never changes what a unit may do, and it must not be used to rephrase or reroute stopped work. Only the owner decides whether stopped work continues, and in what scope. A completeness critic does this on its own: it sees a stopped unit's scope as uncovered and proposes it as a gap, which is why no gap runs in the run that found it, and the owner decides which gaps become specs.
-- **A stop detector that reads free text**: A pattern over report text misses a stop worded differently ("stopped by a reviewer") and matches a clean line that negates it ("never stopped by a safety classifier"). Read the required `stop` field instead, treat any value but `none`, or a missing field, as a stop, and read a transcript by structure (Step 8).
+- **A stop detector that reads free text**: A pattern over report text misses a stop worded differently ("stopped by a reviewer") and matches a clean line that negates it ("never stopped by a safety classifier"). Read the required `stop` field instead, treat any value but `none`, or a missing field, as a stop, and read every transcript by structure as well, because the field is the agent's own account (Step 8).
 - **Launching every cluster before reading the pilot**: A template defect then has to be fixed once per cluster, and the reports already written under it must be re-run, which after any stop or missing result needs the owner to name what runs again (Step 8 item 2). Read the pilot reports first.
 
 ## Related Skills
