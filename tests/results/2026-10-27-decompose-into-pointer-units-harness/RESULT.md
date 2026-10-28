@@ -1,6 +1,6 @@
 ## Run: 2026-10-27-decompose-into-pointer-units-harness
 
-**Observer**: Claude (Opus 5.5 main loop) | **PR**: #1024, review rounds 1 to 5, and the #1026 follow-up (#1030: AD6-2, AD6-7 and its review round 1) | **Skill**: `decompose-into-pointer-units`
+**Observer**: Claude (Opus 5.5 main loop) | **PR**: #1024, review rounds 1 to 5, and the #1026 follow-ups (#1030: AD6-2, AD6-7 and its review round 1; the transcript pass after every run) | **Skill**: `decompose-into-pointer-units`
 
 ### Objective
 
@@ -69,27 +69,27 @@ Run from the repository root, as a user other than root. Three rows (two in `led
   - the Step 8 stop line, the writers of the other hand-written lines, the no-result line, the release snippet and the pre-rerun check;
   - the Step 10 ledger.
 
-  They run byte for byte with two departures: the Step 2 snippet runs at the scenario's chunk 4 (one `sed` on its argument), and of Step 1 only the tool check, `mech_sums` and the freeze refusal run, because the `cp` and `gh` lines need a real repository; the mkdir, touch and the line that writes `MECH-SHA256SUMS` are re-typed. It drives them on the test scenario's fixture through 70 rows:
+  They run byte for byte with two departures: the Step 2 snippet runs at the scenario's chunk 4 (one `sed` on its argument), and of Step 1 only the tool check, `mech_sums` and the freeze refusal run, because the `cp` and `gh` lines need a real repository; the mkdir, touch and the line that writes `MECH-SHA256SUMS` are re-typed. It drives them on the test scenario's fixture through 72 rows:
   - the baseline, a second work list refused, and a second freeze refused;
   - a no-result whose partial moves to `partials/`, a partial that cannot be moved (a stand-in `mv` that fails, as one without `--backup` does) refused with nothing logged, and an empty placeholder;
   - a release refused without an Answered line or on a stopped id, a release from an Answered line, the re-run after it, and a release refused after a report;
   - a transient release, refused the second time, and a transient release of a verifier's no-result;
-  - the pre-rerun check: a released no-result passes; no release, a second no-result, a stop since the release, nothing logged and an existing file are refused; a line with two spaces after its date is refused, beside a control row in which the same copy without that line passes; and a line with two spaces after its kind is refused;
+  - the pre-rerun check: a released no-result passes; no release, a second no-result, a stop since the release, nothing logged and an existing file are refused; a line with two spaces after its date is refused, beside a control row in which the same copy without that line passes; a line with two spaces after its kind is refused; and a verifier of a unit whose stop was found after the run is refused;
   - releases refused with no unit log, for a held id with no no-result, for a no-result held over a stop since, without a transcript file, after an owner release and a second no-result, from an Answered line already used, with an unknown `BY`, and with no owner batch;
   - the owner release bound to each hold: an answer given before a later hold under another reason does not lift it, a no-result answer does not lift a later hold, an answer under another reason is refused, a pre-run owner hold is released by its own answer, and after a transient release one owner answer releases a second no-result;
-  - an undated line, and a line with two spaces after its date or after its kind, refused by the release and by Step 10, a spec file whose first JSON text is not a list refused by Step 10, an unreadable log refused by both, the documented writers read by every reader, and Step 10 refused with no unit log;
+  - an undated line, and a line with two spaces after its date or after its kind, refused by the release and by Step 10, a spec file whose first JSON text is not a list refused by Step 10, a stop found after the run on a whole report counted by Step 10 as reported and stopped, an unreadable log refused by both, the documented writers read by every reader, and Step 10 refused with no unit log;
   - a hand-written release that does not lift a stop;
   - a report under a new id, and verifier, critic and lead files that are not reports;
   - a recorded gap spec, with and without a report;
   - a held spec, with and without a report, a release refused after the held run, a release that lifts the hold, and a hold logged after the release that holds the id again;
   - a re-derivation at chunk 5 written to a new, recorded file, refused for the id it shares with the first;
   - a spec file added without being recorded, a re-derivation at chunk 5 in place, and a mechanical input changed after the freeze.
-- **`derivers.sh <EXAMPLES.md> <bash|zsh>`** runs seven EXAMPLES.md snippets byte for byte, each the one bash fence holding its anchor, on small fixtures. Its 77 rows cover:
+- **`derivers.sh <EXAMPLES.md> <bash|zsh>`** runs seven EXAMPLES.md snippets byte for byte, each the one bash fence holding its anchor, on small fixtures. Its 78 rows cover:
   - the count proofs and ledger-safe ids of the rows and item derivers;
   - recording a gaps file, once, and refusing one without `covers_held`;
   - the gap deriver: an approved topic plus a single id, a marked gap and a flagged gap kept out of the topic, a flagged gap approved by its id, refusals for a marked, unknown or space-padded id, an unknown topic, a missing marks file, an existing output and a changed gaps file, each refusal asserting the exit code and that nothing was written; and the second read: a gap it does not call `CLEAR` is not derived through its topic but is by its own id, and a read that misses a gap, names one twice, names an unknown id, gives another verdict or is missing is refused;
   - the owner-spec check: a scope on its Answered line accepted and recorded, and refused (exit 1, nothing recorded) when it is quoted only in Open, under a nested or later heading, with the wrong `STOP-<n>`, without a citation or under the wrong unit; and refused for an id that is not `OW-<n>` or is already in a spec file, and for a `STOP-<n>` that a recorded owner spec, under any file name, or a second spec in the same file already cites;
-  - the launch snippet: the held list ordered in time (a no-result or hold after a release holds the id again), units that reported left out after a stop unless a `RERUN` line names them for this tag, every unit listed when the job has no stop, reported units left out on a verifier stop alone and on a critic no-result alone, and refusals for an unrecorded cluster file, an id in two spec files, a recorded cluster file that is not a spec list, an undated line, a line with two spaces after its date or after its kind, a tab after the date and its space, a spec file whose first JSON text is not a list, an unreadable log and a missing unit log;
+  - the launch snippet: the held list ordered in time (a no-result or hold after a release holds the id again), units that reported left out after a stop unless a `RERUN` line names them for this tag, every unit listed when the job has no stop, reported units left out on a verifier stop alone and on a critic no-result alone, and refusals for an unrecorded cluster file, an id in two spec files, a recorded cluster file that is not a spec list, an undated line, a line with two spaces after its date or after its kind, a tab after the date and its space, a spec file whose first JSON text is not a list, an unreadable log and a missing unit log; and a stop found after the run holding a unit that reported;
   - the added-specs check: specs over uncovered pointers recorded; a line or a row of the same file a recorded spec covers, a pointer twice in the file, an id already carried, a kind that is not derived, a second JSON text in the added file, a spec without its pointers in the added file or in a recorded one (a recorded one read before a good one too), a file, issue or rows spec without its path, number or file, a spec file outside the work list whose first JSON text is not a list, a file already recorded, a changed work list and a missing file refused.
 - **`mutants.py`** first requires all three checks to be green on the unmutated files; otherwise it refuses (exit 2). It then breaks one guard at a time in a temporary copy. A mutant counts as killed only when the check exits 1 with a failing row that names the guard's own row. Any other non-zero exit is INCONCLUSIVE. It scores `derivers.sh` and `ledger.sh` under zsh only.
 
@@ -103,9 +103,9 @@ Run from the repository root, as a user other than root. Three rows (two in `led
 | `harness.mjs` on the skeleton at `4164c5457` | `out/harness-at-4164c5457.txt` | 30 of 100 rows FAIL, including the round-4 rows (`rerun_prompts`, `rerun`, the checker log text) |
 | `harness.mjs` on the skeleton at `7f75f6c33` | `out/harness-at-7f75f6c33.txt` | 4 of 100 rows FAIL: the merged gap's flag and dropped copies, and the checker log lines (G5-1) |
 | `harness.mjs` on the revision | `out/harness-revised.txt` | 100 of 100 PASS |
-| `derivers.sh` on the revision, bash and zsh | `out/derivers-bash.txt`, `out/derivers-zsh.txt` | 77 of 77 PASS under each |
-| `ledger.sh` on the revision, bash and zsh | `out/ledger-bash.txt`, `out/ledger-zsh.txt` (stdout) | 70 of 70 PASS under each |
-| `mutants.py` | `out/mutants.txt` | baseline green; 121 of 121 KILLED, each on its named row |
+| `derivers.sh` on the revision, bash and zsh | `out/derivers-bash.txt`, `out/derivers-zsh.txt` | 78 of 78 PASS under each |
+| `ledger.sh` on the revision, bash and zsh | `out/ledger-bash.txt`, `out/ledger-zsh.txt` (stdout) | 72 of 72 PASS under each |
+| `mutants.py` | `out/mutants.txt` | baseline green; 122 of 122 KILLED, each on its named row |
 
 The harness FAIL sets nest: every row failing at a later head also fails at each earlier one. Each head fails its own round's rows and every later round's, so the counts are not one round's findings each. The eight "ran once" rows pass at every control head, because no earlier skeleton re-ran anything in code; mutants M13 to M15, Ma and Mb fail each of them.
 
@@ -236,6 +236,7 @@ Eight mutants are killed on their message only, because a later guard refuses th
 | L42 | any spacing after the kind read by the release | release: two spaces after the kind are refused |
 | L43 | any spacing after the kind read by the pre-rerun check | pre-rerun: two spaces after the kind are refused |
 | L44 | any spacing after the kind read by the ledger | ledger: two spaces after the kind are refused |
+| L45 | a verifier of a stopped unit re-run | pre-rerun: a verifier of a unit stopped after the run is refused |
 
 ### Instrument history
 
@@ -264,6 +265,7 @@ Twenty defects in this record's own instruments were found and fixed before any 
 
 ### Limits
 
+- The transcript pass after every run (SKILL.md Step 8) is a procedure that nothing here runs: the harness mocks the runtime and has no transcripts, and a runtime's notices are named in the brief. What is measured is what follows once its stop line is written. Step 10 counts the unit as reported and stopped, the launch holds it, and the pre-rerun check refuses its verifier (L45). A critic whose group holds the unit is held only by the owner batch, because the log does not say which units a critic read.
 - The harness mocks the Workflow runtime. How the live runtime surfaces a classifier halt was not measured in a run of this skill. The no-result rule re-runs only an enumerated transient failure with nothing else in the transcript, treats anything naming a policy, refusal, block or hook as a stop, and holds any no-result whose cause cannot be established. It therefore depends on a halt leaving some trace other than a transient failure.
 - The mock critic is a literal program, not a model. Round 1's refuter reproduced the reroute with a real model as the critic. Under the revision no gap runs in the run that found it, whatever a critic proposes.
 - The ledger counts by id. A re-launch of reported work under its own id leaves no trace in it, whether or not the owner named it. After a stop or no-result the launch snippet lists a reported unit only for a `RERUN` line naming its tag, and a `RERUN` line written by hand passes it. A stopped unit's partial stays at its report path, so a re-run under the stopped id that overwrites it is invisible to the ledger.

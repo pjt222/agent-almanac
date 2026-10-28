@@ -47,6 +47,8 @@ PASS  bash release: two spaces after the kind are refused
 PASS  bash ledger: two spaces after the kind are refused
 PASS  bash pre-rerun: two spaces after the kind are refused
 PASS  bash ledger: a spec file whose first JSON text is not a list is refused
+PASS  bash ledger: a stop found after the run on a whole report counts as reported and stopped
+PASS  bash pre-rerun: a verifier of a unit stopped after the run is refused
 PASS  bash release: an unreadable unit log is refused
 PASS  bash ledger: an unreadable unit log is refused
 PASS  bash the documented writers write lines every reader reads

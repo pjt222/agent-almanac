@@ -305,6 +305,9 @@ printf '%s\n' '2026-10-27 STOP-1  unit=RW-B stage=report-write written=partial r
 check 'launch: two spaces after the kind are refused before any list is printed' "$(run held.sh)" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, its kind and unit=, one space apart rc=2'
 printf '%s\n' '2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch' "$(printf '2026-10-27 \tHELD unit=RW-C reason=overlaps-STOP-1')" > "$RUN_DIR/UNIT-LOG.txt"
 check 'launch: a tab after the date and its space is refused before any list is printed' "$(run held.sh)" 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, its kind and unit=, one space apart rc=2'
+# A stop found after the run on RW-A, which reported, holds RW-A like any other stop (#1026, the transcript pass).
+printf '%s\n' '2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch' '2026-10-28 STOP-2 unit=RW-A stage=after-run written=whole routed=owner-batch' > "$RUN_DIR/UNIT-LOG.txt"
+check 'launch: a stop found after the run holds a unit that reported' "$(run held.sh)" 'held=["RW-A","RW-B"] not relaunched, reported already: ["RW-A","RW-C"] [{"kind":"rows","id":"RW-D"},{"kind":"rows","id":"RW-E"},{"kind":"rows","id":"RW-F"},{"kind":"rows","id":"RW-G"},{"kind":"rows","id":"RW-H"}] rc=0'
 # The all-ids read takes jq's exit from every text of every spec file: an object first hid RW-B's id.
 printf '%s\n' '2026-10-27 STOP-1 unit=RW-B stage=report-write written=partial routed=owner-batch' > "$RUN_DIR/UNIT-LOG.txt"
 printf '%s\n%s\n' '{"kind":"rows","id":"RW-B"}' '[{"kind":"rows","id":"RW-J1"}]' > "$RUN_DIR/specs/junk.json"

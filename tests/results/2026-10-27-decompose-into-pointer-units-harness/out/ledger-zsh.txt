@@ -47,6 +47,8 @@ PASS  zsh release: two spaces after the kind are refused
 PASS  zsh ledger: two spaces after the kind are refused
 PASS  zsh pre-rerun: two spaces after the kind are refused
 PASS  zsh ledger: a spec file whose first JSON text is not a list is refused
+PASS  zsh ledger: a stop found after the run on a whole report counts as reported and stopped
+PASS  zsh pre-rerun: a verifier of a unit stopped after the run is refused
 PASS  zsh release: an unreadable unit log is refused
 PASS  zsh ledger: an unreadable unit log is refused
 PASS  zsh the documented writers write lines every reader reads

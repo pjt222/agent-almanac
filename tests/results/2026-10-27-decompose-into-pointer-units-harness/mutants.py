@@ -432,6 +432,11 @@ MUTANTS = [
     ('L44 any spacing after the kind read by the ledger', SKILL,
      "\\S+ unit=" + DATED + "mech_sums", "[^ ]" + DATED + "mech_sums",
      'ledger: two spaces after the kind are refused'),
+    # #1026, the transcript pass: a verifier of a unit whose stop was found after the run is not re-run.
+    ('L45 a verifier of a stopped unit re-run', SKILL,
+     """case $ID in V-*) U=${ID#V-}; U=${U%-*}; awk -v u="unit=$U" '$2 ~ /^STOP-[0-9]+$/ && $3 == u {f = 1} END {exit !f}' UNIT-LOG.txt &&\n"""
+     """  { echo "REFUSED: $ID verifies $U, which is stopped"; exit 1; } ;; esac   # V-<unit>-<n>: its unit stopped, after the run too\n""", '',
+     'pre-rerun: a verifier of a unit stopped after the run is refused'),
     ('Ma a stopped unit re-run in code', EXAMPLES,
      'if (isStop(r)) { stopped.push(s.id); return null }', 'if (isStop(r)) { stopped.push(s.id); await runUnit(s, ph); return null }',
      'stop reviewer: the stopped unit ran once'),

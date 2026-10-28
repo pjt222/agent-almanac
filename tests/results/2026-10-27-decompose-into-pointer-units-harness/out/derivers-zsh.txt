@@ -72,6 +72,7 @@ PASS  zsh launch: a unit-log line without its date is refused before any list is
 PASS  zsh launch: a unit-log line with two spaces after its date is refused before any list is printed
 PASS  zsh launch: two spaces after the kind are refused before any list is printed
 PASS  zsh launch: a tab after the date and its space is refused before any list is printed
+PASS  zsh launch: a stop found after the run holds a unit that reported
 PASS  zsh launch: a spec file whose first JSON text is not a list is refused before any list is printed
 PASS  zsh launch: an unreadable unit log is refused before any list is printed
 PASS  zsh held: a missing unit log is refused
