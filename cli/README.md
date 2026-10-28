@@ -84,7 +84,7 @@ The version is read from the package manifest, so it always matches the
 installed release. (No example output here on purpose — the previous hardcoded
 number drifted from both the manifest and the binary. See #456.)
 
-Requires Node.js 22.12 or newer, matching the `engines` field in `package.json`.
+Requires Node.js 26 or newer, matching the `engines` field in `package.json`.
 
 ### From source
 

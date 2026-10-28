@@ -27,7 +27,7 @@
     "pi-package"
   ],
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=26.0.0"
   },
   "bin": {
     "agent-almanac": "./cli/index.js",

@@ -35,7 +35,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: '26'
 
       # Pinned to commit SHA for reproducibility — update periodically
       - name: Install skills-ref

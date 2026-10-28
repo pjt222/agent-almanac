@@ -8,15 +8,17 @@
  * The failure names the test whose fixture it was, which did not itself fail, and it clears on
  * a bare re-run — a defect in the check, not in the diff (CLAUDE.md § Merging With a Red Check).
  *
- * `node:fs`'s own `maxRetries` knob is NOT the fix, and that is measured rather than assumed
- * (`tests/results/2026-09-07-rmsync-enotempty-probe/RESULT.md`): under a child that keeps
- * creating files for 60 ms, Node 24 and 25 clear the error with `maxRetries: 3`, but Node 22.16
- * — the oldest version installed here inside `engines.node`'s `>=22.12.0`; the floor itself was
- * not measured — fails every one of 20 trials with it and merely takes longer, ten retries
- * spending over a second. What differs is therefore WHAT is re-attempted, not for how long:
- * re-invoking `rmSync` re-walks the tree, and did remove the directory in every trial on all
- * three versions. Why Node 22's `maxRetries` re-attempts less was not read from Node's source;
- * the inference is that it retries the final `rmdir` without re-removing what appeared meanwhile.
+ * `node:fs`'s own `maxRetries` knob was NOT the fix while Node 22 was inside `engines.node`
+ * (`>=22.12.0`, the floor until #1012; it is `>=26` now), and that was measured rather than
+ * assumed (`tests/results/2026-09-07-rmsync-enotempty-probe/RESULT.md`): under a child that
+ * keeps creating files for 60 ms, Node 24 and 25 cleared the error with `maxRetries: 3`, but
+ * Node 22.16 failed every one of 20 trials with it and merely took longer, ten retries spending
+ * over a second. Inside today's floor it does clear the race: on Node 26.11.1, `maxRetries: 3`
+ * removed the directory in 100 of 100 trials while bare `rmSync` failed 2, and the same run on
+ * 22.16 still failed 34 of 100 (`probe-runs-node26.txt` beside that RESULT.md). Why the versions
+ * differ was not read from Node's source. `rmTree` stays: re-invoking `rmSync` re-walks the
+ * tree, it removed the directory in every trial on every version measured, and the guard below
+ * enforces it.
  *
  * The retry set is ENOTEMPTY, EBUSY, EPERM. EPERM is there for Windows, where it means "in use";
  * on Linux permission denial is EACCES, which is outside the set and rethrown on the first
@@ -151,9 +153,13 @@ export function guardFindings(files) {
   return { offenders, unclosed };
 }
 
-/** Test-suite files under `root`, recursively, as sorted root-relative paths; directories excluded. */
+/**
+ * Test-suite files under `root`, recursively, as sorted root-relative paths; directories
+ * excluded, and so is anything inside a node_modules: an installed package's own tests are not
+ * this repository's suites (scripts/test/_pi-durable-example/ installs one, #1009).
+ */
 export function suiteFiles(root) {
   return readdirSync(root, { recursive: true })
-    .filter((n) => /\.test\.[cm]?js$/.test(n) && statSync(join(root, n)).isFile())
+    .filter((n) => /\.test\.[cm]?js$/.test(n) && !n.split(/[\\/]/).includes('node_modules') && statSync(join(root, n)).isFile())
     .sort();
 }

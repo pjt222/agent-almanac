@@ -1,0 +1,17 @@
+{
+  "name": "agent-almanac-pi-durable-example",
+  "private": true,
+  "description": "The example from guides/almanac-skills-in-pi-durable.md and its test, with their own dependencies so the repository's own installs do not carry them (#1009)",
+  "scripts": {
+    "test": "node --test example.test.mjs"
+  },
+  "engines": {
+    "node": ">=26.0.0"
+  },
+  "dependencies": {
+    "@earendil-works/chord": "1.4.0",
+    "@earendil-works/pi-ai": "1.4.0",
+    "@earendil-works/pi-durable": "1.4.0",
+    "js-yaml": "^5.2.1"
+  }
+}

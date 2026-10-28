@@ -1,6 +1,6 @@
 # Guides
 
-35 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+36 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -66,6 +66,9 @@ Converging a PR to a clean GitHub Copilot review pass — thread IDs, the fix/re
 
 ### [Installation](installation.md)
 OS-aware install runbook covering plugin install, global CLI, prereqs, verification, and updating across Linux, macOS, Windows, WSL2, and Codespaces.
+
+### [Almanac Skills in a pi-durable Host](almanac-skills-in-pi-durable.md)
+Offer agent-almanac skills to an agent built on pi-durable: a system-prompt section that lists them and the read tool that loads one.
 
 ### [Setting Up Your Environment](setting-up-your-environment.md)
 WSL2 setup, shell config, MCP server integration, and Claude Code configuration.

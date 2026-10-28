@@ -1,0 +1,18 @@
+# Node 26 run, 2026-10-22 (#1012 review round 1)
+# command: node tests/results/2026-09-07-rmsync-enotempty-probe/enotempty-probe.mjs 100 60, under ~/.nvm/versions/node/<version>/bin/node
+# Linux (WSL), the same machine as probe-runs.txt
+
+### v26.11.1
+v26.11.1
+node v26.11.1, trials=100, writer active 60ms after its first file
+bare rmSync (the teardown as it was)           {"removed":98,"ENOTEMPTY":2} max_elapsed_ms=32 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the fix as proposed) {"removed":100} max_elapsed_ms=40 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                    {"removed":100} max_elapsed_ms=16 min_files_seen_before_rm=1
+rmTree (scripts/test/_tmp.js, defaults)        {"removed":100} max_elapsed_ms=85 min_files_seen_before_rm=1
+### v22.16.0
+v22.16.0
+node v22.16.0, trials=100, writer active 60ms after its first file
+bare rmSync (the teardown as it was)           {"ENOTEMPTY":42,"removed":58} max_elapsed_ms=27 min_files_seen_before_rm=1
+maxRetries:3 retryDelay:50 (the fix as proposed) {"removed":66,"ENOTEMPTY":34} max_elapsed_ms=340 min_files_seen_before_rm=1
+maxRetries:10 retryDelay:20                    {"removed":73,"ENOTEMPTY":27} max_elapsed_ms=1152 min_files_seen_before_rm=1
+rmTree (scripts/test/_tmp.js, defaults)        {"removed":100} max_elapsed_ms=196 min_files_seen_before_rm=1

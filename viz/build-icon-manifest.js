@@ -239,6 +239,7 @@ function skillKeywords(id, title) {
     'verify-memory-integrity':       'shelf of spines, shelf marker, uncatalogued item',
     'circuit-breaker-pattern':       'circuit switch, break gap, fault tolerance',
     'verify-agent-output':           'verification stamp, evidence chain, checkmark',
+    'decompose-into-pointer-units':  'source sheet, pointer arrows, unit cards, fan-out',
     'bootstrap-agent-identity':      'identity rings, cold start, loading anchor',
     'test-team-coordination':        'team test nodes, coordination check, validation',
     'metal':                         'ore ingot, essence extraction, refined metal',
