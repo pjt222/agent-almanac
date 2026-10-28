@@ -1,0 +1,123 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "agentDir": "<sandbox>/install-agent",
+ "skillCount": 28,
+ "promptChars": 22608,
+ "promptTokensCharsOver4": 5652,
+ "skills": [
+  {
+   "name": "argumentation",
+   "filePath": "<sandbox>/npm-manifest/package/skills/argumentation/SKILL.md"
+  },
+  {
+   "name": "assess-context",
+   "filePath": "<sandbox>/npm-manifest/package/skills/assess-context/SKILL.md"
+  },
+  {
+   "name": "attune",
+   "filePath": "<sandbox>/npm-manifest/package/skills/attune/SKILL.md"
+  },
+  {
+   "name": "awareness",
+   "filePath": "<sandbox>/npm-manifest/package/skills/awareness/SKILL.md"
+  },
+  {
+   "name": "bootstrap-agent-identity",
+   "filePath": "<sandbox>/npm-manifest/package/skills/bootstrap-agent-identity/SKILL.md"
+  },
+  {
+   "name": "breathe",
+   "filePath": "<sandbox>/npm-manifest/package/skills/breathe/SKILL.md"
+  },
+  {
+   "name": "build-coherence",
+   "filePath": "<sandbox>/npm-manifest/package/skills/build-coherence/SKILL.md"
+  },
+  {
+   "name": "center",
+   "filePath": "<sandbox>/npm-manifest/package/skills/center/SKILL.md"
+  },
+  {
+   "name": "conscientiousness",
+   "filePath": "<sandbox>/npm-manifest/package/skills/conscientiousness/SKILL.md"
+  },
+  {
+   "name": "coordinate-reasoning",
+   "filePath": "<sandbox>/npm-manifest/package/skills/coordinate-reasoning/SKILL.md"
+  },
+  {
+   "name": "dream",
+   "filePath": "<sandbox>/npm-manifest/package/skills/dream/SKILL.md"
+  },
+  {
+   "name": "forage-solutions",
+   "filePath": "<sandbox>/npm-manifest/package/skills/forage-solutions/SKILL.md"
+  },
+  {
+   "name": "gratitude",
+   "filePath": "<sandbox>/npm-manifest/package/skills/gratitude/SKILL.md"
+  },
+  {
+   "name": "heal",
+   "filePath": "<sandbox>/npm-manifest/package/skills/heal/SKILL.md"
+  },
+  {
+   "name": "honesty-humility",
+   "filePath": "<sandbox>/npm-manifest/package/skills/honesty-humility/SKILL.md"
+  },
+  {
+   "name": "intrinsic",
+   "filePath": "<sandbox>/npm-manifest/package/skills/intrinsic/SKILL.md"
+  },
+  {
+   "name": "investigate-capa-root-cause",
+   "filePath": "<sandbox>/npm-manifest/package/skills/investigate-capa-root-cause/SKILL.md"
+  },
+  {
+   "name": "learn",
+   "filePath": "<sandbox>/npm-manifest/package/skills/learn/SKILL.md"
+  },
+  {
+   "name": "listen",
+   "filePath": "<sandbox>/npm-manifest/package/skills/listen/SKILL.md"
+  },
+  {
+   "name": "meditate",
+   "filePath": "<sandbox>/npm-manifest/package/skills/meditate/SKILL.md"
+  },
+  {
+   "name": "observe",
+   "filePath": "<sandbox>/npm-manifest/package/skills/observe/SKILL.md"
+  },
+  {
+   "name": "redirect",
+   "filePath": "<sandbox>/npm-manifest/package/skills/redirect/SKILL.md"
+  },
+  {
+   "name": "rest",
+   "filePath": "<sandbox>/npm-manifest/package/skills/rest/SKILL.md"
+  },
+  {
+   "name": "review-data-analysis",
+   "filePath": "<sandbox>/npm-manifest/package/skills/review-data-analysis/SKILL.md"
+  },
+  {
+   "name": "review-research",
+   "filePath": "<sandbox>/npm-manifest/package/skills/review-research/SKILL.md"
+  },
+  {
+   "name": "review-software-architecture",
+   "filePath": "<sandbox>/npm-manifest/package/skills/review-software-architecture/SKILL.md"
+  },
+  {
+   "name": "search-prior-art",
+   "filePath": "<sandbox>/npm-manifest/package/skills/search-prior-art/SKILL.md"
+  },
+  {
+   "name": "teach",
+   "filePath": "<sandbox>/npm-manifest/package/skills/teach/SKILL.md"
+  }
+ ],
+ "diagnostics": []
+}
