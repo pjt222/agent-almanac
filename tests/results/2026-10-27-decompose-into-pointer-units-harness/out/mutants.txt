@@ -99,11 +99,12 @@ KILLED  D7 gap deriver skips the work-list check: exit 1, 1 failing row(s); expe
     FAIL  zsh gaps: a gaps file changed after it was recorded is refused: got [gaps=5 derived=2 flagged_in_approved_topics=1 rc=0 G-R1-1,G-R1-2] want [REFUSED: gaps/R1.json was never recorded, or the work list changed after it was rc=1 none]
 KILLED  D8 a gaps file recorded without covers_held: exit 1, 1 failing row(s); expected row "record: a list without covers_held is refused"
     FAIL  zsh record: a list without covers_held is refused and not recorded: got [ rc=0 recorded=yes] want [REFUSED: gaps/R2.json is not a gaps_for_owner list rc=1 recorded=no]
-KILLED  L1 stop pattern unanchored: exit 1, 17 failing row(s); expected row "no-result: its partial moves to partials/ and it stays unaccounted"
+KILLED  L1 stop pattern unanchored: exit 1, 18 failing row(s); expected row "no-result: its partial moves to partials/ and it stays unaccounted"
     FAIL  zsh no-result: its partial moves to partials/ and it stays unaccounted: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0 VERDICT: partial] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0 VERDICT: partial]
     FAIL  zsh empty file is not reported: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
     FAIL  zsh released and not yet re-run is unaccounted: got [specs=7 reported=6 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0]
     FAIL  zsh released, then re-run: reported, not held_ran: got [specs=7 reported=7 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
+    FAIL  zsh ledger: a stop found after the run on a whole report counts as reported and stopped: got [specs=7 reported=7 stopped=4 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=7 stopped=2 held=0 unaccounted=0 extra=0 held_ran=0]
     FAIL  zsh the documented writers write lines every reader reads: got [specs=7 reported=6 stopped=6 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=6 stopped=1 held=2 unaccounted=0 extra=0 held_ran=1]
     FAIL  zsh a hand-written release does not lift a stop: got [specs=7 reported=7 stopped=3 held=0 unaccounted=0 extra=0 held_ran=0] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=0 held_ran=0]
     FAIL  zsh reroute under a new id is extra: got [specs=7 reported=7 stopped=3 held=0 unaccounted=0 extra=1 held_ran=0] want [specs=7 reported=7 stopped=1 held=0 unaccounted=0 extra=1 held_ran=0]
@@ -182,12 +183,13 @@ KILLED  D9 a release lifts a no-result or hold logged after it (held list): exit
     FAIL  zsh launch: after a stop or no-result, a unit that reported is not relaunched: got [not relaunched, reported already: ["RW-A","RW-C"]|RW-E,RW-G,RW-H] want [not relaunched, reported already: ["RW-A","RW-C"]|RW-E]
     FAIL  zsh launch: a RERUN line for this run relaunches the unit it names: got [RW-A,RW-E,RW-G,RW-H] want [RW-A,RW-E]
     FAIL  zsh launch: a RERUN line for another run does not: got [RW-E,RW-G,RW-H] want [RW-E]
-KILLED  D10 reported units relaunched after a stop: exit 1, 5 failing row(s); expected row "launch: after a stop or no-result, a unit that reported is not relaunched"
+KILLED  D10 reported units relaunched after a stop: exit 1, 6 failing row(s); expected row "launch: after a stop or no-result, a unit that reported is not relaunched"
     FAIL  zsh launch: after a stop or no-result, a unit that reported is not relaunched: got [not relaunched, reported already: ["RW-A","RW-C"]|RW-A,RW-C,RW-E] want [not relaunched, reported already: ["RW-A","RW-C"]|RW-E]
     FAIL  zsh launch: a RERUN line for this run relaunches the unit it names: got [RW-A,RW-C,RW-E] want [RW-A,RW-E]
     FAIL  zsh launch: a RERUN line for another run does not: got [RW-A,RW-C,RW-E] want [RW-E]
     FAIL  zsh launch: a verifier stop alone leaves reported units out: got [held=[]|not relaunched, reported already: ["RW-A","RW-C"]|RW-A,RW-B,RW-C,RW-D,RW-E,RW-F,RW-G,RW-H] want [held=[]|not relaunched, reported already: ["RW-A","RW-C"]|RW-B,RW-D,RW-E,RW-F,RW-G,RW-H]
     FAIL  zsh launch: a critic no-result alone leaves reported units out: got [held=[]|not relaunched, reported already: ["RW-A","RW-C"]|RW-A,RW-B,RW-C,RW-D,RW-E,RW-F,RW-G,RW-H] want [held=[]|not relaunched, reported already: ["RW-A","RW-C"]|RW-B,RW-D,RW-E,RW-F,RW-G,RW-H]
+    FAIL  zsh launch: a stop found after the run holds a unit that reported: got [held=["RW-A"] not relaunched, reported already: ["RW-A","RW-C"] [{"kind":"rows","id":"RW-B"},{"kind":"rows","id":"RW-C"},{"kind":"rows","id":"RW-D"},{"kind":"rows","id":"RW-E"},{"kind":"rows","id":"RW-F"},{"kind":"rows","id":"RW-G"},{"kind":"rows","id":"RW-H"}] rc=0] want [held=["RW-A"] not relaunched, reported already: ["RW-A","RW-C"] [{"kind":"rows","id":"RW-B"},{"kind":"rows","id":"RW-D"},{"kind":"rows","id":"RW-E"},{"kind":"rows","id":"RW-F"},{"kind":"rows","id":"RW-G"},{"kind":"rows","id":"RW-H"}] rc=0]
 KILLED  D11 a RERUN line not bound to its tag: exit 1, 1 failing row(s); expected row "launch: a RERUN line for another run does not"
     FAIL  zsh launch: a RERUN line for another run does not: got [RW-A,RW-E] want [RW-E]
 KILLED  D12 reported units held back with no stop in the job: exit 1, 1 failing row(s); expected row "launch: with no stop or no-result in the job, reported units relaunch"
@@ -377,6 +379,8 @@ KILLED  L43 any spacing after the kind read by the pre-rerun check: exit 1, 1 fa
     FAIL  zsh pre-rerun: two spaces after the kind are refused: got [REFUSED: V-CL1.4.0-01-1 is stopped, or has no release since its last no-result rc=1] want [REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, its kind and unit=, one space apart rc=2]
 KILLED  L44 any spacing after the kind read by the ledger: exit 1, 1 failing row(s); expected row "ledger: two spaces after the kind are refused"
     FAIL  zsh ledger: two spaces after the kind are refused: got [specs=7 reported=6 stopped=1 held=0 unaccounted=1 extra=0 held_ran=0] want [REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, its kind and unit=, one space apart]
+KILLED  L45 a verifier of a stopped unit re-run: exit 1, 1 failing row(s); expected row "pre-rerun: a verifier of a unit stopped after the run is refused"
+    FAIL  zsh pre-rerun: a verifier of a unit stopped after the run is refused: got [rerun V-CL1.4.0-01-1: released, not stopped, no result yet rc=0] want [REFUSED: V-CL1.4.0-01-1 verifies CL1.4.0-01, which is stopped rc=1]
 KILLED  Ma a stopped unit re-run in code: exit 1, 3 failing row(s); expected row "stop reviewer: the stopped unit ran once"
     FAIL  stop safety-classifier: the stopped unit ran once
     FAIL  stop reviewer: the stopped unit ran once

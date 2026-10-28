@@ -72,6 +72,7 @@ PASS  bash launch: a unit-log line without its date is refused before any list i
 PASS  bash launch: a unit-log line with two spaces after its date is refused before any list is printed
 PASS  bash launch: two spaces after the kind are refused before any list is printed
 PASS  bash launch: a tab after the date and its space is refused before any list is printed
+PASS  bash launch: a stop found after the run holds a unit that reported
 PASS  bash launch: a spec file whose first JSON text is not a list is refused before any list is printed
 PASS  bash launch: an unreadable unit log is refused before any list is printed
 PASS  bash held: a missing unit log is refused
