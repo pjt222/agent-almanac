@@ -39,11 +39,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # No package cache. A cache entry written by another workflow on main would be restored into
+      # the job that holds the OIDC permission, and setup-node's documentation advises against
+      # caching in publishing workflows for that reason. It saved little: four packages.
       - uses: actions/setup-node@v7
         with:
           node-version: '26'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          package-manager-cache: false
 
       - run: npm ci
 
@@ -54,15 +57,15 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # NO PRE-PUBLISH AUTH CHECK, deliberately (#1033). The job publishes through npm trusted
-      # publishing: it holds no npm credential, and `npm publish` itself exchanges this job's
-      # GitHub OIDC token (`id-token: write`, above) for a short-lived publish token. So there is
-      # nothing for `npm whoami` to ask about, and npm's documentation says it "is not a check of
-      # trusted publishing permissions". The step that stood here asked the token-era question,
-      # a dead token against a live one, and even then it could not test write access: no npm
-      # command short of publishing does. A dispatch dry run therefore says nothing about publish
-      # auth. It still rehearses everything else the publish does, and the first auth signal is
-      # the publish on the tag path.
+      # NO SEPARATE AUTH STEP, deliberately (#1033). The job publishes through npm trusted
+      # publishing: it holds no npm credential, and `npm publish` exchanges this job's GitHub OIDC
+      # token (`id-token: write`, above) for a short-lived publish token. So there is nothing for
+      # `npm whoami` to ask about, and npm's documentation says it "is not a check of trusted
+      # publishing permissions". The exchange runs inside `npm publish`, in the dry run below as
+      # well, but npm logs its outcome only at verbose level. So both npm steps run with
+      # `--loglevel verbose`, and the `npm verbose oidc` lines say whether it worked. npm does not
+      # check a trusted publisher when it is saved, so a dispatch dry run after configuring one is
+      # the first check that it matches. What no rehearsal can test is the upload itself, the PUT.
 
       # `npm publish --dry-run`, NOT `npm pack --dry-run`, and the difference is the whole value of
       # the rehearsal. Measured: `pack --dry-run` runs `prepack` alone, while `publish --dry-run`
@@ -75,7 +78,7 @@ jobs:
       # this itself, so running it here would only spend the CLI suite a third time.
       - name: Rehearse the publish (everything the real publish does except the PUT)
         if: github.event_name == 'workflow_dispatch'
-        run: npm publish --dry-run
+        run: npm publish --dry-run --loglevel verbose
 
       # THE TAG IS NOT THE VERSION. `npm publish` takes the version from package.json and never
       # looks at the ref; `gh release create` takes its title from the ref and never looks at the
@@ -119,14 +122,18 @@ jobs:
       # multi-step tag push.
       #
       # It authenticates through npm trusted publishing (#1033), with no stored token, and npm
-      # attaches provenance itself, so there is no `--provenance` flag.
+      # attaches provenance itself, so there is no `--provenance` flag. If the exchange fails, for a
+      # trusted publisher that does not match this owner, repository or workflow file, npm does not
+      # stop with ENEEDAUTH. setup-node's `.npmrc` leaves the literal `${NODE_AUTH_TOKEN}` as the
+      # token, and the PUT fails, typically with E404, which npm returns for an unauthorised write
+      # rather than 403. Read the `npm verbose oidc` lines first.
       - name: Publish to npm
         if: >-
           github.event_name == 'push' ||
           (github.event_name == 'workflow_dispatch' &&
           !inputs.dry_run &&
           startsWith(github.ref, 'refs/tags/'))
-        run: npm publish
+        run: npm publish --loglevel verbose
 
       # Same condition as the publish, deliberately. Guarding this on `push` alone meant the exact
       # scenario the dispatch was built for — tag pushed, tests green, publish died, auth fixed,
