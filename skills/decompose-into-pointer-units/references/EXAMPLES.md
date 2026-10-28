@@ -337,7 +337,7 @@ reused=$( { printf '%s\n' "$owner_specs" | cut -f4; printf '%s\n' "$used"; } | s
 sha256sum "$OWNER_SPECS" >> WORK-SHA256SUMS
 ```
 
-A job has one run directory, and once any unit has run its work list is never re-derived (SKILL.md Step 2). Items a fixed deriver finds that the first derivation skipped are written by that deriver to a new file `specs/added-<n>.json`, with ids no spec carries, and recorded by this check. It refuses a file already recorded, a changed work list, a spec of a kind that is not derived (no `gap`, `owner` or `raw`), an id outside `[A-Za-z0-9._-]` or already in a spec file, and any pointer that a recorded spec, or another spec in the file, already covers: an added spec covers only what nothing covered, so it cannot re-run reported or stopped work under a new id. Pointers are compared as written, so the fixed deriver writes each path exactly as the first derivation did (`./items/a.md` and `items/a.md` compare unequal), and Step 8 item 6's reading before launch is the check for a respelled one. As in Step 2, no id starts with `V-` or `X-`. The added specs launch as a cluster not yet run, after Step 8 item 6's overlap reading:
+A job has one run directory, and once any unit has run its work list is never re-derived (SKILL.md Step 2). Items a fixed deriver finds that the first derivation skipped are written by that deriver to a new file `specs/added-<n>.json`, with ids no spec carries, and recorded by this check. It refuses a file already recorded, a changed work list, a file that is not one JSON list of derived specs (no `gap`, `owner` or `raw` spec, and no second list after the first), an id outside `[A-Za-z0-9._-]` or already in a spec file, a spec, added or recorded, whose pointer field is absent or null (a `cl` or `rows` spec without its list, a `rows` spec without its `file`, a `file` spec without its `path`, an `issue` spec without its `n`), and any pointer that a recorded spec, or another spec in the file, already covers: an added spec covers only what nothing covered, so it cannot re-run reported or stopped work under a new id. Pointers are compared as written, so the fixed deriver writes each path exactly as the first derivation did (`./items/a.md` and `items/a.md` compare unequal), and Step 8 item 6's reading before launch is the check for a respelled one. As in Step 2, no id starts with `V-` or `X-`. The added specs launch as a cluster not yet run, after Step 8 item 6's overlap reading:
 
 ```bash
 cd "${RUN_DIR:?}" || exit 1
@@ -345,16 +345,17 @@ ADDED="specs/added-1.json"   # written by the fixed deriver, for skipped items o
 [ -f "$ADDED" ] || { echo "REFUSED: no $ADDED"; exit 2; }
 awk -v f="$ADDED" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS && { echo "REFUSED: $ADDED was already recorded"; exit 2; }
 sha256sum -c --quiet WORK-SHA256SUMS || { echo 'REFUSED: the work list changed after it was recorded'; exit 1; }
-jq -e 'type == "array" and length > 0 and all(.[]; (.kind | IN("cl", "rows", "file", "issue")) and (.id | test("^[A-Za-z0-9._-]+$")))' \
+jq -s -e 'length == 1 and (.[0] | type == "array" and length > 0 and all(.[]; (.kind | IN("cl", "rows", "file", "issue")) and (.id | test("^[A-Za-z0-9._-]+$"))))' \
   "$ADDED" > /dev/null || { echo "REFUSED: $ADDED is not a list of derived specs"; exit 1; }
-PTR='.[] | if .kind == "cl" then .lines[] | "cl:\(.)" elif .kind == "rows" then .file as $f | .rows[] | "rows:\($f):\(.)"
-  elif .kind == "file" then "file:\(.path)" elif .kind == "issue" then "issue:\(.n)" else empty end'
-old=$(awk -v f="$ADDED" '$2 ~ /^specs\// && $2 != f {print $2}' WORK-SHA256SUMS | xargs -r jq -r "$PTR" | sort -u) ||
+PTR='.[] | if .kind == "cl" then .lines[] | "cl:\(.)" elif .kind == "rows" then (.file // error("no file")) as $f | .rows[] | "rows:\($f):\(.)"
+  elif .kind == "file" then "file:\(.path // error("no path"))" elif .kind == "issue" then "issue:\(.n // error("no n"))" else empty end'
+old=$(awk -v f="$ADDED" '$2 ~ /^specs\// && $2 != f {print $2}' WORK-SHA256SUMS | xargs -r jq -n -r "inputs | $PTR") ||
   { echo 'REFUSED: a recorded spec file is not a spec list'; exit 2; }
-new=$(jq -r "$PTR" "$ADDED" | sort) || exit 2
+new=$(jq -r "$PTR" "$ADDED") || { echo "REFUSED: $ADDED has a spec without its pointers"; exit 1; }
+old=$(printf '%s\n' "$old" | sort -u); new=$(printf '%s\n' "$new" | sort)   # sorted apart: a pipe into sort would hide jq's exit
 again=$( { printf '%s\n' "$new" | uniq -d; printf '%s\n' "$new" | sort -u | comm -12 - <(printf '%s\n' "$old"); } | sed '/^$/d' | sort -u | paste -sd ' ' -)
 [ -z "$again" ] || { echo "REFUSED: $ADDED covers pointers a spec already covers: $again"; exit 1; }
-all_ids=$(find specs -name '*.json' -exec jq -r '.[].id' {} +) || { echo 'REFUSED: a spec file is not a spec list'; exit 2; }
+all_ids=$(find specs -name '*.json' -exec jq -n -r 'inputs | .[].id' {} +) || { echo 'REFUSED: a spec file is not a spec list'; exit 2; }
 dup_ids=$(printf '%s\n' "$all_ids" | sort | uniq -d | paste -sd ' ' -)
 [ -z "$dup_ids" ] || { echo "REFUSED: an id in $ADDED is already in a spec file: $dup_ids"; exit 1; }
 sha256sum "$ADDED" >> WORK-SHA256SUMS
@@ -453,13 +454,13 @@ Pilot first, read its reports, then one run per remaining cluster, started toget
 ```bash
 cd "${RUN_DIR:?}" || exit 1
 [ -f UNIT-LOG.txt ] || { echo 'REFUSED: no UNIT-LOG.txt (Step 1 creates it)'; exit 2; }
-rg -q -v '^[0-9]{4}-[0-9]{2}-[0-9]{2} ' UNIT-LOG.txt; [ $? -eq 1 ] || { echo 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date'; exit 2; }   # rg: 1 = every line dated
+rg -q -v '^[0-9]{4}-[0-9]{2}-[0-9]{2} \S+ unit=' UNIT-LOG.txt; [ $? -eq 1 ] || { echo 'REFUSED: UNIT-LOG.txt is unreadable, or a line does not start with its date, its kind and unit=, one space apart'; exit 2; }   # rg: 1 = every line dated
 TAG=R2                      # the run about to launch: a new tag for every launch, re-runs included
 CLUSTER="specs/rows.json"   # the cluster it launches
 sha256sum -c --quiet WORK-SHA256SUMS && awk -v f="$CLUSTER" '$2 == f {found = 1} END {exit !found}' WORK-SHA256SUMS ||
   { echo "REFUSED: $CLUSTER is not a recorded spec file, or the work list changed"; exit 1; }
 ids=$(jq -r '.[].id' "$CLUSTER") || { echo "REFUSED: $CLUSTER is not a spec list"; exit 2; }
-all_ids=$(find specs -name '*.json' -exec jq -r '.[].id' {} +) || { echo 'REFUSED: a spec file is not a spec list'; exit 2; }
+all_ids=$(find specs -name '*.json' -exec jq -n -r 'inputs | .[].id' {} +) || { echo 'REFUSED: a spec file is not a spec list'; exit 2; }
 dup_ids=$(printf '%s\n' "$all_ids" | sort | uniq -d | paste -sd ' ' -)
 [ -z "$dup_ids" ] || { echo "REFUSED: an id is in two spec entries: $dup_ids"; exit 1; }   # a re-derivation, or a spec written twice
 HELD=$( { rg -o '^\S+ STOP-[0-9]+ unit=([A-Za-z0-9._-]+)' -r '$1' UNIT-LOG.txt

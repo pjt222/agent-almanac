@@ -39,6 +39,14 @@ PASS  bash a release with an unknown BY is refused, nothing written
 PASS  bash an owner release with no owner batch is refused
 PASS  bash release: a unit-log line without its date is refused
 PASS  bash ledger: a unit-log line without its date is refused
+PASS  bash release: a unit-log line with two spaces after its date is refused
+PASS  bash ledger: a unit-log line with two spaces after its date is refused
+PASS  bash pre-rerun: control, the copy passes without the line below
+PASS  bash pre-rerun: a unit-log line with two spaces after its date is refused
+PASS  bash release: two spaces after the kind are refused
+PASS  bash ledger: two spaces after the kind are refused
+PASS  bash pre-rerun: two spaces after the kind are refused
+PASS  bash ledger: a spec file whose first JSON text is not a list is refused
 PASS  bash release: an unreadable unit log is refused
 PASS  bash ledger: an unreadable unit log is refused
 PASS  bash the documented writers write lines every reader reads
