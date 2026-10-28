@@ -2,9 +2,9 @@
  "piVersion": "1.4.0",
  "node": "v26.11.1",
  "agentDir": "<sandbox>/install-agent",
- "skillCount": 27,
- "promptChars": 19421,
- "promptTokensCharsOver4": 4856,
+ "skillCount": 28,
+ "promptChars": 22608,
+ "promptTokensCharsOver4": 5652,
  "skills": [
   {
    "name": "argumentation",
@@ -21,6 +21,10 @@
   {
    "name": "awareness",
    "filePath": "<sandbox>/npm-manifest/package/skills/awareness/SKILL.md"
+  },
+  {
+   "name": "bootstrap-agent-identity",
+   "filePath": "<sandbox>/npm-manifest/package/skills/bootstrap-agent-identity/SKILL.md"
   },
   {
    "name": "breathe",

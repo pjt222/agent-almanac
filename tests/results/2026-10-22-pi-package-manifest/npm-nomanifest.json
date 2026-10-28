@@ -2,9 +2,9 @@
  "piVersion": "1.4.0",
  "node": "v26.11.1",
  "agentDir": "<sandbox>/home-npm-nomanifest/.pi/agent",
- "skillCount": 374,
- "promptChars": 261081,
- "promptTokensCharsOver4": 65271,
+ "skillCount": 375,
+ "promptChars": 294077,
+ "promptTokensCharsOver4": 73520,
  "skills": [
   {
    "name": "adapt-architecture",
@@ -425,6 +425,10 @@
   {
    "name": "decommission-validated-system",
    "filePath": "<sandbox>/npm-nomanifest/skills/decommission-validated-system/SKILL.md"
+  },
+  {
+   "name": "decompose-into-pointer-units",
+   "filePath": "<sandbox>/npm-nomanifest/skills/decompose-into-pointer-units/SKILL.md"
   },
   {
    "name": "defend-colony",

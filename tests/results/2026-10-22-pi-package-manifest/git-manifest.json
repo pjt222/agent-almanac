@@ -2,9 +2,9 @@
  "piVersion": "1.4.0",
  "node": "v26.11.1",
  "agentDir": "<sandbox>/home-git-manifest/.pi/agent",
- "skillCount": 27,
- "promptChars": 19367,
- "promptTokensCharsOver4": 4842,
+ "skillCount": 28,
+ "promptChars": 22552,
+ "promptTokensCharsOver4": 5638,
  "skills": [
   {
    "name": "argumentation",
@@ -21,6 +21,10 @@
   {
    "name": "awareness",
    "filePath": "<sandbox>/git-manifest-clone/skills/awareness/SKILL.md"
+  },
+  {
+   "name": "bootstrap-agent-identity",
+   "filePath": "<sandbox>/git-manifest-clone/skills/bootstrap-agent-identity/SKILL.md"
   },
   {
    "name": "breathe",
