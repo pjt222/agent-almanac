@@ -31,6 +31,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Outside a checkout, a bare `agent-almanac` in a terminal now opens the TUI** instead of printing the help, because the fallback under Fixed below finds a root there (#606). `campfire`, `tend` and the TUI then write `.agent-almanac/state.json` in the working directory, as they already did inside a checkout. These commands write no links, so the refusal above does not apply to them.
 
 ### Fixed
+- **`cli/README.md`'s adapter table says what each adapter writes** (#1005). The rows were re-derived from each adapter's `install()`. Several had named a path no adapter writes:
+  - Copilot's `.github/copilot-instructions/`; the adapter writes `.github/skills/<id>/`.
+  - Aider's `.aider/`; it appends to `CONVENTIONS.md`.
+  - Cursor's `.cursor/rules/`; `install` writes `.cursor/skills/<id>/`.
+  - Codex's `.agents/skills/`; the codex adapter writes agents to `AGENTS.md`, and its skills come from Universal.
+
+  `ai-edge` had no row. The table now gives global paths where an adapter has them. The README now also names pi (pi.dev): pi 1.4.0 loads skills from the universal adapter's `.agents/skills/` folders, project scope only in a project pi trusts. Measured in `tests/results/2026-10-22-pi-skill-discovery/`.
 - **`scatter` names a removal that failed** (#999). Its ceremony's list of practices and `--json`'s `skillsRemoved` come from what it planned to remove, and neither carries a failure, so a removal that failed was printed only under `--quiet`, and not even there with `--json`. With copy mode that could hide a whole copy: when the copy moved into its staging directory but the directory could not be deleted, nothing named it, and every listing skips staging directories. `scatter` now prints each failed removal on stderr, in the words `--quiet` uses, so `--json` stays one document; only `--quiet` without `--json` prints them with the results instead, as before. Its exit code is unchanged (#993), and `--ceremonial` still lists a practice whose removal failed as scattering.
 - **An item name could reach outside the install directories, and `uninstall` deleted what it found there.**
   - **The bug.** Every adapter builds its target path as `<base>/<id>`, `<base>/<id>.md` or, for hermes, `<base>/<domain>/<id>`, and `resolve()` followed `..`, separators and absolute paths out of `<base>`. So `uninstall ../../README.md -f universal` removed the project's own `README.md` and exited 0. A name could reach this from a command-line argument, or from a registry read through `--source`.

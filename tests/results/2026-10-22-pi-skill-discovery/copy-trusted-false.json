@@ -1,0 +1,11 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "home": "<sandbox>/home-copy",
+ "cwd": "<sandbox>/proj-copy",
+ "agentDir": "<sandbox>/home-copy/.pi/agent",
+ "requestedTrust": false,
+ "isProjectTrusted": false,
+ "skills": [],
+ "diagnostics": []
+}
