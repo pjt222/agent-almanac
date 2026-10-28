@@ -49,6 +49,12 @@ PASS  bash added: an id a spec already carries is refused
 PASS  bash added: a spec that is not of a derived kind is refused
 PASS  bash added: a spec without its pointers is refused, nothing recorded
 PASS  bash added: a recorded spec file with a spec without its pointers is refused, nothing recorded
+PASS  bash added: a broken recorded spec file read before a good one is refused, nothing recorded
+PASS  bash added: a second JSON text in the added file is refused, nothing recorded
+PASS  bash added: a file spec without its path is refused, nothing recorded
+PASS  bash added: an issue spec without its number is refused, nothing recorded
+PASS  bash added: a rows spec without its file is refused, nothing recorded
+PASS  bash added: a spec file whose first JSON text is not a list is refused, nothing recorded
 PASS  bash added: a changed work list is refused
 PASS  bash added: a missing file is refused
 PASS  bash held: stopped ids and ids whose last no-result, hold or release line is not a release; labels left out
@@ -64,6 +70,9 @@ PASS  bash launch: an id in two spec files is refused before any list is printed
 PASS  bash launch: a recorded cluster file that is not a spec list is refused before any list is printed
 PASS  bash launch: a unit-log line without its date is refused before any list is printed
 PASS  bash launch: a unit-log line with two spaces after its date is refused before any list is printed
+PASS  bash launch: two spaces after the kind are refused before any list is printed
+PASS  bash launch: a tab after the date and its space is refused before any list is printed
+PASS  bash launch: a spec file whose first JSON text is not a list is refused before any list is printed
 PASS  bash launch: an unreadable unit log is refused before any list is printed
 PASS  bash held: a missing unit log is refused
 

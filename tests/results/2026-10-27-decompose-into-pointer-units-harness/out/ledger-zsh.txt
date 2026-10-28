@@ -43,6 +43,10 @@ PASS  zsh release: a unit-log line with two spaces after its date is refused
 PASS  zsh ledger: a unit-log line with two spaces after its date is refused
 PASS  zsh pre-rerun: control, the copy passes without the line below
 PASS  zsh pre-rerun: a unit-log line with two spaces after its date is refused
+PASS  zsh release: two spaces after the kind are refused
+PASS  zsh ledger: two spaces after the kind are refused
+PASS  zsh pre-rerun: two spaces after the kind are refused
+PASS  zsh ledger: a spec file whose first JSON text is not a list is refused
 PASS  zsh release: an unreadable unit log is refused
 PASS  zsh ledger: an unreadable unit log is refused
 PASS  zsh the documented writers write lines every reader reads
