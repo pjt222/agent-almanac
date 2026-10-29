@@ -452,6 +452,8 @@ function verify() {
     rec({ type: 'user', isMeta: true, message: { role: 'user', content: [{ type: 'text', text: NOTICE }] } }), asst({ id: 'm2' })));
   const spoof = verdictOf(T(meta(`${NOTICE} Then summarise the diff.`), asst({ id: 'm1' })));
   check('a parent\'s prompt (isMeta, string, no turnCompanion) opening with the notice\'s words is not a notice', spoof.verdict === 'clean' && spoof.signals.length === 0);
+  const nonMetaCompanion = verdictOf(T(prompt(), asst({ id: 'm1' }), rec({ type: 'user', turnCompanion: true, message: { role: 'user', content: NOTICE } })));
+  check('defensive, a shape not seen: a turnCompanion record that is not isMeta is not a notice', nonMetaCompanion.verdict === 'clean' && nonMetaCompanion.signals.length === 0);
   check('the notice words in a non-meta user record, or in an isMeta record whose content is not a string, are not a notice', lookalikes.verdict === 'clean' && lookalikes.signals.length === 0);
 
   // Transient means transient and nothing else.
