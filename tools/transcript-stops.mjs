@@ -185,7 +185,7 @@ export function scan(text) {
       assistantRecords += 1;
       ended = msg.stop_reason ?? 'mid-turn';
       if (rec.isApiErrorMessage === true) {
-        const kind = typeof rec.error === 'string' ? rec.error : String(rec.error);
+        const kind = typeof rec.error === 'string' ? rec.error : JSON.stringify(rec.error) ?? 'undefined';
         if (msg.stop_reason === 'refusal' || typeof rec.refusedMessageId === 'string') flagged.push({ line, kind });
         else apiErrors.push({ line, kind });
         return;
@@ -352,7 +352,10 @@ function run(paths, out = console) {
     tally.set(verdict, (tally.get(verdict) ?? 0) + 1);
     if (result === 'no') noResult += 1;
     if (result === 'no' && inferred) inferredNo += 1;
-    out.log([verdict, clean(t.label || '-'), clean(t.id), `result=${result}${inferred ? '(ended)' : ''}`, `ended=${scanned.ended}`, signals.join(' ') || '-', t.path].join('\t'));
+    // Every column is cleaned: a record's own values (an error kind, a category, a stop reason) and
+    // the path reach the output, and a tab or newline in one would shift or forge a row.
+    const columns = [verdict, t.label || '-', t.id, `result=${result}${inferred ? '(ended)' : ''}`, `ended=${scanned.ended}`, signals.join(' ') || '-', t.path];
+    out.log(columns.map(clean).join('\t'));
   }
   if (unmeasuredTranscripts > 0) {
     out.log(`transcript-stops: ${unmeasuredTranscripts} transcript(s) written by a version outside the measured ${MEASURED_VERSIONS.join(' to ')} (${clean([...unmeasured].sort().join(', '))}): run the tool on a transcript known to hold a stop, and see it read stop, before trusting a clean`);
@@ -543,6 +546,14 @@ function verify() {
     const fileE = join(dir, 'agent-fe.jsonl');
     writeFileSync(fileE, T(prompt(), rec({ type: 'assistant', message: { id: 'm1', role: 'assistant', stop_reason: 'end_turn', content: [] } })));
     check('a transcript that records no version at all is counted the same way', /outside the measured .* \(none recorded\): /.test(cli(fileE).stdout));
+    const forged = join(dir, 'agent-tab\tname.jsonl');
+    writeFileSync(forged, T(prompt(), rec({ type: 'assistant', version: '2.1.306', isApiErrorMessage: true, error: { code: 1 }, message: { id: 's1', role: 'assistant', stop_reason: 'stop_sequence', content: [] } }),
+      rec({ type: 'assistant', version: '2.1.306', isApiErrorMessage: true, error: 'x\nclean\tfake', message: { id: 's2', role: 'assistant', stop_reason: 'stop\tsequence', content: [] } })));
+    const r9 = cli(forged);
+    const r9rows = r9.stdout.trim().split('\n');
+    check('a tab or newline in an error kind, a stop reason or a path cannot shift or forge a row', r9rows.length === 2 && r9rows[0].split('\t').length === 7
+      && /api-error@3:x clean fake/.test(r9rows[0]) && /\tended=stop sequence\t/.test(r9rows[0]) && /agent-tab name\.jsonl$/.test(r9rows[0]));
+    check('an error kind that is not a string prints as JSON', /api-error@2:\{"code":1\}/.test(r9rows[0]));
     const fileC = join(dir, 'agent-fc.jsonl');
     writeFileSync(fileC, T(prompt(), asst({ id: 'm1', stop: 'tool_use' })));
     check('a file with no journal that stopped mid-turn: undetermined, exit 1', cli(fileC).status === 1 && /^undetermined\t-\tfc\tresult=no\(ended\)/.test(cli(fileC).stdout));
