@@ -91,8 +91,10 @@
  * the signals with their line numbers, the path), then a summary line. The result is yes or no
  * from the run's journal, which a transcript passed as a file is looked up in too. With no
  * journal naming the agent it is inferred, and printed yes(ended) or no(ended): an agent
- * returned when its transcript ends at end_turn, as every finished Agent-tool transcript measured
- * does; one that died on an error, or is still running, ends anywhere else.
+ * returned when its transcript ends at end_turn. Measured against the parents' own record: of the
+ * 94 Agent-tool subagents whose parent's task notification gives an outcome, the 92 reported
+ * completed end at end_turn and the 2 reported failed do not. A workflow agent's transcript ends
+ * on its result tool call instead, so one passed without its journal reads as not returned.
  *
  * Read a run after it has finished. An agent still running has no result yet and reads as
  * undetermined, which is what a sweep measured on a run that was live in another session.
@@ -395,7 +397,7 @@ function run(paths, out = console) {
   }
   const order = ['stop', 'undetermined', 'transient', 'clean'];
   const counts = order.filter((v) => tally.has(v)).map((v) => `${tally.get(v)} ${v}`).join(', ') || 'none read';
-  out.log(`transcript-stops: ${list.length} transcript(s): ${counts}; ${noResult} without a result${inferredNo ? ` (${inferredNo} inferred from how the transcript ended)` : ''}${failures ? `; ${failures} could not be read` : ''}${problems.length ? `; ${problems.length} journal(s) with lines that do not parse` : ''}`);
+  out.log(`transcript-stops: ${list.length} transcript(s): ${counts}; ${noResult} without a result${inferredNo ? ` (${inferredNo} inferred from how the transcript ended)` : ''}${failures ? `; ${failures} could not be read` : ''}${problems.length ? `; ${problems.length} journal problem(s), on stderr` : ''}`);
   if (failures > 0 || problems.length > 0) return 2;
   if (noResult > 0 || tally.has('stop') || tally.has('undetermined')) return 1;
   return 0;
@@ -580,11 +582,12 @@ function verify() {
     writeFileSync(join(cutJournal, 'journal.jsonl'), readFileSync(join(cutJournal, 'journal.jsonl'), 'utf8') + '{"type":"started","agentId":"g2"');
     const r8 = cli(cutJournal);
     check('a journal line that does not parse exits 2, after the lines it could print, naming the line', r8.status === 2 && /^clean\tU1\tg1\t/.test(r8.stdout)
-      && /journal\.jsonl: line\(s\) 3 do not parse/.test(r8.stderr) && /1 journal\(s\) with lines that do not parse$/.test(r8.stdout.trim()));
+      && /journal\.jsonl: line\(s\) 3 do not parse/.test(r8.stderr) && /1 journal problem\(s\), on stderr$/.test(r8.stdout.trim()));
     const odd = runDir('oddid', [{ type: 'started', agentId: '../../x', label: 'U9' }, { type: 'started', agentId: 'i1', label: 'U1' }, { type: 'result', agentId: 'i1', result: {} }], { i1: CLEAN });
     const r10 = cli(odd);
     check('a journal agent id that is not a plain file name is refused, not joined into a path; the others are read', r10.status === 2
-      && /agent id "\.\.\/\.\.\/x" is not a plain file name/.test(r10.stderr) && !/no readable transcript/.test(r10.stderr) && /^clean\tU1\ti1\t/.test(r10.stdout));
+      && /agent id "\.\.\/\.\.\/x" is not a plain file name/.test(r10.stderr) && !/no readable transcript/.test(r10.stderr) && /^clean\tU1\ti1\t/.test(r10.stdout)
+      && /; 1 journal problem\(s\), on stderr$/.test(r10.stdout.trim()));
     const dirAsFile = runDir('dirasfile', [{ type: 'started', agentId: 'j9', label: 'U1' }, { type: 'result', agentId: 'j9', result: {} }], { j9: CLEAN });
     mkdirSync(join(dirAsFile, 'agent-zz.jsonl'));
     check('a read error names its code', /agent-zz\.jsonl: no readable transcript \(EISDIR\)/.test(cli(dirAsFile).stderr));
