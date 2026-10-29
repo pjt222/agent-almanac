@@ -153,8 +153,12 @@ export const NOTICE_PREFIX = 'Your response above was stopped';
 /** Denial causes that decide nothing on a unit that returned: routine refusals of one tool call. */
 /** The permission-rule causes that decide nothing on a unit that returned: routine refusals of one tool call. */
 export const INFORMATIONAL_CAUSES = new Set(['hook', 'rule', 'subcommandResults', 'no-decision']);
-/** The last version measured to write a permission-rule denial with no permissionDecision; from 2.1.295 on every one carries it. */
-export const NO_DECISION_UNTIL = '2.1.287';
+/**
+ * The last version measured to write a permission-rule denial with no permissionDecision, over every
+ * transcript on this machine, main sessions included (2026-10-29): every such record up to 2.1.292
+ * lacks the field, and every one from 2.1.295 on carries it.
+ */
+export const NO_DECISION_UNTIL = '2.1.292';
 
 /**
  * What a denial record says blocked the call, as `{ label, informational }`. For `permission-rule`
@@ -489,7 +493,8 @@ function verify() {
     verdictOf(denialsIn({ toolDenialKind: 'permission-rule/hook' }), { result: 'yes' }).verdict === 'undetermined'
     && verdictOf(denialsIn({ toolDenialKind: 'permission-rule/no-decision' }), { result: 'yes' }).verdict === 'undetermined');
   const undecided = (version) => verdictOf(denialsIn({ toolDenialKind: 'permission-rule', ...(version ? { version } : {}) }), { result: 'yes' });
-  check('no decision on a version up to NO_DECISION_UNTIL is the old shape and decides nothing', undecided('2.1.287').verdict === 'clean' && has(undecided('2.1.287'), /^denial:permission-rule\/no-decisionx1$/));
+  check('no decision on a version up to NO_DECISION_UNTIL is the old shape and decides nothing', undecided('2.1.292').verdict === 'clean' && has(undecided('2.1.292'), /^denial:permission-rule\/no-decisionx1$/));
+  check('no decision one version past NO_DECISION_UNTIL is already unmeasured', undecided('2.1.293').verdict === 'undetermined');
   check('no decision on a later version, or with no version, is unmeasured: undetermined', undecided('2.1.295').verdict === 'undetermined' && has(undecided('2.1.295'), /^denial:permission-rule\/missing-decisionx1$/)
     && undecided(null).verdict === 'undetermined');
   check('compareVersions orders as numbers and refuses what is not x.y.z', compareVersions('2.1.287', '2.1.287') === 0 && compareVersions('2.1.40', '2.1.287') === -1
