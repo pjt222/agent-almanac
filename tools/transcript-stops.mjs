@@ -555,7 +555,7 @@ function verify() {
     const odd = runDir('oddid', [{ type: 'started', agentId: '../../x', label: 'U9' }, { type: 'started', agentId: 'i1', label: 'U1' }, { type: 'result', agentId: 'i1', result: {} }], { i1: CLEAN });
     const r10 = cli(odd);
     check('a journal agent id that is not a plain file name is refused, not joined into a path; the others are read', r10.status === 2
-      && /agent id "\.\.\/\.\.\/x" is not a plain file name/.test(r10.stderr) && /^clean\tU1\ti1\t/.test(r10.stdout));
+      && /agent id "\.\.\/\.\.\/x" is not a plain file name/.test(r10.stderr) && !/no readable transcript/.test(r10.stderr) && /^clean\tU1\ti1\t/.test(r10.stdout));
     const dirAsFile = runDir('dirasfile', [{ type: 'started', agentId: 'j9', label: 'U1' }, { type: 'result', agentId: 'j9', result: {} }], { j9: CLEAN });
     mkdirSync(join(dirAsFile, 'agent-zz.jsonl'));
     check('a read error names its code', /agent-zz\.jsonl: no readable transcript \(EISDIR\)/.test(cli(dirAsFile).stderr));
