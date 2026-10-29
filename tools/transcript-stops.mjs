@@ -100,7 +100,9 @@
  * copied: real ones carry other work's content, and a stopped turn's content is what Step 8
  * forbids reproducing. So a runtime that renamed a stop field would make every stop read clean
  * here, with the self-test still green. After a runtime upgrade, run the tool on a transcript
- * known to hold a stop, and see it read `stop`, before trusting a `clean`.
+ * known to hold a stop, and see it read `stop`, before trusting a `clean`. To put that where the
+ * reader looks, a line before the summary counts the transcripts written by a version outside
+ * MEASURED_VERSIONS (or recording none); it changes no verdict and no exit code.
  */
 
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, rmSync, statSync, readdirSync } from 'node:fs';
@@ -110,6 +112,21 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 export const TRANSIENT_ERRORS = new Set(['rate_limit', 'server_error']);
+/** The Claude Code versions the shapes here were read over; a transcript outside them is warned about. */
+export const MEASURED_VERSIONS = ['2.1.278', '2.1.312'];
+
+/** Whether a version string falls outside MEASURED_VERSIONS, compared part by part as numbers; an unreadable one does. */
+export function outsideMeasured(version) {
+  const parts = (v) => (/^\d+\.\d+\.\d+$/.test(v) ? v.split('.').map(Number) : null);
+  const [v, low, high] = [parts(String(version)), ...MEASURED_VERSIONS.map(parts)];
+  if (v === null) return true;
+  const cmp = (a, b) => {
+    for (let i = 0; i < 3; i += 1) if (a[i] !== b[i]) return a[i] < b[i] ? -1 : 1;
+    return 0;
+  };
+  return cmp(v, low) < 0 || cmp(v, high) > 0;
+}
+
 /** The opening words of the runtime's stop notice, matched only on isMeta records (see the header). */
 export const NOTICE_PREFIX = 'Your response above was stopped';
 /** Denial causes that decide nothing on a unit that returned: routine refusals of one tool call. */
@@ -285,6 +302,8 @@ function run(paths, out = console) {
   let failures = 0;
   let noResult = 0;
   let inferredNo = 0;
+  const unmeasured = new Set();
+  let unmeasuredTranscripts = 0;
   for (const t of list) {
     let text;
     try { text = readFileSync(t.path, 'utf8'); } catch {
@@ -300,6 +319,8 @@ function run(paths, out = console) {
     }
     // With no journal to say, an agent returned when its transcript ends at end_turn: every
     // finished Agent-tool transcript measured does, and one that died or is still running does not.
+    const outside = scanned.versions.size === 0 ? ['none recorded'] : [...scanned.versions].filter(outsideMeasured);
+    if (outside.length > 0) { unmeasuredTranscripts += 1; for (const v of outside) unmeasured.add(v); }
     const inferred = t.result === '?';
     const result = inferred ? (scanned.ended === 'end_turn' ? 'yes' : 'no') : t.result;
     const { verdict, signals } = classify(scanned, { result });
@@ -307,6 +328,9 @@ function run(paths, out = console) {
     if (result === 'no') noResult += 1;
     if (result === 'no' && inferred) inferredNo += 1;
     out.log([verdict, clean(t.label || '-'), clean(t.id), `result=${result}${inferred ? '(ended)' : ''}`, `ended=${scanned.ended}`, signals.join(' ') || '-', t.path].join('\t'));
+  }
+  if (unmeasuredTranscripts > 0) {
+    out.log(`transcript-stops: ${unmeasuredTranscripts} transcript(s) written by a version outside the measured ${MEASURED_VERSIONS.join(' to ')} (${clean([...unmeasured].sort().join(', '))}): run the tool on a transcript known to hold a stop, and see it read stop, before trusting a clean`);
   }
   const order = ['stop', 'undetermined', 'transient', 'clean'];
   const counts = order.filter((v) => tally.has(v)).map((v) => `${tally.get(v)} ${v}`).join(', ') || 'none read';
@@ -322,8 +346,8 @@ function verify() {
   const NOTICE = 'Your response above was stopped by a safety classifier — this is not a tool or API error.';
   const INTERRUPT = 'Interrupted: the response that made this tool call was stopped by a safety classifier while the call was running.';
   const rec = (o) => JSON.stringify(o);
-  const asst = ({ id, uuid, stop = 'end_turn', category, content = [{ type: 'text', text: 'working' }] }) =>
-    rec({ type: 'assistant', uuid: uuid ?? `u-${id}`, version: '2.1.306', message: { id, role: 'assistant', stop_reason: stop, ...(category ? { stop_details: { type: 'refusal', category } } : {}), content } });
+  const asst = ({ id, uuid, stop = 'end_turn', category, version = '2.1.306', content = [{ type: 'text', text: 'working' }] }) =>
+    rec({ type: 'assistant', uuid: uuid ?? `u-${id}`, version, message: { id, role: 'assistant', stop_reason: stop, ...(category ? { stop_details: { type: 'refusal', category } } : {}), content } });
   const toolResult = (text, extra = {}) => rec({ type: 'user', ...extra, message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: 't1', content: text, ...(extra.toolDenialKind ? { is_error: true } : {}) }] } });
   const prompt = () => rec({ type: 'user', message: { role: 'user', content: 'the brief' } });
   const meta = (content, extra = {}) => rec({ type: 'user', isMeta: true, ...extra, message: { role: 'user', content } });
@@ -409,6 +433,9 @@ function verify() {
   check('a transcript with no assistant record is undetermined, never clean', unanswered.verdict === 'undetermined' && has(unanswered, /^no-assistant-record$/));
   const quiet = T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult('ok'));
   check('no signal, result unknown: clean; ended at the user turn', verdictOf(quiet).verdict === 'clean' && scan(quiet).ended === 'user-turn');
+  check('versions compare as numbers, ends included, and an unreadable one is outside',
+    !outsideMeasured('2.1.278') && !outsideMeasured('2.1.312') && !outsideMeasured('2.1.300') && outsideMeasured('2.1.313') && outsideMeasured('2.1.40')
+    && outsideMeasured('2.10.0') && outsideMeasured('1.9.999') && outsideMeasured('2.1') && outsideMeasured('next'));
   check('a runtime reminder (isMeta) after the last turn does not move how it ended', scan(T(prompt(), asst({ id: 'm1' }), meta('<system-reminder>x</system-reminder>'))).ended === 'end_turn');
   check('no signal and no result: undetermined (the cause is not established)', verdictOf(quiet, { result: 'no' }).verdict === 'undetermined');
   check('transient and no result: transient (the skill releases it once)', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('server_error')), { result: 'no' }).verdict === 'transient');
@@ -463,6 +490,16 @@ function verify() {
     const r4b = cli(fileA, fileB);
     check('a file with no journal that died on a server error: transient, did not return by its ending, exit 1', r4b.status === 1
       && /^transient\t-\tfb\tresult=no\(ended\)\tended=stop_sequence\t/m.test(r4b.stdout) && /1 without a result \(1 inferred from how the transcript ended\)/.test(r4b.stdout));
+    check('a run within the measured versions prints no version line', !/outside the measured/.test(r4b.stdout));
+    const fileD = join(dir, 'agent-fd.jsonl');
+    writeFileSync(fileD, T(prompt(), asst({ id: 'm1', version: '2.2.0' })));
+    const r4d = cli(fileA, fileD);
+    check('a transcript from a version outside the measured range gets a line before the summary, and the exit is unchanged', r4d.status === 0
+      && /^transcript-stops: 1 transcript\(s\) written by a version outside the measured 2\.1\.278 to 2\.1\.312 \(2\.2\.0\): /m.test(r4d.stdout)
+      && /^transcript-stops: 2 transcript\(s\): /.test(r4d.stdout.trim().split('\n').pop()));
+    const fileE = join(dir, 'agent-fe.jsonl');
+    writeFileSync(fileE, T(prompt(), rec({ type: 'assistant', message: { id: 'm1', role: 'assistant', stop_reason: 'end_turn', content: [] } })));
+    check('a transcript that records no version at all is counted the same way', /outside the measured .* \(none recorded\): /.test(cli(fileE).stdout));
     const fileC = join(dir, 'agent-fc.jsonl');
     writeFileSync(fileC, T(prompt(), asst({ id: 'm1', stop: 'tool_use' })));
     check('a file with no journal that stopped mid-turn: undetermined, exit 1', cli(fileC).status === 1 && /^undetermined\t-\tfc\tresult=no\(ended\)/.test(cli(fileC).stdout));
