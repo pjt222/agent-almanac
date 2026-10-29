@@ -38,11 +38,12 @@
  *                unreachable API) and are transient. Any other kind is printed verbatim and is
  *                not transient: an invalid_request with no refusal on it, for one, could be a
  *                request too long as easily as a flag.
- *   denial       any other toolDenialKind, printed with its cause (denialCause): for
- *                permission-rule, the permissionDecision's reasonType. A hook, a config rule or
- *                a subcommand rule refused one tool call, mostly a nudge such as grep to rg, and
- *                decides nothing on a unit that returned; neither does a permission-rule record
- *                old enough to carry no decision. A safetyCheck (a dangerousRemoval circuit
+ *   denial       any other toolDenialKind, printed by a key naming its kind and cause
+ *                (denialCause): for permission-rule, the permissionDecision's reasonType, as
+ *                `permission-rule/hook`. A hook, a config rule or a subcommand rule refused one
+ *                tool call, mostly a nudge such as grep to rg, and decides nothing on a unit that
+ *                returned; neither does a permission-rule record old enough (NO_DECISION_UNTIL)
+ *                to carry no decision. A kind spelled like one of those causes is not one. A safetyCheck (a dangerousRemoval circuit
  *                breaker among them), a user-rejected call and any cause not measured make the
  *                transcript undetermined, so the lead reads it: the maintainer's call, 2026-10-29.
  *                Beside any denial, transient API errors do not make an agent that did not
@@ -128,35 +129,46 @@ export const TRANSIENT_ERRORS = new Set(['rate_limit', 'server_error']);
 /** The Claude Code versions the shapes here were read over; a transcript outside them is warned about. */
 export const MEASURED_VERSIONS = ['2.1.278', '2.1.312'];
 
-/** Whether a version string falls outside MEASURED_VERSIONS, compared part by part as numbers; an unreadable one does. */
+/** -1, 0 or 1 comparing two x.y.z version strings part by part as numbers; null when either is not one. */
+export function compareVersions(a, b) {
+  const parts = (v) => (typeof v === 'string' && /^\d+\.\d+\.\d+$/.test(v) ? v.split('.').map(Number) : null);
+  const [x, y] = [parts(a), parts(b)];
+  if (x === null || y === null) return null;
+  for (let i = 0; i < 3; i += 1) if (x[i] !== y[i]) return x[i] < y[i] ? -1 : 1;
+  return 0;
+}
+
+/** Whether a version string falls outside MEASURED_VERSIONS; an unreadable one does. */
 export function outsideMeasured(version) {
-  const parts = (v) => (/^\d+\.\d+\.\d+$/.test(v) ? v.split('.').map(Number) : null);
-  const [v, low, high] = [parts(String(version)), ...MEASURED_VERSIONS.map(parts)];
-  if (v === null) return true;
-  const cmp = (a, b) => {
-    for (let i = 0; i < 3; i += 1) if (a[i] !== b[i]) return a[i] < b[i] ? -1 : 1;
-    return 0;
-  };
-  return cmp(v, low) < 0 || cmp(v, high) > 0;
+  const low = compareVersions(version, MEASURED_VERSIONS[0]);
+  return low === null || low < 0 || compareVersions(version, MEASURED_VERSIONS[1]) > 0;
 }
 
 /** The opening words of the runtime's stop notice, matched only on isMeta records (see the header). */
 export const NOTICE_PREFIX = 'Your response above was stopped';
 /** Denial causes that decide nothing on a unit that returned: routine refusals of one tool call. */
-export const INFORMATIONAL_DENIALS = new Set(['hook', 'rule', 'subcommandResults', 'no-decision']);
+export const INFORMATIONAL_DENIALS = new Set(['permission-rule/hook', 'permission-rule/rule', 'permission-rule/subcommandResults', 'permission-rule/no-decision']);
+/** The last version measured to write a permission-rule denial with no permissionDecision; from 2.1.295 on every one carries it. */
+export const NO_DECISION_UNTIL = '2.1.287';
 
 /**
- * What a denial record says blocked the call. For `permission-rule`, the permissionDecision's
- * reasonType, with its circuit breaker when it names one (`safetyCheck/dangerousRemoval`), or
- * `no-decision` when the record carries none (the runtime added the field after 2.1.287).
- * Any other toolDenialKind is its own cause.
+ * What a denial record says blocked the call, as a key that names its kind, so that a new kind
+ * cannot pass for a measured cause. For `permission-rule`, `permission-rule/` and the
+ * permissionDecision's reasonType, with its circuit breaker when it names one
+ * (`permission-rule/safetyCheck/dangerousRemoval`). A record with no decision is
+ * `permission-rule/no-decision` only when its version is at most NO_DECISION_UNTIL; on a later or
+ * unreadable version the field's absence is not the old shape but something unmeasured (a renamed
+ * field, say), so it is `permission-rule/missing-decision`. Any other toolDenialKind is its own key.
  */
 export function denialCause(rec) {
   if (rec.toolDenialKind !== 'permission-rule') return rec.toolDenialKind;
   const decision = rec.permissionDecision;
-  if (decision === null || typeof decision !== 'object') return 'no-decision';
+  if (decision === null || typeof decision !== 'object') {
+    const order = compareVersions(rec.version, NO_DECISION_UNTIL);
+    return order !== null && order <= 0 ? 'permission-rule/no-decision' : 'permission-rule/missing-decision';
+  }
   const type = typeof decision.reasonType === 'string' ? decision.reasonType : 'unknown';
-  return typeof decision.circuitBreaker === 'string' ? `${type}/${decision.circuitBreaker}` : type;
+  return `permission-rule/${typeof decision.circuitBreaker === 'string' ? `${type}/${decision.circuitBreaker}` : type}`;
 }
 
 /**
@@ -450,14 +462,23 @@ function verify() {
   // Denials, by the cause the record names (permissionDecision, the measured shapes).
   const decided = (reasonType, extra = {}) => ({ toolDenialKind: 'permission-rule', permissionDecision: { decision: 'reject', source: reasonType === 'hook' ? 'hook' : 'config', reasonType, reason: 'why', ...extra } });
   const denialsIn = (...extras) => T(prompt(), ...extras.flatMap((x, i) => [asst({ id: `m${i}`, stop: 'tool_use' }), toolResult('denied', x)]), asst({ id: 'last' }));
-  const nudges = verdictOf(denialsIn(decided('hook'), decided('hook', { reasonCode: 'hook:PreToolUse' }), decided('rule'), decided('subcommandResults'), { toolDenialKind: 'permission-rule' }));
+  const nudges = verdictOf(denialsIn(decided('hook'), decided('hook', { reasonCode: 'hook:PreToolUse' }), decided('rule'), decided('subcommandResults'), { toolDenialKind: 'permission-rule', version: '2.1.281' }));
   check('hook, config-rule, subcommand-rule and no-decision denials decide nothing on a returned unit, each printed with its cause', nudges.verdict === 'clean'
-    && has(nudges, /^denial:hookx2$/) && has(nudges, /^denial:rulex1$/) && has(nudges, /^denial:subcommandResultsx1$/) && has(nudges, /^denial:no-decisionx1$/));
+    && has(nudges, /^denial:permission-rule\/hookx2$/) && has(nudges, /^denial:permission-rule\/rulex1$/) && has(nudges, /^denial:permission-rule\/subcommandResultsx1$/)
+    && has(nudges, /^denial:permission-rule\/no-decisionx1$/));
   const breaker = verdictOf(denialsIn(decided('hook'), decided('safetyCheck', { reasonCode: 'safetyCheck', circuitBreaker: 'dangerousRemoval' })), { result: 'yes' });
-  check('a safetyCheck circuit breaker makes even a returned unit undetermined, printed apart from a hook', breaker.verdict === 'undetermined' && has(breaker, /^denial:safetyCheck\/dangerousRemovalx1$/) && has(breaker, /^denial:hookx1$/));
+  check('a safetyCheck circuit breaker makes even a returned unit undetermined, printed apart from a hook', breaker.verdict === 'undetermined' && has(breaker, /^denial:permission-rule\/safetyCheck\/dangerousRemovalx1$/) && has(breaker, /^denial:permission-rule\/hookx1$/));
   check('a plain safetyCheck is undetermined', verdictOf(denialsIn(decided('safetyCheck')), { result: 'yes' }).verdict === 'undetermined');
   check('a user-rejected call is undetermined', verdictOf(denialsIn({ toolDenialKind: 'user-rejected' }), { result: 'yes' }).verdict === 'undetermined');
   check('a denial kind not measured is undetermined', verdictOf(denialsIn({ toolDenialKind: 'hook-blocked' })).verdict === 'undetermined');
+  const spelledLikeCause = verdictOf(denialsIn({ toolDenialKind: 'hook' }), { result: 'yes' });
+  check('a new toolDenialKind spelled like a measured cause is not that cause: undetermined, printed by its own name', spelledLikeCause.verdict === 'undetermined' && has(spelledLikeCause, /^denial:hookx1$/));
+  const undecided = (version) => verdictOf(denialsIn({ toolDenialKind: 'permission-rule', ...(version ? { version } : {}) }), { result: 'yes' });
+  check('no decision on a version up to NO_DECISION_UNTIL is the old shape and decides nothing', undecided('2.1.287').verdict === 'clean' && has(undecided('2.1.287'), /^denial:permission-rule\/no-decisionx1$/));
+  check('no decision on a later version, or with no version, is unmeasured: undetermined', undecided('2.1.295').verdict === 'undetermined' && has(undecided('2.1.295'), /^denial:permission-rule\/missing-decisionx1$/)
+    && undecided(null).verdict === 'undetermined');
+  check('compareVersions orders as numbers and refuses what is not x.y.z', compareVersions('2.1.287', '2.1.287') === 0 && compareVersions('2.1.40', '2.1.287') === -1
+    && compareVersions('2.10.0', '2.9.9') === 1 && compareVersions(undefined, '2.1.287') === null && compareVersions('2.1', '2.1.287') === null);
   check('a permission-rule reasonType not measured is undetermined', verdictOf(denialsIn(decided('classifier'))).verdict === 'undetermined');
   const diedAfterNudge = T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult('denied', decided('hook')), apiErr('server_error'));
   check('transient errors beside a hook nudge: an agent that did not return is undetermined, never released as transient', verdictOf(diedAfterNudge, { result: 'no' }).verdict === 'undetermined');
