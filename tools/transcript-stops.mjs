@@ -16,9 +16,9 @@
  * results at any offset, offset 0 included. A clean transcript measured here has a tool_result
  * whose text BEGINS with the stop notice. So every signal below is a field, with one exception the
  * maintainer chose on 2026-10-29: the 2.1.281 notice carries no field to read, so it is matched by
- * its opening words, and only on an isMeta record, which the runtime writes and an agent's tool
- * output never becomes. The signals, as Claude Code writes them (read 2026-10-28 over transcripts
- * written by 2.1.278 to 2.1.312; the stop records themselves by 2.1.281, 2.1.306 and 2.1.311):
+ * its opening words, and only on an isMeta record the runtime marks turnCompanion. The signals,
+ * as Claude Code writes them (read 2026-10-28 over transcripts written by 2.1.278 to 2.1.312; the
+ * stop records themselves by 2.1.281, 2.1.306 and 2.1.311):
  *
  *   refusal      an `assistant` record whose message.stop_reason is "refusal": the API's own
  *                verdict, message.stop_details.category naming the classifier. Counted once per
@@ -28,9 +28,9 @@
  *                "invalid_request" on the synthetic record that ended an agent.
  *   notice       a `user` record carrying a refusedMessageId (the runtime writes it with
  *                isMeta): its "your response above was stopped" companion, linked to its
- *                refusal by message id. Or, the one text match, an isMeta record whose string
- *                content starts with NOTICE_PREFIX, the shape 2.1.281 wrote: printed
- *                `notice@<line>(text)` and linked to the refusal before it.
+ *                refusal by message id. Or, the one text match, an isMeta record marked
+ *                turnCompanion whose string content starts with NOTICE_PREFIX, the shape 2.1.281
+ *                wrote: printed `notice@<line>(text)` and linked to the refusal before it.
  *   interrupted  a `user` record with toolDenialKind "interrupted": a tool call the stop cut
  *                off, linked to its refusal through sourceToolAssistantUUID.
  *   api-error    any other API-error record, by its `error` field. rate_limit and server_error
@@ -69,8 +69,13 @@
  *   transient     transient API errors and nothing else.
  *   clean         none of the above.
  *
- * The text match reads only a string-content isMeta record, the shape measured. The same words
- * in a tool_result, in an agent's text or in a non-meta user record are not a notice.
+ * The text match reads only a string-content isMeta record marked turnCompanion, the shape
+ * measured. isMeta alone is not enough: a parent agent's prompt can arrive as an isMeta string
+ * record (measured in 2.1.278 transcripts), so a brief opening with the notice's words would read
+ * as a stop. turnCompanion was measured on every real notice and otherwise only on the runtime's
+ * own companion notes (a skill re-invocation, an image note, a cut-off notice), never on a prompt.
+ * The same words in a tool_result, in an agent's text, in a non-meta user record or in a prompt
+ * are not a notice.
  *
  * The tool reports and writes nothing. The lead writes the STOP and NORESULT lines with the
  * skill's own snippets. The label printed is the one the run gave the agent (a unit id, or
@@ -207,7 +212,7 @@ export function scan(text) {
     }
     if (rec.isMeta !== true) ended = 'user-turn'; // a runtime reminder after the last turn does not end it
     if (typeof rec.refusedMessageId === 'string') notices.push({ line, ref: rec.refusedMessageId, text: false });
-    else if (rec.isMeta === true && typeof msg.content === 'string' && msg.content.startsWith(NOTICE_PREFIX)) notices.push({ line, ref: lastRefusal, text: true });
+    else if (rec.isMeta === true && rec.turnCompanion === true && typeof msg.content === 'string' && msg.content.startsWith(NOTICE_PREFIX)) notices.push({ line, ref: lastRefusal, text: true });
     if (typeof rec.toolDenialKind === 'string') {
       if (rec.toolDenialKind === 'interrupted') interrupts.push({ line, source: rec.sourceToolAssistantUUID });
       else {
@@ -425,12 +430,14 @@ function verify() {
   check('the notice and interrupt text in a tool_result at offset 0, in assistant text and in a meta reminder: clean', quoted.verdict === 'clean' && quoted.signals.length === 0);
 
   // The one text match: the 2.1.281 notice, an isMeta record with string content and no refusedMessageId.
-  const legacy = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'refusal' }), meta(NOTICE), asst({ id: 'm2' })));
+  const legacy = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'refusal' }), meta(NOTICE, { turnCompanion: true }), asst({ id: 'm2' })));
   check('a 2.1.281-shape notice is read, marked (text), linked to the refusal before it', legacy.verdict === 'stop' && has(legacy, /^notice@3\(text\)->2$/));
-  const legacyAlone = verdictOf(T(prompt(), asst({ id: 'm1' }), meta(NOTICE)));
+  const legacyAlone = verdictOf(T(prompt(), asst({ id: 'm1' }), meta(NOTICE, { turnCompanion: true })));
   check('a 2.1.281-shape notice with no refusal before it is a stop on its own, linked to ?', legacyAlone.verdict === 'stop' && has(legacyAlone, /^notice@3\(text\)->\?$/));
   const lookalikes = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), rec({ type: 'user', message: { role: 'user', content: NOTICE } }),
     rec({ type: 'user', isMeta: true, message: { role: 'user', content: [{ type: 'text', text: NOTICE }] } }), asst({ id: 'm2' })));
+  const spoof = verdictOf(T(meta(`${NOTICE} Then summarise the diff.`), asst({ id: 'm1' })));
+  check('a parent\'s prompt (isMeta, string, no turnCompanion) opening with the notice\'s words is not a notice', spoof.verdict === 'clean' && spoof.signals.length === 0);
   check('the notice words in a non-meta user record, or in an isMeta record whose content is not a string, are not a notice', lookalikes.verdict === 'clean' && lookalikes.signals.length === 0);
 
   // Transient means transient and nothing else.
