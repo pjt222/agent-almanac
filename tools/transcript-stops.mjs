@@ -59,9 +59,10 @@
  *                 stop, since Step 8 calls a stop or interrupt notice the runtime wrote a stop;
  *                 its signal links to `?` so the missing refusal stays visible.
  *   undetermined  an API-error kind not listed above; a denial that is not informational; no
- *                 assistant record at all; an agent that did not return with transient errors
- *                 and a denial; or, in a run directory, an agent the journal started that has
- *                 no result and no other signal (the skill's "Otherwise": the cause is not
+ *                 assistant record at all; a line that is not a JSON object (a record cut short,
+ *                 a transcript still being written), which could have held any signal; an agent
+ *                 that did not return with transient errors and a denial; or an agent that did
+ *                 not return and shows no other signal (the skill's "Otherwise": the cause is not
  *                 established).
  *   transient     transient API errors and nothing else.
  *   clean         none of the above.
@@ -91,7 +92,8 @@
  * Exit 0: every transcript read, each clean or transient, and every agent returned, by its journal
  * or by its ending. 1: at least one stop or undetermined, or an agent that did not return. 2:
  * could not look — a usage error, an unreadable path, a directory with no
- * journal.jsonl, a journal that started no agent, a started agent with no transcript, or a
+ * journal.jsonl, a journal that started no agent, a journal with a line that does not parse (a
+ * started or result record may be among them), a started agent with no transcript, or a
  * transcript with no parseable line or no assistant or user record carrying a message role (the
  * format having moved). Exit 2 is never a pass, and the lines it could print are printed first.
  *
@@ -166,11 +168,12 @@ export function scan(text) {
   const apiErrors = [];
   const denials = new Map(); // kind -> count
   const versions = new Set();
-  text.split('\n').forEach((raw, index) => {
+  const unparsed = []; // a line that is not a JSON object could have held any signal
+  text.replace(/^\uFEFF/, '').split('\n').forEach((raw, index) => {
     if (raw.trim() === '') return;
     let rec;
-    try { rec = JSON.parse(raw); } catch { return; }
-    if (rec === null || typeof rec !== 'object' || Array.isArray(rec)) return;
+    try { rec = JSON.parse(raw); } catch { unparsed.push(index + 1); return; }
+    if (rec === null || typeof rec !== 'object' || Array.isArray(rec)) { unparsed.push(index + 1); return; }
     parsed += 1;
     const line = index + 1;
     if (typeof rec.version === 'string') versions.add(rec.version);
@@ -209,7 +212,7 @@ export function scan(text) {
   });
   if (parsed === 0) throw new Error('no parseable JSON line');
   if (withRole === 0) throw new Error(`${parsed} line(s) parsed, no assistant or user record carrying a message role — the transcript format may have moved`);
-  return { refusals, flagged, notices, interrupts, apiErrors, denials, uuidToMessageId, assistantRecords, ended, versions };
+  return { refusals, flagged, notices, interrupts, apiErrors, denials, uuidToMessageId, assistantRecords, ended, versions, unparsed };
 }
 
 /**
@@ -226,9 +229,10 @@ export function classify(s, { result = '?' } = {}) {
   for (const e of s.apiErrors) signals.push(`api-error@${e.line}:${e.kind}`);
   for (const [cause, count] of s.denials) signals.push(`denial:${cause}x${count}`);
   if (s.assistantRecords === 0) signals.push('no-assistant-record');
+  if (s.unparsed.length > 0) signals.push(`unparsed@${s.unparsed.slice(0, 5).join(',')}${s.unparsed.length > 5 ? `+${s.unparsed.length - 5}` : ''}`);
   let verdict;
   if (s.refusals.size > 0 || s.flagged.length > 0 || s.notices.length > 0 || s.interrupts.length > 0) verdict = 'stop';
-  else if (s.assistantRecords === 0
+  else if (s.assistantRecords === 0 || s.unparsed.length > 0
     || s.apiErrors.some((e) => !TRANSIENT_ERRORS.has(e.kind))
     || [...s.denials.keys()].some((cause) => !INFORMATIONAL_DENIALS.has(cause))) verdict = 'undetermined';
   // "Transient and nothing else": beside a denial, an agent that did not return is not released.
@@ -239,26 +243,40 @@ export function classify(s, { result = '?' } = {}) {
 
 class LookError extends Error {}
 
-/** The agents a Workflow run's journal started, as a Map of agent id -> { label, result }. */
+/**
+ * The agents a Workflow run's journal started, as `{ agents, unparsed }`: a Map of agent id ->
+ * { label, result }, and the line numbers that are not JSON objects, any of which could have been
+ * a started or result record.
+ */
 export function readJournal(text) {
   const agents = new Map();
-  for (const raw of text.split('\n')) {
-    if (raw.trim() === '') continue;
+  const unparsed = [];
+  text.replace(/^\uFEFF/, '').split('\n').forEach((raw, index) => {
+    if (raw.trim() === '') return;
     let rec;
-    try { rec = JSON.parse(raw); } catch { continue; }
-    if (rec === null || typeof rec !== 'object' || typeof rec.agentId !== 'string') continue;
+    try { rec = JSON.parse(raw); } catch { unparsed.push(index + 1); return; }
+    if (rec === null || typeof rec !== 'object' || Array.isArray(rec)) { unparsed.push(index + 1); return; }
+    if (typeof rec.agentId !== 'string') return;
     if (rec.type === 'started' && !agents.has(rec.agentId)) agents.set(rec.agentId, { label: typeof rec.label === 'string' ? rec.label : '', result: false });
     else if (rec.type === 'result') {
       const agent = agents.get(rec.agentId);
       if (agent) agent.result = true;
       else agents.set(rec.agentId, { label: '', result: true });
     }
-  }
-  return agents;
+  });
+  return { agents, unparsed };
 }
 
-/** The transcripts to read, as { path, label, id, result }; throws LookError when a run cannot be looked at. */
+/**
+ * The transcripts to read, as `{ list, problems }`: each { path, label, id, result }, and the
+ * journal problems that make the run exit 2 after its lines are printed. Throws LookError when a
+ * run cannot be looked at at all.
+ */
 function targets(paths) {
+  const problems = [];
+  const journalProblem = (path, unparsed) => {
+    if (unparsed.length > 0) problems.push(`${path}: line(s) ${unparsed.join(',')} do not parse, and a started or result record may be among them`);
+  };
   const kinds = paths.map((p) => {
     try { return statSync(p).isDirectory() ? 'dir' : 'file'; } catch { throw new LookError(`${p}: no such file or directory`); }
   });
@@ -267,39 +285,46 @@ function targets(paths) {
     const dir = paths[0];
     let journal;
     try { journal = readFileSync(join(dir, 'journal.jsonl'), 'utf8'); } catch { throw new LookError(`${dir}: no readable journal.jsonl — not a Workflow run directory; pass an Agent-tool transcript as a file`); }
-    const agents = readJournal(journal);
-    if (agents.size === 0) throw new LookError(`${dir}/journal.jsonl: no agent started`);
+    const { agents, unparsed } = readJournal(journal);
+    journalProblem(join(dir, 'journal.jsonl'), unparsed);
+    if (agents.size === 0) throw new LookError(`${dir}/journal.jsonl: no agent started${unparsed.length ? ` (line(s) ${unparsed.join(',')} do not parse)` : ''}`);
     const list = [...agents].map(([id, a]) => ({ path: join(dir, `agent-${id}.jsonl`), label: a.label, id, result: a.result ? 'yes' : 'no' }));
     for (const name of readdirSync(dir).sort()) {
       const m = /^agent-(.+)\.jsonl$/.exec(name);
       if (m && !agents.has(m[1])) list.push({ path: join(dir, name), label: '(unjournaled)', id: m[1], result: '?' });
     }
-    return list;
+    return { list, problems };
   }
   // A workflow agent's transcript passed as a file still has its run's journal beside it.
   const journals = new Map();
-  return paths.map((p) => {
+  const list = paths.map((p) => {
     const m = /agent-([^/]+)\.jsonl$/.exec(p);
     const id = m ? m[1] : '-';
     const dir = dirname(p);
     if (!journals.has(dir)) {
-      try { journals.set(dir, readJournal(readFileSync(join(dir, 'journal.jsonl'), 'utf8'))); } catch { journals.set(dir, null); }
+      let journal = null;
+      try { journal = readJournal(readFileSync(join(dir, 'journal.jsonl'), 'utf8')); } catch { /* no journal: an Agent-tool transcript */ }
+      if (journal) journalProblem(join(dir, 'journal.jsonl'), journal.unparsed);
+      journals.set(dir, journal?.agents ?? null);
     }
     const agent = journals.get(dir)?.get(id);
     return agent ? { path: p, label: agent.label, id, result: agent.result ? 'yes' : 'no' } : { path: p, label: '', id, result: '?' };
   });
+  return { list, problems };
 }
 
 const clean = (s) => String(s).replace(/[\t\n\r]/g, ' ');
 
 function run(paths, out = console) {
   let list;
-  try { list = targets(paths); } catch (e) {
+  let problems;
+  try { ({ list, problems } = targets(paths)); } catch (e) {
     if (e instanceof LookError) { out.error(`transcript-stops: ${e.message}`); return 2; }
     throw e;
   }
   const tally = new Map();
   let failures = 0;
+  for (const problem of problems) out.error(`transcript-stops: ${problem}`);
   let noResult = 0;
   let inferredNo = 0;
   const unmeasured = new Set();
@@ -334,8 +359,8 @@ function run(paths, out = console) {
   }
   const order = ['stop', 'undetermined', 'transient', 'clean'];
   const counts = order.filter((v) => tally.has(v)).map((v) => `${tally.get(v)} ${v}`).join(', ') || 'none read';
-  out.log(`transcript-stops: ${list.length} transcript(s): ${counts}; ${noResult} without a result${inferredNo ? ` (${inferredNo} inferred from how the transcript ended)` : ''}${failures ? `; ${failures} could not be read` : ''}`);
-  if (failures > 0) return 2;
+  out.log(`transcript-stops: ${list.length} transcript(s): ${counts}; ${noResult} without a result${inferredNo ? ` (${inferredNo} inferred from how the transcript ended)` : ''}${failures ? `; ${failures} could not be read` : ''}${problems.length ? `; ${problems.length} journal(s) with lines that do not parse` : ''}`);
+  if (failures > 0 || problems.length > 0) return 2;
   if (noResult > 0 || tally.has('stop') || tally.has('undetermined')) return 1;
   return 0;
 }
@@ -443,6 +468,19 @@ function verify() {
   // Could not look.
   const throws = (text) => { try { scan(text); return false; } catch { return true; } };
   check('no parseable line: throws', throws('{"partial": tru\nnot json'));
+
+  // A line that does not parse could have held any signal, so it is never read as clean.
+  const cut = (line) => line.slice(0, -1);
+  const corrupt = verdictOf(T(prompt(), cut(asst({ id: 'm1', stop: 'refusal' })), asst({ id: 'm2' })));
+  check('a record cut short mid-file is undetermined, never clean, and names its line', corrupt.verdict === 'undetermined' && has(corrupt, /^unparsed@2$/));
+  check('a truncated last line (a transcript still being written) is undetermined', verdictOf(T(prompt(), asst({ id: 'm1' }), cut(asst({ id: 'm2', stop: 'refusal' })))).verdict === 'undetermined');
+  check('a line that parses to a non-object is unparsed too', has(verdictOf(T(prompt(), 'null', '[1]', asst({ id: 'm1' }))), /^unparsed@2,3$/));
+  check('a stop beside an unparsed line is still a stop', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'refusal' }), '{"x": tru')).verdict === 'stop');
+  check('more than five unparsed lines are listed as five and a count', has(verdictOf(T(prompt(), asst({ id: 'm1' }), ...Array(7).fill('{'))), /^unparsed@3,4,5,6,7\+2$/));
+  const bom = verdictOf('\uFEFF' + T(asst({ id: 'm1', stop: 'refusal' }), asst({ id: 'm2' })));
+  check('a byte-order mark before line 1 is stripped, so a refusal there is read', bom.verdict === 'stop' && has(bom, /^refusal@1$/) && !has(bom, /^unparsed/));
+  const journal = readJournal('\uFEFF' + T(rec({ type: 'started', agentId: 'j1', label: 'L' }), '{"type": "result", "agentId": "j1"'));
+  check('a journal strips its byte-order mark and reports the lines that do not parse', journal.agents.get('j1')?.label === 'L' && JSON.stringify(journal.unparsed) === '[2]');
   check('records with no assistant or user message role (format moved): throws', throws(T(rec({ type: 'api-request', id: 'x' }), rec({ type: 'model', message: { role: 'model', content: [] } }), rec({ type: 'user', message: { content: 'no role' } }))));
 
   // The CLI, end to end.
@@ -479,6 +517,11 @@ function verify() {
     const gap = runDir('gap', [{ type: 'started', agentId: 'c1', label: 'U1' }, { type: 'started', agentId: 'c2', label: 'U2' }, { type: 'result', agentId: 'c1', result: {} }], { c1: CLEAN });
     const r3 = cli(gap);
     check('run dir: a started agent with no transcript exits 2, after printing the agents it could read', r3.status === 2 && /^clean\tU1/.test(r3.stdout) && /c2/.test(r3.stderr));
+    const cutJournal = runDir('cutjournal', [{ type: 'started', agentId: 'g1', label: 'U1' }, { type: 'result', agentId: 'g1', result: {} }], { g1: CLEAN });
+    writeFileSync(join(cutJournal, 'journal.jsonl'), readFileSync(join(cutJournal, 'journal.jsonl'), 'utf8') + '{"type":"started","agentId":"g2"');
+    const r8 = cli(cutJournal);
+    check('a journal line that does not parse exits 2, after the lines it could print, naming the line', r8.status === 2 && /^clean\tU1\tg1\t/.test(r8.stdout)
+      && /journal\.jsonl: line\(s\) 3 do not parse/.test(r8.stderr) && /1 journal\(s\) with lines that do not parse$/.test(r8.stdout.trim()));
     check('a directory with no journal.jsonl exits 2', cli(runDir('nojournal', null, { d1: CLEAN })).status === 2);
     check('a journal that started no agent exits 2', cli(runDir('empty', [{ type: 'launched' }], {})).status === 2);
     const fileA = join(dir, 'agent-fa.jsonl');
