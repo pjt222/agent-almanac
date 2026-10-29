@@ -48,11 +48,12 @@
  * into the next request, a refused turn among them, and would count each one twice.
  *
  * Verdicts, first match wins:
- *   stop          a refusal or a flagged API error. A refusal alone is enough, because its
- *                 companions depend on the version and the turn: 2.1.281 wrote the notice
- *                 without a refusedMessageId, and a turn refused while only thinking has no tool
- *                 call to interrupt.
- *   unconfirmed   a notice or an interrupt whose refusal is not in the transcript.
+ *   stop          a refusal, a flagged API error, a notice or an interrupt. Any one is enough.
+ *                 A refusal's companions depend on the version and the turn: 2.1.281 wrote the
+ *                 notice without a refusedMessageId, and a turn refused while only thinking has
+ *                 no tool call to interrupt. And a companion whose refusal is missing is still a
+ *                 stop, since Step 8 calls a stop or interrupt notice the runtime wrote a stop;
+ *                 its signal links to `?` so the missing refusal stays visible.
  *   undetermined  an API-error kind not listed above; a denial that is not informational; no
  *                 assistant record at all; an agent that did not return with transient errors
  *                 and a denial; or, in a run directory, an agent the journal started that has
@@ -81,7 +82,7 @@
  * undetermined, which is what a sweep measured on a run that was live in another session.
  *
  * Exit 0: every transcript read, each clean or transient, and every agent the journal started
- * returned a result. 1: at least one stop, unconfirmed or undetermined, or an agent with no
+ * returned a result. 1: at least one stop or undetermined, or an agent with no
  * result. 2: could not look — a usage error, an unreadable path, a directory with no
  * journal.jsonl, a journal that started no agent, a started agent with no transcript, or a
  * transcript with no parseable line or no assistant or user record carrying a message role (the
@@ -197,8 +198,7 @@ export function classify(s, { result = '?' } = {}) {
   for (const [cause, count] of s.denials) signals.push(`denial:${cause}x${count}`);
   if (s.assistantRecords === 0) signals.push('no-assistant-record');
   let verdict;
-  if (s.refusals.size > 0 || s.flagged.length > 0) verdict = 'stop';
-  else if (s.notices.length > 0 || s.interrupts.length > 0) verdict = 'unconfirmed';
+  if (s.refusals.size > 0 || s.flagged.length > 0 || s.notices.length > 0 || s.interrupts.length > 0) verdict = 'stop';
   else if (s.assistantRecords === 0
     || s.apiErrors.some((e) => !TRANSIENT_ERRORS.has(e.kind))
     || [...s.denials.keys()].some((cause) => !INFORMATIONAL_DENIALS.has(cause))) verdict = 'undetermined';
@@ -282,11 +282,11 @@ function run(paths, out = console) {
     if (t.result === 'no') noResult += 1;
     out.log([verdict, clean(t.label || '-'), clean(t.id), `result=${t.result}`, `ended=${scanned.ended}`, signals.join(' ') || '-', t.path].join('\t'));
   }
-  const order = ['stop', 'unconfirmed', 'undetermined', 'transient', 'clean'];
+  const order = ['stop', 'undetermined', 'transient', 'clean'];
   const counts = order.filter((v) => tally.has(v)).map((v) => `${tally.get(v)} ${v}`).join(', ') || 'none read';
   out.log(`transcript-stops: ${list.length} transcript(s): ${counts}; ${noResult} without a result${failures ? `; ${failures} could not be read` : ''}`);
   if (failures > 0) return 2;
-  if (noResult > 0 || ['stop', 'unconfirmed', 'undetermined'].some((v) => tally.has(v))) return 1;
+  if (noResult > 0 || tally.has('stop') || tally.has('undetermined')) return 1;
   return 0;
 }
 
@@ -334,7 +334,7 @@ function verify() {
   check('rate_limit alone: transient', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('rate_limit'))).verdict === 'transient');
   check('server_error alone: transient', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('server_error'))).verdict === 'transient');
   check('rate_limit beside a refusal: stop', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'refusal' }), apiErr('rate_limit'))).verdict === 'stop');
-  check('rate_limit beside an orphan notice: unconfirmed, not transient', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), meta(NOTICE, { refusedMessageId: 'gone' }), apiErr('rate_limit'))).verdict === 'unconfirmed');
+  check('rate_limit beside an orphan notice: a stop, not transient', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), meta(NOTICE, { refusedMessageId: 'gone' }), apiErr('rate_limit'))).verdict === 'stop');
   check('rate_limit beside an API-error kind not measured: undetermined, not transient', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('rate_limit'), apiErr('authentication_failed'))).verdict === 'undetermined');
 
   // Denials, by the cause the record names (permissionDecision, the measured shapes).
@@ -355,9 +355,9 @@ function verify() {
 
   // Orphan companions.
   const orphanNotice = verdictOf(T(prompt(), asst({ id: 'm1' }), meta(NOTICE, { refusedMessageId: 'elsewhere' })));
-  check('a notice whose refusal is not in the transcript: unconfirmed, linked to ?', orphanNotice.verdict === 'unconfirmed' && has(orphanNotice, /^notice@3->\?$/));
+  check('a notice whose refusal is not in the transcript: a stop, linked to ?', orphanNotice.verdict === 'stop' && has(orphanNotice, /^notice@3->\?$/));
   const orphanInterrupt = verdictOf(T(prompt(), asst({ id: 'm1', uuid: 'r1', stop: 'tool_use' }), toolResult(INTERRUPT, { toolDenialKind: 'interrupted', sourceToolAssistantUUID: 'r1' })));
-  check('an interrupt whose source turn was not refused: unconfirmed, linked to ?', orphanInterrupt.verdict === 'unconfirmed' && has(orphanInterrupt, /^interrupted@3->\?$/));
+  check('an interrupt whose source turn was not refused: a stop, linked to ?', orphanInterrupt.verdict === 'stop' && has(orphanInterrupt, /^interrupted@3->\?$/));
 
   // Records that are not assistant or user turns.
   const blobOnly = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), blob({ id: 'm9', role: 'assistant', stop_reason: 'refusal', content: [] }),

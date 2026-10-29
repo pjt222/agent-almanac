@@ -331,7 +331,7 @@ tools:
     language: node
     status: active
     superseded_by: null
-    description: "Reads a run's subagent transcripts by record fields, never by text, and classifies each as stop, unconfirmed, undetermined, transient or clean, naming the line of every signal; exit 1 on anything to act on, 2 when it could not look"
+    description: "Reads a run's subagent transcripts by record fields, never by text, and classifies each as stop, undetermined, transient or clean, naming the line of every signal; exit 1 on anything to act on, 2 when it could not look"
     need: "Reading every subagent transcript of a finished run by structure, for a stop an agent's own report does not admit, or for why a subagent returned nothing (decompose-into-pointer-units Step 8)."
     not_for: "recovering what a subagent wrote — that is agent-report.mjs; a Workflow review panel's findings — that is review-findings.mjs"
     invoke: "node tools/transcript-stops.mjs <session>/subagents/workflows/wf_<id>"
