@@ -48,8 +48,10 @@
  *                Beside any denial, transient API errors do not make an agent that did not
  *                return transient: Step 8's transient is "and nothing else".
  *
- * Only `assistant` and `user` records are read. `api-request-blob` records replay earlier blocks
- * into the next request, a refused turn among them, and would count each one twice.
+ * Only `assistant` and `user` records are read. The runtime writes other types beside them, none
+ * a turn: `api-request-blob` records, for one, are copies of earlier messages sent again with the
+ * next request, measured to carry `role` and `content` and no stop field. Read as turns, they would
+ * move how a transcript ended, and one carrying a turn's fields would be counted twice.
  *
  * Verdicts, first match wins:
  *   stop          a refusal, a flagged API error, a notice or an interrupt. Any one is enough.
@@ -96,16 +98,19 @@
  * started or result record may be among them), a journal agent id that is not a plain file name
  * (it would be joined into a path), a started agent with no transcript, or a
  * transcript with no parseable line or no assistant or user record carrying a message role (the
- * format having moved). Exit 2 is never a pass, and the lines it could print are printed first.
+ * format having moved). Exit 2 is never a pass, and the lines it could print are printed first:
+ * on exit 2, read every line, since a stop may be among them.
  *
  * The format belongs to another program and moves. The self-test pins the shapes measured, not
- * the runtime, and its fixtures are synthetic records in those shapes. No real transcript is
- * copied: real ones carry other work's content, and a stopped turn's content is what Step 8
- * forbids reproducing. So a runtime that renamed a stop field would make every stop read clean
- * here, with the self-test still green. After a runtime upgrade, run the tool on a transcript
- * known to hold a stop, and see it read `stop`, before trusting a `clean`. To put that where the
- * reader looks, a line before the summary counts the transcripts written by a version outside
- * MEASURED_VERSIONS (or recording none); it changes no verdict and no exit code.
+ * the runtime. Its fixtures are synthetic records, most in the shapes measured; a few are
+ * defensive variants of shapes not seen (a flagged record with no refusal beside it, a blob
+ * carrying a turn's fields), and their checks say so. No real transcript is copied: real ones
+ * carry other work's content, and a stopped turn's content is what Step 8 forbids reproducing.
+ * So a runtime that renamed a stop field would make every stop read clean here, with the
+ * self-test still green. After a runtime upgrade, run the tool on a transcript known to hold a
+ * stop, and see it read `stop`, before trusting a `clean`. To put that where the reader looks, a
+ * line before the summary counts the transcripts written by a version outside MEASURED_VERSIONS
+ * (or recording none); it changes no verdict and no exit code.
  */
 
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, rmSync, statSync, readdirSync } from 'node:fs';
@@ -408,7 +413,7 @@ function verify() {
 
   // A flagged API error: a stop with no refusal turn of its own, and beside one.
   const flaggedAlone = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('invalid_request', { stop: 'refusal' })));
-  check('an API-error record carrying stop_reason refusal is a stop on its own', flaggedAlone.verdict === 'stop' && has(flaggedAlone, /^flagged@3:invalid_request$/));
+  check('defensive, a shape not seen (both real flagged records sit beside a refusal): an API-error record carrying stop_reason refusal is a stop on its own', flaggedAlone.verdict === 'stop' && has(flaggedAlone, /^flagged@3:invalid_request$/));
   const flaggedById = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'refusal' }), apiErr('invalid_request', { rec: { refusedMessageId: 'm1' } })));
   check('an API-error record carrying a refusedMessageId is flagged, not an api-error', flaggedById.verdict === 'stop' && has(flaggedById, /^flagged@3/) && !has(flaggedById, /^api-error/));
   const plainInvalid = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('invalid_request')));
@@ -460,7 +465,9 @@ function verify() {
   // Records that are not assistant or user turns.
   const blobOnly = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), blob({ id: 'm9', role: 'assistant', stop_reason: 'refusal', content: [] }),
     rec({ type: 'api-request-blob', isMeta: true, refusedMessageId: 'm9', toolDenialKind: 'interrupted', message: { role: 'user', content: NOTICE } }), asst({ id: 'm2' })));
-  check('api-request-blob records replaying a refused turn and its companions are not read', blobOnly.verdict === 'clean' && blobOnly.signals.length === 0);
+  check('defensive, a shape not seen: api-request-blob records carrying a refused turn\'s and its companions\' fields are not read', blobOnly.verdict === 'clean' && blobOnly.signals.length === 0);
+  const blobLast = T(prompt(), asst({ id: 'm1' }), rec({ type: 'api-request-blob', agentId: 'x', hash: 'h', sessionId: 's', message: { role: 'assistant', content: [{ type: 'text', text: 'earlier' }] } }));
+  check('an api-request-blob in its measured shape (role and content only) after the last turn does not move how it ended', scan(blobLast).ended === 'end_turn');
   const streamed = verdictOf(T(prompt(), asst({ id: 'm1', uuid: 'a', stop: 'refusal', content: [{ type: 'thinking', thinking: '' }] }),
     asst({ id: 'm1', uuid: 'b', stop: 'refusal', content: [{ type: 'tool_use', name: 'Write', input: {} }] }),
     toolResult(INTERRUPT, { toolDenialKind: 'interrupted', sourceToolAssistantUUID: 'b' }), blob({ id: 'm1', role: 'assistant', stop_reason: 'refusal', content: [] })));
