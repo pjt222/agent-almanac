@@ -502,6 +502,7 @@ function verify() {
   check('a byte-order mark before line 1 is stripped, so a refusal there is read', bom.verdict === 'stop' && has(bom, /^refusal@1$/) && !has(bom, /^unparsed/));
   const journal = readJournal('\uFEFF' + T(rec({ type: 'started', agentId: 'j1', label: 'L' }), '{"type": "result", "agentId": "j1"'));
   check('a journal strips its byte-order mark and reports the lines that do not parse', journal.agents.get('j1')?.label === 'L' && JSON.stringify(journal.unparsed) === '[2]');
+  check('a journal line that parses to a non-object is reported too', JSON.stringify(readJournal(T('null', rec({ type: 'started', agentId: 'j2' }))).unparsed) === '[1]');
   const resumed = readJournal(T(rec({ type: 'started', agentId: 'k1', label: 'K' }), rec({ type: 'result', agentId: 'k1' }), rec({ type: 'started', agentId: 'k1', label: 'K2' }))).agents.get('k1');
   check('a second started after a result (a resumed run) keeps the result and the first label', resumed?.result === true && resumed?.label === 'K');
   const early = readJournal(T(rec({ type: 'result', agentId: 'k2' }), rec({ type: 'started', agentId: 'k2', label: 'L2' }))).agents.get('k2');
