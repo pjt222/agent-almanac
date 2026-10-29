@@ -11,11 +11,13 @@
  * leaves the runtime's notices to the brief. This tool is the instrument for one runtime, Claude
  * Code, and it reads record fields only.
  *
- * Why fields and never text: a subagent that reads material holding the runtime's own stop
- * strings (a CLI binary's string pool, another transcript, a page quoting one) carries them into
- * its tool results at any offset, offset 0 included. A clean transcript measured here has a
- * tool_result whose text BEGINS with the stop notice. So no signal below is a text match, not
- * even an anchored one. The signals, as Claude Code writes them (read 2026-10-28 over transcripts
+ * Why fields, not text: a subagent that reads material holding the runtime's own stop strings (a
+ * CLI binary's string pool, another transcript, a page quoting one) carries them into its tool
+ * results at any offset, offset 0 included. A clean transcript measured here has a tool_result
+ * whose text BEGINS with the stop notice. So every signal below is a field, with one exception the
+ * maintainer chose on 2026-10-29: the 2.1.281 notice carries no field to read, so it is matched by
+ * its opening words, and only on an isMeta record, which the runtime writes and an agent's tool
+ * output never becomes. The signals, as Claude Code writes them (read 2026-10-28 over transcripts
  * written by 2.1.278 to 2.1.312; the stop records themselves by 2.1.281, 2.1.306 and 2.1.311):
  *
  *   refusal      an `assistant` record whose message.stop_reason is "refusal": the API's own
@@ -26,7 +28,9 @@
  *                "invalid_request" on the synthetic record that ended an agent.
  *   notice       a `user` record carrying a refusedMessageId (the runtime writes it with
  *                isMeta): its "your response above was stopped" companion, linked to its
- *                refusal by message id.
+ *                refusal by message id. Or, the one text match, an isMeta record whose string
+ *                content starts with NOTICE_PREFIX, the shape 2.1.281 wrote: printed
+ *                `notice@<line>(text)` and linked to the refusal before it.
  *   interrupted  a `user` record with toolDenialKind "interrupted": a tool call the stop cut
  *                off, linked to its refusal through sourceToolAssistantUUID.
  *   api-error    any other API-error record, by its `error` field. rate_limit and server_error
@@ -62,8 +66,8 @@
  *   transient     transient API errors and nothing else.
  *   clean         none of the above.
  *
- * Blind spot: a notice written in the 2.1.281 shape (isMeta, no refusedMessageId) is not
- * recognised, so an orphan one reads clean. Its refusal, when present, still makes the stop.
+ * The text match reads only a string-content isMeta record, the shape measured. The same words
+ * in a tool_result, in an agent's text or in a non-meta user record are not a notice.
  *
  * The tool reports and writes nothing. The lead writes the STOP and NORESULT lines with the
  * skill's own snippets. The label printed is the one the run gave the agent (a unit id, or
@@ -103,6 +107,8 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 export const TRANSIENT_ERRORS = new Set(['rate_limit', 'server_error']);
+/** The opening words of the runtime's stop notice, matched only on isMeta records (see the header). */
+export const NOTICE_PREFIX = 'Your response above was stopped';
 /** Denial causes that decide nothing on a unit that returned: routine refusals of one tool call. */
 export const INFORMATIONAL_DENIALS = new Set(['hook', 'rule', 'subcommandResults', 'no-decision']);
 
@@ -132,6 +138,7 @@ export function scan(text) {
   let assistantRecords = 0;
   let ended = null;
   const refusals = new Map(); // message id -> { line, category }
+  let lastRefusal = null; // the message id of the latest refusal, which a text-matched notice follows
   const uuidToMessageId = new Map();
   const flagged = [];
   const notices = [];
@@ -166,10 +173,12 @@ export function scan(text) {
         const category = msg.stop_details && typeof msg.stop_details.category === 'string' ? msg.stop_details.category : null;
         refusals.set(id, { line, category });
       }
+      if (msg.stop_reason === 'refusal') lastRefusal = id;
       return;
     }
     ended = 'user-turn';
-    if (typeof rec.refusedMessageId === 'string') notices.push({ line, ref: rec.refusedMessageId });
+    if (typeof rec.refusedMessageId === 'string') notices.push({ line, ref: rec.refusedMessageId, text: false });
+    else if (rec.isMeta === true && typeof msg.content === 'string' && msg.content.startsWith(NOTICE_PREFIX)) notices.push({ line, ref: lastRefusal, text: true });
     if (typeof rec.toolDenialKind === 'string') {
       if (rec.toolDenialKind === 'interrupted') interrupts.push({ line, source: rec.sourceToolAssistantUUID });
       else {
@@ -192,7 +201,7 @@ export function classify(s, { result = '?' } = {}) {
   const signals = [];
   for (const r of s.refusals.values()) signals.push(`refusal@${r.line}${r.category ? `(${r.category})` : ''}`);
   for (const f of s.flagged) signals.push(`flagged@${f.line}:${f.kind}`);
-  for (const n of s.notices) signals.push(`notice@${n.line}->${refusalLine(n.ref) ?? '?'}`);
+  for (const n of s.notices) signals.push(`notice@${n.line}${n.text ? '(text)' : ''}->${refusalLine(n.ref) ?? '?'}`);
   for (const x of s.interrupts) signals.push(`interrupted@${x.line}->${refusalLine(s.uuidToMessageId.get(x.source)) ?? '?'}`);
   for (const e of s.apiErrors) signals.push(`api-error@${e.line}:${e.kind}`);
   for (const [cause, count] of s.denials) signals.push(`denial:${cause}x${count}`);
@@ -329,6 +338,15 @@ function verify() {
   const quoted = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult(NOTICE + '\n' + INTERRUPT),
     asst({ id: 'm2', content: [{ type: 'text', text: `${NOTICE} appears in the binary` }] }), meta('<system-reminder>\n' + NOTICE + '\n</system-reminder>')));
   check('the notice and interrupt text in a tool_result at offset 0, in assistant text and in a meta reminder: clean', quoted.verdict === 'clean' && quoted.signals.length === 0);
+
+  // The one text match: the 2.1.281 notice, an isMeta record with string content and no refusedMessageId.
+  const legacy = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'refusal' }), meta(NOTICE), asst({ id: 'm2' })));
+  check('a 2.1.281-shape notice is read, marked (text), linked to the refusal before it', legacy.verdict === 'stop' && has(legacy, /^notice@3\(text\)->2$/));
+  const legacyAlone = verdictOf(T(prompt(), asst({ id: 'm1' }), meta(NOTICE)));
+  check('a 2.1.281-shape notice with no refusal before it is a stop on its own, linked to ?', legacyAlone.verdict === 'stop' && has(legacyAlone, /^notice@3\(text\)->\?$/));
+  const lookalikes = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), rec({ type: 'user', message: { role: 'user', content: NOTICE } }),
+    rec({ type: 'user', isMeta: true, message: { role: 'user', content: [{ type: 'text', text: NOTICE }] } }), asst({ id: 'm2' })));
+  check('the notice words in a non-meta user record, or in an isMeta record whose content is not a string, are not a notice', lookalikes.verdict === 'clean' && lookalikes.signals.length === 0);
 
   // Transient means transient and nothing else.
   check('rate_limit alone: transient', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('rate_limit'))).verdict === 'transient');
