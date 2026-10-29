@@ -93,7 +93,8 @@
  * or by its ending. 1: at least one stop or undetermined, or an agent that did not return. 2:
  * could not look — a usage error, an unreadable path, a directory with no
  * journal.jsonl, a journal that started no agent, a journal with a line that does not parse (a
- * started or result record may be among them), a started agent with no transcript, or a
+ * started or result record may be among them), a journal agent id that is not a plain file name
+ * (it would be joined into a path), a started agent with no transcript, or a
  * transcript with no parseable line or no assistant or user record carrying a message role (the
  * format having moved). Exit 2 is never a pass, and the lines it could print are printed first.
  *
@@ -293,7 +294,10 @@ function targets(paths) {
     const { agents, unparsed } = readJournal(journal);
     journalProblem(join(dir, 'journal.jsonl'), unparsed);
     if (agents.size === 0) throw new LookError(`${dir}/journal.jsonl: no agent started${unparsed.length ? ` (line(s) ${unparsed.join(',')} do not parse)` : ''}`);
-    const list = [...agents].map(([id, a]) => ({ path: join(dir, `agent-${id}.jsonl`), label: a.label, id, result: a.result ? 'yes' : 'no' }));
+    // An agent id becomes part of a path, so one that is not a plain name is refused, not joined.
+    const plain = /^[A-Za-z0-9_-]+$/;
+    for (const id of agents.keys()) if (!plain.test(id)) problems.push(`${dir}/journal.jsonl: agent id ${JSON.stringify(id)} is not a plain file name; its transcript was not read`);
+    const list = [...agents].filter(([id]) => plain.test(id)).map(([id, a]) => ({ path: join(dir, `agent-${id}.jsonl`), label: a.label, id, result: a.result ? 'yes' : 'no' }));
     // Node's readdirSync already lists names in order (libuv sorts them), so this sort cannot be
     // shown wrong by a test; it keeps the order a property of this tool rather than of libuv.
     for (const name of readdirSync(dir).sort()) {
@@ -305,7 +309,7 @@ function targets(paths) {
   // A workflow agent's transcript passed as a file still has its run's journal beside it.
   const journals = new Map();
   const list = paths.map((p) => {
-    const m = /agent-([^/]+)\.jsonl$/.exec(p);
+    const m = /(?:^|[\\/])agent-([^\\/]+)\.jsonl$/.exec(p);
     const id = m ? m[1] : '-';
     const dir = dirname(p);
     if (!journals.has(dir)) {
@@ -338,8 +342,8 @@ function run(paths, out = console) {
   let unmeasuredTranscripts = 0;
   for (const t of list) {
     let text;
-    try { text = readFileSync(t.path, 'utf8'); } catch {
-      out.error(`transcript-stops: ${t.path}: no readable transcript${t.result === '?' ? '' : ` for started agent ${t.id}`}`);
+    try { text = readFileSync(t.path, 'utf8'); } catch (e) {
+      out.error(`transcript-stops: ${t.path}: no readable transcript (${e.code ?? e.message})${t.result === '?' ? '' : ` for started agent ${t.id}`}`);
       failures += 1;
       continue;
     }
@@ -541,6 +545,16 @@ function verify() {
     const r8 = cli(cutJournal);
     check('a journal line that does not parse exits 2, after the lines it could print, naming the line', r8.status === 2 && /^clean\tU1\tg1\t/.test(r8.stdout)
       && /journal\.jsonl: line\(s\) 3 do not parse/.test(r8.stderr) && /1 journal\(s\) with lines that do not parse$/.test(r8.stdout.trim()));
+    const odd = runDir('oddid', [{ type: 'started', agentId: '../../x', label: 'U9' }, { type: 'started', agentId: 'i1', label: 'U1' }, { type: 'result', agentId: 'i1', result: {} }], { i1: CLEAN });
+    const r10 = cli(odd);
+    check('a journal agent id that is not a plain file name is refused, not joined into a path; the others are read', r10.status === 2
+      && /agent id "\.\.\/\.\.\/x" is not a plain file name/.test(r10.stderr) && /^clean\tU1\ti1\t/.test(r10.stdout));
+    const dirAsFile = runDir('dirasfile', [{ type: 'started', agentId: 'j9', label: 'U1' }, { type: 'result', agentId: 'j9', result: {} }], { j9: CLEAN });
+    mkdirSync(join(dirAsFile, 'agent-zz.jsonl'));
+    check('a read error names its code', /agent-zz\.jsonl: no readable transcript \(EISDIR\)/.test(cli(dirAsFile).stderr));
+    const lookalike = join(dir, 'foo-agent-bar.jsonl');
+    writeFileSync(lookalike, CLEAN);
+    check('a file whose name only contains agent-<id> gets no id', /^clean\t-\t-\t/.test(cli(lookalike).stdout));
     check('a directory with no journal.jsonl exits 2', cli(runDir('nojournal', null, { d1: CLEAN })).status === 2);
     check('a journal that started no agent exits 2', cli(runDir('empty', [{ type: 'launched' }], {})).status === 2);
     const fileA = join(dir, 'agent-fa.jsonl');
