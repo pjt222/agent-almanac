@@ -149,28 +149,33 @@ export function outsideMeasured(version) {
 /** The opening words of the runtime's stop notice, matched only on isMeta records (see the header). */
 export const NOTICE_PREFIX = 'Your response above was stopped';
 /** Denial causes that decide nothing on a unit that returned: routine refusals of one tool call. */
-export const INFORMATIONAL_DENIALS = new Set(['permission-rule/hook', 'permission-rule/rule', 'permission-rule/subcommandResults', 'permission-rule/no-decision']);
+/** The permission-rule causes that decide nothing on a unit that returned: routine refusals of one tool call. */
+export const INFORMATIONAL_CAUSES = new Set(['hook', 'rule', 'subcommandResults', 'no-decision']);
 /** The last version measured to write a permission-rule denial with no permissionDecision; from 2.1.295 on every one carries it. */
 export const NO_DECISION_UNTIL = '2.1.287';
 
 /**
- * What a denial record says blocked the call, as a key that names its kind, so that a new kind
- * cannot pass for a measured cause. For `permission-rule`, `permission-rule/` and the
- * permissionDecision's reasonType, with its circuit breaker when it names one
- * (`permission-rule/safetyCheck/dangerousRemoval`). A record with no decision is
- * `permission-rule/no-decision` only when its version is at most NO_DECISION_UNTIL; on a later or
+ * What a denial record says blocked the call, as `{ label, informational }`. For `permission-rule`
+ * the label is `permission-rule/` and the permissionDecision's reasonType, with its circuit
+ * breaker when it names one (`permission-rule/safetyCheck/dangerousRemoval`). A record with no
+ * decision is `no-decision` only when its version is at most NO_DECISION_UNTIL; on a later or
  * unreadable version the field's absence is not the old shape but something unmeasured (a renamed
- * field, say), so it is `permission-rule/missing-decision`. Any other toolDenialKind is its own key.
+ * field, say), so it is `missing-decision`. Any other toolDenialKind is labelled by its own name.
+ * `informational` is decided from the record's kind and cause, never from the label, so a new
+ * kind spelled like a label (`hook`, or `permission-rule/hook` itself) cannot pass for one.
  */
 export function denialCause(rec) {
-  if (rec.toolDenialKind !== 'permission-rule') return rec.toolDenialKind;
+  if (rec.toolDenialKind !== 'permission-rule') return { label: rec.toolDenialKind, informational: false };
   const decision = rec.permissionDecision;
+  let cause;
   if (decision === null || typeof decision !== 'object') {
     const order = compareVersions(rec.version, NO_DECISION_UNTIL);
-    return order !== null && order <= 0 ? 'permission-rule/no-decision' : 'permission-rule/missing-decision';
+    cause = order !== null && order <= 0 ? 'no-decision' : 'missing-decision';
+  } else {
+    const type = typeof decision.reasonType === 'string' ? decision.reasonType : 'unknown';
+    cause = typeof decision.circuitBreaker === 'string' ? `${type}/${decision.circuitBreaker}` : type;
   }
-  const type = typeof decision.reasonType === 'string' ? decision.reasonType : 'unknown';
-  return `permission-rule/${typeof decision.circuitBreaker === 'string' ? `${type}/${decision.circuitBreaker}` : type}`;
+  return { label: `permission-rule/${cause}`, informational: INFORMATIONAL_CAUSES.has(cause) };
 }
 
 /**
@@ -191,7 +196,7 @@ export function scan(text) {
   const notices = [];
   const interrupts = [];
   const apiErrors = [];
-  const denials = new Map(); // kind -> count
+  const denials = new Map(); // label and whether informational -> { label, informational, count }
   const versions = new Set();
   const unparsed = []; // a line that is not a JSON object could have held any signal
   text.replace(/^\uFEFF/, '').split('\n').forEach((raw, index) => {
@@ -230,8 +235,9 @@ export function scan(text) {
     if (typeof rec.toolDenialKind === 'string') {
       if (rec.toolDenialKind === 'interrupted') interrupts.push({ line, source: rec.sourceToolAssistantUUID });
       else {
-        const cause = denialCause(rec);
-        denials.set(cause, (denials.get(cause) ?? 0) + 1);
+        const { label, informational } = denialCause(rec);
+        const key = `${informational}:${label}`;
+        denials.set(key, { label, informational, count: (denials.get(key)?.count ?? 0) + 1 });
       }
     }
   });
@@ -252,14 +258,14 @@ export function classify(s, { result = '?' } = {}) {
   for (const n of s.notices) signals.push(`notice@${n.line}${n.text ? '(text)' : ''}->${refusalLine(n.ref) ?? '?'}`);
   for (const x of s.interrupts) signals.push(`interrupted@${x.line}->${refusalLine(s.uuidToMessageId.get(x.source)) ?? '?'}`);
   for (const e of s.apiErrors) signals.push(`api-error@${e.line}:${e.kind}`);
-  for (const [cause, count] of s.denials) signals.push(`denial:${cause}x${count}`);
+  for (const d of s.denials.values()) signals.push(`denial:${d.label}x${d.count}`);
   if (s.assistantRecords === 0) signals.push('no-assistant-record');
   if (s.unparsed.length > 0) signals.push(`unparsed@${s.unparsed.slice(0, 5).join(',')}${s.unparsed.length > 5 ? `+${s.unparsed.length - 5}` : ''}`);
   let verdict;
   if (s.refusals.size > 0 || s.flagged.length > 0 || s.notices.length > 0 || s.interrupts.length > 0) verdict = 'stop';
   else if (s.assistantRecords === 0 || s.unparsed.length > 0
     || s.apiErrors.some((e) => !TRANSIENT_ERRORS.has(e.kind))
-    || [...s.denials.keys()].some((cause) => !INFORMATIONAL_DENIALS.has(cause))) verdict = 'undetermined';
+    || [...s.denials.values()].some((d) => !d.informational)) verdict = 'undetermined';
   // "Transient and nothing else": beside a denial, an agent that did not return is not released.
   else if (s.apiErrors.length > 0) verdict = s.denials.size > 0 && result !== 'yes' ? 'undetermined' : 'transient';
   else verdict = result === 'no' ? 'undetermined' : 'clean';
@@ -477,12 +483,19 @@ function verify() {
   check('a denial kind not measured is undetermined', verdictOf(denialsIn({ toolDenialKind: 'hook-blocked' })).verdict === 'undetermined');
   const spelledLikeCause = verdictOf(denialsIn({ toolDenialKind: 'hook' }), { result: 'yes' });
   check('a new toolDenialKind spelled like a measured cause is not that cause: undetermined, printed by its own name', spelledLikeCause.verdict === 'undetermined' && has(spelledLikeCause, /^denial:hookx1$/));
+  check('a new toolDenialKind spelled like a whole label (permission-rule/hook, permission-rule/no-decision) is not that cause either',
+    verdictOf(denialsIn({ toolDenialKind: 'permission-rule/hook' }), { result: 'yes' }).verdict === 'undetermined'
+    && verdictOf(denialsIn({ toolDenialKind: 'permission-rule/no-decision' }), { result: 'yes' }).verdict === 'undetermined');
   const undecided = (version) => verdictOf(denialsIn({ toolDenialKind: 'permission-rule', ...(version ? { version } : {}) }), { result: 'yes' });
   check('no decision on a version up to NO_DECISION_UNTIL is the old shape and decides nothing', undecided('2.1.287').verdict === 'clean' && has(undecided('2.1.287'), /^denial:permission-rule\/no-decisionx1$/));
   check('no decision on a later version, or with no version, is unmeasured: undetermined', undecided('2.1.295').verdict === 'undetermined' && has(undecided('2.1.295'), /^denial:permission-rule\/missing-decisionx1$/)
     && undecided(null).verdict === 'undetermined');
   check('compareVersions orders as numbers and refuses what is not x.y.z', compareVersions('2.1.287', '2.1.287') === 0 && compareVersions('2.1.40', '2.1.287') === -1
     && compareVersions('2.10.0', '2.9.9') === 1 && compareVersions(undefined, '2.1.287') === null && compareVersions('2.1', '2.1.287') === null);
+  // A record's version is read raw, so a non-string one must be refused, not crash the run.
+  let nonString;
+  try { nonString = compareVersions(['2.1.287'], '2.1.287') === null && undecided(['2.1.287']).verdict === 'undetermined'; } catch { nonString = false; }
+  check('a version that is not a string (an array spelling a version, say) is refused, and its record reads undetermined', nonString);
   check('a permission-rule reasonType not measured is undetermined', verdictOf(denialsIn(decided('classifier'))).verdict === 'undetermined');
   const diedAfterNudge = T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult('denied', decided('hook')), apiErr('server_error'));
   check('transient errors beside a hook nudge: an agent that did not return is undetermined, never released as transient', verdictOf(diedAfterNudge, { result: 'no' }).verdict === 'undetermined');
