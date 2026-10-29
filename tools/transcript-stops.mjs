@@ -75,19 +75,22 @@
  *
  * Usage:
  *   node tools/transcript-stops.mjs [--] <workflow-run-dir>       journal.jsonl plus agent-<id>.jsonl
- *   node tools/transcript-stops.mjs [--] <transcript.jsonl>...    an Agent-tool subagent's, no journal
+ *   node tools/transcript-stops.mjs [--] <transcript.jsonl>...    an Agent-tool subagent's, or any file
  *   node tools/transcript-stops.mjs --verify
  *
- * Output: one tab-separated line per transcript (verdict, label, agent id, result: yes, no, or ?
- * outside a run directory, how it ended, the signals with their line numbers, the path), then a
- * summary line.
+ * Output: one tab-separated line per transcript (verdict, label, agent id, result, how it ended,
+ * the signals with their line numbers, the path), then a summary line. The result is yes or no
+ * from the run's journal, which a transcript passed as a file is looked up in too. With no
+ * journal naming the agent it is inferred, and printed yes(ended) or no(ended): an agent
+ * returned when its transcript ends at end_turn, as every finished Agent-tool transcript measured
+ * does; one that died on an error, or is still running, ends anywhere else.
  *
  * Read a run after it has finished. An agent still running has no result yet and reads as
  * undetermined, which is what a sweep measured on a run that was live in another session.
  *
- * Exit 0: every transcript read, each clean or transient, and every agent the journal started
- * returned a result. 1: at least one stop or undetermined, or an agent with no
- * result. 2: could not look — a usage error, an unreadable path, a directory with no
+ * Exit 0: every transcript read, each clean or transient, and every agent returned, by its journal
+ * or by its ending. 1: at least one stop or undetermined, or an agent that did not return. 2:
+ * could not look — a usage error, an unreadable path, a directory with no
  * journal.jsonl, a journal that started no agent, a started agent with no transcript, or a
  * transcript with no parseable line or no assistant or user record carrying a message role (the
  * format having moved). Exit 2 is never a pass, and the lines it could print are printed first.
@@ -102,7 +105,7 @@
 
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, rmSync, statSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
@@ -176,7 +179,7 @@ export function scan(text) {
       if (msg.stop_reason === 'refusal') lastRefusal = id;
       return;
     }
-    ended = 'user-turn';
+    if (rec.isMeta !== true) ended = 'user-turn'; // a runtime reminder after the last turn does not end it
     if (typeof rec.refusedMessageId === 'string') notices.push({ line, ref: rec.refusedMessageId, text: false });
     else if (rec.isMeta === true && typeof msg.content === 'string' && msg.content.startsWith(NOTICE_PREFIX)) notices.push({ line, ref: lastRefusal, text: true });
     if (typeof rec.toolDenialKind === 'string') {
@@ -256,9 +259,17 @@ function targets(paths) {
     }
     return list;
   }
+  // A workflow agent's transcript passed as a file still has its run's journal beside it.
+  const journals = new Map();
   return paths.map((p) => {
     const m = /agent-([^/]+)\.jsonl$/.exec(p);
-    return { path: p, label: '', id: m ? m[1] : '-', result: '?' };
+    const id = m ? m[1] : '-';
+    const dir = dirname(p);
+    if (!journals.has(dir)) {
+      try { journals.set(dir, readJournal(readFileSync(join(dir, 'journal.jsonl'), 'utf8'))); } catch { journals.set(dir, null); }
+    }
+    const agent = journals.get(dir)?.get(id);
+    return agent ? { path: p, label: agent.label, id, result: agent.result ? 'yes' : 'no' } : { path: p, label: '', id, result: '?' };
   });
 }
 
@@ -273,6 +284,7 @@ function run(paths, out = console) {
   const tally = new Map();
   let failures = 0;
   let noResult = 0;
+  let inferredNo = 0;
   for (const t of list) {
     let text;
     try { text = readFileSync(t.path, 'utf8'); } catch {
@@ -286,14 +298,19 @@ function run(paths, out = console) {
       failures += 1;
       continue;
     }
-    const { verdict, signals } = classify(scanned, { result: t.result });
+    // With no journal to say, an agent returned when its transcript ends at end_turn: every
+    // finished Agent-tool transcript measured does, and one that died or is still running does not.
+    const inferred = t.result === '?';
+    const result = inferred ? (scanned.ended === 'end_turn' ? 'yes' : 'no') : t.result;
+    const { verdict, signals } = classify(scanned, { result });
     tally.set(verdict, (tally.get(verdict) ?? 0) + 1);
-    if (t.result === 'no') noResult += 1;
-    out.log([verdict, clean(t.label || '-'), clean(t.id), `result=${t.result}`, `ended=${scanned.ended}`, signals.join(' ') || '-', t.path].join('\t'));
+    if (result === 'no') noResult += 1;
+    if (result === 'no' && inferred) inferredNo += 1;
+    out.log([verdict, clean(t.label || '-'), clean(t.id), `result=${result}${inferred ? '(ended)' : ''}`, `ended=${scanned.ended}`, signals.join(' ') || '-', t.path].join('\t'));
   }
   const order = ['stop', 'undetermined', 'transient', 'clean'];
   const counts = order.filter((v) => tally.has(v)).map((v) => `${tally.get(v)} ${v}`).join(', ') || 'none read';
-  out.log(`transcript-stops: ${list.length} transcript(s): ${counts}; ${noResult} without a result${failures ? `; ${failures} could not be read` : ''}`);
+  out.log(`transcript-stops: ${list.length} transcript(s): ${counts}; ${noResult} without a result${inferredNo ? ` (${inferredNo} inferred from how the transcript ended)` : ''}${failures ? `; ${failures} could not be read` : ''}`);
   if (failures > 0) return 2;
   if (noResult > 0 || tally.has('stop') || tally.has('undetermined')) return 1;
   return 0;
@@ -392,6 +409,7 @@ function verify() {
   check('a transcript with no assistant record is undetermined, never clean', unanswered.verdict === 'undetermined' && has(unanswered, /^no-assistant-record$/));
   const quiet = T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult('ok'));
   check('no signal, result unknown: clean; ended at the user turn', verdictOf(quiet).verdict === 'clean' && scan(quiet).ended === 'user-turn');
+  check('a runtime reminder (isMeta) after the last turn does not move how it ended', scan(T(prompt(), asst({ id: 'm1' }), meta('<system-reminder>x</system-reminder>'))).ended === 'end_turn');
   check('no signal and no result: undetermined (the cause is not established)', verdictOf(quiet, { result: 'no' }).verdict === 'undetermined');
   check('transient and no result: transient (the skill releases it once)', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('server_error')), { result: 'no' }).verdict === 'transient');
 
@@ -423,7 +441,7 @@ function verify() {
     check('run dir: a stop and a no-result exit 1', r1.status === 1);
     check('run dir: one line per started agent, with its label and result', row('a1')[0] === 'clean' && row('a1')[1] === 'CL1-01' && row('a1')[3] === 'result=yes'
       && row('a2')[0] === 'stop' && row('a2')[1] === 'verify CL1-01#1' && row('a3')[0] === 'undetermined' && row('a3')[3] === 'result=no');
-    check('run dir: a transcript the journal never started is still read, labelled (unjournaled)', row('a9')[0] === 'clean' && row('a9')[1] === '(unjournaled)' && row('a9')[3] === 'result=?');
+    check('run dir: a transcript the journal never started is still read, labelled (unjournaled)', row('a9')[0] === 'clean' && row('a9')[1] === '(unjournaled)' && row('a9')[3] === 'result=yes(ended)');
     check('run dir: the summary counts every transcript and the missing result', /^transcript-stops: 4 transcript\(s\): 1 stop, 1 undetermined, 2 clean; 1 without a result$/.test(rows[rows.length - 1]));
     const green = runDir('green', [{ type: 'started', agentId: 'b1', label: 'U1' }, { type: 'result', agentId: 'b1', result: {} }, { type: 'started', agentId: 'b2', label: 'U2' }, { type: 'result', agentId: 'b2', result: {} }],
       { b1: CLEAN, b2: T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('rate_limit'), asst({ id: 'm2' })) });
@@ -440,8 +458,17 @@ function verify() {
     const fileB = join(dir, 'agent-fb.jsonl');
     writeFileSync(fileA, CLEAN);
     writeFileSync(fileB, T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('server_error')));
-    const r4 = cli(fileA, fileB);
-    check('files: clean and transient exit 0, each line with result=?', r4.status === 0 && r4.stdout.split('\n').filter((l) => /\tresult=\?\t/.test(l)).length === 2);
+    const r4 = cli(fileA);
+    check('a file with no journal, ending at end_turn: returned by its ending, exit 0', r4.status === 0 && /^clean\t-\tfa\tresult=yes\(ended\)\tended=end_turn\t/.test(r4.stdout));
+    const r4b = cli(fileA, fileB);
+    check('a file with no journal that died on a server error: transient, did not return by its ending, exit 1', r4b.status === 1
+      && /^transient\t-\tfb\tresult=no\(ended\)\tended=stop_sequence\t/m.test(r4b.stdout) && /1 without a result \(1 inferred from how the transcript ended\)/.test(r4b.stdout));
+    const fileC = join(dir, 'agent-fc.jsonl');
+    writeFileSync(fileC, T(prompt(), asst({ id: 'm1', stop: 'tool_use' })));
+    check('a file with no journal that stopped mid-turn: undetermined, exit 1', cli(fileC).status === 1 && /^undetermined\t-\tfc\tresult=no\(ended\)/.test(cli(fileC).stdout));
+    const r4c = cli(join(mixed, 'agent-a2.jsonl'), join(mixed, 'agent-a3.jsonl'));
+    check('a workflow transcript passed as a file takes its label and result from the journal beside it', r4c.status === 1
+      && /^stop\tverify CL1-01#1\ta2\tresult=yes\t/m.test(r4c.stdout) && /^undetermined\tCL1-02\ta3\tresult=no\t/m.test(r4c.stdout));
     const broken = join(dir, 'broken.jsonl');
     writeFileSync(broken, '{"partial": tru');
     // Each refusal names its own reason: an exit code alone cannot tell them apart, since an
