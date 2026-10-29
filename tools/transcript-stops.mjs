@@ -492,6 +492,8 @@ function verify() {
   check('a new toolDenialKind spelled like a whole label (permission-rule/hook, permission-rule/no-decision) is not that cause either',
     verdictOf(denialsIn({ toolDenialKind: 'permission-rule/hook' }), { result: 'yes' }).verdict === 'undetermined'
     && verdictOf(denialsIn({ toolDenialKind: 'permission-rule/no-decision' }), { result: 'yes' }).verdict === 'undetermined');
+  const mixed = verdictOf(denialsIn({ toolDenialKind: 'permission-rule/hook' }, decided('hook')), { result: 'yes' });
+  check('a look-alike kind beside a real hook denial keeps its own weight: undetermined, not merged into the hook', mixed.verdict === 'undetermined');
   const undecided = (version) => verdictOf(denialsIn({ toolDenialKind: 'permission-rule', ...(version ? { version } : {}) }), { result: 'yes' });
   check('no decision on a version up to NO_DECISION_UNTIL is the old shape and decides nothing', undecided('2.1.292').verdict === 'clean' && has(undecided('2.1.292'), /^denial:permission-rule\/no-decisionx1$/));
   check('no decision one version past NO_DECISION_UNTIL is already unmeasured', undecided('2.1.293').verdict === 'undetermined');
