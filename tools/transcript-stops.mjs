@@ -73,10 +73,12 @@
  * The text match reads only a string-content isMeta record marked turnCompanion, the shape
  * measured. isMeta alone is not enough: a parent agent's prompt can arrive as an isMeta string
  * record (measured in 2.1.278 transcripts), so a brief opening with the notice's words would read
- * as a stop. turnCompanion was measured on every real notice and otherwise only on the runtime's
- * own companion notes (a skill re-invocation, an image note, a cut-off notice), never on a prompt.
- * The same words in a tool_result, in an agent's text, in a non-meta user record or in a prompt
- * are not a notice.
+ * as a stop. Among string-content records, turnCompanion was measured on every real notice and
+ * otherwise only on the runtime's own short notes (a skill re-invocation, an image note, a cut-off
+ * notice), never on a prompt. Array-content companion records do carry authored text (a skill's
+ * body, say), which is why the match also requires string content, and why the words must open
+ * the record. The same words in a tool_result, in an agent's text, in a non-meta user record, in
+ * a prompt, in array content or later in a companion note are not a notice.
  *
  * The tool reports and writes nothing. The lead writes the STOP and NORESULT lines with the
  * skill's own snippets. The label printed is the one the run gave the agent (a unit id, or
@@ -446,7 +448,7 @@ function verify() {
 
   // The notice's text, wherever an agent can put it, is not a signal — offset 0 included.
   const quoted = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult(NOTICE + '\n' + INTERRUPT),
-    asst({ id: 'm2', content: [{ type: 'text', text: `${NOTICE} appears in the binary` }] }), meta('<system-reminder>\n' + NOTICE + '\n</system-reminder>')));
+    asst({ id: 'm2', content: [{ type: 'text', text: `${NOTICE} appears in the binary` }] }), meta('<system-reminder>\n' + NOTICE + '\n</system-reminder>', { turnCompanion: true })));
   check('the notice and interrupt text in a tool_result at offset 0, in assistant text and in a meta reminder: clean', quoted.verdict === 'clean' && quoted.signals.length === 0);
 
   // The one text match: the 2.1.281 notice, an isMeta record with string content and no refusedMessageId.
@@ -455,7 +457,7 @@ function verify() {
   const legacyAlone = verdictOf(T(prompt(), asst({ id: 'm1' }), meta(NOTICE, { turnCompanion: true })));
   check('a 2.1.281-shape notice with no refusal before it is a stop on its own, linked to ?', legacyAlone.verdict === 'stop' && has(legacyAlone, /^notice@3\(text\)->\?$/));
   const lookalikes = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), rec({ type: 'user', message: { role: 'user', content: NOTICE } }),
-    rec({ type: 'user', isMeta: true, message: { role: 'user', content: [{ type: 'text', text: NOTICE }] } }), asst({ id: 'm2' })));
+    rec({ type: 'user', isMeta: true, turnCompanion: true, message: { role: 'user', content: [{ type: 'text', text: NOTICE }] } }), asst({ id: 'm2' })));
   const spoof = verdictOf(T(meta(`${NOTICE} Then summarise the diff.`), asst({ id: 'm1' })));
   check('a parent\'s prompt (isMeta, string, no turnCompanion) opening with the notice\'s words is not a notice', spoof.verdict === 'clean' && spoof.signals.length === 0);
   const nonMetaCompanion = verdictOf(T(prompt(), asst({ id: 'm1' }), rec({ type: 'user', turnCompanion: true, message: { role: 'user', content: NOTICE } })));
