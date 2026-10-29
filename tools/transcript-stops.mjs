@@ -150,7 +150,6 @@ export function outsideMeasured(version) {
 
 /** The opening words of the runtime's stop notice, matched only on isMeta records (see the header). */
 export const NOTICE_PREFIX = 'Your response above was stopped';
-/** Denial causes that decide nothing on a unit that returned: routine refusals of one tool call. */
 /** The permission-rule causes that decide nothing on a unit that returned: routine refusals of one tool call. */
 export const INFORMATIONAL_CAUSES = new Set(['hook', 'rule', 'subcommandResults', 'no-decision']);
 /**
