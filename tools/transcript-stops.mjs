@@ -34,9 +34,15 @@
  *                unreachable API) and are transient. Any other kind is printed verbatim and is
  *                not transient: an invalid_request with no refusal on it, for one, could be a
  *                request too long as easily as a flag.
- *   denial       any other toolDenialKind. permission-rule and user-rejected are counted and
- *                decide nothing: one tool call was refused and the agent went on. A kind not
- *                measured is undetermined.
+ *   denial       any other toolDenialKind, printed with its cause (denialCause): for
+ *                permission-rule, the permissionDecision's reasonType. A hook, a config rule or
+ *                a subcommand rule refused one tool call, mostly a nudge such as grep to rg, and
+ *                decides nothing on a unit that returned; neither does a permission-rule record
+ *                old enough to carry no decision. A safetyCheck (a dangerousRemoval circuit
+ *                breaker among them), a user-rejected call and any cause not measured make the
+ *                transcript undetermined, so the lead reads it: the maintainer's call, 2026-10-29.
+ *                Beside any denial, transient API errors do not make an agent that did not
+ *                return transient: Step 8's transient is "and nothing else".
  *
  * Only `assistant` and `user` records are read. `api-request-blob` records replay earlier blocks
  * into the next request, a refused turn among them, and would count each one twice.
@@ -47,9 +53,11 @@
  *                 without a refusedMessageId, and a turn refused while only thinking has no tool
  *                 call to interrupt.
  *   unconfirmed   a notice or an interrupt whose refusal is not in the transcript.
- *   undetermined  an API-error or denial kind not listed above; no assistant record at all; or,
- *                 in a run directory, an agent the journal started that has no result and no
- *                 other signal (the skill's "Otherwise": the cause is not established).
+ *   undetermined  an API-error kind not listed above; a denial that is not informational; no
+ *                 assistant record at all; an agent that did not return with transient errors
+ *                 and a denial; or, in a run directory, an agent the journal started that has
+ *                 no result and no other signal (the skill's "Otherwise": the cause is not
+ *                 established).
  *   transient     transient API errors and nothing else.
  *   clean         none of the above.
  *
@@ -94,7 +102,22 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 export const TRANSIENT_ERRORS = new Set(['rate_limit', 'server_error']);
-export const COUNTED_DENIALS = new Set(['permission-rule', 'user-rejected']);
+/** Denial causes that decide nothing on a unit that returned: routine refusals of one tool call. */
+export const INFORMATIONAL_DENIALS = new Set(['hook', 'rule', 'subcommandResults', 'no-decision']);
+
+/**
+ * What a denial record says blocked the call. For `permission-rule`, the permissionDecision's
+ * reasonType, with its circuit breaker when it names one (`safetyCheck/dangerousRemoval`), or
+ * `no-decision` when the record carries none (the runtime added the field after 2.1.287).
+ * Any other toolDenialKind is its own cause.
+ */
+export function denialCause(rec) {
+  if (rec.toolDenialKind !== 'permission-rule') return rec.toolDenialKind;
+  const decision = rec.permissionDecision;
+  if (decision === null || typeof decision !== 'object') return 'no-decision';
+  const type = typeof decision.reasonType === 'string' ? decision.reasonType : 'unknown';
+  return typeof decision.circuitBreaker === 'string' ? `${type}/${decision.circuitBreaker}` : type;
+}
 
 /**
  * The signals in one transcript's text, as `{ refusals, flagged, notices, interrupts, apiErrors,
@@ -148,7 +171,10 @@ export function scan(text) {
     if (typeof rec.refusedMessageId === 'string') notices.push({ line, ref: rec.refusedMessageId });
     if (typeof rec.toolDenialKind === 'string') {
       if (rec.toolDenialKind === 'interrupted') interrupts.push({ line, source: rec.sourceToolAssistantUUID });
-      else denials.set(rec.toolDenialKind, (denials.get(rec.toolDenialKind) ?? 0) + 1);
+      else {
+        const cause = denialCause(rec);
+        denials.set(cause, (denials.get(cause) ?? 0) + 1);
+      }
     }
   });
   if (parsed === 0) throw new Error('no parseable JSON line');
@@ -168,15 +194,16 @@ export function classify(s, { result = '?' } = {}) {
   for (const n of s.notices) signals.push(`notice@${n.line}->${refusalLine(n.ref) ?? '?'}`);
   for (const x of s.interrupts) signals.push(`interrupted@${x.line}->${refusalLine(s.uuidToMessageId.get(x.source)) ?? '?'}`);
   for (const e of s.apiErrors) signals.push(`api-error@${e.line}:${e.kind}`);
-  for (const [kind, count] of s.denials) signals.push(`denial:${kind}x${count}`);
+  for (const [cause, count] of s.denials) signals.push(`denial:${cause}x${count}`);
   if (s.assistantRecords === 0) signals.push('no-assistant-record');
   let verdict;
   if (s.refusals.size > 0 || s.flagged.length > 0) verdict = 'stop';
   else if (s.notices.length > 0 || s.interrupts.length > 0) verdict = 'unconfirmed';
   else if (s.assistantRecords === 0
     || s.apiErrors.some((e) => !TRANSIENT_ERRORS.has(e.kind))
-    || [...s.denials.keys()].some((kind) => !COUNTED_DENIALS.has(kind))) verdict = 'undetermined';
-  else if (s.apiErrors.length > 0) verdict = 'transient';
+    || [...s.denials.keys()].some((cause) => !INFORMATIONAL_DENIALS.has(cause))) verdict = 'undetermined';
+  // "Transient and nothing else": beside a denial, an agent that did not return is not released.
+  else if (s.apiErrors.length > 0) verdict = s.denials.size > 0 && result !== 'yes' ? 'undetermined' : 'transient';
   else verdict = result === 'no' ? 'undetermined' : 'clean';
   return { verdict, signals };
 }
@@ -310,11 +337,21 @@ function verify() {
   check('rate_limit beside an orphan notice: unconfirmed, not transient', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), meta(NOTICE, { refusedMessageId: 'gone' }), apiErr('rate_limit'))).verdict === 'unconfirmed');
   check('rate_limit beside an API-error kind not measured: undetermined, not transient', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), apiErr('rate_limit'), apiErr('authentication_failed'))).verdict === 'undetermined');
 
-  // Denials.
-  const denied = verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult('denied', { toolDenialKind: 'permission-rule' }),
-    asst({ id: 'm2', stop: 'tool_use' }), toolResult('denied', { toolDenialKind: 'permission-rule' }), toolResult('no', { toolDenialKind: 'user-rejected' }), asst({ id: 'm3' })));
-  check('permission-rule and user-rejected denials are counted and decide nothing', denied.verdict === 'clean' && has(denied, /^denial:permission-rulex2$/) && has(denied, /^denial:user-rejectedx1$/));
-  check('a denial kind not measured is undetermined', verdictOf(T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult('x', { toolDenialKind: 'hook-blocked' }), asst({ id: 'm2' }))).verdict === 'undetermined');
+  // Denials, by the cause the record names (permissionDecision, the measured shapes).
+  const decided = (reasonType, extra = {}) => ({ toolDenialKind: 'permission-rule', permissionDecision: { decision: 'reject', source: reasonType === 'hook' ? 'hook' : 'config', reasonType, reason: 'why', ...extra } });
+  const denialsIn = (...extras) => T(prompt(), ...extras.flatMap((x, i) => [asst({ id: `m${i}`, stop: 'tool_use' }), toolResult('denied', x)]), asst({ id: 'last' }));
+  const nudges = verdictOf(denialsIn(decided('hook'), decided('hook', { reasonCode: 'hook:PreToolUse' }), decided('rule'), decided('subcommandResults'), { toolDenialKind: 'permission-rule' }));
+  check('hook, config-rule, subcommand-rule and no-decision denials decide nothing on a returned unit, each printed with its cause', nudges.verdict === 'clean'
+    && has(nudges, /^denial:hookx2$/) && has(nudges, /^denial:rulex1$/) && has(nudges, /^denial:subcommandResultsx1$/) && has(nudges, /^denial:no-decisionx1$/));
+  const breaker = verdictOf(denialsIn(decided('hook'), decided('safetyCheck', { reasonCode: 'safetyCheck', circuitBreaker: 'dangerousRemoval' })), { result: 'yes' });
+  check('a safetyCheck circuit breaker makes even a returned unit undetermined, printed apart from a hook', breaker.verdict === 'undetermined' && has(breaker, /^denial:safetyCheck\/dangerousRemovalx1$/) && has(breaker, /^denial:hookx1$/));
+  check('a plain safetyCheck is undetermined', verdictOf(denialsIn(decided('safetyCheck')), { result: 'yes' }).verdict === 'undetermined');
+  check('a user-rejected call is undetermined', verdictOf(denialsIn({ toolDenialKind: 'user-rejected' }), { result: 'yes' }).verdict === 'undetermined');
+  check('a denial kind not measured is undetermined', verdictOf(denialsIn({ toolDenialKind: 'hook-blocked' })).verdict === 'undetermined');
+  check('a permission-rule reasonType not measured is undetermined', verdictOf(denialsIn(decided('classifier'))).verdict === 'undetermined');
+  const diedAfterNudge = T(prompt(), asst({ id: 'm1', stop: 'tool_use' }), toolResult('denied', decided('hook')), apiErr('server_error'));
+  check('transient errors beside a hook nudge: an agent that did not return is undetermined, never released as transient', verdictOf(diedAfterNudge, { result: 'no' }).verdict === 'undetermined');
+  check('transient errors beside a hook nudge: an agent that returned stays transient', verdictOf(diedAfterNudge, { result: 'yes' }).verdict === 'transient');
 
   // Orphan companions.
   const orphanNotice = verdictOf(T(prompt(), asst({ id: 'm1' }), meta(NOTICE, { refusedMessageId: 'elsewhere' })));
