@@ -257,8 +257,13 @@ export function readJournal(text) {
     try { rec = JSON.parse(raw); } catch { unparsed.push(index + 1); return; }
     if (rec === null || typeof rec !== 'object' || Array.isArray(rec)) { unparsed.push(index + 1); return; }
     if (typeof rec.agentId !== 'string') return;
-    if (rec.type === 'started' && !agents.has(rec.agentId)) agents.set(rec.agentId, { label: typeof rec.label === 'string' ? rec.label : '', result: false });
-    else if (rec.type === 'result') {
+    if (rec.type === 'started') {
+      // A second started (a resumed run) keeps the result; one after its result supplies the label.
+      const label = typeof rec.label === 'string' ? rec.label : '';
+      const agent = agents.get(rec.agentId);
+      if (!agent) agents.set(rec.agentId, { label, result: false });
+      else if (agent.label === '') agent.label = label;
+    } else if (rec.type === 'result') {
       const agent = agents.get(rec.agentId);
       if (agent) agent.result = true;
       else agents.set(rec.agentId, { label: '', result: true });
@@ -289,6 +294,8 @@ function targets(paths) {
     journalProblem(join(dir, 'journal.jsonl'), unparsed);
     if (agents.size === 0) throw new LookError(`${dir}/journal.jsonl: no agent started${unparsed.length ? ` (line(s) ${unparsed.join(',')} do not parse)` : ''}`);
     const list = [...agents].map(([id, a]) => ({ path: join(dir, `agent-${id}.jsonl`), label: a.label, id, result: a.result ? 'yes' : 'no' }));
+    // Node's readdirSync already lists names in order (libuv sorts them), so this sort cannot be
+    // shown wrong by a test; it keeps the order a property of this tool rather than of libuv.
     for (const name of readdirSync(dir).sort()) {
       const m = /^agent-(.+)\.jsonl$/.exec(name);
       if (m && !agents.has(m[1])) list.push({ path: join(dir, name), label: '(unjournaled)', id: m[1], result: '?' });
@@ -484,6 +491,10 @@ function verify() {
   check('a byte-order mark before line 1 is stripped, so a refusal there is read', bom.verdict === 'stop' && has(bom, /^refusal@1$/) && !has(bom, /^unparsed/));
   const journal = readJournal('\uFEFF' + T(rec({ type: 'started', agentId: 'j1', label: 'L' }), '{"type": "result", "agentId": "j1"'));
   check('a journal strips its byte-order mark and reports the lines that do not parse', journal.agents.get('j1')?.label === 'L' && JSON.stringify(journal.unparsed) === '[2]');
+  const resumed = readJournal(T(rec({ type: 'started', agentId: 'k1', label: 'K' }), rec({ type: 'result', agentId: 'k1' }), rec({ type: 'started', agentId: 'k1', label: 'K2' }))).agents.get('k1');
+  check('a second started after a result (a resumed run) keeps the result and the first label', resumed?.result === true && resumed?.label === 'K');
+  const early = readJournal(T(rec({ type: 'result', agentId: 'k2' }), rec({ type: 'started', agentId: 'k2', label: 'L2' }))).agents.get('k2');
+  check('a result before its started keeps the result and takes the label', early?.result === true && early?.label === 'L2');
   check('records with no assistant or user message role (format moved): throws', throws(T(rec({ type: 'api-request', id: 'x' }), rec({ type: 'model', message: { role: 'model', content: [] } }), rec({ type: 'user', message: { content: 'no role' } }))));
 
   // The CLI, end to end.
@@ -519,7 +530,12 @@ function verify() {
     check('run dir: a transient agent with no result exits 1 — the missing result alone decides it', r5.status === 1 && /^transient\tU1\te1\tresult=no\t/.test(r5.stdout));
     const gap = runDir('gap', [{ type: 'started', agentId: 'c1', label: 'U1' }, { type: 'started', agentId: 'c2', label: 'U2' }, { type: 'result', agentId: 'c1', result: {} }], { c1: CLEAN });
     const r3 = cli(gap);
-    check('run dir: a started agent with no transcript exits 2, after printing the agents it could read', r3.status === 2 && /^clean\tU1/.test(r3.stdout) && /c2/.test(r3.stderr));
+    check('run dir: a started agent with no transcript exits 2, after printing the agents it could read', r3.status === 2 && /^clean\tU1/.test(r3.stdout) && /c2/.test(r3.stderr)
+      && /; 1 could not be read$/.test(r3.stdout.trim()));
+    const many = runDir('unjournaled', [{ type: 'started', agentId: 'h0', label: 'U0' }, { type: 'result', agentId: 'h0', result: {} }],
+      Object.fromEntries(['h0', 'h5', 'h3', 'h1', 'h4', 'h2'].map((id) => [id, CLEAN]))); // created out of name order
+    const unjournaledOrder = cli(many).stdout.split('\n').filter((l) => l.includes('(unjournaled)')).map((l) => l.split('\t')[2]).join(',');
+    check('unjournaled transcripts are read in name order, whatever order the directory lists them in', unjournaledOrder === 'h1,h2,h3,h4,h5');
     const cutJournal = runDir('cutjournal', [{ type: 'started', agentId: 'g1', label: 'U1' }, { type: 'result', agentId: 'g1', result: {} }], { g1: CLEAN });
     writeFileSync(join(cutJournal, 'journal.jsonl'), readFileSync(join(cutJournal, 'journal.jsonl'), 'utf8') + '{"type":"started","agentId":"g2"');
     const r8 = cli(cutJournal);
