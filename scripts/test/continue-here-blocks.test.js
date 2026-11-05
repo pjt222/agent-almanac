@@ -642,8 +642,10 @@ test('archive: nearest first — project CLAUDE.md, parent CLAUDE.md, user-level
   try {
     for (const level of order) dirs[level] = join(tree.base, `arch-${level}`);
     // CRLF on the project line: a CLAUDE.md saved on NTFS must not name "<dir>\r".
-    levels.project = `# x\n\`Handoff archive:\` in prose does not count\nHandoff archive: ${dirs.project}\r\n`;
+    // The prose line comes first and carries the literal mid-line: an unanchored match would take it.
+    levels.project = `# x\nprose that mentions Handoff archive: /wrong/dir does not count\nHandoff archive: ${dirs.project}\r\n`;
     for (const level of order.slice(1)) levels[level] = `Handoff archive: ${dirs[level]}\n`;
+    levels.user = `Handoff archive: ${dirs.user}`; // no trailing newline: `read` still yields the last line
     for (const [index, winner] of order.entries()) {
       const fresh = archiveTree(Object.fromEntries(order.slice(index).map((l) => [l, levels[l]])));
       try {
@@ -751,7 +753,12 @@ test('Verified: write lists exactly three values, and read and verify spell the 
   // read-continue-here decides whether to re-confirm by matching this value, and
   // verify-continue-here writes it. A respelling in either leaves a handoff that passed the gate
   // re-confirmed for nothing, or one that did not pass trusted.
-  const values = [...read(WRITE).matchAll(/^- `((?:single pass|verify-handoff round|not run)[^`]*)`/gm)].map((m) => m[1]);
+  const text = read(WRITE);
+  const anchor = text.indexOf('Record exactly one `Verified:` value:');
+  assert.ok(anchor >= 0, `${WRITE} no longer introduces its Verified: values with the expected sentence`);
+  const list = text.slice(anchor).split('\n\n')[1].split('\n');
+  const values = list.map((line) => line.match(/^- `([^`]*)`/)?.[1]);
+  assert.ok(values.every(Boolean), `every item of the Verified: list must open with a backticked value:\n${list.join('\n')}`);
   assert.deepEqual(values, [
     'single pass, N blocking applied, coverage <complete|incomplete>, findings <file>',
     'verify-handoff round N, 0 blocking, coverage complete',
