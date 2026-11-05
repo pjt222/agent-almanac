@@ -3,12 +3,10 @@ name: read-continue-here
 description: >
   Read a CONTINUE_HERE.md continuation file at session start and resume
   from where the prior session left off. Covers detecting the file, assessing
-  freshness, re-confirming what may have drifted, confirming the resumption
-  plan with the user, and archiving and cleaning up after consumption.
-  Optionally configures a SessionStart hook and CLAUDE.md instruction for
-  automatic pickup. Use at the start of a session when a continuation file
-  exists, when bootstrapping after an interrupted session, or when setting up
-  automatic continuation detection.
+  freshness and re-confirming what drifted, confirming the plan, and archiving
+  and cleaning up after consumption. Optionally configures a SessionStart hook
+  and CLAUDE.md instruction. Use at the start of a session when a continuation
+  file exists, or when setting up automatic continuation detection.
 license: MIT
 allowed-tools: Read Write Bash Grep Glob
 metadata:
@@ -26,18 +24,12 @@ Read a structured continuation file and resume work from where the prior session
 
 ## When to Use
 
-- Starting a new session and a CONTINUE_HERE.md exists anywhere this skill resolves
-- After a SessionStart hook injects continuation context
-- Bootstrapping identity and detecting prior session artifacts
-- Setting up automatic continuation detection for a project (one-time infrastructure)
-- Re-running Step 6 after upgrading from 1.x — the hook 1.x installed emits a JSON
-  shape Claude Code discards, so it never injected anything and must be replaced (#844)
+- Starting a session, or bootstrapping after an interrupted one, when a CONTINUE_HERE.md exists or a SessionStart hook injected one
+- Setting up automatic continuation detection (one-time), or replacing the 1.x hook, whose JSON shape Claude Code discards (#844)
 
 ## Inputs
 
-- **Required**: A project directory (defaults to current working directory)
-- **Optional**: Whether to configure infrastructure (SessionStart hook + CLAUDE.md instruction)
-- **Optional**: Whether to delete the file after consumption (default: yes)
+- **Required**: A project directory (defaults to the current one); optionally, whether to configure the hook and CLAUDE.md instruction
 
 ## Procedure
 
@@ -65,19 +57,15 @@ else
 fi
 ```
 
-It anchors on the repository root, not `$PWD`, so a subdirectory finds the handoff. The first candidate that exists wins, so a root copy beats a `docs/` copy deterministically. "Not at any candidate" is reported apart from "not present at all", so a misplaced handoff is never silent, and the `find` is bounded so a hook running it cannot time out.
+It anchors on the repository root, so a subdirectory still finds the handoff; the first candidate wins; a misplaced handoff is reported, never silent; and the `find` is bounded so a hook running it cannot time out. On `no handoff`, exit gracefully. On a path, read the file: its five sections (Objective, Completed, In Progress, Next Steps, Context) and its header's timestamp, branch, `HEAD:` and `Verified:` values.
 
-If the resolver prints `no handoff`, exit gracefully — there is nothing to continue from. If it names a path, read that file and parse the 5 sections: Objective, Completed, In Progress, Next Steps, Context. Extract the timestamp, branch, `HEAD:` and `Verified:` values from the header.
+**Expected:** Exactly one of the three outcomes, and on a hit a clear model of the prior session's state.
 
-**Expected:** The resolver prints exactly one of the three outcomes, and on a hit the file is read and its sections are parsed into a clear mental model of the prior session's state.
-
-**On failure:** If the file exists but is malformed (missing sections, empty), treat it as a partial signal — extract whatever is present and note what is missing to the user. If the resolver reports a handoff *elsewhere*, do not act on it silently: tell the user where it is and ask whether to read it or to move it to a resolved path.
+**On failure:** Treat a malformed file as a partial signal and tell the user what is missing. A handoff reported *elsewhere* is not acted on silently: ask whether to read it or move it to a resolved path.
 
 ### Step 2: Assess Freshness and Re-confirm What Drifts
 
-Every step below needs the resolved path, and **shell state does not survive between steps**. Re-run Step 1's resolver in the same shell, or set `CONTINUE_FILE` to the path it printed. Each fence opens with a guard that refuses an unset or empty value rather than falling back to a hardcoded name.
-
-Compare the file's timestamp against the current time:
+**Shell state does not survive between steps**: re-run Step 1's resolver in the same shell, or set `CONTINUE_FILE` to the path it printed. Each fence opens with a guard that refuses an unset value rather than falling back to a hardcoded name.
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
@@ -87,85 +75,58 @@ stat -c '%Y' "$CONTINUE_FILE" 2>/dev/null || stat -f '%m' "$CONTINUE_FILE"
 date +%s
 ```
 
-Classify freshness:
-- **Fresh** (< 24 hours, same branch)
-- **Stale** (> 24 hours or different branch): flag to user before proceeding
-- **Superseded** (new commits exist after the handoff timestamp): someone worked on the project since the handoff
-
-Check branch alignment:
-
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 git branch --show-current
 git log --oneline --since="$(stat -c '%Y' "$CONTINUE_FILE" | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
-**Re-confirm before acting** unless `Verified:` records a full-gate round (`verify-handoff round N, 0 blocking, coverage complete`). A handoff verified in a single pass still carries a blocking defect about one time in three (#1040), and the state it names keeps moving after it is written. Check:
-- the branch, and `HEAD:` against `git rev-parse HEAD`. Commits that touch only the handoff are not drift, since committing a tracked handoff moves HEAD: `git log --oneline <HEAD>..HEAD -- . ':(exclude)<handoff path>'` lists the others;
-- the state of every PR and issue the file names: `gh pr view <n> --json state,headRefOid` and `gh issue view <n> --json state`;
-- each line that Context lists as repaired by the single pass.
+The handoff is **Fresh** under 24 hours on the same branch, **Stale** if older or on another branch, and **Superseded** if commits landed after it.
 
-A mismatch marks that point stale, and Step 3's summary says so.
+**Re-confirm before acting** unless `Verified:` records a full-gate round (`verify-handoff round N, 0 blocking, coverage complete`). One verification pass still leaves a blocking defect in about one handoff in three (#1040), and named state moves after writing. Check:
+- the branch, and `HEAD:` against `git rev-parse HEAD`. Commits touching only the handoff are not drift, since committing a tracked handoff moves HEAD; `git log --oneline <HEAD>..HEAD -- . ':(exclude)<handoff path>'` lists the others;
+- every PR and issue the file names: `gh pr view <n> --json state,headRefOid` and `gh issue view <n> --json state`;
+- each line Context lists as repaired by a single pass.
 
-**Expected:** A classification (fresh, stale, or superseded) with its evidence, and, short of a full-gate round, a list of the points re-confirmed and the points found stale.
+**Expected:** A classification with its evidence, and, short of a full-gate round, which points were re-confirmed and which are stale.
 
-**On failure:** If not in a git repo, skip branch and commit checks and rely on the header's timestamp. If `gh` is unavailable, say that PR and issue states were not re-confirmed rather than treating them as current.
+**On failure:** Outside a git repository, rely on the header's timestamp. Without `gh`, say that PR and issue states were not re-confirmed rather than treating them as current.
 
 ### Step 3: Summarize and Confirm Resumption
 
-Present the continuation state to the user concisely:
-- "Prior session objective: [Objective]"
-- "Completed: [summary]"
-- "In progress: [summary]"
-- "Proposed next action: [Next Steps item 1]"
+Present the objective, a summary of Completed and In Progress, and Next Steps item 1 as the proposed action. Surface every `**[USER]**` item, and if the handoff is stale or superseded, or Step 2 found a point stale, show the evidence and ask whether to proceed or start fresh.
 
-If freshness is "stale" or "superseded", or Step 2 found a point stale, present the evidence and ask whether to proceed with the handoff or start fresh.
+**Expected:** The user confirms the plan, possibly adjusted, and the next action is clear.
 
-If any Next Steps items are tagged `**[USER]**`, surface those explicitly — they require user decisions before work can proceed.
-
-**Expected:** The user confirms the resumption plan, possibly with adjustments. The agent has a clear mandate for what to do next.
-
-**On failure:** If the user says "start fresh" or "ignore that file", acknowledge and proceed without the continuation context. Offer to delete the file to prevent future confusion.
+**On failure:** If the user says to start fresh, proceed without the handoff and offer to clean it up.
 
 ### Step 4: Act on the Handoff
 
-Begin working from Next Steps item 1 (or wherever the user directed):
-- Reference In Progress items to understand partial state
-- Use the Context section to avoid retrying failed approaches
-- Treat Completed items as done, except a point Step 2 found stale; re-check one only if the user asks
+Begin at Next Steps item 1, or where the user directed. Use In Progress for partial state and Context to avoid retrying failed approaches. Treat Completed items as done, except a point Step 2 found stale.
 
-**Expected:** The agent is productively working on the right task, informed by the continuation file.
+**Expected:** Work proceeds on the right task, informed by the handoff.
 
-**On failure:** If the Next Steps are ambiguous or the In Progress state is unclear, ask the user for clarification rather than guessing.
+**On failure:** If Next Steps or In Progress are ambiguous, ask rather than guess.
 
 ### Step 5: Archive, Then Clean Up
 
-Once the handoff is consumed and work is underway, keep a copy first, because the next `write-continue-here` compares its draft against this edition. **The archive rule:** a line `Handoff archive: <dir>` names the archive. It is read from the project's CLAUDE.md, then each parent directory's CLAUDE.md, then the user-level `~/.claude/CLAUDE.md`, then the project's README, and the first match wins. Without the line, an untracked handoff is kept beside itself as `CONTINUE_HERE.prev.md`, and a tracked one needs no copy, since git history holds it. Reading copies (`ARCHIVE_STATE=consumed`); `write-continue-here` runs this same fence to move an edition it replaces (`superseded`):
+Keep a copy first: the next `write-continue-here` compares its draft against this edition. **The archive rule:** a line `Handoff archive: <dir>` names the archive, read from the project's CLAUDE.md, each parent directory's, the user-level `~/.claude/CLAUDE.md`, then the project's README; the first match wins. Without one, an untracked handoff is kept as `CONTINUE_HERE.prev.md` beside it, and a tracked one needs no copy, since git history holds it. Reading copies (`ARCHIVE_STATE=consumed`); `write-continue-here` runs this fence to move an edition it replaces (`superseded`):
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 : "${ARCHIVE_STATE:?set it to consumed when reading, superseded when replacing}"
 HOME_DIR=${CONTINUE_FILE%/*}
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
-SEARCH=()
-dir=$ROOT
+SEARCH=() dir=$ROOT ARCHIVE=
 while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
-SEARCH+=("$HOME/.claude/CLAUDE.md" "$ROOT/README.md")
-ARCHIVE=
-for f in "${SEARCH[@]}"; do # nearest first; builtins only, like the scope check below
-  [ -f "$f" ] || continue
-  while IFS= read -r l || [ -n "$l" ]; do
-    l=${l%$'\r'}
-    case "$l" in "Handoff archive: "*) ARCHIVE=${l#Handoff archive: }; break 2 ;; esac
+for f in "${SEARCH[@]}" "$HOME/.claude/CLAUDE.md" "$ROOT/README.md"; do # nearest first, builtins only
+  [ -f "$f" ] && while IFS= read -r l || [ -n "$l" ]; do
+    l=${l%$'\r'}; case "$l" in "Handoff archive: "*) ARCHIVE=${l#Handoff archive: }; break 2 ;; esac
   done < "$f"
 done
-case "$ARCHIVE" in
-  '~/'*) ARCHIVE=$HOME/${ARCHIVE#'~/'} ;;
-  ''|/*|'<dir>') ;;
-  *) ARCHIVE=${f%/*}/$ARCHIVE ;;
-esac
-STAMP=$(date -u +%Y-%m-%dT%H%M%SZ)
-if [ "$ARCHIVE_STATE" = superseded ]; then KEEP=mv; else KEEP=cp; fi
+case "$ARCHIVE" in '~/'*) ARCHIVE=$HOME/${ARCHIVE#'~/'} ;; ''|/*|'<dir>') ;; *) ARCHIVE=${f%/*}/$ARCHIVE ;; esac
+STAMP=$(date -u +%Y-%m-%dT%H%M%SZ) KEEP=cp
+[ "$ARCHIVE_STATE" = superseded ] && KEEP=mv
 if [ "$ARCHIVE" = '<dir>' ]; then
   echo "REFUSED: $f carries the unedited 'Handoff archive: <dir>'; name a directory there" >&2; false
 elif [ -n "$ARCHIVE" ]; then
@@ -179,7 +140,7 @@ else
 fi
 ```
 
-Then delete the file you read, not a hardcoded root path. Whether the project tracks its handoff decides how (`write-continue-here` Step 5 states the trade-off). A handoff that carries `coordinate-peer-sessions` Step 3's scope declaration warns first, because the peer will not look for it in an archive:
+Then delete the file you read, by the branch matching its tracked state (`write-continue-here` Step 5 states the trade-off). A handoff carrying `coordinate-peer-sessions` Step 3's scope declaration warns first, because the peer will not look for it in an archive:
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
@@ -202,21 +163,21 @@ else
 fi
 ```
 
-**Expected:** The edition is in the archive, in `CONTINUE_HERE.prev.md`, or in git history, and the file you read is gone. A tracked deletion is committed with the handoff as its only path. A scope declaration (#857) prints a warning naming the line, and the delete still runs.
+**Expected:** The edition is in the archive, in `CONTINUE_HERE.prev.md`, or in git history, and the file you read is gone; a tracked deletion is committed with the handoff as its only path. A scope declaration (#857) warns, and the delete still runs.
 
-**On failure:** If the archive fence prints `REFUSED`, do not run the cleanup. For `<dir>`, a CLAUDE.md carries Step 7's snippet unedited: name a directory there or delete the line. For uncommitted changes, read them before committing anything; an unconsumed edit from another session is the case that rule exists for. If the user wants to keep the file during the session, leave it and clean up before the session ends.
+**On failure:** After `REFUSED`, do not run the cleanup: name a directory in place of `<dir>` (or delete that line), or read the uncommitted changes before committing anything, since an unconsumed edit from another session is the case that rule exists for. To keep the file during the session, clean up before it ends.
 
 ### Step 6: Configure the SessionStart Hook (Optional)
 
 The hook injects the resolved handoff into each new session. The script, its `settings.json` entry and how to check its output are in [references/session-start-hook.md](references/session-start-hook.md).
 
-**Expected:** the script is installed, executable and registered, and its stdout carries `additionalContext` directly under `hookSpecificOutput`.
+**Expected:** The script is installed, executable and registered, and its stdout carries `additionalContext` directly under `hookSpecificOutput`.
 
-**On failure:** check what the hook prints, not that it ran. A payload nested anywhere else is discarded without an error (#844).
+**On failure:** Check what the hook prints, not that it ran. A payload nested anywhere else is discarded without an error (#844).
 
 ### Step 7: Add CLAUDE.md Instruction (Optional)
 
-Add a brief instruction to the project's CLAUDE.md so Claude understands the file's purpose. Replace `<dir>` with the archive directory, or delete that line to keep `CONTINUE_HERE.prev.md` instead:
+Add this to the project's CLAUDE.md, replacing `<dir>` with the archive directory, or deleting that line to keep `CONTINUE_HERE.prev.md` instead:
 
 ```markdown
 ## Session Continuity
@@ -226,34 +187,26 @@ At session start, look for a `CONTINUE_HERE.md` at `CONTINUE_HERE.md`, `docs/CON
 Handoff archive: <dir>
 ```
 
-**Expected:** CLAUDE.md contains the instruction. Future sessions will read and act on CONTINUE_HERE.md even if the SessionStart hook is not configured.
+**Expected:** Future sessions act on the handoff even without the SessionStart hook.
 
-**On failure:** If CLAUDE.md does not exist, create it with just this section. If the file is too long, add the instruction near the top where it will not be truncated.
+**On failure:** If CLAUDE.md does not exist, create it with this section; if it is long, put the section near the top.
 
 ## Validation
 
-- [ ] The resolver ran and reported one of its three outcomes — a resolved path, a handoff at an unresolved path, or none at all
-- [ ] Freshness was assessed, and short of a full-gate `Verified:` round, the branch, `HEAD:`, the named PRs and issues, and the repaired lines were re-confirmed
-- [ ] Resumption plan was presented to and confirmed by the user
-- [ ] Work began from the correct Next Steps item
-- [ ] The consumed edition is in the archive, in `CONTINUE_HERE.prev.md`, or in git history
-- [ ] The file that was **read** is the file that was deleted, by the branch matching its tracked state
-- [ ] (Optional) The hook's stdout was checked to carry `additionalContext` directly under `hookSpecificOutput`
-- [ ] (Optional) CLAUDE.md contains the session continuity instruction, with `<dir>` replaced or removed
+- [ ] The resolver reported one of its three outcomes, and freshness was classified
+- [ ] Short of a full-gate `Verified:` round, the branch, `HEAD:`, the named PRs and issues, and the repaired lines were re-confirmed
+- [ ] The user confirmed the plan, work began at the right Next Steps item, and the consumed edition is archived, in `CONTINUE_HERE.prev.md`, or in git history, and the file read is the file deleted
+- [ ] (Optional) The hook's stdout carries `additionalContext` directly under `hookSpecificOutput`, and CLAUDE.md has the snippet with `<dir>` replaced or removed
 
 ## Common Pitfalls
 
-- **Acting without confirming**: Always present the resumption plan to the user. They may have changed their mind about what to work on, even if the file is fresh.
-- **Trusting stale files blindly**: A continuation file older than 24 hours or from a different branch is a suggestion, not a mandate. Always check freshness.
-- **Ignoring the Context section**: The most valuable part of the file is often the failed approaches. Skipping this section leads to retrying dead ends.
-- **Forgetting to clean up**: Leaving the handoff after consumption causes confusion in the next session, which will try to act on it again.
-- **Trusting a single-pass handoff's state lines**: the prior session's assessment holds for what it did, not for what moved since. Re-confirm what Step 2 lists, then do not re-do completed work unless the user asks.
-- **Reading "the hook ran" as "the hook worked"**: a hook that exits 0 having printed a payload Claude Code discards looks, from outside, like one that worked. Check what it prints.
+- **Acting without confirming**: present the plan even for a fresh file; the user may have changed priorities.
+- **Trusting a single pass's state lines**: the prior session's assessment holds for its work, not for what moved since. Re-confirm what Step 2 lists; re-do nothing else unless asked.
+- **Ignoring Context, or forgetting to clean up**: Context holds the failed approaches, and an unconsumed handoff is acted on again next session.
 
 ## Related Skills
 
 - `write-continue-here` — the complement: writing the continuation file at session end
 - `verify-continue-here` — the full verification loop, for a handoff that must meet the gate before install
-- `bootstrap-agent-identity` — full identity reconstruction that includes continuation detection as one heuristic
+- `bootstrap-agent-identity` — identity reconstruction that includes continuation detection as one heuristic
 - `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
-- `write-claude-md` — project instructions where the optional continuity guidance lives
