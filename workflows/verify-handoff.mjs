@@ -21,7 +21,8 @@
 // Invoke from an almanac checkout or plugin install; an npm install ships no workflows/.
 // write-continue-here runs one round, verify-continue-here runs rounds to the first pass:
 //   Workflow({ scriptPath: '<almanac>/workflows/verify-handoff.mjs', args: { ...as below } })
-// A copy in .claude/workflows/ works by name, but does not update itself:
+// A copy saved as .claude/workflows/verify-handoff.js works by name (a .mjs there is not
+// discovered, tests/results/2026-10-14-workflow-loader-probe), but does not update itself:
 //   Workflow({ name: 'verify-handoff', args: {
 //     drafts: [{
 //       key: 'companion',                                   // label; made unique if repeated
