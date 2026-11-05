@@ -47,8 +47,11 @@ WHAT IT DOES, IDENTICALLY FOR BOTH BUILDS
    installed.
 6. For every other moved package it makes the fingerprint read. It takes a string literal that
    only new's ESM entry carries, and looks for it in the chunks new's page fetched, and for its
-   absence in base's chunks. If no literal survives the build, it falls back to each tree's
-   installed version plus the fetched chunk names. That read is weaker, and it says so.
+   absence in base's chunks. If no literal survives the build, it falls back to the version each
+   tree's node_modules holds plus the fetched chunk names that differ. That read is weaker, and it
+   says so. The fingerprint read is evidence of what was bundled, reported in the output and in
+   summary.json. It is not a pass condition: a literal can be tree-shaken away legitimately, so
+   its absence cannot be a FAIL.
 
 THE VERDICT
 -----------
@@ -481,6 +484,14 @@ def installed_version(modules, name):
         return None
 
 
+def installed_at(tree, path):
+    """The version node_modules holds at a lockfile path (node_modules/a/node_modules/b), not the lockfile's."""
+    try:
+        return json.loads((tree['modules'].parent / path / 'package.json').read_text()).get('version')
+    except (OSError, ValueError):
+        return None
+
+
 # ---------- the browser run ----------
 
 def free_port():
@@ -654,7 +665,8 @@ def fingerprint_reads(moved, base, new, base_chunks, new_chunks, patch, executed
     for pkg in moved:
         if pkg['dev'] or pkg['name'] in executed:
             continue
-        line = {'package': pkg['name'], 'path': pkg['path'], 'base': pkg['base'], 'new': pkg['new']}
+        line = {'package': pkg['name'], 'path': pkg['path'], 'base': pkg['base'], 'new': pkg['new'],
+                'installed': {'base': installed_at(base, pkg['path']), 'new': installed_at(new, pkg['path'])}}
         literal = None
         if not patch:
             b_entry, n_entry = esm_entry(base['modules'].parent / pkg['path']), esm_entry(new['modules'].parent / pkg['path'])
@@ -664,9 +676,11 @@ def fingerprint_reads(moved, base, new, base_chunks, new_chunks, patch, executed
         if literal:
             line.update(how='fingerprint literal (in new chunks, absent from base chunks)', literal=literal[:80])
         else:
-            line.update(how='installed version plus chunk names (weaker: proves what was bundled, not what ran)'
+            line.update(how='installed version plus the fetched chunk names that differ (weaker: proves what was '
+                            'bundled, not what ran)'
                         + (' -- --patch skips the literal hunt' if patch else ' -- no new-only literal survived the build'),
-                        chunks_differ=base_chunks != new_chunks)
+                        chunks_only_in_base=sorted(set(base_chunks) - set(new_chunks)),
+                        chunks_only_in_new=sorted(set(new_chunks) - set(base_chunks)))
         out.append(line)
     return out
 
@@ -720,8 +734,10 @@ def run(args):
             how = read['how'] if read['ran'] is not None else 'no executed read: ' + read['how'].replace(' (executed)', ' returned nothing')
             print(f"{label}: {read['package']} ran {read['ran']} (installed {read['installed_version']}) via {how}")
     for line in prints:
-        print(f"read {line['package']} {line['base']} -> {line['new']}: {line['how']}"
-              + (f" '{line['literal']}'" if line.get('literal') else ''))
+        print(f"read {line['package']} {line['base']} -> {line['new']} (node_modules: base "
+              f"{line['installed']['base']}, new {line['installed']['new']}): {line['how']}"
+              + (f" '{line['literal']}'" if line.get('literal') else '')
+              + (f"; chunks only in new: {line['chunks_only_in_new']}" if line.get('chunks_only_in_new') else ''))
     for view in views:
         b, n = summary['per_view']['base'][view], summary['per_view']['new'][view]
         print(f"{view}: drawn base={b['drawn']} new={n['drawn']}; errors base={len(b['errors'])} new={len(n['errors'])}; "
@@ -952,6 +968,22 @@ def verify():
             code = main(['--base', str(Path(tmp) / 'base'), '--new', str(Path(tmp) / 'new'), '--out', str(Path(tmp) / 'out')])
         arm('a malformed lockfile: exit 2 with the traceback, not exit 1', code == 2
             and 'the tool itself failed' in err.getvalue() and 'JSONDecodeError' in err.getvalue(), f'exit {code}')
+    # 12. the fingerprint fallback reads node_modules, not the lockfile, and names the chunks that differ
+    with tempfile.TemporaryDirectory() as tmp:
+        trees = {}
+        for name, version, chunk in (('base', '1.0.0', 'assets/index-AAAAAAAA.js'), ('new', '1.1.0', 'assets/index-BBBBBBBB.js')):
+            viz = Path(tmp) / name / 'viz'
+            (viz / 'node_modules' / 'lib').mkdir(parents=True)
+            (viz / 'node_modules' / 'lib' / 'package.json').write_text(json.dumps({'version': version}))
+            (viz / 'dist' / 'assets').mkdir(parents=True)
+            (viz / 'dist' / chunk).write_text('x')
+            trees[name] = {'modules': viz / 'node_modules', 'dist': viz / 'dist'}
+        moved_lib = [{'name': 'lib', 'path': 'node_modules/lib', 'base': '9.9.9', 'new': '9.9.9', 'dev': False}]
+        line = fingerprint_reads(moved_lib, trees['base'], trees['new'], ['assets/index-AAAAAAAA.js', 'assets/shared.js'],
+                                 ['assets/index-BBBBBBBB.js', 'assets/shared.js'], True, set())[0]
+        arm('the fallback reads the version node_modules holds, not the lockfile', line['installed'] == {'base': '1.0.0', 'new': '1.1.0'}, str(line['installed']))
+        arm('the fallback names only the chunks that differ', line['chunks_only_in_base'] == ['assets/index-AAAAAAAA.js']
+            and line['chunks_only_in_new'] == ['assets/index-BBBBBBBB.js'], str(line))
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
