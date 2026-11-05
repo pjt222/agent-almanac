@@ -10,17 +10,28 @@ dependency bump in viz/ (Dependabot or by hand), and say which version of each m
 Run it WITHOUT -I. Playwright lives in the user's site-packages, and -I hides it. The static
 servers it starts run WITH -I, `python3 -I -m http.server`.
 
-Exit 0 PASS, 1 FAIL, 2 no verdict. No verdict covers four cases: a refusal, a control row the
-instrument failed, a view one build could not draw, and nothing to check because no package the
-page loads moved.
+Exit 0 PASS, 1 FAIL, 2 no verdict. No verdict covers:
+- a refusal: nothing moved, node_modules not matching its lockfile, the same build twice,
+  a non-empty --out, or a server that is not Pages-shaped;
+- a control row the instrument failed;
+- a view whose empty control reads drawn;
+- a view base could not draw, or one measured in only one build;
+- no executed read in either build;
+- an exception inside the tool.
 
 WHAT THE CALLER BUILDS
 ----------------------
 Two worktrees, each with `viz/dist` built and `viz/node_modules` and `viz/package-lock.json` in
-place. The NEW tree has the PR merged. The BASE tree is `origin/main` WITHOUT the PR. A base that
-also merged the PR equals new, and the control rows then confirm nothing; the tool refuses two
-byte-identical `dist/` trees for that reason. Building stays outside the tool: the Dependabot
-procedure's step 2 builds new, and step 3's first bullet builds the base.
+place. The NEW tree has the PR merged. The BASE tree is `origin/main` WITHOUT the PR. Building
+stays outside the tool: the Dependabot procedure's step 2 builds new, and step 3's first bullet
+builds the base. Three mistakes in that are refused before any browser starts:
+- a base that also merged the PR: the two lockfiles are then identical, and nothing moved;
+- a merge without `npm ci`: a moved package's node_modules version differs from its tree's own
+  lockfile (an optional package npm skipped for this platform may be absent);
+- a build taken before `npm ci`: base and new are the same build once the `__BUILD_TIME__` stamp
+  and the bundle hashes are stripped.
+Two separate builds are never byte-identical, because vite.config.js stamps `Date.now()` into a
+chunk, so the last check compares them with those values stripped.
 
 WHAT IT DOES, IDENTICALLY FOR BOTH BUILDS
 -----------------------------------------
@@ -34,16 +45,23 @@ WHAT IT DOES, IDENTICALLY FOR BOTH BUILDS
    `/agent-almanac/`, where a missing file is a real 404. It never uses `vite preview`, whose SPA
    fallback answers a missing file with `200 text/html`. A probe of a missing asset must read
    404 before anything is measured.
-3. Control rows, in the same page and through the same screenshot path: a one-colour canvas
-   must read NOT drawn, and a noise canvas must read drawn. If either is wrong, the instrument
-   is wrong, and the verdict is 2.
-4. It loads the page and enters each selected view by its button. In each view it records:
-   - console errors and page errors;
-   - responses of 400 and above, failed requests and dialogs;
-   - a screenshot of `#graph-container`, judged drawn or blank.
-5. It reads what executed: `window.__THREE__` after 3D, and mermaid's own `info` diagram through
-   `window.__mermaid` after the workflow view. Each read must equal the version that tree has
-   installed.
+3. Control rows: a one-colour canvas must read NOT drawn, and a noise canvas must read drawn. If
+   either is wrong, the instrument is wrong, and the verdict is 2. Each view also gets an empty
+   control on the live page, through the same clip: with everything inside `#graph-container`
+   hidden, the crop must read NOT drawn, or blank-or-not means nothing for that view.
+4. It loads the page and enters each selected view by its button. It waits for the button's
+   `aria-selected="true"` and for `#loading` to hide; a timeout reads as not drawn. In each view
+   it records:
+   - console errors, page errors and dialogs;
+   - responses of 400 and above, and failed requests;
+   - console warnings, reported but not judged;
+   - a screenshot of `#graph-container` with every overlay the stylesheet positions over it
+     hidden (OVERLAY_CSS), judged drawn or blank.
+5. It reads what executed:
+   - `window.__THREE__` after 3D, and the number of three copies that ran;
+   - mermaid's own `info` diagram, through `window.__mermaid`, after the workflow view.
+   Each read must equal the version that tree has installed. A read that returns nothing is a
+   FAIL in new when base read one, and no verdict otherwise.
 6. For every other moved package it makes the fingerprint read. It takes a string literal that
    only new's ESM entry carries, and looks for it in the chunks new's page fetched, and for its
    absence in base's chunks. If no literal survives the build, it falls back to the version each
@@ -57,7 +75,8 @@ THE VERDICT
 FAIL when, in any entered view:
 - new shows an error, a status of 400 or above or a dialog that base does not;
 - new draws nothing where base drew;
-- an executed read differs from the installed version, or new gave none where base did.
+- an executed read differs from the installed version, or new gave none where base did;
+- new runs more copies of three than base.
 
 Precedence:
 - A failed control row makes the whole run NO VERDICT (exit 2), whatever else was found, because
