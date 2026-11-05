@@ -34,7 +34,7 @@ Run the full verification loop on a handoff draft, and stop at the first round t
 
 ### Step 1: Run Rounds Until the First Pass
 
-From an almanac checkout or plugin install, run `workflows/verify-handoff.mjs` as `Workflow({ scriptPath: '<almanac>/workflows/verify-handoff.mjs', args: { drafts: [{ key, draft, facts, sources, context }], round: N } })`. An npm install ships no `workflows/`; a copy in `.claude/workflows/` works but does not update itself. `context` says what the file is, who consumes it, and which repositories the agents must not read. After each round, read the gate from the run's return value, not its log:
+From an almanac checkout or plugin install (`<almanac>` is two directories above the `realpath` of this skill's directory), run `workflows/verify-handoff.mjs` as `Workflow({ scriptPath: '<almanac>/workflows/verify-handoff.mjs', args: { drafts: [{ key, draft, facts, sources, context }], round: N } })`. An npm install ships no `workflows/`; a copy in `.claude/workflows/` works but does not update itself. `context` says what the file is, who consumes it, and which repositories the agents must not read. After each round, read the gate from the run's return value, not its log:
 
 1. `blocking` is 0 and `coverage.complete` is true: **stop**. A later round can rate something blocking again, so the first pass is where the loop ends.
 2. Otherwise, write the findings to `handoff-findings-rN.md` beside the facts file, apply them, add that file to `sources`, and run round N+1.
