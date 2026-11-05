@@ -211,6 +211,6 @@ Handoff archive: <dir>
 ## Related Skills
 
 - `write-continue-here` — the complement: writing the continuation file at session end
-- `verify-continue-here` — the full verification loop, for a handoff that must meet the gate before install
+- `verify-continue-here` — the full verification loop before install, stopping at the first pass or after round 3
 - `bootstrap-agent-identity` — identity reconstruction that includes continuation detection as one heuristic
 - `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)

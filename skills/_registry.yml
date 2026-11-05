@@ -488,7 +488,7 @@ domains:
         path: verify-continue-here/SKILL.md
         complexity: intermediate
         language: multi
-        description: Verify a handoff draft to the full gate, stopping at the first round that passes
+        description: Verify a handoff draft to the full gate, stopping at the first round that passes or after round 3
       - id: install-almanac-content
         path: install-almanac-content/SKILL.md
         complexity: basic

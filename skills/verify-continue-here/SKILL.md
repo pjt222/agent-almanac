@@ -4,7 +4,7 @@ description: >
   Verify a CONTINUE_HERE.md draft to the full gate before it is installed:
   rounds of the verify-handoff workflow against a facts file and at least one
   source, applying findings between rounds and stopping at the first round
-  with no blocking finding and complete coverage. Use when the reader may not
+  with no blocking finding and complete coverage, or after round 3. Use when the reader may not
   run read-continue-here, the next session is days away, or a single pass left
   a finding unsettled.
 license: MIT
@@ -20,7 +20,7 @@ metadata:
 
 # Verify Continue Here
 
-Run the full verification loop on a handoff draft, and stop at the first round that passes. It runs on the draft between `write-continue-here` Steps 3 and 4; that skill alone resolves the location and installs.
+Run the full verification loop on a handoff draft, and stop at the first round that passes, or after round 3. It runs on the draft between `write-continue-here` Steps 3 and 4; that skill alone resolves the location and installs.
 
 ## When to Use
 
@@ -32,7 +32,7 @@ Run the full verification loop on a handoff draft, and stop at the first round t
 
 ## Procedure
 
-### Step 1: Run Rounds Until the First Pass
+### Step 1: Run Rounds Until the First Pass, Up to Round 3
 
 From an almanac checkout or plugin install (`<almanac>` is two directories above the `realpath` of this skill's directory), run `workflows/verify-handoff.mjs` as `Workflow({ scriptPath: '<almanac>/workflows/verify-handoff.mjs', args: { drafts: [{ key, draft, facts, sources, context }], round: N } })`. An npm install ships no `workflows/`. A copy saved as `.claude/workflows/verify-handoff.js` runs by name but does not update itself; a `.mjs` there is not discovered (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`). `context` says what the file is, who consumes it, and which repositories the agents must not read. Coming from `write-continue-here` Step 3, start at round 2 with its findings file among `sources`; otherwise start at round 1. After each round, read the gate from the run's return value, not its log:
 
