@@ -164,3 +164,4 @@ It asks from the handoff's own directory, because `git` asked about another repo
 - `read-continue-here` — the complement: reading, re-confirming, archiving and consuming the file
 - `verify-continue-here` — the full verification loop, stopping at the first passing round
 - `coordinate-peer-sessions` — a peer sharing this worktree may consume the same handoff
+- `bootstrap-agent-identity`, `manage-memory` — the cold start that reads the handoff, and the durable knowledge it should not repeat
