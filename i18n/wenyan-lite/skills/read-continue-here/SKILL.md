@@ -3,7 +3,7 @@ name: read-continue-here
 locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
-fence_basis_commit: afb148e637f7987255890aa34c1fd08c70caa121
+fence_basis_commit: 85f4aeb7b9f7fe632734a6a5c3ae866399c0a689
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-26"
 description: >
@@ -134,37 +134,56 @@ git log --oneline --since="$(stat -c '%Y' "$CONTINUE_FILE" | xargs -I{} date -d 
 
 ### 步驟五：清理
 
+先留副本：下次 `write-continue-here` 以此版比對其稿。`Handoff archive: <dir>` 一行，依就近之序，見於項目 CLAUDE.md、上級目錄 CLAUDE.md、用戶 `~/.claude/CLAUDE.md` 或 README，即定歸檔目錄。無此行，未追蹤之交接存為旁之 `CONTINUE_HERE.prev.md`，已追蹤者無須副本。設 `ARCHIVE_STATE=consumed`：
+
+```bash
+: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+: "${ARCHIVE_STATE:?set it to consumed when reading, superseded when replacing}"
+HOME_DIR=${CONTINUE_FILE%/*}
+ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
+SEARCH=() dir=$ROOT ARCHIVE=
+while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
+for f in "${SEARCH[@]}" "$HOME/.claude/CLAUDE.md" "$ROOT/README.md"; do # nearest first, builtins only
+  [ -f "$f" ] && while IFS= read -r l || [ -n "$l" ]; do
+    l=${l%$'\r'}; case "$l" in "Handoff archive: "*) ARCHIVE=${l#Handoff archive: }; break 2 ;; esac
+  done < "$f"
+done
+case "$ARCHIVE" in '~/'*) ARCHIVE=$HOME/${ARCHIVE#'~/'} ;; ''|/*|'<dir>') ;; *) ARCHIVE=${f%/*}/$ARCHIVE ;; esac
+STAMP=$(date -u +%Y-%m-%dT%H%M%SZ) KEEP=cp
+[ "$ARCHIVE_STATE" = superseded ] && KEEP=mv
+if [ "$ARCHIVE" = '<dir>' ]; then
+  echo "REFUSED: $f carries the unedited 'Handoff archive: <dir>'; name a directory there" >&2; false
+elif [ -n "$ARCHIVE" ]; then
+  DEST=$ARCHIVE/${STAMP%%T*}/${ROOT##*/}-CONTINUE_HERE.$STAMP.$ARCHIVE_STATE.md
+  mkdir -p -- "${DEST%/*}" && "$KEEP" -- "$CONTINUE_FILE" "$DEST" && echo "archive: $DEST"
+elif git -C "$HOME_DIR" ls-files --error-unmatch -- "$CONTINUE_FILE" >/dev/null 2>&1; then
+  if git -C "$HOME_DIR" diff --quiet HEAD -- "$CONTINUE_FILE"; then echo "archive: git history keeps this edition"
+  else echo "REFUSED: $CONTINUE_FILE has uncommitted changes; commit them first" >&2; false; fi
+else
+  "$KEEP" -- "$CONTINUE_FILE" "$HOME_DIR/CONTINUE_HERE.prev.md" && echo "archive: $HOME_DIR/CONTINUE_HERE.prev.md"
+fi
+```
+
 交接消化、作業展開後，刪除 CONTINUE_HERE.md：
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
-# A handoff that carries `coordinate-peer-sessions` Step 3's scope declaration is about to lose
-# its only durable copy — this is the one point in the lifecycle where anyone could still act on
-# it. A shell loop, not `grep`/`rg`: a session may run this in an environment that has neither on
-# PATH, or that blocks a bare `grep` outright (this repository's own Bash hook does exactly that,
-# which would otherwise make this warning never fire where it matters most). Anchored on the
-# LINE START, not `*Nobody runs:*`: a handoff can quote or discuss the mechanism in prose (as this
-# skill's own commit history has), and an unanchored match warns on that too — a real declaration
-# always starts the line, by construction of the fence that emits it.
+# A shell loop, not grep/rg: a session may have neither, or a hook that blocks grep. Anchored on
+# the line start, so prose that merely discusses the literal does not warn.
 SCOPE_LINE=$(while IFS= read -r l; do
   case "$l" in "Nobody runs:"*) printf '%s' "$l"; break ;; esac
 done < "$CONTINUE_FILE")
 if [ -n "$SCOPE_LINE" ]; then
-  echo "WARNING: $CONTINUE_FILE carries a peer-session scope declaration about to be lost:" >&2
+  echo "WARNING: $CONTINUE_FILE carries a peer-session scope declaration the peer will no longer find:" >&2
   echo "  $SCOPE_LINE" >&2
-  echo "Copy it somewhere durable (an issue comment, a message to the peer) before it is gone." >&2
+  echo "Copy it where the peer will see it (an issue comment, a message to the peer)." >&2
 fi
 if git ls-files --error-unmatch "$CONTINUE_FILE" >/dev/null 2>&1; then
-  # Tracked: the deletion is recoverable, which is what makes it safe.
-  # The pathspec is load-bearing: `git commit -m` with none commits the WHOLE
-  # index, so a peer session's staged work is swept into a commit titled for the
-  # handoff. This runs at session start, which is exactly when that is likely.
+  # The pathspec is load-bearing: without it, the commit also takes a peer's staged work.
   git rm -q "$CONTINUE_FILE" &&
     git commit -qm 'chore: consume the session handoff' -- "$CONTINUE_FILE"
 else
-  # Untracked, ignored, or no repository at all — all three land here, and for
-  # all three an ordinary delete is the right and only option.
-  rm -- "$CONTINUE_FILE"
+  rm -- "$CONTINUE_FILE" # untracked, ignored, or no repository: an ordinary delete
 fi
 ```
 
@@ -176,100 +195,7 @@ fi
 
 ### 步驟六：設置 SessionStart 鉤子（選擇性）
 
-若尚未設置，建立會話啟動時自動讀取 CONTINUE_HERE.md 之機制。
-
-建立鉤子腳本：
-
-```bash
-mkdir -p ~/.claude/hooks/continue-here
-
-cat > ~/.claude/hooks/continue-here/read-continuation.sh << 'SCRIPT'
-#!/usr/bin/env bash
-# SessionStart hook: inject the resolved CONTINUE_HERE.md into session context.
-# OS-aware: works on native Linux, WSL, macOS, and Windows (Git Bash/MSYS).
-set -uo pipefail
-
-ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
-CONTINUE_FILE=
-for candidate in CONTINUE_HERE.md docs/CONTINUE_HERE.md .claude/CONTINUE_HERE.md; do
-  if [ -f "$ROOT/$candidate" ]; then CONTINUE_FILE="$ROOT/$candidate"; break; fi
-done
-
-emit() {
-  # additionalContext sits DIRECTLY under hookSpecificOutput. Nesting it inside a
-  # "sessionStartContext" object — the shape this hook shipped until 2.0 — names a
-  # key Claude Code does not know, so the whole object is discarded and the failure
-  # is reported nowhere the user will look (#844). stdout carries the JSON and
-  # nothing else.
-  if command -v jq >/dev/null 2>&1; then
-    ESCAPED=$(printf '%s' "$1" | jq -Rsa .)
-  else
-    ESCAPED=$(printf '%s' "$1" | awk '
-      BEGIN {
-        ORS = ""
-        # JSON forbids every raw byte below 0x20 inside a string, not only the
-        # three with short escapes. Handling \\ " and tab alone left CR, ESC and
-        # the rest to pass through raw, which made the object unparseable — and
-        # an unparseable object is discarded in exactly the silent way #844 was.
-        # A handoff quoting terminal output carries ESC; one written on NTFS
-        # carries CR. Both are ordinary here.
-        for (i = 1; i < 32; i++) esc[sprintf("%c", i)] = sprintf("\\u%04x", i)
-        esc["\t"] = "\\t"
-        print "\""
-      }
-      {
-        line = $0
-        gsub(/\\/, "\\\\", line)
-        gsub(/"/, "\\\"", line)
-        if (line ~ /[\001-\037]/) {
-          out = ""
-          n = length(line)
-          for (i = 1; i <= n; i++) {
-            ch = substr(line, i, 1)
-            out = out (ch in esc ? esc[ch] : ch)
-          }
-          line = out
-        }
-        if (NR > 1) print "\\n"
-        print line
-      }
-      END { print "\"" }
-    ')
-  fi
-  printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":%s}}' "$ESCAPED"
-}
-
-if [ -n "$CONTINUE_FILE" ]; then
-  # Strip CRLF (files on NTFS often have Windows line endings)
-  emit "$(sed 's/\r$//' "$CONTINUE_FILE")"
-  exit 0
-fi
-
-# No handoff at a resolved path. Exiting silently here is what made a misplaced
-# handoff indistinguishable from a project that has none, so look once more, cheaply,
-# and say what was found.
-ELSEWHERE=$(find "$ROOT" -maxdepth 3 -name 'CONTINUE_HERE.md' \
-  -not -path '*/.git/*' -not -path '*/node_modules/*' 2>/dev/null | head -5)
-if [ -n "$ELSEWHERE" ]; then
-  emit "A CONTINUE_HERE.md exists in this project but not where the continuation hook resolves it. The hook looks for CONTINUE_HERE.md, docs/CONTINUE_HERE.md and .claude/CONTINUE_HERE.md, relative to the repository root. Found instead:
-$ELSEWHERE
-Read it if it is a handoff for this session, or move it to one of the resolved paths."
-fi
-exit 0
-SCRIPT
-
-chmod +x ~/.claude/hooks/continue-here/read-continuation.sh
-```
-
-加入 `~/.claude/settings.json` 之 SessionStart 鉤子陣列：
-
-```json
-{
-  "type": "command",
-  "command": "~/.claude/hooks/continue-here/read-continuation.sh",
-  "timeout": 5
-}
-```
+此鉤於每新會話注入所解之交接文件。腳本、其 `settings.json` 條目及驗其輸出之法，見 [references/session-start-hook.md](references/session-start-hook.md)。
 
 **預期：** 鉤子腳本已存在、可執行，並登錄於 settings.json。下次會話啟動時，若 CONTINUE_HERE.md 存在，其內容將注入會話上下文。
 
