@@ -472,13 +472,40 @@ def tree_inputs(root):
     return {'root': root, 'dist': dist, 'lock': json.loads(lock.read_text()), 'modules': modules}
 
 
+# viz/vite.config.js defines __BUILD_TIME__ as String(Date.now()), a quoted 13-digit millisecond stamp, and
+# that value changes the hash in the name of every chunk that carries or imports it. So two builds of the
+# same sources are never byte-identical (#1046 round 2): compare them with the stamp and the hashes stripped.
+# The minifier writes it as a template literal (`1793905216658` in i18n-*.js, measured), so all three quotes.
+_BUILD_STAMP = re.compile(r'(["\'`])1\d{12}\1')
+
+
 def tree_digest(dist):
-    """index.html plus the built assets/: what a dependency bump can change (public/ is copied as is)."""
+    """index.html plus the built assets/, with the build stamp and bundle hashes stripped from names and text:
+    what a dependency bump can change (public/ is copied as is). Equal digests mean the same build."""
     digest = hashlib.sha256()
-    files = [dist / 'index.html'] + sorted(p for p in (dist / 'assets').rglob('*') if p.is_file())
-    for path in files:
-        digest.update(str(path.relative_to(dist)).encode() + b'\0' + path.read_bytes() + b'\0')
+    files = [dist / 'index.html'] + [p for p in (dist / 'assets').rglob('*') if p.is_file()]
+    for path in sorted(files, key=lambda f: (normalise(str(f.relative_to(dist))), str(f))):
+        data = path.read_bytes()
+        if path.suffix in ('.js', '.mjs', '.css', '.html'):
+            data = _BUILD_STAMP.sub(r'\1<build-time>\1', normalise(data.decode('utf-8', 'replace'))).encode()
+        digest.update(normalise(str(path.relative_to(dist))).encode() + b'\0' + data + b'\0')
     return digest.hexdigest()
+
+
+def stale_installs(tree, moved):
+    """Moved packages whose node_modules version differs from this tree's own lockfile (#1046 round 2):
+    a merge without npm ci, or a build taken before it. An optional entry npm skipped for this platform
+    (the @rolldown/binding-* family) may be absent."""
+    packages = tree['lock'].get('packages') or {}
+    out = []
+    for pkg in moved:
+        meta = packages.get(pkg['path']) or {}
+        want, have = meta.get('version'), installed_at(tree, pkg['path'])
+        if have is None and (want is None or meta.get('optional')):
+            continue
+        if want != have:
+            out.append(f"{pkg['path']}: package-lock.json {want}, node_modules {have}")
+    return out
 
 
 def installed_version(modules, name):
@@ -737,10 +764,18 @@ def run(args):
         raise Refused(f'--out {out} is not empty; name a new directory, so no earlier screenshot is read as this run')
     out.mkdir(parents=True, exist_ok=True)
     base, new = tree_inputs(args.base), tree_inputs(args.new)
-    if tree_digest(base['dist']) == tree_digest(new['dist']):
-        raise Refused('base and new viz/dist are byte-identical: either the base merged the PR, '
-                      'or the bump did not reach the bundle; the control comparison would confirm nothing')
     moved = moved_packages(base['lock'], new['lock'])
+    if not moved:
+        raise Refused('the two lockfiles list the same packages at the same versions: nothing moved, so base and '
+                      'new are the same dependency tree (did the base merge the PR?); --views cannot change that')
+    for label, tree in (('base', base), ('new', new)):
+        stale = stale_installs(tree, moved)
+        if stale:
+            raise Refused(f'{label}: viz/node_modules does not match viz/package-lock.json for {len(stale)} moved '
+                          f'package(s): {stale[:5]}; run npm ci in that viz/ and rebuild')
+    if tree_digest(base['dist']) == tree_digest(new['dist']):
+        raise Refused('base and new viz/dist are the same build once the build stamp and bundle hashes are '
+                      'stripped: the bump did not reach the bundle (was new built before npm ci?)')
     override = [v.strip() for v in args.views.split(',')] if args.views else None
     if override and any(v not in ALL_VIEWS for v in override):
         raise Refused(f'--views takes {",".join(ALL_VIEWS)}; got {args.views}')
@@ -1091,6 +1126,44 @@ def verify():
     many = [f'node_modules/p{i} 1 -> 2: in vite\'s dependency closure' for i in range(5)] + ['added by --views']
     arm('the printed reason groups packages and names three', summarise_reasons(many)
         == "p0, p1, p2 and 2 more: in vite's dependency closure; added by --views", summarise_reasons(many))
+    # 15. two builds that differ only by the build stamp and hashes are the same build; a real change is not
+    with tempfile.TemporaryDirectory() as tmp:
+        def dist_with(root, stamp, chunk_hash, body):
+            dist = Path(tmp) / root
+            (dist / 'assets').mkdir(parents=True)
+            (dist / 'index.html').write_text(f'<script src="/agent-almanac/assets/index-{chunk_hash}.js"></script>')
+            (dist / 'assets' / f'index-{chunk_hash}.js').write_text(f'var v=`{stamp}`,w="{stamp}";{body}')
+            return dist
+        a = dist_with('a', '1793905216658', 'AbCdEf12', 'run()')
+        b = dist_with('b', '1793905596433', 'XyZw9876', 'run()')
+        c = dist_with('c', '1793905596433', 'XyZw9876', 'run2()')
+        arm('two builds differing only by build stamp and hash have one digest', tree_digest(a) == tree_digest(b))
+        arm('a real content change gives another digest', tree_digest(a) != tree_digest(c))
+    # 16. node_modules must match the lockfile for every moved package; an optional skipped package may be absent
+    with tempfile.TemporaryDirectory() as tmp:
+        viz = Path(tmp) / 'viz'
+        (viz / 'node_modules' / 'vite').mkdir(parents=True)
+        (viz / 'node_modules' / 'vite' / 'package.json').write_text(json.dumps({'version': '8.3.4'}))
+        tree = {'modules': viz / 'node_modules', 'lock': {'packages': {
+            'node_modules/vite': {'version': '8.3.5', 'dev': True},
+            'node_modules/@rolldown/binding-android-arm-eabi': {'version': '1.2.16', 'optional': True, 'dev': True}}}}
+        moved_here = [{'path': 'node_modules/vite'}, {'path': 'node_modules/@rolldown/binding-android-arm-eabi'}]
+        stale = stale_installs(tree, moved_here)
+        arm('a merge without npm ci is caught: node_modules vite 8.3.4 against the lockfile 8.3.5',
+            stale == ['node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4'], str(stale))
+    # 17. identical lockfiles are refused, whatever --views says
+    with tempfile.TemporaryDirectory() as tmp:
+        for name in ('base', 'new'):
+            viz = Path(tmp) / name / 'viz'
+            (viz / 'dist' / 'assets').mkdir(parents=True)
+            (viz / 'node_modules').mkdir()
+            (viz / 'dist' / 'index.html').write_text(name)
+            (viz / 'package-lock.json').write_text(json.dumps({'packages': {'node_modules/three': {'version': '0.187.0'}}}))
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+            code = main(['--base', str(Path(tmp) / 'base'), '--new', str(Path(tmp) / 'new'),
+                         '--out', str(Path(tmp) / 'out'), '--views', '2d'])
+        arm('identical lockfiles are refused even with --views', code == 2 and 'nothing moved' in err.getvalue(), f'exit {code}')
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
