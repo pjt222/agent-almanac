@@ -761,6 +761,10 @@ def verify():
         'console: icon 404 at /agent-almanac/icons/a.webp' in sn['errors'])
     arm('an ERR_ABORTED failure is set aside, not compared', sb['aborted_ignored'] == ['/agent-almanac/icons/b.webp']
         and not any('b.webp' in x for x in sb['non_ok']))
+    extra = view_signature([{'kind': 'dialog', 'text': 'WebGL is not available'},
+                            {'kind': 'console', 'type': 'warning', 'text': 'a deprecation notice'}])
+    arm('a dialog counts as an error, a console warning does not',
+        extra['errors'] == {'dialog: WebGL is not available'}, str(extra['errors']))
     good = {'drawn': True, 'stats': {}}
     def runs_with(new_sig, new_drawn=True, base_drawn=True, control_ok=True):
         return {'base': {'_control_ok': control_ok, 'load': {**good, 'sig': sb}, '2d': {**good, 'drawn': base_drawn, 'sig': sb}},
