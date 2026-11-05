@@ -114,6 +114,16 @@ CHROMIUM_ARGS = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-s
                  '--ignore-gpu-blocklist']
 NAV_TIMEOUT_MS = 180000
 SETTLE_MS = {'2d': 4000, '3d': 4500, 'campfire': 4000, 'chord': 4000, 'hive': 4000, 'workflow': 5000}
+# Everything viz/css/style.css positions over #graph-container that is not the drawing: the header,
+# the panels and their toggles and backdrops, the loading overlay, the first-visit hint, the tooltip,
+# the locale notice, three-render-objects' 3D nav info, and the CRT scanline layer. Hidden while each
+# view is photographed, so only the drawing can make the crop read drawn (#1046 round 1, B1).
+OVERLAY_CSS = ('.header, .header-drawer, .header-drawer-backdrop, .panel-toggle, .filter-panel, .filter-backdrop, '
+               '.detail-panel, #loading, .first-visit-hint, .tooltip, .locale-notice, .scene-nav-info '
+               '{ visibility: hidden !important; } body::after { display: none !important; }')
+# The empty control: the same crop with the view itself hidden too. It must read NOT drawn, or the
+# crop holds something other than the view and blank-or-not means nothing for that view.
+EMPTY_VIEW_CSS = OVERLAY_CSS + ' #graph-container * { visibility: hidden !important; }'
 
 
 class Refused(Exception):
@@ -357,7 +367,10 @@ def verdict(views, runs, reads):
         if b is None or n is None:
             no_verdict.append(f'{view}: not measured in both builds')
             continue
-        if view != 'load':
+        if view != 'load' and (b.get('empty_drawn') or n.get('empty_drawn')):
+            no_verdict.append(f'{view}: with the view hidden the crop still reads drawn, so blank-or-not '
+                              f"means nothing here (empty control: base {b.get('empty_stats')}, new {n.get('empty_stats')})")
+        elif view != 'load':
             if not b['drawn']:
                 no_verdict.append(f'{view}: base drew nothing, so blank-or-not cannot be compared'
                                   + (f" ({b['harness_error']})" if b.get('harness_error') else ''))
@@ -557,11 +570,15 @@ def run_build(label, tree, views, out, sync_playwright):
                         page.wait_for_function('() => window.__THREE__ !== undefined')
                     page.wait_for_timeout(SETTLE_MS[view])
                     box = page.locator('#graph-container').bounding_box()
-                    png = page.screenshot(clip=box) if box else None
+                    png = page.screenshot(clip=box, style=OVERLAY_CSS) if box else None
                     if png:
                         (work / f'{view}.png').write_bytes(png)
                         runs[view]['stats'] = image_stats(png)
                         runs[view]['drawn'] = drawn(runs[view]['stats'])
+                        empty = page.screenshot(clip=box, style=EMPTY_VIEW_CSS)
+                        (work / f'{view}-empty.png').write_bytes(empty)
+                        runs[view]['empty_stats'] = image_stats(empty)
+                        runs[view]['empty_drawn'] = drawn(runs[view]['empty_stats'])
                 except Exception as exc:  # noqa: BLE001 -- a view that never draws reads as not drawn
                     runs[view]['harness_error'] = f'{type(exc).__name__}: {exc}'[:300]
                     continue
@@ -654,6 +671,8 @@ def run(args):
         'mode': 'patch' if args.patch else 'full', 'views': views, 'reasons': reasons, 'moved': moved,
         'control': {label: runs[label]['_control'] for label in runs},
         'per_view': {label: {v: {'drawn': runs[label][v]['drawn'], 'stats': runs[label][v]['stats'],
+                                 'empty_drawn': runs[label][v].get('empty_drawn'), 'empty_stats': runs[label][v].get('empty_stats'),
+                                 'harness_error': runs[label][v].get('harness_error'),
                                  'errors': sorted(runs[label][v]['sig']['errors']),
                                  'non_ok': sorted(runs[label][v]['sig']['non_ok']),
                                  'aborted_ignored': len(runs[label][v]['sig']['aborted_ignored'])}
@@ -834,6 +853,11 @@ def verify():
                                                                          'new': runs_with(sb)['base']}, no_reads)[0] == 0)
     arm('new drew nothing: FAIL', verdict(['2d'], runs_with(sb, new_drawn=False), no_reads)[0] == 1)
     arm('base drew nothing: NO VERDICT', verdict(['2d'], runs_with(sb, base_drawn=False), no_reads)[0] == 2)
+    leaky = runs_with(sb)
+    leaky['new']['2d']['empty_drawn'] = True
+    code, _, nov = verdict(['2d'], leaky, no_reads)
+    arm('an empty control that reads drawn: NO VERDICT for that view, never PASS', code == 2
+        and any('with the view hidden' in x for x in nov), str(nov))
     arm('a failed control row: NO VERDICT', verdict(['2d'], runs_with(sb, control_ok=False), no_reads)[0] == 2)
     arm('a view measured in one build only: NO VERDICT', verdict(['2d', '3d'], runs_with(sb), no_reads)[0] == 2)
     # 8. executed reads
