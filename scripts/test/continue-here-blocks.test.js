@@ -600,6 +600,19 @@ test('archive: in a linked worktree, the archived name carries the project, not 
   }
 });
 
+test('archive: a project that keeps its CLAUDE.md under .claude/ is read at the project level', () => {
+  const tree = archiveTree({ parent: 'Handoff archive: /must/not/win\n' });
+  try {
+    mkdirSync(join(tree.proj, '.claude'));
+    writeFileSync(join(tree.proj, '.claude', 'CLAUDE.md'), `Handoff archive: ${join(tree.base, 'dotclaude')}\n`);
+    const res = runArchive(tree, 'consumed');
+    assert.equal(res.status, 0, res.stderr);
+    assert.match(res.stdout, archivedName(join(tree.base, 'dotclaude'), 'consumed'));
+  } finally {
+    rmTree(tree.base);
+  }
+});
+
 test('archive DRIFT: the fence reads the literal and refuses the placeholder that Step 7 emits', () => {
   const line = snippetArchiveLine();
   const block = extractBlock(READ, ARCHIVE_MARKER);

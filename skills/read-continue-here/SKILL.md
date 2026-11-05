@@ -110,7 +110,7 @@ Begin at Next Steps item 1, or where the user directed. Use In Progress for part
 
 ### Step 5: Archive, Then Clean Up
 
-Keep a copy first: the next `write-continue-here` compares its draft against this edition. **The archive rule:** a line `Handoff archive: <dir>` names the archive, read from the project's CLAUDE.md, each parent directory's, the user-level `~/.claude/CLAUDE.md`, then the project's README; the first match wins. Without one, an untracked handoff is kept as `CONTINUE_HERE.prev.md` beside it, and a tracked one needs no copy, since git history holds it. Reading copies (`ARCHIVE_STATE=consumed`); `write-continue-here` runs this fence to move an edition it replaces (`superseded`):
+Keep a copy first: the next `write-continue-here` compares its draft against this edition. **The archive rule:** a line `Handoff archive: <dir>` names the archive, read from the project's CLAUDE.md or `.claude/CLAUDE.md`, each parent directory's CLAUDE.md, the user-level `~/.claude/CLAUDE.md`, then the project's README; the first match wins. Without one, an untracked handoff is kept as `CONTINUE_HERE.prev.md` beside it, and a tracked one needs no copy, since git history holds it. Reading copies (`ARCHIVE_STATE=consumed`); `write-continue-here` runs this fence to move an edition it replaces (`superseded`):
 
 ```bash
 : "${CONTINUE_FILE:?set it to the handoff's path, as the resolver printed it}"
@@ -120,7 +120,7 @@ HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
 PROJECT=$(git -C "$HOME_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || PROJECT=$ROOT
 PROJECT=${PROJECT%/.git}; PROJECT=${PROJECT##*/} # a linked worktree names its project, not itself
-SEARCH=() dir=$ROOT ARCHIVE=
+SEARCH=("$ROOT/CLAUDE.md" "$ROOT/.claude/CLAUDE.md") dir=${ROOT%/*} ARCHIVE=
 while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
 for f in "${SEARCH[@]}" "$HOME/.claude/CLAUDE.md" "$ROOT/README.md"; do # nearest first, builtins only
   [ -f "$f" ] && while IFS= read -r l || [ -n "$l" ]; do
