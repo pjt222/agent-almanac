@@ -317,13 +317,11 @@ def select_views(moved, closures, override=None):
         views, why = views_for(pkg, closures)
         for view in views:
             reasons.setdefault(view, []).append(f"{pkg['path']} {pkg['base']} -> {pkg['new']}: {why}")
-    if override:
-        for view in override:
-            reasons.setdefault(view, []).append('named by --views')
-        chosen = [v for v in ALL_VIEWS if v in override]
-    else:
-        chosen = [v for v in ALL_VIEWS if v in reasons]
-    return chosen, reasons
+    # --views only ADDS (#1046 round 1, S4): replacing the selection let a run skip a view a moved
+    # package loads and still report PASS.
+    for view in override or []:
+        reasons.setdefault(view, []).append('added by --views')
+    return [v for v in ALL_VIEWS if v in reasons], reasons
 
 
 # ---------- comparison ----------
@@ -886,6 +884,9 @@ def verify():
         arm(f"views for {path}{' (dev)' if dev else ''}", got == want, str(got))
     chosen, _ = select_views([{'path': 'node_modules/vitest', 'name': 'vitest', 'dev': True, 'base': '1', 'new': '2'}], closures)
     arm('only a dev-only package outside the build closure moved: no view, so the run refuses', chosen == [])
+    chosen, _ = select_views([{'path': 'node_modules/mermaid', 'name': 'mermaid', 'dev': False, 'base': '1', 'new': '2'}],
+                             closures, ['2d'])
+    arm('--views adds a view and never drops one the moved packages load', chosen == ['2d', 'workflow'], str(chosen))
     # 6. comparison: normalisation, and a planted new-only error
     arm('normalise strips host, port and bundle hash',
         normalise('GET http://127.0.0.1:41234/agent-almanac/assets/graph3d-BXq3dPZS.js 404')
@@ -1036,7 +1037,8 @@ def main(argv=None):
     parser.add_argument('--patch', action='store_true',
                         help='the lighter check for a patch bump: no literal hunt (installed version plus chunk '
                              'names instead); the views, control rows, comparisons and executed reads stay')
-    parser.add_argument('--views', help=f'enter exactly these views, comma-separated from {",".join(ALL_VIEWS)}')
+    parser.add_argument('--views', help=f'also enter these views, comma-separated from {",".join(ALL_VIEWS)}; it adds '
+                                        'to the views the moved packages select and never removes one')
     parser.add_argument('--verify', action='store_true', help='run the browser-free self-test and exit')
     args = parser.parse_args(argv)
     if args.verify:
