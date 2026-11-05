@@ -118,6 +118,8 @@ Keep a copy first: the next `write-continue-here` compares its draft against thi
 case "$CONTINUE_FILE" in /*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac
 HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
+PROJECT=$(git -C "$HOME_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || PROJECT=$ROOT
+PROJECT=${PROJECT%/.git}; PROJECT=${PROJECT##*/} # a linked worktree names its project, not itself
 SEARCH=() dir=$ROOT ARCHIVE=
 while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
 for f in "${SEARCH[@]}" "$HOME/.claude/CLAUDE.md" "$ROOT/README.md"; do # nearest first, builtins only
@@ -131,7 +133,7 @@ STAMP=$(date -u +%Y-%m-%dT%H%M%SZ) KEEP=cp
 if [ "$ARCHIVE" = '<dir>' ]; then
   echo "REFUSED: $f carries the unedited 'Handoff archive: <dir>'; name a directory there" >&2; false
 elif [ -n "$ARCHIVE" ]; then
-  DEST=$ARCHIVE/${STAMP%%T*}/${ROOT##*/}-CONTINUE_HERE.$STAMP.$ARCHIVE_STATE.md
+  DEST=$ARCHIVE/${STAMP%%T*}/$PROJECT-CONTINUE_HERE.$STAMP.$ARCHIVE_STATE.md
   mkdir -p -- "${DEST%/*}" && "$KEEP" -- "$CONTINUE_FILE" "$DEST" && ARCHIVED=$DEST
 elif git -C "$HOME_DIR" ls-files --error-unmatch -- "$CONTINUE_FILE" >/dev/null 2>&1; then
   if git -C "$HOME_DIR" diff --quiet HEAD -- "$CONTINUE_FILE"; then ARCHIVED="git history, tracked"

@@ -579,6 +579,27 @@ test('archive: a relative CONTINUE_FILE is made absolute, not walked forever', (
   }
 });
 
+test('archive: in a linked worktree, the archived name carries the project, not the worktree', () => {
+  // Archives are shared across projects, and this repository works in .claude/worktrees/<name>.
+  const tree = archiveTree({ parent: 'Handoff archive: shared\n' }, { tracked: true });
+  try {
+    const add = spawnSync('git', ['-C', tree.proj, 'worktree', 'add', '-q', join(tree.base, 'feat-x')], {
+      encoding: 'utf8',
+      env: cleanEnv(tree.home),
+    });
+    assert.equal(add.status, 0, add.stderr);
+    const wt = join(tree.base, 'feat-x');
+    const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
+      cwd: wt,
+      env: { CONTINUE_FILE: join(wt, 'CONTINUE_HERE.md'), ARCHIVE_STATE: 'consumed', HOME: tree.home },
+    });
+    assert.equal(res.status, 0, res.stderr);
+    assert.match(res.stdout, archivedName(join(tree.base, 'shared'), 'consumed'), `named after the worktree: ${res.stdout}`);
+  } finally {
+    rmTree(tree.base);
+  }
+});
+
 test('archive DRIFT: the fence reads the literal and refuses the placeholder that Step 7 emits', () => {
   const line = snippetArchiveLine();
   const block = extractBlock(READ, ARCHIVE_MARKER);
