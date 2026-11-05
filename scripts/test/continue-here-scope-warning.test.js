@@ -152,7 +152,7 @@ test('cleanup: warns and names the line when the handoff carries a scope declara
   const untracked = fixture({ 'CONTINUE_HERE.md': content });
   try {
     const path = join(untracked, 'CONTINUE_HERE.md');
-    const res = runBash(block, { cwd: untracked, env: { CONTINUE_FILE: path } });
+    const res = runBash(block, { cwd: untracked, env: { CONTINUE_FILE: path, ARCHIVED: 'fixture' } });
     assert.equal(res.status, 0, `cleanup exited ${res.status}\n${res.stderr}`);
     assert.equal(existsSync(path), false, 'the handoff was not deleted despite carrying a scope declaration — the warning must not become a refusal');
     assert.match(res.stderr, /WARNING/, 'no warning printed for a handoff that carries the scope declaration');
@@ -164,7 +164,7 @@ test('cleanup: warns and names the line when the handoff carries a scope declara
   const tracked = fixture({ 'CONTINUE_HERE.md': content }, { commit: ['CONTINUE_HERE.md'] });
   try {
     const path = join(tracked, 'CONTINUE_HERE.md');
-    const res = runBash(block, { cwd: tracked, env: { CONTINUE_FILE: path } });
+    const res = runBash(block, { cwd: tracked, env: { CONTINUE_FILE: path, ARCHIVED: 'fixture' } });
     assert.equal(res.status, 0, `cleanup exited ${res.status}\n${res.stderr}`);
     assert.equal(existsSync(path), false, 'tracked handoff carrying a scope declaration was not deleted');
     assert.match(res.stderr, /WARNING/, 'no warning printed on the tracked arm');
@@ -178,7 +178,7 @@ test('cleanup: stays silent and still deletes when the handoff carries no scope 
   const dir = fixture({ 'CONTINUE_HERE.md': '# Continue Here\nno scope declaration in this one\n' });
   try {
     const path = join(dir, 'CONTINUE_HERE.md');
-    const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: path } });
+    const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: path, ARCHIVED: 'fixture' } });
     assert.equal(res.status, 0, `cleanup exited ${res.status}\n${res.stderr}`);
     assert.equal(existsSync(path), false, 'an ordinary handoff was not deleted');
     assert.equal(res.stderr, '', `an ordinary handoff produced stderr output: ${JSON.stringify(res.stderr)}`);
@@ -200,7 +200,7 @@ test('a many-line handoff is handled correctly — no pipe, so no SIGPIPE class 
     const path = join(dir, 'CONTINUE_HERE.md');
     for (let i = 0; i < 3; i++) {
       writeFileSync(path, `# Continue Here\n${manyLines}\n`);
-      const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: path } });
+      const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: path, ARCHIVED: 'fixture' } });
       assert.equal(res.status, 0, `run ${i + 1}: cleanup exited ${res.status}\n${res.stderr}`);
       assert.equal(existsSync(path), false, `run ${i + 1}: many-match handoff was not deleted`);
       assert.match(res.stderr, /WARNING/, `run ${i + 1}: no warning on a many-match handoff`);
@@ -223,7 +223,7 @@ test('FALSE POSITIVE FIX: prose discussing the mechanism does not trigger the wa
   const dir = fixture({ 'CONTINUE_HERE.md': prose });
   try {
     const path = join(dir, 'CONTINUE_HERE.md');
-    const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: path } });
+    const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: path, ARCHIVED: 'fixture' } });
     assert.equal(res.status, 0, `cleanup exited ${res.status}\n${res.stderr}`);
     assert.equal(existsSync(path), false, 'the handoff discussing the mechanism was not deleted');
     assert.equal(res.stderr, '', `prose merely mentioning "Nobody runs:" produced a warning: ${JSON.stringify(res.stderr)}`);
@@ -243,7 +243,7 @@ test('NO EXTERNAL TOOL: the check still fires with neither grep nor rg on PATH',
   const toolDir = noSearchToolPath();
   try {
     const path = join(dir, 'CONTINUE_HERE.md');
-    const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: path, PATH: toolDir } });
+    const res = runBash(block, { cwd: dir, env: { CONTINUE_FILE: path, ARCHIVED: 'fixture', PATH: toolDir } });
     assert.equal(res.status, 0, `cleanup exited ${res.status} with grep/rg absent from PATH\n${res.stderr}`);
     assert.equal(existsSync(path), false, 'handoff was not deleted with grep/rg absent from PATH');
     assert.match(res.stderr, /WARNING/, 'no warning fired with grep/rg absent from PATH — the check depends on an external tool after all');
