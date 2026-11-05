@@ -54,8 +54,15 @@ THE VERDICT
 -----------
 FAIL when, in any entered view:
 - new shows an error, a status of 400 or above or a dialog that base does not;
-- new draws nothing;
-- an executed read differs from the installed version.
+- new draws nothing where base drew;
+- an executed read differs from the installed version, or new gave none where base did.
+
+Precedence:
+- A failed control row makes the whole run NO VERDICT (exit 2), whatever else was found, because
+  the instrument behind drawn-or-blank is wrong.
+- Otherwise any FAIL gives exit 1, even beside a no-verdict item.
+- A view base could not draw is a no-verdict item, so new drawing nothing there is not a FAIL.
+- An exception inside the tool is exit 2 with its traceback, never exit 1.
 
 The comparison is base-relative, never against zero: the page already has icon 404s (#743).
 URLs are compared without host, port or the bundle hash, because the two servers listen on
@@ -94,6 +101,7 @@ import struct
 import subprocess
 import sys
 import time
+import traceback
 import urllib.error
 import urllib.request
 import zlib
@@ -360,8 +368,10 @@ def mermaid_version(svg):
 def verdict(views, runs, reads):
     """runs[label][view] -> {'sig', 'stats', 'drawn'}; reads[label] -> list of executed reads."""
     fails, no_verdict = [], []
+    instrument_broken = False
     for label in ('base', 'new'):
         if not runs[label].get('_control_ok'):
+            instrument_broken = True
             no_verdict.append(f'{label}: the control rows failed, so the drawn/blank instrument is wrong')
     for view in ['load'] + views:
         b, n = runs['base'].get(view), runs['new'].get(view)
@@ -375,7 +385,7 @@ def verdict(views, runs, reads):
             if not b['drawn']:
                 no_verdict.append(f'{view}: base drew nothing, so blank-or-not cannot be compared'
                                   + (f" ({b['harness_error']})" if b.get('harness_error') else ''))
-            if not n['drawn']:
+            elif not n['drawn']:
                 fails.append(f'{view}: new drew nothing (stats {n["stats"]})'
                              + (f" ({n['harness_error']})" if n.get('harness_error') else ''))
         for key, what in (('errors', 'error'), ('non_ok', 'non-2xx response or failed request')):
@@ -394,7 +404,7 @@ def verdict(views, runs, reads):
             fails.append(f"new: {package} gave no executed read, though base read {b['ran']}")
         elif (n and n['ran'] is None) or (b and b['ran'] is None):
             no_verdict.append(f"{package}: no executed read (base {b and b['ran']}, new {n and n['ran']})")
-    code = 1 if fails else (2 if no_verdict else 0)
+    code = 2 if instrument_broken else (1 if fails else (2 if no_verdict else 0))
     return code, fails, no_verdict
 
 
@@ -485,6 +495,8 @@ def http_status(url):
             return response.status
     except urllib.error.HTTPError as exc:
         return exc.code
+    except (urllib.error.URLError, OSError):
+        return None
 
 
 CONTROL_JS = """(mode) => { const c = document.createElement('canvas'); c.id = 'rt-control';
@@ -596,15 +608,22 @@ def run_build(label, tree, views, out, sync_playwright):
                     runs[view]['harness_error'] = f'{type(exc).__name__}: {exc}'[:300]
                     continue
                 if view == '3d':
+                    try:
+                        three_ran = page.evaluate('() => window.__THREE__ === undefined ? null : String(window.__THREE__)')
+                    except Exception:  # noqa: BLE001 -- an unreadable read is a missing read, not a crash
+                        three_ran = None
                     reads.append({'package': 'three', 'how': 'window.__THREE__ (executed)',
-                                  'ran': page.evaluate('() => String(window.__THREE__)'),
+                                  'ran': three_ran,
                                   'installed': three_revision(installed_version(tree['modules'], 'three')),
                                   'installed_version': installed_version(tree['modules'], 'three')})
                 if view == 'workflow':
-                    svg = page.evaluate("""async () => { if (!window.__mermaid) return null;
-                      const render = window.__mermaid.render('rt-info-' + Date.now(), 'info').then(r => r.svg);
-                      const timeout = new Promise(resolve => setTimeout(() => resolve(null), 30000));
-                      return Promise.race([render, timeout]); }""")
+                    try:
+                        svg = page.evaluate("""async () => { if (!window.__mermaid) return null;
+                          const render = window.__mermaid.render('rt-info-' + Date.now(), 'info').then(r => r.svg);
+                          const timeout = new Promise(resolve => setTimeout(() => resolve(null), 30000));
+                          return Promise.race([render, timeout]); }""")
+                    except Exception:  # noqa: BLE001 -- an unreadable read is a missing read, not a crash
+                        svg = None
                     reads.append({'package': 'mermaid', 'how': "window.__mermaid.render('info') (executed)",
                                   'ran': mermaid_version(svg),
                                   'installed': installed_version(tree['modules'], 'mermaid'),
@@ -875,6 +894,10 @@ def verify():
     arm('an empty control that reads drawn: NO VERDICT for that view, never PASS', code == 2
         and any('with the view hidden' in x for x in nov), str(nov))
     arm('a failed control row: NO VERDICT', verdict(['2d'], runs_with(sb, control_ok=False), no_reads)[0] == 2)
+    arm('a failed control row beside a new-only error: still NO VERDICT, not FAIL',
+        verdict(['2d'], runs_with(sn, control_ok=False), no_reads)[0] == 2)
+    arm('base and new both drew nothing: NO VERDICT, not FAIL',
+        verdict(['2d'], runs_with(sb, new_drawn=False, base_drawn=False), no_reads)[0] == 2)
     arm('a view measured in one build only: NO VERDICT', verdict(['2d', '3d'], runs_with(sb), no_reads)[0] == 2)
     # 8. executed reads
     arm("three 0.187.0 expects window.__THREE__ '187'", three_revision('0.187.0') == '187' and three_revision('1.0.0') is None)
@@ -914,6 +937,21 @@ def verify():
             (pkg / 'package.json').write_text(json.dumps(meta))
             got = esm_entry(pkg)
             arm(f'esm entry for {json.dumps(meta)[:60]}', (got.name if got else None) == want, str(got))
+    # 11. a crash inside the tool is exit 2 with a traceback, never exit 1 (the FAIL code)
+    import contextlib
+    import io
+    with tempfile.TemporaryDirectory() as tmp:
+        for name in ('base', 'new'):
+            viz = Path(tmp) / name / 'viz'
+            (viz / 'dist' / 'assets').mkdir(parents=True)
+            (viz / 'node_modules').mkdir()
+            (viz / 'dist' / 'index.html').write_text(name)
+            (viz / 'package-lock.json').write_text('{not json' if name == 'base' else '{}')
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+            code = main(['--base', str(Path(tmp) / 'base'), '--new', str(Path(tmp) / 'new'), '--out', str(Path(tmp) / 'out')])
+        arm('a malformed lockfile: exit 2 with the traceback, not exit 1', code == 2
+            and 'the tool itself failed' in err.getvalue() and 'JSONDecodeError' in err.getvalue(), f'exit {code}')
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
@@ -940,6 +978,10 @@ def main(argv=None):
         return run(args)
     except Refused as exc:
         print(f'REFUSED: {exc}', file=sys.stderr)
+        return 2
+    except Exception:  # noqa: BLE001 -- a crash is no verdict; exit 1 is reserved for FAIL (#1046 round 1, S1)
+        traceback.print_exc()
+        print('ERROR: the tool itself failed (traceback above); no verdict', file=sys.stderr)
         return 2
 
 
