@@ -4,7 +4,6 @@ Compare a base and a new build of the viz page in a headless browser, view by vi
 dependency bump in viz/ (Dependabot or by hand), and say which version of each moved library ran.
 
     python3 tools/viz-runtime-check.py --base <worktree> --new <worktree> --out <dir>
-    python3 tools/viz-runtime-check.py --base <worktree> --new <worktree> --out <dir> --patch
     python3 tools/viz-runtime-check.py --base <worktree> --new <worktree> --out <dir> --views 2d,3d
     python3 tools/viz-runtime-check.py --verify
 
@@ -73,14 +72,12 @@ different ports and the hashes differ by construction. A failed request whose fa
 `net::ERR_ABORTED` is recorded but not compared: switching views cancels loads, and that timing
 differs between runs.
 
---patch, THE LIGHTER CHECK (proposed for the maintainer's "take patches, lighter check")
------------------------------------------------------------------------------------------
-- It skips the literal hunt and goes straight to installed versions plus chunk names.
-- It keeps everything else: the control rows, the same views (a vite bump, patch or not, enters
-  all six, since vite rebuilds every chunk and a merge deploys straight to the live page), the
-  three comparisons per view and the executed reads.
-- So it saves little time; the browser run dominates either way. The full check is already
-  lighter than rt1039.py was: no drag, wheel, fps, hover or click battery.
+ONE MODE FOR EVERY BUMP
+-----------------------
+A patch bump gets the same check as any other. The maintainer chose that on 2026-11-05 (#1046),
+after an earlier --patch mode had been reduced to skipping only the literal hunt, a few seconds,
+while the browser run, which dominates, stayed the same. The check is already lighter than
+rt1039.py was: it has no drag, wheel, fps, hover or click battery. A six-view run took 3 minutes.
 
 NOT IN SCOPE
 ------------
@@ -301,7 +298,7 @@ def views_for(pkg, closures):
     """(views, reason) for one moved package, from the view closures of both lockfiles."""
     views, build = closures
     if pkg['path'] in build:
-        return list(ALL_VIEWS), "in vite's dependency closure; vite builds every chunk, so every view, under --patch too"
+        return list(ALL_VIEWS), "in vite's dependency closure; vite builds every chunk, so every view"
     hit = [v for v in ALL_VIEWS if pkg['path'] in views[v]]
     if hit:
         roots = sorted({r for v in hit for r in VIEW_ROOTS[v]})
@@ -697,7 +694,7 @@ def run_build(label, tree, views, out, sync_playwright):
     return runs, reads, chunks
 
 
-def fingerprint_reads(moved, base, new, base_chunks, new_chunks, patch, executed):
+def fingerprint_reads(moved, base, new, base_chunks, new_chunks, executed):
     """One line per moved package that no executed read covered."""
     def chunk_text(tree, names):
         return ''.join((tree['dist'] / n).read_text(errors='replace') for n in names if (tree['dist'] / n).is_file())
@@ -709,17 +706,16 @@ def fingerprint_reads(moved, base, new, base_chunks, new_chunks, patch, executed
         line = {'package': pkg['name'], 'path': pkg['path'], 'base': pkg['base'], 'new': pkg['new'],
                 'installed': {'base': installed_at(base, pkg['path']), 'new': installed_at(new, pkg['path'])}}
         literal = None
-        if not patch:
-            b_entry, n_entry = esm_entry(base['modules'].parent / pkg['path']), esm_entry(new['modules'].parent / pkg['path'])
-            if b_entry and n_entry:
-                literal = pick_fingerprint(b_entry.read_text(errors='replace'), n_entry.read_text(errors='replace'),
-                                           base_text, new_text)
+        b_entry, n_entry = esm_entry(base['modules'].parent / pkg['path']), esm_entry(new['modules'].parent / pkg['path'])
+        if b_entry and n_entry:
+            literal = pick_fingerprint(b_entry.read_text(errors='replace'), n_entry.read_text(errors='replace'),
+                                       base_text, new_text)
         if literal:
             line.update(how='fingerprint literal (in new chunks, absent from base chunks)', literal=literal[:80])
         else:
             line.update(how='installed version plus the fetched chunk names that differ (weaker: proves what was '
                             'bundled, not what ran)'
-                        + (' -- --patch skips the literal hunt' if patch else ' -- no new-only literal survived the build'),
+                        + ' -- no new-only literal survived the build',
                         chunks_only_in_base=sorted(set(base_chunks) - set(new_chunks)),
                         chunks_only_in_new=sorted(set(new_chunks) - set(base_chunks)))
         out.append(line)
@@ -780,7 +776,7 @@ def run(args):
     if override and any(v not in ALL_VIEWS for v in override):
         raise Refused(f'--views takes {",".join(ALL_VIEWS)}; got {args.views}')
     closures = view_closures(base['lock'], new['lock'])
-    views, reasons = select_views(moved, closures, override)  # --patch never narrows the views
+    views, reasons = select_views(moved, closures, override)
     vite = vite_report(base, new) if any(pkg['path'] in closures[1] for pkg in moved) else None
     if vite:
         print(f"vite built base with {vite['installed']['base']} and new with {vite['installed']['new']}; dist files "
@@ -803,10 +799,10 @@ def run(args):
     for label, tree in (('base', base), ('new', new)):
         runs[label], reads[label], chunks[label] = run_build(label, tree, views, out, sync_playwright)
     executed = {r['package'] for r in reads['new'] if r['ran'] is not None}
-    prints = fingerprint_reads(moved, base, new, chunks['base'], chunks['new'], args.patch, executed)
+    prints = fingerprint_reads(moved, base, new, chunks['base'], chunks['new'], executed)
     code, fails, no_verdict = verdict(views, runs, reads)
     summary = {
-        'mode': 'patch' if args.patch else 'full', 'views': views, 'reasons': reasons, 'moved': moved,
+        'views': views, 'reasons': reasons, 'moved': moved,
         'control': {label: runs[label]['_control'] for label in runs},
         'per_view': {label: {v: {'drawn': runs[label][v]['drawn'], 'stats': runs[label][v]['stats'],
                                  'empty_drawn': runs[label][v].get('empty_drawn'), 'empty_stats': runs[label][v].get('empty_stats'),
@@ -1092,7 +1088,7 @@ def verify():
             trees[name] = {'modules': viz / 'node_modules', 'dist': viz / 'dist'}
         moved_lib = [{'name': 'lib', 'path': 'node_modules/lib', 'base': '9.9.9', 'new': '9.9.9', 'dev': False}]
         line = fingerprint_reads(moved_lib, trees['base'], trees['new'], ['assets/index-AAAAAAAA.js', 'assets/shared.js'],
-                                 ['assets/index-BBBBBBBB.js', 'assets/shared.js'], True, set())[0]
+                                 ['assets/index-BBBBBBBB.js', 'assets/shared.js'], set())[0]
         arm('the fallback reads the version node_modules holds, not the lockfile', line['installed'] == {'base': '1.0.0', 'new': '1.1.0'}, str(line['installed']))
         arm('the fallback names only the chunks that differ', line['chunks_only_in_base'] == ['assets/index-AAAAAAAA.js']
             and line['chunks_only_in_new'] == ['assets/index-BBBBBBBB.js'], str(line))
@@ -1176,9 +1172,6 @@ def main(argv=None):
     parser.add_argument('--base', help='worktree root of the base build (origin/main WITHOUT the PR), viz/dist built')
     parser.add_argument('--new', help='worktree root of the new build (the PR merged), viz/dist built')
     parser.add_argument('--out', help='evidence directory: summary.json, per-build events and screenshots')
-    parser.add_argument('--patch', action='store_true',
-                        help='the lighter check for a patch bump: no literal hunt (installed version plus chunk '
-                             'names instead); the views, control rows, comparisons and executed reads stay')
     parser.add_argument('--views', help=f'also enter these views, comma-separated from {",".join(ALL_VIEWS)}; it adds '
                                         'to the views the moved packages select and never removes one')
     parser.add_argument('--verify', action='store_true', help='run the browser-free self-test and exit')
