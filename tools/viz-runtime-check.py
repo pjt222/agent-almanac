@@ -685,6 +685,18 @@ def fingerprint_reads(moved, base, new, base_chunks, new_chunks, patch, executed
     return out
 
 
+def vite_report(base, new):
+    """What vite built with, for a bump in vite's closure: each tree's installed vite and the dist/ file-list
+    difference. Reported, not a pass condition: a vite release can legitimately re-chunk (spec step 3)."""
+    def listing(dist):
+        return {str(p.relative_to(dist)) for p in dist.rglob('*') if p.is_file()}
+    b, n = listing(base['dist']), listing(new['dist'])
+    return {'installed': {'base': installed_version(base['modules'], 'vite'), 'new': installed_version(new['modules'], 'vite')},
+            'dist_files': {'base': len(b), 'new': len(n)},
+            'dist_only_in_base': sorted(b - n), 'dist_only_in_new': sorted(n - b),
+            'differ_after_hash_strip': sorted({normalise(x) for x in b} ^ {normalise(x) for x in n})}
+
+
 def run(args):
     out = Path(args.out).resolve()
     out.mkdir(parents=True, exist_ok=True)
@@ -696,7 +708,14 @@ def run(args):
     override = [v.strip() for v in args.views.split(',')] if args.views else None
     if override and any(v not in ALL_VIEWS for v in override):
         raise Refused(f'--views takes {",".join(ALL_VIEWS)}; got {args.views}')
-    views, reasons = select_views(moved, view_closures(base['lock'], new['lock']), override)  # --patch never narrows the views
+    closures = view_closures(base['lock'], new['lock'])
+    views, reasons = select_views(moved, closures, override)  # --patch never narrows the views
+    vite = vite_report(base, new) if any(pkg['path'] in closures[1] for pkg in moved) else None
+    if vite:
+        print(f"vite built base with {vite['installed']['base']} and new with {vite['installed']['new']}; dist files "
+              f"{vite['dist_files']['base']} -> {vite['dist_files']['new']}, {len(vite['dist_only_in_base'])} only in base, "
+              f"{len(vite['dist_only_in_new'])} only in new, {len(vite['differ_after_hash_strip'])} differ after the hash "
+              f"is stripped (reported, not a pass condition)")
     print(f'moved packages: {len(moved)}')
     for pkg in moved:
         print(f"  {pkg['path']}: {pkg['base']} -> {pkg['new']}{' (dev)' if pkg['dev'] else ''}")
@@ -725,7 +744,7 @@ def run(args):
                                  'non_ok': sorted(runs[label][v]['sig']['non_ok']),
                                  'aborted_ignored': len(runs[label][v]['sig']['aborted_ignored'])}
                              for v in ['load'] + views} for label in runs},
-        'executed_reads': reads, 'other_reads': prints, 'chunks': chunks,
+        'executed_reads': reads, 'other_reads': prints, 'chunks': chunks, 'vite': vite,
         'verdict': {0: 'PASS', 1: 'FAIL', 2: 'NO VERDICT'}[code], 'fails': fails, 'no_verdict': no_verdict,
     }
     (out / 'summary.json').write_text(json.dumps(summary, indent=1, default=str))
@@ -984,6 +1003,24 @@ def verify():
         arm('the fallback reads the version node_modules holds, not the lockfile', line['installed'] == {'base': '1.0.0', 'new': '1.1.0'}, str(line['installed']))
         arm('the fallback names only the chunks that differ', line['chunks_only_in_base'] == ['assets/index-AAAAAAAA.js']
             and line['chunks_only_in_new'] == ['assets/index-BBBBBBBB.js'], str(line))
+    # 13. the vite report: installed vite per tree, and the dist/ file-list difference
+    with tempfile.TemporaryDirectory() as tmp:
+        trees = {}
+        for name, version, files in (('base', '8.0.0', ['index.html', 'assets/index-AAAAAAAA.js', 'assets/old.js']),
+                                     ('new', '8.0.1', ['index.html', 'assets/index-BBBBBBBB.js'])):
+            viz = Path(tmp) / name / 'viz'
+            (viz / 'node_modules' / 'vite').mkdir(parents=True)
+            (viz / 'node_modules' / 'vite' / 'package.json').write_text(json.dumps({'version': version}))
+            for rel in files:
+                (viz / 'dist' / rel).parent.mkdir(parents=True, exist_ok=True)
+                (viz / 'dist' / rel).write_text(rel)
+            trees[name] = {'modules': viz / 'node_modules', 'dist': viz / 'dist'}
+        report = vite_report(trees['base'], trees['new'])
+        arm('the vite report names each tree\'s installed vite', report['installed'] == {'base': '8.0.0', 'new': '8.0.1'})
+        arm('the vite report lists the dist/ difference, raw and with the hash stripped',
+            report['dist_only_in_base'] == ['assets/index-AAAAAAAA.js', 'assets/old.js']
+            and report['dist_only_in_new'] == ['assets/index-BBBBBBBB.js'] and report['differ_after_hash_strip'] == ['assets/old.js'],
+            str(report))
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
