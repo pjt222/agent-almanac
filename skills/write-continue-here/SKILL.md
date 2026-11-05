@@ -64,7 +64,7 @@ else
 fi
 ```
 
-Write `CONTINUE_HERE.draft.md` beside a resolved handoff; beside one at an unresolved path, so the next session is not handed two; or, for a first handoff, at the repository root. Fill every section from this session. Tag an unmeasured claim in place as `inferred`, `not re-measured`, `by-construction` or `the operator's call`, but never a sha, count or status line a reader would act on.
+Write `CONTINUE_HERE.draft.md` beside a resolved handoff; beside one at an unresolved path, so the next session is not handed two; or, for a first handoff, at the repository root. Fill every section from this session. Tag an unmeasured claim in place as `inferred`, `not re-measured`, `by-construction` or `the operator's call`, with a facts-file line saying why it was not measured, and never tag a sha, count or status line a reader would act on.
 
 ```markdown
 # Continue Here
@@ -90,7 +90,7 @@ Why, in one paragraph; git log shows what changed, not why.
 
 ### Step 3: Read Back, Then Verify Once
 
-Read the draft back: the timestamp is current, `Branch:` and `HEAD:` match `git branch --show-current` and `git rev-parse --short HEAD`, no placeholder is left, Next Steps are numbered, and In Progress says enough to resume. Then run `workflows/verify-handoff.mjs` once, from an almanac checkout or plugin install: `Workflow({ scriptPath: '<almanac>/workflows/verify-handoff.mjs', args: { drafts: [{ key, draft, facts, sources, context }], round: 1 } })`. `sources` names at least one file: the previous edition, which is the handoff still at the install path if one is there, else the newest archived edition, `CONTINUE_HERE.prev.md`, or for a consumed tracked handoff the file `git show "$(git rev-list -1 HEAD -- <path>)^:<path>" > <file>` writes; or the plan the work follows when there is none. Without a source the completeness lens is skipped, and `coverage.complete` can never be true.
+Read the draft back: the timestamp is current, `Branch:` and `HEAD:` match `git branch --show-current` and `git rev-parse --short HEAD`, no placeholder is left, Next Steps are numbered, and In Progress says enough to resume. Then run `workflows/verify-handoff.mjs` once, from an almanac checkout or plugin install (`<almanac>` is two directories above the `realpath` of this skill's directory): `Workflow({ scriptPath: '<almanac>/workflows/verify-handoff.mjs', args: { drafts: [{ key, draft, facts, sources, context }], round: 1 } })`. `sources` names at least one file: the previous edition, which is the handoff still at the install path if one is there, else the newest archived edition, `CONTINUE_HERE.prev.md`, or for a consumed tracked handoff the file `git show "$(git rev-list -1 HEAD -- <path>)^:<path>" > <file>` writes; or the plan the work follows when there is none. Without a source the completeness lens is skipped, and `coverage.complete` can never be true.
 
 Write the findings to a file beside the facts file, apply every blocking finding, list each in Context with the line it changed, and **do not re-run**. Record exactly one `Verified:` value:
 
