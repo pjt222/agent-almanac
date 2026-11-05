@@ -47,7 +47,7 @@ From an almanac checkout or plugin install (`<almanac>` is two directories above
 
 Set the header to `Verified: verify-handoff round N, 0 blocking, coverage complete`, with N the round that passed, and return to `write-continue-here` Step 4 to install.
 
-**Expected:** The draft names its passing round, and `read-continue-here` will act on it without re-confirming.
+**Expected:** The draft names its passing round, so `read-continue-here` skips the recheck of repaired lines; it still re-confirms the branch, `HEAD:` and the named PRs and issues.
 
 **On failure:** If the loop is not converging, stop and hand the open findings to the user; installing with an honest single-pass `Verified:` value is better than an unbounded loop.
 
