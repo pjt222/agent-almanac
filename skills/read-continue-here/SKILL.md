@@ -81,7 +81,7 @@ git branch --show-current
 git log --oneline --since="$(stat -c '%Y' "$CONTINUE_FILE" | xargs -I{} date -d @{} --iso-8601=seconds)" 2>/dev/null
 ```
 
-The handoff is **Fresh** under 24 hours on the same branch, **Stale** if older or on another branch, and **Superseded** if commits landed after it.
+The handoff is **Fresh** under 24 hours on the same branch, **Stale** if older or on another branch, and **Superseded** if commits other than the handoff's own landed after it; the fence above lists both kinds.
 
 **Re-confirm before acting** unless `Verified:` records a full-gate round (`verify-handoff round N, 0 blocking, coverage complete`). One verification pass still leaves a blocking defect in about one handoff in three (#1040), and named state moves after writing. Check:
 - the branch, and `HEAD:` against `git rev-parse HEAD`. Commits touching only the handoff are not drift, since committing a tracked handoff moves HEAD; `git log --oneline <HEAD>..HEAD -- ':/' ':(exclude,top)<handoff path from the repository root>'` lists the others, from any directory;
