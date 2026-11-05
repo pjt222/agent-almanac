@@ -700,10 +700,14 @@ def fingerprint_reads(moved, base, new, base_chunks, new_chunks, patch, executed
 
 
 def vite_report(base, new):
-    """What vite built with, for a bump in vite's closure: each tree's installed vite and the dist/ file-list
-    difference. Reported, not a pass condition: a vite release can legitimately re-chunk (spec step 3)."""
+    """What vite built with, for a bump in vite's closure: each tree's installed vite and the difference of the
+    built file lists (index.html and assets/). Reported, not a pass condition: a vite release can legitimately
+    re-chunk (spec step 3)."""
     def listing(dist):
-        return {str(p.relative_to(dist)) for p in dist.rglob('*') if p.is_file()}
+        # index.html and assets/ only, the scope of tree_digest(): public/ is copied as is, and walking its
+        # 8,000-odd icons per tree took 152 s on the /mnt/d mount (measured on the vite 8.3.4 -> 8.3.5 pair).
+        files = [dist / 'index.html'] + [p for p in (dist / 'assets').rglob('*') if p.is_file()]
+        return {str(p.relative_to(dist)) for p in files if p.is_file()}
     b, n = listing(base['dist']), listing(new['dist'])
     return {'installed': {'base': installed_version(base['modules'], 'vite'), 'new': installed_version(new['modules'], 'vite')},
             'dist_files': {'base': len(b), 'new': len(n)},
