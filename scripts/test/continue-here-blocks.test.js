@@ -29,7 +29,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, statSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -459,6 +459,192 @@ test('the hook embeds the same candidate list as the resolver', () => {
     `the hook's candidate loop has drifted from Step 1's resolver. Both must look in the same ` +
       `places, or the hook and the documented procedure disagree about where a handoff lives.`,
   );
+});
+
+// ── the archive rule (#1040 decision 4) ─────────────────────────────────────────────────────
+
+/** read-continue-here Step 5's archive fence; write-continue-here runs the same fence. */
+const ARCHIVE_MARKER = ': "${ARCHIVE_STATE:?';
+
+/** Step 7's snippet line, the one source of the literal and its placeholder. */
+function snippetArchiveLine() {
+  const fences = [...read(READ).matchAll(/^```markdown\r?\n([\s\S]*?)^```/gm)].map((m) => m[1]);
+  const hits = fences.map((body) => body.match(/^Handoff archive: .*$/m)).filter(Boolean);
+  assert.equal(hits.length, 1, `${READ} must carry exactly one "Handoff archive:" line in its Step 7 snippet`);
+  return hits[0][0];
+}
+
+/**
+ * A project inside a parent directory, with a user-level HOME beside it. `levels` maps
+ * project | parent | user | readme to the text of the file that level reads.
+ */
+function archiveTree(levels, { tracked = false } = {}) {
+  const base = mkdtempSync(join(tmpdir(), 'archive-'));
+  const proj = join(base, 'proj');
+  const home = join(base, 'home');
+  mkdirSync(join(home, '.claude'), { recursive: true });
+  mkdirSync(proj);
+  const git = (...args) => spawnSync('git', ['-C', proj, ...args], { encoding: 'utf8', env: cleanEnv(home) });
+  git('init', '-q', '.');
+  git('config', 'user.email', 'test@example.invalid');
+  git('config', 'user.name', 'test');
+  writeFileSync(join(proj, 'CONTINUE_HERE.md'), '# Continue Here\nedition one\n');
+  const where = {
+    project: join(proj, 'CLAUDE.md'),
+    parent: join(base, 'CLAUDE.md'),
+    user: join(home, '.claude', 'CLAUDE.md'),
+    readme: join(proj, 'README.md'),
+  };
+  for (const [level, text] of Object.entries(levels)) writeFileSync(where[level], text);
+  if (tracked) {
+    git('add', '-f', 'CONTINUE_HERE.md');
+    git('commit', '-qm', 'fixture');
+  }
+  // The walk continues above `base`. A CLAUDE.md up there carrying the line would decide the
+  // "no line" cases below, so refuse to run rather than report a result it chose.
+  for (let dir = dirname(base); dir !== dirname(dir); dir = dirname(dir)) {
+    const above = join(dir, 'CLAUDE.md');
+    if (existsSync(above)) {
+      assert.doesNotMatch(readFileSync(above, 'utf8'), /^Handoff archive: /m, `${above} declares an archive; this suite cannot isolate from it`);
+    }
+  }
+  return { base, proj, home, file: join(proj, 'CONTINUE_HERE.md') };
+}
+
+function runArchive(tree, state, extraEnv = {}) {
+  const block = extractBlock(READ, ARCHIVE_MARKER);
+  return runBash(block, {
+    cwd: tree.proj,
+    env: { CONTINUE_FILE: tree.file, ARCHIVE_STATE: state, HOME: tree.home, ...extraEnv },
+  });
+}
+
+/** The archived name: <dir>/<UTC date>/<project>-CONTINUE_HERE.<UTC stamp>.<state>.md */
+function archivedName(dir, state) {
+  const esc = dir.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`^archive: ${esc}/(\\d{4}-\\d\\d-\\d\\d)/proj-CONTINUE_HERE\\.(\\1)T\\d{6}Z\\.${state}\\.md$`, 'm');
+}
+
+test('archive DRIFT: the fence reads the literal and refuses the placeholder that Step 7 emits', () => {
+  const line = snippetArchiveLine();
+  const block = extractBlock(READ, ARCHIVE_MARKER);
+  const literal = block.match(/case "\$l" in "([^"]+)"\*\)/);
+  assert.ok(literal, 'the archive fence no longer matches its literal with a line-start case pattern');
+  assert.ok(line.startsWith(literal[1]), `Step 7 emits ${JSON.stringify(line)} but the fence reads ${JSON.stringify(literal[1])}`);
+  const placeholder = line.slice(literal[1].length);
+  assert.ok(
+    block.includes(`[ "$ARCHIVE" = '${placeholder}' ]`),
+    `the fence does not refuse Step 7's placeholder ${JSON.stringify(placeholder)}`,
+  );
+});
+
+test('archive: nearest first — project CLAUDE.md, parent CLAUDE.md, user-level CLAUDE.md, README', () => {
+  const dirs = {};
+  const levels = {};
+  const order = ['project', 'parent', 'user', 'readme'];
+  const tree = archiveTree({});
+  try {
+    for (const level of order) dirs[level] = join(tree.base, `arch-${level}`);
+    // CRLF on the project line: a CLAUDE.md saved on NTFS must not name "<dir>\r".
+    levels.project = `# x\n\`Handoff archive:\` in prose does not count\nHandoff archive: ${dirs.project}\r\n`;
+    for (const level of order.slice(1)) levels[level] = `Handoff archive: ${dirs[level]}\n`;
+    for (const [index, winner] of order.entries()) {
+      const fresh = archiveTree(Object.fromEntries(order.slice(index).map((l) => [l, levels[l]])));
+      try {
+        const res = runArchive(fresh, 'consumed');
+        assert.equal(res.status, 0, `${winner}: archive fence exited ${res.status}\n${res.stderr}`);
+        assert.match(res.stdout, archivedName(dirs[winner], 'consumed'), `${winner} should have won; stdout was ${res.stdout}`);
+        assert.ok(existsSync(fresh.file), `${winner}: reading must COPY; the handoff is the cleanup fence's to delete`);
+      } finally {
+        rmTree(fresh.base);
+      }
+    }
+  } finally {
+    rmTree(tree.base);
+  }
+});
+
+test('archive: superseded moves, a relative path is the declaring file\'s, and ~/ is $HOME', () => {
+  const rel = archiveTree({ parent: 'Handoff archive: kept\n' });
+  try {
+    const res = runArchive(rel, 'superseded');
+    assert.equal(res.status, 0, res.stderr);
+    assert.match(res.stdout, archivedName(join(rel.base, 'kept'), 'superseded'));
+    assert.equal(existsSync(rel.file), false, 'superseded must MOVE the edition it replaces');
+  } finally {
+    rmTree(rel.base);
+  }
+  const tilde = archiveTree({ project: 'Handoff archive: ~/arch\n' });
+  try {
+    const res = runArchive(tilde, 'consumed');
+    assert.equal(res.status, 0, res.stderr);
+    assert.match(res.stdout, archivedName(join(tilde.home, 'arch'), 'consumed'));
+  } finally {
+    rmTree(tilde.base);
+  }
+});
+
+test('archive: the unedited <dir> placeholder is refused and nothing is written', () => {
+  const tree = archiveTree({ project: `${snippetArchiveLine()}\n`, parent: 'Handoff archive: /must/not/win\n' });
+  try {
+    const res = runArchive(tree, 'superseded');
+    assert.notEqual(res.status, 0, 'the placeholder was accepted');
+    assert.match(res.stderr, /REFUSED: .*CLAUDE\.md carries the unedited/);
+    assert.ok(existsSync(tree.file), 'a refused archive moved the handoff anyway');
+    assert.equal(existsSync(join(tree.proj, 'CONTINUE_HERE.prev.md')), false);
+    assert.deepEqual(readdirSync(tree.proj).filter((n) => n.startsWith('<')), [], 'a "<dir>" directory was created');
+  } finally {
+    rmTree(tree.base);
+  }
+});
+
+test('archive: without the line, untracked keeps CONTINUE_HERE.prev.md and tracked keeps nothing', () => {
+  for (const [state, survives] of [['consumed', true], ['superseded', false]]) {
+    const tree = archiveTree({ project: '# no archive line here\n' });
+    try {
+      const res = runArchive(tree, state);
+      assert.equal(res.status, 0, res.stderr);
+      const prev = join(tree.proj, 'CONTINUE_HERE.prev.md');
+      assert.equal(readFileSync(prev, 'utf8'), '# Continue Here\nedition one\n', `${state}: .prev.md is not the edition`);
+      assert.equal(existsSync(tree.file), survives, `${state}: ${survives ? 'copy' : 'move'} expected`);
+    } finally {
+      rmTree(tree.base);
+    }
+  }
+
+  const tracked = archiveTree({}, { tracked: true });
+  try {
+    const res = runArchive(tracked, 'consumed');
+    assert.equal(res.status, 0, res.stderr);
+    assert.match(res.stdout, /git history keeps this edition/);
+    assert.equal(existsSync(join(tracked.proj, 'CONTINUE_HERE.prev.md')), false, 'a tracked handoff got a copy it does not need');
+    writeFileSync(tracked.file, '# Continue Here\nedited after the commit\n');
+    const dirty = runArchive(tracked, 'superseded');
+    assert.notEqual(dirty.status, 0, 'uncommitted changes to a tracked handoff were not refused');
+    assert.match(dirty.stderr, /REFUSED: .*uncommitted changes/);
+  } finally {
+    rmTree(tracked.base);
+  }
+});
+
+test('archive: refuses to run without ARCHIVE_STATE, and needs no grep, rg, sed or awk', () => {
+  const tree = archiveTree({ project: 'Handoff archive: arch\n' });
+  const toolDir = mkdtempSync(join(tmpdir(), 'archiveTools-'));
+  try {
+    const unset = runArchive(tree, '');
+    assert.notEqual(unset.status, 0);
+    assert.match(unset.stderr, /set it to consumed when reading/);
+    for (const tool of ['bash', 'git', 'cp', 'mv', 'mkdir', 'date']) {
+      const target = spawnSync('bash', ['-c', `command -v ${tool}`], { encoding: 'utf8' }).stdout.trim();
+      symlinkSync(target, join(toolDir, tool));
+    }
+    const res = runArchive(tree, 'consumed', { PATH: toolDir });
+    assert.equal(res.status, 0, `with only bash, git, cp, mv, mkdir and date on PATH\n${res.stderr}`);
+    assert.match(res.stdout, archivedName(join(tree.proj, 'arch'), 'consumed'));
+  } finally {
+    rmTree(tree.base);
+    rmTree(toolDir);
+  }
 });
 
 test('HOSTILE ENVIRONMENT: a GIT_DIR pointing at another repository cannot reach it', () => {
