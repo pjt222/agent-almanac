@@ -169,7 +169,7 @@ fi
 
 **Expected:** The edition is in the archive, in `CONTINUE_HERE.prev.md`, or in git history, and the file you read is gone; a tracked deletion is committed with the handoff as its only path. A scope declaration (#857) warns, and the delete still runs.
 
-**On failure:** After `REFUSED` or any non-zero exit, nothing is deleted. Name a directory in place of `<dir>` (or delete that line), or read the uncommitted changes before committing anything, since an unconsumed edit from another session is the case that rule exists for. To keep the file during the session, clean up before it ends.
+**On failure:** After `REFUSED` or any non-zero exit from the archive fence, the cleanup deletes nothing. Name a directory in place of `<dir>` (or delete that line), or read the uncommitted changes before committing anything, since an unconsumed edit from another session is the case that rule exists for. If the cleanup's own commit fails (a hook, say), the deletion stays staged; `git restore --staged --worktree <path>` undoes it. To keep the file during the session, clean up before it ends.
 
 ### Step 6: Configure the SessionStart Hook (Optional)
 
