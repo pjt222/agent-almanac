@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 374
+total_skills: 375
 
 domains:
   r-packages:
@@ -484,6 +484,11 @@ domains:
         complexity: basic
         language: multi
         description: Read a continuation file at session start and resume from where the prior session left off
+      - id: verify-continue-here
+        path: verify-continue-here/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Verify a handoff draft to the full gate, stopping at the first round that passes
       - id: install-almanac-content
         path: install-almanac-content/SKILL.md
         complexity: basic

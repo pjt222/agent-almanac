@@ -19,6 +19,10 @@
  *      nested it inside a `sessionStartContext` object that Claude Code does not know, so the
  *      payload was discarded with no error anyone would see. The hook ran; the hook did nothing.
  *
+ * Two more since #1040: the ARCHIVE fence in read-continue-here Step 5 (which write-continue-here
+ * runs too) is run against a parent directory, a user-level HOME and a README, and the `Verified:`
+ * values are pinned across the three skills that write or read them.
+ *
  * The shape assertion carries its own negative arm — the same checker fed the 1.x object must
  * reject it. Without that, a checker that had quietly stopped looking at anything would pass every
  * positive case forever, which is the exact failure mode this suite exists to prevent.
@@ -644,6 +648,26 @@ test('archive: refuses to run without ARCHIVE_STATE, and needs no grep, rg, sed 
   } finally {
     rmTree(tree.base);
     rmTree(toolDir);
+  }
+});
+
+// ── the Verified: values (#1040 decisions 1 to 3) ───────────────────────────────────────────
+
+const VERIFY = 'skills/verify-continue-here/SKILL.md';
+
+test('Verified: write lists exactly three values, and read and verify spell the full-gate one the same', () => {
+  // read-continue-here decides whether to re-confirm by matching this value, and
+  // verify-continue-here writes it. A respelling in either leaves a handoff that passed the gate
+  // re-confirmed for nothing, or one that did not pass trusted.
+  const values = [...read(WRITE).matchAll(/^- `((?:single pass|verify-handoff round|not run)[^`]*)`/gm)].map((m) => m[1]);
+  assert.deepEqual(values, [
+    'single pass, N blocking applied, coverage <complete|incomplete>, findings <file>',
+    'verify-handoff round N, 0 blocking, coverage complete',
+    'not run (workflow unavailable)',
+  ]);
+  for (const rel of [READ, VERIFY]) {
+    assert.ok(read(rel).includes(`\`${values[1]}\``) || read(rel).includes(`Verified: ${values[1]}`),
+      `${rel} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
   }
 });
 

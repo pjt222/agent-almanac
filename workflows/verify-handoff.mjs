@@ -18,7 +18,10 @@
 // three lenses run in parallel per draft; findings are structured so the author can
 // apply them and re-run.
 //
-// Invoke:
+// Invoke from an almanac checkout or plugin install; an npm install ships no workflows/.
+// write-continue-here runs one round, verify-continue-here runs rounds to the first pass:
+//   Workflow({ scriptPath: '<almanac>/workflows/verify-handoff.mjs', args: { ...as below } })
+// A copy in .claude/workflows/ works by name, but does not update itself:
 //   Workflow({ name: 'verify-handoff', args: {
 //     drafts: [{
 //       key: 'companion',                                   // label; made unique if repeated
