@@ -99,6 +99,7 @@ import hashlib
 import json
 import os
 import re
+import signal
 import socket
 import struct
 import subprocess
@@ -1076,6 +1077,9 @@ def main(argv=None):
         return verify()
     if not (args.base and args.new and args.out):
         parser.error('--base, --new and --out are required (or --verify)')
+    # SIGTERM would otherwise end the process without running run_build()'s finally, leaving the static
+    # server listening (#1046 round 1, N3). SystemExit unwinds through it; the catch-all below lets it pass.
+    signal.signal(signal.SIGTERM, lambda signum, frame: sys.exit(128 + signum))
     try:
         return run(args)
     except Refused as exc:
