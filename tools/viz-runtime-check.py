@@ -98,6 +98,16 @@ after an earlier --patch mode had been reduced to skipping only the literal hunt
 while the browser run, which dominates, stayed the same. The check is already lighter than
 rt1039.py was: it has no drag, wheel, fps, hover or click battery. A six-view run took 3 minutes.
 
+WHAT IT DOES NOT JUDGE
+----------------------
+- **How a view looks.** It checks that a view drew something and raised nothing new; it does not
+  compare the two pictures. The force layouts place their nodes differently on every run, so a
+  whole-frame difference between base and new would always be large and says nothing. Wrong
+  colours or a broken layout therefore pass. Each run writes compare.html in --out, with base and
+  new side by side for every view: look at it before merging.
+- **Interaction.** No click, drag, wheel, hover or leaving a view and coming back: a regression
+  that shows only then passes. #1039's 3D re-entry scare was of that kind.
+
 NOT IN SCOPE
 ------------
 - The js-yaml check, which is a `skills.json` diff and not a page check.
@@ -112,6 +122,7 @@ procedure, step 3.
 """
 import argparse
 import hashlib
+import html
 import json
 import os
 import re
@@ -757,6 +768,26 @@ def vite_report(base, new):
             'differ_after_hash_strip': sorted({normalise(x) for x in b} ^ {normalise(x) for x in n})}
 
 
+def write_compare(out, views, summary):
+    """compare.html: base and new side by side per view, for the look the verdict does not judge."""
+    rows = []
+    for view in views:
+        cells = []
+        for label in ('base', 'new'):
+            shot = out / label / f'{view}.png'
+            cells.append(f'<td><img src="{label}/{view}.png" alt="{label} {view}"></td>' if shot.exists()
+                         else f'<td>no screenshot ({html.escape(str(summary["per_view"][label][view].get("harness_error")))})</td>')
+        rows.append(f'<tr><th>{view}</th>{"".join(cells)}</tr>')
+    notes = ''.join(f'<li>{html.escape(x)}</li>' for x in summary['fails'] + summary['no_verdict'])
+    page = ('<!doctype html><meta charset="utf-8"><title>viz-runtime-check</title>'
+            '<style>body{font:14px sans-serif;margin:16px}img{width:100%;border:1px solid #888}'
+            'td,th{vertical-align:top;padding:4px}td{width:48%}</style>'
+            f"<h1>{html.escape(summary['verdict'])}</h1><ul>{notes}</ul>"
+            '<p>The verdict does not judge how a view looks. Compare each pair before merging.</p>'
+            f'<table><tr><th></th><th>base</th><th>new</th></tr>{"".join(rows)}</table>')
+    (out / 'compare.html').write_text(page)
+
+
 def summarise_reasons(lines, shown=3):
     """One clause per distinct reason, naming up to `shown` packages; summary.json keeps every line."""
     groups = {}
@@ -836,6 +867,7 @@ def run(args):
         'verdict': {0: 'PASS', 1: 'FAIL', 2: 'NO VERDICT'}[code], 'fails': fails, 'no_verdict': no_verdict,
     }
     (out / 'summary.json').write_text(json.dumps(summary, indent=1, default=str))
+    write_compare(out, views, summary)
     for label in ('base', 'new'):
         for read in reads[label]:
             how = read['how'] if read['ran'] is not None else 'no executed read: ' + read['how'].replace(' (executed)', ' returned nothing')
@@ -858,7 +890,8 @@ def run(args):
         print('FAIL: ' + line)
     for line in no_verdict:
         print('NO VERDICT: ' + line)
-    print(f"verdict: {summary['verdict']} -- evidence in {out}")
+    print(f"verdict: {summary['verdict']} -- evidence in {out}; look at {out / 'compare.html'}: the verdict "
+          'does not judge how a view looks')
     return code
 
 
@@ -1179,6 +1212,18 @@ def verify():
             code = main(['--base', str(Path(tmp) / 'base'), '--new', str(Path(tmp) / 'new'),
                          '--out', str(Path(tmp) / 'out'), '--views', '2d'])
         arm('identical lockfiles are refused even with --views', code == 2 and 'nothing moved' in err.getvalue(), f'exit {code}')
+    # 18. compare.html pairs base and new for every view, and names a missing screenshot
+    with tempfile.TemporaryDirectory() as tmp:
+        out_dir = Path(tmp)
+        for label in ('base', 'new'):
+            (out_dir / label).mkdir()
+            (out_dir / label / '2d.png').write_bytes(b'x')
+        per = {label: {'2d': {}, '3d': {'harness_error': 'TimeoutError <x>'}} for label in ('base', 'new')}
+        write_compare(out_dir, ['2d', '3d'], {'verdict': 'FAIL', 'fails': ['3d: new drew nothing'], 'no_verdict': [], 'per_view': per})
+        page = (out_dir / 'compare.html').read_text()
+        arm('compare.html pairs base and new per view and escapes a missing shot',
+            'src="base/2d.png"' in page and 'src="new/2d.png"' in page and 'TimeoutError &lt;x&gt;' in page
+            and '3d: new drew nothing' in page)
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
