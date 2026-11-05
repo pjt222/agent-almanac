@@ -106,7 +106,7 @@ One pass still leaves a blocking defect in about one handoff in three (10 of 32 
 
 ### Step 4: Install Without Losing the Prior Edition
 
-Re-stamp the header. If a handoff still exists at the install path, archive it with `read-continue-here` Step 5's archive fence and `ARCHIVE_STATE=superseded`, which moves it into the named archive or to `CONTINUE_HERE.prev.md`, or leaves a tracked edition to git history. Then `mv -n` the draft into place and check that the draft is gone, since some `mv` versions skip an existing target with exit 0. Over a tracked edition the fence left in place, use `mv -f`.
+Re-stamp the header. If a handoff still exists at the install path, archive it with the fence in `read-continue-here` Step 5 (`../read-continue-here/SKILL.md`, the one that guards `ARCHIVE_STATE`), with `CONTINUE_FILE` set to the install path and `ARCHIVE_STATE=superseded`, which moves it into the named archive or to `CONTINUE_HERE.prev.md`, or leaves a tracked edition to git history. Then `mv -n` the draft into place and check that the draft is gone, since some `mv` versions skip an existing target with exit 0. Over a tracked edition the fence left in place, use `mv -f`.
 
 **Expected:** `CONTINUE_HERE.md` at the resolved location, no draft beside it, and the prior edition archived, kept as `CONTINUE_HERE.prev.md`, or in git history.
 
