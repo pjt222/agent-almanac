@@ -755,7 +755,7 @@ def verify():
                {'kind': 'requestfailed', 'url': 'http://127.0.0.1:1111/agent-almanac/icons/b.webp', 'failure': 'net::ERR_ABORTED'}]
     ev_new = [{'kind': 'console', 'type': 'error', 'text': 'icon 404 at http://127.0.0.1:2222/agent-almanac/icons/a.webp'},
               {'kind': 'response', 'status': 404, 'url': 'http://127.0.0.1:2222/agent-almanac/icons/a.webp'},
-              {'kind': 'pageerror', 'text': 'TypeError: x is not a function'}]
+              {'kind': 'pageerror', 'text': 'Error: planted page error in the graph'}]
     sb, sn = view_signature(ev_base), view_signature(ev_new)
     arm('the same icon 404 on two ports compares equal', sb['non_ok'] == sn['non_ok'] and
         'console: icon 404 at /agent-almanac/icons/a.webp' in sn['errors'])
@@ -773,7 +773,7 @@ def verify():
     # 7. the verdict
     arm('identical signatures: PASS', verdict(['2d'], runs_with(sb), no_reads)[0] == 0)
     code, fails, _ = verdict(['2d'], runs_with(sn), no_reads)
-    arm('a planted new-only page error: FAIL naming it', code == 1 and any('x is not a function' in f for f in fails), str(fails))
+    arm('a planted new-only page error: FAIL naming it', code == 1 and any('planted page error in the graph' in f for f in fails), str(fails))
     sn404 = view_signature(ev_base[:2] + [{'kind': 'response', 'status': 404,
                                            'url': 'http://127.0.0.1:2222/agent-almanac/assets/graph3d-AbCdEf12.js'}])
     code, fails, _ = verdict(['2d'], runs_with(sn404), no_reads)
