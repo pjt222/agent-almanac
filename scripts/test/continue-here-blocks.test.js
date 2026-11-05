@@ -40,6 +40,8 @@ import { rmTree } from './_tmp.js';
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const READ = 'skills/read-continue-here/SKILL.md';
 const WRITE = 'skills/write-continue-here/SKILL.md';
+/** The one-time hook setup moved out of the skill's line budget into references/ (#1040). */
+const HOOK_REF = 'skills/read-continue-here/references/session-start-hook.md';
 
 /**
  * Files expected to carry the resolver. A file listed here that does NOT carry it fails: an absent
@@ -78,9 +80,9 @@ function bashFences(markdown) {
 function extractBlock(rel, marker, { startsWith } = {}) {
   let hits = bashFences(read(rel)).filter((body) => body.includes(marker));
   // The SessionStart hook embeds its own copy of the candidate loop — it is a standalone script
-  // and cannot source anything — so the resolver marker legitimately matches two fences in
-  // read-continue-here. Narrow by what the fence OPENS with rather than loosening the marker,
-  // and pin the hook's copy separately below, where it belongs.
+  // and cannot source anything — so the resolver marker matched two fences while the hook lived
+  // in the skill, and would again if it moved back. Narrow by what the fence OPENS with rather
+  // than loosening the marker, and pin the hook's copy separately below, where it belongs.
   if (startsWith) hits = hits.filter((body) => body.startsWith(startsWith));
   assert.ok(
     hits.length > 0,
@@ -95,13 +97,13 @@ function extractBlock(rel, marker, { startsWith } = {}) {
   return hits[0];
 }
 
-/** The SessionStart hook script, taken from between the heredoc delimiters in read-continue-here. */
+/** The SessionStart hook script, taken from between the heredoc delimiters in its reference file. */
 function extractHook() {
-  const lines = read(READ).split('\n');
+  const lines = read(HOOK_REF).split('\n');
   const start = lines.indexOf(HOOK_OPEN);
-  assert.ok(start >= 0, `${READ} no longer opens the hook heredoc with ${JSON.stringify(HOOK_OPEN)}`);
+  assert.ok(start >= 0, `${HOOK_REF} no longer opens the hook heredoc with ${JSON.stringify(HOOK_OPEN)}`);
   const end = lines.indexOf(HOOK_CLOSE, start + 1);
-  assert.ok(end > start, `${READ}'s hook heredoc is never closed`);
+  assert.ok(end > start, `${HOOK_REF}'s hook heredoc is never closed`);
   const body = lines.slice(start + 1, end).join('\n');
   assert.ok(body.length > 400, `extracted hook is ${body.length} bytes — refusing to test an empty script`);
   return body;
