@@ -35,7 +35,7 @@
 # PROCEDURE and has lost the NAME (a compaction summary does exactly that). An index keyed by
 # what you are trying to do recovers the name from that state; one keyed by name cannot.
 
-total_tools: 20
+total_tools: 21
 
 tools:
   - id: review-bundle
@@ -339,3 +339,18 @@ tools:
     verify_in_ci: true
     deps: null
     issue: "1026, 1032"
+  - id: viz-runtime-check
+    path: tools/viz-runtime-check.py
+    language: python
+    status: active
+    superseded_by: null
+    description: "Serves a base and a new build of viz/dist the way Pages does, enters the views the moved packages load, and compares console errors, non-2xx responses and a drawn-or-blank crop, base against new, naming which version of each moved library ran; exit 0 PASS, 1 FAIL, 2 no verdict"
+    need: "Checking a viz dependency bump in a real browser before merging it, base against new and view by view, with the version that executed named (the Dependabot procedure, step 3)."
+    not_for: "the frontend-runtime-verifier agent and the verify-web-app-runtime skill, which judge one build of a changed surface; vite preview, whose SPA fallback answers a missing file with 200 text/html; a js-yaml bump, which is a skills.json diff"
+    tag: null
+    invoke: "python3 tools/viz-runtime-check.py --base <base-worktree> --new <new-worktree> --out <dir>"
+    verify: "python3 tools/viz-runtime-check.py --verify"
+    verify_in_ci: true
+    deps: "playwright with Chromium for a run, imported without -I; --verify needs nothing beyond the standard library"
+    promoted_from: "the base-vs-new scripts typed three times: rt2.py for #964, rt3.py, and rt1039.py for #1039 (maintainer decision of 2026-11-05)"
+    issue: null

@@ -40,6 +40,7 @@ Generated from `tools/_registry.yml` by `npm run update-readmes`; the need-first
 | `provenance-field.mjs` | node | Reads, stamps or clears a translation's `source_commit` or `fence_basis_commit` indent-aware, refusing to move source_commit unless the caller declares the human retranslation | `node tools/provenance-field.mjs --verify` |
 | `mutation-envelope.sh` | bash | Runs a plan of mutants through scripts/mutation-check.js under ONE test command and prints a verdict table; exit 1 when any row is not a clean kill, exit 2 before any mutant is measured when a row is malformed or its <old>::<new> field does not hold :: exactly once | `bash tools/mutation-envelope.sh --verify` |
 | `transcript-stops.mjs` | node | Reads a run's subagent transcripts by record fields, never by an agent's text, and classifies each as stop, undetermined, transient or clean, naming the line of every signal; exit 1 on anything to act on, 2 when it could not look | `node tools/transcript-stops.mjs --verify` |
+| `viz-runtime-check.py` | python | Serves a base and a new build of viz/dist the way Pages does, enters the views the moved packages load, and compares console errors, non-2xx responses and a drawn-or-blank crop, base against new, naming which version of each moved library ran; exit 0 PASS, 1 FAIL, 2 no verdict | `python3 tools/viz-runtime-check.py --verify` |
 <!-- AUTO:END:tools-table -->
 
 ## Layout
