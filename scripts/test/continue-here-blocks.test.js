@@ -151,10 +151,10 @@ function fixture(files, { commit = [] } = {}) {
   return dir;
 }
 
-function runBash(script, { cwd, env = {} } = {}) {
+function runBash(script, { cwd, env = {}, timeout } = {}) {
   // Same reason as `cleanEnv`'s docblock: the cleanup block runs `git rm` and `git commit`, so an
   // inherited GIT_DIR would land them in whatever repository the suite was started from.
-  return spawnSync('bash', ['-c', script], { cwd, encoding: 'utf8', env: cleanEnv(cwd, env) });
+  return spawnSync('bash', ['-c', script], { cwd, encoding: 'utf8', env: cleanEnv(cwd, env), timeout });
 }
 
 /**
@@ -556,6 +556,26 @@ test('archive: any failure refuses, and the cleanup run after it in the same cal
     assert.ok(existsSync(alone.file), 'the cleanup ran with no archive in its shell');
   } finally {
     rmTree(alone.base);
+  }
+});
+
+test('archive: a relative CONTINUE_FILE is made absolute, not walked forever', () => {
+  // `${dir%/*}` leaves a slash-free path unchanged, so a relative path never shortens to nothing
+  // and the parent walk never ends (#1042 round 1 measured rc 124 under bash and zsh).
+  for (const tracked of [false, true]) {
+    const tree = archiveTree({}, { tracked });
+    try {
+      const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
+        cwd: tree.proj,
+        timeout: 20000,
+        env: { CONTINUE_FILE: 'CONTINUE_HERE.md', ARCHIVE_STATE: 'consumed', HOME: tree.home },
+      });
+      assert.equal(res.signal, null, `tracked=${tracked}: the fence never finished`);
+      assert.equal(res.status, 0, `tracked=${tracked}: ${res.stderr}`);
+      assert.match(res.stdout, /^archive: /m);
+    } finally {
+      rmTree(tree.base);
+    }
   }
 });
 

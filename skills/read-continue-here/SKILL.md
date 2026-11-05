@@ -115,6 +115,7 @@ Keep a copy first: the next `write-continue-here` compares its draft against thi
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 : "${ARCHIVE_STATE:?set it to consumed when reading, superseded when replacing}"
+case "$CONTINUE_FILE" in /*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac
 HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
 SEARCH=() dir=$ROOT ARCHIVE=
