@@ -49,7 +49,7 @@ Set the header to `Verified: verify-handoff round N, 0 blocking, coverage comple
 
 **Expected:** The draft names its passing round, so `read-continue-here` skips the recheck of repaired lines; it still re-confirms the branch, `HEAD:` and the named PRs and issues.
 
-**On failure:** If round 3 does not pass, stop and hand the open findings to the user. The user decides whether to install with an honest `single pass` value, which records the last round's findings file, or to keep working.
+**On failure:** If round 3 does not pass, stop and hand the open findings to the user. The user decides whether to keep working, or to install with `Verified: verify-handoff round 3, N blocking open, findings <file>`. Any value other than the full-gate one makes `read-continue-here` re-check the repaired lines.
 
 ## Validation
 
