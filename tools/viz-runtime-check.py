@@ -113,6 +113,7 @@ BUILD_ROOTS = ['vite']  # builds every chunk: anything in its closure enters eve
 CHROMIUM_ARGS = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
                  '--ignore-gpu-blocklist']
 NAV_TIMEOUT_MS = 180000
+VIEW_TIMEOUT_MS = 120000  # for a view switch to finish: its button selected and the loading overlay hidden
 SETTLE_MS = {'2d': 4000, '3d': 4500, 'campfire': 4000, 'chord': 4000, 'hive': 4000, 'workflow': 5000}
 # Everything viz/css/style.css positions over #graph-container that is not the drawing: the header,
 # the panels and their toggles and backdrops, the loading overlay, the first-visit hint, the tooltip,
@@ -381,13 +382,18 @@ def verdict(views, runs, reads):
             extra = sorted(n['sig'][key] - b['sig'][key])
             if extra:
                 fails.append(f'{view}: new shows {len(extra)} {what}(s) base does not: {extra[:5]}')
-    for label in ('base', 'new'):
-        for read in reads[label]:
-            if read['ran'] is None:
-                continue
-            if read['ran'] != read['installed']:
+    for package in sorted({r['package'] for label in reads for r in reads[label]}):
+        b = next((r for r in reads['base'] if r['package'] == package), None)
+        n = next((r for r in reads['new'] if r['package'] == package), None)
+        for label, read in (('base', b), ('new', n)):
+            if read and read['ran'] is not None and read['ran'] != read['installed']:
                 where = fails if label == 'new' else no_verdict
-                where.append(f"{label}: {read['package']} ran {read['ran']} but {read['installed']} is installed")
+                where.append(f"{label}: {package} ran {read['ran']} but {read['installed']} is installed")
+        # A read that returned nothing is not a pass (#1046 round 1, B2): the library may never have run.
+        if n and n['ran'] is None and b and b['ran'] is not None:
+            fails.append(f"new: {package} gave no executed read, though base read {b['ran']}")
+        elif (n and n['ran'] is None) or (b and b['ran'] is None):
+            no_verdict.append(f"{package}: no executed read (base {b and b['ran']}, new {n and n['ran']})")
     code = 1 if fails else (2 if no_verdict else 0)
     return code, fails, no_verdict
 
@@ -566,6 +572,13 @@ def run_build(label, tree, views, out, sync_playwright):
                     if view != current:
                         page.click('#' + BUTTON[view])
                         current = view
+                    # The app drops a click while a switch is running (viz/js/app.js, the switching guard),
+                    # and marks the button selected only after the view loaded (setActiveMode, last in
+                    # switchMode). So wait for both, or the screenshot shows the view this replaced.
+                    page.wait_for_function("(id) => document.getElementById(id)?.getAttribute('aria-selected') === 'true'",
+                                           arg=BUTTON[view], timeout=VIEW_TIMEOUT_MS)
+                    page.wait_for_function("() => document.getElementById('loading')?.classList.contains('hidden')",
+                                           timeout=VIEW_TIMEOUT_MS)
                     if view == '3d':
                         page.wait_for_function('() => window.__THREE__ !== undefined')
                     page.wait_for_timeout(SETTLE_MS[view])
@@ -589,7 +602,9 @@ def run_build(label, tree, views, out, sync_playwright):
                                   'installed_version': installed_version(tree['modules'], 'three')})
                 if view == 'workflow':
                     svg = page.evaluate("""async () => { if (!window.__mermaid) return null;
-                      const { svg } = await window.__mermaid.render('rt-info-' + Date.now(), 'info'); return svg; }""")
+                      const render = window.__mermaid.render('rt-info-' + Date.now(), 'info').then(r => r.svg);
+                      const timeout = new Promise(resolve => setTimeout(() => resolve(null), 30000));
+                      return Promise.race([render, timeout]); }""")
                     reads.append({'package': 'mermaid', 'how': "window.__mermaid.render('info') (executed)",
                                   'ran': mermaid_version(svg),
                                   'installed': installed_version(tree['modules'], 'mermaid'),
@@ -683,7 +698,8 @@ def run(args):
     (out / 'summary.json').write_text(json.dumps(summary, indent=1, default=str))
     for label in ('base', 'new'):
         for read in reads[label]:
-            print(f"{label}: {read['package']} ran {read['ran']} (installed {read['installed_version']}) via {read['how']}")
+            how = read['how'] if read['ran'] is not None else 'no executed read: ' + read['how'].replace(' (executed)', ' returned nothing')
+            print(f"{label}: {read['package']} ran {read['ran']} (installed {read['installed_version']}) via {how}")
     for line in prints:
         print(f"read {line['package']} {line['base']} -> {line['new']}: {line['how']}"
               + (f" '{line['literal']}'" if line.get('literal') else ''))
@@ -864,6 +880,13 @@ def verify():
     arm("three 0.187.0 expects window.__THREE__ '187'", three_revision('0.187.0') == '187' and three_revision('1.0.0') is None)
     arm("mermaid's info SVG yields its version", mermaid_version('<svg><text>v12.2.0</text></svg>') == '12.2.0'
         and mermaid_version('<svg/>') is None)
+    silent = {'base': [{'package': 'mermaid', 'ran': '12.1.0', 'installed': '12.1.0'}],
+              'new': [{'package': 'mermaid', 'ran': None, 'installed': '12.2.0'}]}
+    code, fails, _ = verdict(['2d'], runs_with(sb), silent)
+    arm('new gave no executed read where base did: FAIL', code == 1 and any('no executed read' in f for f in fails), str(fails))
+    neither = {'base': [{'package': 'mermaid', 'ran': None, 'installed': '12.1.0'}],
+               'new': [{'package': 'mermaid', 'ran': None, 'installed': '12.2.0'}]}
+    arm('neither build gave an executed read: NO VERDICT, never PASS', verdict(['2d'], runs_with(sb), neither)[0] == 2)
     stale = {'base': [], 'new': [{'package': 'three', 'ran': '186', 'installed': '187', 'installed_version': '0.187.0'}]}
     code, fails, _ = verdict(['2d'], runs_with(sb), stale)
     arm('new ran a different three than it installed: FAIL', code == 1 and any('ran 186' in f for f in fails), str(fails))
