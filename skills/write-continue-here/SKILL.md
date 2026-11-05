@@ -70,7 +70,7 @@ Write `CONTINUE_HERE.draft.md` beside a resolved handoff; beside one at an unres
 # Continue Here
 
 > Last updated: YYYY-MM-DDTHH:MM:SSZ | Branch: <branch> | HEAD: <short sha>
-> Verified: <one of the three values in Step 3>
+> Verified: <one of the three values in Step 3, or the value verify-continue-here records>
 
 ## Objective
 Why, in one paragraph; git log shows what changed, not why.
