@@ -115,7 +115,7 @@ Keep a copy first: the next `write-continue-here` compares its draft against thi
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
 : "${ARCHIVE_STATE:?set it to consumed when reading, superseded when replacing}"
-HOME_DIR=${CONTINUE_FILE%/*}
+HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
 SEARCH=() dir=$ROOT ARCHIVE=
 while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
@@ -131,21 +131,22 @@ if [ "$ARCHIVE" = '<dir>' ]; then
   echo "REFUSED: $f carries the unedited 'Handoff archive: <dir>'; name a directory there" >&2; false
 elif [ -n "$ARCHIVE" ]; then
   DEST=$ARCHIVE/${STAMP%%T*}/${ROOT##*/}-CONTINUE_HERE.$STAMP.$ARCHIVE_STATE.md
-  mkdir -p -- "${DEST%/*}" && "$KEEP" -- "$CONTINUE_FILE" "$DEST" && echo "archive: $DEST"
+  mkdir -p -- "${DEST%/*}" && "$KEEP" -- "$CONTINUE_FILE" "$DEST" && ARCHIVED=$DEST
 elif git -C "$HOME_DIR" ls-files --error-unmatch -- "$CONTINUE_FILE" >/dev/null 2>&1; then
-  if git -C "$HOME_DIR" diff --quiet HEAD -- "$CONTINUE_FILE"; then echo "archive: git history keeps this edition"
+  if git -C "$HOME_DIR" diff --quiet HEAD -- "$CONTINUE_FILE"; then ARCHIVED="git history, tracked"
   else echo "REFUSED: $CONTINUE_FILE has uncommitted changes; commit them first" >&2; false; fi
 else
-  "$KEEP" -- "$CONTINUE_FILE" "$HOME_DIR/CONTINUE_HERE.prev.md" && echo "archive: $HOME_DIR/CONTINUE_HERE.prev.md"
+  "$KEEP" -- "$CONTINUE_FILE" "$HOME_DIR/CONTINUE_HERE.prev.md" && ARCHIVED=$HOME_DIR/CONTINUE_HERE.prev.md
 fi
+if [ -n "$ARCHIVED" ]; then echo "archive: $ARCHIVED"
+else echo "REFUSED: $CONTINUE_FILE was not archived, so the cleanup will not delete it" >&2; false; fi
 ```
 
-Then delete the file you read, by the branch matching its tracked state (`write-continue-here` Step 5 states the trade-off). A handoff carrying `coordinate-peer-sessions` Step 3's scope declaration warns first, because the peer will not look for it in an archive:
+Then delete the file you read, in the same shell call: the cleanup refuses unless the archive set `ARCHIVED`. Its branch matches the file's tracked state (`write-continue-here` Step 5 states the trade-off). A handoff carrying `coordinate-peer-sessions` Step 3's scope declaration warns first, because the peer will not look for it in an archive:
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
-# A shell loop, not grep/rg: a session may have neither, or a hook that blocks grep. Anchored on
-# the line start, so prose that merely discusses the literal does not warn.
+: "${ARCHIVED:?run the archive fence first in this shell call, or set ARCHIVED to the path it printed}"
 SCOPE_LINE=$(while IFS= read -r l; do
   case "$l" in "Nobody runs:"*) printf '%s' "$l"; break ;; esac
 done < "$CONTINUE_FILE")
@@ -165,7 +166,7 @@ fi
 
 **Expected:** The edition is in the archive, in `CONTINUE_HERE.prev.md`, or in git history, and the file you read is gone; a tracked deletion is committed with the handoff as its only path. A scope declaration (#857) warns, and the delete still runs.
 
-**On failure:** After `REFUSED`, do not run the cleanup: name a directory in place of `<dir>` (or delete that line), or read the uncommitted changes before committing anything, since an unconsumed edit from another session is the case that rule exists for. To keep the file during the session, clean up before it ends.
+**On failure:** After `REFUSED` or any non-zero exit, nothing is deleted. Name a directory in place of `<dir>` (or delete that line), or read the uncommitted changes before committing anything, since an unconsumed edit from another session is the case that rule exists for. To keep the file during the session, clean up before it ends.
 
 ### Step 6: Configure the SessionStart Hook (Optional)
 

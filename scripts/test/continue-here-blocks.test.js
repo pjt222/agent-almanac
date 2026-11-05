@@ -256,7 +256,7 @@ test('cleanup: a tracked handoff is removed through git, an untracked one is not
     writeFileSync(join(tracked, 'src.txt'), 'staged by somebody else');
     spawnSync('git', ['-C', tracked, 'add', 'src.txt'], { encoding: 'utf8' });
 
-    const res = runBash(block, { cwd: tracked, env: { CONTINUE_FILE: path } });
+    const res = runBash(block, { cwd: tracked, env: { CONTINUE_FILE: path, ARCHIVED: 'fixture' } });
     assert.equal(res.status, 0, `tracked arm exited ${res.status}\n${res.stderr}`);
     assert.equal(existsSync(path), false, 'tracked handoff was not deleted');
     const log = spawnSync('git', ['-C', tracked, 'log', '--oneline'], { encoding: 'utf8' }).stdout;
@@ -283,7 +283,7 @@ test('cleanup: a tracked handoff is removed through git, an untracked one is not
   const untracked = fixture({ 'CONTINUE_HERE.md': 'x' });
   try {
     const path = join(untracked, 'CONTINUE_HERE.md');
-    const res = runBash(block, { cwd: untracked, env: { CONTINUE_FILE: path } });
+    const res = runBash(block, { cwd: untracked, env: { CONTINUE_FILE: path, ARCHIVED: 'fixture' } });
     assert.equal(res.status, 0, `untracked arm exited ${res.status}\n${res.stderr}`);
     assert.equal(existsSync(path), false, 'untracked handoff was not deleted');
     const log = spawnSync('git', ['-C', untracked, 'log', '--oneline'], { encoding: 'utf8' });
@@ -529,6 +529,36 @@ function archivedName(dir, state) {
   return new RegExp(`^archive: ${esc}/(\\d{4}-\\d\\d-\\d\\d)/proj-CONTINUE_HERE\\.(\\1)T\\d{6}Z\\.${state}\\.md$`, 'm');
 }
 
+test('archive: any failure refuses, and the cleanup run after it in the same call deletes nothing', () => {
+  // A file where the archive's parent should be makes mkdir fail without any named REFUSED arm
+  // firing; the placeholder is the named arm. Both run archive then cleanup in one call, as the
+  // skill says, and the handoff must survive both. Round 1 of #1042 measured the opposite.
+  const pair = `${extractBlock(READ, ARCHIVE_MARKER)}\n${extractBlock(READ, CLEANUP_MARKER)}`;
+  for (const line of ['blocker', snippetArchiveLine()]) {
+    const tree = archiveTree({});
+    try {
+      writeFileSync(join(tree.base, 'blocker'), 'a file, not a directory');
+      const declared = line === 'blocker' ? `Handoff archive: ${join(tree.base, 'blocker', 'arch')}` : line;
+      writeFileSync(join(tree.proj, 'CLAUDE.md'), `${declared}\n`);
+      const res = runBash(pair, { cwd: tree.proj, env: { CONTINUE_FILE: tree.file, ARCHIVE_STATE: 'consumed', HOME: tree.home } });
+      assert.notEqual(res.status, 0, `${line}: the archive failed and the pair still exited 0`);
+      assert.match(res.stderr, /REFUSED: .*was not archived/, `${line}: no REFUSED line for the failure`);
+      assert.ok(existsSync(tree.file), `${line}: the cleanup deleted a handoff the archive never kept`);
+    } finally {
+      rmTree(tree.base);
+    }
+  }
+  const alone = archiveTree({});
+  try {
+    const res = runBash(extractBlock(READ, CLEANUP_MARKER), { cwd: alone.proj, env: { CONTINUE_FILE: alone.file } });
+    assert.notEqual(res.status, 0);
+    assert.match(res.stderr, /run the archive fence first/);
+    assert.ok(existsSync(alone.file), 'the cleanup ran with no archive in its shell');
+  } finally {
+    rmTree(alone.base);
+  }
+});
+
 test('archive DRIFT: the fence reads the literal and refuses the placeholder that Step 7 emits', () => {
   const line = snippetArchiveLine();
   const block = extractBlock(READ, ARCHIVE_MARKER);
@@ -620,7 +650,7 @@ test('archive: without the line, untracked keeps CONTINUE_HERE.prev.md and track
   try {
     const res = runArchive(tracked, 'consumed');
     assert.equal(res.status, 0, res.stderr);
-    assert.match(res.stdout, /git history keeps this edition/);
+    assert.match(res.stdout, /archive: git history, tracked/);
     assert.equal(existsSync(join(tracked.proj, 'CONTINUE_HERE.prev.md')), false, 'a tracked handoff got a copy it does not need');
     writeFileSync(tracked.file, '# Continue Here\nedited after the commit\n');
     const dirty = runArchive(tracked, 'superseded');
@@ -704,7 +734,7 @@ test('HOSTILE ENVIRONMENT: a GIT_DIR pointing at another repository cannot reach
     tracked = fixture({ 'CONTINUE_HERE.md': 'x' }, { commit: ['CONTINUE_HERE.md'] });
     const res = runBash(extractBlock(READ, CLEANUP_MARKER), {
       cwd: tracked,
-      env: { CONTINUE_FILE: join(tracked, 'CONTINUE_HERE.md') },
+      env: { CONTINUE_FILE: join(tracked, 'CONTINUE_HERE.md'), ARCHIVED: 'fixture' },
     });
     assert.equal(res.status, 0, `cleanup failed under a hostile environment\n${res.stderr}`);
   } finally {
