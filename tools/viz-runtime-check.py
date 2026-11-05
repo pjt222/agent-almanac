@@ -25,10 +25,12 @@ procedure's step 2 builds new, and step 3's first bullet builds the base.
 
 WHAT IT DOES, IDENTICALLY FOR BOTH BUILDS
 -----------------------------------------
-1. It diffs the two lockfiles and lists every package that moved. It maps the moved packages to
-   the views that load them (VIEW_RULES below; a package the table does not know enters every
-   view). With only dev-only packages moving, other than vite, there is nothing in the page to
-   check, and it exits 2.
+1. It diffs the two lockfiles and lists every package that moved. A moved package enters each
+   view whose dependency closure contains it. The closures are computed from both lockfiles with
+   Node's lookup, starting at each view's own imports (VIEW_ROOTS below). Anything in vite's
+   closure enters every view, because vite builds every chunk. A runtime package in no closure
+   enters every view too. With only dev-only packages moving outside vite's closure, there is
+   nothing in the page to check, and it exits 2.
 2. It serves each `dist/` the way GitHub Pages does, a plain static server under
    `/agent-almanac/`, where a missing file is a real 404. It never uses `vite preview`, whose SPA
    fallback answers a missing file with `200 text/html`. A probe of a missing asset must read
@@ -101,12 +103,13 @@ PROG = 'python3 tools/viz-runtime-check.py'
 ALL_VIEWS = ['2d', '3d', 'campfire', 'chord', 'hive', 'workflow']
 BUTTON = {'2d': 'btn-2d', '3d': 'btn-3d', 'campfire': 'btn-campfire', 'chord': 'btn-chord',
           'hive': 'btn-hive', 'workflow': 'btn-flow'}
-# d3 sub-packages that force-graph (2D) and three-forcegraph (3D) resolve to; the lockfile
-# deduplicates them, so a move of one reaches those views too (the handoff's facts A5).
-D3_2D = {'d3-array', 'd3-drag', 'd3-scale', 'd3-scale-chromatic', 'd3-selection', 'd3-zoom'}
-D3_3D = {'d3-array', 'd3-scale', 'd3-scale-chromatic'}
-D3_DIRECT = ['campfire', 'chord', 'hive', 'workflow']  # import d3 directly; mermaid depends on d3
-THREE_FAMILY = {'3d-force-graph', 'three', 'three-forcegraph', 'three-render-objects'}
+# The bare imports of each view's module (viz/js/graph.js, graph3d.js, campfire.js, chord.js,
+# hive.js, workflow.js). A moved package enters a view when it is in the dependency closure of
+# that view's roots, computed from the lockfile with Node's lookup. graph.js is imported by app.js
+# itself, so force-graph also loads with the page; the load phase is compared in every run.
+VIEW_ROOTS = {'2d': ['force-graph'], '3d': ['3d-force-graph', 'three'], 'campfire': ['d3'],
+              'chord': ['d3'], 'hive': ['d3'], 'workflow': ['mermaid']}
+BUILD_ROOTS = ['vite']  # builds every chunk: anything in its closure enters every view
 CHROMIUM_ARGS = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
                  '--ignore-gpu-blocklist']
 NAV_TIMEOUT_MS = 180000
@@ -230,38 +233,68 @@ def moved_packages(base_lock, new_lock):
     return moved
 
 
-def views_for(name, dev):
-    """(views, reason) for one moved package; the table is the handoff's step 3, as data."""
-    if name == 'vite':
-        return list(ALL_VIEWS), 'vite builds every chunk, so every view, under --patch too'
-    if dev:
-        return [], 'dev-only, not in the page'
-    if name == 'force-graph':
-        return ['2d'], 'force-graph draws the 2D view'
-    if name in THREE_FAMILY:
-        return ['3d'], f'{name} is in the 3D view'
-    if name == 'mermaid':
-        return ['workflow'], 'mermaid draws the workflow view'
-    if name == 'd3':
-        return list(D3_DIRECT), 'campfire, chord and hive import d3; mermaid depends on it'
-    if name.startswith('d3-'):
-        views = list(D3_DIRECT)
-        if name in D3_2D:
-            views.append('2d')
-        if name in D3_3D:
-            views.append('3d')
-        return views, f'{name} is deduplicated under d3' + (', force-graph' if name in D3_2D else '') + \
-            (', three-forcegraph' if name in D3_3D else '')
-    return list(ALL_VIEWS), f'{name} is not in the table: every view'
+def resolve(packages, from_path, name):
+    """Node's lookup in a lockfile's packages map: <from>/node_modules/<name>, each ancestor's, the root's."""
+    base = from_path
+    while True:
+        candidate = f'{base}/node_modules/{name}' if base else f'node_modules/{name}'
+        if candidate in packages:
+            return candidate
+        if not base:
+            return None
+        cut = base.rfind('/node_modules/')
+        base = base[:cut] if cut >= 0 else ''
 
 
-def select_views(moved, override=None):
+def closure(packages, roots):
+    """Every installed path reachable from the roots through dependencies, optional and peer dependencies."""
+    seen, todo = set(), [p for p in (resolve(packages, '', r) for r in roots) if p]
+    while todo:
+        path = todo.pop()
+        if path in seen:
+            continue
+        seen.add(path)
+        meta = packages.get(path) or {}
+        for field in ('dependencies', 'optionalDependencies', 'peerDependencies'):
+            for dep in meta.get(field) or {}:
+                found = resolve(packages, path, dep)
+                if found and found not in seen:
+                    todo.append(found)
+    return seen
+
+
+def view_closures(*locks):
+    """{view: paths} and the build closure, each the union over the given lockfiles."""
+    views, build = {v: set() for v in ALL_VIEWS}, set()
+    for lock in locks:
+        packages = lock.get('packages') or {}
+        for view, roots in VIEW_ROOTS.items():
+            views[view] |= closure(packages, roots)
+        build |= closure(packages, BUILD_ROOTS)
+    return views, build
+
+
+def views_for(pkg, closures):
+    """(views, reason) for one moved package, from the view closures of both lockfiles."""
+    views, build = closures
+    if pkg['path'] in build:
+        return list(ALL_VIEWS), "in vite's dependency closure; vite builds every chunk, so every view, under --patch too"
+    hit = [v for v in ALL_VIEWS if pkg['path'] in views[v]]
+    if hit:
+        roots = sorted({r for v in hit for r in VIEW_ROOTS[v]})
+        return hit, 'in the dependency closure of ' + ', '.join(roots)
+    if pkg['dev']:
+        return [], "dev-only and outside vite's closure, not in the page"
+    return list(ALL_VIEWS), "a runtime package in no view's closure: every view"
+
+
+def select_views(moved, closures, override=None):
     """Return (ordered views, {view: [reasons]})."""
     reasons = {}
     for pkg in moved:
-        views, why = views_for(pkg['name'], pkg['dev'])
+        views, why = views_for(pkg, closures)
         for view in views:
-            reasons.setdefault(view, []).append(f"{pkg['name']} {pkg['base']} -> {pkg['new']}: {why}")
+            reasons.setdefault(view, []).append(f"{pkg['path']} {pkg['base']} -> {pkg['new']}: {why}")
     if override:
         for view in override:
             reasons.setdefault(view, []).append('named by --views')
@@ -598,7 +631,7 @@ def run(args):
     override = [v.strip() for v in args.views.split(',')] if args.views else None
     if override and any(v not in ALL_VIEWS for v in override):
         raise Refused(f'--views takes {",".join(ALL_VIEWS)}; got {args.views}')
-    views, reasons = select_views(moved, override)  # --patch never narrows the views
+    views, reasons = select_views(moved, view_closures(base['lock'], new['lock']), override)  # --patch never narrows the views
     print(f'moved packages: {len(moved)}')
     for pkg in moved:
         print(f"  {pkg['path']}: {pkg['base']} -> {pkg['new']}{' (dev)' if pkg['dev'] else ''}")
@@ -734,18 +767,36 @@ def verify():
     arm('lock diff marks vitest dev and three not', next(m for m in moved if m['name'] == 'vitest')['dev']
         and not next(m for m in moved if m['name'] == 'three')['dev'])
     arm('a nested copy is named by its leaf package', any(m['name'] == 'dompurify' for m in moved))
-    # 5. the view table, full and --patch
-    cases = [('force-graph', False, ['2d']), ('three', False, ['3d']), ('3d-force-graph', False, ['3d']),
-             ('mermaid', False, ['workflow']), ('d3', False, ['campfire', 'chord', 'hive', 'workflow']),
-             ('d3-array', False, ['campfire', 'chord', 'hive', 'workflow', '2d', '3d']),
-             ('d3-zoom', False, ['campfire', 'chord', 'hive', 'workflow', '2d']),
-             ('d3-shape', False, ['campfire', 'chord', 'hive', 'workflow']),
-             ('vite', True, ALL_VIEWS), ('vitest', True, []), ('dompurify', False, ALL_VIEWS)]
-    for name, dev, want in cases:
-        got, _ = views_for(name, dev)
-        arm(f"views for {name}{' (dev)' if dev else ''}", got == want, str(got))
-    chosen, _ = select_views([{'name': 'vitest', 'dev': True, 'base': '1', 'new': '2'}])
-    arm('only a dev-only package moved: no view, so the run refuses', chosen == [])
+    # 5. view routing by dependency closure (the shape of viz/package-lock.json, cut down)
+    fixture = {'packages': {
+        '': {}, 'node_modules/force-graph': {'dependencies': {'d3-array': '^3', 'd3-force-3d': '^3'}},
+        'node_modules/3d-force-graph': {'dependencies': {'three-forcegraph': '^1'}},
+        'node_modules/three-forcegraph': {'dependencies': {'d3-force-3d': '^3', 'd3-scale': '^4'}, 'peerDependencies': {'three': '>=0.1'}},
+        'node_modules/three': {}, 'node_modules/d3': {'dependencies': {'d3-array': '^3', 'd3-interpolate': '^3'}},
+        'node_modules/d3-interpolate': {'dependencies': {'d3-color': '^3'}}, 'node_modules/d3-color': {},
+        'node_modules/d3-array': {}, 'node_modules/d3-scale': {}, 'node_modules/d3-force-3d': {},
+        'node_modules/mermaid': {'dependencies': {'dompurify': '^3', 'd3': '^7'}},
+        'node_modules/mermaid/node_modules/dompurify': {}, 'node_modules/dompurify': {},
+        'node_modules/vite': {'dev': True, 'dependencies': {'rolldown': '1'}}, 'node_modules/rolldown': {'dev': True},
+        'node_modules/vitest': {'dev': True}, 'node_modules/orphan': {}}}
+    closures = view_closures(fixture)
+    arm('the lookup prefers a nested copy over the root one',
+        resolve(fixture['packages'], 'node_modules/mermaid', 'dompurify') == 'node_modules/mermaid/node_modules/dompurify'
+        and resolve(fixture['packages'], 'node_modules/mermaid/node_modules/dompurify', 'd3') == 'node_modules/d3')
+    cases = [('node_modules/force-graph', False, ['2d']),
+             ('node_modules/d3-force-3d', False, ['2d', '3d']),  # #1046 round 1, B3: the layout engine of both graphs
+             ('node_modules/d3-array', False, ['2d', 'campfire', 'chord', 'hive', 'workflow']),
+             ('node_modules/d3-color', False, ['campfire', 'chord', 'hive', 'workflow']),
+             ('node_modules/three', False, ['3d']), ('node_modules/d3-scale', False, ['3d']),
+             ('node_modules/mermaid/node_modules/dompurify', False, ['workflow']),
+             ('node_modules/dompurify', False, ALL_VIEWS),  # shadowed by mermaid's copy: in no closure
+             ('node_modules/vite', True, ALL_VIEWS), ('node_modules/rolldown', True, ALL_VIEWS),
+             ('node_modules/vitest', True, []), ('node_modules/orphan', False, ALL_VIEWS)]
+    for path, dev, want in cases:
+        got, _ = views_for({'path': path, 'dev': dev}, closures)
+        arm(f"views for {path}{' (dev)' if dev else ''}", got == want, str(got))
+    chosen, _ = select_views([{'path': 'node_modules/vitest', 'name': 'vitest', 'dev': True, 'base': '1', 'new': '2'}], closures)
+    arm('only a dev-only package outside the build closure moved: no view, so the run refuses', chosen == [])
     # 6. comparison: normalisation, and a planted new-only error
     arm('normalise strips host, port and bundle hash',
         normalise('GET http://127.0.0.1:41234/agent-almanac/assets/graph3d-BXq3dPZS.js 404')
