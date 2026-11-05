@@ -524,6 +524,14 @@ function runArchive(tree, state, extraEnv = {}) {
 }
 
 /** The archived name: <dir>/<UTC date>/<project>-CONTINUE_HERE.<UTC stamp>.<state>.md */
+/** The fence printed an archived path of the right shape, and that file holds the edition. */
+function assertArchived(stdout, dir, state, message) {
+  const match = stdout.match(archivedName(dir, state));
+  assert.ok(match, message ?? `not archived under ${dir}: ${stdout}`);
+  const archived = match[0].slice('archive: '.length);
+  assert.equal(readFileSync(archived, 'utf8'), '# Continue Here\nedition one\n', `${archived} does not hold the edition`);
+}
+
 function archivedName(dir, state) {
   const esc = dir.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return new RegExp(`^archive: ${esc}/(\\d{4}-\\d\\d-\\d\\d)/proj-CONTINUE_HERE\\.(\\1)T\\d{6}Z\\.${state}\\.md$`, 'm');
@@ -594,7 +602,7 @@ test('archive: in a linked worktree, the archived name carries the project, not 
       env: { CONTINUE_FILE: join(wt, 'CONTINUE_HERE.md'), ARCHIVE_STATE: 'consumed', HOME: tree.home },
     });
     assert.equal(res.status, 0, res.stderr);
-    assert.match(res.stdout, archivedName(join(tree.base, 'shared'), 'consumed'), `named after the worktree: ${res.stdout}`);
+    assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `named after the worktree: ${res.stdout}`);
   } finally {
     rmTree(tree.base);
   }
@@ -607,7 +615,7 @@ test('archive: a project that keeps its CLAUDE.md under .claude/ is read at the 
     writeFileSync(join(tree.proj, '.claude', 'CLAUDE.md'), `Handoff archive: ${join(tree.base, 'dotclaude')}\n`);
     const res = runArchive(tree, 'consumed');
     assert.equal(res.status, 0, res.stderr);
-    assert.match(res.stdout, archivedName(join(tree.base, 'dotclaude'), 'consumed'));
+    assertArchived(res.stdout, join(tree.base, 'dotclaude'), 'consumed');
   } finally {
     rmTree(tree.base);
   }
@@ -641,7 +649,7 @@ test('archive: nearest first — project CLAUDE.md, parent CLAUDE.md, user-level
       try {
         const res = runArchive(fresh, 'consumed');
         assert.equal(res.status, 0, `${winner}: archive fence exited ${res.status}\n${res.stderr}`);
-        assert.match(res.stdout, archivedName(dirs[winner], 'consumed'), `${winner} should have won; stdout was ${res.stdout}`);
+        assertArchived(res.stdout, dirs[winner], 'consumed', `${winner} should have won; stdout was ${res.stdout}`);
         assert.ok(existsSync(fresh.file), `${winner}: reading must COPY; the handoff is the cleanup fence's to delete`);
       } finally {
         rmTree(fresh.base);
@@ -657,7 +665,7 @@ test('archive: superseded moves, a relative path is the declaring file\'s, and ~
   try {
     const res = runArchive(rel, 'superseded');
     assert.equal(res.status, 0, res.stderr);
-    assert.match(res.stdout, archivedName(join(rel.base, 'kept'), 'superseded'));
+    assertArchived(res.stdout, join(rel.base, 'kept'), 'superseded');
     assert.equal(existsSync(rel.file), false, 'superseded must MOVE the edition it replaces');
   } finally {
     rmTree(rel.base);
@@ -666,7 +674,7 @@ test('archive: superseded moves, a relative path is the declaring file\'s, and ~
   try {
     const res = runArchive(tilde, 'consumed');
     assert.equal(res.status, 0, res.stderr);
-    assert.match(res.stdout, archivedName(join(tilde.home, 'arch'), 'consumed'));
+    assertArchived(res.stdout, join(tilde.home, 'arch'), 'consumed');
   } finally {
     rmTree(tilde.base);
   }
@@ -728,7 +736,7 @@ test('archive: refuses to run without ARCHIVE_STATE, and needs no grep, rg, sed 
     }
     const res = runArchive(tree, 'consumed', { PATH: toolDir });
     assert.equal(res.status, 0, `with only bash, git, cp, mv, mkdir and date on PATH\n${res.stderr}`);
-    assert.match(res.stdout, archivedName(join(tree.proj, 'arch'), 'consumed'));
+    assertArchived(res.stdout, join(tree.proj, 'arch'), 'consumed');
   } finally {
     rmTree(tree.base);
     rmTree(toolDir);
