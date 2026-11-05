@@ -337,10 +337,12 @@ def normalise(text):
 
 def view_signature(events):
     """The comparable sets for one view: errors, and responses or failures that are not 2xx/3xx."""
-    errors, non_ok, ignored = set(), set(), []
+    errors, non_ok, ignored, warnings = set(), set(), [], set()
     for e in events:
         if e['kind'] == 'console' and e['type'] == 'error':
             errors.add('console: ' + normalise(e['text']))
+        elif e['kind'] == 'console' and e['type'] == 'warning':
+            warnings.add('warning: ' + normalise(e['text']))
         elif e['kind'] == 'pageerror':
             errors.add('pageerror: ' + normalise(e['text']))
         elif e['kind'] == 'dialog':
@@ -352,7 +354,7 @@ def view_signature(events):
                 ignored.append(normalise(e['url']))
             else:
                 non_ok.add(f"failed {normalise(e['url'])} {e.get('failure')}")
-    return {'errors': errors, 'non_ok': non_ok, 'aborted_ignored': ignored}
+    return {'errors': errors, 'non_ok': non_ok, 'aborted_ignored': ignored, 'warnings': warnings}
 
 
 def three_revision(version):
@@ -389,6 +391,9 @@ def verdict(views, runs, reads):
             elif not n['drawn']:
                 fails.append(f'{view}: new drew nothing (stats {n["stats"]})'
                              + (f" ({n['harness_error']})" if n.get('harness_error') else ''))
+        if b.get('three_instances') is not None and n.get('three_instances') is not None \
+                and n['three_instances'] > b['three_instances']:
+            fails.append(f"{view}: new runs {n['three_instances']} copies of three, base {b['three_instances']}")
         for key, what in (('errors', 'error'), ('non_ok', 'non-2xx response or failed request')):
             extra = sorted(n['sig'][key] - b['sig'][key])
             if extra:
@@ -547,7 +552,13 @@ def run_build(label, tree, views, out, sync_playwright):
             raise Refused(f'{label}: the server is not Pages-shaped (index {probe_index}, missing asset {probe_missing})')
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True, args=CHROMIUM_ARGS)
-            page = browser.new_context(viewport={'width': 1000, 'height': 650}).new_page()
+            context = browser.new_context(viewport={'width': 1000, 'height': 650})
+            # three dispatches 'register' on window.__THREE_DEVTOOLS__ once per copy that executes, so the
+            # count is the number of three instances the page ran (rt1039.py's instrument, #1046 round 1, S5).
+            context.add_init_script("""(() => { const et = new EventTarget(); window.__rt_three_registers = [];
+              et.addEventListener('register', e => window.__rt_three_registers.push(String(e.detail && e.detail.revision)));
+              window.__THREE_DEVTOOLS__ = et; })();""")
+            page = context.new_page()
             page.set_default_timeout(NAV_TIMEOUT_MS)
             page.on('console', lambda m: events.append({'phase': phase[0], 'kind': 'console', 'type': m.type, 'text': m.text}))
             page.on('pageerror', lambda e: events.append({'phase': phase[0], 'kind': 'pageerror', 'text': str(e)}))
@@ -621,6 +632,10 @@ def run_build(label, tree, views, out, sync_playwright):
                         three_ran = page.evaluate('() => window.__THREE__ === undefined ? null : String(window.__THREE__)')
                     except Exception:  # noqa: BLE001 -- an unreadable read is a missing read, not a crash
                         three_ran = None
+                    try:
+                        runs[view]['three_instances'] = page.evaluate('() => (window.__rt_three_registers || []).length')
+                    except Exception:  # noqa: BLE001 -- an unreadable count is simply not compared
+                        runs[view]['three_instances'] = None
                     reads.append({'package': 'three', 'how': 'window.__THREE__ (executed)',
                                   'ran': three_ran,
                                   'installed': three_revision(installed_version(tree['modules'], 'three')),
@@ -738,6 +753,8 @@ def run(args):
         'per_view': {label: {v: {'drawn': runs[label][v]['drawn'], 'stats': runs[label][v]['stats'],
                                  'empty_drawn': runs[label][v].get('empty_drawn'), 'empty_stats': runs[label][v].get('empty_stats'),
                                  'harness_error': runs[label][v].get('harness_error'),
+                                 'three_instances': runs[label][v].get('three_instances'),
+                                 'warnings': sorted(runs[label][v]['sig']['warnings']),
                                  'errors': sorted(runs[label][v]['sig']['errors']),
                                  'non_ok': sorted(runs[label][v]['sig']['non_ok']),
                                  'aborted_ignored': len(runs[label][v]['sig']['aborted_ignored'])}
@@ -758,7 +775,12 @@ def run(args):
     for view in views:
         b, n = summary['per_view']['base'][view], summary['per_view']['new'][view]
         print(f"{view}: drawn base={b['drawn']} new={n['drawn']}; errors base={len(b['errors'])} new={len(n['errors'])}; "
-              f"non-2xx base={len(b['non_ok'])} new={len(n['non_ok'])}")
+              f"non-2xx base={len(b['non_ok'])} new={len(n['non_ok'])}"
+              + (f"; three copies base={b['three_instances']} new={n['three_instances']}" if view == '3d' else ''))
+        new_warnings = sorted(set(n['warnings']) - set(b['warnings']))
+        if new_warnings:
+            print(f'WARN: {view}: {len(new_warnings)} console warning(s) only in new, reported, not a pass condition: '
+                  f'{new_warnings[:5]}')
     for line in fails:
         print('FAIL: ' + line)
     for line in no_verdict:
@@ -906,6 +928,7 @@ def verify():
                             {'kind': 'console', 'type': 'warning', 'text': 'a deprecation notice'}])
     arm('a dialog counts as an error, a console warning does not',
         extra['errors'] == {'dialog: WebGL is not available'}, str(extra['errors']))
+    arm('a console warning is recorded as a warning', extra['warnings'] == {'warning: a deprecation notice'}, str(extra['warnings']))
     good = {'drawn': True, 'stats': {}}
     def runs_with(new_sig, new_drawn=True, base_drawn=True, control_ok=True):
         return {'base': {'_control_ok': control_ok, 'load': {**good, 'sig': sb}, '2d': {**good, 'drawn': base_drawn, 'sig': sb}},
@@ -913,6 +936,14 @@ def verify():
     no_reads = {'base': [], 'new': []}
     # 7. the verdict
     arm('identical signatures: PASS', verdict(['2d'], runs_with(sb), no_reads)[0] == 0)
+    twins = runs_with(sb)
+    twins['base']['2d']['three_instances'], twins['new']['2d']['three_instances'] = 1, 2
+    code, fails, _ = verdict(['2d'], twins, no_reads)
+    arm('new runs a second copy of three: FAIL', code == 1 and any('2 copies of three' in f for f in fails), str(fails))
+    warned = runs_with(view_signature([{'kind': 'console', 'type': 'warning', 'text': 'new deprecation'}]))
+    warned['base']['2d']['sig'] = view_signature([])
+    warned['base']['load']['sig'] = warned['new']['load']['sig'] = view_signature([])
+    arm('a new-only console warning is reported, not a FAIL', verdict(['2d'], warned, no_reads)[0] == 0)
     code, fails, _ = verdict(['2d'], runs_with(sn), no_reads)
     arm('a planted new-only page error: FAIL naming it', code == 1 and any('planted page error in the graph' in f for f in fails), str(fails))
     sn404 = view_signature(ev_base[:2] + [{'kind': 'response', 'status': 404,
