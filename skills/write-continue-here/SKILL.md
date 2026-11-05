@@ -98,7 +98,7 @@ Write the findings to a file beside the facts file, apply every blocking finding
 - `verify-handoff round N, 0 blocking, coverage complete` — only when this round returned `blocking` 0 and `coverage.complete` true
 - `not run (workflow unavailable)`
 
-One pass still leaves a blocking defect in about one handoff in three (10 of 32 measured, #1040); `read-continue-here` re-confirms what drifts for that reason. When the reader may not run it, or the next session is days away, use `verify-continue-here`.
+One pass still leaves a blocking defect in about one handoff in three (10 of 32 measured, #1040); `read-continue-here` re-checks the repaired lines for that reason, and re-confirms the branch, `HEAD:` and the named PRs and issues on every handoff, since those move with time. When the reader may not run it, or the next session is days away, use `verify-continue-here`.
 
 **Expected:** A findings file, every blocking finding applied and listed in Context, and one honest `Verified:` value.
 
