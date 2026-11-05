@@ -37,7 +37,7 @@ Run the full verification loop on a handoff draft, and stop at the first round t
 From an almanac checkout or plugin install (`<almanac>` is two directories above the `realpath` of this skill's directory), run `workflows/verify-handoff.mjs` as `Workflow({ scriptPath: '<almanac>/workflows/verify-handoff.mjs', args: { drafts: [{ key, draft, facts, sources, context }], round: N } })`. An npm install ships no `workflows/`. A copy saved as `.claude/workflows/verify-handoff.js` runs by name but does not update itself; a `.mjs` there is not discovered (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`). `context` says what the file is, who consumes it, and which repositories the agents must not read. Coming from `write-continue-here` Step 3, start at round 2 with its findings file among `sources`; otherwise start at round 1. After each round, read the gate from the run's return value, not its log:
 
 1. `blocking` is 0 and `coverage.complete` is true: **stop**. The gate is met, and each further round costs minutes and hundreds of thousands of tokens.
-2. Otherwise, write the findings to `handoff-findings-rN.md` beside the facts file, apply them, add that file to `sources`, and run round N+1.
+2. Otherwise, write the findings to `handoff-findings-rN.md` beside the facts file, apply them, add that file to `sources`, and run round N+1, **up to round 3**.
 
 **Expected:** A round that returned `blocking` 0 and `coverage.complete` true, and one findings file per earlier round.
 
@@ -49,12 +49,12 @@ Set the header to `Verified: verify-handoff round N, 0 blocking, coverage comple
 
 **Expected:** The draft names its passing round, so `read-continue-here` skips the recheck of repaired lines; it still re-confirms the branch, `HEAD:` and the named PRs and issues.
 
-**On failure:** If the loop is not converging, stop and hand the open findings to the user; installing with an honest single-pass `Verified:` value is better than an unbounded loop.
+**On failure:** If round 3 does not pass, stop and hand the open findings to the user. The user decides whether to install with an honest `single pass` value, which records the last round's findings file, or to keep working.
 
 ## Validation
 
 - [ ] Every round had the facts file and a source, and each earlier findings file was among the next round's sources
-- [ ] The loop stopped at the first round with `blocking` 0 and `coverage.complete` true, `Verified:` names it, and `write-continue-here` installed the draft
+- [ ] The loop stopped at the first round with `blocking` 0 and `coverage.complete` true, or after round 3; `Verified:` names what happened, and `write-continue-here` installed the draft
 
 ## Common Pitfalls
 
