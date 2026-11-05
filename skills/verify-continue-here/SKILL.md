@@ -63,4 +63,4 @@ Set the header to `Verified: verify-handoff round N, 0 blocking, coverage comple
 ## Related Skills
 
 - `write-continue-here` — drafts the handoff, verifies it once, and installs it
-- `read-continue-here` — re-confirms a handoff that stopped short of this gate
+- `read-continue-here` — re-confirms every handoff, and re-checks its repaired lines when it stopped short of this gate
