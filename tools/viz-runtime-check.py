@@ -715,6 +715,20 @@ def vite_report(base, new):
             'differ_after_hash_strip': sorted({normalise(x) for x in b} ^ {normalise(x) for x in n})}
 
 
+def summarise_reasons(lines, shown=3):
+    """One clause per distinct reason, naming up to `shown` packages; summary.json keeps every line."""
+    groups = {}
+    for line in lines:
+        head, _, why = line.partition(': ')
+        groups.setdefault(why or head, []).append(head if why else '')
+    parts = []
+    for why, heads in groups.items():
+        names = [h.split(' ')[0].replace('node_modules/', '') for h in heads if h]
+        more = f' and {len(names) - shown} more' if len(names) > shown else ''
+        parts.append((f"{', '.join(names[:shown])}{more}: " if names else '') + why)
+    return '; '.join(parts)
+
+
 def run(args):
     out = Path(args.out).resolve()
     # A reused --out would leave an earlier run's screenshots beside this run's (#1046 round 1, N4). Refuse
@@ -745,7 +759,7 @@ def run(args):
         raise Refused('no package the page loads moved (only dev-only packages other than vite); '
                       'nothing to check in the browser')
     for view in views:
-        print(f'enter {view}: ' + '; '.join(reasons[view]))
+        print(f'enter {view}: ' + summarise_reasons(reasons[view]))
     try:
         from playwright.sync_api import sync_playwright
     except ImportError as exc:
@@ -1074,6 +1088,9 @@ def verify():
             code = main(['--base', tmp, '--new', tmp, '--out', str(Path(tmp) / 'out')])
         arm('a non-empty --out is refused and left as it was', code == 2 and 'is not empty' in err.getvalue()
             and (Path(tmp) / 'out' / 'earlier.png').read_text() == 'earlier run', f'exit {code}')
+    many = [f'node_modules/p{i} 1 -> 2: in vite\'s dependency closure' for i in range(5)] + ['added by --views']
+    arm('the printed reason groups packages and names three', summarise_reasons(many)
+        == "p0, p1, p2 and 2 more: in vite's dependency closure; added by --views", summarise_reasons(many))
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
