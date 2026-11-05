@@ -63,10 +63,12 @@ differs between runs.
 
 --patch, THE LIGHTER CHECK (proposed for the maintainer's "take patches, lighter check")
 -----------------------------------------------------------------------------------------
-- It enters the mapped views only, as the full check does, except that a vite patch bump enters
-  2D and 3D instead of all six.
 - It skips the literal hunt and goes straight to installed versions plus chunk names.
-- It keeps the control rows, the three comparisons per view and the executed reads.
+- It keeps everything else: the control rows, the same views (a vite bump, patch or not, enters
+  all six, since vite rebuilds every chunk and a merge deploys straight to the live page), the
+  three comparisons per view and the executed reads.
+- So it saves little time; the browser run dominates either way. The full check is already
+  lighter than rt1039.py was: no drag, wheel, fps, hover or click battery.
 
 NOT IN SCOPE
 ------------
@@ -228,11 +230,10 @@ def moved_packages(base_lock, new_lock):
     return moved
 
 
-def views_for(name, dev, patch):
+def views_for(name, dev):
     """(views, reason) for one moved package; the table is the handoff's step 3, as data."""
     if name == 'vite':
-        return (['2d', '3d'], 'vite builds every chunk; --patch enters 2D and 3D') if patch \
-            else (list(ALL_VIEWS), 'vite builds every chunk')
+        return list(ALL_VIEWS), 'vite builds every chunk, so every view, under --patch too'
     if dev:
         return [], 'dev-only, not in the page'
     if name == 'force-graph':
@@ -254,11 +255,11 @@ def views_for(name, dev, patch):
     return list(ALL_VIEWS), f'{name} is not in the table: every view'
 
 
-def select_views(moved, patch, override=None):
+def select_views(moved, override=None):
     """Return (ordered views, {view: [reasons]})."""
     reasons = {}
     for pkg in moved:
-        views, why = views_for(pkg['name'], pkg['dev'], patch)
+        views, why = views_for(pkg['name'], pkg['dev'])
         for view in views:
             reasons.setdefault(view, []).append(f"{pkg['name']} {pkg['base']} -> {pkg['new']}: {why}")
     if override:
@@ -597,7 +598,7 @@ def run(args):
     override = [v.strip() for v in args.views.split(',')] if args.views else None
     if override and any(v not in ALL_VIEWS for v in override):
         raise Refused(f'--views takes {",".join(ALL_VIEWS)}; got {args.views}')
-    views, reasons = select_views(moved, args.patch, override)
+    views, reasons = select_views(moved, override)  # --patch never narrows the views
     print(f'moved packages: {len(moved)}')
     for pkg in moved:
         print(f"  {pkg['path']}: {pkg['base']} -> {pkg['new']}{' (dev)' if pkg['dev'] else ''}")
@@ -734,18 +735,16 @@ def verify():
         and not next(m for m in moved if m['name'] == 'three')['dev'])
     arm('a nested copy is named by its leaf package', any(m['name'] == 'dompurify' for m in moved))
     # 5. the view table, full and --patch
-    cases = [('force-graph', False, False, ['2d']), ('three', False, False, ['3d']),
-             ('3d-force-graph', False, False, ['3d']), ('mermaid', False, False, ['workflow']),
-             ('d3', False, False, ['campfire', 'chord', 'hive', 'workflow']),
-             ('d3-array', False, False, ['campfire', 'chord', 'hive', 'workflow', '2d', '3d']),
-             ('d3-zoom', False, False, ['campfire', 'chord', 'hive', 'workflow', '2d']),
-             ('d3-shape', False, False, ['campfire', 'chord', 'hive', 'workflow']),
-             ('vite', True, False, ALL_VIEWS), ('vite', True, True, ['2d', '3d']),
-             ('vitest', True, False, []), ('dompurify', False, False, ALL_VIEWS)]
-    for name, dev, patch, want in cases:
-        got, _ = views_for(name, dev, patch)
-        arm(f"views for {name}{' (dev)' if dev else ''}{' --patch' if patch else ''}", got == want, str(got))
-    chosen, _ = select_views([{'name': 'vitest', 'dev': True, 'base': '1', 'new': '2'}], False)
+    cases = [('force-graph', False, ['2d']), ('three', False, ['3d']), ('3d-force-graph', False, ['3d']),
+             ('mermaid', False, ['workflow']), ('d3', False, ['campfire', 'chord', 'hive', 'workflow']),
+             ('d3-array', False, ['campfire', 'chord', 'hive', 'workflow', '2d', '3d']),
+             ('d3-zoom', False, ['campfire', 'chord', 'hive', 'workflow', '2d']),
+             ('d3-shape', False, ['campfire', 'chord', 'hive', 'workflow']),
+             ('vite', True, ALL_VIEWS), ('vitest', True, []), ('dompurify', False, ALL_VIEWS)]
+    for name, dev, want in cases:
+        got, _ = views_for(name, dev)
+        arm(f"views for {name}{' (dev)' if dev else ''}", got == want, str(got))
+    chosen, _ = select_views([{'name': 'vitest', 'dev': True, 'base': '1', 'new': '2'}])
     arm('only a dev-only package moved: no view, so the run refuses', chosen == [])
     # 6. comparison: normalisation, and a planted new-only error
     arm('normalise strips host, port and bundle hash',
@@ -826,8 +825,8 @@ def main(argv=None):
     parser.add_argument('--new', help='worktree root of the new build (the PR merged), viz/dist built')
     parser.add_argument('--out', help='evidence directory: summary.json, per-build events and screenshots')
     parser.add_argument('--patch', action='store_true',
-                        help='the lighter check for a patch bump: mapped views only (vite: 2D and 3D), and no '
-                             'literal hunt; the control rows, comparisons and executed reads stay')
+                        help='the lighter check for a patch bump: no literal hunt (installed version plus chunk '
+                             'names instead); the views, control rows, comparisons and executed reads stay')
     parser.add_argument('--views', help=f'enter exactly these views, comma-separated from {",".join(ALL_VIEWS)}')
     parser.add_argument('--verify', action='store_true', help='run the browser-free self-test and exit')
     args = parser.parse_args(argv)
