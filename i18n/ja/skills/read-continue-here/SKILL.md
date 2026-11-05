@@ -20,7 +20,7 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: 025eea68
-  fence_basis_commit: 85f4aeb7b9f7fe632734a6a5c3ae866399c0a689
+  fence_basis_commit: 9616c3db25dbf24f7586e87fafa15229c28ef8de
   translator: "Claude + human review"
   translation_date: "2026-05-03"
 ---
@@ -137,11 +137,14 @@ Next Steps item 1（またはユーザーが指示した場所）から作業を
 まずコピーを残す。次の `write-continue-here` はドラフトをこの版と比較する。プロジェクトの CLAUDE.md、親ディレクトリの CLAUDE.md、ユーザーレベルの `~/.claude/CLAUDE.md`、README の順に(近いものを優先して)探す `Handoff archive: <dir>` の行がアーカイブ先を決める。この行がなければ、追跡されていないハンドオフは隣に `CONTINUE_HERE.prev.md` として残し、追跡されているものはコピー不要。`ARCHIVE_STATE=consumed` を設定する:
 
 ```bash
-: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+: "${CONTINUE_FILE:?set it to the path of the handoff, as the resolver printed it}"
 : "${ARCHIVE_STATE:?set it to consumed when reading, superseded when replacing}"
-HOME_DIR=${CONTINUE_FILE%/*}
+case "$CONTINUE_FILE" in /*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac
+HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
-SEARCH=() dir=$ROOT ARCHIVE=
+PROJECT=$(git -C "$HOME_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || PROJECT=$ROOT
+PROJECT=${PROJECT%/.git}; PROJECT=${PROJECT##*/} # a linked worktree names its project, not itself
+SEARCH=("$ROOT/CLAUDE.md" "$ROOT/.claude/CLAUDE.md") dir=${ROOT%/*} ARCHIVE=
 while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
 for f in "${SEARCH[@]}" "$HOME/.claude/CLAUDE.md" "$ROOT/README.md"; do # nearest first, builtins only
   [ -f "$f" ] && while IFS= read -r l || [ -n "$l" ]; do
@@ -154,22 +157,23 @@ STAMP=$(date -u +%Y-%m-%dT%H%M%SZ) KEEP=cp
 if [ "$ARCHIVE" = '<dir>' ]; then
   echo "REFUSED: $f carries the unedited 'Handoff archive: <dir>'; name a directory there" >&2; false
 elif [ -n "$ARCHIVE" ]; then
-  DEST=$ARCHIVE/${STAMP%%T*}/${ROOT##*/}-CONTINUE_HERE.$STAMP.$ARCHIVE_STATE.md
-  mkdir -p -- "${DEST%/*}" && "$KEEP" -- "$CONTINUE_FILE" "$DEST" && echo "archive: $DEST"
+  DEST=$ARCHIVE/${STAMP%%T*}/$PROJECT-CONTINUE_HERE.$STAMP.$ARCHIVE_STATE.md
+  mkdir -p -- "${DEST%/*}" && "$KEEP" -- "$CONTINUE_FILE" "$DEST" && ARCHIVED=$DEST
 elif git -C "$HOME_DIR" ls-files --error-unmatch -- "$CONTINUE_FILE" >/dev/null 2>&1; then
-  if git -C "$HOME_DIR" diff --quiet HEAD -- "$CONTINUE_FILE"; then echo "archive: git history keeps this edition"
-  else echo "REFUSED: $CONTINUE_FILE has uncommitted changes; commit them first" >&2; false; fi
+  if git -C "$HOME_DIR" diff --quiet HEAD -- "$CONTINUE_FILE"; then ARCHIVED="git history, tracked"
+  else echo "REFUSED: $CONTINUE_FILE has uncommitted changes; read them before committing anything" >&2; false; fi
 else
-  "$KEEP" -- "$CONTINUE_FILE" "$HOME_DIR/CONTINUE_HERE.prev.md" && echo "archive: $HOME_DIR/CONTINUE_HERE.prev.md"
+  "$KEEP" -- "$CONTINUE_FILE" "$HOME_DIR/CONTINUE_HERE.prev.md" && ARCHIVED=$HOME_DIR/CONTINUE_HERE.prev.md
 fi
+if [ -n "$ARCHIVED" ]; then echo "archive: $ARCHIVED"
+else echo "REFUSED: $CONTINUE_FILE was not archived, so the cleanup will not delete it" >&2; false; fi
 ```
 
 引き渡しが消費され作業が進行中になったら、CONTINUE_HERE.md を削除:
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
-# A shell loop, not grep/rg: a session may have neither, or a hook that blocks grep. Anchored on
-# the line start, so prose that merely discusses the literal does not warn.
+: "${ARCHIVED:?run the archive fence first in this shell call, or set ARCHIVED to the path it printed}"
 SCOPE_LINE=$(while IFS= read -r l; do
   case "$l" in "Nobody runs:"*) printf '%s' "$l"; break ;; esac
 done < "$CONTINUE_FILE")

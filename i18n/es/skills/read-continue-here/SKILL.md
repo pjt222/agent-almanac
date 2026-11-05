@@ -20,7 +20,7 @@ metadata:
   locale: es
   source_locale: en
   source_commit: 025eea68
-  fence_basis_commit: 85f4aeb7b9f7fe632734a6a5c3ae866399c0a689
+  fence_basis_commit: 9616c3db25dbf24f7586e87fafa15229c28ef8de
   translator: scaffold
   translation_date: "2026-05-03"
 ---
@@ -134,14 +134,17 @@ Comenzar a trabajar desde el item 1 de Next Steps (o donde el usuario haya dirig
 
 ### Paso 5: Limpiar
 
-Primero conserva una copia: el próximo `write-continue-here` compara su borrador con esta edición. Una línea `Handoff archive: <dir>` en el CLAUDE.md del proyecto, en el CLAUDE.md de un directorio padre, en el `~/.claude/CLAUDE.md` del usuario o en el README (el más cercano primero) nombra el archivo; sin ella, un handoff no versionado se conserva a su lado como `CONTINUE_HERE.prev.md`, y uno versionado no necesita copia. Define `ARCHIVE_STATE=consumed`:
+Primero conserva una copia: el próximo `write-continue-here` compara su borrador con esta edición. Una línea `Handoff archive: <dir>` en el CLAUDE.md del proyecto, en el CLAUDE.md de un directorio padre, en el `~/.claude/CLAUDE.md` del usuario o en el README (el más cercano primero) nombra el directorio de archivo; sin ella, un handoff no versionado se conserva a su lado como `CONTINUE_HERE.prev.md`, y uno versionado no necesita copia. Define `ARCHIVE_STATE=consumed`:
 
 ```bash
-: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+: "${CONTINUE_FILE:?set it to the path of the handoff, as the resolver printed it}"
 : "${ARCHIVE_STATE:?set it to consumed when reading, superseded when replacing}"
-HOME_DIR=${CONTINUE_FILE%/*}
+case "$CONTINUE_FILE" in /*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac
+HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
-SEARCH=() dir=$ROOT ARCHIVE=
+PROJECT=$(git -C "$HOME_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || PROJECT=$ROOT
+PROJECT=${PROJECT%/.git}; PROJECT=${PROJECT##*/} # a linked worktree names its project, not itself
+SEARCH=("$ROOT/CLAUDE.md" "$ROOT/.claude/CLAUDE.md") dir=${ROOT%/*} ARCHIVE=
 while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
 for f in "${SEARCH[@]}" "$HOME/.claude/CLAUDE.md" "$ROOT/README.md"; do # nearest first, builtins only
   [ -f "$f" ] && while IFS= read -r l || [ -n "$l" ]; do
@@ -154,22 +157,23 @@ STAMP=$(date -u +%Y-%m-%dT%H%M%SZ) KEEP=cp
 if [ "$ARCHIVE" = '<dir>' ]; then
   echo "REFUSED: $f carries the unedited 'Handoff archive: <dir>'; name a directory there" >&2; false
 elif [ -n "$ARCHIVE" ]; then
-  DEST=$ARCHIVE/${STAMP%%T*}/${ROOT##*/}-CONTINUE_HERE.$STAMP.$ARCHIVE_STATE.md
-  mkdir -p -- "${DEST%/*}" && "$KEEP" -- "$CONTINUE_FILE" "$DEST" && echo "archive: $DEST"
+  DEST=$ARCHIVE/${STAMP%%T*}/$PROJECT-CONTINUE_HERE.$STAMP.$ARCHIVE_STATE.md
+  mkdir -p -- "${DEST%/*}" && "$KEEP" -- "$CONTINUE_FILE" "$DEST" && ARCHIVED=$DEST
 elif git -C "$HOME_DIR" ls-files --error-unmatch -- "$CONTINUE_FILE" >/dev/null 2>&1; then
-  if git -C "$HOME_DIR" diff --quiet HEAD -- "$CONTINUE_FILE"; then echo "archive: git history keeps this edition"
-  else echo "REFUSED: $CONTINUE_FILE has uncommitted changes; commit them first" >&2; false; fi
+  if git -C "$HOME_DIR" diff --quiet HEAD -- "$CONTINUE_FILE"; then ARCHIVED="git history, tracked"
+  else echo "REFUSED: $CONTINUE_FILE has uncommitted changes; read them before committing anything" >&2; false; fi
 else
-  "$KEEP" -- "$CONTINUE_FILE" "$HOME_DIR/CONTINUE_HERE.prev.md" && echo "archive: $HOME_DIR/CONTINUE_HERE.prev.md"
+  "$KEEP" -- "$CONTINUE_FILE" "$HOME_DIR/CONTINUE_HERE.prev.md" && ARCHIVED=$HOME_DIR/CONTINUE_HERE.prev.md
 fi
+if [ -n "$ARCHIVED" ]; then echo "archive: $ARCHIVED"
+else echo "REFUSED: $CONTINUE_FILE was not archived, so the cleanup will not delete it" >&2; false; fi
 ```
 
 Después de que el handoff es consumido y el trabajo está en marcha, eliminar CONTINUE_HERE.md:
 
 ```bash
 : "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
-# A shell loop, not grep/rg: a session may have neither, or a hook that blocks grep. Anchored on
-# the line start, so prose that merely discusses the literal does not warn.
+: "${ARCHIVED:?run the archive fence first in this shell call, or set ARCHIVED to the path it printed}"
 SCOPE_LINE=$(while IFS= read -r l; do
   case "$l" in "Nobody runs:"*) printf '%s' "$l"; break ;; esac
 done < "$CONTINUE_FILE")
