@@ -713,6 +713,10 @@ def vite_report(base, new):
 
 def run(args):
     out = Path(args.out).resolve()
+    # A reused --out would leave an earlier run's screenshots beside this run's (#1046 round 1, N4). Refuse
+    # rather than delete: the earlier evidence may be what someone is still reading.
+    if out.exists() and any(out.iterdir()):
+        raise Refused(f'--out {out} is not empty; name a new directory, so no earlier screenshot is read as this run')
     out.mkdir(parents=True, exist_ok=True)
     base, new = tree_inputs(args.base), tree_inputs(args.new)
     if tree_digest(base['dist']) == tree_digest(new['dist']):
@@ -1054,6 +1058,15 @@ def verify():
             report['dist_only_in_base'] == ['assets/index-AAAAAAAA.js', 'assets/old.js']
             and report['dist_only_in_new'] == ['assets/index-BBBBBBBB.js'] and report['differ_after_hash_strip'] == ['assets/old.js'],
             str(report))
+    # 14. a non-empty --out is refused, and nothing in it is touched
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / 'out').mkdir()
+        (Path(tmp) / 'out' / 'earlier.png').write_text('earlier run')
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+            code = main(['--base', tmp, '--new', tmp, '--out', str(Path(tmp) / 'out')])
+        arm('a non-empty --out is refused and left as it was', code == 2 and 'is not empty' in err.getvalue()
+            and (Path(tmp) / 'out' / 'earlier.png').read_text() == 'earlier run', f'exit {code}')
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
