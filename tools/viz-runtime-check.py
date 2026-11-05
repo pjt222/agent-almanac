@@ -885,7 +885,9 @@ def verify():
     fixture = {'packages': {
         '': {}, 'node_modules/force-graph': {'dependencies': {'d3-array': '^3', 'd3-force-3d': '^3'}},
         'node_modules/3d-force-graph': {'dependencies': {'three-forcegraph': '^1'}},
-        'node_modules/three-forcegraph': {'dependencies': {'d3-force-3d': '^3', 'd3-scale': '^4'}, 'peerDependencies': {'three': '>=0.1'}},
+        'node_modules/three-forcegraph': {'dependencies': {'d3-force-3d': '^3', 'd3-scale': '^4'},
+                                          'peerDependencies': {'three': '>=0.1', 'peer-only': '1'}},
+        'node_modules/peer-only': {},
         'node_modules/three': {}, 'node_modules/d3': {'dependencies': {'d3-array': '^3', 'd3-interpolate': '^3'}},
         'node_modules/d3-interpolate': {'dependencies': {'d3-color': '^3'}}, 'node_modules/d3-color': {},
         'node_modules/d3-array': {}, 'node_modules/d3-scale': {}, 'node_modules/d3-force-3d': {},
@@ -902,6 +904,7 @@ def verify():
              ('node_modules/d3-array', False, ['2d', 'campfire', 'chord', 'hive', 'workflow']),
              ('node_modules/d3-color', False, ['campfire', 'chord', 'hive', 'workflow']),
              ('node_modules/three', False, ['3d']), ('node_modules/d3-scale', False, ['3d']),
+             ('node_modules/peer-only', False, ['3d']),  # reached only as a peer dependency
              ('node_modules/mermaid/node_modules/dompurify', False, ['workflow']),
              ('node_modules/dompurify', False, ALL_VIEWS),  # shadowed by mermaid's copy: in no closure
              ('node_modules/vite', True, ALL_VIEWS), ('node_modules/rolldown', True, ALL_VIEWS),
