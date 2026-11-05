@@ -113,7 +113,7 @@ Begin at Next Steps item 1, or where the user directed. Use In Progress for part
 Keep a copy first: the next `write-continue-here` compares its draft against this edition. **The archive rule:** a line `Handoff archive: <dir>` names the archive, read from the project's CLAUDE.md, each parent directory's, the user-level `~/.claude/CLAUDE.md`, then the project's README; the first match wins. Without one, an untracked handoff is kept as `CONTINUE_HERE.prev.md` beside it, and a tracked one needs no copy, since git history holds it. Reading copies (`ARCHIVE_STATE=consumed`); `write-continue-here` runs this fence to move an edition it replaces (`superseded`):
 
 ```bash
-: "${CONTINUE_FILE:?resolve it with the Step 1 block in this shell first}"
+: "${CONTINUE_FILE:?set it to the handoff's path, as the resolver printed it}"
 : "${ARCHIVE_STATE:?set it to consumed when reading, superseded when replacing}"
 case "$CONTINUE_FILE" in /*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac
 HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
