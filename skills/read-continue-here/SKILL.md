@@ -205,7 +205,7 @@ Handoff archive: <dir>
 ## Common Pitfalls
 
 - **Acting without confirming**: present the plan even for a fresh file; the user may have changed priorities.
-- **Trusting a single pass's state lines**: the prior session's assessment holds for its work, not for what moved since. Re-confirm what Step 2 lists; re-do nothing else unless asked.
+- **Trusting the handoff's state lines**: the prior session's assessment holds for its work, not for what moved since. Re-confirm what Step 2 lists; re-do nothing else unless asked.
 - **Ignoring Context, or forgetting to clean up**: Context holds the failed approaches, and an unconsumed handoff is acted on again next session.
 
 ## Related Skills
