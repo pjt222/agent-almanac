@@ -821,7 +821,8 @@ def run(args):
                           f'package(s): {stale[:5]}; run npm ci in that viz/ and rebuild')
     if tree_digest(base['dist']) == tree_digest(new['dist']):
         raise Refused('base and new viz/dist are the same build once the build stamp and bundle hashes are '
-                      'stripped: the bump did not reach the bundle (was new built before npm ci?)')
+                      'stripped, so there is nothing to compare: either new was built before npm ci, or the bump '
+                      'changed nothing that is bundled (tree-shaken code, files outside the bundle)')
     override = [v.strip() for v in args.views.split(',')] if args.views else None
     if override and any(v not in ALL_VIEWS for v in override):
         raise Refused(f'--views takes {",".join(ALL_VIEWS)}; got {args.views}')
