@@ -1195,11 +1195,26 @@ def verify():
         (viz / 'node_modules' / 'vite' / 'package.json').write_text(json.dumps({'version': '8.3.4'}))
         tree = {'modules': viz / 'node_modules', 'lock': {'packages': {
             'node_modules/vite': {'version': '8.3.5', 'dev': True},
-            'node_modules/@rolldown/binding-android-arm-eabi': {'version': '1.2.16', 'optional': True, 'dev': True}}}}
-        moved_here = [{'path': 'node_modules/vite'}, {'path': 'node_modules/@rolldown/binding-android-arm-eabi'}]
+            'node_modules/@rolldown/binding-android-arm-eabi': {'version': '1.2.16', 'optional': True, 'dev': True},
+            'node_modules/three': {'version': '0.187.0'},
+            'node_modules/@rollup/rollup-darwin-arm64': {'version': '4.67.5', 'devOptional': True},
+            'node_modules/vitest': {'version': '4.0.0', 'dev': True},
+            'node_modules/fsevents': {'version': '2.3.3', 'optional': True}}}}
+        moved_here = [{'path': p} for p in ('node_modules/vite', 'node_modules/@rolldown/binding-android-arm-eabi',
+                                            'node_modules/three', 'node_modules/@rollup/rollup-darwin-arm64',
+                                            'node_modules/vitest', 'node_modules/fsevents')]
         stale = stale_installs(tree, moved_here)
         arm('a merge without npm ci is caught: node_modules vite 8.3.4 against the lockfile 8.3.5',
-            stale == ['node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4'], str(stale))
+            'node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4' in stale, str(stale))
+        # Absence is excused for an optional entry only (#1047 R2b), whether or not it is also dev, and never for
+        # a dev or a devOptional one (#1049 round 1). A plain npm ci refuses a devOptional entry for another
+        # platform (EBADPLATFORM, measured on npm 11.20.0), so after one that succeeded such an entry is never
+        # absent; only --omit=dev and --omit=optional together drop it, and the viz procedure passes neither.
+        arm('a moved package the lockfile lists and node_modules lacks is caught; only an optional one may be absent',
+            stale == ['node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4',
+                      'node_modules/three: package-lock.json 0.187.0, node_modules None',
+                      'node_modules/@rollup/rollup-darwin-arm64: package-lock.json 4.67.5, node_modules None',
+                      'node_modules/vitest: package-lock.json 4.0.0, node_modules None'], str(stale))
     # 17. identical lockfiles are refused, whatever --views says
     with tempfile.TemporaryDirectory() as tmp:
         for name in ('base', 'new'):
@@ -1225,6 +1240,73 @@ def verify():
         arm('compare.html pairs base and new per view and escapes a missing shot',
             'src="base/2d.png"' in page and 'src="new/2d.png"' in page and 'TimeoutError &lt;x&gt;' in page
             and '3d: new drew nothing' in page)
+    # From arm 19 on, the arms run main() on two small trees. Each tree's spec is (lockfile version, installed version, build
+    # stamp, chunk hash, chunk body); one package, three, is in both lockfiles. The run is given a valid --views,
+    # and run_build and playwright are replaced for the call, so a run that gets past every refusal stops at the
+    # stub, with or without playwright installed and with or without -I: none of them can start a browser, whatever
+    # order run() checks things in (#1049 round 1, SHOULD-FIX 3).
+    import types
+
+    def stub_run_build(*args, **kwargs):
+        raise Refused('verify: run_build reached, a browser would have started')
+
+    def main_without_browser(tmp, base_spec, new_spec):
+        for name, (locked, installed, stamp, chunk_hash, body) in (('base', base_spec), ('new', new_spec)):
+            viz = Path(tmp) / name / 'viz'
+            (viz / 'dist' / 'assets').mkdir(parents=True)
+            (viz / 'dist' / 'index.html').write_text(f'<script src="/agent-almanac/assets/index-{chunk_hash}.js"></script>')
+            (viz / 'dist' / 'assets' / f'index-{chunk_hash}.js').write_text(f'var v=`{stamp}`;{body}')
+            (viz / 'node_modules' / 'three').mkdir(parents=True)
+            (viz / 'node_modules' / 'three' / 'package.json').write_text(json.dumps({'version': installed}))
+            (viz / 'package-lock.json').write_text(json.dumps({'packages': {'node_modules/three': {'version': locked}}}))
+        fake = types.ModuleType('playwright.sync_api')
+        fake.sync_playwright = None
+        parent = types.ModuleType('playwright')
+        parent.sync_api = fake
+        saved = {name: sys.modules.get(name) for name in ('playwright', 'playwright.sync_api')}
+        real_run_build = globals()['run_build']
+        globals()['run_build'] = stub_run_build
+        sys.modules.update({'playwright': parent, 'playwright.sync_api': fake})
+        err = io.StringIO()
+        try:
+            with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+                code = main(['--base', str(Path(tmp) / 'base'), '--new', str(Path(tmp) / 'new'),
+                             '--out', str(Path(tmp) / 'out'), '--views', '2d'])
+        finally:
+            globals()['run_build'] = real_run_build
+            for name, module in saved.items():
+                if module is None:
+                    sys.modules.pop(name, None)
+                else:
+                    sys.modules[name] = module
+        return code, err.getvalue()
+
+    def refused_with(name, code, err, text):
+        ok = code == 2 and text in err
+        arm(name, ok, f'exit {code}' + ('' if ok else f': {err.strip()[-160:]}'))
+
+    # 19. dists that are the same build once the stamp and hash are stripped are refused through main() (#1047 R3b:
+    #     arm 15 tests tree_digest(), not the refusal). node_modules matches each lockfile, so only that refusal applies.
+    with tempfile.TemporaryDirectory() as tmp:
+        code, err = main_without_browser(tmp, ('0.186.1', '0.186.1', '1793905216658', 'AbCdEf12', 'run()'),
+                                         ('0.187.0', '0.187.0', '1793905596433', 'XyZw9876', 'run()'))
+        refused_with('dists that differ only by the build stamp are refused as the same build, through main()',
+                     code, err, 'the same build')
+    # 20. a tree whose node_modules lags its lockfile for a moved package is refused through main() (#1049 round 1,
+    #     SHOULD-FIX 2: arm 16 tests stale_installs(), not the refusal). The dists differ, so the same-build
+    #     refusal cannot be what stops it.
+    with tempfile.TemporaryDirectory() as tmp:
+        code, err = main_without_browser(tmp, ('0.186.1', '0.186.1', '1793905216658', 'AbCdEf12', 'run()'),
+                                         ('0.187.0', '0.186.1', '1793905596433', 'XyZw9876', 'run2()'))
+        refused_with('a merge without npm ci is refused through main(), naming the tree',
+                     code, err, 'new: viz/node_modules does not match')
+    # 21. the control for 19 and 20: a real change with node_modules matching both lockfiles passes every refusal and
+    #     reaches the browser stage (#1049 round 1, NIT 3). Without it a refusal that fired on every pair passes them.
+    with tempfile.TemporaryDirectory() as tmp:
+        code, err = main_without_browser(tmp, ('0.186.1', '0.186.1', '1793905216658', 'AbCdEf12', 'run()'),
+                                         ('0.187.0', '0.187.0', '1793905596433', 'XyZw9876', 'run2()'))
+        refused_with('a real change with matching node_modules gets past every refusal to the browser stage',
+                     code, err, 'run_build reached')
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
