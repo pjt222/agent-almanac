@@ -541,19 +541,26 @@ test('archive: any failure refuses, and the cleanup run after it in the same cal
   // A file where the archive's parent should be makes mkdir fail without any named REFUSED arm
   // firing; the placeholder is the named arm. Both run archive then cleanup in one call, as the
   // skill says, and the handoff must survive both. Round 1 of #1042 measured the opposite.
+  //
+  // The `stale` arm (#1043): an ARCHIVED left in the shell by an earlier archive must not satisfy
+  // the cleanup's guard after this one fails. The fence resets it before doing anything; without
+  // that reset the stale path is printed as this run's archive and the handoff is deleted.
   const pair = `${extractBlock(READ, ARCHIVE_MARKER)}\n${extractBlock(READ, CLEANUP_MARKER)}`;
-  for (const line of ['blocker', snippetArchiveLine()]) {
-    const tree = archiveTree({});
-    try {
-      writeFileSync(join(tree.base, 'blocker'), 'a file, not a directory');
-      const declared = line === 'blocker' ? `Handoff archive: ${join(tree.base, 'blocker', 'arch')}` : line;
-      writeFileSync(join(tree.proj, 'CLAUDE.md'), `${declared}\n`);
-      const res = runBash(pair, { cwd: tree.proj, env: { CONTINUE_FILE: tree.file, ARCHIVE_STATE: 'consumed', HOME: tree.home } });
-      assert.notEqual(res.status, 0, `${line}: the archive failed and the pair still exited 0`);
-      assert.match(res.stderr, /REFUSED: .*was not archived/, `${line}: no REFUSED line for the failure`);
-      assert.ok(existsSync(tree.file), `${line}: the cleanup deleted a handoff the archive never kept`);
-    } finally {
-      rmTree(tree.base);
+  for (const stale of ['', 'ARCHIVED=/stale/from/an/earlier/archive\n']) {
+    for (const line of ['blocker', snippetArchiveLine()]) {
+      const tree = archiveTree({});
+      const label = `${line}${stale ? ' (ARCHIVED already set)' : ''}`;
+      try {
+        writeFileSync(join(tree.base, 'blocker'), 'a file, not a directory');
+        const declared = line === 'blocker' ? `Handoff archive: ${join(tree.base, 'blocker', 'arch')}` : line;
+        writeFileSync(join(tree.proj, 'CLAUDE.md'), `${declared}\n`);
+        const res = runBash(`${stale}${pair}`, { cwd: tree.proj, env: { CONTINUE_FILE: tree.file, ARCHIVE_STATE: 'consumed', HOME: tree.home } });
+        assert.notEqual(res.status, 0, `${label}: the archive failed and the pair still exited 0`);
+        assert.match(res.stderr, /REFUSED: .*was not archived/, `${label}: no REFUSED line for the failure`);
+        assert.ok(existsSync(tree.file), `${label}: the cleanup deleted a handoff the archive never kept`);
+      } finally {
+        rmTree(tree.base);
+      }
     }
   }
   const alone = archiveTree({});
@@ -605,6 +612,89 @@ test('archive: in a linked worktree, the archived name carries the project, not 
     assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `named after the worktree: ${res.stdout}`);
   } finally {
     rmTree(tree.base);
+  }
+});
+
+test('archive: a git without --path-format (before 2.31) still names the project (#1043)', () => {
+  // git before 2.31 does not know --path-format. rev-parse prints an option it does not know back,
+  // then the common dir, and exits 0, so the `||` fallback never fires. At the top level that dir is
+  // relative (`.git`), and the name carried "--path-format=absolute", a newline and ".git". In a
+  // linked worktree it is absolute, and the two strips happened to give the project's name: a
+  // fallback keyed on "not absolute" turned that into the worktree's (#1048 round 1, B1, measured
+  // on real git 2.30.2). The shim models that git: it echoes the option, drops it, and hands every
+  // argument to the real git, so every other git call in the fence is unchanged; round 1 found it
+  // matching git 2.30.2 cell for cell. A shim that exited non-zero would trip the `||` fallback
+  // instead, and this test could not fail.
+  const realGit = spawnSync('bash', ['-c', 'command -v git'], { encoding: 'utf8' }).stdout.trim();
+  assert.ok(realGit.startsWith('/'), `cannot resolve the real git: ${JSON.stringify(realGit)}`);
+  assert.ok(!realGit.includes("'"), `the shim single-quotes the git path, which holds a quote: ${realGit}`);
+  const shimDir = mkdtempSync(join(tmpdir(), 'oldgit-'));
+  // Every call the shim answers is logged, so the test can show that the FENCE's git was the shim,
+  // not only that the shim answers when asked (round 1, S2: with PATH dropped from the fence's run,
+  // the control row still passed and the test went vacuous).
+  const calls = join(shimDir, 'calls.log');
+  try {
+    writeFileSync(
+      join(shimDir, 'git'),
+      [
+        '#!/usr/bin/env bash',
+        `printf '%s\\n' "$*" >> '${calls}'`,
+        'args=()',
+        'for a in "$@"; do',
+        '  if [ "$a" = --path-format=absolute ]; then printf "%s\\n" "$a"; else args+=("$a"); fi',
+        'done',
+        `exec '${realGit}' "\${args[@]}"`,
+        '',
+      ].join('\n'),
+      { mode: 0o755 },
+    );
+    const PATH = `${shimDir}:${process.env.PATH}`;
+    for (const layout of ['top level', 'docs/ handoff', 'linked worktree']) {
+      const tree = archiveTree({ parent: 'Handoff archive: shared\n' }, { tracked: true });
+      try {
+        let cwd = tree.proj;
+        let handoffDir = tree.proj;
+        if (layout === 'docs/ handoff') {
+          // One of the resolver's three layouts: the fence must name the top-level directory, not the
+          // handoff's own (round 1, S1: a fallback to $HOME_DIR passed every other row).
+          handoffDir = join(tree.proj, 'docs');
+          mkdirSync(handoffDir);
+          writeFileSync(join(handoffDir, 'CONTINUE_HERE.md'), '# Continue Here\nedition one\n');
+        }
+        if (layout === 'linked worktree') {
+          cwd = handoffDir = join(tree.base, 'feat-x');
+          const add = spawnSync('git', ['-C', tree.proj, 'worktree', 'add', '-q', cwd], { encoding: 'utf8', env: cleanEnv(tree.home) });
+          assert.equal(add.status, 0, add.stderr);
+        }
+        // Control row: the git the fence will find is the shim, and it answers as old git does.
+        // Without this, a shim that never ran would leave the real git answering and read as a pass.
+        const control = runBash('command -v git; git -C "$P" rev-parse --path-format=absolute --git-common-dir', {
+          cwd,
+          env: { PATH, P: handoffDir },
+        });
+        assert.equal(control.status, 0, `${layout}: the shim must exit 0, as git before 2.31 does: ${control.stderr}`);
+        const [found, echoed, commonDir] = control.stdout.split('\n');
+        assert.equal(found, join(shimDir, 'git'), `${layout}: the shim is not the git under test`);
+        assert.equal(echoed, '--path-format=absolute', `${layout}: the shim did not echo the option`);
+        assert.ok(layout === 'linked worktree' ? commonDir.startsWith('/') : commonDir === (layout === 'top level' ? '.git' : '../.git'),
+          `${layout}: the common dir that follows the echo is not the shape this row is about: ${JSON.stringify(commonDir)}`);
+
+        // Load-bearing: the control row's own call would otherwise satisfy the call-log assertion below.
+        writeFileSync(calls, '');
+        const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
+          cwd,
+          env: { CONTINUE_FILE: join(handoffDir, 'CONTINUE_HERE.md'), ARCHIVE_STATE: 'consumed', HOME: tree.home, PATH },
+        });
+        assert.equal(res.status, 0, `${layout}: ${res.stderr}`);
+        assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `${layout}: not named after the project: ${JSON.stringify(res.stdout)}`);
+        assert.match(readFileSync(calls, 'utf8'), /rev-parse --path-format=absolute --git-common-dir$/m,
+          `${layout}: the fence's own git was not the shim, so this row tested a modern git`);
+      } finally {
+        rmTree(tree.base);
+      }
+    }
+  } finally {
+    rmTree(shimDir);
   }
 });
 
@@ -764,9 +854,24 @@ test('Verified: write lists exactly three values, and read and verify spell the 
     'verify-handoff round N, 0 blocking, coverage complete',
     'not run (workflow unavailable)',
   ]);
-  for (const rel of [READ, VERIFY]) {
-    assert.ok(read(rel).includes(`\`${values[1]}\``) || read(rel).includes(`Verified: ${values[1]}`),
-      `${rel} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
+  assert.ok(read(VERIFY).includes(`\`${values[1]}\``) || read(VERIFY).includes(`Verified: ${values[1]}`),
+    `${VERIFY} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
+  // read carries the value twice: in Step 2, which a session running the skill reads, and in
+  // Step 7's CLAUDE.md snippet, which is all a session that has only the snippet ever sees. A
+  // whole-file `includes` was satisfied by either copy, so respelling one survived (#1043, M11).
+  const text2 = read(READ);
+  // Bound the slice by a Step 3 that exists after Step 2: with indexOf's -1 the slice ran to the end of
+  // the file, Step 7's snippet included, and Step 2's copy went unpinned (#1048 round 1, S3).
+  const i2 = text2.indexOf('### Step 2:');
+  const i3 = text2.indexOf('### Step 3:', i2);
+  assert.ok(i2 >= 0 && i3 > i2, `${READ} no longer has a Step 2 followed by a Step 3`);
+  const step2 = text2.slice(i2, i3);
+  const snippet = [...text2.matchAll(/^```markdown\r?\n([\s\S]*?)^```/gm)].map((m) => m[1])
+    .filter((body) => /^Handoff archive: /m.test(body));
+  assert.equal(snippet.length, 1, `${READ} must carry exactly one Step 7 snippet (the markdown fence with a "Handoff archive:" line)`);
+  for (const [where, body] of [['Step 2', step2], ['the Step 7 snippet', snippet[0]]]) {
+    assert.ok(body.includes(`\`${values[1]}\``),
+      `${READ} ${where} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
   }
 });
 

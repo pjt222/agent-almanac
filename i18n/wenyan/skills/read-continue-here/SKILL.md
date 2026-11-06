@@ -3,7 +3,7 @@ name: read-continue-here
 locale: wenyan
 source_locale: en
 source_commit: 82c77053
-fence_basis_commit: 9616c3db25dbf24f7586e87fafa15229c28ef8de
+fence_basis_commit: 194e01240c4a3f3b436802558dd22844e6735b0f
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-26"
 description: >
@@ -146,6 +146,7 @@ case "$CONTINUE_FILE" in /*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac
 HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
 PROJECT=$(git -C "$HOME_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || PROJECT=$ROOT
+case "$PROJECT" in --path-format=*) PROJECT=${PROJECT#*$'\n'}; case "$PROJECT" in /*) ;; *) PROJECT=$ROOT ;; esac ;; esac # git < 2.31 echoes it
 PROJECT=${PROJECT%/.git}; PROJECT=${PROJECT##*/} # a linked worktree names its project, not itself
 SEARCH=("$ROOT/CLAUDE.md" "$ROOT/.claude/CLAUDE.md") dir=${ROOT%/*} ARCHIVE=
 while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
