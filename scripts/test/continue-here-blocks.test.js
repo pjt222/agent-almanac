@@ -679,6 +679,7 @@ test('archive: a git without --path-format (before 2.31) still names the project
         assert.ok(layout === 'linked worktree' ? commonDir.startsWith('/') : commonDir === (layout === 'top level' ? '.git' : '../.git'),
           `${layout}: the common dir that follows the echo is not the shape this row is about: ${JSON.stringify(commonDir)}`);
 
+        // Load-bearing: the control row's own call would otherwise satisfy the call-log assertion below.
         writeFileSync(calls, '');
         const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
           cwd,
