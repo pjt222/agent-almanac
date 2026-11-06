@@ -615,17 +615,19 @@ test('archive: in a linked worktree, the archived name carries the project, not 
   }
 });
 
-test('archive: a git without --path-format (before 2.31) still names the top-level directory (#1043)', () => {
-  // git before 2.31 does not know --path-format, and rev-parse prints an option it does not know
-  // back into its output and exits 0. So the `||` fallback never fires, and the name carried
-  // "--path-format=absolute" and a newline (#1043, measured on 2.43 with a respelled option). The
-  // shim models that: it echoes the option, drops it, and hands every argument to the real git, so
-  // every other git call in the fence is unchanged. A shim that exited non-zero would trip the `||`
-  // fallback instead, and this test could not fail.
+test('archive: a git without --path-format (before 2.31) still names the project (#1043)', () => {
+  // git before 2.31 does not know --path-format. rev-parse prints an option it does not know back,
+  // then the common dir, and exits 0, so the `||` fallback never fires. At the top level that dir is
+  // relative (`.git`), and the name carried "--path-format=absolute", a newline and ".git". In a
+  // linked worktree it is absolute, and the two strips happened to give the project's name: a
+  // fallback keyed on "not absolute" turned that into the worktree's (#1048 round 1, B1, measured
+  // on real git 2.30.2). The shim models that git: it echoes the option, drops it, and hands every
+  // argument to the real git, so every other git call in the fence is unchanged; round 1 found it
+  // matching git 2.30.2 cell for cell. A shim that exited non-zero would trip the `||` fallback
+  // instead, and this test could not fail.
   const realGit = spawnSync('bash', ['-c', 'command -v git'], { encoding: 'utf8' }).stdout.trim();
   assert.ok(realGit.startsWith('/'), `cannot resolve the real git: ${JSON.stringify(realGit)}`);
   const shimDir = mkdtempSync(join(tmpdir(), 'oldgit-'));
-  const tree = archiveTree({ parent: 'Handoff archive: shared\n' });
   try {
     writeFileSync(
       join(shimDir, 'git'),
@@ -641,20 +643,39 @@ test('archive: a git without --path-format (before 2.31) still names the top-lev
       { mode: 0o755 },
     );
     const PATH = `${shimDir}:${process.env.PATH}`;
-    // Control row: the git the fence will find is the shim, and it answers as old git does. Without
-    // this, a shim that never ran would leave the real git answering and read as a pass.
-    const control = runBash('command -v git; git -C "$P" rev-parse --path-format=absolute --git-common-dir', {
-      cwd: tree.proj,
-      env: { PATH, P: tree.proj },
-    });
-    assert.equal(control.status, 0, `the shim must exit 0, as git before 2.31 does: ${control.stderr}`);
-    assert.equal(control.stdout, `${join(shimDir, 'git')}\n--path-format=absolute\n.git\n`, 'the shim is not the git under test');
+    for (const layout of ['top level', 'linked worktree']) {
+      const tree = archiveTree({ parent: 'Handoff archive: shared\n' }, { tracked: true });
+      try {
+        let cwd = tree.proj;
+        if (layout === 'linked worktree') {
+          cwd = join(tree.base, 'feat-x');
+          const add = spawnSync('git', ['-C', tree.proj, 'worktree', 'add', '-q', cwd], { encoding: 'utf8', env: cleanEnv(tree.home) });
+          assert.equal(add.status, 0, add.stderr);
+        }
+        // Control row: the git the fence will find is the shim, and it answers as old git does.
+        // Without this, a shim that never ran would leave the real git answering and read as a pass.
+        const control = runBash('command -v git; git -C "$P" rev-parse --path-format=absolute --git-common-dir', {
+          cwd,
+          env: { PATH, P: cwd },
+        });
+        assert.equal(control.status, 0, `${layout}: the shim must exit 0, as git before 2.31 does: ${control.stderr}`);
+        const [found, echoed, commonDir] = control.stdout.split('\n');
+        assert.equal(found, join(shimDir, 'git'), `${layout}: the shim is not the git under test`);
+        assert.equal(echoed, '--path-format=absolute', `${layout}: the shim did not echo the option`);
+        assert.ok(layout === 'top level' ? commonDir === '.git' : commonDir.startsWith('/'),
+          `${layout}: the common dir that follows the echo is not the shape this row is about: ${JSON.stringify(commonDir)}`);
 
-    const res = runArchive(tree, 'consumed', { PATH });
-    assert.equal(res.status, 0, res.stderr);
-    assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `not named after the top-level directory: ${JSON.stringify(res.stdout)}`);
+        const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
+          cwd,
+          env: { CONTINUE_FILE: join(cwd, 'CONTINUE_HERE.md'), ARCHIVE_STATE: 'consumed', HOME: tree.home, PATH },
+        });
+        assert.equal(res.status, 0, `${layout}: ${res.stderr}`);
+        assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `${layout}: not named after the project: ${JSON.stringify(res.stdout)}`);
+      } finally {
+        rmTree(tree.base);
+      }
+    }
   } finally {
-    rmTree(tree.base);
     rmTree(shimDir);
   }
 });

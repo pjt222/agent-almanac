@@ -119,7 +119,7 @@ case "$CONTINUE_FILE" in /*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac
 HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
 PROJECT=$(git -C "$HOME_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || PROJECT=$ROOT
-case "$PROJECT" in /*) ;; *) PROJECT=$ROOT ;; esac # git before 2.31 prints --path-format back, exit 0
+case "$PROJECT" in --path-format=*) PROJECT=${PROJECT#*$'\n'}; case "$PROJECT" in /*) ;; *) PROJECT=$ROOT ;; esac ;; esac # git < 2.31 echoes it
 PROJECT=${PROJECT%/.git}; PROJECT=${PROJECT##*/} # a linked worktree names its project, not itself
 SEARCH=("$ROOT/CLAUDE.md" "$ROOT/.claude/CLAUDE.md") dir=${ROOT%/*} ARCHIVE=
 while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
