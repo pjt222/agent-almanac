@@ -643,12 +643,20 @@ test('archive: a git without --path-format (before 2.31) still names the project
       { mode: 0o755 },
     );
     const PATH = `${shimDir}:${process.env.PATH}`;
-    for (const layout of ['top level', 'linked worktree']) {
+    for (const layout of ['top level', 'docs/ handoff', 'linked worktree']) {
       const tree = archiveTree({ parent: 'Handoff archive: shared\n' }, { tracked: true });
       try {
         let cwd = tree.proj;
+        let handoffDir = tree.proj;
+        if (layout === 'docs/ handoff') {
+          // One of the resolver's three layouts: the fence must name the top-level directory, not the
+          // handoff's own (round 1, S1: a fallback to $HOME_DIR passed every other row).
+          handoffDir = join(tree.proj, 'docs');
+          mkdirSync(handoffDir);
+          writeFileSync(join(handoffDir, 'CONTINUE_HERE.md'), '# Continue Here\nedition one\n');
+        }
         if (layout === 'linked worktree') {
-          cwd = join(tree.base, 'feat-x');
+          cwd = handoffDir = join(tree.base, 'feat-x');
           const add = spawnSync('git', ['-C', tree.proj, 'worktree', 'add', '-q', cwd], { encoding: 'utf8', env: cleanEnv(tree.home) });
           assert.equal(add.status, 0, add.stderr);
         }
@@ -656,18 +664,18 @@ test('archive: a git without --path-format (before 2.31) still names the project
         // Without this, a shim that never ran would leave the real git answering and read as a pass.
         const control = runBash('command -v git; git -C "$P" rev-parse --path-format=absolute --git-common-dir', {
           cwd,
-          env: { PATH, P: cwd },
+          env: { PATH, P: handoffDir },
         });
         assert.equal(control.status, 0, `${layout}: the shim must exit 0, as git before 2.31 does: ${control.stderr}`);
         const [found, echoed, commonDir] = control.stdout.split('\n');
         assert.equal(found, join(shimDir, 'git'), `${layout}: the shim is not the git under test`);
         assert.equal(echoed, '--path-format=absolute', `${layout}: the shim did not echo the option`);
-        assert.ok(layout === 'top level' ? commonDir === '.git' : commonDir.startsWith('/'),
+        assert.ok(layout === 'linked worktree' ? commonDir.startsWith('/') : commonDir === (layout === 'top level' ? '.git' : '../.git'),
           `${layout}: the common dir that follows the echo is not the shape this row is about: ${JSON.stringify(commonDir)}`);
 
         const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
           cwd,
-          env: { CONTINUE_FILE: join(cwd, 'CONTINUE_HERE.md'), ARCHIVE_STATE: 'consumed', HOME: tree.home, PATH },
+          env: { CONTINUE_FILE: join(handoffDir, 'CONTINUE_HERE.md'), ARCHIVE_STATE: 'consumed', HOME: tree.home, PATH },
         });
         assert.equal(res.status, 0, `${layout}: ${res.stderr}`);
         assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `${layout}: not named after the project: ${JSON.stringify(res.stdout)}`);
