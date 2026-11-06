@@ -21,6 +21,20 @@ Then `measure-agent.mjs` ran:
 
 The full output is in `measure-agent.json`, with the sandbox root replaced by `<sandbox>`.
 
+## The positive arm #1007 names, 2026-11-06
+
+#1007's criterion asks for the most common almanac line, `[Read, Write, Edit, Bash, Grep, Glob]`, which code-reviewer does not declare. web-developer declares exactly that line (as does shiny-developer). Re-run with the same recipe, pi 1.4.0, Node v26.11.1, from the `feat/1007-pi-agents` branch after its merge of `main` at `ce87dce34`:
+
+| Instrument | Input | Result |
+|---|---|---|
+| `install --agent web-developer -f pi -g` | `[Read, Write, Edit, Bash, Grep, Glob]` | `tools: read, write, edit, bash, grep, find` (`generated-web-developer-head.md`), nothing dropped |
+| `discoverAgents(cwd, "user")` | the sandbox agent directory | finds `web-developer` (source `user`), tools `read, write, edit, bash, grep, find`, model `null` |
+| `createAgentSession({ tools })`, then `session.getActiveToolNames()` | the discovered tools | active: `read, write, edit, bash, grep, find`, exactly the list |
+| the same | the unmapped `Read, Write, Edit, Bash, Grep, Glob` (control) | active: none, and no error |
+| the same | `Read` (control) | active: none, and no error |
+
+The full output is in `measure-agent-web-developer.json`, with the sandbox root replaced by `<sandbox>`. Its recipe is the one below with `web-developer` for `code-reviewer`, and `"Read,Write,Edit,Bash,Grep,Glob" "Read"` as the two control lists.
+
 ## Recipe
 
 ```bash
