@@ -16,11 +16,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **373 skills** across 67 domains — structured, executable procedures
+- **375 skills** across 67 domains — structured, executable procedures
 - **76 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **22 teams** — predefined multi-agent compositions for complex workflows
-- **35 guides** — human-readable documentation across workflow, infrastructure, reference, design, and investigation
-- **Interactive visualization** — force-graph explorer with 373 R-generated skill icons and 9 color themes
+- **36 guides** — human-readable documentation across workflow, infrastructure, reference, design, and investigation
+- **Interactive visualization** — force-graph explorer with 375 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -82,14 +82,14 @@ claude plugin install agent-almanac@local
 ```
 
 <!-- AUTO:START:plugin-discovery -->
-Auto-discovers all 373 skills and 76 agents. To use a team, read its definition in `teams/<name>.md` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (`subagent_type`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
+Auto-discovers all 375 skills and 76 agents. To use a team, read its definition in `teams/<name>.md` and spawn each listed member as a subagent via the [Agent tool](guides/creating-agents-and-teams.md) (`subagent_type`), coordinating them with SendMessage under the session's single implicit team. Windows / macOS variants in the [Installation guide](guides/installation.md#phase-1--plugin-install-claude-code-native).
 <!-- AUTO:END:plugin-discovery -->
 
 ### Path 3 — Global CLI (cross-framework)
 
-**Requires Node.js 22.12.0 or newer.** The floor was raised when the CLI moved to commander 15.
-`npm install` only *warns* on an engine mismatch rather than failing, so on Node 18 or 20 the
-install appears to succeed and the CLI then cannot start — check with `node --version` first.
+**Requires Node.js 26 or newer** (`engines` in `package.json`; raised from 22.12 in #1012).
+`npm install` only *warns* on an engine mismatch rather than failing, so on an older Node the
+install appears to succeed on a version the CLI is no longer tested on — check with `node --version` first.
 
 ```bash
 npm install -g agent-almanac            # the CLI, with every skill, agent, team and guide in its package
@@ -160,6 +160,16 @@ or silently change the content under them. The refusal names three ways forward:
 
 14 adapters: Claude Code, Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw, AI Edge, Copilot, pi (pi.dev), and Universal. Universal's `.agents/skills/` also reaches any other tool that reads that folder. See [cli/README.md](cli/README.md).
 
+### Path 4 — pi package (pi.dev)
+
+```bash
+pi install npm:agent-almanac            # a curated set of skills, for pi only, from the first release after 1.9.1
+```
+
+**Needs a release after 1.9.1.** 1.9.1 and earlier have no `pi` key, so pi loads every skill they ship (371 in 1.9.1), and the install gives no warning. `npm view agent-almanac pi` prints the curated list for a version that carries it, and nothing for 1.9.1.
+
+The pi package carries a curated set, not every skill. pi lists every installed skill's name, description and path in each request, and all of them would add about 65,000 tokens (measured with pi 1.4.0 in `tests/results/2026-10-22-pi-package-manifest/`; the figure grows with the length of the install path). The set is the AI-welfare skills (`meditate`, `heal`, `breathe`, `rest`, `honesty-humility` and their kin), the reasoning-balance skills (`redirect`, `awareness`, …) and advocatus-diaboli's review skills (`argumentation`, `review-research`, …), with `bootstrap-agent-identity`. `pi.skills` in `package.json` lists them. To narrow it further, use pi's settings filter (`{"source": "npm:agent-almanac", "skills": [...]}`). For any skill outside the set, install it with the CLI (Path 3), since pi also reads the universal adapter's `.agents/skills/`.
+
 ### Verify
 
 ```bash
@@ -185,12 +195,12 @@ Requires R 4.5.x or Docker; per-OS R paths in the [Installation guide](guides/in
 ```
 agent-almanac/
   .claude-plugin/  Plugin manifest for Claude Code plugin installation
-  skills/          373 executable procedures across 67 domains
+  skills/          375 executable procedures across 67 domains
   agents/          76 specialist personas
   teams/           22 multi-agent compositions with 8 coordination patterns
-  guides/          35 human-readable reference docs
+  guides/          36 human-readable reference docs
   viz/             Interactive force-graph explorer with R-generated icons
-  tests/           30 test scenarios for validation
+  tests/           31 test scenarios for validation
   i18n/            Translations (10 locales: de, zh-CN, ja, es, caveman-lite, caveman, caveman-ultra, wenyan-lite, wenyan, wenyan-ultra)
   cli/             Universal installer CLI (npm install -g agent-almanac)
   scripts/         Build and CI automation
@@ -227,6 +237,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 **Infrastructure**
 
 - [Installation](guides/installation.md) — OS-aware install runbook covering plugin install, global CLI, prereqs, verification, and updating across Linux, macOS, Windows, WSL2, and Codespaces
+- [Almanac Skills in a pi-durable Host](guides/almanac-skills-in-pi-durable.md) — Offer agent-almanac skills to an agent built on pi-durable: a system-prompt section that lists them and the read tool that loads one
 - [Setting Up Your Environment](guides/setting-up-your-environment.md) — WSL2 setup, shell config, MCP server integration, and Claude Code configuration
 - [Symlink Architecture](guides/symlink-architecture.md) — How symlinks enable multi-project discovery of skills, agents, and teams through Claude Code
 - [R Package Development](guides/r-package-development.md) — Package structure, testing, CRAN submission, pkgdown deployment, and renv management
@@ -259,16 +270,16 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total | Stubs | Unjudged |
 |---|---|---|---|---|---|---|---|---|
-| de | Deutsch | 340/373 | 3/76 | 1/22 | 2/35 | 346/506 (68.4%) | 41 | 1 |
-| zh-CN | 简体中文 | 346/373 | 3/76 | 1/22 | 2/35 | 352/506 (69.6%) | 32 | 4 |
-| ja | 日本語 | 347/373 | 3/76 | 1/22 | 2/35 | 353/506 (69.8%) | 32 | 3 |
-| es | Español | 334/373 | 3/76 | 1/22 | 2/35 | 340/506 (67.2%) | 46 | 2 |
-| caveman-lite | Caveman Lite | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 6 | 0 |
-| caveman | Caveman | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 6 | 0 |
-| caveman-ultra | Caveman Ultra | 346/373 | 0/76 | 0/22 | 0/35 | 346/506 (68.4%) | 6 | 0 |
-| wenyan-lite | 文言文輕 | 345/373 | 0/76 | 0/22 | 0/35 | 345/506 (68.2%) | 6 | 1 |
-| wenyan | 文言文 | 345/373 | 0/76 | 0/22 | 0/35 | 345/506 (68.2%) | 6 | 1 |
-| wenyan-ultra | 文言文極 | 345/373 | 0/76 | 0/22 | 0/35 | 345/506 (68.2%) | 6 | 1 |
+| de | Deutsch | 340/375 | 3/76 | 1/22 | 2/36 | 346/509 (68%) | 43 | 1 |
+| zh-CN | 简体中文 | 346/375 | 3/76 | 1/22 | 2/36 | 352/509 (69.2%) | 34 | 4 |
+| ja | 日本語 | 347/375 | 3/76 | 1/22 | 2/36 | 353/509 (69.4%) | 34 | 3 |
+| es | Español | 334/375 | 3/76 | 1/22 | 2/36 | 340/509 (66.8%) | 48 | 2 |
+| caveman-lite | Caveman Lite | 346/375 | 0/76 | 0/22 | 0/36 | 346/509 (68%) | 6 | 0 |
+| caveman | Caveman | 346/375 | 0/76 | 0/22 | 0/36 | 346/509 (68%) | 6 | 0 |
+| caveman-ultra | Caveman Ultra | 346/375 | 0/76 | 0/22 | 0/36 | 346/509 (68%) | 6 | 0 |
+| wenyan-lite | 文言文輕 | 345/375 | 0/76 | 0/22 | 0/36 | 345/509 (67.8%) | 6 | 1 |
+| wenyan | 文言文 | 345/375 | 0/76 | 0/22 | 0/36 | 345/509 (67.8%) | 6 | 1 |
+| wenyan-ultra | 文言文極 | 345/375 | 0/76 | 0/22 | 0/36 | 345/509 (67.8%) | 6 | 1 |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
@@ -280,7 +291,7 @@ Agent-almanac is packaged as a Claude Code plugin at `.claude-plugin/plugin.json
 <!-- AUTO:START:plugin-table -->
 | Component | Discovery | Count |
 |-----------|-----------|-------|
-| Skills | `skills/*/SKILL.md` | 373 |
+| Skills | `skills/*/SKILL.md` | 375 |
 | Agents | `agents/*.md` | 76 |
 | Teams | Bundled but not auto-discovered | 22 |
 <!-- AUTO:END:plugin-table -->

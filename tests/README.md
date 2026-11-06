@@ -1,6 +1,6 @@
 # Tests
 
-30 test scenarios for validating team coordination, agent behavior, and skill execution. The framework covers 7 categories: static validation (CI-automated), structural integrity (CI-automated), coordination patterns, agent behavior, skill execution, negative/edge cases, and integration/composition. Each scenario is evaluated on a 5-dimension rubric (max 25 points) covering accuracy, completeness, coordination fidelity, persona adherence, and actionability.
+31 test scenarios for validating team coordination, agent behavior, and skill execution. The framework covers 7 categories: static validation (CI-automated), structural integrity (CI-automated), coordination patterns, agent behavior, skill execution, negative/edge cases, and integration/composition. Each scenario is evaluated on a 5-dimension rubric (max 25 points) covering accuracy, completeness, coordination fidelity, persona adherence, and actionability.
 
 CI workflows (`validate-skills.yml`, `validate-tests.yml`, `validate-integrity.yml`) automate the static checks. The remaining scenarios are executed manually via Claude Code and produce structured results in `tests/results/`.
 
@@ -26,6 +26,7 @@ CI workflows (`validate-skills.yml`, `validate-tests.yml`, `validate-integrity.y
 | [test-security-audit-codebase-self](scenarios/skills/test-security-audit-codebase-self.md) | skill | security-audit-codebase | - | Security audit skill executed on agent-almanac for procedure verification against known-clean baseline |
 | [test-review-skill-format-batch](scenarios/skills/test-review-skill-format-batch.md) | skill | review-skill-format | - | Skill format review executed on 5 skills across different domains for consistency validation |
 | [test-commit-changes-dryrun](scenarios/skills/test-commit-changes-dryrun.md) | skill | commit-changes | - | Commit changes skill in dry-run mode identifies untracked files and drafts message without committing |
+| [test-decompose-into-pointer-units-planning](scenarios/skills/test-decompose-into-pointer-units-planning.md) | skill | decompose-into-pointer-units | - | Pointer-unit decomposition in planning mode derives specs by script, proves coverage, and records a stopped unit without re-running it |
 | [test-investigate-capa-root-cause](scenarios/skills/test-investigate-capa-root-cause.md) | skill | investigate-capa-root-cause | - | CAPA root cause investigation on adaptive pattern underperformance finding from cross-scenario analysis |
 | [test-negative-malformed-scenario](scenarios/negative/test-negative-malformed-scenario.md) | negative | test-team-coordination | - | Malformed scenario file missing required sections tests the test framework's own error handling |
 | [test-negative-out-of-scope-task](scenarios/negative/test-negative-out-of-scope-task.md) | negative | r-developer | - | R developer given a Kubernetes task tests graceful boundary-setting and scope refusal |

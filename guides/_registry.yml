@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 35
+total_guides: 36
 version: "1.0"
 last_updated: "2026-07-16"
 
@@ -187,6 +187,15 @@ guides:
     path: guides/installation.md
     title: "Installation"
     description: "OS-aware install runbook covering plugin install, global CLI, prereqs, verification, and updating across Linux, macOS, Windows, WSL2, and Codespaces"
+    category: infrastructure
+    agents: []
+    teams: []
+    skills: [install-almanac-content]
+
+  - id: almanac-skills-in-pi-durable
+    path: guides/almanac-skills-in-pi-durable.md
+    title: "Almanac Skills in a pi-durable Host"
+    description: "Offer agent-almanac skills to an agent built on pi-durable: a system-prompt section that lists them and the read tool that loads one"
     category: infrastructure
     agents: []
     teams: []

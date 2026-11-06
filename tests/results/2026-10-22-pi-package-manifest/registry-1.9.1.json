@@ -1,0 +1,1495 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "agentDir": "<sandbox>/home-registry/.pi/agent",
+ "skillCount": 371,
+ "promptChars": 273624,
+ "promptTokensCharsOver4": 68406,
+ "skills": [
+  {
+   "name": "adapt-architecture",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/adapt-architecture/SKILL.md"
+  },
+  {
+   "name": "adaptic",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/adaptic/SKILL.md"
+  },
+  {
+   "name": "add-puzzle-type",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/add-puzzle-type/SKILL.md"
+  },
+  {
+   "name": "add-rcpp-integration",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/add-rcpp-integration/SKILL.md"
+  },
+  {
+   "name": "aikido",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/aikido/SKILL.md"
+  },
+  {
+   "name": "analyze-codebase-for-mcp",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-codebase-for-mcp/SKILL.md"
+  },
+  {
+   "name": "analyze-codebase-workflow",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-codebase-workflow/SKILL.md"
+  },
+  {
+   "name": "analyze-diffusion-dynamics",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-diffusion-dynamics/SKILL.md"
+  },
+  {
+   "name": "analyze-generative-diffusion-model",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-generative-diffusion-model/SKILL.md"
+  },
+  {
+   "name": "analyze-kernel-bottleneck",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-kernel-bottleneck/SKILL.md"
+  },
+  {
+   "name": "analyze-magnetic-field",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-magnetic-field/SKILL.md"
+  },
+  {
+   "name": "analyze-magnetic-levitation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-magnetic-levitation/SKILL.md"
+  },
+  {
+   "name": "analyze-prime-numbers",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-prime-numbers/SKILL.md"
+  },
+  {
+   "name": "analyze-tensegrity-system",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/analyze-tensegrity-system/SKILL.md"
+  },
+  {
+   "name": "annotate-source-files",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/annotate-source-files/SKILL.md"
+  },
+  {
+   "name": "apply-gematria",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/apply-gematria/SKILL.md"
+  },
+  {
+   "name": "apply-semantic-versioning",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/apply-semantic-versioning/SKILL.md"
+  },
+  {
+   "name": "appraise-gemstone",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/appraise-gemstone/SKILL.md"
+  },
+  {
+   "name": "argumentation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/argumentation/SKILL.md"
+  },
+  {
+   "name": "assess-context",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/assess-context/SKILL.md"
+  },
+  {
+   "name": "assess-form",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/assess-form/SKILL.md"
+  },
+  {
+   "name": "assess-github-repo-security",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/assess-github-repo-security/SKILL.md"
+  },
+  {
+   "name": "assess-holistic-health",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/assess-holistic-health/SKILL.md"
+  },
+  {
+   "name": "assess-ip-landscape",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/assess-ip-landscape/SKILL.md"
+  },
+  {
+   "name": "assess-trail-conditions",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/assess-trail-conditions/SKILL.md"
+  },
+  {
+   "name": "athanor",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/athanor/SKILL.md"
+  },
+  {
+   "name": "attune",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/attune/SKILL.md"
+  },
+  {
+   "name": "audit-dependency-versions",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/audit-dependency-versions/SKILL.md"
+  },
+  {
+   "name": "audit-discovery-symlinks",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/audit-discovery-symlinks/SKILL.md"
+  },
+  {
+   "name": "audit-icon-pipeline",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/audit-icon-pipeline/SKILL.md"
+  },
+  {
+   "name": "awareness",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/awareness/SKILL.md"
+  },
+  {
+   "name": "basic-obedience",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/basic-obedience/SKILL.md"
+  },
+  {
+   "name": "behavioral-modification",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/behavioral-modification/SKILL.md"
+  },
+  {
+   "name": "benchmark-htr-engines",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/benchmark-htr-engines/SKILL.md"
+  },
+  {
+   "name": "bootstrap-agent-identity",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/bootstrap-agent-identity/SKILL.md"
+  },
+  {
+   "name": "brahma-bhaga",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/brahma-bhaga/SKILL.md"
+  },
+  {
+   "name": "breathe",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/breathe/SKILL.md"
+  },
+  {
+   "name": "build-ci-cd-pipeline",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-ci-cd-pipeline/SKILL.md"
+  },
+  {
+   "name": "build-cli-plugin",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-cli-plugin/SKILL.md"
+  },
+  {
+   "name": "build-coherence",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-coherence/SKILL.md"
+  },
+  {
+   "name": "build-consensus",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-consensus/SKILL.md"
+  },
+  {
+   "name": "build-custom-mcp-server",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-custom-mcp-server/SKILL.md"
+  },
+  {
+   "name": "build-feature-store",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-feature-store/SKILL.md"
+  },
+  {
+   "name": "build-grafana-dashboards",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-grafana-dashboards/SKILL.md"
+  },
+  {
+   "name": "build-parameterized-report",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-parameterized-report/SKILL.md"
+  },
+  {
+   "name": "build-pkgdown-site",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-pkgdown-site/SKILL.md"
+  },
+  {
+   "name": "build-sequential-circuit",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-sequential-circuit/SKILL.md"
+  },
+  {
+   "name": "build-shiny-module",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-shiny-module/SKILL.md"
+  },
+  {
+   "name": "build-tcg-deck",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/build-tcg-deck/SKILL.md"
+  },
+  {
+   "name": "catalog-collection",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/catalog-collection/SKILL.md"
+  },
+  {
+   "name": "center",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/center/SKILL.md"
+  },
+  {
+   "name": "check-hiking-gear",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/check-hiking-gear/SKILL.md"
+  },
+  {
+   "name": "check-relocation-documents",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/check-relocation-documents/SKILL.md"
+  },
+  {
+   "name": "choose-loop-wakeup-interval",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/choose-loop-wakeup-interval/SKILL.md"
+  },
+  {
+   "name": "chrysopoeia",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/chrysopoeia/SKILL.md"
+  },
+  {
+   "name": "circuit-breaker-pattern",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/circuit-breaker-pattern/SKILL.md"
+  },
+  {
+   "name": "clean-codebase",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/clean-codebase/SKILL.md"
+  },
+  {
+   "name": "collect-preserve-specimens",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/collect-preserve-specimens/SKILL.md"
+  },
+  {
+   "name": "commit-changes",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/commit-changes/SKILL.md"
+  },
+  {
+   "name": "compose-sacred-music",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/compose-sacred-music/SKILL.md"
+  },
+  {
+   "name": "conduct-empirical-wire-capture",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/conduct-empirical-wire-capture/SKILL.md"
+  },
+  {
+   "name": "conduct-gxp-audit",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/conduct-gxp-audit/SKILL.md"
+  },
+  {
+   "name": "conduct-post-mortem",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/conduct-post-mortem/SKILL.md"
+  },
+  {
+   "name": "conduct-retrospective",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/conduct-retrospective/SKILL.md"
+  },
+  {
+   "name": "configure-alerting-rules",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-alerting-rules/SKILL.md"
+  },
+  {
+   "name": "configure-api-gateway",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-api-gateway/SKILL.md"
+  },
+  {
+   "name": "configure-git-repository",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-git-repository/SKILL.md"
+  },
+  {
+   "name": "configure-ingress-networking",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-ingress-networking/SKILL.md"
+  },
+  {
+   "name": "configure-log-aggregation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-log-aggregation/SKILL.md"
+  },
+  {
+   "name": "configure-mcp-server",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-mcp-server/SKILL.md"
+  },
+  {
+   "name": "configure-nginx",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-nginx/SKILL.md"
+  },
+  {
+   "name": "configure-putior-mcp",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-putior-mcp/SKILL.md"
+  },
+  {
+   "name": "configure-reverse-proxy",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/configure-reverse-proxy/SKILL.md"
+  },
+  {
+   "name": "conscientiousness",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/conscientiousness/SKILL.md"
+  },
+  {
+   "name": "construct-geometric-figure",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/construct-geometric-figure/SKILL.md"
+  },
+  {
+   "name": "consult-natural-history",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/consult-natural-history/SKILL.md"
+  },
+  {
+   "name": "containerize-mcp-server",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/containerize-mcp-server/SKILL.md"
+  },
+  {
+   "name": "coordinate-peer-sessions",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/coordinate-peer-sessions/SKILL.md"
+  },
+  {
+   "name": "coordinate-reasoning",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/coordinate-reasoning/SKILL.md"
+  },
+  {
+   "name": "coordinate-swarm",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/coordinate-swarm/SKILL.md"
+  },
+  {
+   "name": "correlate-observability-signals",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/correlate-observability-signals/SKILL.md"
+  },
+  {
+   "name": "create-2d-composition",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-2d-composition/SKILL.md"
+  },
+  {
+   "name": "create-3d-scene",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-3d-scene/SKILL.md"
+  },
+  {
+   "name": "create-agent",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-agent/SKILL.md"
+  },
+  {
+   "name": "create-dockerfile",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-dockerfile/SKILL.md"
+  },
+  {
+   "name": "create-github-issues",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-github-issues/SKILL.md"
+  },
+  {
+   "name": "create-github-release",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-github-release/SKILL.md"
+  },
+  {
+   "name": "create-glyph",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-glyph/SKILL.md"
+  },
+  {
+   "name": "create-multistage-dockerfile",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-multistage-dockerfile/SKILL.md"
+  },
+  {
+   "name": "create-pull-request",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-pull-request/SKILL.md"
+  },
+  {
+   "name": "create-quarto-report",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-quarto-report/SKILL.md"
+  },
+  {
+   "name": "create-r-dockerfile",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-r-dockerfile/SKILL.md"
+  },
+  {
+   "name": "create-r-package",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-r-package/SKILL.md"
+  },
+  {
+   "name": "create-skill",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-skill/SKILL.md"
+  },
+  {
+   "name": "create-spatial-visualization",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-spatial-visualization/SKILL.md"
+  },
+  {
+   "name": "create-team",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-team/SKILL.md"
+  },
+  {
+   "name": "create-work-breakdown-structure",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-work-breakdown-structure/SKILL.md"
+  },
+  {
+   "name": "create-workflow",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/create-workflow/SKILL.md"
+  },
+  {
+   "name": "cross-review-project",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/cross-review-project/SKILL.md"
+  },
+  {
+   "name": "cultivate-bonsai",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/cultivate-bonsai/SKILL.md"
+  },
+  {
+   "name": "curate-collection",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/curate-collection/SKILL.md"
+  },
+  {
+   "name": "cut-gemstone",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/cut-gemstone/SKILL.md"
+  },
+  {
+   "name": "decode-minified-js-gates",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/decode-minified-js-gates/SKILL.md"
+  },
+  {
+   "name": "decommission-validated-system",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/decommission-validated-system/SKILL.md"
+  },
+  {
+   "name": "defend-colony",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/defend-colony/SKILL.md"
+  },
+  {
+   "name": "define-slo-sli-sla",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/define-slo-sli-sla/SKILL.md"
+  },
+  {
+   "name": "deploy-edge-ai-model",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/deploy-edge-ai-model/SKILL.md"
+  },
+  {
+   "name": "deploy-ml-model-serving",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/deploy-ml-model-serving/SKILL.md"
+  },
+  {
+   "name": "deploy-searxng",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/deploy-searxng/SKILL.md"
+  },
+  {
+   "name": "deploy-shiny-app",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/deploy-shiny-app/SKILL.md"
+  },
+  {
+   "name": "deploy-shinyproxy",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/deploy-shinyproxy/SKILL.md"
+  },
+  {
+   "name": "deploy-to-kubernetes",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/deploy-to-kubernetes/SKILL.md"
+  },
+  {
+   "name": "deploy-to-vercel",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/deploy-to-vercel/SKILL.md"
+  },
+  {
+   "name": "derive-theoretical-result",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/derive-theoretical-result/SKILL.md"
+  },
+  {
+   "name": "design-a2a-agent-card",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-a2a-agent-card/SKILL.md"
+  },
+  {
+   "name": "design-acoustic-levitation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-acoustic-levitation/SKILL.md"
+  },
+  {
+   "name": "design-cli-output",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-cli-output/SKILL.md"
+  },
+  {
+   "name": "design-compliance-architecture",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-compliance-architecture/SKILL.md"
+  },
+  {
+   "name": "design-electromagnetic-device",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-electromagnetic-device/SKILL.md"
+  },
+  {
+   "name": "design-logic-circuit",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-logic-circuit/SKILL.md"
+  },
+  {
+   "name": "design-on-call-rotation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-on-call-rotation/SKILL.md"
+  },
+  {
+   "name": "design-serialization-schema",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-serialization-schema/SKILL.md"
+  },
+  {
+   "name": "design-shiny-ui",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-shiny-ui/SKILL.md"
+  },
+  {
+   "name": "design-training-program",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/design-training-program/SKILL.md"
+  },
+  {
+   "name": "detect-anomalies-aiops",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/detect-anomalies-aiops/SKILL.md"
+  },
+  {
+   "name": "develop-gc-method",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/develop-gc-method/SKILL.md"
+  },
+  {
+   "name": "develop-hplc-method",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/develop-hplc-method/SKILL.md"
+  },
+  {
+   "name": "dissolve-form",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/dissolve-form/SKILL.md"
+  },
+  {
+   "name": "document-insect-sighting",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/document-insect-sighting/SKILL.md"
+  },
+  {
+   "name": "draft-project-charter",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/draft-project-charter/SKILL.md"
+  },
+  {
+   "name": "dream",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/dream/SKILL.md"
+  },
+  {
+   "name": "du-dum",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/du-dum/SKILL.md"
+  },
+  {
+   "name": "enforce-policy-as-code",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/enforce-policy-as-code/SKILL.md"
+  },
+  {
+   "name": "enforce-redaction-gate",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/enforce-redaction-gate/SKILL.md"
+  },
+  {
+   "name": "enhance-glyph",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/enhance-glyph/SKILL.md"
+  },
+  {
+   "name": "escalate-issues",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/escalate-issues/SKILL.md"
+  },
+  {
+   "name": "evaluate-agent-framework",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/evaluate-agent-framework/SKILL.md"
+  },
+  {
+   "name": "evaluate-boolean-expression",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/evaluate-boolean-expression/SKILL.md"
+  },
+  {
+   "name": "evaluate-levitation-mechanism",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/evaluate-levitation-mechanism/SKILL.md"
+  },
+  {
+   "name": "evolve-agent",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/evolve-agent/SKILL.md"
+  },
+  {
+   "name": "evolve-skill",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/evolve-skill/SKILL.md"
+  },
+  {
+   "name": "evolve-skill-from-traces",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/evolve-skill-from-traces/SKILL.md"
+  },
+  {
+   "name": "evolve-team",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/evolve-team/SKILL.md"
+  },
+  {
+   "name": "expand-awareness",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/expand-awareness/SKILL.md"
+  },
+  {
+   "name": "explore-diophantine-equations",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/explore-diophantine-equations/SKILL.md"
+  },
+  {
+   "name": "express-insight",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/express-insight/SKILL.md"
+  },
+  {
+   "name": "fail-early-pattern",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/fail-early-pattern/SKILL.md"
+  },
+  {
+   "name": "file-trademark",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/file-trademark/SKILL.md"
+  },
+  {
+   "name": "fit-drift-diffusion-model",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/fit-drift-diffusion-model/SKILL.md"
+  },
+  {
+   "name": "fit-hidden-markov-model",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/fit-hidden-markov-model/SKILL.md"
+  },
+  {
+   "name": "forage-plants",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/forage-plants/SKILL.md"
+  },
+  {
+   "name": "forage-resources",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/forage-resources/SKILL.md"
+  },
+  {
+   "name": "forage-solutions",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/forage-solutions/SKILL.md"
+  },
+  {
+   "name": "forecast-operational-metrics",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/forecast-operational-metrics/SKILL.md"
+  },
+  {
+   "name": "format-apa-report",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/format-apa-report/SKILL.md"
+  },
+  {
+   "name": "format-citations",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/format-citations/SKILL.md"
+  },
+  {
+   "name": "formulate-herbal-remedy",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/formulate-herbal-remedy/SKILL.md"
+  },
+  {
+   "name": "formulate-maxwell-equations",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/formulate-maxwell-equations/SKILL.md"
+  },
+  {
+   "name": "formulate-quantum-problem",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/formulate-quantum-problem/SKILL.md"
+  },
+  {
+   "name": "fungi-identification",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/fungi-identification/SKILL.md"
+  },
+  {
+   "name": "generate-puzzle",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/generate-puzzle/SKILL.md"
+  },
+  {
+   "name": "generate-statistical-tables",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/generate-statistical-tables/SKILL.md"
+  },
+  {
+   "name": "generate-status-report",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/generate-status-report/SKILL.md"
+  },
+  {
+   "name": "generate-tour-report",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/generate-tour-report/SKILL.md"
+  },
+  {
+   "name": "generate-workflow-diagram",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/generate-workflow-diagram/SKILL.md"
+  },
+  {
+   "name": "generative-recipe-dsl",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/generative-recipe-dsl/SKILL.md"
+  },
+  {
+   "name": "gold-washing",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/gold-washing/SKILL.md"
+  },
+  {
+   "name": "grade-tcg-card",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/grade-tcg-card/SKILL.md"
+  },
+  {
+   "name": "gratitude",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/gratitude/SKILL.md"
+  },
+  {
+   "name": "harden-github-repo-security",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/harden-github-repo-security/SKILL.md"
+  },
+  {
+   "name": "headless-web-scraping",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/headless-web-scraping/SKILL.md"
+  },
+  {
+   "name": "heal",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/heal/SKILL.md"
+  },
+  {
+   "name": "heal-guidance",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/heal-guidance/SKILL.md"
+  },
+  {
+   "name": "honesty-humility",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/honesty-humility/SKILL.md"
+  },
+  {
+   "name": "identify-gemstone",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/identify-gemstone/SKILL.md"
+  },
+  {
+   "name": "identify-insect",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/identify-insect/SKILL.md"
+  },
+  {
+   "name": "implement-a2a-server",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/implement-a2a-server/SKILL.md"
+  },
+  {
+   "name": "implement-audit-trail",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/implement-audit-trail/SKILL.md"
+  },
+  {
+   "name": "implement-diffusion-network",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/implement-diffusion-network/SKILL.md"
+  },
+  {
+   "name": "implement-electronic-signatures",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/implement-electronic-signatures/SKILL.md"
+  },
+  {
+   "name": "implement-gitops-workflow",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/implement-gitops-workflow/SKILL.md"
+  },
+  {
+   "name": "implement-pharma-serialisation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/implement-pharma-serialisation/SKILL.md"
+  },
+  {
+   "name": "install-almanac-content",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/install-almanac-content/SKILL.md"
+  },
+  {
+   "name": "install-putior",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/install-putior/SKILL.md"
+  },
+  {
+   "name": "instrument-distributed-tracing",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/instrument-distributed-tracing/SKILL.md"
+  },
+  {
+   "name": "integrate-gestalt",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/integrate-gestalt/SKILL.md"
+  },
+  {
+   "name": "interpret-chromatogram",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/interpret-chromatogram/SKILL.md"
+  },
+  {
+   "name": "interpret-ir-spectrum",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/interpret-ir-spectrum/SKILL.md"
+  },
+  {
+   "name": "interpret-mass-spectrum",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/interpret-mass-spectrum/SKILL.md"
+  },
+  {
+   "name": "interpret-nmr-spectrum",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/interpret-nmr-spectrum/SKILL.md"
+  },
+  {
+   "name": "interpret-raman-spectrum",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/interpret-raman-spectrum/SKILL.md"
+  },
+  {
+   "name": "interpret-uv-vis-spectrum",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/interpret-uv-vis-spectrum/SKILL.md"
+  },
+  {
+   "name": "intrinsic",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/intrinsic/SKILL.md"
+  },
+  {
+   "name": "investigate-capa-root-cause",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/investigate-capa-root-cause/SKILL.md"
+  },
+  {
+   "name": "label-training-data",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/label-training-data/SKILL.md"
+  },
+  {
+   "name": "learn",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/learn/SKILL.md"
+  },
+  {
+   "name": "learn-guidance",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/learn-guidance/SKILL.md"
+  },
+  {
+   "name": "listen",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/listen/SKILL.md"
+  },
+  {
+   "name": "listen-guidance",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/listen-guidance/SKILL.md"
+  },
+  {
+   "name": "maintain-hand-tools",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/maintain-hand-tools/SKILL.md"
+  },
+  {
+   "name": "make-fire",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/make-fire/SKILL.md"
+  },
+  {
+   "name": "manage-backlog",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-backlog/SKILL.md"
+  },
+  {
+   "name": "manage-bibliography",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-bibliography/SKILL.md"
+  },
+  {
+   "name": "manage-change-control",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-change-control/SKILL.md"
+  },
+  {
+   "name": "manage-changelog",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-changelog/SKILL.md"
+  },
+  {
+   "name": "manage-engagement-buffer",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-engagement-buffer/SKILL.md"
+  },
+  {
+   "name": "manage-git-branches",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-git-branches/SKILL.md"
+  },
+  {
+   "name": "manage-kubernetes-secrets",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-kubernetes-secrets/SKILL.md"
+  },
+  {
+   "name": "manage-memory",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-memory/SKILL.md"
+  },
+  {
+   "name": "manage-renv-dependencies",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-renv-dependencies/SKILL.md"
+  },
+  {
+   "name": "manage-tcg-collection",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-tcg-collection/SKILL.md"
+  },
+  {
+   "name": "manage-token-budget",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/manage-token-budget/SKILL.md"
+  },
+  {
+   "name": "meditate",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/meditate/SKILL.md"
+  },
+  {
+   "name": "meditate-guidance",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/meditate-guidance/SKILL.md"
+  },
+  {
+   "name": "memex",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/memex/SKILL.md"
+  },
+  {
+   "name": "memex-init",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/memex-init/SKILL.md"
+  },
+  {
+   "name": "memex-observe",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/memex-observe/SKILL.md"
+  },
+  {
+   "name": "memex-verify",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/memex-verify/SKILL.md"
+  },
+  {
+   "name": "memex-wrap",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/memex-wrap/SKILL.md"
+  },
+  {
+   "name": "metal",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/metal/SKILL.md"
+  },
+  {
+   "name": "mindfulness",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/mindfulness/SKILL.md"
+  },
+  {
+   "name": "mineral-identification",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/mineral-identification/SKILL.md"
+  },
+  {
+   "name": "model-markov-chain",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/model-markov-chain/SKILL.md"
+  },
+  {
+   "name": "monitor-binary-version-baselines",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/monitor-binary-version-baselines/SKILL.md"
+  },
+  {
+   "name": "monitor-data-integrity",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/monitor-data-integrity/SKILL.md"
+  },
+  {
+   "name": "monitor-model-drift",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/monitor-model-drift/SKILL.md"
+  },
+  {
+   "name": "mushroom-cultivation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/mushroom-cultivation/SKILL.md"
+  },
+  {
+   "name": "navigate-dach-bureaucracy",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/navigate-dach-bureaucracy/SKILL.md"
+  },
+  {
+   "name": "observe",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/observe/SKILL.md"
+  },
+  {
+   "name": "observe-guidance",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/observe-guidance/SKILL.md"
+  },
+  {
+   "name": "observe-insect-behavior",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/observe-insect-behavior/SKILL.md"
+  },
+  {
+   "name": "optimize-cloud-costs",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/optimize-cloud-costs/SKILL.md"
+  },
+  {
+   "name": "optimize-docker-build-cache",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/optimize-docker-build-cache/SKILL.md"
+  },
+  {
+   "name": "optimize-shiny-performance",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/optimize-shiny-performance/SKILL.md"
+  },
+  {
+   "name": "orchestrate-ml-pipeline",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/orchestrate-ml-pipeline/SKILL.md"
+  },
+  {
+   "name": "ornament-style-color",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/ornament-style-color/SKILL.md"
+  },
+  {
+   "name": "ornament-style-modern",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/ornament-style-modern/SKILL.md"
+  },
+  {
+   "name": "ornament-style-mono",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/ornament-style-mono/SKILL.md"
+  },
+  {
+   "name": "paper-making",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/paper-making/SKILL.md"
+  },
+  {
+   "name": "perform-csv-assessment",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/perform-csv-assessment/SKILL.md"
+  },
+  {
+   "name": "pipeline-gpu-kernel",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/pipeline-gpu-kernel/SKILL.md"
+  },
+  {
+   "name": "plan-capacity",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/plan-capacity/SKILL.md"
+  },
+  {
+   "name": "plan-eu-relocation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/plan-eu-relocation/SKILL.md"
+  },
+  {
+   "name": "plan-garden-calendar",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/plan-garden-calendar/SKILL.md"
+  },
+  {
+   "name": "plan-hiking-tour",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/plan-hiking-tour/SKILL.md"
+  },
+  {
+   "name": "plan-release-cycle",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/plan-release-cycle/SKILL.md"
+  },
+  {
+   "name": "plan-spectroscopic-analysis",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/plan-spectroscopic-analysis/SKILL.md"
+  },
+  {
+   "name": "plan-sprint",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/plan-sprint/SKILL.md"
+  },
+  {
+   "name": "plan-tour-route",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/plan-tour-route/SKILL.md"
+  },
+  {
+   "name": "polish-claw-project",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/polish-claw-project/SKILL.md"
+  },
+  {
+   "name": "polish-gemstone",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/polish-gemstone/SKILL.md"
+  },
+  {
+   "name": "practice-viriditas",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/practice-viriditas/SKILL.md"
+  },
+  {
+   "name": "prepare-inspection-readiness",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/prepare-inspection-readiness/SKILL.md"
+  },
+  {
+   "name": "prepare-print-model",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/prepare-print-model/SKILL.md"
+  },
+  {
+   "name": "prepare-soil",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/prepare-soil/SKILL.md"
+  },
+  {
+   "name": "preserve-materials",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/preserve-materials/SKILL.md"
+  },
+  {
+   "name": "probe-feature-flag-state",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/probe-feature-flag-state/SKILL.md"
+  },
+  {
+   "name": "prove-geometric-theorem",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/prove-geometric-theorem/SKILL.md"
+  },
+  {
+   "name": "provision-infrastructure-terraform",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/provision-infrastructure-terraform/SKILL.md"
+  },
+  {
+   "name": "prune-agent-memory",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/prune-agent-memory/SKILL.md"
+  },
+  {
+   "name": "purify-water",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/purify-water/SKILL.md"
+  },
+  {
+   "name": "qualify-vendor",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/qualify-vendor/SKILL.md"
+  },
+  {
+   "name": "read-continue-here",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/read-continue-here/SKILL.md"
+  },
+  {
+   "name": "read-garden",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/read-garden/SKILL.md"
+  },
+  {
+   "name": "read-tree-of-life",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/read-tree-of-life/SKILL.md"
+  },
+  {
+   "name": "redact-for-public-disclosure",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/redact-for-public-disclosure/SKILL.md"
+  },
+  {
+   "name": "redact-visualization-for-disclosure",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/redact-visualization-for-disclosure/SKILL.md"
+  },
+  {
+   "name": "redact-wire-capture",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/redact-wire-capture/SKILL.md"
+  },
+  {
+   "name": "redirect",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/redirect/SKILL.md"
+  },
+  {
+   "name": "refactor-skill-structure",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/refactor-skill-structure/SKILL.md"
+  },
+  {
+   "name": "register-ml-model",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/register-ml-model/SKILL.md"
+  },
+  {
+   "name": "release-package-version",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/release-package-version/SKILL.md"
+  },
+  {
+   "name": "remote-viewing",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/remote-viewing/SKILL.md"
+  },
+  {
+   "name": "remote-viewing-guidance",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/remote-viewing-guidance/SKILL.md"
+  },
+  {
+   "name": "render-blender-output",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/render-blender-output/SKILL.md"
+  },
+  {
+   "name": "render-icon-pipeline",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/render-icon-pipeline/SKILL.md"
+  },
+  {
+   "name": "render-publication-graphic",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/render-publication-graphic/SKILL.md"
+  },
+  {
+   "name": "render-puzzle-docs",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/render-puzzle-docs/SKILL.md"
+  },
+  {
+   "name": "repair-broken-references",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/repair-broken-references/SKILL.md"
+  },
+  {
+   "name": "repair-damage",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/repair-damage/SKILL.md"
+  },
+  {
+   "name": "research-word-etymology",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/research-word-etymology/SKILL.md"
+  },
+  {
+   "name": "resolve-git-conflicts",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/resolve-git-conflicts/SKILL.md"
+  },
+  {
+   "name": "rest",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/rest/SKILL.md"
+  },
+  {
+   "name": "restore-diagram-legibility",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/restore-diagram-legibility/SKILL.md"
+  },
+  {
+   "name": "review-codebase",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/review-codebase/SKILL.md"
+  },
+  {
+   "name": "review-data-analysis",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/review-data-analysis/SKILL.md"
+  },
+  {
+   "name": "review-pull-request",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/review-pull-request/SKILL.md"
+  },
+  {
+   "name": "review-research",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/review-research/SKILL.md"
+  },
+  {
+   "name": "review-skill-format",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/review-skill-format/SKILL.md"
+  },
+  {
+   "name": "review-software-architecture",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/review-software-architecture/SKILL.md"
+  },
+  {
+   "name": "review-ux-ui",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/review-ux-ui/SKILL.md"
+  },
+  {
+   "name": "review-web-design",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/review-web-design/SKILL.md"
+  },
+  {
+   "name": "rotate-scraping-proxies",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/rotate-scraping-proxies/SKILL.md"
+  },
+  {
+   "name": "run-ab-test-models",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/run-ab-test-models/SKILL.md"
+  },
+  {
+   "name": "run-chaos-experiment",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/run-chaos-experiment/SKILL.md"
+  },
+  {
+   "name": "run-copilot-review-loop",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/run-copilot-review-loop/SKILL.md"
+  },
+  {
+   "name": "run-puzzle-tests",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/run-puzzle-tests/SKILL.md"
+  },
+  {
+   "name": "scaffold-cli-command",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/scaffold-cli-command/SKILL.md"
+  },
+  {
+   "name": "scaffold-mcp-server",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/scaffold-mcp-server/SKILL.md"
+  },
+  {
+   "name": "scaffold-nextjs-app",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/scaffold-nextjs-app/SKILL.md"
+  },
+  {
+   "name": "scaffold-shiny-app",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/scaffold-shiny-app/SKILL.md"
+  },
+  {
+   "name": "scale-colony",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/scale-colony/SKILL.md"
+  },
+  {
+   "name": "screen-trademark",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/screen-trademark/SKILL.md"
+  },
+  {
+   "name": "script-blender-automation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/script-blender-automation/SKILL.md"
+  },
+  {
+   "name": "search-prior-art",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/search-prior-art/SKILL.md"
+  },
+  {
+   "name": "security-audit-codebase",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/security-audit-codebase/SKILL.md"
+  },
+  {
+   "name": "select-print-material",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/select-print-material/SKILL.md"
+  },
+  {
+   "name": "serialize-data-formats",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/serialize-data-formats/SKILL.md"
+  },
+  {
+   "name": "setup-automl-pipeline",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-automl-pipeline/SKILL.md"
+  },
+  {
+   "name": "setup-compose-stack",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-compose-stack/SKILL.md"
+  },
+  {
+   "name": "setup-container-registry",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-container-registry/SKILL.md"
+  },
+  {
+   "name": "setup-docker-compose",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-docker-compose/SKILL.md"
+  },
+  {
+   "name": "setup-github-actions-ci",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-github-actions-ci/SKILL.md"
+  },
+  {
+   "name": "setup-gxp-r-project",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-gxp-r-project/SKILL.md"
+  },
+  {
+   "name": "setup-local-kubernetes",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-local-kubernetes/SKILL.md"
+  },
+  {
+   "name": "setup-prometheus-monitoring",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-prometheus-monitoring/SKILL.md"
+  },
+  {
+   "name": "setup-putior-ci",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-putior-ci/SKILL.md"
+  },
+  {
+   "name": "setup-service-mesh",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-service-mesh/SKILL.md"
+  },
+  {
+   "name": "setup-tailwind-typescript",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-tailwind-typescript/SKILL.md"
+  },
+  {
+   "name": "setup-uptime-checks",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-uptime-checks/SKILL.md"
+  },
+  {
+   "name": "setup-wsl-dev-environment",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/setup-wsl-dev-environment/SKILL.md"
+  },
+  {
+   "name": "sharpen-knife",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/sharpen-knife/SKILL.md"
+  },
+  {
+   "name": "shift-camouflage",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/shift-camouflage/SKILL.md"
+  },
+  {
+   "name": "shine",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/shine/SKILL.md"
+  },
+  {
+   "name": "shiva-bhaga",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/shiva-bhaga/SKILL.md"
+  },
+  {
+   "name": "simulate-cpu-architecture",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/simulate-cpu-architecture/SKILL.md"
+  },
+  {
+   "name": "simulate-stochastic-process",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/simulate-stochastic-process/SKILL.md"
+  },
+  {
+   "name": "solve-electromagnetic-induction",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/solve-electromagnetic-induction/SKILL.md"
+  },
+  {
+   "name": "solve-modular-arithmetic",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/solve-modular-arithmetic/SKILL.md"
+  },
+  {
+   "name": "solve-trigonometric-problem",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/solve-trigonometric-problem/SKILL.md"
+  },
+  {
+   "name": "stale-proof-rendered-numbers",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/stale-proof-rendered-numbers/SKILL.md"
+  },
+  {
+   "name": "study-hebrew-letters",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/study-hebrew-letters/SKILL.md"
+  },
+  {
+   "name": "submit-to-cran",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/submit-to-cran/SKILL.md"
+  },
+  {
+   "name": "survey-insect-population",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/survey-insect-population/SKILL.md"
+  },
+  {
+   "name": "survey-theoretical-literature",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/survey-theoretical-literature/SKILL.md"
+  },
+  {
+   "name": "sweep-flag-namespace",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/sweep-flag-namespace/SKILL.md"
+  },
+  {
+   "name": "tai-chi",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/tai-chi/SKILL.md"
+  },
+  {
+   "name": "teach",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/teach/SKILL.md"
+  },
+  {
+   "name": "teach-guidance",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/teach-guidance/SKILL.md"
+  },
+  {
+   "name": "test-a2a-interop",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/test-a2a-interop/SKILL.md"
+  },
+  {
+   "name": "test-cli-application",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/test-cli-application/SKILL.md"
+  },
+  {
+   "name": "test-shiny-app",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/test-shiny-app/SKILL.md"
+  },
+  {
+   "name": "test-team-coordination",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/test-team-coordination/SKILL.md"
+  },
+  {
+   "name": "tidy-project-structure",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/tidy-project-structure/SKILL.md"
+  },
+  {
+   "name": "track-ml-experiments",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/track-ml-experiments/SKILL.md"
+  },
+  {
+   "name": "translate-content",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/translate-content/SKILL.md"
+  },
+  {
+   "name": "transmute",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/transmute/SKILL.md"
+  },
+  {
+   "name": "troubleshoot-mcp-connection",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/troubleshoot-mcp-connection/SKILL.md"
+  },
+  {
+   "name": "troubleshoot-print-issues",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/troubleshoot-print-issues/SKILL.md"
+  },
+  {
+   "name": "troubleshoot-separation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/troubleshoot-separation/SKILL.md"
+  },
+  {
+   "name": "unleash-the-agents",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/unleash-the-agents/SKILL.md"
+  },
+  {
+   "name": "update-skill-content",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/update-skill-content/SKILL.md"
+  },
+  {
+   "name": "use-graphql-api",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/use-graphql-api/SKILL.md"
+  },
+  {
+   "name": "validate-analytical-method",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/validate-analytical-method/SKILL.md"
+  },
+  {
+   "name": "validate-piles-notation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/validate-piles-notation/SKILL.md"
+  },
+  {
+   "name": "validate-references",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/validate-references/SKILL.md"
+  },
+  {
+   "name": "validate-statistical-output",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/validate-statistical-output/SKILL.md"
+  },
+  {
+   "name": "verify-agent-output",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/verify-agent-output/SKILL.md"
+  },
+  {
+   "name": "verify-memory-integrity",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/verify-memory-integrity/SKILL.md"
+  },
+  {
+   "name": "verify-web-app-runtime",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/verify-web-app-runtime/SKILL.md"
+  },
+  {
+   "name": "version-ml-data",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/version-ml-data/SKILL.md"
+  },
+  {
+   "name": "vishnu-bhaga",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/vishnu-bhaga/SKILL.md"
+  },
+  {
+   "name": "write-claude-md",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-claude-md/SKILL.md"
+  },
+  {
+   "name": "write-continue-here",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-continue-here/SKILL.md"
+  },
+  {
+   "name": "write-helm-chart",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-helm-chart/SKILL.md"
+  },
+  {
+   "name": "write-incident-runbook",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-incident-runbook/SKILL.md"
+  },
+  {
+   "name": "write-roxygen-docs",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-roxygen-docs/SKILL.md"
+  },
+  {
+   "name": "write-standard-operating-procedure",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-standard-operating-procedure/SKILL.md"
+  },
+  {
+   "name": "write-testthat-tests",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-testthat-tests/SKILL.md"
+  },
+  {
+   "name": "write-validation-documentation",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-validation-documentation/SKILL.md"
+  },
+  {
+   "name": "write-vignette",
+   "filePath": "<sandbox>/home-registry/.pi/agent/npm/node_modules/agent-almanac/skills/write-vignette/SKILL.md"
+  }
+ ],
+ "diagnostics": []
+}

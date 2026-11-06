@@ -13,6 +13,20 @@ updates:
     schedule:
       interval: weekly
 
+  # The pi-durable guide's example has its own package (#1009). pi-durable pins
+  # pi-ai and chord at its own exact version, so the three move together: a bump
+  # of one alone installs a second copy of pi-ai, chord, or both. A grouped bump
+  # turns scripts-test red until the guide names the new version
+  # (scripts/test/pi-durable-guide.test.js). Security updates for these packages
+  # are not grouped.
+  - package-ecosystem: npm
+    directory: /scripts/test/_pi-durable-example
+    schedule:
+      interval: weekly
+    groups:
+      pi:
+        patterns: ["@earendil-works/*"]
+
   - package-ecosystem: npm
     directory: /viz
     schedule:
