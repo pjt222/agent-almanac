@@ -1195,11 +1195,19 @@ def verify():
         (viz / 'node_modules' / 'vite' / 'package.json').write_text(json.dumps({'version': '8.3.4'}))
         tree = {'modules': viz / 'node_modules', 'lock': {'packages': {
             'node_modules/vite': {'version': '8.3.5', 'dev': True},
-            'node_modules/@rolldown/binding-android-arm-eabi': {'version': '1.2.16', 'optional': True, 'dev': True}}}}
-        moved_here = [{'path': 'node_modules/vite'}, {'path': 'node_modules/@rolldown/binding-android-arm-eabi'}]
+            'node_modules/@rolldown/binding-android-arm-eabi': {'version': '1.2.16', 'optional': True, 'dev': True},
+            'node_modules/three': {'version': '0.187.0'}}}}
+        moved_here = [{'path': 'node_modules/vite'}, {'path': 'node_modules/@rolldown/binding-android-arm-eabi'},
+                      {'path': 'node_modules/three'}]
         stale = stale_installs(tree, moved_here)
         arm('a merge without npm ci is caught: node_modules vite 8.3.4 against the lockfile 8.3.5',
-            stale == ['node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4'], str(stale))
+            'node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4' in stale, str(stale))
+        # Absence is excused for an optional entry only (#1047 R2b). A devOptional one needs no excuse: npm ci
+        # refuses it on a platform mismatch (EBADPLATFORM, measured on npm 11.20.0), so it is never absent after
+        # an install that succeeded.
+        arm('a moved package the lockfile lists and node_modules lacks is caught; only an optional one may be absent',
+            stale == ['node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4',
+                      'node_modules/three: package-lock.json 0.187.0, node_modules None'], str(stale))
     # 17. identical lockfiles are refused, whatever --views says
     with tempfile.TemporaryDirectory() as tmp:
         for name in ('base', 'new'):
@@ -1225,6 +1233,27 @@ def verify():
         arm('compare.html pairs base and new per view and escapes a missing shot',
             'src="base/2d.png"' in page and 'src="new/2d.png"' in page and 'TimeoutError &lt;x&gt;' in page
             and '3d: new drew nothing' in page)
+    # 19. two dists that are the same build once the stamp and hash are stripped are refused through main()
+    #     (#1047 R3b: arm 15 tests tree_digest(), not the refusal). One package moved and node_modules matches
+    #     each lockfile, so only the same-build refusal can stop the run. --views is checked after it, so the
+    #     unknown view makes a run that skipped the refusal stop there instead of starting a browser in --verify.
+    with tempfile.TemporaryDirectory() as tmp:
+        for name, version, stamp, chunk_hash in (('base', '0.186.1', '1793905216658', 'AbCdEf12'),
+                                                 ('new', '0.187.0', '1793905596433', 'XyZw9876')):
+            viz = Path(tmp) / name / 'viz'
+            (viz / 'dist' / 'assets').mkdir(parents=True)
+            (viz / 'dist' / 'index.html').write_text(f'<script src="/agent-almanac/assets/index-{chunk_hash}.js"></script>')
+            (viz / 'dist' / 'assets' / f'index-{chunk_hash}.js').write_text(f'var v=`{stamp}`;run()')
+            (viz / 'node_modules' / 'three').mkdir(parents=True)
+            (viz / 'node_modules' / 'three' / 'package.json').write_text(json.dumps({'version': version}))
+            (viz / 'package-lock.json').write_text(json.dumps({'packages': {'node_modules/three': {'version': version}}}))
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+            code = main(['--base', str(Path(tmp) / 'base'), '--new', str(Path(tmp) / 'new'),
+                         '--out', str(Path(tmp) / 'out'), '--views', 'no-such-view'])
+        same = code == 2 and 'the same build' in err.getvalue()
+        arm('dists that differ only by the build stamp are refused as the same build, through main()', same,
+            f'exit {code}' + ('' if same else f': {err.getvalue().strip()[-160:]}'))
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
