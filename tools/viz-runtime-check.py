@@ -1292,6 +1292,14 @@ def verify():
                                          ('0.187.0', '0.187.0', '1793905596433', 'XyZw9876', 'run()'))
         refused_with('dists that differ only by the build stamp are refused as the same build, through main()',
                      code, err, 'the same build')
+    # 20. a tree whose node_modules lags its lockfile for a moved package is refused through main() (#1049 round 1,
+    #     SHOULD-FIX 2: arm 16 tests stale_installs(), not the refusal). The dists differ, so the same-build
+    #     refusal cannot be what stops it.
+    with tempfile.TemporaryDirectory() as tmp:
+        code, err = main_without_browser(tmp, ('0.186.1', '0.186.1', '1793905216658', 'AbCdEf12', 'run()'),
+                                         ('0.187.0', '0.186.1', '1793905596433', 'XyZw9876', 'run2()'))
+        refused_with('a merge without npm ci is refused through main(), naming the tree',
+                     code, err, 'new: viz/node_modules does not match')
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
