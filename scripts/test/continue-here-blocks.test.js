@@ -859,8 +859,12 @@ test('Verified: write lists exactly three values, and read and verify spell the 
   // Step 7's CLAUDE.md snippet, which is all a session that has only the snippet ever sees. A
   // whole-file `includes` was satisfied by either copy, so respelling one survived (#1043, M11).
   const text2 = read(READ);
-  const step2 = text2.slice(text2.indexOf('### Step 2:'), text2.indexOf('### Step 3:'));
-  assert.ok(text2.indexOf('### Step 2:') >= 0 && step2.length > 0, `${READ} no longer has a Step 2 followed by a Step 3`);
+  // Bound the slice by a Step 3 that exists after Step 2: with indexOf's -1 the slice ran to the end of
+  // the file, Step 7's snippet included, and Step 2's copy went unpinned (#1048 round 1, S3).
+  const i2 = text2.indexOf('### Step 2:');
+  const i3 = text2.indexOf('### Step 3:', i2);
+  assert.ok(i2 >= 0 && i3 > i2, `${READ} no longer has a Step 2 followed by a Step 3`);
+  const step2 = text2.slice(i2, i3);
   const snippet = [...text2.matchAll(/^```markdown\r?\n([\s\S]*?)^```/gm)].map((m) => m[1])
     .filter((body) => /^Handoff archive: /m.test(body));
   assert.equal(snippet.length, 1, `${READ} must carry exactly one Step 7 snippet (the markdown fence with a "Handoff archive:" line)`);
