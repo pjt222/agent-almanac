@@ -1196,18 +1196,25 @@ def verify():
         tree = {'modules': viz / 'node_modules', 'lock': {'packages': {
             'node_modules/vite': {'version': '8.3.5', 'dev': True},
             'node_modules/@rolldown/binding-android-arm-eabi': {'version': '1.2.16', 'optional': True, 'dev': True},
-            'node_modules/three': {'version': '0.187.0'}}}}
-        moved_here = [{'path': 'node_modules/vite'}, {'path': 'node_modules/@rolldown/binding-android-arm-eabi'},
-                      {'path': 'node_modules/three'}]
+            'node_modules/three': {'version': '0.187.0'},
+            'node_modules/@rollup/rollup-darwin-arm64': {'version': '4.67.5', 'devOptional': True},
+            'node_modules/vitest': {'version': '4.0.0', 'dev': True},
+            'node_modules/fsevents': {'version': '2.3.3', 'optional': True}}}}
+        moved_here = [{'path': p} for p in ('node_modules/vite', 'node_modules/@rolldown/binding-android-arm-eabi',
+                                            'node_modules/three', 'node_modules/@rollup/rollup-darwin-arm64',
+                                            'node_modules/vitest', 'node_modules/fsevents')]
         stale = stale_installs(tree, moved_here)
         arm('a merge without npm ci is caught: node_modules vite 8.3.4 against the lockfile 8.3.5',
             'node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4' in stale, str(stale))
-        # Absence is excused for an optional entry only (#1047 R2b). A devOptional one needs no excuse: npm ci
-        # refuses it on a platform mismatch (EBADPLATFORM, measured on npm 11.20.0), so it is never absent after
-        # an install that succeeded.
+        # Absence is excused for an optional entry only (#1047 R2b), whether or not it is also dev, and never for
+        # a dev or a devOptional one (#1049 round 1). A plain npm ci refuses a devOptional entry for another
+        # platform (EBADPLATFORM, measured on npm 11.20.0), so after one that succeeded such an entry is never
+        # absent; only --omit=dev and --omit=optional together drop it, and the viz procedure passes neither.
         arm('a moved package the lockfile lists and node_modules lacks is caught; only an optional one may be absent',
             stale == ['node_modules/vite: package-lock.json 8.3.5, node_modules 8.3.4',
-                      'node_modules/three: package-lock.json 0.187.0, node_modules None'], str(stale))
+                      'node_modules/three: package-lock.json 0.187.0, node_modules None',
+                      'node_modules/@rollup/rollup-darwin-arm64: package-lock.json 4.67.5, node_modules None',
+                      'node_modules/vitest: package-lock.json 4.0.0, node_modules None'], str(stale))
     # 17. identical lockfiles are refused, whatever --views says
     with tempfile.TemporaryDirectory() as tmp:
         for name in ('base', 'new'):
