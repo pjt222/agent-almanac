@@ -541,19 +541,26 @@ test('archive: any failure refuses, and the cleanup run after it in the same cal
   // A file where the archive's parent should be makes mkdir fail without any named REFUSED arm
   // firing; the placeholder is the named arm. Both run archive then cleanup in one call, as the
   // skill says, and the handoff must survive both. Round 1 of #1042 measured the opposite.
+  //
+  // The `stale` arm (#1043): an ARCHIVED left in the shell by an earlier archive must not satisfy
+  // the cleanup's guard after this one fails. The fence resets it before doing anything; without
+  // that reset the stale path is printed as this run's archive and the handoff is deleted.
   const pair = `${extractBlock(READ, ARCHIVE_MARKER)}\n${extractBlock(READ, CLEANUP_MARKER)}`;
-  for (const line of ['blocker', snippetArchiveLine()]) {
-    const tree = archiveTree({});
-    try {
-      writeFileSync(join(tree.base, 'blocker'), 'a file, not a directory');
-      const declared = line === 'blocker' ? `Handoff archive: ${join(tree.base, 'blocker', 'arch')}` : line;
-      writeFileSync(join(tree.proj, 'CLAUDE.md'), `${declared}\n`);
-      const res = runBash(pair, { cwd: tree.proj, env: { CONTINUE_FILE: tree.file, ARCHIVE_STATE: 'consumed', HOME: tree.home } });
-      assert.notEqual(res.status, 0, `${line}: the archive failed and the pair still exited 0`);
-      assert.match(res.stderr, /REFUSED: .*was not archived/, `${line}: no REFUSED line for the failure`);
-      assert.ok(existsSync(tree.file), `${line}: the cleanup deleted a handoff the archive never kept`);
-    } finally {
-      rmTree(tree.base);
+  for (const stale of ['', 'ARCHIVED=/stale/from/an/earlier/archive\n']) {
+    for (const line of ['blocker', snippetArchiveLine()]) {
+      const tree = archiveTree({});
+      const label = `${line}${stale ? ' (ARCHIVED already set)' : ''}`;
+      try {
+        writeFileSync(join(tree.base, 'blocker'), 'a file, not a directory');
+        const declared = line === 'blocker' ? `Handoff archive: ${join(tree.base, 'blocker', 'arch')}` : line;
+        writeFileSync(join(tree.proj, 'CLAUDE.md'), `${declared}\n`);
+        const res = runBash(`${stale}${pair}`, { cwd: tree.proj, env: { CONTINUE_FILE: tree.file, ARCHIVE_STATE: 'consumed', HOME: tree.home } });
+        assert.notEqual(res.status, 0, `${label}: the archive failed and the pair still exited 0`);
+        assert.match(res.stderr, /REFUSED: .*was not archived/, `${label}: no REFUSED line for the failure`);
+        assert.ok(existsSync(tree.file), `${label}: the cleanup deleted a handoff the archive never kept`);
+      } finally {
+        rmTree(tree.base);
+      }
     }
   }
   const alone = archiveTree({});
@@ -605,6 +612,50 @@ test('archive: in a linked worktree, the archived name carries the project, not 
     assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `named after the worktree: ${res.stdout}`);
   } finally {
     rmTree(tree.base);
+  }
+});
+
+test('archive: a git without --path-format (before 2.31) still names the top-level directory (#1043)', () => {
+  // git before 2.31 does not know --path-format, and rev-parse prints an option it does not know
+  // back into its output and exits 0. So the `||` fallback never fires, and the name carried
+  // "--path-format=absolute" and a newline (#1043, measured on 2.43 with a respelled option). The
+  // shim models that: it echoes the option, drops it, and hands every argument to the real git, so
+  // every other git call in the fence is unchanged. A shim that exited non-zero would trip the `||`
+  // fallback instead, and this test could not fail.
+  const realGit = spawnSync('bash', ['-c', 'command -v git'], { encoding: 'utf8' }).stdout.trim();
+  assert.ok(realGit.startsWith('/'), `cannot resolve the real git: ${JSON.stringify(realGit)}`);
+  const shimDir = mkdtempSync(join(tmpdir(), 'oldgit-'));
+  const tree = archiveTree({ parent: 'Handoff archive: shared\n' });
+  try {
+    writeFileSync(
+      join(shimDir, 'git'),
+      [
+        '#!/bin/bash',
+        'args=()',
+        'for a in "$@"; do',
+        '  if [ "$a" = --path-format=absolute ]; then printf "%s\\n" "$a"; else args+=("$a"); fi',
+        'done',
+        `exec ${JSON.stringify(realGit)} "\${args[@]}"`,
+        '',
+      ].join('\n'),
+      { mode: 0o755 },
+    );
+    const PATH = `${shimDir}:${process.env.PATH}`;
+    // Control row: the git the fence will find is the shim, and it answers as old git does. Without
+    // this, a shim that never ran would leave the real git answering and read as a pass.
+    const control = runBash('command -v git; git -C "$P" rev-parse --path-format=absolute --git-common-dir', {
+      cwd: tree.proj,
+      env: { PATH, P: tree.proj },
+    });
+    assert.equal(control.status, 0, `the shim must exit 0, as git before 2.31 does: ${control.stderr}`);
+    assert.equal(control.stdout, `${join(shimDir, 'git')}\n--path-format=absolute\n.git\n`, 'the shim is not the git under test');
+
+    const res = runArchive(tree, 'consumed', { PATH });
+    assert.equal(res.status, 0, res.stderr);
+    assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `not named after the top-level directory: ${JSON.stringify(res.stdout)}`);
+  } finally {
+    rmTree(tree.base);
+    rmTree(shimDir);
   }
 });
 
@@ -764,9 +815,20 @@ test('Verified: write lists exactly three values, and read and verify spell the 
     'verify-handoff round N, 0 blocking, coverage complete',
     'not run (workflow unavailable)',
   ]);
-  for (const rel of [READ, VERIFY]) {
-    assert.ok(read(rel).includes(`\`${values[1]}\``) || read(rel).includes(`Verified: ${values[1]}`),
-      `${rel} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
+  assert.ok(read(VERIFY).includes(`\`${values[1]}\``) || read(VERIFY).includes(`Verified: ${values[1]}`),
+    `${VERIFY} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
+  // read carries the value twice: in Step 2, which a session running the skill reads, and in
+  // Step 7's CLAUDE.md snippet, which is all a session that has only the snippet ever sees. A
+  // whole-file `includes` was satisfied by either copy, so respelling one survived (#1043, M11).
+  const text2 = read(READ);
+  const step2 = text2.slice(text2.indexOf('### Step 2:'), text2.indexOf('### Step 3:'));
+  assert.ok(text2.indexOf('### Step 2:') >= 0 && step2.length > 0, `${READ} no longer has a Step 2 followed by a Step 3`);
+  const snippet = [...text2.matchAll(/^```markdown\r?\n([\s\S]*?)^```/gm)].map((m) => m[1])
+    .filter((body) => /^Handoff archive: /m.test(body));
+  assert.equal(snippet.length, 1, `${READ} must carry exactly one Step 7 snippet (the markdown fence with a "Handoff archive:" line)`);
+  for (const [where, body] of [['Step 2', step2], ['the Step 7 snippet', snippet[0]]]) {
+    assert.ok(body.includes(`\`${values[1]}\``),
+      `${READ} ${where} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
   }
 });
 
