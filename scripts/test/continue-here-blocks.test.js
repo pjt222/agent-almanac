@@ -627,17 +627,23 @@ test('archive: a git without --path-format (before 2.31) still names the project
   // instead, and this test could not fail.
   const realGit = spawnSync('bash', ['-c', 'command -v git'], { encoding: 'utf8' }).stdout.trim();
   assert.ok(realGit.startsWith('/'), `cannot resolve the real git: ${JSON.stringify(realGit)}`);
+  assert.ok(!realGit.includes("'"), `the shim single-quotes the git path, which holds a quote: ${realGit}`);
   const shimDir = mkdtempSync(join(tmpdir(), 'oldgit-'));
+  // Every call the shim answers is logged, so the test can show that the FENCE's git was the shim,
+  // not only that the shim answers when asked (round 1, S2: with PATH dropped from the fence's run,
+  // the control row still passed and the test went vacuous).
+  const calls = join(shimDir, 'calls.log');
   try {
     writeFileSync(
       join(shimDir, 'git'),
       [
-        '#!/bin/bash',
+        '#!/usr/bin/env bash',
+        `printf '%s\\n' "$*" >> '${calls}'`,
         'args=()',
         'for a in "$@"; do',
         '  if [ "$a" = --path-format=absolute ]; then printf "%s\\n" "$a"; else args+=("$a"); fi',
         'done',
-        `exec ${JSON.stringify(realGit)} "\${args[@]}"`,
+        `exec '${realGit}' "\${args[@]}"`,
         '',
       ].join('\n'),
       { mode: 0o755 },
@@ -673,12 +679,15 @@ test('archive: a git without --path-format (before 2.31) still names the project
         assert.ok(layout === 'linked worktree' ? commonDir.startsWith('/') : commonDir === (layout === 'top level' ? '.git' : '../.git'),
           `${layout}: the common dir that follows the echo is not the shape this row is about: ${JSON.stringify(commonDir)}`);
 
+        writeFileSync(calls, '');
         const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
           cwd,
           env: { CONTINUE_FILE: join(handoffDir, 'CONTINUE_HERE.md'), ARCHIVE_STATE: 'consumed', HOME: tree.home, PATH },
         });
         assert.equal(res.status, 0, `${layout}: ${res.stderr}`);
         assertArchived(res.stdout, join(tree.base, 'shared'), 'consumed', `${layout}: not named after the project: ${JSON.stringify(res.stdout)}`);
+        assert.match(readFileSync(calls, 'utf8'), /rev-parse --path-format=absolute --git-common-dir$/m,
+          `${layout}: the fence's own git was not the shim, so this row tested a modern git`);
       } finally {
         rmTree(tree.base);
       }
