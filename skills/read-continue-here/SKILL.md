@@ -86,7 +86,7 @@ The handoff is **Fresh** under 24 hours on the same branch, **Stale** if older o
 **Re-confirm before acting.** Named state moves after writing, however well the handoff was verified. Check:
 - the branch, and `HEAD:` against `git rev-parse HEAD`. Commits touching only the handoff are not drift, since committing a tracked handoff moves HEAD; `git log --oneline <HEAD>..HEAD -- ':/' ':(exclude,top)<handoff path from the repository root>'` lists the others, from any directory;
 - every PR and issue the file names: `gh pr view <n> --json state,headRefOid` and `gh issue view <n> --json state`;
-- each line Context lists as repaired, unless `Verified:` records a full-gate round (`verify-handoff round N, 0 blocking, coverage complete`); one pass still leaves a blocking defect in about one handoff in three (#1040).
+- each line Context lists as repaired or open, unless `Verified:` records a full-gate round (`verify-handoff round N, 0 blocking, coverage complete`); one pass still leaves a blocking defect in about one handoff in three (#1040).
 
 **Expected:** A classification with its evidence, and which points were re-confirmed and which are stale.
 
@@ -187,7 +187,7 @@ Add this to the project's CLAUDE.md, replacing `<dir>` with the archive director
 ```markdown
 ## Session Continuity
 
-At session start, look for a `CONTINUE_HERE.md` at `CONTINUE_HERE.md`, `docs/CONTINUE_HERE.md` or `.claude/CONTINUE_HERE.md`, relative to the repository root, and read the first one that exists. It contains a structured handoff from a prior session: objective, completed work, in-progress state, next steps, and context. Acknowledge it, summarize it, and propose resuming from its Next Steps; flag it if it is older than 24 hours. Before acting on it, re-confirm the branch, `HEAD:` and every PR and issue it names, and, unless its `Verified:` line reads `verify-handoff round N, 0 blocking, coverage complete`, the lines its Context lists as repaired. Once consumed, keep a copy before deleting it: in the directory on the nearest `Handoff archive:` line (this file's, a parent directory's CLAUDE.md, `~/.claude/CLAUDE.md`, then the README) as `<YYYY-MM-DD>/<project>-CONTINUE_HERE.<UTC stamp>.consumed.md`, or with no such line as `CONTINUE_HERE.prev.md` beside it if it is untracked. Then `git rm` it if this project tracks it, otherwise `rm`, and delete nothing if the copy failed.
+At session start, look for a `CONTINUE_HERE.md` at `CONTINUE_HERE.md`, `docs/CONTINUE_HERE.md` or `.claude/CONTINUE_HERE.md`, relative to the repository root, and read the first one that exists. It contains a structured handoff from a prior session: objective, completed work, in-progress state, next steps, and context. Acknowledge it, summarize it, and propose resuming from its Next Steps; flag it if it is older than 24 hours. Before acting on it, re-confirm the branch, `HEAD:` and every PR and issue it names, and, unless its `Verified:` line reads `verify-handoff round N, 0 blocking, coverage complete`, the lines its Context lists as repaired or open. Once consumed, keep a copy before deleting it: in the directory on the nearest `Handoff archive:` line (this file's, a parent directory's CLAUDE.md, `~/.claude/CLAUDE.md`, then the README) as `<YYYY-MM-DD>/<project>-CONTINUE_HERE.<UTC stamp>.consumed.md`, or with no such line as `CONTINUE_HERE.prev.md` beside it if it is untracked. Then `git rm` it if this project tracks it, otherwise `rm`, and delete nothing if the copy failed.
 
 Handoff archive: <dir>
 ```
@@ -199,7 +199,7 @@ Handoff archive: <dir>
 ## Validation
 
 - [ ] The resolver reported one of its three outcomes, and freshness was classified
-- [ ] The branch, `HEAD:` and the named PRs and issues were re-confirmed, and, short of a full-gate `Verified:` round, the repaired lines
+- [ ] The branch, `HEAD:` and the named PRs and issues were re-confirmed, and, short of a full-gate `Verified:` round, the lines Context lists as repaired or open
 - [ ] The user confirmed the plan, work began at the right Next Steps item, and the consumed edition is archived, in `CONTINUE_HERE.prev.md`, or in git history, and the file read is the file deleted
 - [ ] (Optional) The hook's stdout carries `additionalContext` directly under `hookSpecificOutput`, and CLAUDE.md has the snippet with `<dir>` replaced or removed
 
