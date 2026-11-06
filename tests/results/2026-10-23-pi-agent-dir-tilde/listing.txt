@@ -1,0 +1,4 @@
+$ ls -A <sandbox>/proj
+.git
+$ ls -A <sandbox>/home
+pi-tilde

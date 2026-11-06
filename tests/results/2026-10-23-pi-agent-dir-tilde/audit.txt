@@ -1,0 +1,3 @@
+Audit results:
+Pi Coding Agent:
+  OK   1 skills installed in <sandbox>/home/pi-tilde/skills

@@ -1,0 +1,14 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "home": "<sandbox>/home",
+ "envValue": "~/pi-tilde",
+ "agentDirFromPi": "<sandbox>/home/pi-tilde",
+ "skills": [
+  {
+   "name": "commit-changes",
+   "filePath": "<sandbox>/home/pi-tilde/skills/commit-changes/SKILL.md"
+  }
+ ],
+ "diagnostics": []
+}

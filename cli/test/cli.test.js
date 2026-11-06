@@ -30,6 +30,10 @@ import { OpenClawAdapter } from '../adapters/openclaw.js';
 import { OpenCodeAdapter } from '../adapters/opencode.js';
 import { UniversalAdapter } from '../adapters/universal.js';
 import { VibeAdapter } from '../adapters/vibe.js';
+// New in #1006, so imported the way item-id.js is below: a missing module then
+// fails the tests that use it, not the whole file at link time.
+const piAgentDir = await import('../lib/pi-agent-dir.js').catch(() => ({}));
+const { PiAdapter } = await import('../adapters/pi.js').catch(() => ({}));
 import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-renderer.js';
 import {
   CAMPFIRE_BURNING, CAMPFIRE_EMBERS, CAMPFIRE_COLD,
@@ -729,6 +733,241 @@ describe('detectFrameworks resolves the Hermes home (#604)', () => {
   });
 });
 
+// ── pi agent directory and project detection (#1006) ────────────
+//
+// pi resolves its agent directory as getAgentDir() does in pi 1.4.0
+// (dist/config.js): $PI_CODING_AGENT_DIR when non-empty, through normalizePath
+// (win32 shell paths, ~ and ~/, file:// URLs), else <home>/.pi/agent. Each case
+// below is one branch of that rule; a resolver that disagreed with pi would
+// install global skills where pi never looks.
+describe('resolvePiAgentDir (#1006)', () => {
+  let tmpRoot;
+  const saved = {};
+
+  before(() => {
+    tmpRoot = mkdtempSync(resolve(tmpdir(), 'almanac-pi-agent-dir-'));
+    for (const key of ['PI_CODING_AGENT_DIR', 'HOME', 'USERPROFILE']) saved[key] = process.env[key];
+    process.env.HOME = resolve(tmpRoot, 'home');
+    process.env.USERPROFILE = resolve(tmpRoot, 'home');
+  });
+
+  after(() => {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    rmTree(tmpRoot);
+  });
+
+  it('falls back to <home>/.pi/agent when PI_CODING_AGENT_DIR is unset', () => {
+    delete process.env.PI_CODING_AGENT_DIR;
+    assert.equal(piAgentDir.resolvePiAgentDir(), resolve(tmpRoot, 'home', '.pi', 'agent'));
+  });
+
+  it('treats an empty PI_CODING_AGENT_DIR as unset', () => {
+    process.env.PI_CODING_AGENT_DIR = '';
+    assert.equal(piAgentDir.resolvePiAgentDir(), resolve(tmpRoot, 'home', '.pi', 'agent'));
+  });
+
+  it('uses $PI_CODING_AGENT_DIR, outside the home directory', () => {
+    const elsewhere = resolve(tmpRoot, 'elsewhere', 'agent');
+    process.env.PI_CODING_AGENT_DIR = elsewhere;
+    assert.equal(piAgentDir.resolvePiAgentDir(), elsewhere);
+  });
+
+  it('expands ~ and ~/ against the home directory, as pi does', () => {
+    process.env.PI_CODING_AGENT_DIR = '~';
+    assert.equal(piAgentDir.resolvePiAgentDir(), resolve(tmpRoot, 'home'));
+    process.env.PI_CODING_AGENT_DIR = '~/pi-agent';
+    assert.equal(piAgentDir.resolvePiAgentDir(), resolve(tmpRoot, 'home', 'pi-agent'));
+  });
+
+  it('resolves a relative value against the working directory, and normalizes an absolute one', () => {
+    process.env.PI_CODING_AGENT_DIR = 'relative-pi-agent';
+    assert.equal(piAgentDir.resolvePiAgentDir(), resolve(process.cwd(), 'relative-pi-agent'));
+    process.env.PI_CODING_AGENT_DIR = resolve(tmpRoot, 'a') + '/../b';
+    assert.equal(piAgentDir.resolvePiAgentDir(), resolve(tmpRoot, 'b'));
+  });
+
+  it('keeps a whitespace-only value as a path, as pi does, unlike HERMES_HOME', () => {
+    process.env.PI_CODING_AGENT_DIR = '   ';
+    assert.equal(piAgentDir.resolvePiAgentDir(), resolve(process.cwd(), '   '));
+  });
+
+  it('turns a file:// URL into its path', () => {
+    const target = resolve(tmpRoot, 'from-url');
+    process.env.PI_CODING_AGENT_DIR = `file://${target}`;
+    assert.equal(piAgentDir.resolvePiAgentDir(), target);
+  });
+
+  it('converts shell-style drive paths the way pi does on win32', () => {
+    const convert = piAgentDir.normalizeWindowsShellPath;
+    assert.equal(convert('/mnt/c/Users/me/agent'), 'C:\\Users\\me\\agent');
+    assert.equal(convert('/c/agent'), 'C:\\agent');
+    assert.equal(convert('/cygdrive/d'), 'D:\\');
+    // Left alone: a UNC-style path, a native path, and a POSIX path whose first
+    // segment is longer than one letter.
+    assert.equal(convert('//server/share'), '//server/share');
+    assert.equal(convert('C:\\agent'), 'C:\\agent');
+    assert.equal(convert('/home/me'), '/home/me');
+  });
+});
+
+describe('pi project detection (#1006)', () => {
+  let tmpRoot;
+  const saved = {};
+
+  before(() => {
+    tmpRoot = mkdtempSync(resolve(tmpdir(), 'almanac-pi-detect-'));
+    for (const key of ['HOME', 'USERPROFILE']) saved[key] = process.env[key];
+    process.env.HOME = resolve(tmpRoot, 'home');
+    process.env.USERPROFILE = resolve(tmpRoot, 'home');
+    mkdirSync(resolve(tmpRoot, 'home', '.pi', 'agent'), { recursive: true });
+    mkdirSync(resolve(tmpRoot, 'pi-project', '.pi'), { recursive: true });
+    mkdirSync(resolve(tmpRoot, 'plain-project'), { recursive: true });
+  });
+
+  after(() => {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    rmTree(tmpRoot);
+  });
+
+  const piDetected = (dir) => detectFrameworks(dir).some((d) => d.id === 'pi');
+
+  it('detects a project that holds .pi/', () => {
+    assert.equal(piDetected(resolve(tmpRoot, 'pi-project')), true);
+  });
+
+  it('does not detect a project without .pi/', () => {
+    assert.equal(piDetected(resolve(tmpRoot, 'plain-project')), false);
+  });
+
+  it('does not take the home directory for a pi project: ~/.pi is pi\'s own agent directory', () => {
+    // The control above shows the rule fires on .pi/; here .pi/ exists too, so
+    // only the home-directory exclusion can make this false.
+    assert.equal(existsSync(resolve(tmpRoot, 'home', '.pi')), true);
+    assert.equal(piDetected(resolve(tmpRoot, 'home')), false);
+  });
+
+  // The two spellings below differ from the directory's own path, so an exact
+  // string comparison would take the home directory for a project. The symlink
+  // case is the one that needs the real-path comparison: resolve() alone strips
+  // a trailing slash but does not follow a link (#1006, review round 1).
+  const withHome = (value, body) => {
+    const before = { HOME: process.env.HOME, USERPROFILE: process.env.USERPROFILE };
+    process.env.HOME = value;
+    process.env.USERPROFILE = value;
+    try {
+      return body();
+    } finally {
+      for (const [key, saved] of Object.entries(before)) {
+        if (saved === undefined) delete process.env[key];
+        else process.env[key] = saved;
+      }
+    }
+  };
+
+  it('does not take the home directory for a pi project when $HOME is a symlink to it', () => {
+    const homeLink = resolve(tmpRoot, 'home-link');
+    symlinkSync(resolve(tmpRoot, 'home'), homeLink);
+    assert.equal(withHome(homeLink, () => piDetected(resolve(tmpRoot, 'home'))), false);
+  });
+
+  it('does not take the home directory for a pi project when $HOME ends in a slash', () => {
+    assert.equal(withHome(`${resolve(tmpRoot, 'home')}/`, () => piDetected(resolve(tmpRoot, 'home'))), false);
+  });
+});
+
+describe('pi adapter, end to end (#1006)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  let tmpRoot;
+  let home;
+  let agentDir;
+  let env;
+
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+  const spawnCli = (args, cwd, envOverride = {}) => {
+    const res = spawnSync(process.execPath, [cliEntry, ...args, '--source', ROOT], { cwd, env: { ...env, ...envOverride }, encoding: 'utf8', timeout: 20000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+  };
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-pi-e2e-')));
+    home = resolve(tmpRoot, 'home');
+    // Outside the home directory, so an install that ignored the variable and
+    // fell back to ~/.pi/agent would land somewhere else.
+    agentDir = resolve(tmpRoot, 'pi-agent');
+    mkdirSync(resolve(home, '.pi', 'agent'), { recursive: true });
+    env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), PI_CODING_AGENT_DIR: agentDir };
+    delete env.LOCALAPPDATA;
+  });
+
+  after(() => rmTree(tmpRoot));
+
+  it('a default install into a pi project links into both .pi/skills/ and .agents/skills/', () => {
+    // pi loads a skill linked from one source into both folders once (measured
+    // with pi 1.4.0); the overlap is documented, not avoided.
+    const dir = resolve(tmpRoot, 'link-overlap');
+    mkdirSync(resolve(dir, '.pi'), { recursive: true });
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    for (const base of ['.agents/skills', '.pi/skills']) {
+      const link = resolve(dir, base, 'commit-changes');
+      assert.equal(existsSync(link) && lstatSync(link).isSymbolicLink(), true, `${base}: no link\n${stdout}`);
+      assert.equal(realpathSync(link), realpathSync(resolve(ROOT, 'skills/commit-changes')));
+    }
+  });
+
+  it('-g installs into $PI_CODING_AGENT_DIR/skills/', () => {
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes', '-f', 'pi', '-g'], resolve(tmpRoot));
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const link = resolve(agentDir, 'skills/commit-changes');
+    assert.equal(existsSync(link) && lstatSync(link).isSymbolicLink(), true, stdout);
+    assert.equal(existsSync(resolve(home, '.pi/agent/skills/commit-changes')), false,
+      'the install went to the default agent directory, not to $PI_CODING_AGENT_DIR');
+    // audit names the directory it read, the one pi reads too.
+    const audited = spawnCli(['audit', '-f', 'pi', '-g'], resolve(tmpRoot));
+    assert.ok(audited.stdout.includes(`1 skills installed in ${resolve(agentDir, 'skills')}`), audited.stdout);
+  });
+
+  it('refuses project scope in the home directory, names -g, and writes nothing under ~/.pi/skills/', () => {
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes', '-f', 'pi'], home);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const target = resolve(home, '.pi/skills/commit-changes');
+    assert.ok(stdout.split('\n').includes(
+      `  = commit-changes [pi] ${target}  project scope in your home directory would write ~/.pi/skills/; ` +
+      `install with -g for ${resolve(agentDir, 'skills')}`), stdout);
+    assert.equal(existsSync(resolve(home, '.pi/skills')), false);
+  });
+
+  it('refuses project scope in the home directory when $HOME is a symlink to it', () => {
+    const realHome = resolve(tmpRoot, 'real-home');
+    const homeLink = resolve(tmpRoot, 'home-link');
+    mkdirSync(resolve(realHome, '.pi', 'agent'), { recursive: true });
+    symlinkSync(realHome, homeLink);
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes', '-f', 'pi'], realHome, { HOME: homeLink, USERPROFILE: homeLink });
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(stdout.includes('project scope in your home directory would write ~/.pi/skills/'), stdout);
+    assert.equal(existsSync(resolve(realHome, '.pi/skills')), false);
+  });
+
+  it('still refuses, without naming a directory, when $PI_CODING_AGENT_DIR does not resolve', () => {
+    // pi rejects a file:// URL with a remote host too. Project scope never reads
+    // the variable, so the refusal must not become a failure (#1006, review round 1).
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes', '-f', 'pi'], home, { PI_CODING_AGENT_DIR: 'file://host/pi-agent' });
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const target = resolve(home, '.pi/skills/commit-changes');
+    assert.ok(stdout.split('\n').includes(
+      `  = commit-changes [pi] ${target}  project scope in your home directory would write ~/.pi/skills/; install with -g`), stdout);
+    assert.equal(existsSync(resolve(home, '.pi/skills')), false);
+  });
+});
+
 // ── audit exit codes, end to end (#439) ──────────────────────────
 //
 // The block above covers auditExitCode()'s logic, but it cannot see whether the
@@ -1327,6 +1566,25 @@ describe('npm package root (#606)', () => {
     assert.match(readFileSync(resolve(kept, 'SKILL.md'), 'utf8'), /my own line\n$/);
   });
 
+  // #1006: pi reads both .pi/skills/ and the universal adapter's
+  // .agents/skills/, so a copy install into a pi project writes a copy into
+  // each. Measured with pi 1.4.0: it loads the .pi/skills/ one and reports a
+  // name collision for the other. Accepted and documented rather than
+  // avoided, as for claude-code, cursor, gemini and vibe; pinned here so the
+  // documented overlap stays true.
+  it('install --from-package copy into a pi project copies into both .pi/skills/ and .agents/skills/ (#1006)', () => {
+    const dir = resolve(tmpRoot, 'copy-pi-overlap');
+    mkdirSync(resolve(dir, '.pi'), { recursive: true });
+    const { status, stdout, stderr } = spawnCli(['install', 'commit-changes', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    for (const base of ['.agents/skills', '.pi/skills']) {
+      const copy = resolve(dir, base, 'commit-changes');
+      assert.equal(existsSync(copy) && lstatSync(copy).isDirectory(), true, `${base}: no copied directory\n${stdout}`);
+      assert.equal(existsSync(resolve(copy, placement.COPY_MARKER)), true, `${base}: no copy marker`);
+    }
+    assert.deepEqual(symlinksUnder(dir), []);
+  });
+
   it('gather --json --from-package copy keeps stdout one document; scatter removes the copies, or names the edited one it kept', () => {
     for (const editFirst of [false, true]) {
       const dir = project(`copy-gather-${editFirst ? 'edited' : 'clean'}`);
@@ -1551,9 +1809,10 @@ describe('npm package root (#606)', () => {
 // as an error, and must not count it as installed. Before #438, six of them
 // returned `errors: []` outright, so a half-destroyed install audited clean.
 // opencode did report the error but still counted the dangling item in `ok`;
-// #445 aligned it, so all nine now split valid from broken the same way.
+// #445 aligned it, so all nine then split valid from broken the same way; pi
+// (#1006), the tenth, does too.
 //
-// Nine adapters split, and this block holds EIGHT cases. claude-code is the one
+// Ten adapters split, and this block holds NINE cases. claude-code is the one
 // left out — and NOT because it is covered. Its direct audit test above (#373)
 // exercises only the healthy path: it audits the real repository root, builds no
 // dangling link, and asserts `errors` is EMPTY, which is exactly what a
@@ -1561,30 +1820,32 @@ describe('npm package root (#606)', () => {
 // (claude-code.js:199) fails nothing — measured with a deletion mutant. It has a
 // second broken branch at :203 that was not mutated; #823 carries both.
 //
-// Both numbers in this paragraph's first sentence — nine, and EIGHT — are prose
-// that no tool reads. A tenth symlink-installing adapter would join uncovered,
-// the shape #447 had, except that there the gap was at least written down.
-// Gating them is #824.
+// Both numbers in this paragraph's first sentence — ten, and NINE — are prose
+// that no tool reads. pi, the tenth symlink-installing adapter, did join
+// uncovered, as this paragraph predicted, until review round 1 of #1006 added
+// its row; an eleventh would too, the shape #447 had. Gating them is #824.
 //
-// universal is the odd one here: alone among the nine it ENUMERATES the broken
-// ids in the error rather than only counting them (the `broken.map(b => b.id)`
-// in universal.js's errors.push — cited by expression, because a line number
-// here was already wrong once: #607 moved the push and the citation did not
-// follow). Its case therefore pins the id list, not just the number —
-// dropping `.map(b => b.id).join(', ')` would keep the count right and still go
-// red (#447).
+// universal and pi are the odd ones here: alone among the ten they ENUMERATE
+// the broken ids in the error rather than only counting them (the
+// `broken.map(b => b.id)` in each adapter's errors.push — cited by expression,
+// because a line number here was already wrong once: #607 moved the push and
+// the citation did not follow). Their cases therefore pin the id list, not just
+// the number — dropping `.map(b => b.id).join(', ')` would keep the count right
+// and still go red (#447).
 //
 // `1 broken skill symlinks` (five rows) and `1 broken links` (opencode) each
 // disagree with themselves on number, as do the ok strings `1 skills installed`,
-// `1 items installed` and `1 skills in workspace`. All of it is pinned
+// `1 items installed`, `1 skills in workspace` and pi's `1 skills installed in
+// <dir>`. All of it is pinned
 // DELIBERATELY — the string is behaviour, so a pluralisation fix should go red
 // here and be made on purpose rather than slipping through unnoticed.
 //
 // Each case builds one valid link and at least one dangling one, and asserts the
 // error and the exact ok string, so neither a regression to `errors: []` nor a
 // drift back to counting totals passes. Seven rows assert the error as an exact
-// string; universal supplies `errAssert` instead — it needs two dangling links
-// for the join to be observable, and their order is not promised (see the row).
+// string; universal and pi supply `errAssert` instead — each needs two dangling
+// links for the join to be observable, and their order is not promised (see
+// twoGhostsEnumerated).
 // hermes builds two of each, one pair per content type. The wording differs
 // by design and follows what each installs: "broken skill symlinks" where only
 // skills are linked, "broken links" for hermes and opencode, which link agents
@@ -1610,6 +1871,26 @@ describe('adapter audits detect broken symlinks', () => {
   const realAgent = resolve(ROOT, 'agents/code-reviewer.md');
   let savedHome;
 
+  // universal and pi enumerate the broken ids; every other adapter only counts
+  // them.
+  //
+  // TWO dangling links, not one. With a single id there is nothing to join, so
+  // `join(', ')` and `join('; ')` produce identical output and a separator
+  // mutant SURVIVES — measured, before universal's row was widened. One id pins
+  // an id; it does not pin an enumeration.
+  //
+  // The assertion splits on ', ' and compares as a set. Splitting is what pins
+  // the separator: under `join('; ')` the split yields one element and the
+  // deepEqual fails. Comparing as a set is what keeps it honest about order —
+  // each adapter enumerates in readdirSync order, which is not specified, so an
+  // exact two-id string would be asserting something neither promises.
+  const twoGhostsEnumerated = (errors) => {
+    assert.equal(errors.length, 1, `expected one error, got: ${JSON.stringify(errors)}`);
+    const enumerated = /^2 broken symlinks: (.+)$/.exec(errors[0]);
+    assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
+    assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
+  };
+
   // path: where the adapter looks, relative to its own base (project or home).
   const cases = [
     { name: 'copilot', base: 'project', dir: '.github/skills', ok: '1 skills installed', err: '1 broken skill symlinks', audit: (d) => new CopilotAdapter().audit(d) },
@@ -1628,34 +1909,26 @@ describe('adapter audits detect broken symlinks', () => {
     // line to valid-only like the rest. One dir is enough here: unlike hermes,
     // its skills and agents flow through the same expression (opencode.js:82).
     { name: 'opencode', base: 'project', dir: '.opencode/skills', ok: '1 items installed', err: '1 broken links', audit: (d) => new OpenCodeAdapter().audit(d, 'project') },
-    // universal enumerates the broken ids; every other adapter only counts them.
-    //
-    // TWO dangling links, not one. With a single id there is nothing to join, so
-    // `join(', ')` and `join('; ')` produce identical output and a separator
-    // mutant SURVIVES — measured, before this was widened. One id pins an id;
-    // it does not pin an enumeration.
-    //
-    // The assertion splits on ', ' and compares as a set. Splitting is what pins
-    // the separator: under `join('; ')` the split yields one element and the
-    // deepEqual fails. Comparing as a set is what keeps it honest about order —
-    // the adapter enumerates in readdirSync order, which is not specified, so an
-    // exact two-id string would be asserting something universal.js does not
-    // promise.
     {
       name: 'universal', base: 'project', dir: '.agents/skills',
       extraGhosts: ['ghost-skill-2'],
       ok: '1 skills installed',
-      errAssert: (errors) => {
-        assert.equal(errors.length, 1, `expected one error, got: ${JSON.stringify(errors)}`);
-        const enumerated = /^2 broken symlinks: (.+)$/.exec(errors[0]);
-        assert.ok(enumerated, `unexpected error shape: ${errors[0]}`);
-        assert.deepEqual(enumerated[1].split(', ').sort(), ['ghost-skill', 'ghost-skill-2']);
-      },
+      errAssert: twoGhostsEnumerated,
       // 'project' is explicit, not load-bearing: _targetBase() returns the project
       // path for any scope that is not 'global', so audit(d) behaves identically
       // here — that mutant survives, measured. Passed anyway so the row states its
       // scope instead of leaning on a default that could change.
       audit: (d) => new UniversalAdapter().audit(d, 'project'),
+    },
+    // pi's ok line names the directory it read (#1006), so it is computed here.
+    // Project scope only: global differs in _targetBase() alone, and the
+    // broken-link branch is the same expression for both.
+    {
+      name: 'pi', base: 'project', dir: '.pi/skills',
+      extraGhosts: ['ghost-skill-2'],
+      ok: `1 skills installed in ${resolve(tmpRoot, 'pi', '.pi/skills')}`,
+      errAssert: twoGhostsEnumerated,
+      audit: (d) => new PiAdapter().audit(d, 'project'),
     },
   ];
 
@@ -2307,10 +2580,13 @@ describe('adapter scope declarations (#607)', () => {
       HOME: process.env.HOME,
       USERPROFILE: process.env.USERPROFILE,
       HERMES_HOME: process.env.HERMES_HOME,
+      PI_CODING_AGENT_DIR: process.env.PI_CODING_AGENT_DIR,
     };
     process.env.HOME = sandbox;
     process.env.USERPROFILE = sandbox;
     process.env.HERMES_HOME = resolve(sandbox, '.hermes');
+    // pi's global site follows $PI_CODING_AGENT_DIR; unset, it is under HOME.
+    delete process.env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
@@ -2801,8 +3077,8 @@ describe('item names stay inside their install directories', () => {
 
 // ── Link sites (S3-B2) ───────────────────────────────────────────
 //
-// Nine adapters make a link into the content root, at twelve sites in three
-// shapes: nine skill directories, the opencode and hermes agent files, and
+// Ten adapters make a link into the content root, at thirteen sites in three
+// shapes: ten skill directories, the opencode and hermes agent files, and
 // claude-code's whole agents directory. cursor and copilot link too, whatever
 // their declared `strategy` says. The blocks below drive every site in-process,
 // each test in a throwaway tree of its own, so a change to one site's link
@@ -2902,6 +3178,13 @@ const LINK_SITES = [
     relTarget: '../../../src/skills/commit-changes',
   },
   {
+    // The global site follows $PI_CODING_AGENT_DIR, which inLinkSandbox points
+    // outside the sandbox's home, so a resolver that ignored it would miss (#1006).
+    site: 'pi skill', adapter: () => new PiAdapter(), type: 'skill', scopes: ['project', 'global'],
+    path: (sb, scope) => resolve(scope === 'global' ? resolve(sb.piAgent, 'skills') : resolve(sb.proj, '.pi/skills'), 'commit-changes'),
+    relTarget: '../../../src/skills/commit-changes',
+  },
+  {
     // cursor reports the paths it removed, joined, without details, and an
     // empty path when it removed nothing.
     site: 'cursor skill', adapter: () => new CursorAdapter(), type: 'skill', scopes: ['project'],
@@ -2949,10 +3232,11 @@ function linkResult(action, path, details) {
 
 /**
  * Run fn in a fresh tree under `parent`: a content root `src`, a project
- * `proj`, a home and a Hermes home, with HOME, USERPROFILE and HERMES_HOME
- * pointed at them and LOCALAPPDATA cleared until fn settles. The global sites
- * read homedir() and resolveHermesHome() at call time, so this is what steers
- * them away from the real home. `gone` is a path that never exists, the target
+ * `proj`, a home, a Hermes home and a pi agent directory, with HOME,
+ * USERPROFILE, HERMES_HOME and PI_CODING_AGENT_DIR pointed at them and
+ * LOCALAPPDATA cleared until fn settles. The global sites read homedir(),
+ * resolveHermesHome() and resolvePiAgentDir() at call time, so this is what
+ * steers them away from the real home. `gone` is a path that never exists, the target
  * of every dangling link.
  */
 async function inLinkSandbox(parent, name, fn) {
@@ -2963,6 +3247,7 @@ async function inLinkSandbox(parent, name, fn) {
     proj: resolve(root, 'proj'),
     home: resolve(root, 'home'),
     hermes: resolve(root, 'hermes-home'),
+    piAgent: resolve(root, 'pi-agent'),
     gone: resolve(root, 'gone'),
   };
   mkdirSync(resolve(sb.src, 'skills/commit-changes'), { recursive: true });
@@ -2975,11 +3260,13 @@ async function inLinkSandbox(parent, name, fn) {
     HOME: process.env.HOME,
     USERPROFILE: process.env.USERPROFILE,
     HERMES_HOME: process.env.HERMES_HOME,
+    PI_CODING_AGENT_DIR: process.env.PI_CODING_AGENT_DIR,
     LOCALAPPDATA: process.env.LOCALAPPDATA,
   };
   process.env.HOME = sb.home;
   process.env.USERPROFILE = sb.home;
   process.env.HERMES_HOME = sb.hermes;
+  process.env.PI_CODING_AGENT_DIR = sb.piAgent;
   delete process.env.LOCALAPPDATA;
   try {
     return await fn(sb);
@@ -3010,8 +3297,8 @@ describe('link sites: baseline pins (S3-B2 T0)', () => {
     for (const site of LINK_SITES) {
       assert.deepEqual(site.scopes, site.adapter().scopesFor(site.type), site.site);
     }
-    assert.equal(LINK_SITES.length, 12);
-    assert.equal(new Set(LINK_SITES.map((site) => site.adapter().constructor.id)).size, 9);
+    assert.equal(LINK_SITES.length, 13);
+    assert.equal(new Set(LINK_SITES.map((site) => site.adapter().constructor.id)).size, 10);
   });
 
   for (const site of LINK_SITES) {
@@ -4313,7 +4600,7 @@ describe('copy placement: a remove or replace that fails part way says what it l
 
 describe('copy placement at every link site (#606 part 2)', () => {
   // The AC tests claude-code and universal and leaves the rest to shared
-  // logic; this makes that literal for all twelve sites, at every scope each
+  // logic; this makes that literal for all thirteen sites, at every scope each
   // declares (critique F4: one row per site, not per adapter, so the three
   // sites that are not a skill directory are covered too).
   let tmpRoot;
