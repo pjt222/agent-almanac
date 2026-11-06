@@ -1300,6 +1300,13 @@ def verify():
                                          ('0.187.0', '0.186.1', '1793905596433', 'XyZw9876', 'run2()'))
         refused_with('a merge without npm ci is refused through main(), naming the tree',
                      code, err, 'new: viz/node_modules does not match')
+    # 21. the control for 19 and 20: a real change with node_modules matching both lockfiles passes every refusal and
+    #     reaches the browser stage (#1049 round 1, NIT 3). Without it a refusal that fired on every pair passes them.
+    with tempfile.TemporaryDirectory() as tmp:
+        code, err = main_without_browser(tmp, ('0.186.1', '0.186.1', '1793905216658', 'AbCdEf12', 'run()'),
+                                         ('0.187.0', '0.187.0', '1793905596433', 'XyZw9876', 'run2()'))
+        refused_with('a real change with matching node_modules gets past every refusal to the browser stage',
+                     code, err, 'run_build reached')
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
