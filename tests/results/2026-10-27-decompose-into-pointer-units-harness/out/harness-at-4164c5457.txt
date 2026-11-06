@@ -1,0 +1,102 @@
+PASS  S1 clean: no stop, no missing result
+FAIL  S1 clean: no rerun prompt when nothing came back empty
+PASS  S1 clean: a verifier per unit
+PASS  S1 clean: gaps are returned for the owner
+PASS  S1 clean: every gap carries an id, a topic and a covers_held flag
+PASS  S1 clean: every critic schema requires covers_held
+PASS  S1 clean: no gap unit runs
+PASS  stop safety-classifier: recorded as stopped
+PASS  stop safety-classifier: no verifier for the stopped unit
+PASS  stop safety-classifier: the stopped unit ran once
+PASS  stop safety-classifier: the stopped unit is not listed under no_result
+PASS  stop safety-classifier: the log says not to re-run the stopped unit
+FAIL  stop safety-classifier: the stopped unit has no rerun prompt
+PASS  stop safety-classifier: no gap unit runs, though the critic proposes the stopped scope
+PASS  stop safety-classifier: the completeness critic is told the stopped id is held
+PASS  stop safety-classifier: the accuracy critic is told the stopped id is held
+PASS  stop reviewer: recorded as stopped
+PASS  stop reviewer: no verifier for the stopped unit
+PASS  stop reviewer: the stopped unit ran once
+PASS  stop reviewer: the stopped unit is not listed under no_result
+PASS  stop reviewer: the log says not to re-run the stopped unit
+FAIL  stop reviewer: the stopped unit has no rerun prompt
+PASS  stop reviewer: no gap unit runs, though the critic proposes the stopped scope
+PASS  stop reviewer: the completeness critic is told the stopped id is held
+PASS  stop reviewer: the accuracy critic is told the stopped id is held
+PASS  stop policy-hook: recorded as stopped
+PASS  stop policy-hook: no verifier for the stopped unit
+PASS  stop policy-hook: the stopped unit ran once
+PASS  stop policy-hook: the stopped unit is not listed under no_result
+PASS  stop policy-hook: the log says not to re-run the stopped unit
+FAIL  stop policy-hook: the stopped unit has no rerun prompt
+PASS  stop policy-hook: no gap unit runs, though the critic proposes the stopped scope
+PASS  stop policy-hook: the completeness critic is told the stopped id is held
+PASS  stop policy-hook: the accuracy critic is told the stopped id is held
+PASS  S5 missing stop field: treated as stopped
+PASS  S6 negated clean line: not recorded as stopped
+PASS  S7 no result: listed under no_result
+PASS  S7 no result: the log does not say to re-run as-is
+PASS  S7 no result: the log says the cause is undetermined
+FAIL  S7 no result: the log allows one re-run, unchanged and alone, for a transient failure and nothing else
+PASS  S7 no result: the unit ran once
+FAIL  S7 no result: a unit gets no rerun prompt; it re-runs as a run of its one spec
+PASS  S7 no result: the completeness critic is told the no-result id is held
+PASS  S7 no result: no gap unit runs
+PASS  S8 raw input spec: refused before any agent
+PASS  S9 held id: never launched
+PASS  S9 held id: returned as held, including an id outside this run
+PASS  S9 held id: the critic is told an id outside this run
+PASS  S9 held id: the accuracy critic is told the held ids
+PASS  S9 held id: no gap unit runs over held scope
+PASS  S10 verifier no result: recorded in verifier_no_result
+PASS  S10 verifier no result: its id is the basename of the file it writes
+PASS  S10 verifier no result: no verdict counted for it
+PASS  S10 verifier no result: 'verify CL-B#1' ran once
+PASS  S10 verifier no result: the log says the cause is undetermined
+FAIL  S10 verifier no result: the log allows one re-run with args.rerun, for a transient failure only
+FAIL  S10 verifier no result: its rerun prompt is the prompt it was launched with
+PASS  S10 verifier no result: no gap unit runs
+PASS  S11 verifier stop: recorded in verifier_stopped
+PASS  S11 verifier stop: its verdict is not counted
+PASS  S11 verifier stop: 'verify CL-B#1' ran once
+PASS  S11 verifier stop: the log says not to re-run it
+FAIL  S11 verifier stop: a stopped verifier has no rerun prompt
+PASS  S12 cl without source: refused before any agent
+PASS  S13 owner spec: the owner scope is in the prompt verbatim
+PASS  S13 owner spec: the prompt names the unit and points at the answer
+PASS  S13 owner spec: an owner spec without its unit is refused before any agent
+PASS  S13 owner spec: an owner spec whose answer is not a STOP-<n> is refused before any agent
+PASS  S14 critic no result: recorded in critic_no_result
+PASS  S14 critic no result: its id is the basename of the file it writes
+PASS  S14 critic no result: 'critic R1-1' ran once
+FAIL  S14 critic no result: the log allows one re-run with args.rerun, for a transient failure only
+FAIL  S14 critic no result: its rerun prompt is the prompt it was launched with
+PASS  S14 critic stop: recorded in critic_stopped
+PASS  S14 critic stop: 'completeness R1' ran once
+PASS  S14 critic stop: the log says not to re-run it
+FAIL  S14 critic stop: a stopped critic has no rerun prompt
+PASS  S14 critic stop: its gaps are not used
+PASS  S15 held not an array: a string is refused before any agent
+PASS  S15 held not an array: an object is refused before any agent
+FAIL  S16 rerun verifier: exactly one agent runs
+FAIL  S16 rerun verifier: it runs the returned prompt, byte for byte
+FAIL  S16 rerun verifier: it runs with the verifier schema
+FAIL  S16 rerun verifier: its verdict is returned
+FAIL  S16 rerun verifier: a second no-result is recorded, with no rerun prompt
+FAIL  S16 rerun verifier: a stop is recorded and its verdict not counted
+FAIL  S17 rerun critic: exactly one agent runs, and no gap unit
+FAIL  S17 rerun critic: it runs the returned prompt, byte for byte
+FAIL  S17 rerun critic: it runs with the critic schema
+FAIL  S17 rerun critic: its gaps carry ids under the new tag, a topic and a covers_held flag
+FAIL  S17 rerun critic: a stop is recorded and its gaps not used
+FAIL  S17 rerun critic: a second no-result is recorded, with no rerun prompt
+FAIL  S18 rerun refused: a unit id is refused before any agent
+FAIL  S18 rerun refused: a rerun with specs is refused before any agent
+FAIL  S18 rerun refused: a rerun without its prompt is refused before any agent
+FAIL  S18 rerun refused: a rerun without a tag is refused before any agent
+PASS  S20 duplicate gaps: one copy is kept, the higher-priority one
+FAIL  S20 duplicate gaps: a dropped copy's covers_held is carried into the kept copy
+FAIL  S20 duplicate gaps: the kept copy lists each dropped copy's question and flag, for the owner
+PASS  S19 gap spec: the prompt points at the recorded gaps file
+
+30 FAIL

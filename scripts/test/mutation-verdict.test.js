@@ -305,8 +305,8 @@ test('a small baseline does not let one honest failure look broad', () => {
 
 // ── both node:test reporters, pinned from measured transcripts (#666) ────────
 //
-// `package.json` permits `node >= 22.12.0`; CI runs 24. The piped DEFAULT reporter differs
-// across that range — Node 22 emits TAP, Node 23+ emits spec — and these parsers were
+// Until #1012, `package.json` permitted `node >= 22.12.0` and CI ran 24 (both are 26 now). The
+// piped DEFAULT reporter differs across that range — Node 22 emits TAP, Node 23+ emits spec — and these parsers were
 // designed against spec alone. A parse failure disables the share signal by design and
 // says nothing, so a Node-22 user could have been getting one of the two SUSPECT signals
 // without ever being told which.

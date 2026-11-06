@@ -41,7 +41,7 @@ jobs:
       # constraint A8 documents and B13 was written to respect.
       - uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: '26'
 
       # Runs BEFORE the gate it guards, deliberately. A bare `x=$(grep …)` under
       # `set -euo pipefail` aborts the whole script with no diagnostic, so a regression here

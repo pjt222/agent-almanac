@@ -1,0 +1,1511 @@
+{
+ "piVersion": "1.4.0",
+ "node": "v26.11.1",
+ "agentDir": "<sandbox>/home-npm-nomanifest/.pi/agent",
+ "skillCount": 375,
+ "promptChars": 294011,
+ "promptTokensCharsOver4": 73503,
+ "skills": [
+  {
+   "name": "adapt-architecture",
+   "filePath": "<sandbox>/npm-nomanifest/skills/adapt-architecture/SKILL.md"
+  },
+  {
+   "name": "adaptic",
+   "filePath": "<sandbox>/npm-nomanifest/skills/adaptic/SKILL.md"
+  },
+  {
+   "name": "add-puzzle-type",
+   "filePath": "<sandbox>/npm-nomanifest/skills/add-puzzle-type/SKILL.md"
+  },
+  {
+   "name": "add-rcpp-integration",
+   "filePath": "<sandbox>/npm-nomanifest/skills/add-rcpp-integration/SKILL.md"
+  },
+  {
+   "name": "aikido",
+   "filePath": "<sandbox>/npm-nomanifest/skills/aikido/SKILL.md"
+  },
+  {
+   "name": "analyze-codebase-for-mcp",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-codebase-for-mcp/SKILL.md"
+  },
+  {
+   "name": "analyze-codebase-workflow",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-codebase-workflow/SKILL.md"
+  },
+  {
+   "name": "analyze-diffusion-dynamics",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-diffusion-dynamics/SKILL.md"
+  },
+  {
+   "name": "analyze-generative-diffusion-model",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-generative-diffusion-model/SKILL.md"
+  },
+  {
+   "name": "analyze-kernel-bottleneck",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-kernel-bottleneck/SKILL.md"
+  },
+  {
+   "name": "analyze-magnetic-field",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-magnetic-field/SKILL.md"
+  },
+  {
+   "name": "analyze-magnetic-levitation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-magnetic-levitation/SKILL.md"
+  },
+  {
+   "name": "analyze-prime-numbers",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-prime-numbers/SKILL.md"
+  },
+  {
+   "name": "analyze-tensegrity-system",
+   "filePath": "<sandbox>/npm-nomanifest/skills/analyze-tensegrity-system/SKILL.md"
+  },
+  {
+   "name": "annotate-source-files",
+   "filePath": "<sandbox>/npm-nomanifest/skills/annotate-source-files/SKILL.md"
+  },
+  {
+   "name": "apply-gematria",
+   "filePath": "<sandbox>/npm-nomanifest/skills/apply-gematria/SKILL.md"
+  },
+  {
+   "name": "apply-semantic-versioning",
+   "filePath": "<sandbox>/npm-nomanifest/skills/apply-semantic-versioning/SKILL.md"
+  },
+  {
+   "name": "appraise-gemstone",
+   "filePath": "<sandbox>/npm-nomanifest/skills/appraise-gemstone/SKILL.md"
+  },
+  {
+   "name": "argumentation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/argumentation/SKILL.md"
+  },
+  {
+   "name": "assess-context",
+   "filePath": "<sandbox>/npm-nomanifest/skills/assess-context/SKILL.md"
+  },
+  {
+   "name": "assess-form",
+   "filePath": "<sandbox>/npm-nomanifest/skills/assess-form/SKILL.md"
+  },
+  {
+   "name": "assess-github-repo-security",
+   "filePath": "<sandbox>/npm-nomanifest/skills/assess-github-repo-security/SKILL.md"
+  },
+  {
+   "name": "assess-holistic-health",
+   "filePath": "<sandbox>/npm-nomanifest/skills/assess-holistic-health/SKILL.md"
+  },
+  {
+   "name": "assess-ip-landscape",
+   "filePath": "<sandbox>/npm-nomanifest/skills/assess-ip-landscape/SKILL.md"
+  },
+  {
+   "name": "assess-trail-conditions",
+   "filePath": "<sandbox>/npm-nomanifest/skills/assess-trail-conditions/SKILL.md"
+  },
+  {
+   "name": "athanor",
+   "filePath": "<sandbox>/npm-nomanifest/skills/athanor/SKILL.md"
+  },
+  {
+   "name": "attune",
+   "filePath": "<sandbox>/npm-nomanifest/skills/attune/SKILL.md"
+  },
+  {
+   "name": "audit-dependency-versions",
+   "filePath": "<sandbox>/npm-nomanifest/skills/audit-dependency-versions/SKILL.md"
+  },
+  {
+   "name": "audit-discovery-symlinks",
+   "filePath": "<sandbox>/npm-nomanifest/skills/audit-discovery-symlinks/SKILL.md"
+  },
+  {
+   "name": "audit-icon-pipeline",
+   "filePath": "<sandbox>/npm-nomanifest/skills/audit-icon-pipeline/SKILL.md"
+  },
+  {
+   "name": "awareness",
+   "filePath": "<sandbox>/npm-nomanifest/skills/awareness/SKILL.md"
+  },
+  {
+   "name": "basic-obedience",
+   "filePath": "<sandbox>/npm-nomanifest/skills/basic-obedience/SKILL.md"
+  },
+  {
+   "name": "behavioral-modification",
+   "filePath": "<sandbox>/npm-nomanifest/skills/behavioral-modification/SKILL.md"
+  },
+  {
+   "name": "benchmark-htr-engines",
+   "filePath": "<sandbox>/npm-nomanifest/skills/benchmark-htr-engines/SKILL.md"
+  },
+  {
+   "name": "bootstrap-agent-identity",
+   "filePath": "<sandbox>/npm-nomanifest/skills/bootstrap-agent-identity/SKILL.md"
+  },
+  {
+   "name": "brahma-bhaga",
+   "filePath": "<sandbox>/npm-nomanifest/skills/brahma-bhaga/SKILL.md"
+  },
+  {
+   "name": "breathe",
+   "filePath": "<sandbox>/npm-nomanifest/skills/breathe/SKILL.md"
+  },
+  {
+   "name": "build-ci-cd-pipeline",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-ci-cd-pipeline/SKILL.md"
+  },
+  {
+   "name": "build-cli-plugin",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-cli-plugin/SKILL.md"
+  },
+  {
+   "name": "build-coherence",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-coherence/SKILL.md"
+  },
+  {
+   "name": "build-consensus",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-consensus/SKILL.md"
+  },
+  {
+   "name": "build-custom-mcp-server",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-custom-mcp-server/SKILL.md"
+  },
+  {
+   "name": "build-feature-store",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-feature-store/SKILL.md"
+  },
+  {
+   "name": "build-grafana-dashboards",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-grafana-dashboards/SKILL.md"
+  },
+  {
+   "name": "build-parameterized-report",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-parameterized-report/SKILL.md"
+  },
+  {
+   "name": "build-pkgdown-site",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-pkgdown-site/SKILL.md"
+  },
+  {
+   "name": "build-sequential-circuit",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-sequential-circuit/SKILL.md"
+  },
+  {
+   "name": "build-shiny-module",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-shiny-module/SKILL.md"
+  },
+  {
+   "name": "build-tcg-deck",
+   "filePath": "<sandbox>/npm-nomanifest/skills/build-tcg-deck/SKILL.md"
+  },
+  {
+   "name": "catalog-collection",
+   "filePath": "<sandbox>/npm-nomanifest/skills/catalog-collection/SKILL.md"
+  },
+  {
+   "name": "center",
+   "filePath": "<sandbox>/npm-nomanifest/skills/center/SKILL.md"
+  },
+  {
+   "name": "check-hiking-gear",
+   "filePath": "<sandbox>/npm-nomanifest/skills/check-hiking-gear/SKILL.md"
+  },
+  {
+   "name": "check-relocation-documents",
+   "filePath": "<sandbox>/npm-nomanifest/skills/check-relocation-documents/SKILL.md"
+  },
+  {
+   "name": "choose-loop-wakeup-interval",
+   "filePath": "<sandbox>/npm-nomanifest/skills/choose-loop-wakeup-interval/SKILL.md"
+  },
+  {
+   "name": "chrysopoeia",
+   "filePath": "<sandbox>/npm-nomanifest/skills/chrysopoeia/SKILL.md"
+  },
+  {
+   "name": "circuit-breaker-pattern",
+   "filePath": "<sandbox>/npm-nomanifest/skills/circuit-breaker-pattern/SKILL.md"
+  },
+  {
+   "name": "clean-codebase",
+   "filePath": "<sandbox>/npm-nomanifest/skills/clean-codebase/SKILL.md"
+  },
+  {
+   "name": "collect-preserve-specimens",
+   "filePath": "<sandbox>/npm-nomanifest/skills/collect-preserve-specimens/SKILL.md"
+  },
+  {
+   "name": "commit-changes",
+   "filePath": "<sandbox>/npm-nomanifest/skills/commit-changes/SKILL.md"
+  },
+  {
+   "name": "compose-sacred-music",
+   "filePath": "<sandbox>/npm-nomanifest/skills/compose-sacred-music/SKILL.md"
+  },
+  {
+   "name": "conduct-empirical-wire-capture",
+   "filePath": "<sandbox>/npm-nomanifest/skills/conduct-empirical-wire-capture/SKILL.md"
+  },
+  {
+   "name": "conduct-gxp-audit",
+   "filePath": "<sandbox>/npm-nomanifest/skills/conduct-gxp-audit/SKILL.md"
+  },
+  {
+   "name": "conduct-post-mortem",
+   "filePath": "<sandbox>/npm-nomanifest/skills/conduct-post-mortem/SKILL.md"
+  },
+  {
+   "name": "conduct-retrospective",
+   "filePath": "<sandbox>/npm-nomanifest/skills/conduct-retrospective/SKILL.md"
+  },
+  {
+   "name": "configure-alerting-rules",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-alerting-rules/SKILL.md"
+  },
+  {
+   "name": "configure-api-gateway",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-api-gateway/SKILL.md"
+  },
+  {
+   "name": "configure-git-repository",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-git-repository/SKILL.md"
+  },
+  {
+   "name": "configure-ingress-networking",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-ingress-networking/SKILL.md"
+  },
+  {
+   "name": "configure-log-aggregation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-log-aggregation/SKILL.md"
+  },
+  {
+   "name": "configure-mcp-server",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-mcp-server/SKILL.md"
+  },
+  {
+   "name": "configure-nginx",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-nginx/SKILL.md"
+  },
+  {
+   "name": "configure-putior-mcp",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-putior-mcp/SKILL.md"
+  },
+  {
+   "name": "configure-reverse-proxy",
+   "filePath": "<sandbox>/npm-nomanifest/skills/configure-reverse-proxy/SKILL.md"
+  },
+  {
+   "name": "conscientiousness",
+   "filePath": "<sandbox>/npm-nomanifest/skills/conscientiousness/SKILL.md"
+  },
+  {
+   "name": "construct-geometric-figure",
+   "filePath": "<sandbox>/npm-nomanifest/skills/construct-geometric-figure/SKILL.md"
+  },
+  {
+   "name": "consult-a-decision-oracle",
+   "filePath": "<sandbox>/npm-nomanifest/skills/consult-a-decision-oracle/SKILL.md"
+  },
+  {
+   "name": "consult-natural-history",
+   "filePath": "<sandbox>/npm-nomanifest/skills/consult-natural-history/SKILL.md"
+  },
+  {
+   "name": "containerize-mcp-server",
+   "filePath": "<sandbox>/npm-nomanifest/skills/containerize-mcp-server/SKILL.md"
+  },
+  {
+   "name": "coordinate-peer-sessions",
+   "filePath": "<sandbox>/npm-nomanifest/skills/coordinate-peer-sessions/SKILL.md"
+  },
+  {
+   "name": "coordinate-reasoning",
+   "filePath": "<sandbox>/npm-nomanifest/skills/coordinate-reasoning/SKILL.md"
+  },
+  {
+   "name": "coordinate-swarm",
+   "filePath": "<sandbox>/npm-nomanifest/skills/coordinate-swarm/SKILL.md"
+  },
+  {
+   "name": "correlate-observability-signals",
+   "filePath": "<sandbox>/npm-nomanifest/skills/correlate-observability-signals/SKILL.md"
+  },
+  {
+   "name": "create-2d-composition",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-2d-composition/SKILL.md"
+  },
+  {
+   "name": "create-3d-scene",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-3d-scene/SKILL.md"
+  },
+  {
+   "name": "create-agent",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-agent/SKILL.md"
+  },
+  {
+   "name": "create-dockerfile",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-dockerfile/SKILL.md"
+  },
+  {
+   "name": "create-github-issues",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-github-issues/SKILL.md"
+  },
+  {
+   "name": "create-github-release",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-github-release/SKILL.md"
+  },
+  {
+   "name": "create-glyph",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-glyph/SKILL.md"
+  },
+  {
+   "name": "create-multistage-dockerfile",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-multistage-dockerfile/SKILL.md"
+  },
+  {
+   "name": "create-pull-request",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-pull-request/SKILL.md"
+  },
+  {
+   "name": "create-quarto-report",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-quarto-report/SKILL.md"
+  },
+  {
+   "name": "create-r-dockerfile",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-r-dockerfile/SKILL.md"
+  },
+  {
+   "name": "create-r-package",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-r-package/SKILL.md"
+  },
+  {
+   "name": "create-skill",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-skill/SKILL.md"
+  },
+  {
+   "name": "create-spatial-visualization",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-spatial-visualization/SKILL.md"
+  },
+  {
+   "name": "create-team",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-team/SKILL.md"
+  },
+  {
+   "name": "create-work-breakdown-structure",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-work-breakdown-structure/SKILL.md"
+  },
+  {
+   "name": "create-workflow",
+   "filePath": "<sandbox>/npm-nomanifest/skills/create-workflow/SKILL.md"
+  },
+  {
+   "name": "cross-review-project",
+   "filePath": "<sandbox>/npm-nomanifest/skills/cross-review-project/SKILL.md"
+  },
+  {
+   "name": "cultivate-bonsai",
+   "filePath": "<sandbox>/npm-nomanifest/skills/cultivate-bonsai/SKILL.md"
+  },
+  {
+   "name": "curate-collection",
+   "filePath": "<sandbox>/npm-nomanifest/skills/curate-collection/SKILL.md"
+  },
+  {
+   "name": "cut-gemstone",
+   "filePath": "<sandbox>/npm-nomanifest/skills/cut-gemstone/SKILL.md"
+  },
+  {
+   "name": "decode-minified-js-gates",
+   "filePath": "<sandbox>/npm-nomanifest/skills/decode-minified-js-gates/SKILL.md"
+  },
+  {
+   "name": "decommission-validated-system",
+   "filePath": "<sandbox>/npm-nomanifest/skills/decommission-validated-system/SKILL.md"
+  },
+  {
+   "name": "decompose-into-pointer-units",
+   "filePath": "<sandbox>/npm-nomanifest/skills/decompose-into-pointer-units/SKILL.md"
+  },
+  {
+   "name": "defend-colony",
+   "filePath": "<sandbox>/npm-nomanifest/skills/defend-colony/SKILL.md"
+  },
+  {
+   "name": "define-slo-sli-sla",
+   "filePath": "<sandbox>/npm-nomanifest/skills/define-slo-sli-sla/SKILL.md"
+  },
+  {
+   "name": "deploy-edge-ai-model",
+   "filePath": "<sandbox>/npm-nomanifest/skills/deploy-edge-ai-model/SKILL.md"
+  },
+  {
+   "name": "deploy-ml-model-serving",
+   "filePath": "<sandbox>/npm-nomanifest/skills/deploy-ml-model-serving/SKILL.md"
+  },
+  {
+   "name": "deploy-searxng",
+   "filePath": "<sandbox>/npm-nomanifest/skills/deploy-searxng/SKILL.md"
+  },
+  {
+   "name": "deploy-shiny-app",
+   "filePath": "<sandbox>/npm-nomanifest/skills/deploy-shiny-app/SKILL.md"
+  },
+  {
+   "name": "deploy-shinyproxy",
+   "filePath": "<sandbox>/npm-nomanifest/skills/deploy-shinyproxy/SKILL.md"
+  },
+  {
+   "name": "deploy-to-kubernetes",
+   "filePath": "<sandbox>/npm-nomanifest/skills/deploy-to-kubernetes/SKILL.md"
+  },
+  {
+   "name": "deploy-to-vercel",
+   "filePath": "<sandbox>/npm-nomanifest/skills/deploy-to-vercel/SKILL.md"
+  },
+  {
+   "name": "derive-theoretical-result",
+   "filePath": "<sandbox>/npm-nomanifest/skills/derive-theoretical-result/SKILL.md"
+  },
+  {
+   "name": "design-a2a-agent-card",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-a2a-agent-card/SKILL.md"
+  },
+  {
+   "name": "design-acoustic-levitation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-acoustic-levitation/SKILL.md"
+  },
+  {
+   "name": "design-cli-output",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-cli-output/SKILL.md"
+  },
+  {
+   "name": "design-compliance-architecture",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-compliance-architecture/SKILL.md"
+  },
+  {
+   "name": "design-electromagnetic-device",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-electromagnetic-device/SKILL.md"
+  },
+  {
+   "name": "design-logic-circuit",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-logic-circuit/SKILL.md"
+  },
+  {
+   "name": "design-on-call-rotation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-on-call-rotation/SKILL.md"
+  },
+  {
+   "name": "design-serialization-schema",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-serialization-schema/SKILL.md"
+  },
+  {
+   "name": "design-shiny-ui",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-shiny-ui/SKILL.md"
+  },
+  {
+   "name": "design-training-program",
+   "filePath": "<sandbox>/npm-nomanifest/skills/design-training-program/SKILL.md"
+  },
+  {
+   "name": "detect-anomalies-aiops",
+   "filePath": "<sandbox>/npm-nomanifest/skills/detect-anomalies-aiops/SKILL.md"
+  },
+  {
+   "name": "develop-gc-method",
+   "filePath": "<sandbox>/npm-nomanifest/skills/develop-gc-method/SKILL.md"
+  },
+  {
+   "name": "develop-hplc-method",
+   "filePath": "<sandbox>/npm-nomanifest/skills/develop-hplc-method/SKILL.md"
+  },
+  {
+   "name": "dissolve-form",
+   "filePath": "<sandbox>/npm-nomanifest/skills/dissolve-form/SKILL.md"
+  },
+  {
+   "name": "document-insect-sighting",
+   "filePath": "<sandbox>/npm-nomanifest/skills/document-insect-sighting/SKILL.md"
+  },
+  {
+   "name": "draft-project-charter",
+   "filePath": "<sandbox>/npm-nomanifest/skills/draft-project-charter/SKILL.md"
+  },
+  {
+   "name": "dream",
+   "filePath": "<sandbox>/npm-nomanifest/skills/dream/SKILL.md"
+  },
+  {
+   "name": "du-dum",
+   "filePath": "<sandbox>/npm-nomanifest/skills/du-dum/SKILL.md"
+  },
+  {
+   "name": "enforce-policy-as-code",
+   "filePath": "<sandbox>/npm-nomanifest/skills/enforce-policy-as-code/SKILL.md"
+  },
+  {
+   "name": "enforce-redaction-gate",
+   "filePath": "<sandbox>/npm-nomanifest/skills/enforce-redaction-gate/SKILL.md"
+  },
+  {
+   "name": "enhance-glyph",
+   "filePath": "<sandbox>/npm-nomanifest/skills/enhance-glyph/SKILL.md"
+  },
+  {
+   "name": "escalate-issues",
+   "filePath": "<sandbox>/npm-nomanifest/skills/escalate-issues/SKILL.md"
+  },
+  {
+   "name": "evaluate-agent-framework",
+   "filePath": "<sandbox>/npm-nomanifest/skills/evaluate-agent-framework/SKILL.md"
+  },
+  {
+   "name": "evaluate-boolean-expression",
+   "filePath": "<sandbox>/npm-nomanifest/skills/evaluate-boolean-expression/SKILL.md"
+  },
+  {
+   "name": "evaluate-levitation-mechanism",
+   "filePath": "<sandbox>/npm-nomanifest/skills/evaluate-levitation-mechanism/SKILL.md"
+  },
+  {
+   "name": "evolve-agent",
+   "filePath": "<sandbox>/npm-nomanifest/skills/evolve-agent/SKILL.md"
+  },
+  {
+   "name": "evolve-skill",
+   "filePath": "<sandbox>/npm-nomanifest/skills/evolve-skill/SKILL.md"
+  },
+  {
+   "name": "evolve-skill-from-traces",
+   "filePath": "<sandbox>/npm-nomanifest/skills/evolve-skill-from-traces/SKILL.md"
+  },
+  {
+   "name": "evolve-team",
+   "filePath": "<sandbox>/npm-nomanifest/skills/evolve-team/SKILL.md"
+  },
+  {
+   "name": "expand-awareness",
+   "filePath": "<sandbox>/npm-nomanifest/skills/expand-awareness/SKILL.md"
+  },
+  {
+   "name": "explore-diophantine-equations",
+   "filePath": "<sandbox>/npm-nomanifest/skills/explore-diophantine-equations/SKILL.md"
+  },
+  {
+   "name": "express-insight",
+   "filePath": "<sandbox>/npm-nomanifest/skills/express-insight/SKILL.md"
+  },
+  {
+   "name": "fail-early-pattern",
+   "filePath": "<sandbox>/npm-nomanifest/skills/fail-early-pattern/SKILL.md"
+  },
+  {
+   "name": "file-trademark",
+   "filePath": "<sandbox>/npm-nomanifest/skills/file-trademark/SKILL.md"
+  },
+  {
+   "name": "fit-drift-diffusion-model",
+   "filePath": "<sandbox>/npm-nomanifest/skills/fit-drift-diffusion-model/SKILL.md"
+  },
+  {
+   "name": "fit-hidden-markov-model",
+   "filePath": "<sandbox>/npm-nomanifest/skills/fit-hidden-markov-model/SKILL.md"
+  },
+  {
+   "name": "forage-plants",
+   "filePath": "<sandbox>/npm-nomanifest/skills/forage-plants/SKILL.md"
+  },
+  {
+   "name": "forage-resources",
+   "filePath": "<sandbox>/npm-nomanifest/skills/forage-resources/SKILL.md"
+  },
+  {
+   "name": "forage-solutions",
+   "filePath": "<sandbox>/npm-nomanifest/skills/forage-solutions/SKILL.md"
+  },
+  {
+   "name": "forecast-operational-metrics",
+   "filePath": "<sandbox>/npm-nomanifest/skills/forecast-operational-metrics/SKILL.md"
+  },
+  {
+   "name": "format-apa-report",
+   "filePath": "<sandbox>/npm-nomanifest/skills/format-apa-report/SKILL.md"
+  },
+  {
+   "name": "format-citations",
+   "filePath": "<sandbox>/npm-nomanifest/skills/format-citations/SKILL.md"
+  },
+  {
+   "name": "formulate-herbal-remedy",
+   "filePath": "<sandbox>/npm-nomanifest/skills/formulate-herbal-remedy/SKILL.md"
+  },
+  {
+   "name": "formulate-maxwell-equations",
+   "filePath": "<sandbox>/npm-nomanifest/skills/formulate-maxwell-equations/SKILL.md"
+  },
+  {
+   "name": "formulate-quantum-problem",
+   "filePath": "<sandbox>/npm-nomanifest/skills/formulate-quantum-problem/SKILL.md"
+  },
+  {
+   "name": "fungi-identification",
+   "filePath": "<sandbox>/npm-nomanifest/skills/fungi-identification/SKILL.md"
+  },
+  {
+   "name": "generate-puzzle",
+   "filePath": "<sandbox>/npm-nomanifest/skills/generate-puzzle/SKILL.md"
+  },
+  {
+   "name": "generate-statistical-tables",
+   "filePath": "<sandbox>/npm-nomanifest/skills/generate-statistical-tables/SKILL.md"
+  },
+  {
+   "name": "generate-status-report",
+   "filePath": "<sandbox>/npm-nomanifest/skills/generate-status-report/SKILL.md"
+  },
+  {
+   "name": "generate-tour-report",
+   "filePath": "<sandbox>/npm-nomanifest/skills/generate-tour-report/SKILL.md"
+  },
+  {
+   "name": "generate-workflow-diagram",
+   "filePath": "<sandbox>/npm-nomanifest/skills/generate-workflow-diagram/SKILL.md"
+  },
+  {
+   "name": "generative-recipe-dsl",
+   "filePath": "<sandbox>/npm-nomanifest/skills/generative-recipe-dsl/SKILL.md"
+  },
+  {
+   "name": "gold-washing",
+   "filePath": "<sandbox>/npm-nomanifest/skills/gold-washing/SKILL.md"
+  },
+  {
+   "name": "grade-tcg-card",
+   "filePath": "<sandbox>/npm-nomanifest/skills/grade-tcg-card/SKILL.md"
+  },
+  {
+   "name": "gratitude",
+   "filePath": "<sandbox>/npm-nomanifest/skills/gratitude/SKILL.md"
+  },
+  {
+   "name": "harden-github-repo-security",
+   "filePath": "<sandbox>/npm-nomanifest/skills/harden-github-repo-security/SKILL.md"
+  },
+  {
+   "name": "headless-web-scraping",
+   "filePath": "<sandbox>/npm-nomanifest/skills/headless-web-scraping/SKILL.md"
+  },
+  {
+   "name": "heal",
+   "filePath": "<sandbox>/npm-nomanifest/skills/heal/SKILL.md"
+  },
+  {
+   "name": "heal-guidance",
+   "filePath": "<sandbox>/npm-nomanifest/skills/heal-guidance/SKILL.md"
+  },
+  {
+   "name": "honesty-humility",
+   "filePath": "<sandbox>/npm-nomanifest/skills/honesty-humility/SKILL.md"
+  },
+  {
+   "name": "identify-gemstone",
+   "filePath": "<sandbox>/npm-nomanifest/skills/identify-gemstone/SKILL.md"
+  },
+  {
+   "name": "identify-insect",
+   "filePath": "<sandbox>/npm-nomanifest/skills/identify-insect/SKILL.md"
+  },
+  {
+   "name": "implement-a2a-server",
+   "filePath": "<sandbox>/npm-nomanifest/skills/implement-a2a-server/SKILL.md"
+  },
+  {
+   "name": "implement-audit-trail",
+   "filePath": "<sandbox>/npm-nomanifest/skills/implement-audit-trail/SKILL.md"
+  },
+  {
+   "name": "implement-diffusion-network",
+   "filePath": "<sandbox>/npm-nomanifest/skills/implement-diffusion-network/SKILL.md"
+  },
+  {
+   "name": "implement-electronic-signatures",
+   "filePath": "<sandbox>/npm-nomanifest/skills/implement-electronic-signatures/SKILL.md"
+  },
+  {
+   "name": "implement-gitops-workflow",
+   "filePath": "<sandbox>/npm-nomanifest/skills/implement-gitops-workflow/SKILL.md"
+  },
+  {
+   "name": "implement-pharma-serialisation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/implement-pharma-serialisation/SKILL.md"
+  },
+  {
+   "name": "install-almanac-content",
+   "filePath": "<sandbox>/npm-nomanifest/skills/install-almanac-content/SKILL.md"
+  },
+  {
+   "name": "install-putior",
+   "filePath": "<sandbox>/npm-nomanifest/skills/install-putior/SKILL.md"
+  },
+  {
+   "name": "instrument-distributed-tracing",
+   "filePath": "<sandbox>/npm-nomanifest/skills/instrument-distributed-tracing/SKILL.md"
+  },
+  {
+   "name": "integrate-gestalt",
+   "filePath": "<sandbox>/npm-nomanifest/skills/integrate-gestalt/SKILL.md"
+  },
+  {
+   "name": "interpret-chromatogram",
+   "filePath": "<sandbox>/npm-nomanifest/skills/interpret-chromatogram/SKILL.md"
+  },
+  {
+   "name": "interpret-ir-spectrum",
+   "filePath": "<sandbox>/npm-nomanifest/skills/interpret-ir-spectrum/SKILL.md"
+  },
+  {
+   "name": "interpret-mass-spectrum",
+   "filePath": "<sandbox>/npm-nomanifest/skills/interpret-mass-spectrum/SKILL.md"
+  },
+  {
+   "name": "interpret-nmr-spectrum",
+   "filePath": "<sandbox>/npm-nomanifest/skills/interpret-nmr-spectrum/SKILL.md"
+  },
+  {
+   "name": "interpret-raman-spectrum",
+   "filePath": "<sandbox>/npm-nomanifest/skills/interpret-raman-spectrum/SKILL.md"
+  },
+  {
+   "name": "interpret-uv-vis-spectrum",
+   "filePath": "<sandbox>/npm-nomanifest/skills/interpret-uv-vis-spectrum/SKILL.md"
+  },
+  {
+   "name": "intrinsic",
+   "filePath": "<sandbox>/npm-nomanifest/skills/intrinsic/SKILL.md"
+  },
+  {
+   "name": "investigate-capa-root-cause",
+   "filePath": "<sandbox>/npm-nomanifest/skills/investigate-capa-root-cause/SKILL.md"
+  },
+  {
+   "name": "label-training-data",
+   "filePath": "<sandbox>/npm-nomanifest/skills/label-training-data/SKILL.md"
+  },
+  {
+   "name": "learn",
+   "filePath": "<sandbox>/npm-nomanifest/skills/learn/SKILL.md"
+  },
+  {
+   "name": "learn-guidance",
+   "filePath": "<sandbox>/npm-nomanifest/skills/learn-guidance/SKILL.md"
+  },
+  {
+   "name": "listen",
+   "filePath": "<sandbox>/npm-nomanifest/skills/listen/SKILL.md"
+  },
+  {
+   "name": "listen-guidance",
+   "filePath": "<sandbox>/npm-nomanifest/skills/listen-guidance/SKILL.md"
+  },
+  {
+   "name": "maintain-hand-tools",
+   "filePath": "<sandbox>/npm-nomanifest/skills/maintain-hand-tools/SKILL.md"
+  },
+  {
+   "name": "make-fire",
+   "filePath": "<sandbox>/npm-nomanifest/skills/make-fire/SKILL.md"
+  },
+  {
+   "name": "manage-backlog",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-backlog/SKILL.md"
+  },
+  {
+   "name": "manage-bibliography",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-bibliography/SKILL.md"
+  },
+  {
+   "name": "manage-change-control",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-change-control/SKILL.md"
+  },
+  {
+   "name": "manage-changelog",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-changelog/SKILL.md"
+  },
+  {
+   "name": "manage-engagement-buffer",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-engagement-buffer/SKILL.md"
+  },
+  {
+   "name": "manage-git-branches",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-git-branches/SKILL.md"
+  },
+  {
+   "name": "manage-kubernetes-secrets",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-kubernetes-secrets/SKILL.md"
+  },
+  {
+   "name": "manage-memory",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-memory/SKILL.md"
+  },
+  {
+   "name": "manage-renv-dependencies",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-renv-dependencies/SKILL.md"
+  },
+  {
+   "name": "manage-tcg-collection",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-tcg-collection/SKILL.md"
+  },
+  {
+   "name": "manage-token-budget",
+   "filePath": "<sandbox>/npm-nomanifest/skills/manage-token-budget/SKILL.md"
+  },
+  {
+   "name": "meditate",
+   "filePath": "<sandbox>/npm-nomanifest/skills/meditate/SKILL.md"
+  },
+  {
+   "name": "meditate-guidance",
+   "filePath": "<sandbox>/npm-nomanifest/skills/meditate-guidance/SKILL.md"
+  },
+  {
+   "name": "memex",
+   "filePath": "<sandbox>/npm-nomanifest/skills/memex/SKILL.md"
+  },
+  {
+   "name": "memex-init",
+   "filePath": "<sandbox>/npm-nomanifest/skills/memex-init/SKILL.md"
+  },
+  {
+   "name": "memex-observe",
+   "filePath": "<sandbox>/npm-nomanifest/skills/memex-observe/SKILL.md"
+  },
+  {
+   "name": "memex-verify",
+   "filePath": "<sandbox>/npm-nomanifest/skills/memex-verify/SKILL.md"
+  },
+  {
+   "name": "memex-wrap",
+   "filePath": "<sandbox>/npm-nomanifest/skills/memex-wrap/SKILL.md"
+  },
+  {
+   "name": "metal",
+   "filePath": "<sandbox>/npm-nomanifest/skills/metal/SKILL.md"
+  },
+  {
+   "name": "mindfulness",
+   "filePath": "<sandbox>/npm-nomanifest/skills/mindfulness/SKILL.md"
+  },
+  {
+   "name": "mineral-identification",
+   "filePath": "<sandbox>/npm-nomanifest/skills/mineral-identification/SKILL.md"
+  },
+  {
+   "name": "model-markov-chain",
+   "filePath": "<sandbox>/npm-nomanifest/skills/model-markov-chain/SKILL.md"
+  },
+  {
+   "name": "monitor-binary-version-baselines",
+   "filePath": "<sandbox>/npm-nomanifest/skills/monitor-binary-version-baselines/SKILL.md"
+  },
+  {
+   "name": "monitor-data-integrity",
+   "filePath": "<sandbox>/npm-nomanifest/skills/monitor-data-integrity/SKILL.md"
+  },
+  {
+   "name": "monitor-model-drift",
+   "filePath": "<sandbox>/npm-nomanifest/skills/monitor-model-drift/SKILL.md"
+  },
+  {
+   "name": "mushroom-cultivation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/mushroom-cultivation/SKILL.md"
+  },
+  {
+   "name": "navigate-dach-bureaucracy",
+   "filePath": "<sandbox>/npm-nomanifest/skills/navigate-dach-bureaucracy/SKILL.md"
+  },
+  {
+   "name": "observe",
+   "filePath": "<sandbox>/npm-nomanifest/skills/observe/SKILL.md"
+  },
+  {
+   "name": "observe-guidance",
+   "filePath": "<sandbox>/npm-nomanifest/skills/observe-guidance/SKILL.md"
+  },
+  {
+   "name": "observe-insect-behavior",
+   "filePath": "<sandbox>/npm-nomanifest/skills/observe-insect-behavior/SKILL.md"
+  },
+  {
+   "name": "optimize-cloud-costs",
+   "filePath": "<sandbox>/npm-nomanifest/skills/optimize-cloud-costs/SKILL.md"
+  },
+  {
+   "name": "optimize-docker-build-cache",
+   "filePath": "<sandbox>/npm-nomanifest/skills/optimize-docker-build-cache/SKILL.md"
+  },
+  {
+   "name": "optimize-shiny-performance",
+   "filePath": "<sandbox>/npm-nomanifest/skills/optimize-shiny-performance/SKILL.md"
+  },
+  {
+   "name": "orchestrate-ml-pipeline",
+   "filePath": "<sandbox>/npm-nomanifest/skills/orchestrate-ml-pipeline/SKILL.md"
+  },
+  {
+   "name": "ornament-style-color",
+   "filePath": "<sandbox>/npm-nomanifest/skills/ornament-style-color/SKILL.md"
+  },
+  {
+   "name": "ornament-style-modern",
+   "filePath": "<sandbox>/npm-nomanifest/skills/ornament-style-modern/SKILL.md"
+  },
+  {
+   "name": "ornament-style-mono",
+   "filePath": "<sandbox>/npm-nomanifest/skills/ornament-style-mono/SKILL.md"
+  },
+  {
+   "name": "paper-making",
+   "filePath": "<sandbox>/npm-nomanifest/skills/paper-making/SKILL.md"
+  },
+  {
+   "name": "perform-csv-assessment",
+   "filePath": "<sandbox>/npm-nomanifest/skills/perform-csv-assessment/SKILL.md"
+  },
+  {
+   "name": "pipeline-gpu-kernel",
+   "filePath": "<sandbox>/npm-nomanifest/skills/pipeline-gpu-kernel/SKILL.md"
+  },
+  {
+   "name": "plan-capacity",
+   "filePath": "<sandbox>/npm-nomanifest/skills/plan-capacity/SKILL.md"
+  },
+  {
+   "name": "plan-eu-relocation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/plan-eu-relocation/SKILL.md"
+  },
+  {
+   "name": "plan-garden-calendar",
+   "filePath": "<sandbox>/npm-nomanifest/skills/plan-garden-calendar/SKILL.md"
+  },
+  {
+   "name": "plan-hiking-tour",
+   "filePath": "<sandbox>/npm-nomanifest/skills/plan-hiking-tour/SKILL.md"
+  },
+  {
+   "name": "plan-release-cycle",
+   "filePath": "<sandbox>/npm-nomanifest/skills/plan-release-cycle/SKILL.md"
+  },
+  {
+   "name": "plan-spectroscopic-analysis",
+   "filePath": "<sandbox>/npm-nomanifest/skills/plan-spectroscopic-analysis/SKILL.md"
+  },
+  {
+   "name": "plan-sprint",
+   "filePath": "<sandbox>/npm-nomanifest/skills/plan-sprint/SKILL.md"
+  },
+  {
+   "name": "plan-tour-route",
+   "filePath": "<sandbox>/npm-nomanifest/skills/plan-tour-route/SKILL.md"
+  },
+  {
+   "name": "polish-claw-project",
+   "filePath": "<sandbox>/npm-nomanifest/skills/polish-claw-project/SKILL.md"
+  },
+  {
+   "name": "polish-gemstone",
+   "filePath": "<sandbox>/npm-nomanifest/skills/polish-gemstone/SKILL.md"
+  },
+  {
+   "name": "practice-viriditas",
+   "filePath": "<sandbox>/npm-nomanifest/skills/practice-viriditas/SKILL.md"
+  },
+  {
+   "name": "prepare-inspection-readiness",
+   "filePath": "<sandbox>/npm-nomanifest/skills/prepare-inspection-readiness/SKILL.md"
+  },
+  {
+   "name": "prepare-print-model",
+   "filePath": "<sandbox>/npm-nomanifest/skills/prepare-print-model/SKILL.md"
+  },
+  {
+   "name": "prepare-soil",
+   "filePath": "<sandbox>/npm-nomanifest/skills/prepare-soil/SKILL.md"
+  },
+  {
+   "name": "preserve-materials",
+   "filePath": "<sandbox>/npm-nomanifest/skills/preserve-materials/SKILL.md"
+  },
+  {
+   "name": "probe-feature-flag-state",
+   "filePath": "<sandbox>/npm-nomanifest/skills/probe-feature-flag-state/SKILL.md"
+  },
+  {
+   "name": "prove-geometric-theorem",
+   "filePath": "<sandbox>/npm-nomanifest/skills/prove-geometric-theorem/SKILL.md"
+  },
+  {
+   "name": "provision-infrastructure-terraform",
+   "filePath": "<sandbox>/npm-nomanifest/skills/provision-infrastructure-terraform/SKILL.md"
+  },
+  {
+   "name": "prune-agent-memory",
+   "filePath": "<sandbox>/npm-nomanifest/skills/prune-agent-memory/SKILL.md"
+  },
+  {
+   "name": "purify-water",
+   "filePath": "<sandbox>/npm-nomanifest/skills/purify-water/SKILL.md"
+  },
+  {
+   "name": "qualify-vendor",
+   "filePath": "<sandbox>/npm-nomanifest/skills/qualify-vendor/SKILL.md"
+  },
+  {
+   "name": "read-continue-here",
+   "filePath": "<sandbox>/npm-nomanifest/skills/read-continue-here/SKILL.md"
+  },
+  {
+   "name": "read-garden",
+   "filePath": "<sandbox>/npm-nomanifest/skills/read-garden/SKILL.md"
+  },
+  {
+   "name": "read-tree-of-life",
+   "filePath": "<sandbox>/npm-nomanifest/skills/read-tree-of-life/SKILL.md"
+  },
+  {
+   "name": "redact-for-public-disclosure",
+   "filePath": "<sandbox>/npm-nomanifest/skills/redact-for-public-disclosure/SKILL.md"
+  },
+  {
+   "name": "redact-visualization-for-disclosure",
+   "filePath": "<sandbox>/npm-nomanifest/skills/redact-visualization-for-disclosure/SKILL.md"
+  },
+  {
+   "name": "redact-wire-capture",
+   "filePath": "<sandbox>/npm-nomanifest/skills/redact-wire-capture/SKILL.md"
+  },
+  {
+   "name": "redirect",
+   "filePath": "<sandbox>/npm-nomanifest/skills/redirect/SKILL.md"
+  },
+  {
+   "name": "refactor-skill-structure",
+   "filePath": "<sandbox>/npm-nomanifest/skills/refactor-skill-structure/SKILL.md"
+  },
+  {
+   "name": "register-ml-model",
+   "filePath": "<sandbox>/npm-nomanifest/skills/register-ml-model/SKILL.md"
+  },
+  {
+   "name": "release-package-version",
+   "filePath": "<sandbox>/npm-nomanifest/skills/release-package-version/SKILL.md"
+  },
+  {
+   "name": "remote-viewing",
+   "filePath": "<sandbox>/npm-nomanifest/skills/remote-viewing/SKILL.md"
+  },
+  {
+   "name": "remote-viewing-guidance",
+   "filePath": "<sandbox>/npm-nomanifest/skills/remote-viewing-guidance/SKILL.md"
+  },
+  {
+   "name": "render-blender-output",
+   "filePath": "<sandbox>/npm-nomanifest/skills/render-blender-output/SKILL.md"
+  },
+  {
+   "name": "render-icon-pipeline",
+   "filePath": "<sandbox>/npm-nomanifest/skills/render-icon-pipeline/SKILL.md"
+  },
+  {
+   "name": "render-publication-graphic",
+   "filePath": "<sandbox>/npm-nomanifest/skills/render-publication-graphic/SKILL.md"
+  },
+  {
+   "name": "render-puzzle-docs",
+   "filePath": "<sandbox>/npm-nomanifest/skills/render-puzzle-docs/SKILL.md"
+  },
+  {
+   "name": "repair-broken-references",
+   "filePath": "<sandbox>/npm-nomanifest/skills/repair-broken-references/SKILL.md"
+  },
+  {
+   "name": "repair-damage",
+   "filePath": "<sandbox>/npm-nomanifest/skills/repair-damage/SKILL.md"
+  },
+  {
+   "name": "research-word-etymology",
+   "filePath": "<sandbox>/npm-nomanifest/skills/research-word-etymology/SKILL.md"
+  },
+  {
+   "name": "resolve-git-conflicts",
+   "filePath": "<sandbox>/npm-nomanifest/skills/resolve-git-conflicts/SKILL.md"
+  },
+  {
+   "name": "rest",
+   "filePath": "<sandbox>/npm-nomanifest/skills/rest/SKILL.md"
+  },
+  {
+   "name": "restore-diagram-legibility",
+   "filePath": "<sandbox>/npm-nomanifest/skills/restore-diagram-legibility/SKILL.md"
+  },
+  {
+   "name": "review-codebase",
+   "filePath": "<sandbox>/npm-nomanifest/skills/review-codebase/SKILL.md"
+  },
+  {
+   "name": "review-data-analysis",
+   "filePath": "<sandbox>/npm-nomanifest/skills/review-data-analysis/SKILL.md"
+  },
+  {
+   "name": "review-pull-request",
+   "filePath": "<sandbox>/npm-nomanifest/skills/review-pull-request/SKILL.md"
+  },
+  {
+   "name": "review-research",
+   "filePath": "<sandbox>/npm-nomanifest/skills/review-research/SKILL.md"
+  },
+  {
+   "name": "review-skill-format",
+   "filePath": "<sandbox>/npm-nomanifest/skills/review-skill-format/SKILL.md"
+  },
+  {
+   "name": "review-software-architecture",
+   "filePath": "<sandbox>/npm-nomanifest/skills/review-software-architecture/SKILL.md"
+  },
+  {
+   "name": "review-ux-ui",
+   "filePath": "<sandbox>/npm-nomanifest/skills/review-ux-ui/SKILL.md"
+  },
+  {
+   "name": "review-web-design",
+   "filePath": "<sandbox>/npm-nomanifest/skills/review-web-design/SKILL.md"
+  },
+  {
+   "name": "rotate-scraping-proxies",
+   "filePath": "<sandbox>/npm-nomanifest/skills/rotate-scraping-proxies/SKILL.md"
+  },
+  {
+   "name": "run-ab-test-models",
+   "filePath": "<sandbox>/npm-nomanifest/skills/run-ab-test-models/SKILL.md"
+  },
+  {
+   "name": "run-chaos-experiment",
+   "filePath": "<sandbox>/npm-nomanifest/skills/run-chaos-experiment/SKILL.md"
+  },
+  {
+   "name": "run-copilot-review-loop",
+   "filePath": "<sandbox>/npm-nomanifest/skills/run-copilot-review-loop/SKILL.md"
+  },
+  {
+   "name": "run-puzzle-tests",
+   "filePath": "<sandbox>/npm-nomanifest/skills/run-puzzle-tests/SKILL.md"
+  },
+  {
+   "name": "scaffold-cli-command",
+   "filePath": "<sandbox>/npm-nomanifest/skills/scaffold-cli-command/SKILL.md"
+  },
+  {
+   "name": "scaffold-mcp-server",
+   "filePath": "<sandbox>/npm-nomanifest/skills/scaffold-mcp-server/SKILL.md"
+  },
+  {
+   "name": "scaffold-nextjs-app",
+   "filePath": "<sandbox>/npm-nomanifest/skills/scaffold-nextjs-app/SKILL.md"
+  },
+  {
+   "name": "scaffold-shiny-app",
+   "filePath": "<sandbox>/npm-nomanifest/skills/scaffold-shiny-app/SKILL.md"
+  },
+  {
+   "name": "scale-colony",
+   "filePath": "<sandbox>/npm-nomanifest/skills/scale-colony/SKILL.md"
+  },
+  {
+   "name": "screen-trademark",
+   "filePath": "<sandbox>/npm-nomanifest/skills/screen-trademark/SKILL.md"
+  },
+  {
+   "name": "script-blender-automation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/script-blender-automation/SKILL.md"
+  },
+  {
+   "name": "search-prior-art",
+   "filePath": "<sandbox>/npm-nomanifest/skills/search-prior-art/SKILL.md"
+  },
+  {
+   "name": "security-audit-codebase",
+   "filePath": "<sandbox>/npm-nomanifest/skills/security-audit-codebase/SKILL.md"
+  },
+  {
+   "name": "select-print-material",
+   "filePath": "<sandbox>/npm-nomanifest/skills/select-print-material/SKILL.md"
+  },
+  {
+   "name": "serialize-data-formats",
+   "filePath": "<sandbox>/npm-nomanifest/skills/serialize-data-formats/SKILL.md"
+  },
+  {
+   "name": "setup-automl-pipeline",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-automl-pipeline/SKILL.md"
+  },
+  {
+   "name": "setup-compose-stack",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-compose-stack/SKILL.md"
+  },
+  {
+   "name": "setup-container-registry",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-container-registry/SKILL.md"
+  },
+  {
+   "name": "setup-docker-compose",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-docker-compose/SKILL.md"
+  },
+  {
+   "name": "setup-github-actions-ci",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-github-actions-ci/SKILL.md"
+  },
+  {
+   "name": "setup-gxp-r-project",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-gxp-r-project/SKILL.md"
+  },
+  {
+   "name": "setup-local-kubernetes",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-local-kubernetes/SKILL.md"
+  },
+  {
+   "name": "setup-prometheus-monitoring",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-prometheus-monitoring/SKILL.md"
+  },
+  {
+   "name": "setup-putior-ci",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-putior-ci/SKILL.md"
+  },
+  {
+   "name": "setup-service-mesh",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-service-mesh/SKILL.md"
+  },
+  {
+   "name": "setup-tailwind-typescript",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-tailwind-typescript/SKILL.md"
+  },
+  {
+   "name": "setup-uptime-checks",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-uptime-checks/SKILL.md"
+  },
+  {
+   "name": "setup-wsl-dev-environment",
+   "filePath": "<sandbox>/npm-nomanifest/skills/setup-wsl-dev-environment/SKILL.md"
+  },
+  {
+   "name": "sharpen-knife",
+   "filePath": "<sandbox>/npm-nomanifest/skills/sharpen-knife/SKILL.md"
+  },
+  {
+   "name": "shift-camouflage",
+   "filePath": "<sandbox>/npm-nomanifest/skills/shift-camouflage/SKILL.md"
+  },
+  {
+   "name": "shine",
+   "filePath": "<sandbox>/npm-nomanifest/skills/shine/SKILL.md"
+  },
+  {
+   "name": "shiva-bhaga",
+   "filePath": "<sandbox>/npm-nomanifest/skills/shiva-bhaga/SKILL.md"
+  },
+  {
+   "name": "simulate-cpu-architecture",
+   "filePath": "<sandbox>/npm-nomanifest/skills/simulate-cpu-architecture/SKILL.md"
+  },
+  {
+   "name": "simulate-stochastic-process",
+   "filePath": "<sandbox>/npm-nomanifest/skills/simulate-stochastic-process/SKILL.md"
+  },
+  {
+   "name": "solve-electromagnetic-induction",
+   "filePath": "<sandbox>/npm-nomanifest/skills/solve-electromagnetic-induction/SKILL.md"
+  },
+  {
+   "name": "solve-modular-arithmetic",
+   "filePath": "<sandbox>/npm-nomanifest/skills/solve-modular-arithmetic/SKILL.md"
+  },
+  {
+   "name": "solve-trigonometric-problem",
+   "filePath": "<sandbox>/npm-nomanifest/skills/solve-trigonometric-problem/SKILL.md"
+  },
+  {
+   "name": "stale-proof-rendered-numbers",
+   "filePath": "<sandbox>/npm-nomanifest/skills/stale-proof-rendered-numbers/SKILL.md"
+  },
+  {
+   "name": "study-hebrew-letters",
+   "filePath": "<sandbox>/npm-nomanifest/skills/study-hebrew-letters/SKILL.md"
+  },
+  {
+   "name": "submit-to-cran",
+   "filePath": "<sandbox>/npm-nomanifest/skills/submit-to-cran/SKILL.md"
+  },
+  {
+   "name": "survey-insect-population",
+   "filePath": "<sandbox>/npm-nomanifest/skills/survey-insect-population/SKILL.md"
+  },
+  {
+   "name": "survey-theoretical-literature",
+   "filePath": "<sandbox>/npm-nomanifest/skills/survey-theoretical-literature/SKILL.md"
+  },
+  {
+   "name": "sweep-flag-namespace",
+   "filePath": "<sandbox>/npm-nomanifest/skills/sweep-flag-namespace/SKILL.md"
+  },
+  {
+   "name": "tai-chi",
+   "filePath": "<sandbox>/npm-nomanifest/skills/tai-chi/SKILL.md"
+  },
+  {
+   "name": "teach",
+   "filePath": "<sandbox>/npm-nomanifest/skills/teach/SKILL.md"
+  },
+  {
+   "name": "teach-guidance",
+   "filePath": "<sandbox>/npm-nomanifest/skills/teach-guidance/SKILL.md"
+  },
+  {
+   "name": "test-a2a-interop",
+   "filePath": "<sandbox>/npm-nomanifest/skills/test-a2a-interop/SKILL.md"
+  },
+  {
+   "name": "test-cli-application",
+   "filePath": "<sandbox>/npm-nomanifest/skills/test-cli-application/SKILL.md"
+  },
+  {
+   "name": "test-shiny-app",
+   "filePath": "<sandbox>/npm-nomanifest/skills/test-shiny-app/SKILL.md"
+  },
+  {
+   "name": "test-team-coordination",
+   "filePath": "<sandbox>/npm-nomanifest/skills/test-team-coordination/SKILL.md"
+  },
+  {
+   "name": "test-x402-payment-client",
+   "filePath": "<sandbox>/npm-nomanifest/skills/test-x402-payment-client/SKILL.md"
+  },
+  {
+   "name": "tidy-project-structure",
+   "filePath": "<sandbox>/npm-nomanifest/skills/tidy-project-structure/SKILL.md"
+  },
+  {
+   "name": "track-ml-experiments",
+   "filePath": "<sandbox>/npm-nomanifest/skills/track-ml-experiments/SKILL.md"
+  },
+  {
+   "name": "translate-content",
+   "filePath": "<sandbox>/npm-nomanifest/skills/translate-content/SKILL.md"
+  },
+  {
+   "name": "transmute",
+   "filePath": "<sandbox>/npm-nomanifest/skills/transmute/SKILL.md"
+  },
+  {
+   "name": "troubleshoot-mcp-connection",
+   "filePath": "<sandbox>/npm-nomanifest/skills/troubleshoot-mcp-connection/SKILL.md"
+  },
+  {
+   "name": "troubleshoot-print-issues",
+   "filePath": "<sandbox>/npm-nomanifest/skills/troubleshoot-print-issues/SKILL.md"
+  },
+  {
+   "name": "troubleshoot-separation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/troubleshoot-separation/SKILL.md"
+  },
+  {
+   "name": "unleash-the-agents",
+   "filePath": "<sandbox>/npm-nomanifest/skills/unleash-the-agents/SKILL.md"
+  },
+  {
+   "name": "update-skill-content",
+   "filePath": "<sandbox>/npm-nomanifest/skills/update-skill-content/SKILL.md"
+  },
+  {
+   "name": "use-graphql-api",
+   "filePath": "<sandbox>/npm-nomanifest/skills/use-graphql-api/SKILL.md"
+  },
+  {
+   "name": "validate-analytical-method",
+   "filePath": "<sandbox>/npm-nomanifest/skills/validate-analytical-method/SKILL.md"
+  },
+  {
+   "name": "validate-piles-notation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/validate-piles-notation/SKILL.md"
+  },
+  {
+   "name": "validate-references",
+   "filePath": "<sandbox>/npm-nomanifest/skills/validate-references/SKILL.md"
+  },
+  {
+   "name": "validate-statistical-output",
+   "filePath": "<sandbox>/npm-nomanifest/skills/validate-statistical-output/SKILL.md"
+  },
+  {
+   "name": "verify-agent-output",
+   "filePath": "<sandbox>/npm-nomanifest/skills/verify-agent-output/SKILL.md"
+  },
+  {
+   "name": "verify-memory-integrity",
+   "filePath": "<sandbox>/npm-nomanifest/skills/verify-memory-integrity/SKILL.md"
+  },
+  {
+   "name": "verify-web-app-runtime",
+   "filePath": "<sandbox>/npm-nomanifest/skills/verify-web-app-runtime/SKILL.md"
+  },
+  {
+   "name": "version-ml-data",
+   "filePath": "<sandbox>/npm-nomanifest/skills/version-ml-data/SKILL.md"
+  },
+  {
+   "name": "vishnu-bhaga",
+   "filePath": "<sandbox>/npm-nomanifest/skills/vishnu-bhaga/SKILL.md"
+  },
+  {
+   "name": "write-claude-md",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-claude-md/SKILL.md"
+  },
+  {
+   "name": "write-continue-here",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-continue-here/SKILL.md"
+  },
+  {
+   "name": "write-helm-chart",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-helm-chart/SKILL.md"
+  },
+  {
+   "name": "write-incident-runbook",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-incident-runbook/SKILL.md"
+  },
+  {
+   "name": "write-roxygen-docs",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-roxygen-docs/SKILL.md"
+  },
+  {
+   "name": "write-standard-operating-procedure",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-standard-operating-procedure/SKILL.md"
+  },
+  {
+   "name": "write-testthat-tests",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-testthat-tests/SKILL.md"
+  },
+  {
+   "name": "write-validation-documentation",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-validation-documentation/SKILL.md"
+  },
+  {
+   "name": "write-vignette",
+   "filePath": "<sandbox>/npm-nomanifest/skills/write-vignette/SKILL.md"
+  },
+  {
+   "name": "zz-probe",
+   "filePath": "<sandbox>/npm-nomanifest/skills/zz-probe.md"
+  }
+ ],
+ "diagnostics": []
+}

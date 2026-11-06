@@ -35,7 +35,7 @@ Phase 0 (prereqs) and Phase 4 (verify) apply to both.
 ### 0.1 — All operating systems
 
 ```bash
-node --version    # ≥ 18.0.0
+node --version    # Phase 2 (global CLI): ≥ 26.0.0, the `engines` field in package.json
 git --version
 claude --version
 ```
@@ -148,6 +148,8 @@ Same commands work in PowerShell with quoted Windows paths (`"$HOME\.claude-mark
 ## Phase 2 — Global CLI install (cross-framework)
 
 Use this *instead of or alongside* Phase 1 when targeting Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, or OpenClaw.
+
+Requires Node.js 26 or newer (`engines` in package.json). npm only warns (EBADENGINE) on an older Node, so check `node --version` first.
 
 ```bash
 # POSIX with nvm — no sudo required
