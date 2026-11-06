@@ -839,6 +839,23 @@ test('archive: refuses to run without ARCHIVE_STATE, and needs no grep, rg, sed 
 
 const VERIFY = 'skills/verify-continue-here/SKILL.md';
 
+/**
+ * read-continue-here's two copies of its re-confirm rule: Step 2, which a session running the skill
+ * reads, and Step 7's CLAUDE.md snippet, which is all a session that has only the snippet ever sees.
+ */
+function readRecheckCopies() {
+  const text = read(READ);
+  // Bound the slice by a Step 3 that exists after Step 2: with indexOf's -1 the slice ran to the end of
+  // the file, Step 7's snippet included, and Step 2's copy went unpinned (#1048 round 1, S3).
+  const i2 = text.indexOf('### Step 2:');
+  const i3 = text.indexOf('### Step 3:', i2);
+  assert.ok(i2 >= 0 && i3 > i2, `${READ} no longer has a Step 2 followed by a Step 3`);
+  const snippet = [...text.matchAll(/^```markdown\r?\n([\s\S]*?)^```/gm)].map((m) => m[1])
+    .filter((body) => /^Handoff archive: /m.test(body));
+  assert.equal(snippet.length, 1, `${READ} must carry exactly one Step 7 snippet (the markdown fence with a "Handoff archive:" line)`);
+  return [['Step 2', text.slice(i2, i3)], ['the Step 7 snippet', snippet[0]]];
+}
+
 test('Verified: write lists exactly three values, and read and verify spell the full-gate one the same', () => {
   // read-continue-here decides whether to re-confirm by matching this value, and
   // verify-continue-here writes it. A respelling in either leaves a handoff that passed the gate
@@ -856,22 +873,28 @@ test('Verified: write lists exactly three values, and read and verify spell the 
   ]);
   assert.ok(read(VERIFY).includes(`\`${values[1]}\``) || read(VERIFY).includes(`Verified: ${values[1]}`),
     `${VERIFY} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
-  // read carries the value twice: in Step 2, which a session running the skill reads, and in
-  // Step 7's CLAUDE.md snippet, which is all a session that has only the snippet ever sees. A
-  // whole-file `includes` was satisfied by either copy, so respelling one survived (#1043, M11).
-  const text2 = read(READ);
-  // Bound the slice by a Step 3 that exists after Step 2: with indexOf's -1 the slice ran to the end of
-  // the file, Step 7's snippet included, and Step 2's copy went unpinned (#1048 round 1, S3).
-  const i2 = text2.indexOf('### Step 2:');
-  const i3 = text2.indexOf('### Step 3:', i2);
-  assert.ok(i2 >= 0 && i3 > i2, `${READ} no longer has a Step 2 followed by a Step 3`);
-  const step2 = text2.slice(i2, i3);
-  const snippet = [...text2.matchAll(/^```markdown\r?\n([\s\S]*?)^```/gm)].map((m) => m[1])
-    .filter((body) => /^Handoff archive: /m.test(body));
-  assert.equal(snippet.length, 1, `${READ} must carry exactly one Step 7 snippet (the markdown fence with a "Handoff archive:" line)`);
-  for (const [where, body] of [['Step 2', step2], ['the Step 7 snippet', snippet[0]]]) {
+  // A whole-file `includes` was satisfied by either of read's two copies, so respelling one
+  // survived (#1043, M11).
+  for (const [where, body] of readRecheckCopies()) {
     assert.ok(body.includes(`\`${values[1]}\``),
       `${READ} ${where} does not spell the full-gate value as write-continue-here does: ${values[1]}`);
+  }
+});
+
+test('recheck: read covers open findings as well as repaired lines, and verify lists both (#1044)', () => {
+  // After a loop capped at round 3, the lines that most need read's recheck are the ones verify
+  // repaired between rounds and the findings still open. A copy of read's recheck that says only
+  // "repaired", or a verify that never lists them in Context, lets the recheck skip them.
+  const RECHECK = 'Context lists as repaired or open';
+  for (const [where, body] of readRecheckCopies()) {
+    assert.ok(body.includes(RECHECK), `${READ} ${where} no longer re-checks open findings: missing "${RECHECK}"`);
+  }
+  const verify = read(VERIFY);
+  for (const instruction of [
+    'list each repair in Context with the line it changed',
+    'after listing each finding still open in Context with its line',
+  ]) {
+    assert.ok(verify.includes(instruction), `${VERIFY} no longer says to ${instruction}`);
   }
 });
 
