@@ -2,8 +2,8 @@
  * placement.js — What sits at an install path, and how the CLI puts content
  * there or takes it away, decided without following a link.
  *
- * Nine adapters place content at twelve sites between them: universal,
- * claude-code, opencode, openclaw, hermes, vibe, gemini, cursor and copilot.
+ * Ten adapters place content at thirteen sites between them: universal,
+ * claude-code, opencode, openclaw, hermes, vibe, gemini, cursor, copilot and pi.
  * By default each site holds a link into the content root. With
  * `--from-package copy` it holds a copy instead, marked so that the CLI can
  * tell its own copy from anything else (#606 part 2). The adapters keep their
