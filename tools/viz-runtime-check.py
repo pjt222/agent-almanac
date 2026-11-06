@@ -1243,7 +1243,7 @@ def verify():
     # From arm 19 on, the arms run main() on two small trees. Each tree's spec is (lockfile version, installed version, build
     # stamp, chunk hash, chunk body); one package, three, is in both lockfiles. The run is given a valid --views,
     # and run_build and playwright are replaced for the call, so a run that gets past every refusal stops at the
-    # stub, with or without playwright installed and with or without -I: no arm can start a browser, whatever
+    # stub, with or without playwright installed and with or without -I: none of them can start a browser, whatever
     # order run() checks things in (#1049 round 1, SHOULD-FIX 3).
     import types
 
