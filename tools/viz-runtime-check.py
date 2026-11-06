@@ -1240,27 +1240,58 @@ def verify():
         arm('compare.html pairs base and new per view and escapes a missing shot',
             'src="base/2d.png"' in page and 'src="new/2d.png"' in page and 'TimeoutError &lt;x&gt;' in page
             and '3d: new drew nothing' in page)
-    # 19. two dists that are the same build once the stamp and hash are stripped are refused through main()
-    #     (#1047 R3b: arm 15 tests tree_digest(), not the refusal). One package moved and node_modules matches
-    #     each lockfile, so only the same-build refusal can stop the run. --views is checked after it, so the
-    #     unknown view makes a run that skipped the refusal stop there instead of starting a browser in --verify.
-    with tempfile.TemporaryDirectory() as tmp:
-        for name, version, stamp, chunk_hash in (('base', '0.186.1', '1793905216658', 'AbCdEf12'),
-                                                 ('new', '0.187.0', '1793905596433', 'XyZw9876')):
+    # From arm 19 on, the arms run main() on two small trees. Each tree's spec is (lockfile version, installed version, build
+    # stamp, chunk hash, chunk body); one package, three, is in both lockfiles. The run is given a valid --views,
+    # and run_build and playwright are replaced for the call, so a run that gets past every refusal stops at the
+    # stub, with or without playwright installed and with or without -I: no arm can start a browser, whatever
+    # order run() checks things in (#1049 round 1, SHOULD-FIX 3).
+    import types
+
+    def stub_run_build(*args, **kwargs):
+        raise Refused('verify: run_build reached, a browser would have started')
+
+    def main_without_browser(tmp, base_spec, new_spec):
+        for name, (locked, installed, stamp, chunk_hash, body) in (('base', base_spec), ('new', new_spec)):
             viz = Path(tmp) / name / 'viz'
             (viz / 'dist' / 'assets').mkdir(parents=True)
             (viz / 'dist' / 'index.html').write_text(f'<script src="/agent-almanac/assets/index-{chunk_hash}.js"></script>')
-            (viz / 'dist' / 'assets' / f'index-{chunk_hash}.js').write_text(f'var v=`{stamp}`;run()')
+            (viz / 'dist' / 'assets' / f'index-{chunk_hash}.js').write_text(f'var v=`{stamp}`;{body}')
             (viz / 'node_modules' / 'three').mkdir(parents=True)
-            (viz / 'node_modules' / 'three' / 'package.json').write_text(json.dumps({'version': version}))
-            (viz / 'package-lock.json').write_text(json.dumps({'packages': {'node_modules/three': {'version': version}}}))
+            (viz / 'node_modules' / 'three' / 'package.json').write_text(json.dumps({'version': installed}))
+            (viz / 'package-lock.json').write_text(json.dumps({'packages': {'node_modules/three': {'version': locked}}}))
+        fake = types.ModuleType('playwright.sync_api')
+        fake.sync_playwright = None
+        parent = types.ModuleType('playwright')
+        parent.sync_api = fake
+        saved = {name: sys.modules.get(name) for name in ('playwright', 'playwright.sync_api')}
+        real_run_build = globals()['run_build']
+        globals()['run_build'] = stub_run_build
+        sys.modules.update({'playwright': parent, 'playwright.sync_api': fake})
         err = io.StringIO()
-        with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
-            code = main(['--base', str(Path(tmp) / 'base'), '--new', str(Path(tmp) / 'new'),
-                         '--out', str(Path(tmp) / 'out'), '--views', 'no-such-view'])
-        same = code == 2 and 'the same build' in err.getvalue()
-        arm('dists that differ only by the build stamp are refused as the same build, through main()', same,
-            f'exit {code}' + ('' if same else f': {err.getvalue().strip()[-160:]}'))
+        try:
+            with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+                code = main(['--base', str(Path(tmp) / 'base'), '--new', str(Path(tmp) / 'new'),
+                             '--out', str(Path(tmp) / 'out'), '--views', '2d'])
+        finally:
+            globals()['run_build'] = real_run_build
+            for name, module in saved.items():
+                if module is None:
+                    sys.modules.pop(name, None)
+                else:
+                    sys.modules[name] = module
+        return code, err.getvalue()
+
+    def refused_with(name, code, err, text):
+        ok = code == 2 and text in err
+        arm(name, ok, f'exit {code}' + ('' if ok else f': {err.strip()[-160:]}'))
+
+    # 19. dists that are the same build once the stamp and hash are stripped are refused through main() (#1047 R3b:
+    #     arm 15 tests tree_digest(), not the refusal). node_modules matches each lockfile, so only that refusal applies.
+    with tempfile.TemporaryDirectory() as tmp:
+        code, err = main_without_browser(tmp, ('0.186.1', '0.186.1', '1793905216658', 'AbCdEf12', 'run()'),
+                                         ('0.187.0', '0.187.0', '1793905596433', 'XyZw9876', 'run()'))
+        refused_with('dists that differ only by the build stamp are refused as the same build, through main()',
+                     code, err, 'the same build')
     failed = results.count(False)
     print(f'verify: {len(results)} arm(s), {failed} failed')
     return 1 if failed else 0
