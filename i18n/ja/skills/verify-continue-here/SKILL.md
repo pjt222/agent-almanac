@@ -19,7 +19,6 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: "8b7a744c081d84f1b2bccc7c75794635de1e6e16"
-  fence_basis_commit: "8b7a744c081d84f1b2bccc7c75794635de1e6e16"
   translator: "(untranslated stub)"
   translation_date: "2026-11-05"
 ---
@@ -55,12 +54,12 @@ Set the header to `Verified: verify-handoff round N, 0 blocking, coverage comple
 
 **Expected:** The draft names its passing round, so `read-continue-here` skips the recheck of repaired lines; it still re-confirms the branch, `HEAD:` and the named PRs and issues.
 
-**On failure:** If round 3 does not pass, stop and hand the open findings to the user. The user decides whether to keep working, or to install with `Verified: verify-handoff round 3, N blocking open, coverage <complete|incomplete>, findings <file>`, after listing each finding still open in Context with its line. Any value other than the full-gate one makes `read-continue-here` re-check the lines Context lists as repaired or open.
+**On failure:** If round 3 does not pass, stop and hand the open findings to the user. The user decides whether to keep working, or to install with `Verified: verify-handoff round 3, N blocking open, coverage <complete|incomplete>, findings <file>`; either way, before installing, list in Context each repair made after round 3 and each blocking finding still open, answered ones included, with its line or section. Any value other than the full-gate one makes `read-continue-here` re-check the lines Context lists as repaired or open.
 
 ## Validation
 
 - [ ] Every round had the facts file and a source, and each earlier findings file was among the next round's sources
-- [ ] The loop stopped at the first round with `blocking` 0 and `coverage.complete` true, or after round 3; `Verified:` names what happened, and `write-continue-here` installed the draft
+- [ ] The loop stopped at the first round with `blocking` 0 and `coverage.complete` true, or after round 3; `Verified:` names what happened; Context lists each repair and, if round 3 did not pass, each blocking finding still open, with its line or section; and `write-continue-here` installed the draft
 
 ## Common Pitfalls
 
