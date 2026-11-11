@@ -81,7 +81,7 @@ Why, in one paragraph; git log shows what changed, not why.
 ## Next Steps
 1. The next action first; **[USER]** marks each item needing a user decision
 ## Context
-- Failed approaches and why, constraints, links; each blocking finding Step 3 applied, with the line it changed
+- Failed approaches and why, constraints, links; each blocking finding Step 3 applied, with the line it changed, and each it answered, listed as open with its line or section
 ```
 
 **Expected:** A draft at the resolved location, all five sections filled, every claim backed by the facts file or tagged.
@@ -98,11 +98,11 @@ Write the findings to a file beside the facts file, apply every blocking finding
 - `verify-handoff round N, 0 blocking, coverage complete` — only when this round returned `blocking` 0 and `coverage.complete` true
 - `not run (workflow unavailable)`
 
-One pass still leaves a blocking defect in about one handoff in three (10 of 32 measured, #1040); `read-continue-here` re-checks the repaired lines for that reason, and re-confirms the branch, `HEAD:` and the named PRs and issues on every handoff, since those move with time. When the reader may not run it, or the next session is days away, use `verify-continue-here`.
+One pass still leaves a blocking defect in about one handoff in three (10 of 32 measured, #1040); `read-continue-here` re-checks the repaired and open lines for that reason, and re-confirms the branch, `HEAD:` and the named PRs and issues on every handoff, since those move with time. When the reader may not run it, or the next session is days away, use `verify-continue-here`.
 
-**Expected:** A findings file, every blocking finding applied and listed in Context, and one honest `Verified:` value.
+**Expected:** A findings file, every blocking finding applied or answered and listed in Context, and one honest `Verified:` value.
 
-**On failure:** Answer a finding you disagree with in the draft (tag the claim, cite the fact), never by deleting the finding.
+**On failure:** Answer a finding you disagree with in the draft (tag the claim, cite the fact), never by deleting the finding, and list a blocking one in Context as open, with its line or section.
 
 ### Step 4: Install Without Losing the Prior Edition
 
@@ -151,7 +151,7 @@ It asks from the handoff's own directory, because `git` asked about another repo
 - [ ] One `CONTINUE_HERE.md` at the resolved location, no draft beside it, no second handoff elsewhere
 - [ ] Five real sections, and a header with an accurate timestamp, branch, `HEAD:` and `Verified:` value
 - [ ] Every number, sha, quoted output and status claim traces to a facts-file line naming its command, or carries a tag the facts file explains
-- [ ] `verify-handoff` ran once with a source, every blocking finding is applied and listed in Context, and the prior edition is archived, kept as `CONTINUE_HERE.prev.md`, or in git history, and the lifecycle is named, not changed
+- [ ] `verify-handoff` ran once with a source, every blocking finding is applied or answered and listed in Context, and the prior edition is archived, kept as `CONTINUE_HERE.prev.md`, or in git history, and the lifecycle is named, not changed
 
 ## Common Pitfalls
 

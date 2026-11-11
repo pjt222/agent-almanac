@@ -49,7 +49,7 @@ Set the header to `Verified: verify-handoff round N, 0 blocking, coverage comple
 
 **Expected:** The draft names its passing round, so `read-continue-here` skips the recheck of repaired lines; it still re-confirms the branch, `HEAD:` and the named PRs and issues.
 
-**On failure:** If round 3 does not pass, stop and hand the open findings to the user. The user decides whether to keep working, or to install with `Verified: verify-handoff round 3, N blocking open, coverage <complete|incomplete>, findings <file>`; either way, before installing, list in Context each repair made after round 3 and each blocking finding still open, with its line or section. Any value other than the full-gate one makes `read-continue-here` re-check the lines Context lists as repaired or open.
+**On failure:** If round 3 does not pass, stop and hand the open findings to the user. The user decides whether to keep working, or to install with `Verified: verify-handoff round 3, N blocking open, coverage <complete|incomplete>, findings <file>`; either way, before installing, list in Context each repair made after round 3 and each blocking finding still open, answered ones included, with its line or section. Any value other than the full-gate one makes `read-continue-here` re-check the lines Context lists as repaired or open.
 
 ## Validation
 

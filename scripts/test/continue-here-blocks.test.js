@@ -904,12 +904,20 @@ test('recheck: read covers open findings as well as repaired lines, and verify l
   }
   for (const [from, to, instruction] of [
     ['### Step 1:', '### Step 2:', 'list each repair in Context with the line it changed'],
-    ['### Step 2:', '## Validation', 'list in Context each repair made after round 3 and each blocking finding still open, with its line or section'],
+    ['### Step 2:', '## Validation', 'list in Context each repair made after round 3 and each blocking finding still open, answered ones included, with its line or section'],
     // The producer-side check that the two lists were made (#1050 round 1, S1).
     ['## Validation', '## Common Pitfalls', 'Context lists each repair and, if round 3 did not pass, each blocking finding still open'],
   ]) {
     assert.ok(section(VERIFY, from, to).includes(instruction), `${VERIFY} "${from}" no longer says "${instruction}"`);
   }
+});
+
+test('recheck: write lists each blocking finding it answered as open, so read re-checks it (#1050 round 1, S4)', () => {
+  // A blocking finding the writer answered instead of applying was in neither list: not a repair,
+  // and not a finding left open after round 3. Listed as open, it is covered by the wording the
+  // #1044 test pins in both of read's copies, "Context lists as repaired or open".
+  assert.ok(section(WRITE, '### Step 3:', '### Step 4:').includes('list a blocking one in Context as open'),
+    `${WRITE} Step 3 no longer lists an answered blocking finding in Context as open`);
 });
 
 test('HOSTILE ENVIRONMENT: a GIT_DIR pointing at another repository cannot reach it', () => {
