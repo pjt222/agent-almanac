@@ -18,7 +18,8 @@ metadata:
   tags: session, continuity, handoff, verification, workflow
   locale: zh-CN
   source_locale: en
-  source_commit: "8b7a744c081d84f1b2bccc7c75794635de1e6e16"
+  source_commit: "bcd7dc3b5336bc6bfbe09754d51d1e575376dfe6"
+  fence_basis_commit: "bcd7dc3b5336bc6bfbe09754d51d1e575376dfe6"
   translator: "(untranslated stub)"
   translation_date: "2026-11-05"
 ---
