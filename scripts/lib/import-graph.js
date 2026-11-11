@@ -129,7 +129,7 @@ function requestedSpecifiers(text, rel, absolute) {
   }
   if (Array.isArray(module.moduleRequests)) return module.moduleRequests.map((request) => request.specifier);
   // No field: a Node outside `engines`. An empty list here would be the vacuous pass.
-  throw new Error(`import graph: vm.SourceTextModule on node ${process.version} exposes no moduleRequests (Node >=24.4 or >=22.20 has it; engines asks for >=26)`);
+  throw new Error(`import graph: vm.SourceTextModule on node ${process.version} exposes no moduleRequests; package.json's engines.node names the supported Node versions`);
 }
 
 /** The walk itself. Needs `vm.SourceTextModule`, so it runs in-process only under the flag. */
