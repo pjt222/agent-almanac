@@ -18,6 +18,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import vm from 'node:vm';
 import { rmTree } from './_tmp.js';
 import { importGraph } from '../lib/import-graph.js';
 
@@ -353,6 +354,22 @@ test('the refusal reaches the caller as the reason, not as a parse error in the 
   assert.match(
     childFailureMessage(root, preload(join(root, 'drop-constructor.cjs'))),
     /the parser child .* exited 3 without a graph: vm\.SourceTextModule is unavailable on node v\S+ even under --experimental-vm-modules/,
+  );
+});
+
+test('a SourceTextModule without moduleRequests is refused, never walked as an entry-only graph (#1051 round 1)', (t) => {
+  // No Node inside `engines` lacks the field, so only injection reaches the refusal: this file and
+  // the module share `node:vm`, and a constructor without the field takes the in-process path.
+  // With the refusal replaced by `return []`, the walk returned the entry alone and every test
+  // stayed green (#1051 round 1, SHOULD-FIX 2).
+  const root = fixture(t, { 'a.js': "import './b.js';\n", 'b.js': 'export const b = 1;\n' });
+  const had = Object.prototype.hasOwnProperty.call(vm, 'SourceTextModule');
+  const original = vm.SourceTextModule;
+  vm.SourceTextModule = class { constructor() {} };
+  t.after(() => { if (had) vm.SourceTextModule = original; else delete vm.SourceTextModule; });
+  assert.throws(
+    () => importGraph(root, 'a.js'),
+    /exposes no moduleRequests; package\.json's engines\.node names the supported Node versions/,
   );
 });
 
