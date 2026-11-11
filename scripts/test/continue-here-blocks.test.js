@@ -856,6 +856,19 @@ function readRecheckCopies() {
   return [['Step 2', text.slice(i2, i3)], ['the Step 7 snippet', snippet[0]]];
 }
 
+/**
+ * The text of `rel` from its first `from` to the next `to` after it. An instruction is pinned in the
+ * section that gives it: a whole-file `includes` was satisfied by the same phrase anywhere else, so an
+ * instruction moved into Related Skills or a Common Pitfall still passed (#1050 round 1, S2).
+ */
+function section(rel, from, to) {
+  const text = read(rel);
+  const start = text.indexOf(from);
+  const end = text.indexOf(to, start);
+  assert.ok(start >= 0 && end > start, `${rel} no longer has a "${from}" followed by a "${to}"`);
+  return text.slice(start, end);
+}
+
 test('Verified: write lists exactly three values, and read and verify spell the full-gate one the same', () => {
   // read-continue-here decides whether to re-confirm by matching this value, and
   // verify-continue-here writes it. A respelling in either leaves a handoff that passed the gate
@@ -889,12 +902,11 @@ test('recheck: read covers open findings as well as repaired lines, and verify l
   for (const [where, body] of readRecheckCopies()) {
     assert.ok(body.includes(RECHECK), `${READ} ${where} no longer re-checks open findings: missing "${RECHECK}"`);
   }
-  const verify = read(VERIFY);
-  for (const instruction of [
-    'list each repair in Context with the line it changed',
-    'after listing each finding still open in Context with its line',
+  for (const [from, to, instruction] of [
+    ['### Step 1:', '### Step 2:', 'list each repair in Context with the line it changed'],
+    ['### Step 2:', '## Validation', 'after listing each finding still open in Context with its line'],
   ]) {
-    assert.ok(verify.includes(instruction), `${VERIFY} no longer says to ${instruction}`);
+    assert.ok(section(VERIFY, from, to).includes(instruction), `${VERIFY} "${from}" no longer says to ${instruction}`);
   }
 });
 
