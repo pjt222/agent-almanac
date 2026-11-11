@@ -49,11 +49,13 @@
  * `moduleRequests` (objects with a `specifier`), and nothing else. The Node docs give it "Added in:
  * v24.4.0, v22.20.0". Until #1013 the walk fell back to the deprecated `dependencySpecifiers`
  * (strings) where `moduleRequests` was missing, which it was on every release inside `engines`
- * while the floor was 22.12: 22.12 to 22.19, all of 23.x, and 24.0 to 24.3 (measured without it:
- * 22.16.0, 22.19.0, 23.0.0, 23.11.1, 24.0.0, 24.3.0; with it: 22.20.0, 24.4.0, 24.20.0, 25.9.0,
- * 26.11.1; #918 round 2, N1). #1012 raised `engines` to `>=26`, which excludes all of those, so the
- * fallback was removed. That rests on the docs' "Added in" for every 26.x but 26.11.1; 26.0.0, the
- * floor, was not measured. A Node without the field is refused below, never walked as empty.
+ * while the floor was 22.12: 22.12 to 22.19, all of 23.x, and 24.0 to 24.3 (measured in #918
+ * without it: 22.16.0, 22.19.0, 23.0.0, 23.11.1, 24.0.0, 24.3.0; with it: 22.20.0, 24.4.0, 24.20.0,
+ * 25.9.0; and with it in #1012: 26.11.1). So the fallback could go only once `engines` excluded all
+ * of those (#918 round 2, N1). #1012 raised `engines` to `>=26`, which does, so it was removed. That
+ * rests on the docs' "Added in" for the 26.x releases between the floor and 26.11.1; #1051's review
+ * round 1 reports 26.0.0, the floor, with the field. A Node without the field is refused below,
+ * never walked as empty.
  */
 import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { dirname, extname, relative, resolve as resolvePath } from 'node:path';
