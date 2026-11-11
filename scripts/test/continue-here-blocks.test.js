@@ -904,7 +904,7 @@ test('recheck: read covers open findings as well as repaired lines, and verify l
   }
   for (const [from, to, instruction] of [
     ['### Step 1:', '### Step 2:', 'list each repair in Context with the line it changed'],
-    ['### Step 2:', '## Validation', 'after listing each finding still open in Context with its line'],
+    ['### Step 2:', '## Validation', 'list in Context each repair made after round 3 and each blocking finding still open, with its line or section'],
   ]) {
     assert.ok(section(VERIFY, from, to).includes(instruction), `${VERIFY} "${from}" no longer says to ${instruction}`);
   }
