@@ -54,7 +54,7 @@ Set the header to `Verified: verify-handoff round N, 0 blocking, coverage comple
 ## Validation
 
 - [ ] Every round had the facts file and a source, and each earlier findings file was among the next round's sources
-- [ ] The loop stopped at the first round with `blocking` 0 and `coverage.complete` true, or after round 3; `Verified:` names what happened, and `write-continue-here` installed the draft
+- [ ] The loop stopped at the first round with `blocking` 0 and `coverage.complete` true, or after round 3; `Verified:` names what happened; Context lists each repair and, if round 3 did not pass, each blocking finding still open, with its line or section; and `write-continue-here` installed the draft
 
 ## Common Pitfalls
 

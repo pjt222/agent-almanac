@@ -905,8 +905,10 @@ test('recheck: read covers open findings as well as repaired lines, and verify l
   for (const [from, to, instruction] of [
     ['### Step 1:', '### Step 2:', 'list each repair in Context with the line it changed'],
     ['### Step 2:', '## Validation', 'list in Context each repair made after round 3 and each blocking finding still open, with its line or section'],
+    // The producer-side check that the two lists were made (#1050 round 1, S1).
+    ['## Validation', '## Common Pitfalls', 'Context lists each repair and, if round 3 did not pass, each blocking finding still open'],
   ]) {
-    assert.ok(section(VERIFY, from, to).includes(instruction), `${VERIFY} "${from}" no longer says to ${instruction}`);
+    assert.ok(section(VERIFY, from, to).includes(instruction), `${VERIFY} "${from}" no longer says "${instruction}"`);
   }
 });
 
