@@ -48,6 +48,8 @@ HOME="$R/home" PI_CODING_AGENT_DIR="$R/agentdir" PI_OFFLINE=1 \
 
 `measure-agent.mjs` copies `agents.ts` out of the package into `$R/sbx`, beside a `node_modules` link to the package's own, because Node does not strip TypeScript types under `node_modules`.
 
+What "MCP off" means for the control arms: `$R/home` starts empty, and the install puts only the agent file and its sidecar into `$R/agentdir`. No settings file, extension or MCP configuration exists in either.
+
 ## What this does not measure
 
 - **A model call.** The session is created and its active tools read; no turn runs.
