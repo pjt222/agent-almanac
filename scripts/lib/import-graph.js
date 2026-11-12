@@ -53,9 +53,8 @@
  * without it: 22.16.0, 22.19.0, 23.0.0, 23.11.1, 24.0.0, 24.3.0; with it: 22.20.0, 24.4.0, 24.20.0,
  * 25.9.0; and with it in #1012: 26.11.1). So the fallback could go only once `engines` excluded all
  * of those (#918 round 2, N1). #1012 raised `engines` to `>=26`, which does, so it was removed. That
- * rests on the docs' "Added in" for the 26.x releases between the floor and 26.11.1; #1051's review
- * round 1 reports 26.0.0, the floor, with the field. A Node without the field is refused below,
- * never walked as empty.
+ * rests on the docs' "Added in" for every 26.x release but 26.11.1. A Node without the field is
+ * refused below, never walked as empty.
  */
 import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { dirname, extname, relative, resolve as resolvePath } from 'node:path';
