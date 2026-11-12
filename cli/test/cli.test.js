@@ -1187,7 +1187,12 @@ describe('pi agents (#1007)', () => {
   });
 
   it('install --force replaces an unedited generated agent with the current source', async () => {
-    // The unedited file the test above generated. A changed description shows the file was rewritten.
+    // Its own precondition, not the state the test above left: on an empty path a
+    // "created" would show nothing about replacing (#1064 round 1, NIT-2).
+    for (const path of [agentFile('full-agent'), sidecar('full-agent')]) rmSync(path, { force: true });
+    assert.equal((await install('full-agent')).action, 'created');
+    assert.equal(readGenerated('full-agent').fields.description, 'An agent for the test.');
+    // A changed source description shows the file was rewritten.
     const sourcePath = resolve(src, 'agents/full-agent.md');
     const original = readFileSync(sourcePath, 'utf8');
     writeFileSync(sourcePath, original.replace('description: An agent for the test.', 'description: The agent, updated.'));
