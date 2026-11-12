@@ -46,18 +46,9 @@
  *
  * ## Which field holds the requests
  *
- * `moduleRequests` (objects with a `specifier`) where it exists; otherwise only
- * `dependencySpecifiers` (strings), which every version measured has, with no warning. So the walk
- * reads `moduleRequests` and falls back. The fallback is the documented-deprecated field: the Node
- * docs mark `dependencySpecifiers` "Stability: 0 - Deprecated" and give `moduleRequests` "Added
- * in: v24.4.0, v22.20.0". The fallback was therefore reached on every release inside `engines` that
- * predated `moduleRequests` while the floor was 22.12: 22.12 to 22.19, all of 23.x, and 24.0 to
- * 24.3. Measured without `moduleRequests`: 22.16.0, 22.19.0, 23.0.0, 23.11.1, 24.0.0, 24.3.0.
- * Measured with it: 22.20.0, 24.4.0, 24.20.0, 25.9.0, 26.11.1. So the fallback could go only once
- * `engines` excluded all of those (#918 round 2, N1). Since #1012 `engines` is `>=26`, which does,
- * so the fallback is dead code on every supported Node; removing it is #1013. That rests on the
- * docs' "Added in" for every 26.x but 26.11.1. Not measured: 26.0.0 (the floor since #1012),
- * every other 26.x, and 22.12.0 (the floor until then).
+ * `moduleRequests` (objects with a `specifier`), and nothing else. The Node docs give it "Added in:
+ * v24.4.0, v22.20.0", and every Node `engines` admits is newer. A Node without the field is refused
+ * below, never walked as empty.
  */
 import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { dirname, extname, relative, resolve as resolvePath } from 'node:path';
@@ -132,9 +123,8 @@ function requestedSpecifiers(text, rel, absolute) {
     throw new Error(`cannot parse ${rel} as an ES module: ${error.message}`);
   }
   if (Array.isArray(module.moduleRequests)) return module.moduleRequests.map((request) => request.specifier);
-  if (Array.isArray(module.dependencySpecifiers)) return module.dependencySpecifiers;
-  // Neither field: a Node this was never measured on. An empty list here would be the vacuous pass.
-  throw new Error(`import graph: vm.SourceTextModule on node ${process.version} exposes neither moduleRequests nor dependencySpecifiers`);
+  // No field: a Node outside `engines`. An empty list here would be the vacuous pass.
+  throw new Error(`import graph: vm.SourceTextModule on node ${process.version} exposes no moduleRequests; package.json's engines.node names the supported Node versions`);
 }
 
 /** The walk itself. Needs `vm.SourceTextModule`, so it runs in-process only under the flag. */
