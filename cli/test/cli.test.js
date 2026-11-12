@@ -1018,6 +1018,8 @@ describe('pi agents (#1007)', () => {
     writeFileSync(resolve(src, 'agents/full-agent.md'), agent('Read, Write, Edit, Bash, Grep, Glob, WebFetch'));
     writeFileSync(resolve(src, 'agents/readonly-agent.md'), agent('Read, Grep, Glob'));
     writeFileSync(resolve(src, 'agents/web-agent.md'), agent('WebFetch, WebSearch'));
+    // A description that needs YAML quoting: a leading `@`, `: `, ` #`, both quote kinds, a newline.
+    writeFileSync(resolve(src, 'agents/quoted-agent.md'), '---\nname: x\ndescription: "@review: uses # and \\"double\\" and \'single\' quotes\\nsecond line"\ntools: [Read]\n---\n\nThe body line.\n');
     for (const key of ['HOME', 'USERPROFILE', 'PI_CODING_AGENT_DIR']) saved[key] = process.env[key];
     process.env.HOME = resolve(tmpRoot, 'home');
     process.env.USERPROFILE = resolve(tmpRoot, 'home');
@@ -1058,6 +1060,15 @@ describe('pi agents (#1007)', () => {
     assert.ok(body.includes('The body line.'), body);
     assert.equal(existsSync(sidecar('full-agent')), true);
     assert.equal(existsSync(resolve(tmpRoot, 'home', '.pi')), false, 'the install ignored $PI_CODING_AGENT_DIR');
+  });
+
+  it('quotes a description that needs it, so the generated frontmatter reads back as the source', async () => {
+    // pi's discoverAgents parses this frontmatter; one unquoted description would make it throw (#1064 round 1, SF-2).
+    const result = await install('quoted-agent');
+    assert.equal(result.action, 'created', JSON.stringify(result));
+    assert.equal(readGenerated('quoted-agent').fields.description, '@review: uses # and "double" and \'single\' quotes\nsecond line');
+    rmSync(agentFile('quoted-agent'));
+    rmSync(sidecar('quoted-agent'));
   });
 
   it('never widens an agent: a read-only agent stays read-only', async () => {
