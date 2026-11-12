@@ -904,7 +904,9 @@ test('recheck: read covers open findings as well as repaired lines, and verify l
   }
   for (const [from, to, instruction] of [
     ['### Step 1:', '### Step 2:', 'list each repair in Context with the line it changed'],
-    ['### Step 2:', '## Validation', 'list in Context each repair made after round 3 and each blocking finding still open, answered ones included, with its line or section'],
+    // From the closing backtick of the install value: the clause must follow it, and "either way,
+    // before installing" is what S3 added, so the pin covers both branches (#1050 round 2, R2-S1).
+    ['### Step 2:', '## Validation', '`; either way, before installing, list in Context each repair made after round 3 and each blocking finding still open, answered ones included, with its line or section'],
     // The producer-side check that the two lists were made (#1050 round 1, S1).
     ['## Validation', '## Common Pitfalls', 'Context lists each repair and, if round 3 did not pass, each blocking finding still open'],
   ]) {
