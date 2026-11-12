@@ -1081,6 +1081,14 @@ describe('pi agents (#1007)', () => {
     assert.equal(existsSync(agentFile('notools-agent')), false);
   });
 
+  it('falls back to the registry item\'s tools when the source declares none', async () => {
+    const result = await new PiAdapter().install({ ...item('notools-agent'), tools: ['Read', 'Glob'] }, tmpRoot, 'global', { almanacRoot: src });
+    assert.equal(result.action, 'created', JSON.stringify(result));
+    assert.equal(readGenerated('notools-agent').fields.tools, 'read, find');
+    rmSync(agentFile('notools-agent'));
+    rmSync(sidecar('notools-agent'));
+  });
+
   it('generates the same file under --from-package copy', async () => {
     rmSync(agentFile('readonly-agent'));
     rmSync(sidecar('readonly-agent'));

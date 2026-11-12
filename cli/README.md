@@ -20,7 +20,7 @@ Universal skill/agent/team installer through 14 adapters, and through the univer
 | Windsurf | `windsurf.js` | `.windsurf/rules/<id>.md` (generated), or a section appended to `.windsurfrules` when that file exists without `.windsurf/rules/` (project only) |
 | GitHub Copilot | `copilot.js` | `.github/skills/<id>/` (project only) |
 | Gemini CLI | `gemini.js` | `.gemini/skills/<id>/` (project only) |
-| pi | `pi.js` | skills: `.pi/skills/<id>/` (project), `<agent-dir>/skills/<id>/` (global); agents: `<agent-dir>/agents/<id>.md` (global only, generated). `<agent-dir>` is `$PI_CODING_AGENT_DIR`, else `~/.pi/agent`. See [pi](#pi-pidev) |
+| pi | `pi.js` | skills: `.pi/skills/<id>/` (project), `<agent-dir>/skills/<id>/` (global); agents: `<agent-dir>/agents/<id>.md` (global only, generated; pi reads it only through its example subagent extension, or a compatible one). `<agent-dir>` is `$PI_CODING_AGENT_DIR`, else `~/.pi/agent`. See [pi](#pi-pidev) |
 | Aider | `aider.js` | a section appended to `CONVENTIONS.md` (project only); its skills also come from Universal |
 
 A skill or agent path above is a link by default, relative in the project and absolute under the home directory. With `--from-package copy` it is a marked copy instead. Generated files and appended sections are never links. An adapter that is project-only or global-only ignores `--scope`.
