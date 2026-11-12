@@ -367,11 +367,12 @@ test('a SourceTextModule without moduleRequests is refused, never walked as an e
   const original = vm.SourceTextModule;
   vm.SourceTextModule = class { constructor() {} };
   t.after(() => { if (had) vm.SourceTextModule = original; else delete vm.SourceTextModule; });
-  // The whole message, the version it names included: a bare RegExp is matched against
-  // String(error), which starts with "Error: ", so `message` is matched instead (#1051 round 2, NIT-2).
+  // The whole message, the version it names included. The walk runs in process, so
+  // `process.version` is the exact value the module prints, and `message` is compared for equality
+  // (#1051 round 2, NIT-2; pre-post round, F1051-N1).
   assert.throws(
     () => importGraph(root, 'a.js'),
-    { message: /^import graph: vm\.SourceTextModule on node v\S+ exposes no moduleRequests; package\.json's engines\.node names the supported Node versions$/ },
+    { message: `import graph: vm.SourceTextModule on node ${process.version} exposes no moduleRequests; package.json's engines.node names the supported Node versions` },
   );
 });
 
