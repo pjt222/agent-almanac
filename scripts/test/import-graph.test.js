@@ -367,9 +367,11 @@ test('a SourceTextModule without moduleRequests is refused, never walked as an e
   const original = vm.SourceTextModule;
   vm.SourceTextModule = class { constructor() {} };
   t.after(() => { if (had) vm.SourceTextModule = original; else delete vm.SourceTextModule; });
+  // The whole message, the version it names included: a bare RegExp is matched against
+  // String(error), which starts with "Error: ", so `message` is matched instead (#1051 round 2, NIT-2).
   assert.throws(
     () => importGraph(root, 'a.js'),
-    /exposes no moduleRequests; package\.json's engines\.node names the supported Node versions/,
+    { message: /^import graph: vm\.SourceTextModule on node v\S+ exposes no moduleRequests; package\.json's engines\.node names the supported Node versions$/ },
   );
 });
 
