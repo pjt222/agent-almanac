@@ -1081,6 +1081,8 @@ describe('pi agents (#1007)', () => {
     assert.equal(result.action, 'skipped');
     assert.match(result.note, /none of its tools has a pi built-in \(WebFetch, WebSearch\)/);
     assert.equal(existsSync(agentFile('web-agent')), false);
+    // A dry run reports the refusal the real run makes, not "created" (#1064 round 1, NIT-4).
+    assert.equal((await install('web-agent', { dryRun: true })).action, 'skipped');
   });
 
   it('refuses an agent that declares no tools, and writes nothing', async () => {

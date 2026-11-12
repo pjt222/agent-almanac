@@ -168,9 +168,8 @@ export class PiAdapter extends FrameworkAdapter {
     const name = `${item.id}.md`;
     const targetPath = childPath(base, name);
 
-    if (options.dryRun) {
-      return { action: 'created', path: targetPath, details: 'dry-run' };
-    }
+    // A dry run reports what the real run would: the link and the empty-tools
+    // refusals below are cheap and deterministic, so they run first (#1064 round 1, NIT-4).
     if (classify(targetPath).kind === 'link') {
       return { action: 'skipped', path: targetPath, reason: 'foreign', note: LINK_KEPT_NOTE };
     }
@@ -186,6 +185,9 @@ export class PiAdapter extends FrameworkAdapter {
         action: 'skipped', path: targetPath, details: 'no pi tools',
         note: `none of its tools has a pi built-in (${dropped.length > 0 ? dropped.join(', ') : 'it declares none'}); not installed`,
       };
+    }
+    if (options.dryRun) {
+      return { action: 'created', path: targetPath, details: 'dry-run' };
     }
 
     const description = String(fields.description ?? item.description ?? item.id).trim();
