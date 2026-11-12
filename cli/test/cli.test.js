@@ -1101,6 +1101,9 @@ describe('pi agents (#1007)', () => {
     writeFileSync(agentFile('users-own'), '---\nname: users-own\ndescription: mine\n---\n');
     const listed = (await new PiAdapter().listInstalled(tmpRoot, 'global')).filter((entry) => entry.type === 'agent').map((entry) => entry.id).sort();
     assert.deepEqual(listed, ['full-agent', 'readonly-agent']);
+    // Agents are global only, so a project-scope listing (and the audit built on it) sees them too.
+    const atProject = (await new PiAdapter().listInstalled(tmpRoot, 'project')).filter((entry) => entry.type === 'agent').map((entry) => entry.id).sort();
+    assert.deepEqual(atProject, ['full-agent', 'readonly-agent']);
   });
 
   it('uninstall removes an unedited generated agent and its sidecar', async () => {

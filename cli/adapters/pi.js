@@ -229,17 +229,18 @@ export class PiAdapter extends FrameworkAdapter {
       }
     }
 
-    // Agents are global only, and pi's agents folder also holds the user's own
-    // agents, so only files this CLI generated are listed.
-    if (scope === 'global') {
-      const agentsBase = this._agentsBase();
-      if (existsSync(agentsBase)) {
-        for (const name of readdirSync(agentsBase).filter((entry) => entry.endsWith('.md') && !isInternalName(entry))) {
-          const fullPath = resolve(agentsBase, name);
-          const { kind, fields } = describeEntry(fullPath);
-          if (kind !== 'copy') continue;
-          items.push({ id: name.slice(0, -'.md'.length), type: 'agent', path: fullPath, isSymlink: false, target: null, ...fields });
-        }
+    // Agents are global only, so they are listed at every scope, as vibe.js
+    // lists its agents: a bare `install --agent <id> -f pi` writes globally, and
+    // an audit at the same scope must see what it wrote (#1064 round 1, SF-1).
+    // pi's agents folder also holds the user's own agents, so only files this
+    // CLI generated are listed.
+    const agentsBase = this._agentsBase();
+    if (existsSync(agentsBase)) {
+      for (const name of readdirSync(agentsBase).filter((entry) => entry.endsWith('.md') && !isInternalName(entry))) {
+        const fullPath = resolve(agentsBase, name);
+        const { kind, fields } = describeEntry(fullPath);
+        if (kind !== 'copy') continue;
+        items.push({ id: name.slice(0, -'.md'.length), type: 'agent', path: fullPath, isSymlink: false, target: null, ...fields });
       }
     }
     return items;
