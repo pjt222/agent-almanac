@@ -194,7 +194,17 @@ export class PiAdapter extends FrameworkAdapter {
     const result = placeCopy({
       base, name, source, content, almanacRoot: options.almanacRoot, copyFrom, item, force: options.force,
     });
-    if (result.action !== 'created') return result;
+    if (result.action !== 'created') {
+      // placeCopy's note for a file it generated before names `install --force
+      // --from-package copy`, which the CLI refuses from a clone. A pi agent is
+      // generated in either placement, and outside copy placement plain
+      // `install --force` regenerates it (#1064 round 1, SF-3).
+      if (options.placement !== 'copy' && (result.reason === 'already-copied' || result.reason === 'other-version')) {
+        const generatedBy = classify(targetPath).marker.package;
+        return { ...result, note: `already generated from ${generatedBy.name} ${generatedBy.version}; \`install --force\` regenerates it from the current source if it is unedited` };
+      }
+      return result;
+    }
     const droppedNote = dropped.length > 0 ? `; tools with no pi built-in were dropped: ${dropped.join(', ')}` : '';
     return { ...result, details: 'generated', note: `${PI_AGENT_NOTE}${droppedNote}` };
   }
