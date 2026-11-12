@@ -1038,6 +1038,8 @@ describe('pi agents (#1007)', () => {
       dropped: ['WebFetch', 'WebSearch'],
     });
     assert.deepEqual(piAdapterModule.mapAgentTools('Read, Glob'), { mapped: ['read', 'find'], dropped: [] });
+    // A name the map inherits from Object.prototype is not a tool.
+    assert.deepEqual(piAdapterModule.mapAgentTools(['constructor', 'toString', 'Read']), { mapped: ['read'], dropped: ['constructor', 'toString'] });
   });
 
   it('declares agents global-only', () => {
@@ -1048,7 +1050,8 @@ describe('pi agents (#1007)', () => {
     const result = await install('full-agent');
     assert.equal(result.action, 'created', JSON.stringify(result));
     assert.equal(result.path, agentFile('full-agent'));
-    assert.ok(result.note.startsWith(piAdapterModule.PI_AGENT_NOTE), result.note);
+    // The literal, not the imported constant, so a rewording of the note is seen.
+    assert.ok(result.note.startsWith("pi reads it only through its example subagent extension, or a compatible one, installed per that extension's README"), result.note);
     assert.ok(result.note.endsWith('tools with no pi built-in were dropped: WebFetch'), result.note);
     const { fields, body } = readGenerated('full-agent');
     assert.deepEqual(fields, { name: 'full-agent', description: 'An agent for the test.', tools: 'read, write, edit, bash, grep, find' });
@@ -1067,6 +1070,15 @@ describe('pi agents (#1007)', () => {
     assert.equal(result.action, 'skipped');
     assert.match(result.note, /none of its tools has a pi built-in \(WebFetch, WebSearch\)/);
     assert.equal(existsSync(agentFile('web-agent')), false);
+  });
+
+  it('refuses an agent that declares no tools, and writes nothing', async () => {
+    // Without `tools:` the extension passes no --tools and pi uses its default set.
+    writeFileSync(resolve(src, 'agents/notools-agent.md'), '---\nname: x\ndescription: No tools.\n---\n\nThe body line.\n');
+    const result = await install('notools-agent');
+    assert.equal(result.action, 'skipped');
+    assert.equal(result.note, 'none of its tools has a pi built-in (it declares none); not installed');
+    assert.equal(existsSync(agentFile('notools-agent')), false);
   });
 
   it('generates the same file under --from-package copy', async () => {
@@ -1105,9 +1117,10 @@ describe('pi agents (#1007)', () => {
   it('keeps a generated agent the user edited, on install --force and uninstall', async () => {
     await install('full-agent');
     writeFileSync(agentFile('full-agent'), `${readFileSync(agentFile('full-agent'), 'utf8')}my own line\n`);
-    for (const result of [await install('full-agent', { force: true }), await uninstall('full-agent')]) {
+    for (const [result, purpose] of [[await install('full-agent', { force: true }), 'replace'], [await uninstall('full-agent'), 'remove']]) {
       assert.equal(result.action, 'skipped', JSON.stringify(result));
       assert.equal(result.reason, 'edited');
+      assert.equal(result.note, `edited since it was copied (modified: full-agent.md); kept, delete it by hand to ${purpose} it`);
     }
     assert.match(readFileSync(agentFile('full-agent'), 'utf8'), /my own line\n$/);
     rmSync(agentFile('full-agent'));
@@ -1124,6 +1137,36 @@ describe('pi agents (#1007)', () => {
     }
     assert.equal(lstatSync(agentFile('full-agent')).isSymbolicLink(), true);
     assert.equal(readlinkSync(agentFile('full-agent')), target);
+  });
+
+  it('install without --force keeps what is there and says what it is', async () => {
+    const kept = (result) => ({ action: result.action, reason: result.reason, note: result.note });
+    // The link the test above left at the path.
+    assert.deepEqual(kept(await install('full-agent')), {
+      action: 'skipped', reason: 'foreign',
+      note: "a link is here, which agent-almanac never removes or replaces in pi's agents folder; not installed by agent-almanac; left in place",
+    });
+    rmSync(agentFile('full-agent'));
+    writeFileSync(agentFile('full-agent'), '---\nname: mine\n---\nmine\n');
+    assert.deepEqual(kept(await install('full-agent')), { action: 'skipped', reason: 'foreign', note: 'not installed by agent-almanac; left in place' });
+    rmSync(agentFile('full-agent'));
+    assert.equal((await install('full-agent')).action, 'created');
+    assert.deepEqual(kept(await install('full-agent')), { action: 'skipped', reason: 'already-copied', note: 'already a copy of agent-almanac 9.9.9-test' });
+  });
+
+  it('install --force replaces an unedited generated agent with the current source', async () => {
+    // The unedited file the test above generated. A changed description shows the file was rewritten.
+    const sourcePath = resolve(src, 'agents/full-agent.md');
+    const original = readFileSync(sourcePath, 'utf8');
+    writeFileSync(sourcePath, original.replace('description: An agent for the test.', 'description: The agent, updated.'));
+    try {
+      const result = await install('full-agent', { force: true });
+      assert.equal(result.action, 'created', JSON.stringify(result));
+      assert.equal(readGenerated('full-agent').fields.description, 'The agent, updated.');
+      assert.equal(existsSync(sidecar('full-agent')), true);
+    } finally {
+      writeFileSync(sourcePath, original);
+    }
   });
 });
 
@@ -2744,8 +2787,9 @@ describe('adapter scope declarations (#607)', () => {
     process.env.HOME = sandbox;
     process.env.USERPROFILE = sandbox;
     process.env.HERMES_HOME = resolve(sandbox, '.hermes');
-    // pi's global site follows $PI_CODING_AGENT_DIR; unset, it is under HOME.
-    delete process.env.PI_CODING_AGENT_DIR;
+    // pi's global site follows $PI_CODING_AGENT_DIR, pinned into the sandbox as HERMES_HOME is,
+    // so a caller's exported value cannot reach a dry run (#1007).
+    process.env.PI_CODING_AGENT_DIR = resolve(sandbox, '.pi-agent');
   });
 
   after(() => {
