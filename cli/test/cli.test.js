@@ -1175,9 +1175,10 @@ describe('pi agents (#1007)', () => {
     assert.deepEqual(kept(await install('full-agent')), { action: 'skipped', reason: 'foreign', note: 'not installed by agent-almanac; left in place' });
     rmSync(agentFile('full-agent'));
     assert.equal((await install('full-agent')).action, 'created');
-    // Outside copy placement the note names plain `install --force`; `--from-package copy`
-    // is refused from a clone (#1064 round 1, SF-3).
-    const regenerate = '`install --force` regenerates it from the current source if it is unedited';
+    // Outside copy placement the note says to re-run the same install with `--force`;
+    // `--from-package copy` is refused from a clone (#1064 round 1, SF-3), and plain
+    // `install --force` from an npm package root (round 2, R2-SF-1).
+    const regenerate = 'run the same install with `--force` to regenerate it from the current source if it is unedited';
     assert.deepEqual(kept(await install('full-agent')), { action: 'skipped', reason: 'already-copied', note: `already generated from agent-almanac 9.9.9-test; ${regenerate}` });
     rmSync(agentFile('full-agent'));
     rmSync(sidecar('full-agent'));

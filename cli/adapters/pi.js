@@ -199,11 +199,13 @@ export class PiAdapter extends FrameworkAdapter {
     if (result.action !== 'created') {
       // placeCopy's note for a file it generated before names `install --force
       // --from-package copy`, which the CLI refuses from a clone. A pi agent is
-      // generated in either placement, and outside copy placement plain
-      // `install --force` regenerates it (#1064 round 1, SF-3).
+      // generated in either placement, and outside copy placement the same
+      // install with `--force` added regenerates it (#1064 round 1, SF-3). The
+      // note names no command line: plain `install --force` is refused from an
+      // npm package root, which needs `--from-package link` (round 2, R2-SF-1).
       if (options.placement !== 'copy' && (result.reason === 'already-copied' || result.reason === 'other-version')) {
         const generatedBy = classify(targetPath).marker.package;
-        return { ...result, note: `already generated from ${generatedBy.name} ${generatedBy.version}; \`install --force\` regenerates it from the current source if it is unedited` };
+        return { ...result, note: `already generated from ${generatedBy.name} ${generatedBy.version}; run the same install with \`--force\` to regenerate it from the current source if it is unedited` };
       }
       return result;
     }
