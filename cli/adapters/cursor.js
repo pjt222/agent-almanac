@@ -8,8 +8,8 @@
  * Skills only.
  */
 
-import { existsSync, readdirSync } from 'fs';
-import { resolve } from 'path';
+import { existsSync, readdirSync, readlinkSync } from 'fs';
+import { basename, resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
 import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
 
@@ -77,11 +77,14 @@ export class CursorAdapter extends FrameworkAdapter {
     if (existsSync(rulesDir)) {
       for (const name of readdirSync(rulesDir)) {
         if (!name.endsWith('.mdc')) continue;
-        // No CLI command writes a .mdc file, so only a link there is listed:
-        // a regular .mdc is the user's own rule, not an installed skill (#998).
+        // No CLI command writes a .mdc file, so a regular .mdc is the user's
+        // own rule, not an installed skill (#998). Only a link to a SKILL.md
+        // is listed, the shape skills/README.md describes: a link to the
+        // user's own rule (from a dotfiles repository, say) is theirs too, and
+        // a dangling one would make `audit` exit 3 (#1067 round 1, SF-2).
         const fullPath = resolve(rulesDir, name);
         const { kind, fields } = describeEntry(fullPath);
-        if (kind === 'link') items.push({ id: name.replace(/\.mdc$/, ''), type: 'skill', path: fullPath, format: 'mdc', ...fields });
+        if (kind === 'link' && basename(readlinkSync(fullPath)) === 'SKILL.md') items.push({ id: name.replace(/\.mdc$/, ''), type: 'skill', path: fullPath, format: 'mdc', ...fields });
       }
     }
     return items;

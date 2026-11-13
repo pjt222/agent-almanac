@@ -4274,11 +4274,17 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     });
   });
 
-  it('cursor lists a .mdc rule only when it is a link, and flags a dangling one (#998)', async () => {
+  it('cursor lists a .mdc rule only when it is a link to a SKILL.md, and flags a dangling one (#998; #1067 round 1, SF-2)', async () => {
     await inLinkSandbox(tmpRoot, 'cursor-rule-list', async (sb) => {
       const rulesDir = resolve(sb.proj, '.cursor/rules');
       mkdirSync(rulesDir, { recursive: true });
       writeFileSync(resolve(rulesDir, 'my-own-rule.mdc'), 'my own rule\n');
+      // The user's own rules linked from a dotfiles repository, live and dangling: theirs, not listed.
+      const dotfiles = resolve(sb.proj, 'dotfiles');
+      mkdirSync(dotfiles, { recursive: true });
+      writeFileSync(resolve(dotfiles, 'my-live-rule.mdc'), 'my live rule\n');
+      symlinkSync(resolve(dotfiles, 'my-live-rule.mdc'), resolve(rulesDir, 'my-live-rule.mdc'));
+      symlinkSync(resolve(dotfiles, 'my-gone-rule.mdc'), resolve(rulesDir, 'my-gone-rule.mdc'));
       symlinkSync(resolve(sb.proj, 'gone/SKILL.md'), resolve(rulesDir, 'commit-changes.mdc'));
       assert.deepEqual(await new CursorAdapter().listInstalled(sb.proj), [
         { id: 'commit-changes', type: 'skill', path: resolve(rulesDir, 'commit-changes.mdc'), format: 'mdc', broken: true },
