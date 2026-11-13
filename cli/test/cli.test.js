@@ -1324,6 +1324,7 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
         assert.ok(forced.note.startsWith('edited since it was generated'), forced.note);
         const removed = await uninstall(site, sb);
         assert.equal(removed.reason, 'edited', JSON.stringify(removed));
+        assert.ok(removed.note.startsWith('edited since it was generated'), removed.note);
         assert.ok(readFileSync(path, 'utf8').endsWith('an edit\n'));
       });
     });
@@ -1405,17 +1406,19 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
     });
   }
 
-  it('keeps an unmarked file when the source cannot be read to compare, without throwing', async () => {
-    await inSandbox('nosource', async (sb) => {
-      const site = SITES[0];
-      const path = site.path(sb);
-      await install(site, sb);
-      rmSync(placement.sidecarPath(path));
-      const missing = { ...sb.skill, sourceDir: resolve(sb.src, 'skills/no-such-skill'), sourcePath: resolve(sb.src, 'skills/no-such-skill/SKILL.md') };
-      assert.deepEqual(await site.adapter().uninstall(missing, sb.proj, 'project', {}), { action: 'skipped', path, reason: 'foreign', note: UNCOMPARED });
-      assert.equal(existsSync(path), true);
+  // vibe's TOML is built from the registry item and reads no file, so it has no such case.
+  for (const site of SITES.filter((s) => s.name !== 'vibe agent')) {
+    it(`${site.name}: keeps an unmarked file when the source cannot be read to compare, without throwing`, async () => {
+      await inSandbox('nosource', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        const missing = { ...site.item(sb), sourceDir: resolve(sb.src, 'no-such-dir'), sourcePath: resolve(sb.src, 'no-such-dir/source.md') };
+        assert.deepEqual(await site.adapter().uninstall(missing, sb.proj, site.scope, {}), { action: 'skipped', path, reason: 'foreign', note: UNCOMPARED });
+        assert.equal(existsSync(path), true);
+      });
     });
-  });
+  }
 
   it('keeps an unmarked file holding exactly this version\'s output when a file that is not a marker sits at its marker\'s path', async () => {
     await inSandbox('clash', async (sb) => {
@@ -4242,6 +4245,24 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
         { action: 'skipped', path: `${path}, ${rule}`, reason: 'foreign', note: `kept ${path}: ${KEPT_NOTE}; kept ${rule}: ${KEPT_NOTE}` },
       );
       assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall removes a skill link and names the user\'s own .mdc rule it kept beside it (#1067 round 1, SF-4)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-mixed', async (sb) => {
+      const path = site.path(sb, 'project');
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(path), { recursive: true });
+      symlinkSync(resolve(sb.src, 'skills/commit-changes'), path);
+      mkdirSync(dirname(rule), { recursive: true });
+      writeFileSync(rule, 'my own rule\n');
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'removed', path, note: `kept ${rule}: ${KEPT_NOTE}` },
+      );
+      assert.throws(() => lstatSync(path), { code: 'ENOENT' });
       assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
     });
   });
