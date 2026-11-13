@@ -41,7 +41,7 @@ What this means when installing:
   - `model` is left out, so the subagent runs on the model of the session that calls it;
   - an agent none of whose tools has a pi built-in is not installed.
 
-  `uninstall` and `install --force` remove or replace a generated file only while it is unedited. They never touch a link or your own file at that path.
+  `uninstall` and `install --force` remove or replace a generated file only while it is unedited. They never touch a link or your own file at that path. Re-running `install` keeps an agent already generated, even when its source has changed since; the same install with `--force` regenerates an unedited one from the current source.
 
 Project-scope skills load only in a project pi trusts. pi asks before it loads a project's resources (pi's `docs/security.md`). Measured with links and with `--from-package copy` copies: [tests/results/2026-10-22-pi-skill-discovery/RESULT.md](../tests/results/2026-10-22-pi-skill-discovery/RESULT.md).
 
