@@ -36,6 +36,7 @@ register(OpenClawAdapter);
 register(HermesAdapter);
 register(VibeAdapter);
 register(CodexAdapter);
+register(PiAdapter);
 
 // Edge LLM adapters (distilled content for small context windows)
 register(AiEdgeAdapter);
@@ -45,7 +46,6 @@ register(CursorAdapter);
 register(WindsurfAdapter);
 register(CopilotAdapter);
 register(GeminiAdapter);
-register(PiAdapter);
 register(AiderAdapter);
 
 /**

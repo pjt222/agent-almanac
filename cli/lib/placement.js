@@ -488,6 +488,18 @@ function kindWord(stat) {
 const hashFile = (filePath) => sha256(readFileSync(filePath));
 
 /**
+ * Write `content` to `dest`, which must not exist, as a generated file: the
+ * placeCopy() path for an entry the CLI writes rather than copies (#1007, a
+ * pi agent whose tool names are translated). Hashed as written, like a copy.
+ *
+ * @returns {{ isDir: false, files: Record<string, string> }}
+ */
+function writeGenerated(dest, content) {
+  writeFileSync(dest, content, { flag: 'wx' });
+  return { isDir: false, files: { [basename(dest)]: hashFile(dest) } };
+}
+
+/**
  * Copy `source` to `dest`, which must not exist: directories and regular
  * files only, each file hashed as written. A symlink at or below `source`,
  * `source` itself included, is refused rather than followed or recreated; a
@@ -630,9 +642,13 @@ function decide(entryPath, entry, force, copyFrom) {
  * @param {{ name: string, version: string }} args.copyFrom - The package it is copied from
  * @param {{ type: string, id: string }} args.item - The registry item, recorded in the marker
  * @param {boolean} [args.force]
+ * @param {string} [args.content] - Write this as a generated file instead of
+ *   copying `source` (#1007). `source` is still recorded in the marker as what
+ *   it was generated from, and must still be inside `almanacRoot`. Ownership
+ *   is the same as for a copied file: removable or replaceable while unedited.
  * @returns {import('../adapters/base.js').InstallResult}
  */
-export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, force = false }) {
+export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, force = false, content }) {
   const entryPath = childPath(base, name);
   if (!copyFrom || !isNonEmptyString(copyFrom.name) || !isNonEmptyString(copyFrom.version)) {
     throw new Error('copy refused: no package name and version to record');
@@ -650,7 +666,7 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
   let result = null;
   try {
     const staged = join(staging, name);
-    const { isDir, files } = copyTree(source, staged);
+    const { isDir, files } = content === undefined ? copyTree(source, staged) : writeGenerated(staged, content);
     writeFileSync(markerPathOf(staged, isDir), serializeMarker({ entry: name, item, copyFrom, sourceRel, files }), { flag: 'wx' });
 
     const current = classify(entryPath);
