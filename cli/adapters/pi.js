@@ -168,8 +168,10 @@ export class PiAdapter extends FrameworkAdapter {
     const name = `${item.id}.md`;
     const targetPath = childPath(base, name);
 
-    // A dry run reports what the real run would: the link and the empty-tools
-    // refusals below are cheap and deterministic, so they run first (#1064 round 1, NIT-4).
+    // A dry run reports the two refusals the real run makes before placement, a
+    // link at the path and an empty mapped list: both are cheap and deterministic,
+    // so they run first (#1064 round 1, NIT-4). What placement would decide (a
+    // user's own file, an agent already generated) is not predicted (round 2, R2-N3).
     if (classify(targetPath).kind === 'link') {
       return { action: 'skipped', path: targetPath, reason: 'foreign', note: LINK_KEPT_NOTE };
     }
