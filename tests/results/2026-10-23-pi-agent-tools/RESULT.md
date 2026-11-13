@@ -15,7 +15,7 @@ Then `measure-agent.mjs` ran:
 | the same | the unmapped names `Read, Edit, Grep, Glob, Bash` (control) | active: none, and no error |
 | the same | `Read` (control) | active: none, and no error |
 
-- **The control arms are why the adapter generates the file instead of linking it.** Handed Claude Code's tool names, pi activates no built-in tool and says nothing, so a linked almanac agent would run with no tools and no message.
+- **The control arms are why the adapter generates the file instead of linking it.** Handed Claude Code's tool names, pi activates no built-in tool and says nothing, so a linked almanac agent would run with no built-in tools and no message (measured with no MCP configuration; see "MCP off" below).
 - **The positive arm shows the mapped names are pi's own.** `find` is the built-in that `Glob` becomes.
 - **The agent carries no `model`.** The extension then passes no `--model`, and the subagent runs on its parent's model and thinking level (`index.ts:299-304` in the example).
 
