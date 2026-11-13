@@ -4191,26 +4191,64 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     });
   });
 
-  it('cursor\'s uninstall still reaches its second path, a .mdc rule, beside a kept skill entry, and names the kept one', async () => {
+  it('cursor\'s uninstall keeps a user\'s own .mdc rule beside a kept skill entry, and names both (#998)', async () => {
     // cursor's uninstall looks at two paths: .cursor/skills/<id> and
-    // .cursor/rules/<id>.mdc. What this pins is that a kept entry at the first
-    // does not stop the second, and the `kept <skillPath>: …` note. No CLI
-    // command writes the .mdc (installLegacyRule has no caller), so the rule
-    // planted here stands for a user's own file, and its deletion is
-    // pre-existing behaviour kept on purpose for now, tracked in #998.
+    // .cursor/rules/<id>.mdc. No CLI command writes the .mdc, so a file there
+    // is the user's own; until #998 the uninstall deleted it. A kept entry at
+    // the first path does not stop the second from being looked at.
     const site = LINK_SITES.find((s) => s.site === 'cursor skill');
     await inLinkSandbox(tmpRoot, 'cursor-rule', async (sb) => {
       const path = site.path(sb, 'project');
       const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
       plantUserFile(path);
       mkdirSync(dirname(rule), { recursive: true });
-      writeFileSync(rule, 'legacy rule\n');
+      writeFileSync(rule, 'my own rule\n');
       assert.deepEqual(
         await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
-        { action: 'removed', path: rule, note: `kept ${path}: ${KEPT_NOTE}` },
+        { action: 'skipped', path: `${path}, ${rule}`, reason: 'foreign', note: `kept ${path}: ${KEPT_NOTE}; kept ${rule}: ${KEPT_NOTE}` },
       );
       assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
-      assert.equal(existsSync(rule), false);
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall keeps a user\'s own .mdc rule alone, and names it (#998)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-alone', async (sb) => {
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(rule), { recursive: true });
+      writeFileSync(rule, 'my own rule\n');
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'skipped', path: rule, reason: 'foreign', note: KEPT_NOTE },
+      );
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall removes a dangling link at .cursor/rules/<id>.mdc instead of skipping it with an empty path (#998)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-link', async (sb) => {
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(rule), { recursive: true });
+      symlinkSync(resolve(sb.proj, 'gone/SKILL.md'), rule);
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'removed', path: rule },
+      );
+      assert.throws(() => lstatSync(rule), { code: 'ENOENT' });
+    });
+  });
+
+  it('cursor lists a .mdc rule only when it is a link, and flags a dangling one (#998)', async () => {
+    await inLinkSandbox(tmpRoot, 'cursor-rule-list', async (sb) => {
+      const rulesDir = resolve(sb.proj, '.cursor/rules');
+      mkdirSync(rulesDir, { recursive: true });
+      writeFileSync(resolve(rulesDir, 'my-own-rule.mdc'), 'my own rule\n');
+      symlinkSync(resolve(sb.proj, 'gone/SKILL.md'), resolve(rulesDir, 'commit-changes.mdc'));
+      assert.deepEqual(await new CursorAdapter().listInstalled(sb.proj), [
+        { id: 'commit-changes', type: 'skill', path: resolve(rulesDir, 'commit-changes.mdc'), format: 'mdc', broken: true },
+      ]);
     });
   });
 
