@@ -108,7 +108,9 @@ system_prompt_id = "${item.id}"
     if (existsSync(agentsDir)) {
       for (const name of readdirSync(agentsDir)) {
         if (name.endsWith('.toml')) {
-          // Agent .toml files are generated in place, not linked — they cannot dangle.
+          // Agent .toml files are generated, not linked, so the listing sets
+          // broken: false; a link someone planted at that path is listed the same
+          // way (the listing is unchanged by #998; uninstall removes such a link).
           items.push({ id: name.replace(/\.toml$/, ''), type: 'agent', path: resolve(agentsDir, name), broken: false });
         }
       }

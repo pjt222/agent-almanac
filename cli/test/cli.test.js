@@ -1228,8 +1228,8 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
   // The literals, not the imported constants, so a rewording is seen.
   const UNMARKED = 'no agent-almanac marker, and not what this version would generate there: written by hand, or by agent-almanac 1.9.1 or earlier; left in place';
   const UNCOMPARED = 'no agent-almanac marker, and its source could not be read to compare; left in place';
-  const ADOPTED = "an unmarked file holding exactly this content was here (written by agent-almanac 1.9.1 or earlier); it now carries agent-almanac's marker";
-  const UNMARKED_REMOVED = 'unmarked, and exactly what this version generates (written by agent-almanac 1.9.1 or earlier); removed';
+  const ADOPTED = "an unmarked file holding exactly this content was here (as agent-almanac 1.9.1 and earlier wrote it, with no marker); it was replaced by an identical file carrying agent-almanac's marker";
+  const UNMARKED_REMOVED = 'unmarked, and exactly what this version generates (as agent-almanac 1.9.1 and earlier wrote it, with no marker); removed';
   const MY_OWN = 'MY OWN file, never written by agent-almanac\n';
 
   const SITES = [
@@ -1441,7 +1441,7 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
       const path = site.path(sb);
       await install(site, sb);
       writeFileSync(placement.sidecarPath(path), 'not a marker\n');
-      const kept = { action: 'skipped', path, reason: 'foreign', note: "beside it is a file at the marker's path that agent-almanac did not write; left in place" };
+      const kept = { action: 'skipped', path, reason: 'foreign', note: "beside it is a file at the marker's path that is not a marker this agent-almanac can read; left in place" };
       assert.deepEqual(await uninstall(site, sb), kept);
       assert.deepEqual(await install(site, sb, { force: true }), kept);
       assert.equal(readFileSync(placement.sidecarPath(path), 'utf8'), 'not a marker\n');
