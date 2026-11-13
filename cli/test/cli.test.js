@@ -1397,6 +1397,20 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
     });
   });
 
+  it('keeps an unmarked file holding exactly this version\'s output when a file that is not a marker sits at its marker\'s path', async () => {
+    await inSandbox('clash', async (sb) => {
+      const site = SITES[0];
+      const path = site.path(sb);
+      await install(site, sb);
+      writeFileSync(placement.sidecarPath(path), 'not a marker\n');
+      const kept = { action: 'skipped', path, reason: 'foreign', note: "beside it is a file at the marker's path that agent-almanac did not write; left in place" };
+      assert.deepEqual(await uninstall(site, sb), kept);
+      assert.deepEqual(await install(site, sb, { force: true }), kept);
+      assert.equal(readFileSync(placement.sidecarPath(path), 'utf8'), 'not a marker\n');
+      assert.equal(existsSync(path), true);
+    });
+  });
+
   it('refuses to generate from a content root that names no package and version', async () => {
     await inSandbox('noident', async (sb) => {
       rmSync(resolve(sb.src, 'package.json'));

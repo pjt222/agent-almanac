@@ -699,9 +699,9 @@ function decide(entryPath, entry, force, copyFrom, regenerated) {
  *   is the same as for a copied file: removable or replaceable while unedited.
  * @param {string|Buffer} [args.regenerated] - The bytes a generated file
  *   would hold now (#998, placeGenerated()). An unmarked file holding exactly
- *   these is taken over, with or without --force: moved aside like a copy
- *   being replaced, and the result carries `adopted: true`. Opt-in: pi's
- *   agents (#1007) do not pass it.
+ *   these is taken over, with or without --force: replaced in place by the
+ *   rename, and the result carries `adopted: true`. Opt-in: pi's agents
+ *   (#1007) do not pass it.
  * @returns {import('../adapters/base.js').InstallResult}
  */
 export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, force = false, content, regenerated }) {
@@ -737,11 +737,11 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
       } else if (current.kind === 'copy') {
         renameSync(entryPath, replaced);
         if (!current.isDir) renameSync(sidecarPath(entryPath), replacedMarker);
-      } else if (current.kind === 'foreign') {
-        // decide() lets a foreign entry through only as an unmarked file
-        // holding exactly `regenerated` (#998). It has no sidecar to move.
-        renameSync(entryPath, replaced);
       }
+      // A foreign entry gets here only as an unmarked file holding exactly
+      // `regenerated` (#998). It is not moved aside: it has no sidecar, and the
+      // rename below replaces it in one step, so a failed swap leaves it as it
+      // was, with only the new sidecar to remove.
 
       try {
         if (!isDir) renameSync(sidecarPath(staged), sidecarPath(entryPath));
@@ -754,7 +754,6 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
             renameSync(replaced, entryPath);
             if (!current.isDir) renameSync(replacedMarker, sidecarPath(entryPath));
           }
-          if (current.kind === 'foreign') renameSync(replaced, entryPath);
         } catch {
           keepStaging = true;
           throw new Error(`${err.message}; what was at ${entryPath} could not be put back and is kept in ${staging}`);
@@ -793,6 +792,15 @@ export const UNMARKED_NOTE = 'no agent-almanac marker, and not what this version
 /** The same, when the source could not be read, so nothing was compared. */
 export const UNCOMPARED_NOTE = 'no agent-almanac marker, and its source could not be read to compare; left in place';
 
+/** The same, when a file that is not agent-almanac's marker sits at the marker's path beside it. */
+export const MARKER_CLASH_NOTE = 'beside it is a file at the marker\'s path that agent-almanac did not write; left in place';
+
+/** The note for a foreign entry kept at a generated path, by why it was kept. */
+function keptGeneratedNote(entryPath, compared) {
+  if (classify(entryPath).markerUnreadable) return MARKER_CLASH_NOTE;
+  return compared ? UNMARKED_NOTE : UNCOMPARED_NOTE;
+}
+
 /** Printed when an install takes over an unmarked file holding exactly what it would write. */
 export const ADOPTED_NOTE = 'an unmarked file holding exactly this content was here (written by agent-almanac 1.9.1 or earlier); it now carries agent-almanac\'s marker';
 
@@ -823,7 +831,7 @@ function generatedResult(result) {
     const from = marker ? ` from ${marker.package.name} ${marker.package.version}` : '';
     return { ...result, note: `already generated${from}; ${REGENERATE} to regenerate it from the current source if it is unedited` };
   }
-  if (result.reason === 'foreign') return { ...result, note: UNMARKED_NOTE };
+  if (result.reason === 'foreign') return { ...result, note: keptGeneratedNote(result.path, true) };
   if (result.reason === 'edited') return { ...result, note: generatedWording(result.note) };
   if (result.action === 'created') {
     const { adopted, ...created } = result;
@@ -887,7 +895,7 @@ export function placeGenerated({ base, name, source, content, item, options }) {
  */
 export function removeGenerated(base, name, { dryRun = false, content } = {}) {
   const result = removeEntry(base, name, { dryRun, regenerated: content });
-  if (result.reason === 'foreign') return { ...result, note: content === undefined ? UNCOMPARED_NOTE : UNMARKED_NOTE };
+  if (result.reason === 'foreign') return { ...result, note: keptGeneratedNote(result.path, content !== undefined) };
   if (result.reason === 'edited') return { ...result, note: generatedWording(result.note) };
   if (result.details === 'unmarked') return { ...result, note: UNMARKED_REMOVED_NOTE };
   if (result.details === 'copy') return { ...result, details: 'generated' };
