@@ -5,9 +5,10 @@
  * Auto-detects which pattern is in use. Skills only.
  */
 
-import { existsSync, mkdirSync, writeFileSync, unlinkSync, readFileSync, readdirSync } from 'fs';
+import { existsSync, writeFileSync, readFileSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
+import { classify, placeGenerated, removeGenerated } from '../lib/placement.js';
 import { condenseSkill, wrapInMarkers, removeMarkedSection, hasMarkedSection } from '../lib/transformer.js';
 
 export class WindsurfAdapter extends FrameworkAdapter {
@@ -28,6 +29,10 @@ export class WindsurfAdapter extends FrameworkAdapter {
            !existsSync(resolve(projectDir, '.windsurf/rules'));
   }
 
+  _skillPath(item, options) {
+    return resolve(item.sourceDir || resolve(options.almanacRoot, 'skills', item.id), 'SKILL.md');
+  }
+
   async install(item, projectDir, scope, options = {}) {
     if (item.type !== 'skill') return { action: 'skipped', path: '', details: 'Windsurf supports skills only' };
 
@@ -35,17 +40,14 @@ export class WindsurfAdapter extends FrameworkAdapter {
       return this._appendToFile(item, projectDir, options);
     }
 
-    // Directory mode: .windsurf/rules/<id>.md
+    // Directory mode: .windsurf/rules/<id>.md, a generated file with a
+    // sidecar marker, so uninstall and --force touch only the CLI's own (#998).
     const rulesDir = resolve(projectDir, '.windsurf/rules');
-    const targetPath = childPath(rulesDir, `${item.id}.md`);
+    const name = `${item.id}.md`;
+    const targetPath = childPath(rulesDir, name);
     if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
-
-    mkdirSync(rulesDir, { recursive: true });
-    const skillPath = resolve(item.sourceDir || resolve(options.almanacRoot, 'skills', item.id), 'SKILL.md');
-    const condensed = condenseSkill(skillPath);
-    writeFileSync(targetPath, condensed, 'utf8');
-    return { action: 'created', path: targetPath };
+    const skillPath = this._skillPath(item, options);
+    return placeGenerated({ base: rulesDir, name, source: skillPath, content: condenseSkill(skillPath), item, options });
   }
 
   async _appendToFile(item, projectDir, options) {
@@ -67,12 +69,18 @@ export class WindsurfAdapter extends FrameworkAdapter {
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
-    // Try directory mode first
-    const rulePath = childPath(resolve(projectDir, '.windsurf/rules'), `${item.id}.md`);
-    if (existsSync(rulePath)) {
-      if (options.dryRun) return { action: 'removed', path: rulePath, details: 'dry-run' };
-      unlinkSync(rulePath);
-      return { action: 'removed', path: rulePath };
+    // Directory mode first. classify() is lstat-based, so a link there,
+    // dangling or not, is found and removed; a file goes only while it is the
+    // CLI's own, marked and unedited, or unmarked and exactly what this
+    // version would write (#998).
+    const rulesDir = resolve(projectDir, '.windsurf/rules');
+    const name = `${item.id}.md`;
+    if (classify(childPath(rulesDir, name)).kind !== 'absent') {
+      let content;
+      try {
+        content = condenseSkill(this._skillPath(item, options));
+      } catch { /* source unreadable: compare nothing, keep an unmarked file */ }
+      return removeGenerated(rulesDir, name, { dryRun: options.dryRun, content });
     }
 
     // Try single file mode

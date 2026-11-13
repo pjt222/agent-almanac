@@ -1210,6 +1210,257 @@ describe('pi agents (#1007)', () => {
   });
 });
 
+// ── generated files: the CLI removes or replaces only its own (#998) ──
+//
+// windsurf's rules, ai-edge's distillations and vibe's agent TOML are files the
+// CLI generates. Before #998 their uninstall unlinked whatever regular file sat
+// at the path, and install --force overwrote it. Now each is written through
+// placeGenerated(), with the sidecar marker a copy carries, and removed through
+// removeGenerated(): a marked, unedited file goes; an unmarked file holding
+// exactly what this version would generate (agent-almanac 1.9.1 and earlier
+// wrote no marker) is taken over; anything else is kept with a note.
+//
+// Each test builds its own sandbox, so a mutant that breaks one test cannot
+// fail a later one through the state it leaves.
+
+describe('generated files: the CLI removes or replaces only its own (#998)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  // The literals, not the imported constants, so a rewording is seen.
+  const UNMARKED = 'no agent-almanac marker, and not what this version would generate there: written by hand, or by agent-almanac 1.9.1 or earlier; left in place';
+  const UNCOMPARED = 'no agent-almanac marker, and its source could not be read to compare; left in place';
+  const ADOPTED = "an unmarked file holding exactly this content was here (written by agent-almanac 1.9.1 or earlier); it now carries agent-almanac's marker";
+  const UNMARKED_REMOVED = 'unmarked, and exactly what this version generates (written by agent-almanac 1.9.1 or earlier); removed';
+  const MY_OWN = 'MY OWN file, never written by agent-almanac\n';
+
+  const SITES = [
+    { name: 'windsurf rule', adapter: () => getAdapter('windsurf'), item: (sb) => sb.skill, scope: 'project', path: (sb) => resolve(sb.proj, '.windsurf/rules/gen-skill.md') },
+    { name: 'ai-edge skill', adapter: () => getAdapter('ai-edge'), item: (sb) => sb.skill, scope: 'project', path: (sb) => resolve(sb.proj, '.ai-edge/skills/gen-skill.md') },
+    { name: 'ai-edge agent', adapter: () => getAdapter('ai-edge'), item: (sb) => sb.agent, scope: 'project', path: (sb) => resolve(sb.proj, '.ai-edge/agents/gen-agent.md') },
+    { name: 'vibe agent', adapter: () => getAdapter('vibe'), item: (sb) => sb.agent, scope: 'global', path: (sb) => resolve(sb.home, '.vibe/agents/gen-agent.toml') },
+  ];
+
+  /** A fresh content root, project and home for one test; HOME points at the home (vibe's agents live there). */
+  async function inSandbox(label, fn) {
+    const root = realpathSync(mkdtempSync(resolve(tmpdir(), `almanac-998-${label}-`)));
+    const saved = { HOME: process.env.HOME, USERPROFILE: process.env.USERPROFILE };
+    try {
+      const src = resolve(root, 'src');
+      const proj = resolve(root, 'proj');
+      const home = resolve(root, 'home');
+      mkdirSync(resolve(src, 'skills/gen-skill'), { recursive: true });
+      mkdirSync(resolve(src, 'agents'), { recursive: true });
+      mkdirSync(proj, { recursive: true });
+      mkdirSync(home, { recursive: true });
+      writeFileSync(resolve(src, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: '9.9.9-test' }));
+      copyFileSync(resolve(ROOT, 'skills/commit-changes/SKILL.md'), resolve(src, 'skills/gen-skill/SKILL.md'));
+      copyFileSync(resolve(ROOT, 'agents/code-reviewer.md'), resolve(src, 'agents/gen-agent.md'));
+      process.env.HOME = home;
+      process.env.USERPROFILE = home;
+      await fn({
+        root, src, proj, home,
+        skill: { type: 'skill', id: 'gen-skill', sourceDir: resolve(src, 'skills/gen-skill'), sourcePath: resolve(src, 'skills/gen-skill/SKILL.md') },
+        agent: { type: 'agent', id: 'gen-agent', sourcePath: resolve(src, 'agents/gen-agent.md'), description: 'An agent for the test.', tools: ['Read', 'Grep'] },
+      });
+    } finally {
+      for (const [key, value] of Object.entries(saved)) {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+      }
+      rmTree(root);
+    }
+  }
+
+  const install = (site, sb, extra = {}) => site.adapter().install(site.item(sb), sb.proj, site.scope, { almanacRoot: sb.src, ...extra });
+  // No almanacRoot: the CLI's uninstall passes none (cli/index.js).
+  const uninstall = (site, sb, extra = {}) => site.adapter().uninstall(site.item(sb), sb.proj, site.scope, { ...extra });
+  const plant = (path, text) => {
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, text);
+  };
+
+  for (const site of SITES) {
+    it(`${site.name}: keeps a user's own file on uninstall, install and install --force, and names it as kept`, async () => {
+      await inSandbox('own', async (sb) => {
+        const path = site.path(sb);
+        plant(path, MY_OWN);
+        const kept = { action: 'skipped', path, reason: 'foreign', note: UNMARKED };
+        assert.deepEqual(await uninstall(site, sb), kept);
+        assert.deepEqual(await install(site, sb), kept);
+        assert.deepEqual(await install(site, sb, { force: true }), kept);
+        assert.equal(readFileSync(path, 'utf8'), MY_OWN);
+        assert.equal(existsSync(placement.sidecarPath(path)), false);
+      });
+    });
+
+    it(`${site.name}: installs a marked file, and uninstall removes it and its sidecar`, async () => {
+      await inSandbox('marked', async (sb) => {
+        const path = site.path(sb);
+        assert.deepEqual(await install(site, sb), { action: 'created', path, details: 'generated' });
+        assert.equal(existsSync(placement.sidecarPath(path)), true);
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path, details: 'generated' });
+        assert.equal(existsSync(path), false);
+        assert.equal(existsSync(placement.sidecarPath(path)), false);
+      });
+    });
+
+    it(`${site.name}: a second install keeps the file and names the same install with --force`, async () => {
+      await inSandbox('again', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        assert.deepEqual(await install(site, sb), {
+          action: 'skipped', path, reason: 'already-copied',
+          note: 'already generated from agent-almanac 9.9.9-test; run the same install with `--force` to regenerate it from the current source if it is unedited',
+        });
+      });
+    });
+
+    it(`${site.name}: keeps a generated file the user edited, on install --force and uninstall`, async () => {
+      await inSandbox('edited', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        writeFileSync(path, `${readFileSync(path, 'utf8')}an edit\n`);
+        const forced = await install(site, sb, { force: true });
+        assert.equal(forced.reason, 'edited', JSON.stringify(forced));
+        assert.ok(forced.note.startsWith('edited since it was generated'), forced.note);
+        const removed = await uninstall(site, sb);
+        assert.equal(removed.reason, 'edited', JSON.stringify(removed));
+        assert.ok(readFileSync(path, 'utf8').endsWith('an edit\n'));
+      });
+    });
+
+    it(`${site.name}: a plain install takes over an unmarked file holding exactly this version's output, and marks it`, async () => {
+      await inSandbox('adopt', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        const bytes = readFileSync(path);
+        rmSync(placement.sidecarPath(path)); // as agent-almanac 1.9.1 left it
+        assert.deepEqual(await install(site, sb), { action: 'created', path, details: 'generated', note: ADOPTED });
+        assert.equal(existsSync(placement.sidecarPath(path)), true);
+        assert.ok(readFileSync(path).equals(bytes), 'taking the file over changed its content');
+      });
+    });
+
+    it(`${site.name}: uninstall removes an unmarked file holding exactly this version's output`, async () => {
+      await inSandbox('legacy', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path, details: 'unmarked', note: UNMARKED_REMOVED });
+        assert.equal(existsSync(path), false);
+      });
+    });
+
+    it(`${site.name}: keeps an unmarked file one byte away from this version's output`, async () => {
+      await inSandbox('near', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        writeFileSync(path, `${readFileSync(path, 'utf8')}x`);
+        const kept = { action: 'skipped', path, reason: 'foreign', note: UNMARKED };
+        assert.deepEqual(await uninstall(site, sb), kept);
+        assert.deepEqual(await install(site, sb, { force: true }), kept);
+        assert.ok(readFileSync(path, 'utf8').endsWith('x'));
+      });
+    });
+
+    it(`${site.name}: replaces a link only with --force, never writes through it, and uninstall removes a dangling one`, async () => {
+      await inSandbox('link', async (sb) => {
+        const path = site.path(sb);
+        const target = resolve(sb.root, 'target.txt');
+        writeFileSync(target, 'TARGET\n');
+        mkdirSync(dirname(path), { recursive: true });
+        symlinkSync(target, path);
+        assert.deepEqual(await install(site, sb), {
+          action: 'skipped', path, reason: 'link-kept',
+          note: `a link is here (-> ${target}); run the same install with \`--force\` to replace it with the generated file`,
+        });
+        assert.equal((await install(site, sb, { force: true })).action, 'created');
+        assert.equal(lstatSync(path).isSymbolicLink(), false);
+        assert.equal(readFileSync(target, 'utf8'), 'TARGET\n');
+        await uninstall(site, sb);
+        symlinkSync(resolve(sb.root, 'gone.txt'), path);
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path });
+        assert.throws(() => lstatSync(path), { code: 'ENOENT' });
+      });
+    });
+  }
+
+  it('keeps an unmarked file when the source cannot be read to compare, without throwing', async () => {
+    await inSandbox('nosource', async (sb) => {
+      const site = SITES[0];
+      const path = site.path(sb);
+      await install(site, sb);
+      rmSync(placement.sidecarPath(path));
+      const missing = { ...sb.skill, sourceDir: resolve(sb.src, 'skills/no-such-skill'), sourcePath: resolve(sb.src, 'skills/no-such-skill/SKILL.md') };
+      assert.deepEqual(await site.adapter().uninstall(missing, sb.proj, 'project', {}), { action: 'skipped', path, reason: 'foreign', note: UNCOMPARED });
+      assert.equal(existsSync(path), true);
+    });
+  });
+
+  it('refuses to generate from a content root that names no package and version', async () => {
+    await inSandbox('noident', async (sb) => {
+      rmSync(resolve(sb.src, 'package.json'));
+      await assert.rejects(install(SITES[0], sb), /^Error: not generated: .*package\.json names no package and version/);
+      assert.equal(existsSync(SITES[0].path(sb)), false);
+    });
+  });
+
+  it('never opens a FIFO at a generated path, with or without --force', { skip: process.platform === 'win32' && 'POSIX FIFO' }, async () => {
+    await inSandbox('fifo', async (sb) => {
+      const path = SITES[0].path(sb);
+      mkdirSync(dirname(path), { recursive: true });
+      execSync(`mkfifo '${path}'`);
+      // In a child with a timeout: reading a FIFO blocks, and a block in this
+      // process would hang the whole suite instead of failing this test.
+      const script = `
+        import * as placement from ${JSON.stringify(resolve(ROOT, 'cli/lib/placement.js'))};
+        const r = placement.removeGenerated(${JSON.stringify(dirname(path))}, 'gen-skill.md', { content: 'x' });
+        process.stdout.write(JSON.stringify(r));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 10000 });
+      assert.equal(res.error, undefined, `the child blocked or failed to start: ${res.error}`);
+      assert.equal(res.status, 0, res.stderr);
+      assert.deepEqual(JSON.parse(res.stdout), { action: 'skipped', path, reason: 'foreign', note: UNMARKED });
+      assert.equal(lstatSync(path).isFIFO(), true);
+    });
+  });
+
+  // End to end through the CLI, so the item uninstall builds is the one install
+  // built: a vibe agent's TOML embeds its source path, and a difference there
+  // would make the takeover of an unmarked file never fire.
+  // uninstall takes bare names, resolved skill first, then agent: the same
+  // registry item install --agent resolves.
+  for (const [framework, installArgs, uninstallArgs, rel] of [
+    ['windsurf', ['commit-changes'], ['commit-changes'], (sb) => resolve(sb.proj, '.windsurf/rules/commit-changes.md')],
+    ['ai-edge', ['commit-changes'], ['commit-changes'], (sb) => resolve(sb.proj, '.ai-edge/skills/commit-changes.md')],
+    ['vibe', ['--agent', 'code-reviewer'], ['code-reviewer'], (sb) => resolve(sb.home, '.vibe/agents/code-reviewer.toml')],
+  ]) {
+    it(`${framework}, through the CLI: uninstall removes an unmarked file the same install wrote, and keeps one a byte away`, async () => {
+      await inSandbox(`cli-${framework}`, async (sb) => {
+        const env = { ...process.env, HOME: sb.home, USERPROFILE: sb.home, HERMES_HOME: resolve(sb.home, '.hermes'), NO_COLOR: '1' };
+        delete env.LOCALAPPDATA;
+        const run = (verb) => {
+          const args = verb === 'install' ? installArgs : uninstallArgs;
+          const res = spawnSync(process.execPath, [cliEntry, verb, ...args, '-f', framework, '--source', ROOT], { cwd: sb.proj, env, encoding: 'utf8', timeout: 20000 });
+          assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+          assert.equal(res.status, 0, `${verb}: ${res.stdout}${res.stderr}`);
+          return res.stdout;
+        };
+        const path = rel(sb);
+        run('install');
+        rmSync(placement.sidecarPath(path));
+        const bytes = readFileSync(path);
+        assert.match(run('uninstall'), /1 removed/);
+        assert.equal(existsSync(path), false);
+        plant(path, Buffer.concat([bytes, Buffer.from('x')]));
+        const out = run('uninstall');
+        assert.match(out, /1 skipped/);
+        assert.ok(out.includes(UNMARKED), out);
+        assert.equal(existsSync(path), true);
+      });
+    });
+  }
+});
+
 // ── audit exit codes, end to end (#439) ──────────────────────────
 //
 // The block above covers auditExitCode()'s logic, but it cannot see whether the
