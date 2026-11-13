@@ -1341,6 +1341,21 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
       });
     });
 
+    it(`${site.name}: a takeover keeps the file's permission bits`, { skip: process.platform === 'win32' && 'POSIX permission bits' }, async () => {
+      await inSandbox('mode', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        chmodSync(path, 0o444);
+        try {
+          assert.equal((await install(site, sb)).note, ADOPTED);
+          assert.equal(lstatSync(path).mode & 0o777, 0o444);
+        } finally {
+          chmodSync(path, 0o644);
+        }
+      });
+    });
+
     it(`${site.name}: uninstall removes an unmarked file holding exactly this version's output`, async () => {
       await inSandbox('legacy', async (sb) => {
         const path = site.path(sb);

@@ -44,7 +44,7 @@
 import { createHash } from 'crypto';
 import {
   constants as fsConstants,
-  copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync,
+  chmodSync, copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync,
   readlinkSync, renameSync, rmdirSync, rmSync, symlinkSync, unlinkSync, writeFileSync,
 } from 'fs';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'path';
@@ -750,7 +750,10 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
       // A foreign entry gets here only as an unmarked file holding exactly
       // `regenerated` (#998). It is not moved aside: it has no sidecar, and the
       // rename below replaces it in one step, so a failed swap leaves it as it
-      // was, with only the new sidecar to remove.
+      // was, with only the new sidecar to remove. Its permission bits go to
+      // the identical file that replaces it (#1067 round 1, the maintainer's
+      // choice); a hard link to it is not kept.
+      if (current.kind === 'foreign') chmodSync(staged, lstatSync(entryPath).mode & 0o7777);
 
       try {
         if (!isDir) renameSync(sidecarPath(staged), sidecarPath(entryPath));
