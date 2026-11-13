@@ -1210,6 +1210,309 @@ describe('pi agents (#1007)', () => {
   });
 });
 
+// ── generated files: the CLI removes or replaces only its own (#998) ──
+//
+// windsurf's rules, ai-edge's distillations and vibe's agent TOML are files the
+// CLI generates. Before #998 their uninstall unlinked whatever regular file sat
+// at the path, and install --force overwrote it. Now each is written through
+// placeGenerated(), with the sidecar marker a copy carries, and removed through
+// removeGenerated(): a marked, unedited file goes; an unmarked file holding
+// exactly what this version would generate (agent-almanac 1.9.1 and earlier
+// wrote no marker) is taken over; anything else is kept with a note.
+//
+// Each test builds its own sandbox, so a mutant that breaks one test cannot
+// fail a later one through the state it leaves.
+
+describe('generated files: the CLI removes or replaces only its own (#998)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  // The literals, not the imported constants, so a rewording is seen.
+  const UNMARKED = 'no agent-almanac marker, and not what this version would generate there: written by hand, or by agent-almanac 1.9.1 or earlier; left in place';
+  const UNCOMPARED = 'no agent-almanac marker, and its source could not be read to compare; left in place';
+  const ADOPTED = "an unmarked file holding exactly this content was here (as agent-almanac 1.9.1 and earlier wrote it, with no marker); it was replaced by an identical file carrying agent-almanac's marker";
+  const UNMARKED_REMOVED = 'unmarked, and exactly what this version generates (as agent-almanac 1.9.1 and earlier wrote it, with no marker); removed';
+  const MY_OWN = 'MY OWN file, never written by agent-almanac\n';
+
+  const SITES = [
+    { name: 'windsurf rule', adapter: () => getAdapter('windsurf'), item: (sb) => sb.skill, scope: 'project', path: (sb) => resolve(sb.proj, '.windsurf/rules/gen-skill.md') },
+    { name: 'ai-edge skill', adapter: () => getAdapter('ai-edge'), item: (sb) => sb.skill, scope: 'project', path: (sb) => resolve(sb.proj, '.ai-edge/skills/gen-skill.md') },
+    { name: 'ai-edge agent', adapter: () => getAdapter('ai-edge'), item: (sb) => sb.agent, scope: 'project', path: (sb) => resolve(sb.proj, '.ai-edge/agents/gen-agent.md') },
+    { name: 'vibe agent', adapter: () => getAdapter('vibe'), item: (sb) => sb.agent, scope: 'global', path: (sb) => resolve(sb.home, '.vibe/agents/gen-agent.toml') },
+  ];
+
+  /** A fresh content root, project and home for one test; HOME points at the home (vibe's agents live there). */
+  async function inSandbox(label, fn) {
+    const root = realpathSync(mkdtempSync(resolve(tmpdir(), `almanac-998-${label}-`)));
+    const saved = { HOME: process.env.HOME, USERPROFILE: process.env.USERPROFILE };
+    try {
+      const src = resolve(root, 'src');
+      const proj = resolve(root, 'proj');
+      const home = resolve(root, 'home');
+      mkdirSync(resolve(src, 'skills/gen-skill'), { recursive: true });
+      mkdirSync(resolve(src, 'agents'), { recursive: true });
+      mkdirSync(proj, { recursive: true });
+      mkdirSync(home, { recursive: true });
+      writeFileSync(resolve(src, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: '9.9.9-test' }));
+      copyFileSync(resolve(ROOT, 'skills/commit-changes/SKILL.md'), resolve(src, 'skills/gen-skill/SKILL.md'));
+      copyFileSync(resolve(ROOT, 'agents/code-reviewer.md'), resolve(src, 'agents/gen-agent.md'));
+      process.env.HOME = home;
+      process.env.USERPROFILE = home;
+      await fn({
+        root, src, proj, home,
+        skill: { type: 'skill', id: 'gen-skill', sourceDir: resolve(src, 'skills/gen-skill'), sourcePath: resolve(src, 'skills/gen-skill/SKILL.md') },
+        agent: { type: 'agent', id: 'gen-agent', sourcePath: resolve(src, 'agents/gen-agent.md'), description: 'An agent for the test.', tools: ['Read', 'Grep'] },
+      });
+    } finally {
+      for (const [key, value] of Object.entries(saved)) {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+      }
+      rmTree(root);
+    }
+  }
+
+  const install = (site, sb, extra = {}) => site.adapter().install(site.item(sb), sb.proj, site.scope, { almanacRoot: sb.src, ...extra });
+  // No almanacRoot: the CLI's uninstall passes none (cli/index.js).
+  const uninstall = (site, sb, extra = {}) => site.adapter().uninstall(site.item(sb), sb.proj, site.scope, { ...extra });
+  const plant = (path, text) => {
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, text);
+  };
+
+  for (const site of SITES) {
+    it(`${site.name}: keeps a user's own file on uninstall, install and install --force, and names it as kept`, async () => {
+      await inSandbox('own', async (sb) => {
+        const path = site.path(sb);
+        plant(path, MY_OWN);
+        const kept = { action: 'skipped', path, reason: 'foreign', note: UNMARKED };
+        assert.deepEqual(await uninstall(site, sb), kept);
+        assert.deepEqual(await install(site, sb), kept);
+        assert.deepEqual(await install(site, sb, { force: true }), kept);
+        assert.equal(readFileSync(path, 'utf8'), MY_OWN);
+        assert.equal(existsSync(placement.sidecarPath(path)), false);
+      });
+    });
+
+    it(`${site.name}: installs a marked file, and uninstall removes it and its sidecar`, async () => {
+      await inSandbox('marked', async (sb) => {
+        const path = site.path(sb);
+        assert.deepEqual(await install(site, sb), { action: 'created', path, details: 'generated' });
+        assert.equal(existsSync(placement.sidecarPath(path)), true);
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path, details: 'generated' });
+        assert.equal(existsSync(path), false);
+        assert.equal(existsSync(placement.sidecarPath(path)), false);
+      });
+    });
+
+    it(`${site.name}: a second install keeps the file and names the same install with --force`, async () => {
+      await inSandbox('again', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        assert.deepEqual(await install(site, sb), {
+          action: 'skipped', path, reason: 'already-copied',
+          note: 'already generated from agent-almanac 9.9.9-test; run the same install with `--force` to regenerate it from the current source if it is unedited',
+        });
+      });
+    });
+
+    it(`${site.name}: keeps a generated file the user edited, on install --force and uninstall`, async () => {
+      await inSandbox('edited', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        writeFileSync(path, `${readFileSync(path, 'utf8')}an edit\n`);
+        const forced = await install(site, sb, { force: true });
+        assert.equal(forced.reason, 'edited', JSON.stringify(forced));
+        assert.ok(forced.note.startsWith('edited since it was generated'), forced.note);
+        const removed = await uninstall(site, sb);
+        assert.equal(removed.reason, 'edited', JSON.stringify(removed));
+        assert.ok(removed.note.startsWith('edited since it was generated'), removed.note);
+        assert.ok(readFileSync(path, 'utf8').endsWith('an edit\n'));
+      });
+    });
+
+    it(`${site.name}: a plain install takes over an unmarked file holding exactly this version's output, and marks it`, async () => {
+      await inSandbox('adopt', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        const bytes = readFileSync(path);
+        rmSync(placement.sidecarPath(path)); // as agent-almanac 1.9.1 left it
+        assert.deepEqual(await install(site, sb), { action: 'created', path, details: 'generated', note: ADOPTED });
+        assert.equal(existsSync(placement.sidecarPath(path)), true);
+        assert.ok(readFileSync(path).equals(bytes), 'taking the file over changed its content');
+      });
+    });
+
+    it(`${site.name}: a takeover keeps the file's permission bits`, { skip: process.platform === 'win32' && 'POSIX permission bits' }, async () => {
+      await inSandbox('mode', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        chmodSync(path, 0o444);
+        try {
+          assert.equal((await install(site, sb)).note, ADOPTED);
+          assert.equal(lstatSync(path).mode & 0o777, 0o444);
+        } finally {
+          chmodSync(path, 0o644);
+        }
+      });
+    });
+
+    it(`${site.name}: uninstall removes an unmarked file holding exactly this version's output`, async () => {
+      await inSandbox('legacy', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path, details: 'unmarked', note: UNMARKED_REMOVED });
+        assert.equal(existsSync(path), false);
+      });
+    });
+
+    it(`${site.name}: keeps an unmarked file one byte away from this version's output`, async () => {
+      await inSandbox('near', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        writeFileSync(path, `${readFileSync(path, 'utf8')}x`);
+        const kept = { action: 'skipped', path, reason: 'foreign', note: UNMARKED };
+        assert.deepEqual(await uninstall(site, sb), kept);
+        assert.deepEqual(await install(site, sb, { force: true }), kept);
+        assert.ok(readFileSync(path, 'utf8').endsWith('x'));
+      });
+    });
+
+    it(`${site.name}: replaces a link only with --force, never writes through it, and uninstall removes a dangling one`, async () => {
+      await inSandbox('link', async (sb) => {
+        const path = site.path(sb);
+        const target = resolve(sb.root, 'target.txt');
+        writeFileSync(target, 'TARGET\n');
+        mkdirSync(dirname(path), { recursive: true });
+        symlinkSync(target, path);
+        assert.deepEqual(await install(site, sb), {
+          action: 'skipped', path, reason: 'link-kept',
+          note: `a link is here (-> ${target}); run the same install with \`--force\` to replace it with the generated file`,
+        });
+        assert.equal((await install(site, sb, { force: true })).action, 'created');
+        assert.equal(lstatSync(path).isSymbolicLink(), false);
+        assert.equal(readFileSync(target, 'utf8'), 'TARGET\n');
+        await uninstall(site, sb);
+        symlinkSync(resolve(sb.root, 'gone.txt'), path);
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path });
+        assert.throws(() => lstatSync(path), { code: 'ENOENT' });
+      });
+    });
+  }
+
+  for (const site of SITES) {
+    it(`${site.name}: keeps a file it cannot read, names why, and does not fail the run (#1067 round 1, SF-1)`, { skip: (process.platform === 'win32' || process.getuid?.() === 0) && 'needs POSIX permissions and a non-root user' }, async () => {
+      await inSandbox('unreadable', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        chmodSync(path, 0o000); // same size as this version's output, so the comparison has to read it
+        try {
+          const kept = { action: 'skipped', path, reason: 'foreign', note: 'no agent-almanac marker, and it could not be read to compare (EACCES); left in place' };
+          assert.deepEqual(await uninstall(site, sb), kept);
+          assert.deepEqual(await install(site, sb), kept);
+          assert.deepEqual(await install(site, sb, { force: true }), kept);
+          assert.equal(existsSync(path), true);
+        } finally {
+          chmodSync(path, 0o644); // so the sandbox can be removed
+        }
+      });
+    });
+  }
+
+  // vibe's TOML is built from the registry item and reads no file, so it has no such case.
+  for (const site of SITES.filter((s) => s.name !== 'vibe agent')) {
+    it(`${site.name}: keeps an unmarked file when the source cannot be read to compare, without throwing`, async () => {
+      await inSandbox('nosource', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        const missing = { ...site.item(sb), sourceDir: resolve(sb.src, 'no-such-dir'), sourcePath: resolve(sb.src, 'no-such-dir/source.md') };
+        assert.deepEqual(await site.adapter().uninstall(missing, sb.proj, site.scope, {}), { action: 'skipped', path, reason: 'foreign', note: UNCOMPARED });
+        assert.equal(existsSync(path), true);
+      });
+    });
+  }
+
+  it('keeps an unmarked file holding exactly this version\'s output when a file that is not a marker sits at its marker\'s path', async () => {
+    await inSandbox('clash', async (sb) => {
+      const site = SITES[0];
+      const path = site.path(sb);
+      await install(site, sb);
+      writeFileSync(placement.sidecarPath(path), 'not a marker\n');
+      const kept = { action: 'skipped', path, reason: 'foreign', note: "beside it is a file at the marker's path that is not a marker this agent-almanac can read; left in place" };
+      assert.deepEqual(await uninstall(site, sb), kept);
+      assert.deepEqual(await install(site, sb, { force: true }), kept);
+      assert.equal(readFileSync(placement.sidecarPath(path), 'utf8'), 'not a marker\n');
+      assert.equal(existsSync(path), true);
+    });
+  });
+
+  it('refuses to generate from a content root that names no package and version', async () => {
+    await inSandbox('noident', async (sb) => {
+      rmSync(resolve(sb.src, 'package.json'));
+      await assert.rejects(install(SITES[0], sb), /^Error: not generated: .*package\.json names no package and version/);
+      assert.equal(existsSync(SITES[0].path(sb)), false);
+    });
+  });
+
+  it('never opens a FIFO at a generated path, with or without --force', { skip: process.platform === 'win32' && 'POSIX FIFO' }, async () => {
+    await inSandbox('fifo', async (sb) => {
+      const path = SITES[0].path(sb);
+      mkdirSync(dirname(path), { recursive: true });
+      execSync(`mkfifo '${path}'`);
+      // In a child with a timeout: reading a FIFO blocks, and a block in this
+      // process would hang the whole suite instead of failing this test.
+      const script = `
+        import * as placement from ${JSON.stringify(resolve(ROOT, 'cli/lib/placement.js'))};
+        const r = placement.removeGenerated(${JSON.stringify(dirname(path))}, 'gen-skill.md', { content: 'x' });
+        process.stdout.write(JSON.stringify(r));`;
+      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 10000 });
+      assert.equal(res.error, undefined, `the child blocked or failed to start: ${res.error}`);
+      assert.equal(res.status, 0, res.stderr);
+      assert.deepEqual(JSON.parse(res.stdout), { action: 'skipped', path, reason: 'foreign', note: UNMARKED });
+      assert.equal(lstatSync(path).isFIFO(), true);
+    });
+  });
+
+  // End to end through the CLI, so the item uninstall builds is the one install
+  // built: a vibe agent's TOML embeds its source path, and a difference there
+  // would make the takeover of an unmarked file never fire.
+  // uninstall takes bare names, resolved skill first, then agent: the same
+  // registry item install --agent resolves.
+  for (const [framework, installArgs, uninstallArgs, rel] of [
+    ['windsurf', ['commit-changes'], ['commit-changes'], (sb) => resolve(sb.proj, '.windsurf/rules/commit-changes.md')],
+    ['ai-edge', ['commit-changes'], ['commit-changes'], (sb) => resolve(sb.proj, '.ai-edge/skills/commit-changes.md')],
+    ['vibe', ['--agent', 'code-reviewer'], ['code-reviewer'], (sb) => resolve(sb.home, '.vibe/agents/code-reviewer.toml')],
+  ]) {
+    it(`${framework}, through the CLI: uninstall removes an unmarked file the same install wrote, and keeps one a byte away`, async () => {
+      await inSandbox(`cli-${framework}`, async (sb) => {
+        const env = { ...process.env, HOME: sb.home, USERPROFILE: sb.home, HERMES_HOME: resolve(sb.home, '.hermes'), NO_COLOR: '1' };
+        delete env.LOCALAPPDATA;
+        const run = (verb) => {
+          const args = verb === 'install' ? installArgs : uninstallArgs;
+          const res = spawnSync(process.execPath, [cliEntry, verb, ...args, '-f', framework, '--source', ROOT], { cwd: sb.proj, env, encoding: 'utf8', timeout: 20000 });
+          assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+          assert.equal(res.status, 0, `${verb}: ${res.stdout}${res.stderr}`);
+          return res.stdout;
+        };
+        const path = rel(sb);
+        run('install');
+        rmSync(placement.sidecarPath(path));
+        const bytes = readFileSync(path);
+        assert.match(run('uninstall'), /1 removed/);
+        assert.equal(existsSync(path), false);
+        plant(path, Buffer.concat([bytes, Buffer.from('x')]));
+        const out = run('uninstall');
+        assert.match(out, /1 skipped/);
+        assert.ok(out.includes(UNMARKED), out);
+        assert.equal(existsSync(path), true);
+      });
+    });
+  }
+});
+
 // ── audit exit codes, end to end (#439) ──────────────────────────
 //
 // The block above covers auditExitCode()'s logic, but it cannot see whether the
@@ -3940,26 +4243,88 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     });
   });
 
-  it('cursor\'s uninstall still reaches its second path, a .mdc rule, beside a kept skill entry, and names the kept one', async () => {
+  it('cursor\'s uninstall keeps a user\'s own .mdc rule beside a kept skill entry, and names both (#998)', async () => {
     // cursor's uninstall looks at two paths: .cursor/skills/<id> and
-    // .cursor/rules/<id>.mdc. What this pins is that a kept entry at the first
-    // does not stop the second, and the `kept <skillPath>: …` note. No CLI
-    // command writes the .mdc (installLegacyRule has no caller), so the rule
-    // planted here stands for a user's own file, and its deletion is
-    // pre-existing behaviour kept on purpose for now, tracked in #998.
+    // .cursor/rules/<id>.mdc. No CLI command writes the .mdc, so a file there
+    // is the user's own; until #998 the uninstall deleted it. A kept entry at
+    // the first path does not stop the second from being looked at.
     const site = LINK_SITES.find((s) => s.site === 'cursor skill');
     await inLinkSandbox(tmpRoot, 'cursor-rule', async (sb) => {
       const path = site.path(sb, 'project');
       const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
       plantUserFile(path);
       mkdirSync(dirname(rule), { recursive: true });
-      writeFileSync(rule, 'legacy rule\n');
+      writeFileSync(rule, 'my own rule\n');
       assert.deepEqual(
         await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
-        { action: 'removed', path: rule, note: `kept ${path}: ${KEPT_NOTE}` },
+        { action: 'skipped', path: `${path}, ${rule}`, reason: 'foreign', note: `kept ${path}: ${KEPT_NOTE}; kept ${rule}: ${KEPT_NOTE}` },
       );
       assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
-      assert.equal(existsSync(rule), false);
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall removes a skill link and names the user\'s own .mdc rule it kept beside it (#1067 round 1, SF-4)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-mixed', async (sb) => {
+      const path = site.path(sb, 'project');
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(path), { recursive: true });
+      symlinkSync(resolve(sb.src, 'skills/commit-changes'), path);
+      mkdirSync(dirname(rule), { recursive: true });
+      writeFileSync(rule, 'my own rule\n');
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'removed', path, note: `kept ${rule}: ${KEPT_NOTE}` },
+      );
+      assert.throws(() => lstatSync(path), { code: 'ENOENT' });
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall keeps a user\'s own .mdc rule alone, and names it (#998)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-alone', async (sb) => {
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(rule), { recursive: true });
+      writeFileSync(rule, 'my own rule\n');
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'skipped', path: rule, reason: 'foreign', note: KEPT_NOTE },
+      );
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall removes a dangling link at .cursor/rules/<id>.mdc instead of skipping it with an empty path (#998)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-link', async (sb) => {
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(rule), { recursive: true });
+      symlinkSync(resolve(sb.proj, 'gone/SKILL.md'), rule);
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'removed', path: rule },
+      );
+      assert.throws(() => lstatSync(rule), { code: 'ENOENT' });
+    });
+  });
+
+  it('cursor lists a .mdc rule only when it is a link to a SKILL.md, and flags a dangling one (#998; #1067 round 1, SF-2)', async () => {
+    await inLinkSandbox(tmpRoot, 'cursor-rule-list', async (sb) => {
+      const rulesDir = resolve(sb.proj, '.cursor/rules');
+      mkdirSync(rulesDir, { recursive: true });
+      writeFileSync(resolve(rulesDir, 'my-own-rule.mdc'), 'my own rule\n');
+      // The user's own rules linked from a dotfiles repository, live and dangling: theirs, not listed.
+      const dotfiles = resolve(sb.proj, 'dotfiles');
+      mkdirSync(dotfiles, { recursive: true });
+      writeFileSync(resolve(dotfiles, 'my-live-rule.mdc'), 'my live rule\n');
+      symlinkSync(resolve(dotfiles, 'my-live-rule.mdc'), resolve(rulesDir, 'my-live-rule.mdc'));
+      symlinkSync(resolve(dotfiles, 'my-gone-rule.mdc'), resolve(rulesDir, 'my-gone-rule.mdc'));
+      symlinkSync(resolve(sb.proj, 'gone/SKILL.md'), resolve(rulesDir, 'commit-changes.mdc'));
+      assert.deepEqual(await new CursorAdapter().listInstalled(sb.proj), [
+        { id: 'commit-changes', type: 'skill', path: resolve(rulesDir, 'commit-changes.mdc'), format: 'mdc', broken: true },
+      ]);
     });
   });
 

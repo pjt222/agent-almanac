@@ -16,14 +16,14 @@ Universal skill/agent/team installer through 14 adapters, and through the univer
 | Mistral Vibe | `vibe.js` | skills: `.vibe/skills/<id>/` (project), `~/.vibe/skills/<id>/` (global); agents: `~/.vibe/agents/<id>.toml` (global only, generated) |
 | OpenAI Codex | `codex.js` | agents appended to `AGENTS.md` (project only); its skills come from Universal |
 | Google AI Edge | `ai-edge.js` | `.ai-edge/skills/`, `agents/` and `teams/<id>.md` (generated, project only); only with `--framework ai-edge`, as nothing detects it |
-| Cursor | `cursor.js` | `.cursor/skills/<id>/` (project only) |
+| Cursor | `cursor.js` | `.cursor/skills/<id>/` (project only). A link at `.cursor/rules/<id>.mdc` is uninstalled, and listed when it points at a `SKILL.md` as [`skills/README.md`](../skills/README.md) describes; a file there is yours and is kept |
 | Windsurf | `windsurf.js` | `.windsurf/rules/<id>.md` (generated), or a section appended to `.windsurfrules` when that file exists without `.windsurf/rules/` (project only) |
 | GitHub Copilot | `copilot.js` | `.github/skills/<id>/` (project only) |
 | Gemini CLI | `gemini.js` | `.gemini/skills/<id>/` (project only) |
 | pi | `pi.js` | skills: `.pi/skills/<id>/` (project), `<agent-dir>/skills/<id>/` (global); agents: `<agent-dir>/agents/<id>.md` (global only, generated; pi reads it only through its example subagent extension, or a compatible one). `<agent-dir>` is `$PI_CODING_AGENT_DIR`, else `~/.pi/agent`. See [pi](#pi-pidev) |
 | Aider | `aider.js` | a section appended to `CONVENTIONS.md` (project only); its skills also come from Universal |
 
-A skill or agent path above is a link by default, relative in the project and absolute under the home directory. With `--from-package copy` it is a marked copy instead. Generated files and appended sections are never links. An adapter that is project-only or global-only ignores `--scope`.
+A skill or agent path above is a link by default, relative in the project and absolute under the home directory. With `--from-package copy` it is a marked copy instead. Generated files and appended sections are never links; a generated file carries the same hidden sidecar marker as a copied file (see Generated files below). An adapter that is project-only or global-only ignores `--scope`.
 
 ### pi (pi.dev)
 
@@ -240,6 +240,24 @@ case-sensitive, so on a case-insensitive filesystem a path typed with
 `Node_Modules` is not caught. And a clone that happens to live under a
 directory named `node_modules` is refused too, with `--from-package link` as
 its only way through.
+
+**Generated files.** windsurf's `.windsurf/rules/<id>.md`, ai-edge's
+`.ai-edge/{skills,agents,teams}/<id>.md`, vibe's `~/.vibe/agents/<id>.toml` and
+pi's agents are written, not linked or copied, with the same sidecar as a copied
+file, in either placement (#998, #1007). `uninstall` and `install --force` remove
+or replace one only while it is unedited, and keep any other file at the path,
+naming it; one the CLI cannot read is kept too. A link at a windsurf, ai-edge or
+vibe path is removed by `uninstall` and replaced only by `install --force`; a
+link at a pi agent's path is never removed or replaced. `list --installed` and
+`audit` do not read the marker at the windsurf, ai-edge and vibe paths yet.
+
+A windsurf, ai-edge or vibe file that agent-almanac 1.9.1 or earlier wrote has no
+marker. One holding exactly what this version would write is taken over: a plain
+`install` replaces it with an identical file carrying the marker, keeping its
+permission bits, and `uninstall` removes it. One that differs is kept, to be
+deleted by hand once. For a vibe agent, "exactly" includes the content root's
+path as given, which the TOML records. Measured on Linux (WSL), Node 26; Windows
+is unmeasured.
 
 ## Campfire Architecture
 

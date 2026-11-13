@@ -9,6 +9,14 @@
  * tell its own copy from anything else (#606 part 2). The adapters keep their
  * own path arithmetic and call these at each site.
  *
+ * Some sites hold a file the CLI generates instead: pi's agents (#1007), and
+ * windsurf's rules, ai-edge's distillations and vibe's agent TOML (#998).
+ * Those are written in either placement and carry the same marker as a copied
+ * file, so they get a copy's ownership (placeCopy() with `content`, and
+ * placeGenerated() / removeGenerated()). Cursor's `.cursor/rules/<id>.mdc` is
+ * one more removal site with no writer: removeEntry() there removes a link
+ * and keeps a file.
+ *
  * Every path is tested with lstat. existsSync follows a link, so a link whose
  * target is gone used to count as absent: uninstall left it (#993 §2) and
  * install failed with EEXIST when symlinkSync met it (S3-B2 P5).
@@ -36,7 +44,7 @@
 import { createHash } from 'crypto';
 import {
   constants as fsConstants,
-  copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync,
+  chmodSync, copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync,
   readlinkSync, renameSync, rmdirSync, rmSync, symlinkSync, unlinkSync, writeFileSync,
 } from 'fs';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'path';
@@ -330,21 +338,64 @@ function editedNote(diff, purpose) {
 }
 
 /**
+ * Whether an unmarked file holds exactly `regenerated`, the bytes the CLI
+ * would generate at its path now (#998, back-compat (b)). agent-almanac 1.9.1
+ * and earlier wrote windsurf's rules, ai-edge's distillations and vibe's agent
+ * TOML with no marker, so such a file, byte for byte what this version would
+ * write, is taken as the CLI's own. Exact bytes, with no CRLF tolerance, so
+ * taking one over never changes its content. A file whose source changed
+ * since it was generated does not match and is kept, the safe direction.
+ *
+ * Only a regular file with nothing at its sidecar path qualifies: lstat is
+ * read before the file is, so a FIFO is never opened, and a marker-like file
+ * that is not one (`markerUnreadable`) means something else wrote there.
+ *
+ * @param {string} entryPath
+ * @param {ReturnType<typeof classify>} entry
+ * @param {string|Buffer|undefined} regenerated - undefined: nothing to compare
+ */
+function isUnmarkedRegeneration(entryPath, entry, regenerated) {
+  if (regenerated === undefined) return false;
+  if (entry.kind !== 'foreign' || entry.isDir || entry.markerUnreadable) return false;
+  let stat;
+  try {
+    stat = lstatSync(entryPath);
+  } catch {
+    return false; // gone since classify(): nothing to take over
+  }
+  if (!stat.isFile()) return false;
+  // Different sizes cannot hold the same bytes; nothing is read, so a large
+  // file of the user's is not loaded to compare.
+  if (stat.size !== Buffer.byteLength(regenerated)) return false;
+  let bytes;
+  try {
+    bytes = readFileSync(entryPath);
+  } catch {
+    return false; // unreadable (EACCES, say): kept, and keptGeneratedNote() says why (#1067 round 1, SF-1)
+  }
+  return bytes.equals(Buffer.from(regenerated));
+}
+
+/**
  * The ownership verdict: may the CLI remove or replace this entry?
  *
  * A link is the CLI's to remove, because unlinking one loses no data even
  * when a user made it. A copy is, while every file in it is as copied and
  * no file or link was added, junk aside; diffCopy() does not record
- * directories, so one holding nothing else goes with the copy. Anything
- * else, and an edited copy, is kept (D1).
+ * directories, so one holding nothing else goes with the copy. So is an
+ * unmarked file holding exactly `regenerated`, when the caller passes one
+ * (isUnmarkedRegeneration, #998). Anything else, and an edited copy, is kept
+ * (D1).
  *
  * @param {string} entryPath
  * @param {ReturnType<typeof classify>} entry - Not 'absent'.
  * @param {'remove'|'replace'} purpose - Words the note for an edited copy.
- * @returns {{ removable: true } | { removable: false, reason: 'foreign'|'edited', note: string }}
+ * @param {string|Buffer} [regenerated] - The bytes a generated file would hold now
+ * @returns {{ removable: true, unmarked?: true } | { removable: false, reason: 'foreign'|'edited', note: string }}
  */
-export function ownership(entryPath, entry, purpose) {
+export function ownership(entryPath, entry, purpose, regenerated) {
   if (entry.kind === 'link') return { removable: true };
+  if (isUnmarkedRegeneration(entryPath, entry, regenerated)) return { removable: true, unmarked: true };
   if (entry.kind !== 'copy') return { removable: false, reason: 'foreign', note: FOREIGN_NOTE };
   const diff = diffCopy(entryPath, entry.marker);
   if (diff.modified.length === 0 && diff.added.length === 0) return { removable: true };
@@ -360,10 +411,13 @@ function keep(entryPath, verdict) {
  * The uninstall guard. null when the CLI may remove or replace what is at
  * entryPath; otherwise the result that keeps it. removeEntry(),
  * clearForInstall() and placeCopy() all go through this one line, so a
- * mutant of it is seen on all three paths (critique F8).
+ * mutant of it is seen on all three paths (critique F8). placeCopy()'s
+ * decide() reaches it for an entry that is neither a link nor a copy with or
+ * without --force, so taking over an unmarked regenerated file (#998) is
+ * decided here and nowhere else.
  */
-function refuseUnlessOwned(entryPath, entry, purpose) {
-  const verdict = ownership(entryPath, entry, purpose);
+function refuseUnlessOwned(entryPath, entry, purpose, regenerated) {
+  const verdict = ownership(entryPath, entry, purpose, regenerated);
   if (!verdict.removable) return keep(entryPath, verdict);
   return null;
 }
@@ -422,16 +476,18 @@ function discard(entryPath, isDir) {
  *
  * @param {string} base - The directory the entry is in
  * @param {string} name - The entry's name in it
- * @param {{ dryRun?: boolean }} [options]
+ * @param {{ dryRun?: boolean, regenerated?: string|Buffer }} [options] -
+ *   `regenerated`: the bytes a generated file would hold now, so an unmarked
+ *   file holding exactly that is removed too (#998; removeGenerated()).
  * @returns {import('../adapters/base.js').InstallResult}
  */
-export function removeEntry(base, name, { dryRun = false } = {}) {
+export function removeEntry(base, name, { dryRun = false, regenerated } = {}) {
   const entryPath = childPath(base, name);
   const entry = classify(entryPath);
   if (entry.kind === 'absent') {
     return { action: 'skipped', path: entryPath, details: 'not installed' };
   }
-  const kept = refuseUnlessOwned(entryPath, entry, 'remove');
+  const kept = refuseUnlessOwned(entryPath, entry, 'remove', regenerated);
   if (kept) return kept;
   if (dryRun) return { action: 'removed', path: entryPath, details: 'dry-run' };
   if (entry.kind === 'link') {
@@ -439,7 +495,7 @@ export function removeEntry(base, name, { dryRun = false } = {}) {
     return { action: 'removed', path: entryPath };
   }
   discard(entryPath, entry.isDir);
-  return { action: 'removed', path: entryPath, details: 'copy' };
+  return { action: 'removed', path: entryPath, details: entry.kind === 'copy' ? 'copy' : 'unmarked' };
 }
 
 /**
@@ -560,8 +616,13 @@ const installCommand = '`install --force --from-package copy`';
 /**
  * What placeCopy() decides about what is already at the path. Returns the
  * result that stops the install, or null to go ahead.
+ *
+ * Anything that is neither a link nor a copy goes through the guard, with or
+ * without --force: without `regenerated` that keeps it with FOREIGN_NOTE, as
+ * before #998; with it, an unmarked file holding exactly those bytes is taken
+ * over, so a plain install marks it.
  */
-function decide(entryPath, entry, force, copyFrom) {
+function decide(entryPath, entry, force, copyFrom, regenerated) {
   if (entry.kind === 'absent') return null;
   if (!force) {
     if (entry.kind === 'link') {
@@ -583,9 +644,8 @@ function decide(entryPath, entry, force, copyFrom) {
         note: `already a copy of ${name} ${version}; ${installCommand} replaces it with ${copyFrom.name} ${copyFrom.version} if it is unedited`,
       };
     }
-    return keep(entryPath, { reason: 'foreign', note: FOREIGN_NOTE });
   }
-  return refuseUnlessOwned(entryPath, entry, 'replace');
+  return refuseUnlessOwned(entryPath, entry, 'replace', regenerated);
 }
 
 /**
@@ -597,6 +657,7 @@ function decide(entryPath, entry, force, copyFrom) {
  * | a link, even dangling| skipped, note names the link            | replaced by the copy  |
  * | our unedited copy    | skipped, note names its version         | replaced              |
  * | our edited copy      | skipped, note names its version         | kept, note names files|
+ * | an unmarked file holding exactly `regenerated` (#998) | taken over | taken over |
  * | anything else        | kept, FOREIGN_NOTE                      | kept, FOREIGN_NOTE    |
  *
  * The copy is staged in a fresh directory beside the path, on the same
@@ -626,7 +687,10 @@ function decide(entryPath, entry, force, copyFrom) {
  * the re-check reads every file of it, so a change written to a file after
  * the re-check read it, or a save over it, before the copy is moved aside is
  * replaced with it. That window is the rest of the re-check's hash walk, not
- * two lstat calls.
+ * two lstat calls. With `regenerated`, a plain install also replaces an
+ * existing file (#998), so the same holds without --force there: an edit saved
+ * to the unmarked file after the re-check read it, and before the rename, is
+ * replaced with the generated bytes (#1067 round 1, N-2).
  *
  * Containment is lexical (review round 1, E5). contentPath() checks that
  * `source` is inside `almanacRoot`, and childPath() that the target is inside
@@ -646,16 +710,21 @@ function decide(entryPath, entry, force, copyFrom) {
  *   copying `source` (#1007). `source` is still recorded in the marker as what
  *   it was generated from, and must still be inside `almanacRoot`. Ownership
  *   is the same as for a copied file: removable or replaceable while unedited.
+ * @param {string|Buffer} [args.regenerated] - The bytes a generated file
+ *   would hold now (#998, placeGenerated()). An unmarked file holding exactly
+ *   these is taken over, with or without --force: replaced in place by the
+ *   rename, and the result carries `adopted: true`. Opt-in: pi's agents
+ *   (#1007) do not pass it.
  * @returns {import('../adapters/base.js').InstallResult}
  */
-export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, force = false, content }) {
+export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, force = false, content, regenerated }) {
   const entryPath = childPath(base, name);
   if (!copyFrom || !isNonEmptyString(copyFrom.name) || !isNonEmptyString(copyFrom.version)) {
     throw new Error('copy refused: no package name and version to record');
   }
   const sourceRel = contentPath(almanacRoot, source);
 
-  const stop = decide(entryPath, classify(entryPath), force, copyFrom);
+  const stop = decide(entryPath, classify(entryPath), force, copyFrom, regenerated);
   if (stop) return stop;
 
   mkdirSync(base, { recursive: true });
@@ -670,7 +739,7 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
     writeFileSync(markerPathOf(staged, isDir), serializeMarker({ entry: name, item, copyFrom, sourceRel, files }), { flag: 'wx' });
 
     const current = classify(entryPath);
-    result = decide(entryPath, current, force, copyFrom);
+    result = decide(entryPath, current, force, copyFrom, regenerated);
     if (result === null) {
       let linkText = null;
       const replaced = join(staging, 'replaced');
@@ -682,6 +751,13 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
         renameSync(entryPath, replaced);
         if (!current.isDir) renameSync(sidecarPath(entryPath), replacedMarker);
       }
+      // A foreign entry gets here only as an unmarked file holding exactly
+      // `regenerated` (#998). It is not moved aside: it has no sidecar, and the
+      // rename below replaces it in one step, so a failed swap leaves it as it
+      // was, with only the new sidecar to remove. Its permission bits go to
+      // the identical file that replaces it (#1067 round 1, the maintainer's
+      // choice); a hard link to it is not kept.
+      if (current.kind === 'foreign') chmodSync(staged, lstatSync(entryPath).mode & 0o7777);
 
       try {
         if (!isDir) renameSync(sidecarPath(staged), sidecarPath(entryPath));
@@ -700,7 +776,9 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
         }
         throw err;
       }
-      result = { action: 'created', path: entryPath, details: 'copy' };
+      result = current.kind === 'foreign'
+        ? { action: 'created', path: entryPath, details: 'copy', adopted: true }
+        : { action: 'created', path: entryPath, details: 'copy' };
     }
   } finally {
     if (!keepStaging) {
@@ -717,6 +795,139 @@ export function placeCopy({ base, name, source, almanacRoot, copyFrom, item, for
       }
     }
   }
+  return result;
+}
+
+/**
+ * Printed after the path of an unmarked file at a generated path that does
+ * not hold what this version would write there (#998, back-compat (a)).
+ * FOREIGN_NOTE would be false for a file an earlier agent-almanac wrote.
+ */
+export const UNMARKED_NOTE = 'no agent-almanac marker, and not what this version would generate there: written by hand, or by agent-almanac 1.9.1 or earlier; left in place';
+
+/** The same, when the source could not be read, so nothing was compared. */
+export const UNCOMPARED_NOTE = 'no agent-almanac marker, and its source could not be read to compare; left in place';
+
+/** The same, when a file that is not agent-almanac's marker sits at the marker's path beside it. */
+export const MARKER_CLASH_NOTE = 'beside it is a file at the marker\'s path that is not a marker this agent-almanac can read; left in place';
+
+/**
+ * The note for a foreign entry kept at a generated path, by why it was kept.
+ * `content`: what this version would write there, or undefined when the
+ * source could not be read. A file of that size that cannot be read was not
+ * compared, so it gets a note naming the error rather than UNMARKED_NOTE,
+ * whose "not what this version would generate" would be unverified.
+ */
+function keptGeneratedNote(entryPath, content) {
+  if (classify(entryPath).markerUnreadable) return MARKER_CLASH_NOTE;
+  if (content === undefined) return UNCOMPARED_NOTE;
+  try {
+    const stat = lstatSync(entryPath);
+    if (stat.isFile() && stat.size === Buffer.byteLength(content)) readFileSync(entryPath);
+  } catch (err) {
+    return `no agent-almanac marker, and it could not be read to compare (${err.code ?? err.message}); left in place`;
+  }
+  return UNMARKED_NOTE;
+}
+
+/** Printed when an install takes over an unmarked file holding exactly what it would write. */
+export const ADOPTED_NOTE = 'an unmarked file holding exactly this content was here (as agent-almanac 1.9.1 and earlier wrote it, with no marker); it was replaced by an identical file carrying agent-almanac\'s marker';
+
+/** Printed when an uninstall removes an unmarked file holding exactly what this version would write. */
+export const UNMARKED_REMOVED_NOTE = 'unmarked, and exactly what this version generates (as agent-almanac 1.9.1 and earlier wrote it, with no marker); removed';
+
+/**
+ * The command a note on a generated file names. Not `install --force
+ * --from-package copy`, which a clone refuses, and not plain `install
+ * --force`, which an npm package root refuses (#1064 round 1 SF-3, round 2
+ * R2-SF-1): the same install with --force added holds in every placement.
+ */
+const REGENERATE = 'run the same install with `--force`';
+
+const generatedWording = (note) => note.replace('edited since it was copied', 'edited since it was generated');
+
+/** placeCopy()'s result, reworded for a generated file. `content`: what was to be written. */
+function generatedResult(result, content) {
+  if (result.reason === 'link-kept') {
+    let target = '';
+    try {
+      target = ` (-> ${readlinkSync(result.path)})`;
+    } catch { /* gone since decide(): name no target */ }
+    return { ...result, note: `a link is here${target}; ${REGENERATE} to replace it with the generated file` };
+  }
+  if (result.reason === 'already-copied' || result.reason === 'other-version') {
+    const marker = readOwnedMarker(result.path);
+    const from = marker ? ` from ${marker.package.name} ${marker.package.version}` : '';
+    return { ...result, note: `already generated${from}; ${REGENERATE} to regenerate it from the current source if it is unedited` };
+  }
+  if (result.reason === 'foreign') return { ...result, note: keptGeneratedNote(result.path, content) };
+  if (result.reason === 'edited') return { ...result, note: generatedWording(result.note) };
+  if (result.action === 'created') {
+    const { adopted, ...created } = result;
+    created.details = 'generated';
+    if (adopted) created.note = created.note ? `${ADOPTED_NOTE}; ${created.note}` : ADOPTED_NOTE;
+    return created;
+  }
+  return result;
+}
+
+/**
+ * Install a file the CLI generates rather than links or copies (#998):
+ * windsurf's rules, ai-edge's distillations, vibe's agent TOML. placeCopy()
+ * with `content`, so the file gets the sidecar marker and the ownership of a
+ * copied file in either placement: replaced or removed only while unedited,
+ * and anything else at the path kept. Three things differ from placeCopy():
+ *
+ * - The package recorded is `options.copyFrom` (`--from-package copy`) or
+ *   else the content root's package.json, read as a clone's. A root naming
+ *   neither is refused: there would be no marker to recognise the file by.
+ * - An unmarked file holding exactly `content` is the CLI's own, written by
+ *   agent-almanac 1.9.1 or earlier: a plain install marks it, and --force
+ *   replaces it (`regenerated`, back-compat (b)).
+ * - The notes speak of a generated file and name the same install with
+ *   --force, and an unmarked file that differs is kept with UNMARKED_NOTE.
+ *
+ * pi's agents (#1007) call placeCopy() directly and keep its behaviour.
+ *
+ * @param {object} args
+ * @param {string} args.base
+ * @param {string} args.name
+ * @param {string} args.source - What the file is generated from, inside the content root
+ * @param {string} args.content - The bytes to write
+ * @param {{ type: string, id: string }} args.item
+ * @param {{ almanacRoot: string, force?: boolean, copyFrom?: { name: string, version: string } }} args.options
+ * @returns {import('../adapters/base.js').InstallResult}
+ */
+export function placeGenerated({ base, name, source, content, item, options }) {
+  const copyFrom = options.copyFrom ?? readPackageIdentity(options.almanacRoot);
+  if (!copyFrom) {
+    throw new Error(`not generated: ${join(options.almanacRoot, 'package.json')} names no package and version, which agent-almanac records beside a generated file to recognise it later`);
+  }
+  return generatedResult(placeCopy({
+    base, name, source, content, almanacRoot: options.almanacRoot, copyFrom, item, force: options.force, regenerated: content,
+  }), content);
+}
+
+/**
+ * Remove a generated file at `<base>/<name>`, or keep it and say why: the
+ * uninstall half of placeGenerated(). removeEntry() with `regenerated`, so a
+ * marked, unedited file goes, an unmarked file holding exactly `content`
+ * goes too, and anything else is kept with a note that is true for a file an
+ * earlier version wrote.
+ *
+ * @param {string} base
+ * @param {string} name
+ * @param {{ dryRun?: boolean, content?: string }} [options] - `content`: what
+ *   this version would generate there now; undefined when the source could
+ *   not be read, so an unmarked file is kept without comparing.
+ * @returns {import('../adapters/base.js').InstallResult}
+ */
+export function removeGenerated(base, name, { dryRun = false, content } = {}) {
+  const result = removeEntry(base, name, { dryRun, regenerated: content });
+  if (result.reason === 'foreign') return { ...result, note: keptGeneratedNote(result.path, content) };
+  if (result.reason === 'edited') return { ...result, note: generatedWording(result.note) };
+  if (result.details === 'unmarked') return { ...result, note: UNMARKED_REMOVED_NOTE };
+  if (result.details === 'copy') return { ...result, details: 'generated' };
   return result;
 }
 
