@@ -1385,6 +1385,26 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
     });
   }
 
+  for (const site of SITES) {
+    it(`${site.name}: keeps a file it cannot read, names why, and does not fail the run (#1067 round 1, SF-1)`, { skip: (process.platform === 'win32' || process.getuid?.() === 0) && 'needs POSIX permissions and a non-root user' }, async () => {
+      await inSandbox('unreadable', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        chmodSync(path, 0o000); // same size as this version's output, so the comparison has to read it
+        try {
+          const kept = { action: 'skipped', path, reason: 'foreign', note: 'no agent-almanac marker, and it could not be read to compare (EACCES); left in place' };
+          assert.deepEqual(await uninstall(site, sb), kept);
+          assert.deepEqual(await install(site, sb), kept);
+          assert.deepEqual(await install(site, sb, { force: true }), kept);
+          assert.equal(existsSync(path), true);
+        } finally {
+          chmodSync(path, 0o644); // so the sandbox can be removed
+        }
+      });
+    });
+  }
+
   it('keeps an unmarked file when the source cannot be read to compare, without throwing', async () => {
     await inSandbox('nosource', async (sb) => {
       const site = SITES[0];

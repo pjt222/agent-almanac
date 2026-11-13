@@ -364,7 +364,16 @@ function isUnmarkedRegeneration(entryPath, entry, regenerated) {
     return false; // gone since classify(): nothing to take over
   }
   if (!stat.isFile()) return false;
-  return readFileSync(entryPath).equals(Buffer.from(regenerated));
+  // Different sizes cannot hold the same bytes; nothing is read, so a large
+  // file of the user's is not loaded to compare.
+  if (stat.size !== Buffer.byteLength(regenerated)) return false;
+  let bytes;
+  try {
+    bytes = readFileSync(entryPath);
+  } catch {
+    return false; // unreadable (EACCES, say): kept, and keptGeneratedNote() says why (#1067 round 1, SF-1)
+  }
+  return bytes.equals(Buffer.from(regenerated));
 }
 
 /**
@@ -795,10 +804,23 @@ export const UNCOMPARED_NOTE = 'no agent-almanac marker, and its source could no
 /** The same, when a file that is not agent-almanac's marker sits at the marker's path beside it. */
 export const MARKER_CLASH_NOTE = 'beside it is a file at the marker\'s path that agent-almanac did not write; left in place';
 
-/** The note for a foreign entry kept at a generated path, by why it was kept. */
-function keptGeneratedNote(entryPath, compared) {
+/**
+ * The note for a foreign entry kept at a generated path, by why it was kept.
+ * `content`: what this version would write there, or undefined when the
+ * source could not be read. A file of that size that cannot be read was not
+ * compared, so it gets a note naming the error rather than UNMARKED_NOTE,
+ * whose "not what this version would generate" would be unverified.
+ */
+function keptGeneratedNote(entryPath, content) {
   if (classify(entryPath).markerUnreadable) return MARKER_CLASH_NOTE;
-  return compared ? UNMARKED_NOTE : UNCOMPARED_NOTE;
+  if (content === undefined) return UNCOMPARED_NOTE;
+  try {
+    const stat = lstatSync(entryPath);
+    if (stat.isFile() && stat.size === Buffer.byteLength(content)) readFileSync(entryPath);
+  } catch (err) {
+    return `no agent-almanac marker, and it could not be read to compare (${err.code ?? err.message}); left in place`;
+  }
+  return UNMARKED_NOTE;
 }
 
 /** Printed when an install takes over an unmarked file holding exactly what it would write. */
@@ -817,8 +839,8 @@ const REGENERATE = 'run the same install with `--force`';
 
 const generatedWording = (note) => note.replace('edited since it was copied', 'edited since it was generated');
 
-/** placeCopy()'s result, reworded for a generated file. */
-function generatedResult(result) {
+/** placeCopy()'s result, reworded for a generated file. `content`: what was to be written. */
+function generatedResult(result, content) {
   if (result.reason === 'link-kept') {
     let target = '';
     try {
@@ -831,7 +853,7 @@ function generatedResult(result) {
     const from = marker ? ` from ${marker.package.name} ${marker.package.version}` : '';
     return { ...result, note: `already generated${from}; ${REGENERATE} to regenerate it from the current source if it is unedited` };
   }
-  if (result.reason === 'foreign') return { ...result, note: keptGeneratedNote(result.path, true) };
+  if (result.reason === 'foreign') return { ...result, note: keptGeneratedNote(result.path, content) };
   if (result.reason === 'edited') return { ...result, note: generatedWording(result.note) };
   if (result.action === 'created') {
     const { adopted, ...created } = result;
@@ -876,7 +898,7 @@ export function placeGenerated({ base, name, source, content, item, options }) {
   }
   return generatedResult(placeCopy({
     base, name, source, content, almanacRoot: options.almanacRoot, copyFrom, item, force: options.force, regenerated: content,
-  }));
+  }), content);
 }
 
 /**
@@ -895,7 +917,7 @@ export function placeGenerated({ base, name, source, content, item, options }) {
  */
 export function removeGenerated(base, name, { dryRun = false, content } = {}) {
   const result = removeEntry(base, name, { dryRun, regenerated: content });
-  if (result.reason === 'foreign') return { ...result, note: keptGeneratedNote(result.path, content !== undefined) };
+  if (result.reason === 'foreign') return { ...result, note: keptGeneratedNote(result.path, content) };
   if (result.reason === 'edited') return { ...result, note: generatedWording(result.note) };
   if (result.details === 'unmarked') return { ...result, note: UNMARKED_REMOVED_NOTE };
   if (result.details === 'copy') return { ...result, details: 'generated' };
