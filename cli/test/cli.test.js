@@ -2185,21 +2185,25 @@ describe('npm package root (#606)', () => {
     }
   });
 
-  it('gather --from-package copy names, on stderr, a link it kept', () => {
+  it('gather --from-package copy names, on stderr, a link it kept, under --json and --json --quiet', () => {
     // gather never passes --force, so an existing link stays (#993 §3); its
-    // JSON says only "skipped".
-    const dir = project('copy-gather-link');
-    const link = resolve(dir, '.claude/skills/commit-changes');
-    const target = resolve(pkgRoot, 'skills/commit-changes');
-    mkdirSync(dirname(link), { recursive: true });
-    symlinkSync(target, link);
-    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
-    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.doesNotThrow(() => JSON.parse(stdout), stdout);
-    const note = `  NOTE: commit-changes [claude-code] ${link}: a link is here (-> ${target}); ` +
-      '`install --force --from-package copy` replaces it with a copy';
-    assert.ok(stderr.split('\n').includes(note), stderr);
-    assert.equal(lstatSync(link).isSymbolicLink(), true);
+    // JSON says only "skipped". Under --json --quiet too: --json takes the
+    // output first, so printResults() never runs, and the note was printed on
+    // neither stream (#1003).
+    for (const flags of [['--json'], ['--json', '--quiet']]) {
+      const dir = project(`copy-gather-link${flags.join('')}`);
+      const link = resolve(dir, '.claude/skills/commit-changes');
+      const target = resolve(pkgRoot, 'skills/commit-changes');
+      mkdirSync(dirname(link), { recursive: true });
+      symlinkSync(target, link);
+      const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', ...flags, '--source', pkgRoot, '--from-package', 'copy'], dir);
+      assert.equal(status, 0, `${flags.join(' ')}: exit ${status}\n${stdout}\n${stderr}`);
+      assert.doesNotThrow(() => JSON.parse(stdout), `${flags.join(' ')}:\n${stdout}`);
+      const note = `  NOTE: commit-changes [claude-code] ${link}: a link is here (-> ${target}); ` +
+        '`install --force --from-package copy` replaces it with a copy';
+      assert.equal(stderr.split('\n').filter((line) => line === note).length, 1, `${flags.join(' ')}: the note, once:\n${stderr}`);
+      assert.equal(lstatSync(link).isSymbolicLink(), true);
+    }
   });
 
   // Review round 1, F5: three paths of the copy wiring that no test pinned.

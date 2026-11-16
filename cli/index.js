@@ -826,12 +826,14 @@ program
     // link that copy mode does not replace by itself, a copy of another
     // version, an entry agent-almanac did not make. Its ceremony and JSON say
     // only "skipped", so each is named here (#993 §3 for links; critique F14
-    // for other versions). stderr, so `gather --json` stays one document;
-    // --quiet already printed every note with its result. A copy already at
+    // for other versions). stderr, so `gather --json` stays one document.
+    // Skipped only where printResults() has already printed every note with
+    // its result: under --quiet without --json, since --json takes the output
+    // first (#1003, as scatter's failure loop below). A copy already at
     // this version is not news. In link mode a link site keeps what it finds
     // without a note; a generated site (windsurf, ai-edge, vibe agents, pi
     // agents) names what it kept or took over, and that is printed here too.
-    if (!options.quiet) {
+    if (options.json || !options.quiet) {
       for (const r of installResults) {
         if (r.note && r.reason !== 'already-copied') {
           console.error(reporter.chalk.yellow(`  NOTE: ${r.item.id} [${r.adapter}] ${r.path}: ${r.note}`));
