@@ -11,9 +11,10 @@
  * Output: .ai-edge/skills/<id>.md, .ai-edge/agents/<id>.md, .ai-edge/bundle.md
  */
 
-import { existsSync, mkdirSync, writeFileSync, unlinkSync, readdirSync, readFileSync } from 'fs';
+import { existsSync, writeFileSync, readdirSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
+import { placeGenerated, removeGenerated } from '../lib/placement.js';
 import { distillSkill, distillAgent, distillTeam, bundleForEdge } from '../lib/edge-transformer.js';
 
 export class AiEdgeAdapter extends FrameworkAdapter {
@@ -38,42 +39,42 @@ export class AiEdgeAdapter extends FrameworkAdapter {
     return resolve(projectDir, '.ai-edge', plural);
   }
 
-  async install(item, projectDir, scope, options = {}) {
-    const dir = this._targetDir(projectDir, item.type);
-    const targetPath = childPath(dir, `${item.id}.md`);
-
-    if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
-    if (existsSync(targetPath) && !options.force) {
-      return { action: 'skipped', path: targetPath, details: 'already exists' };
-    }
-
-    mkdirSync(dir, { recursive: true });
-
-    // Distill content based on type
-    const sourcePath = item.sourcePath || resolve(
+  _sourcePath(item, options) {
+    return item.sourcePath || resolve(
       options.almanacRoot,
       item.type === 'skill' ? `skills/${item.id}/SKILL.md` :
       item.type === 'agent' ? `agents/${item.id}.md` :
       `teams/${item.id}.md`
     );
+  }
 
-    let distilled;
-    if (item.type === 'skill') distilled = distillSkill(sourcePath);
-    else if (item.type === 'agent') distilled = distillAgent(sourcePath);
-    else distilled = distillTeam(sourcePath);
+  _distill(item, sourcePath) {
+    if (item.type === 'skill') return distillSkill(sourcePath);
+    if (item.type === 'agent') return distillAgent(sourcePath);
+    return distillTeam(sourcePath);
+  }
 
-    writeFileSync(targetPath, distilled, 'utf8');
-    return { action: 'created', path: targetPath };
+  async install(item, projectDir, scope, options = {}) {
+    const dir = this._targetDir(projectDir, item.type);
+    const name = `${item.id}.md`;
+    const targetPath = childPath(dir, name);
+
+    if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run' };
+    // A generated file with a sidecar marker, so uninstall and --force touch
+    // only the CLI's own (#998).
+    const sourcePath = this._sourcePath(item, options);
+    return placeGenerated({ base: dir, name, source: sourcePath, content: this._distill(item, sourcePath), item, options });
   }
 
   async uninstall(item, projectDir, scope, options = {}) {
-    const targetPath = childPath(this._targetDir(projectDir, item.type), `${item.id}.md`);
-    if (!existsSync(targetPath)) {
-      return { action: 'skipped', path: '', details: 'not installed' };
-    }
-    if (options.dryRun) return { action: 'removed', path: targetPath, details: 'dry-run' };
-    unlinkSync(targetPath);
-    return { action: 'removed', path: targetPath };
+    const dir = this._targetDir(projectDir, item.type);
+    const name = `${item.id}.md`;
+    let content;
+    try {
+      content = this._distill(item, this._sourcePath(item, options));
+    } catch { /* source unreadable: compare nothing, keep an unmarked file */ }
+    const result = removeGenerated(dir, name, { dryRun: options.dryRun, content });
+    return result.details === 'not installed' ? { action: 'skipped', path: '', details: 'not installed' } : result;
   }
 
   async listInstalled(projectDir) {
