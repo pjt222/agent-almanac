@@ -1423,7 +1423,7 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
   }
 
   for (const site of SITES) {
-    it(`${site.name}: keeps a file it cannot read, names why, and does not fail the run (#1067 round 1, SF-1)`, { skip: (process.platform === 'win32' || process.getuid?.() === 0) && 'needs POSIX permissions and a non-root user' }, async () => {
+    it(`${site.name}: keeps an unmarked file of this version's size that it cannot read, names the error, and does not throw (#1067 round 1, SF-1)`, { skip: (process.platform === 'win32' || process.getuid?.() === 0) && 'needs POSIX permissions and a non-root user' }, async () => {
       await inSandbox('unreadable', async (sb) => {
         const path = site.path(sb);
         await install(site, sb);
@@ -1478,17 +1478,18 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
     });
   });
 
-  it('never opens a FIFO at a generated path, with or without --force', { skip: process.platform === 'win32' && 'POSIX FIFO' }, async () => {
+  it('never opens a FIFO at a generated path on uninstall', { skip: process.platform === 'win32' && 'POSIX FIFO' }, async () => {
     await inSandbox('fifo', async (sb) => {
       const path = SITES[0].path(sb);
       mkdirSync(dirname(path), { recursive: true });
       execSync(`mkfifo '${path}'`);
       // In a child with a timeout: reading a FIFO blocks, and a block in this
       // process would hang the whole suite instead of failing this test.
-      // A FIFO's size is 0, so content of any other size is refused by the
-      // size check before the regular-file check is reached; empty content
-      // reaches it. That is not hypothetical: an empty SKILL.md condenses to
-      // '' (condenseSkill).
+      // The regular-file check refuses a FIFO before the size check. Without
+      // it (mutant P3), the size check would still refuse content of any
+      // other size, since a FIFO's size is 0, so only empty content would
+      // reach the read. That is not hypothetical: an empty SKILL.md condenses
+      // to '' (condenseSkill).
       for (const content of ['x', '']) {
         const script = `
           import * as placement from ${JSON.stringify(resolve(ROOT, 'cli/lib/placement.js'))};
