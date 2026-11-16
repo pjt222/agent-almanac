@@ -246,9 +246,11 @@ its only way through.
 pi's agents are written, not linked or copied, with the same sidecar as a copied
 file, in either placement (#998, #1007). `uninstall` and `install --force` remove
 or replace one only while it is unedited, and keep any other file at the path,
-naming it; one the CLI cannot read is kept too. A link at a windsurf, ai-edge or
-vibe path is removed by `uninstall` and replaced only by `install --force`; a
-link at a pi agent's path is never removed or replaced. `list --installed` and
+naming it; an unmarked one the CLI cannot read is kept too. A marked one it
+cannot read makes `uninstall` and `install --force` report it as failed, and is
+left in place. A link at a windsurf, ai-edge or vibe path is removed by
+`uninstall` and replaced only by `install --force`; a link at a pi agent's path
+is never removed or replaced. `list --installed` and
 `audit` do not read the marker at the windsurf, ai-edge and vibe paths yet.
 
 A windsurf, ai-edge or vibe file that agent-almanac 1.9.1 or earlier wrote has no

@@ -620,7 +620,7 @@ const installCommand = '`install --force --from-package copy`';
  * Anything that is neither a link nor a copy goes through the guard, with or
  * without --force: without `regenerated` that keeps it with FOREIGN_NOTE, as
  * before #998; with it, an unmarked file holding exactly those bytes is taken
- * over, so a plain install marks it.
+ * over, so a plain install replaces it with an identical marked file.
  */
 function decide(entryPath, entry, force, copyFrom, regenerated) {
   if (entry.kind === 'absent') return null;
@@ -881,9 +881,10 @@ function generatedResult(result, content) {
  * - The package recorded is `options.copyFrom` (`--from-package copy`) or
  *   else the content root's package.json, read as a clone's. A root naming
  *   neither is refused: there would be no marker to recognise the file by.
- * - An unmarked file holding exactly `content` is the CLI's own, written by
- *   agent-almanac 1.9.1 or earlier: a plain install marks it, and --force
- *   replaces it (`regenerated`, back-compat (b)).
+ * - An unmarked file holding exactly `content` is taken as the CLI's own
+ *   (agent-almanac 1.9.1 and earlier wrote these files without a marker): a
+ *   plain install and --force both replace it with an identical marked file,
+ *   keeping its permission bits (`regenerated`, back-compat (b)).
  * - The notes speak of a generated file and name the same install with
  *   --force, and an unmarked file that differs is kept with UNMARKED_NOTE.
  *
