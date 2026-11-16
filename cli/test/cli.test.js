@@ -1379,6 +1379,27 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
       });
     });
 
+    it(`${site.name}: keeps an unmarked file the size of this version's output with one byte changed`, async () => {
+      await inSandbox('same-size', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        // A file of another size is refused by the size check before its bytes
+        // are read, so only a file of the same size reaches the comparison of
+        // bytes. The appended byte in the case above never does.
+        const generated = readFileSync(path);
+        const changed = Buffer.from(generated);
+        changed[0] = changed[0] === 0x58 ? 0x59 : 0x58;
+        writeFileSync(path, changed);
+        assert.equal(lstatSync(path).size, generated.length);
+        const kept = { action: 'skipped', path, reason: 'foreign', note: UNMARKED };
+        assert.deepEqual(await uninstall(site, sb), kept);
+        assert.deepEqual(await install(site, sb), kept);
+        assert.deepEqual(await install(site, sb, { force: true }), kept);
+        assert.ok(readFileSync(path).equals(changed));
+      });
+    });
+
     it(`${site.name}: replaces a link only with --force, never writes through it, and uninstall removes a dangling one`, async () => {
       await inSandbox('link', async (sb) => {
         const path = site.path(sb);
