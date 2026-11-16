@@ -2981,6 +2981,19 @@ describe('--json keeps stdout one JSON document (#984)', () => {
     }
     assert.deepEqual(stderr.split('\n').filter((l) => l.includes('WARN:') || l === DRY_RUN), [], stderr);
   });
+
+  it('without --json, scatter keeps the ignored-scope warning and the DRY RUN header on stdout', () => {
+    // The control above runs gather only; scatter has its own two call sites (review round 1, P-1).
+    const dir = project('plain-scatter', '.cursor/');
+    gatherQuietly(dir, '-g');
+    const { status, stdout, stderr } = spawnCli(['scatter', 'fixture-team', '--quiet', '--dry-run', '-y', '-g'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const lines = stdout.split('\n');
+    for (const line of [DRY_RUN, '  WARN: Cursor is project-only; --scope global ignored (uninstalling from project).']) {
+      assert.equal(lines.filter((l) => l === line).length, 1, `not on stdout exactly once: ${line}\n${stdout}`);
+    }
+    assert.deepEqual(stderr.split('\n').filter((l) => l.includes('WARN:') || l === DRY_RUN), [], stderr);
+  });
 });
 
 // ── Version ──────────────────────────────────────────────────────
