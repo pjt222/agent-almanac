@@ -110,17 +110,35 @@ export function printAudit(auditResults) {
 
 /**
  * Print a dry-run header.
+ *
+ * On stdout, except where a command's stdout is a JSON document: there the
+ * header would come first and make it unparseable (#984), so `gather --json`
+ * and `scatter --json` pass `{ stderr: true }`.
+ *
+ * @param {{ stderr?: boolean }} [options]
  */
-export function printDryRun() {
-  console.log(chalk.yellow('\n  DRY RUN — no changes will be made\n'));
+export function printDryRun({ stderr = false } = {}) {
+  const header = chalk.yellow('\n  DRY RUN — no changes will be made\n');
+  if (stderr) console.error(header);
+  else console.log(header);
 }
 
 /**
- * Print a warning message.
+ * Print a warning message, on stdout. The #607 tests read the scope warnings
+ * there, and so does a person running a command without --json.
  * @param {string} msg
  */
 export function warn(msg) {
   console.log(chalk.yellow(`  WARN: ${msg}`));
+}
+
+/**
+ * Print a warning message as warn() does, but on stderr. installAll() and
+ * uninstallAll() are given it where stdout is a JSON document (#984).
+ * @param {string} msg
+ */
+export function warnOnStderr(msg) {
+  console.error(chalk.yellow(`  WARN: ${msg}`));
 }
 
 /**
