@@ -2953,6 +2953,17 @@ describe('--json keeps stdout one JSON document (#984)', () => {
     ]);
   });
 
+  // No adapter declares `workspace`, so every adapter in play takes the
+  // warning's other branch, the one that names each type's scopes.
+  it('gather --json --scope workspace prints the per-type scope warnings on stderr', () => {
+    const dir = project('scope-workspace', '.claude/');
+    assertOneDocument(spawnCli(['gather', 'fixture-team', '--json', '--scope', 'workspace'], dir), [
+      '  WARN: Universal (.agents/): skills support project, global; --scope workspace ignored for skills.',
+      '  WARN: Claude Code: skills support project, global; agents support project, global; teams support project, global; ' +
+        '--scope workspace ignored for skills and agents and teams.',
+    ]);
+  });
+
   it('tend --json with no fire burning prints a document with no fires', () => {
     const dir = project('tend-empty', '.claude/');
     assert.deepEqual(assertOneDocument(spawnCli(['tend', '--json'], dir), []), { fires: [] });
