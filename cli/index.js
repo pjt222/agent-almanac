@@ -784,10 +784,12 @@ program
       teams: [team],
     };
 
-    if (options.dryRun) reporter.printDryRun();
+    // Under --json stdout is the document, so the header and the installer's
+    // warnings go to stderr (#984).
+    if (options.dryRun) reporter.printDryRun({ stderr: options.json === true });
 
     const installResults = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope,
-      installOptions(ctx, options, placed, { force: false }));
+      installOptions(ctx, options, placed, { force: false, warn: options.json ? reporter.warnOnStderr : reporter.warn }));
 
     // Categorize results
     const installed = installResults.filter(r => r.action === 'created').map(r => r.item.id);
@@ -955,7 +957,8 @@ program
       }
     }
 
-    if (options.dryRun) reporter.printDryRun();
+    // Under --json stdout is the document, as in gather (#984).
+    if (options.dryRun) reporter.printDryRun({ stderr: options.json === true });
 
     // Uninstall via standard machinery (only items not shared)
     const resolved = {
@@ -967,6 +970,7 @@ program
     const uninstallResults = await uninstallAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
       dryRun: options.dryRun,
       scopeExplicit: ctx.scopeExplicit,
+      warn: options.json ? reporter.warnOnStderr : reporter.warn,
     });
 
     // A copy edited since it was copied is kept, not removed (D1). This is
@@ -1042,13 +1046,15 @@ program
     const state = loadState();
     const fires = getFireStates(state);
 
-    if (fires.length === 0) {
-      console.log(reporter.chalk.dim('\n  No fires to tend. Gather a campfire first.\n'));
+    // Before the empty case: under --json stdout is one document, with no
+    // fire burning too (#984).
+    if (options.json) {
+      campfire.printJson({ fires });
       return;
     }
 
-    if (options.json) {
-      campfire.printJson({ fires });
+    if (fires.length === 0) {
+      console.log(reporter.chalk.dim('\n  No fires to tend. Gather a campfire first.\n'));
       return;
     }
 

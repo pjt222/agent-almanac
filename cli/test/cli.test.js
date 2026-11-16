@@ -2745,11 +2745,10 @@ describe('gather', () => {
 
   it('gather --dry-run --json outputs JSON', () => {
     const out = run('gather tending --dry-run --json');
-    // Extract JSON block from output (skip DRY RUN header line)
-    const jsonStart = out.indexOf('{');
-    const jsonEnd = out.lastIndexOf('}');
-    assert.ok(jsonStart >= 0, 'Should contain JSON');
-    const data = JSON.parse(out.slice(jsonStart, jsonEnd + 1));
+    // stdout is the document alone: the DRY RUN header goes to stderr (#984).
+    // This test used to cut the document out from between the first `{` and
+    // the last `}`, which passed with the header on stdout.
+    const data = JSON.parse(out);
     assert.equal(data.team, 'tending');
     assert.ok(data.agents.includes('mystic'));
   });
@@ -2816,6 +2815,160 @@ describe('tend', () => {
 
     // Clean up
     try { rmSync(resolve(ROOT, '.agent-almanac'), { recursive: true }); } catch {}
+  });
+});
+
+// ── --json keeps stdout one JSON document (#984) ───────────────────
+//
+// `gather --json`, `scatter --json` and `tend --json` print one JSON document
+// on stdout, and every other line goes to stderr: the installer's warnings (a
+// type an adapter does not support, a --scope it ignores) and the DRY RUN
+// header. At the base commit each case below printed such a line on stdout
+// ahead of the document, or instead of it, so JSON.parse(stdout) threw.
+// Each warning is asserted once, as a whole line, on stderr, so a fix that
+// dropped one would go red as well.
+//
+// The root is clone-shaped, not an npm package, so nothing here meets the
+// #606 refusal. HOME is redirected, so -g writes under the fixture.
+describe('--json keeps stdout one JSON document (#984)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  const DRY_RUN = '  DRY RUN — no changes will be made';
+  const unsupported = (type, framework, id) => `  WARN: ${type}s not supported by ${framework}. Skipping ${id}.`;
+  let tmpRoot;
+  let cloneRoot;
+  let env;
+
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+
+  function spawnCli(args, cwd) {
+    const res = spawnSync(process.execPath, [cliEntry, ...args, '--source', cloneRoot],
+      { cwd, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+  }
+
+  /** A fresh project with one framework marker: a directory (trailing /) or a file. */
+  function project(name, marker) {
+    const dir = resolve(tmpRoot, name);
+    mkdirSync(dir, { recursive: true });
+    if (marker.endsWith('/')) mkdirSync(resolve(dir, marker), { recursive: true });
+    else writeFileSync(resolve(dir, marker), '');
+    return dir;
+  }
+
+  /** Exit 0, stdout parses as one document, and each of `stderrLines` is on stderr once. */
+  function assertOneDocument({ status, stdout, stderr }, stderrLines) {
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    let doc;
+    assert.doesNotThrow(() => { doc = JSON.parse(stdout); }, `stdout is not one JSON document:\n${stdout}`);
+    const lines = stderr.split('\n');
+    for (const line of stderrLines) {
+      assert.equal(lines.filter((l) => l === line).length, 1, `not on stderr exactly once: ${line}\n${stderr}`);
+    }
+    return doc;
+  }
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-984-')));
+    const fakeHome = resolve(tmpRoot, 'home');
+    mkdirSync(fakeHome, { recursive: true });
+    cloneRoot = resolve(tmpRoot, 'clone/agent-almanac');
+    mkdirSync(resolve(cloneRoot, 'skills/commit-changes'), { recursive: true });
+    mkdirSync(resolve(cloneRoot, 'agents'), { recursive: true });
+    mkdirSync(resolve(cloneRoot, 'teams'), { recursive: true });
+    copyFileSync(resolve(ROOT, 'skills/commit-changes/SKILL.md'), resolve(cloneRoot, 'skills/commit-changes/SKILL.md'));
+    writeFileSync(resolve(cloneRoot, 'skills/_registry.yml'), [
+      'total_skills: 1', 'domains:', '  git:', '    description: fixture', '    skills:',
+      '      - id: commit-changes', '        path: commit-changes/SKILL.md', '',
+    ].join('\n'));
+    // An agent and a team, so the skills-only adapters have both to warn about.
+    writeFileSync(resolve(cloneRoot, 'agents/_registry.yml'), [
+      'total_agents: 1', 'agents:', '  - id: fixture-agent', '    path: agents/fixture-agent.md',
+      '    skills:', '      - commit-changes', '',
+    ].join('\n'));
+    writeFileSync(resolve(cloneRoot, 'agents/fixture-agent.md'), '---\nname: fixture-agent\n---\n');
+    writeFileSync(resolve(cloneRoot, 'teams/_registry.yml'), [
+      'total_teams: 1', 'teams:', '  - id: fixture-team', '    path: teams/fixture-team.md',
+      '    lead: fixture-agent', '    members:', '      - fixture-agent', '',
+    ].join('\n'));
+    writeFileSync(resolve(cloneRoot, 'teams/fixture-team.md'), '---\nname: fixture-team\n---\n');
+    env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
+    delete env.LOCALAPPDATA;
+  });
+
+  after(() => {
+    rmTree(tmpRoot);
+  });
+
+  // The four project shapes #984 measured. Codex takes agents (into
+  // AGENTS.md), so it warns about the team only.
+  for (const [framework, marker, types] of [
+    ['Cursor', '.cursor/', ['agent', 'team']],
+    ['Gemini CLI', '.gemini/', ['agent', 'team']],
+    ['Windsurf', '.windsurf/', ['agent', 'team']],
+    ['OpenAI Codex', 'AGENTS.md', ['team']],
+  ]) {
+    it(`gather --json, where ${framework} is detected, prints the installer's warnings on stderr`, () => {
+      const dir = project(`gather-${marker.replace(/\W/g, '')}`, marker);
+      const ids = { agent: 'fixture-agent', team: 'fixture-team' };
+      const doc = assertOneDocument(spawnCli(['gather', 'fixture-team', '--json'], dir),
+        types.map((type) => unsupported(type, framework, ids[type])));
+      assert.equal(doc.team, 'fixture-team');
+    });
+  }
+
+  it('gather --json --dry-run prints the DRY RUN header on stderr', () => {
+    const dir = project('gather-dry-run', '.claude/');
+    assertOneDocument(spawnCli(['gather', 'fixture-team', '--json', '--dry-run'], dir), [DRY_RUN]);
+  });
+
+  /** Light the fixture team's fire without --json, so a scatter test does not depend on gather's fix. */
+  function gatherQuietly(dir, ...flags) {
+    const gathered = spawnCli(['gather', 'fixture-team', '--quiet', ...flags], dir);
+    assert.equal(gathered.status, 0, `setup gather: exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+  }
+
+  it('scatter --json --dry-run prints the DRY RUN header on stderr', () => {
+    const dir = project('scatter-dry-run', '.claude/');
+    gatherQuietly(dir);
+    assertOneDocument(spawnCli(['scatter', 'fixture-team', '--json', '--dry-run', '-y'], dir), [DRY_RUN]);
+  });
+
+  // Cursor is project-only, so an explicit -g is ignored for it (#607's warning).
+  it('gather --json -g prints the ignored-scope warning on stderr', () => {
+    const dir = project('scope-global-gather', '.cursor/');
+    assertOneDocument(spawnCli(['gather', 'fixture-team', '--json', '-g'], dir), [
+      '  WARN: Cursor is project-only; --scope global ignored (installing to project).',
+      unsupported('agent', 'Cursor', 'fixture-agent'),
+      unsupported('team', 'Cursor', 'fixture-team'),
+    ]);
+  });
+
+  it('scatter --json -g prints the ignored-scope warning on stderr', () => {
+    const dir = project('scope-global-scatter', '.cursor/');
+    gatherQuietly(dir, '-g');
+    assertOneDocument(spawnCli(['scatter', 'fixture-team', '--json', '-y', '-g'], dir), [
+      '  WARN: Cursor is project-only; --scope global ignored (uninstalling from project).',
+    ]);
+  });
+
+  it('tend --json with no fire burning prints a document with no fires', () => {
+    const dir = project('tend-empty', '.claude/');
+    assert.deepEqual(assertOneDocument(spawnCli(['tend', '--json'], dir), []), { fires: [] });
+  });
+
+  it('without --json, the warnings and the DRY RUN header stay on stdout', () => {
+    // The control: only --json moves them (#984's third criterion). The #607
+    // tests read the scope warnings through console.log.
+    const dir = project('plain-quiet', '.cursor/');
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--quiet', '--dry-run'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const lines = stdout.split('\n');
+    for (const line of [DRY_RUN, unsupported('agent', 'Cursor', 'fixture-agent'), unsupported('team', 'Cursor', 'fixture-team')]) {
+      assert.equal(lines.filter((l) => l === line).length, 1, `not on stdout exactly once: ${line}\n${stdout}`);
+    }
+    assert.deepEqual(stderr.split('\n').filter((l) => l.includes('WARN:') || l === DRY_RUN), [], stderr);
   });
 });
 
