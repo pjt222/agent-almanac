@@ -1485,14 +1485,20 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
       execSync(`mkfifo '${path}'`);
       // In a child with a timeout: reading a FIFO blocks, and a block in this
       // process would hang the whole suite instead of failing this test.
-      const script = `
-        import * as placement from ${JSON.stringify(resolve(ROOT, 'cli/lib/placement.js'))};
-        const r = placement.removeGenerated(${JSON.stringify(dirname(path))}, 'gen-skill.md', { content: 'x' });
-        process.stdout.write(JSON.stringify(r));`;
-      const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 10000 });
-      assert.equal(res.error, undefined, `the child blocked or failed to start: ${res.error}`);
-      assert.equal(res.status, 0, res.stderr);
-      assert.deepEqual(JSON.parse(res.stdout), { action: 'skipped', path, reason: 'foreign', note: UNMARKED });
+      // A FIFO's size is 0, so content of any other size is refused by the
+      // size check before the regular-file check is reached; empty content
+      // reaches it. That is not hypothetical: an empty SKILL.md condenses to
+      // '' (condenseSkill).
+      for (const content of ['x', '']) {
+        const script = `
+          import * as placement from ${JSON.stringify(resolve(ROOT, 'cli/lib/placement.js'))};
+          const r = placement.removeGenerated(${JSON.stringify(dirname(path))}, 'gen-skill.md', { content: ${JSON.stringify(content)} });
+          process.stdout.write(JSON.stringify(r));`;
+        const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 10000 });
+        assert.equal(res.error, undefined, `content ${JSON.stringify(content)}: the child blocked or failed to start: ${res.error}`);
+        assert.equal(res.status, 0, res.stderr);
+        assert.deepEqual(JSON.parse(res.stdout), { action: 'skipped', path, reason: 'foreign', note: UNMARKED });
+      }
       assert.equal(lstatSync(path).isFIFO(), true);
     });
   });
