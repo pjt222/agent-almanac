@@ -3343,6 +3343,19 @@ describe('the default skills reach every fire (#994)', () => {
     assert.deepEqual(linkedSkills(dir), []);
   });
 
+  it('scatter keeps an own skill that a second keeper of another burning fire brings', () => {
+    // The keep check counts each other fire's keepers, all of them, and their
+    // own skills as well as the defaults. Test 5's fires share no own skill,
+    // so a check for the defaults alone passed it (review round 1, B2).
+    const dir = project('keep-own-skill');
+    cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
+    cliOk(['gather', 'team-pair', '-f', 'claude-code', '--quiet'], dir);
+    const scattered = JSON.parse(cliOk(['scatter', 'team-one', '-f', 'claude-code', '-y', '--json'], dir).stdout);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'beta', 'heal', 'meditate'], 'agent-shares-alpha still brings alpha');
+    assert.equal(scattered.skillsRemoved, 0);
+    assert.equal(scattered.skillsKept, 3, 'alpha, meditate and heal');
+  });
+
   it('campfire counts a default skill that an agent also lists once', () => {
     const reg = loadRegistries(cloneRoot);
     const team = reg.teams.find((t) => t.id === 'team-lists-meditate');
