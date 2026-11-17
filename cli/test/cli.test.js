@@ -3236,27 +3236,32 @@ describe('the default skills reach every fire (#994)', () => {
       '      - id: heal', '        path: heal/SKILL.md', '',
     ].join('\n'));
     // The shape of the shipped registry's default_skills block.
+    // agent-shares-alpha is team-pair's second keeper, not its lead, and lists
+    // team-one's own skill (review round 1, B1 and B2).
     writeFileSync(resolve(cloneRoot, 'agents/_registry.yml'), [
-      'total_agents: 3',
+      'total_agents: 4',
       'default_skills:',
       '  - skill: meditate', '    domain: esoteric', '    description: fixture',
       '  - skill: heal', '    domain: esoteric', '    description: fixture',
       'agents:',
       '  - id: agent-one', '    path: agents/agent-one.md', '    skills:', '      - alpha',
       '  - id: agent-two', '    path: agents/agent-two.md', '    skills:', '      - beta',
-      '  - id: agent-lists-meditate', '    path: agents/agent-lists-meditate.md', '    skills:', '      - gamma', '      - meditate', '',
+      '  - id: agent-lists-meditate', '    path: agents/agent-lists-meditate.md', '    skills:', '      - gamma', '      - meditate',
+      '  - id: agent-shares-alpha', '    path: agents/agent-shares-alpha.md', '    skills:', '      - alpha', '',
     ].join('\n'));
-    for (const id of ['agent-one', 'agent-two', 'agent-lists-meditate']) {
+    for (const id of ['agent-one', 'agent-two', 'agent-lists-meditate', 'agent-shares-alpha']) {
       writeFileSync(resolve(cloneRoot, 'agents', `${id}.md`), `---\nname: ${id}\n---\n`);
     }
     writeFileSync(resolve(cloneRoot, 'teams/_registry.yml'), [
-      'total_teams: 3', 'teams:',
+      'total_teams: 4', 'teams:',
       '  - id: team-one', '    path: teams/team-one.md', '    lead: agent-one', '    members:', '      - agent-one',
       '  - id: team-two', '    path: teams/team-two.md', '    lead: agent-two', '    members:', '      - agent-two',
       '  - id: team-lists-meditate', '    path: teams/team-lists-meditate.md', '    lead: agent-lists-meditate',
-      '    members:', '      - agent-lists-meditate', '',
+      '    members:', '      - agent-lists-meditate',
+      '  - id: team-pair', '    path: teams/team-pair.md', '    lead: agent-two',
+      '    members:', '      - agent-two', '      - agent-shares-alpha', '',
     ].join('\n'));
-    for (const id of ['team-one', 'team-two', 'team-lists-meditate']) {
+    for (const id of ['team-one', 'team-two', 'team-lists-meditate', 'team-pair']) {
       writeFileSync(resolve(cloneRoot, 'teams', `${id}.md`), `---\nname: ${id}\n---\n`);
     }
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
@@ -3295,6 +3300,26 @@ describe('the default skills reach every fire (#994)', () => {
     assert.deepEqual(linkedSkills(dir), ['gamma', 'heal', 'meditate']);
     assert.match(stdout, /^ {2}3 practices settled\./m, stdout);
     assert.equal(stdout.split('\n').filter((line) => /✦ meditate$/.test(line)).length, 1, stdout);
+  });
+
+  it('gather of a two-keeper team links each skill once, the default skills among them', () => {
+    // Both keepers bring meditate and heal (review round 1, B1).
+    const dir = project('gather-pair');
+    cliOk(['gather', 'team-pair', '-f', 'claude-code', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'beta', 'heal', 'meditate']);
+    const state = JSON.parse(readFileSync(resolve(dir, '.agent-almanac/state.json'), 'utf8'));
+    assert.equal(state.fires['team-pair'].skillCount, 4, 'state.json counts each skill once');
+  });
+
+  it('gather --only a keeper who is not the lead brings the default skills, and scatter removes them', () => {
+    // A rule that gave the defaults to the lead alone passed every other test (review round 1, B1).
+    const dir = project('gather-only-non-lead');
+    cliOk(['gather', 'team-pair', '--only', 'agent-shares-alpha', '-f', 'claude-code', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'heal', 'meditate']);
+    const state = JSON.parse(readFileSync(resolve(dir, '.agent-almanac/state.json'), 'utf8'));
+    assert.equal(state.fires['team-pair'].skillCount, 3);
+    cliOk(['scatter', 'team-pair', '-f', 'claude-code', '-y', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), []);
   });
 
   it('scatter removes the default skills when no other fire burns', () => {
