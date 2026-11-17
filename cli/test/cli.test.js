@@ -3376,6 +3376,20 @@ describe('the default skills reach every fire (#994)', () => {
     assert.deepEqual([...findSharedSkills(state, reg)].sort(), ['heal', 'meditate']);
   });
 
+  it('with two other fires burning, gather marks the default skills already burning', () => {
+    // What findSharedSkills() now returns, as gather's ceremony shows it. Two
+    // other fires, because gather asks before it records the new one (review
+    // round 1, B7 and A13).
+    const dir = project('already-burning');
+    cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
+    cliOk(['gather', 'team-two', '-f', 'claude-code', '--quiet'], dir);
+    const { stdout } = cliOk(['gather', 'team-lists-meditate', '-f', 'claude-code', '--ceremonial'], dir);
+    for (const id of ['meditate', 'heal']) {
+      assert.match(stdout, new RegExp(`✦ ${id} \\(already burning\\)$`, 'm'), `${id} is marked\n${stdout}`);
+    }
+    assert.match(stdout, /✦ gamma$/m, `gamma, which no other fire brings, is not marked\n${stdout}`);
+  });
+
   it('only cli/lib/registry.js reads the registry\'s default skills, through defaultSkillIds()', () => {
     // Every consumer read the entries itself, and each got the key wrong
     // (#994). The TUI's count is one of them and no test drives the TUI, so
