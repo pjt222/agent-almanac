@@ -3172,12 +3172,13 @@ describe('--json keeps stdout one JSON document (#984)', () => {
 // ── The default skills reach every fire (#994 §2) ──────────────────
 //
 // agents/_registry.yml lists its default skills as `{ skill: <id>, … }`, and
-// every agent inherits them. Since the key was renamed from `id` in #209, each
-// consumer read `.id` and got undefined: gather and scatter never linked or
-// removed meditate and heal, and the two team counts added the registry
-// entries themselves to a set of skill ids. The fixture's agents do not list
-// the defaults, except one, which lists meditate: on that shape the counts
-// were over by one, and on the others they were right by accident.
+// every agent inherits them. gather and scatter read `.id`, which gave
+// undefined once 347dbe1de renamed the key (closing #209), so they never
+// linked or removed meditate and heal. The two team counts added the registry
+// entries themselves to a set of skill ids, from the day each was written.
+// The fixture's agents do not list the defaults, except one, which lists
+// meditate: on that shape the counts were over by one, and on the others they
+// were right by accident.
 describe('the default skills reach every fire (#994)', () => {
   const cliEntry = resolve(ROOT, 'cli/index.js');
   let tmpRoot;

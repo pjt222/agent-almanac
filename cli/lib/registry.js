@@ -108,8 +108,10 @@ export function findTeam(reg, id) {
 /**
  * The ids of the registry's default skills, which every agent inherits.
  * agents/_registry.yml lists each as `{ skill: <id>, domain, description }`,
- * and this is the one place the CLI reads that key: every consumer read `.id`
- * after the key was renamed in #209, and got undefined (#994).
+ * and this is the one place the CLI reads that key. Before #994 each consumer
+ * read the entries itself: gather and scatter read `.id`, which gave
+ * undefined once 347dbe1de renamed the key (closing #209), and campfire's and
+ * the TUI's counts added the entries themselves to a set of skill ids.
  * @param {Registry} reg
  * @returns {string[]}
  */
