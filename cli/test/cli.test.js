@@ -2318,6 +2318,22 @@ describe('npm package root (#606)', () => {
     assert.equal(stderr.split('\n').filter((line) => line.includes(note)).length, 0, stderr);
   });
 
+  it('gather without --json or --quiet names a kept link on stderr, once', () => {
+    // The ceremony says only "skipped", so the note loop is the one place the
+    // kept link is named. The test above pins the loop's --quiet half.
+    const dir = project('copy-gather-link-plain');
+    const link = resolve(dir, '.claude/skills/commit-changes');
+    const target = resolve(pkgRoot, 'skills/commit-changes');
+    mkdirSync(dirname(link), { recursive: true });
+    symlinkSync(target, link);
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const note = `  NOTE: commit-changes [claude-code] ${link}: a link is here (-> ${target}); ` +
+      '`install --force --from-package copy` replaces it with a copy';
+    assert.equal(stderr.split('\n').filter((line) => line === note).length, 1, stderr);
+    assert.equal(lstatSync(link).isSymbolicLink(), true);
+  });
+
   // Review round 1, F5: three paths of the copy wiring that no test pinned.
 
   it('a second gather --from-package copy over the same copies prints no NOTE for them', () => {
