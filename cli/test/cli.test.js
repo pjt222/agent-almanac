@@ -335,6 +335,13 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
     const out = stripAnsi(run(PI_DRY_RUN));
     assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
   });
+
+  it('runAllowFail() puts pi\'s global directory under its own home', () => {
+    const { stdout, status } = runAllowFail(PI_DRY_RUN);
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
+  });
 });
 
 // ── Install / Uninstall ──────────────────────────────────────────
