@@ -284,13 +284,15 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
   }
 
   before(() => {
+    // Saved first: after() runs even when before() throws, and restores from
+    // whatever was saved, so a key saved late would be deleted.
+    for (const key of KEYS) saved[key] = process.env[key];
     tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-1071-')));
     callerHome = resolve(tmpRoot, 'home');
     mkdirSync(resolve(callerHome, '.hermes'), { recursive: true });
     writeFileSync(resolve(callerHome, '.hermes/config.yaml'), '');
     mkdirSync(resolve(callerHome, '.openclaw'), { recursive: true });
     writeFileSync(resolve(callerHome, '.openclaw/openclaw.json'), '{}\n');
-    for (const key of KEYS) saved[key] = process.env[key];
     process.env.HOME = callerHome;
     process.env.USERPROFILE = callerHome;
     process.env.HERMES_HOME = resolve(callerHome, '.hermes');
