@@ -63,8 +63,45 @@ import { canInlineImage, renderInlineImage } from '../lib/inline-image.js';
 const CLI = 'node cli/index.js';
 const ROOT = process.cwd();
 
+// run() and runAllowFail() spawn the CLI at the repository root. With the
+// caller's environment it saw the caller's home, and there it detects Hermes
+// (a config.yaml in the Hermes home) and OpenClaw (~/.openclaw/openclaw.json
+// or ~/.nemoclaw). Both take skills and agents at global scope only, so a
+// project-scope install or gather here also linked items into the real
+// ~/.hermes or ~/.openclaw (#1071). pi's agents are global only too, and go to
+// $PI_CODING_AGENT_DIR when it is set. So both spawn with a home made once for
+// this file, as the file's other spawns do with a fixture home: HERMES_HOME is
+// read before the home on every platform, LOCALAPPDATA is Hermes's win32
+// default, and without PI_CODING_AGENT_DIR pi's directory is under the home.
+// RUN_HOME is made once, at module scope, and a top-level after() removes it.
+//
+// STARTUP_HOMES are the homes this process started with, read before RUN_HOME
+// exists. The #1071 describe's arms stand in for the caller from a before(),
+// after anything taken at load time, so a RUN_HOME or a runEnv() value taken
+// from the caller's home at load would pass them on a machine without Hermes
+// or OpenClaw. A test there checks runEnv() names none of these (#1073 review
+// round 1, D1).
+const STARTUP_HOMES = new Set(
+  [homedir(), process.env.HOME, process.env.USERPROFILE, process.env.HERMES_HOME, resolveHermesHome(), resolve(homedir(), '.hermes')]
+    .filter(Boolean)
+    .flatMap((homePath) => {
+      const absolute = resolve(homePath);
+      try { return [absolute, realpathSync(absolute)]; } catch { return [absolute]; }
+    }),
+);
+const RUN_HOME = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-run-home-')));
+after(() => rmTree(RUN_HOME));
+
+/** The caller's environment with every home variable pinned to RUN_HOME (#1071). */
+function runEnv() {
+  const env = { ...process.env, HOME: RUN_HOME, USERPROFILE: RUN_HOME, HERMES_HOME: resolve(RUN_HOME, '.hermes') };
+  delete env.LOCALAPPDATA;
+  delete env.PI_CODING_AGENT_DIR;
+  return env;
+}
+
 function run(args) {
-  return execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 });
+  return execSync(`${CLI} ${args}`, { cwd: ROOT, env: runEnv(), encoding: 'utf8', timeout: 10000 });
 }
 
 /**
@@ -83,7 +120,7 @@ function run(args) {
  */
 function runAllowFail(args) {
   try {
-    const stdout = execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 });
+    const stdout = execSync(`${CLI} ${args}`, { cwd: ROOT, env: runEnv(), encoding: 'utf8', timeout: 10000 });
     return { stdout, status: 0 };
   } catch (err) {
     return { stdout: err.stdout ?? '', status: err.status ?? 1 };
@@ -234,6 +271,102 @@ describe('detect', () => {
     const out = run('detect');
     assert.match(out, /Universal/);
     assert.match(out, /Claude Code/);
+  });
+});
+
+// ── run() and runAllowFail() spawn with a home of their own (#1071) ──
+//
+// The caller's home variables point at a fixture home holding a Hermes home,
+// an OpenClaw config and a pi agent directory, and the arms ask the CLI what
+// it sees. The control spawns with the caller's environment and must see all
+// three, so the other arms cannot pass because the fixture went unseen. pi
+// marks no project from its agent directory, so its arm asks for -g: a dry run
+// names the path it would write, and writes nothing. The first test checks
+// runEnv() itself against STARTUP_HOMES, which the arms cannot see.
+describe('run() and runAllowFail() spawn with a home of their own (#1071)', () => {
+  const KEYS = ['HOME', 'USERPROFILE', 'HERMES_HOME', 'LOCALAPPDATA', 'PI_CODING_AGENT_DIR'];
+  const PI_DRY_RUN = 'install commit-changes -f pi -g --dry-run';
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => text.replace(/\x1b\[[0-9;]*m/g, '');
+  const piLine = (agentDir) => `  + commit-changes [pi] ${resolve(agentDir, 'skills/commit-changes')}`;
+  const saved = {};
+  let tmpRoot;
+  let callerHome;
+
+  /** The CLI spawned with the caller's environment, as run() did before #1071. */
+  function spawnAsCaller(args) {
+    return stripAnsi(execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 }));
+  }
+
+  before(() => {
+    // Saved first: after() runs even when before() throws, and restores from
+    // whatever was saved, so a key saved late would be deleted.
+    for (const key of KEYS) saved[key] = process.env[key];
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-1071-')));
+    callerHome = resolve(tmpRoot, 'home');
+    mkdirSync(resolve(callerHome, '.hermes'), { recursive: true });
+    writeFileSync(resolve(callerHome, '.hermes/config.yaml'), '');
+    mkdirSync(resolve(callerHome, '.openclaw'), { recursive: true });
+    writeFileSync(resolve(callerHome, '.openclaw/openclaw.json'), '{}\n');
+    mkdirSync(resolve(callerHome, 'pi-agent'), { recursive: true });
+    process.env.HOME = callerHome;
+    process.env.USERPROFILE = callerHome;
+    process.env.HERMES_HOME = resolve(callerHome, '.hermes');
+    process.env.PI_CODING_AGENT_DIR = resolve(callerHome, 'pi-agent');
+    // Set, not removed, so the check that runEnv() removes it has something to remove.
+    process.env.LOCALAPPDATA = resolve(callerHome, 'AppData/Local');
+  });
+
+  after(() => {
+    for (const key of KEYS) {
+      if (saved[key] === undefined) delete process.env[key];
+      else process.env[key] = saved[key];
+    }
+    rmTree(tmpRoot);
+  });
+
+  it('runEnv() points every home variable at RUN_HOME, which is none of the homes this process started with', () => {
+    assert.ok(!STARTUP_HOMES.has(RUN_HOME), `RUN_HOME is a home this process started with: ${RUN_HOME}`);
+    const env = runEnv();
+    assert.equal(env.HOME, RUN_HOME);
+    assert.equal(env.USERPROFILE, RUN_HOME);
+    assert.equal(env.HERMES_HOME, resolve(RUN_HOME, '.hermes'));
+    assert.equal(env.LOCALAPPDATA, undefined);
+    assert.equal(env.PI_CODING_AGENT_DIR, undefined);
+  });
+
+  it('control: a spawn with the caller\'s environment sees the fixture\'s Hermes, OpenClaw and pi directory', () => {
+    const detected = spawnAsCaller('detect');
+    assert.match(detected, /Hermes Agent/, detected);
+    assert.match(detected, /OpenClaw\/NemoClaw/, detected);
+    const dryRun = spawnAsCaller(PI_DRY_RUN);
+    assert.ok(dryRun.split('\n').includes(piLine(resolve(callerHome, 'pi-agent'))), dryRun);
+  });
+
+  it('run() detects neither Hermes nor OpenClaw', () => {
+    const out = stripAnsi(run('detect'));
+    assert.doesNotMatch(out, /Hermes Agent/, out);
+    assert.doesNotMatch(out, /OpenClaw\/NemoClaw/, out);
+  });
+
+  it('runAllowFail() detects neither Hermes nor OpenClaw', () => {
+    const { stdout, status } = runAllowFail('detect');
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.doesNotMatch(out, /Hermes Agent/, out);
+    assert.doesNotMatch(out, /OpenClaw\/NemoClaw/, out);
+  });
+
+  it('run() puts pi\'s global directory under its own home', () => {
+    const out = stripAnsi(run(PI_DRY_RUN));
+    assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
+  });
+
+  it('runAllowFail() puts pi\'s global directory under its own home', () => {
+    const { stdout, status } = runAllowFail(PI_DRY_RUN);
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
   });
 });
 
@@ -1565,6 +1698,7 @@ describe('audit exit codes end to end (#439)', () => {
   const cliEntry = resolve(ROOT, 'cli/index.js');
   let tmpRoot;
   let savedHome;
+  let savedUserProfile;
   let savedHermesHome;
   let savedLocalAppData;
 
@@ -1611,6 +1745,9 @@ describe('audit exit codes end to end (#439)', () => {
 
     savedHome = process.env.HOME;
     process.env.HOME = resolve(tmpRoot, 'home');
+    // os.homedir() reads USERPROFILE on win32, so the home is pinned there too (#1071).
+    savedUserProfile = process.env.USERPROFILE;
+    process.env.USERPROFILE = resolve(tmpRoot, 'home');
     // #604: resolveHermesHome() reads HERMES_HOME first, and on win32 probes
     // %LOCALAPPDATA%\hermes — a dev machine carrying either (this very
     // integration ran on one) would leak a real Hermes home into the fixture
@@ -1624,6 +1761,8 @@ describe('audit exit codes end to end (#439)', () => {
   after(() => {
     if (savedHome === undefined) delete process.env.HOME;
     else process.env.HOME = savedHome;
+    if (savedUserProfile === undefined) delete process.env.USERPROFILE;
+    else process.env.USERPROFILE = savedUserProfile;
     if (savedHermesHome === undefined) delete process.env.HERMES_HOME;
     else process.env.HERMES_HOME = savedHermesHome;
     if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
@@ -2219,6 +2358,22 @@ describe('npm package root (#606)', () => {
     const note = `a link is here (-> ${target}); \`install --force --from-package copy\` replaces it with a copy`;
     assert.equal(stdout.split('\n').filter((line) => line === `  = commit-changes [claude-code] ${link}  ${note}`).length, 1, stdout);
     assert.equal(stderr.split('\n').filter((line) => line.includes(note)).length, 0, stderr);
+  });
+
+  it('gather without --json or --quiet names a kept link on stderr, once', () => {
+    // The ceremony says only "skipped", so the note loop is the one place the
+    // kept link is named. The test above pins the loop's --quiet half.
+    const dir = project('copy-gather-link-plain');
+    const link = resolve(dir, '.claude/skills/commit-changes');
+    const target = resolve(pkgRoot, 'skills/commit-changes');
+    mkdirSync(dirname(link), { recursive: true });
+    symlinkSync(target, link);
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const note = `  NOTE: commit-changes [claude-code] ${link}: a link is here (-> ${target}); ` +
+      '`install --force --from-package copy` replaces it with a copy';
+    assert.equal(stderr.split('\n').filter((line) => line === note).length, 1, stderr);
+    assert.equal(lstatSync(link).isSymbolicLink(), true);
   });
 
   // Review round 1, F5: three paths of the copy wiring that no test pinned.
