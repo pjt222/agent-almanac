@@ -3287,6 +3287,16 @@ describe('the default skills reach every fire (#994)', () => {
     assert.doesNotMatch(stdout, /undefined/, stdout);
   });
 
+  it('gather counts and names a default skill that an agent also lists once', () => {
+    // The mutant table's H1: without the dedup, agent-lists-meditate brings
+    // meditate twice, and its ceremony counts 4 practices for 3 links.
+    const dir = project('gather-lists-meditate');
+    const { stdout } = cliOk(['gather', 'team-lists-meditate', '-f', 'claude-code', '--ceremonial'], dir);
+    assert.deepEqual(linkedSkills(dir), ['gamma', 'heal', 'meditate']);
+    assert.match(stdout, /^ {2}3 practices settled\./m, stdout);
+    assert.equal(stdout.split('\n').filter((line) => /✦ meditate$/.test(line)).length, 1, stdout);
+  });
+
   it('scatter removes the default skills when no other fire burns', () => {
     const dir = project('scatter-one');
     cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
@@ -3321,6 +3331,25 @@ describe('the default skills reach every fire (#994)', () => {
     const reg = loadRegistries(cloneRoot);
     const state = { fires: { 'team-one': { agents: ['agent-one'] }, 'team-two': { agents: ['agent-two'] } } };
     assert.deepEqual([...findSharedSkills(state, reg)].sort(), ['heal', 'meditate']);
+  });
+
+  it('only cli/lib/registry.js reads the registry\'s default skills, through defaultSkillIds()', () => {
+    // Every consumer read the entries itself, and each got the key wrong
+    // (#994). The TUI's count is one of them and no test drives the TUI, so
+    // this is what stops a copy of the old count coming back there.
+    const sources = [];
+    const walk = (dir) => {
+      for (const entry of readdirSync(resolve(ROOT, dir), { withFileTypes: true })) {
+        const rel = `${dir}/${entry.name}`;
+        if (entry.isDirectory()) { if (!['node_modules', 'test'].includes(entry.name)) walk(rel); } else if (entry.name.endsWith('.js')) sources.push(rel);
+      }
+    };
+    walk('cli');
+    assert.ok(sources.length > 20, `walked ${sources.length} files under cli/`);
+    const readers = sources.filter((rel) => readFileSync(resolve(ROOT, rel), 'utf8').includes('defaultSkills'));
+    assert.deepEqual(readers, ['cli/lib/registry.js']);
+    const registrySource = readFileSync(resolve(ROOT, 'cli/lib/registry.js'), 'utf8');
+    assert.equal(registrySource.split('reg.defaultSkills').length - 1, 1, 'registry.js reads reg.defaultSkills in defaultSkillIds() alone');
   });
 });
 
