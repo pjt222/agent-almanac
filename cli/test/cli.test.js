@@ -63,8 +63,31 @@ import { canInlineImage, renderInlineImage } from '../lib/inline-image.js';
 const CLI = 'node cli/index.js';
 const ROOT = process.cwd();
 
+// run() and runAllowFail() spawn the CLI at the repository root. With the
+// caller's environment it saw the caller's home, and there it detects Hermes
+// (a config.yaml in the Hermes home) and OpenClaw (~/.openclaw/openclaw.json
+// or ~/.nemoclaw). Both take skills and agents at global scope only, so a
+// project-scope install or gather here also linked items into the real
+// ~/.hermes or ~/.openclaw (#1071). pi's agents are global only too, and go to
+// $PI_CODING_AGENT_DIR when it is set. So both spawn with a home made once for
+// this file, as the file's other spawns do with a fixture home: HERMES_HOME is
+// read before the home on every platform, LOCALAPPDATA is Hermes's win32
+// default, and without PI_CODING_AGENT_DIR pi's directory is under the home.
+// Made at module scope, not in a before(), so that a run() made while the
+// describe blocks are collected gets it too.
+const RUN_HOME = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-run-home-')));
+after(() => rmTree(RUN_HOME));
+
+/** The caller's environment with every home variable pinned to RUN_HOME (#1071). */
+function runEnv() {
+  const env = { ...process.env, HOME: RUN_HOME, USERPROFILE: RUN_HOME, HERMES_HOME: resolve(RUN_HOME, '.hermes') };
+  delete env.LOCALAPPDATA;
+  delete env.PI_CODING_AGENT_DIR;
+  return env;
+}
+
 function run(args) {
-  return execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 });
+  return execSync(`${CLI} ${args}`, { cwd: ROOT, env: runEnv(), encoding: 'utf8', timeout: 10000 });
 }
 
 /**
@@ -83,7 +106,7 @@ function run(args) {
  */
 function runAllowFail(args) {
   try {
-    const stdout = execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 });
+    const stdout = execSync(`${CLI} ${args}`, { cwd: ROOT, env: runEnv(), encoding: 'utf8', timeout: 10000 });
     return { stdout, status: 0 };
   } catch (err) {
     return { stdout: err.stdout ?? '', status: err.status ?? 1 };
@@ -234,6 +257,80 @@ describe('detect', () => {
     const out = run('detect');
     assert.match(out, /Universal/);
     assert.match(out, /Claude Code/);
+  });
+});
+
+// ── run() and runAllowFail() spawn with a home of their own (#1071) ──
+//
+// The caller's home variables point at a fixture home holding a Hermes home,
+// an OpenClaw config and a pi agent directory, and the arms ask the CLI what
+// it sees. The control spawns with the caller's environment and must see all
+// three, so the other arms cannot pass because the fixture went unseen. pi
+// marks no project from its agent directory, so its arm asks for -g: a dry run
+// names the path it would write, and writes nothing.
+describe('run() and runAllowFail() spawn with a home of their own (#1071)', () => {
+  const KEYS = ['HOME', 'USERPROFILE', 'HERMES_HOME', 'LOCALAPPDATA', 'PI_CODING_AGENT_DIR'];
+  const PI_DRY_RUN = 'install commit-changes -f pi -g --dry-run';
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => text.replace(/\x1b\[[0-9;]*m/g, '');
+  const piLine = (agentDir) => `  + commit-changes [pi] ${resolve(agentDir, 'skills/commit-changes')}`;
+  const saved = {};
+  let tmpRoot;
+  let callerHome;
+
+  /** The CLI spawned with the caller's environment, as run() did before #1071. */
+  function spawnAsCaller(args) {
+    return stripAnsi(execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 }));
+  }
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-1071-')));
+    callerHome = resolve(tmpRoot, 'home');
+    mkdirSync(resolve(callerHome, '.hermes'), { recursive: true });
+    writeFileSync(resolve(callerHome, '.hermes/config.yaml'), '');
+    mkdirSync(resolve(callerHome, '.openclaw'), { recursive: true });
+    writeFileSync(resolve(callerHome, '.openclaw/openclaw.json'), '{}\n');
+    for (const key of KEYS) saved[key] = process.env[key];
+    process.env.HOME = callerHome;
+    process.env.USERPROFILE = callerHome;
+    process.env.HERMES_HOME = resolve(callerHome, '.hermes');
+    process.env.PI_CODING_AGENT_DIR = resolve(callerHome, 'pi-agent');
+    delete process.env.LOCALAPPDATA;
+  });
+
+  after(() => {
+    for (const key of KEYS) {
+      if (saved[key] === undefined) delete process.env[key];
+      else process.env[key] = saved[key];
+    }
+    rmTree(tmpRoot);
+  });
+
+  it('control: a spawn with the caller\'s environment sees the fixture\'s Hermes, OpenClaw and pi directory', () => {
+    const detected = spawnAsCaller('detect');
+    assert.match(detected, /Hermes Agent/, detected);
+    assert.match(detected, /OpenClaw\/NemoClaw/, detected);
+    const dryRun = spawnAsCaller(PI_DRY_RUN);
+    assert.ok(dryRun.split('\n').includes(piLine(resolve(callerHome, 'pi-agent'))), dryRun);
+  });
+
+  it('run() detects neither Hermes nor OpenClaw', () => {
+    const out = stripAnsi(run('detect'));
+    assert.doesNotMatch(out, /Hermes Agent/, out);
+    assert.doesNotMatch(out, /OpenClaw\/NemoClaw/, out);
+  });
+
+  it('runAllowFail() detects neither Hermes nor OpenClaw', () => {
+    const { stdout, status } = runAllowFail('detect');
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.doesNotMatch(out, /Hermes Agent/, out);
+    assert.doesNotMatch(out, /OpenClaw\/NemoClaw/, out);
+  });
+
+  it('run() puts pi\'s global directory under its own home', () => {
+    const out = stripAnsi(run(PI_DRY_RUN));
+    assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
   });
 });
 
