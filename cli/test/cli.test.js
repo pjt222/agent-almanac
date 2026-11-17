@@ -3390,10 +3390,15 @@ describe('the default skills reach every fire (#994)', () => {
     assert.match(stdout, /✦ gamma$/m, `gamma, which no other fire brings, is not marked\n${stdout}`);
   });
 
-  it('only cli/lib/registry.js reads the registry\'s default skills, through defaultSkillIds()', () => {
-    // Every consumer read the entries itself, and each got the key wrong
-    // (#994). The TUI's count is one of them and no test drives the TUI, so
-    // this is what stops a copy of the old count coming back there.
+  it('only cli/lib/registry.js names defaultSkills under cli/, a text tripwire against a copy of the old reads', () => {
+    // A text scan, not a check of any count. At 8ff93da83 each of the four
+    // consumers read the registry's entries itself, and each named
+    // `defaultSkills` to do it, the TUI's count among them. Nothing drives the
+    // TUI, so this is what stops such a copy coming back there. It does not
+    // check the number the TUI shows: a TUI count that drops the defaults
+    // without naming `defaultSkills` passes, and so does one that reaches them
+    // through defaultSkillIds(), the sanctioned way. It also fails on a comment
+    // that names the string (review round 1, B4).
     const sources = [];
     const walk = (dir) => {
       for (const entry of readdirSync(resolve(ROOT, dir), { withFileTypes: true })) {
