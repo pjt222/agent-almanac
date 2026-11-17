@@ -1662,6 +1662,7 @@ describe('audit exit codes end to end (#439)', () => {
   const cliEntry = resolve(ROOT, 'cli/index.js');
   let tmpRoot;
   let savedHome;
+  let savedUserProfile;
   let savedHermesHome;
   let savedLocalAppData;
 
@@ -1708,6 +1709,9 @@ describe('audit exit codes end to end (#439)', () => {
 
     savedHome = process.env.HOME;
     process.env.HOME = resolve(tmpRoot, 'home');
+    // os.homedir() reads USERPROFILE on win32, so the home is pinned there too (#1071).
+    savedUserProfile = process.env.USERPROFILE;
+    process.env.USERPROFILE = resolve(tmpRoot, 'home');
     // #604: resolveHermesHome() reads HERMES_HOME first, and on win32 probes
     // %LOCALAPPDATA%\hermes — a dev machine carrying either (this very
     // integration ran on one) would leak a real Hermes home into the fixture
@@ -1721,6 +1725,8 @@ describe('audit exit codes end to end (#439)', () => {
   after(() => {
     if (savedHome === undefined) delete process.env.HOME;
     else process.env.HOME = savedHome;
+    if (savedUserProfile === undefined) delete process.env.USERPROFILE;
+    else process.env.USERPROFILE = savedUserProfile;
     if (savedHermesHome === undefined) delete process.env.HERMES_HOME;
     else process.env.HERMES_HOME = savedHermesHome;
     if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
