@@ -75,6 +75,21 @@ const ROOT = process.cwd();
 // default, and without PI_CODING_AGENT_DIR pi's directory is under the home.
 // Made at module scope, not in a before(), so that a run() made while the
 // describe blocks are collected gets it too.
+//
+// STARTUP_HOMES are the homes this process started with, read before RUN_HOME
+// exists. The #1071 describe's arms stand in for the caller from a before(),
+// after anything taken at load time, so a RUN_HOME or a runEnv() value taken
+// from the caller's home at load would pass them on a machine without Hermes
+// or OpenClaw. A test there checks runEnv() names none of these (#1073 review
+// round 1, D1).
+const STARTUP_HOMES = new Set(
+  [homedir(), process.env.HOME, process.env.USERPROFILE, process.env.HERMES_HOME, resolveHermesHome(), resolve(homedir(), '.hermes')]
+    .filter(Boolean)
+    .flatMap((homePath) => {
+      const absolute = resolve(homePath);
+      try { return [absolute, realpathSync(absolute)]; } catch { return [absolute]; }
+    }),
+);
 const RUN_HOME = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-run-home-')));
 after(() => rmTree(RUN_HOME));
 
@@ -267,7 +282,8 @@ describe('detect', () => {
 // it sees. The control spawns with the caller's environment and must see all
 // three, so the other arms cannot pass because the fixture went unseen. pi
 // marks no project from its agent directory, so its arm asks for -g: a dry run
-// names the path it would write, and writes nothing.
+// names the path it would write, and writes nothing. The first test checks
+// runEnv() itself against STARTUP_HOMES, which the arms cannot see.
 describe('run() and runAllowFail() spawn with a home of their own (#1071)', () => {
   const KEYS = ['HOME', 'USERPROFILE', 'HERMES_HOME', 'LOCALAPPDATA', 'PI_CODING_AGENT_DIR'];
   const PI_DRY_RUN = 'install commit-changes -f pi -g --dry-run';
@@ -298,7 +314,8 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
     process.env.USERPROFILE = callerHome;
     process.env.HERMES_HOME = resolve(callerHome, '.hermes');
     process.env.PI_CODING_AGENT_DIR = resolve(callerHome, 'pi-agent');
-    delete process.env.LOCALAPPDATA;
+    // Set, not removed, so the check that runEnv() removes it has something to remove.
+    process.env.LOCALAPPDATA = resolve(callerHome, 'AppData/Local');
   });
 
   after(() => {
@@ -307,6 +324,16 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
       else process.env[key] = saved[key];
     }
     rmTree(tmpRoot);
+  });
+
+  it('runEnv() points every home variable at RUN_HOME, which is none of the homes this process started with', () => {
+    assert.ok(!STARTUP_HOMES.has(RUN_HOME), `RUN_HOME is a home this process started with: ${RUN_HOME}`);
+    const env = runEnv();
+    assert.equal(env.HOME, RUN_HOME);
+    assert.equal(env.USERPROFILE, RUN_HOME);
+    assert.equal(env.HERMES_HOME, resolve(RUN_HOME, '.hermes'));
+    assert.equal(env.LOCALAPPDATA, undefined);
+    assert.equal(env.PI_CODING_AGENT_DIR, undefined);
   });
 
   it('control: a spawn with the caller\'s environment sees the fixture\'s Hermes, OpenClaw and pi directory', () => {
