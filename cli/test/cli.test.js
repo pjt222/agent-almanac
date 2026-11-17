@@ -293,6 +293,7 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
     writeFileSync(resolve(callerHome, '.hermes/config.yaml'), '');
     mkdirSync(resolve(callerHome, '.openclaw'), { recursive: true });
     writeFileSync(resolve(callerHome, '.openclaw/openclaw.json'), '{}\n');
+    mkdirSync(resolve(callerHome, 'pi-agent'), { recursive: true });
     process.env.HOME = callerHome;
     process.env.USERPROFILE = callerHome;
     process.env.HERMES_HOME = resolve(callerHome, '.hermes');
