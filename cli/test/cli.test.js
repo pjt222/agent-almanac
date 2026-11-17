@@ -73,8 +73,7 @@ const ROOT = process.cwd();
 // this file, as the file's other spawns do with a fixture home: HERMES_HOME is
 // read before the home on every platform, LOCALAPPDATA is Hermes's win32
 // default, and without PI_CODING_AGENT_DIR pi's directory is under the home.
-// Made at module scope, not in a before(), so that a run() made while the
-// describe blocks are collected gets it too.
+// RUN_HOME is made once, at module scope, and a top-level after() removes it.
 //
 // STARTUP_HOMES are the homes this process started with, read before RUN_HOME
 // exists. The #1071 describe's arms stand in for the caller from a before(),
