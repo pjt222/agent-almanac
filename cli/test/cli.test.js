@@ -3322,12 +3322,17 @@ describe('the default skills reach every fire (#994)', () => {
     assert.deepEqual(linkedSkills(dir), []);
   });
 
-  it('scatter removes the default skills when no other fire burns', () => {
+  it('scatter removes the default skills when no other fire burns, and its ceremony names them', () => {
     const dir = project('scatter-one');
     cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
     assert.deepEqual(linkedSkills(dir), ['alpha', 'heal', 'meditate'], 'setup: the gather linked the defaults');
-    cliOk(['scatter', 'team-one', '-f', 'claude-code', '-y', '--quiet'], dir);
+    // --ceremonial printed `✦ undefined scatters` here too (review round 1, A12).
+    const { stdout } = cliOk(['scatter', 'team-one', '-f', 'claude-code', '-y', '--ceremonial'], dir);
     assert.deepEqual(linkedSkills(dir), []);
+    for (const id of ['alpha', 'meditate', 'heal']) {
+      assert.match(stdout, new RegExp(`✦ ${id} scatters$`, 'm'), `the ceremony names ${id}\n${stdout}`);
+    }
+    assert.doesNotMatch(stdout, /undefined/, stdout);
   });
 
   it('scatter of one fire keeps the default skills while another fire burns, and the last scatter removes them', () => {
