@@ -9,6 +9,7 @@ import { loadRegistries } from './registry.js';
 import { detectAlmanacRoot } from './resolver.js';
 import { loadState, saveState, recordWarm, recordGather, recordScatter, markWelcomed, computeFireState, findHearthKeepers } from './state.js';
 import { buildFireScene } from './scene.js';
+import { countTeamSkills } from './campfire-reporter.js';
 import { makeChalkStub } from './chalk-stub.js';
 
 let chalk;
@@ -88,15 +89,9 @@ function parseKey(buf) {
 }
 
 // ── Data helpers ───────────────────────────────────────────────────
-function countTeamSkillSet(team, reg) {
-  const s = new Set();
-  for (const memberId of team.members || []) {
-    const agent = reg.agents.find(a => a.id === memberId);
-    if (agent) for (const sk of agent.skills || []) s.add(sk);
-  }
-  for (const sk of reg.defaultSkills || []) s.add(sk);
-  return s;
-}
+// A team's skill count is countTeamSkills() from campfire-reporter.js, the
+// one `campfire` prints. This file kept its own copy, which added the default
+// skills' registry entries instead of their ids (#994).
 
 function stateGlyph(state) {
   if (state === 'burning') return C.flame(GLYPH.burning);
@@ -196,7 +191,7 @@ function renderClearingLines(data, selected, scrollOffset, searchQuery, tendedMs
     const fd = data.state.fires[item.id];
     const fs = fd ? computeFireState(fd.lastWarmed) : null;
     const glyph = isGathered ? stateGlyph(fs) : C.dim(GLYPH.available);
-    const skillCount = countTeamSkillSet(item, data.reg).size;
+    const skillCount = countTeamSkills(item, data.reg);
     const memberCount = (item.members || []).length;
 
     const itemIdx = i - (i > gathered.length ? 1 : 0);
@@ -507,7 +502,7 @@ export async function startTui() {
           const team = allItems[selected];
           if (team && !data.state.fires[team.id]) {
             const memberIds = team.members || [];
-            const skillCount = countTeamSkillSet(team, data.reg).size;
+            const skillCount = countTeamSkills(team, data.reg);
             state = recordGather(state, team.id, memberIds, skillCount);
             data.state = state;
             saveState(state);
