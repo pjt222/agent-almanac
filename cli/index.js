@@ -24,7 +24,7 @@ import { Command, Option } from 'commander';
 // advertised 1.1.0, and the published package was 1.3.0.
 import pkg from '../package.json' with { type: 'json' };
 import { createInterface } from 'readline';
-import { loadRegistries, resolveItems, filterSkills, search, findTeam, findAgent } from './lib/registry.js';
+import { loadRegistries, resolveItems, filterSkills, search, findTeam, findAgent, agentSkillIdsWithDefaults } from './lib/registry.js';
 import { detectAlmanacRoot, isNpmPackageRoot, resolveTargetDir } from './lib/resolver.js';
 import { detectFrameworks } from './lib/detector.js';
 import { getAdapter, getAdaptersForDetections, listAdapters } from './adapters/index.js';
@@ -749,14 +749,13 @@ program
     const agents = [];
     const allSkillItems = [];
     const allAgentItems = [];
-    const defaultSkillIds = (ctx.reg.defaultSkills || []).map(s => s.id);
 
     for (const memberId of memberIds) {
       const agent = findAgent(ctx.reg, memberId);
       if (!agent) continue;
       allAgentItems.push(agent);
 
-      const agentSkillIds = [...new Set([...(agent.skills || []), ...defaultSkillIds])];
+      const agentSkillIds = agentSkillIdsWithDefaults(ctx.reg, agent);
       const agentSkills = agentSkillIds.map(sid =>
         ctx.reg.skills.find(s => s.id === sid),
       ).filter(Boolean);
@@ -883,7 +882,6 @@ program
 
     // Resolve what to remove
     const memberIds = team.members || [];
-    const defaultSkillIds = (ctx.reg.defaultSkills || []).map(s => s.id);
 
     const agents = [];
     const allSkillItems = [];
@@ -893,7 +891,7 @@ program
       const agent = findAgent(ctx.reg, memberId);
       if (!agent) continue;
 
-      const agentSkillIds = [...new Set([...(agent.skills || []), ...defaultSkillIds])];
+      const agentSkillIds = agentSkillIdsWithDefaults(ctx.reg, agent);
       const agentSkills = agentSkillIds.map(sid =>
         ctx.reg.skills.find(s => s.id === sid),
       ).filter(Boolean);
@@ -912,7 +910,8 @@ program
       }
     }
 
-    // Find skills/agents needed by other fires
+    // Find skills/agents needed by other fires. Every agent there brings the
+    // default skills too, so another fire keeps them (#994).
     const otherFires = Object.entries(state.fires).filter(([id]) => id !== name);
     const keptSkills = [];
     const keptAgents = [];
@@ -922,7 +921,7 @@ program
         const otherAgentIds = otherFire.agents || [];
         for (const oaId of otherAgentIds) {
           const oa = findAgent(ctx.reg, oaId);
-          if (oa && (oa.skills || []).includes(skill.id)) {
+          if (oa && agentSkillIdsWithDefaults(ctx.reg, oa).includes(skill.id)) {
             keptSkills.push({ id: skill.id, reason: otherId });
             break;
           }

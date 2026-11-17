@@ -106,6 +106,29 @@ export function findTeam(reg, id) {
 }
 
 /**
+ * The ids of the registry's default skills, which every agent inherits.
+ * agents/_registry.yml lists each as `{ skill: <id>, domain, description }`,
+ * and this is the one place the CLI reads that key: every consumer read `.id`
+ * after the key was renamed in #209, and got undefined (#994).
+ * @param {Registry} reg
+ * @returns {string[]}
+ */
+export function defaultSkillIds(reg) {
+  return (reg.defaultSkills || []).map(entry => entry.skill);
+}
+
+/**
+ * The skills an agent brings to a fire: its own, then the default skills,
+ * each once (#994).
+ * @param {Registry} reg
+ * @param {object} agent
+ * @returns {string[]}
+ */
+export function agentSkillIdsWithDefaults(reg, agent) {
+  return [...new Set([...(agent.skills || []), ...defaultSkillIds(reg)])];
+}
+
+/**
  * Filter skills by domain, complexity, language, or tags.
  * @param {Registry} reg
  * @param {object} filters - { domain, complexity, language, tag }

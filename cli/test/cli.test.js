@@ -55,6 +55,9 @@ const itemId = await import('../lib/item-id.js').catch(() => ({}));
 import * as placement from '../lib/placement.js';
 import * as campfire from '../lib/campfire-reporter.js';
 import { loadRegistries } from '../lib/registry.js';
+// A namespace import too: defaultSkillIds is new in #994's fix.
+import * as registryLib from '../lib/registry.js';
+import { findSharedSkills } from '../lib/state.js';
 import { makeChalkStub } from '../lib/chalk-stub.js';
 import { detectFrameworks } from '../lib/detector.js';
 import { buildFireScene } from '../lib/scene.js';
@@ -3163,6 +3166,161 @@ describe('--json keeps stdout one JSON document (#984)', () => {
       assert.equal(lines.filter((l) => l === line).length, 1, `not on stdout exactly once: ${line}\n${stdout}`);
     }
     assert.deepEqual(stderr.split('\n').filter((l) => l.includes('WARN:') || l === DRY_RUN), [], stderr);
+  });
+});
+
+// ── The default skills reach every fire (#994 §2) ──────────────────
+//
+// agents/_registry.yml lists its default skills as `{ skill: <id>, … }`, and
+// every agent inherits them. Since the key was renamed from `id` in #209, each
+// consumer read `.id` and got undefined: gather and scatter never linked or
+// removed meditate and heal, and the two team counts added the registry
+// entries themselves to a set of skill ids. The fixture's agents do not list
+// the defaults, except one, which lists meditate: on that shape the counts
+// were over by one, and on the others they were right by accident.
+describe('the default skills reach every fire (#994)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  let tmpRoot;
+  let cloneRoot;
+  let env;
+
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+
+  function spawnCli(args, cwd) {
+    const res = spawnSync(process.execPath, [cliEntry, ...args, '--source', cloneRoot],
+      { cwd, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+  }
+
+  /** Run the CLI and require exit 0. */
+  function cliOk(args, cwd) {
+    const result = spawnCli(args, cwd);
+    assert.equal(result.status, 0, `${args.join(' ')}: exit ${result.status}\n${result.stdout}\n${result.stderr}`);
+    return result;
+  }
+
+  /** A fresh project that Claude Code is detected in. */
+  function project(name) {
+    const dir = resolve(tmpRoot, name);
+    mkdirSync(resolve(dir, '.claude'), { recursive: true });
+    return dir;
+  }
+
+  /** The skill ids linked into a project's .claude/skills/, sorted. */
+  function linkedSkills(dir) {
+    const skillsDir = resolve(dir, '.claude/skills');
+    return existsSync(skillsDir) ? readdirSync(skillsDir).sort() : [];
+  }
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-994-')));
+    const fakeHome = resolve(tmpRoot, 'home');
+    mkdirSync(fakeHome, { recursive: true });
+    cloneRoot = resolve(tmpRoot, 'clone/agent-almanac');
+    for (const id of ['alpha', 'beta', 'gamma', 'meditate', 'heal']) {
+      mkdirSync(resolve(cloneRoot, 'skills', id), { recursive: true });
+      writeFileSync(resolve(cloneRoot, 'skills', id, 'SKILL.md'), `---\nname: ${id}\n---\n`);
+    }
+    mkdirSync(resolve(cloneRoot, 'agents'), { recursive: true });
+    mkdirSync(resolve(cloneRoot, 'teams'), { recursive: true });
+    writeFileSync(resolve(cloneRoot, 'skills/_registry.yml'), [
+      'total_skills: 5', 'domains:',
+      '  fixture:', '    description: fixture', '    skills:',
+      '      - id: alpha', '        path: alpha/SKILL.md',
+      '      - id: beta', '        path: beta/SKILL.md',
+      '      - id: gamma', '        path: gamma/SKILL.md',
+      '  esoteric:', '    description: fixture', '    skills:',
+      '      - id: meditate', '        path: meditate/SKILL.md',
+      '      - id: heal', '        path: heal/SKILL.md', '',
+    ].join('\n'));
+    // The shape of the shipped registry's default_skills block.
+    writeFileSync(resolve(cloneRoot, 'agents/_registry.yml'), [
+      'total_agents: 3',
+      'default_skills:',
+      '  - skill: meditate', '    domain: esoteric', '    description: fixture',
+      '  - skill: heal', '    domain: esoteric', '    description: fixture',
+      'agents:',
+      '  - id: agent-one', '    path: agents/agent-one.md', '    skills:', '      - alpha',
+      '  - id: agent-two', '    path: agents/agent-two.md', '    skills:', '      - beta',
+      '  - id: agent-lists-meditate', '    path: agents/agent-lists-meditate.md', '    skills:', '      - gamma', '      - meditate', '',
+    ].join('\n'));
+    for (const id of ['agent-one', 'agent-two', 'agent-lists-meditate']) {
+      writeFileSync(resolve(cloneRoot, 'agents', `${id}.md`), `---\nname: ${id}\n---\n`);
+    }
+    writeFileSync(resolve(cloneRoot, 'teams/_registry.yml'), [
+      'total_teams: 3', 'teams:',
+      '  - id: team-one', '    path: teams/team-one.md', '    lead: agent-one', '    members:', '      - agent-one',
+      '  - id: team-two', '    path: teams/team-two.md', '    lead: agent-two', '    members:', '      - agent-two',
+      '  - id: team-lists-meditate', '    path: teams/team-lists-meditate.md', '    lead: agent-lists-meditate',
+      '    members:', '      - agent-lists-meditate', '',
+    ].join('\n'));
+    for (const id of ['team-one', 'team-two', 'team-lists-meditate']) {
+      writeFileSync(resolve(cloneRoot, 'teams', `${id}.md`), `---\nname: ${id}\n---\n`);
+    }
+    env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
+    delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
+  });
+
+  after(() => {
+    rmTree(tmpRoot);
+  });
+
+  it('defaultSkillIds() reads the shipped registry\'s default skills by their `skill` key', () => {
+    assert.equal(typeof registryLib.defaultSkillIds, 'function', 'defaultSkillIds is exported from cli/lib/registry.js');
+    assert.deepEqual(registryLib.defaultSkillIds(loadRegistries(ROOT)), ['meditate', 'heal']);
+  });
+
+  it('gather links the default skills with the team\'s own, and its ceremony counts the links it made', () => {
+    const dir = project('gather-one');
+    const { stdout } = cliOk(['gather', 'team-one', '-f', 'claude-code', '--ceremonial'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'heal', 'meditate']);
+    const state = JSON.parse(readFileSync(resolve(dir, '.agent-almanac/state.json'), 'utf8'));
+    assert.equal(state.fires['team-one'].skillCount, 3, 'state.json records the skills gathered');
+    // A one-agent team, so the ceremony's per-agent sum is the number linked.
+    assert.match(stdout, /^ {2}3 practices settled\./m, stdout);
+    for (const id of ['alpha', 'meditate', 'heal']) {
+      assert.match(stdout, new RegExp(`✦ ${id}$`, 'm'), `the ceremony names ${id}\n${stdout}`);
+    }
+    assert.doesNotMatch(stdout, /undefined/, stdout);
+  });
+
+  it('scatter removes the default skills when no other fire burns', () => {
+    const dir = project('scatter-one');
+    cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'heal', 'meditate'], 'setup: the gather linked the defaults');
+    cliOk(['scatter', 'team-one', '-f', 'claude-code', '-y', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), []);
+  });
+
+  it('scatter of one fire keeps the default skills while another fire burns, and the last scatter removes them', () => {
+    const dir = project('two-fires');
+    cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
+    cliOk(['gather', 'team-two', '-f', 'claude-code', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'beta', 'heal', 'meditate'], 'setup: both gathers');
+    const first = JSON.parse(cliOk(['scatter', 'team-one', '-f', 'claude-code', '-y', '--json'], dir).stdout);
+    assert.deepEqual(linkedSkills(dir), ['beta', 'heal', 'meditate'], 'team-two still burns, and its agent brings the defaults');
+    assert.equal(first.skillsRemoved, 1, 'only alpha was team-one\'s alone');
+    assert.equal(first.skillsKept, 2, 'meditate and heal are kept for team-two');
+    cliOk(['scatter', 'team-two', '-f', 'claude-code', '-y', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), []);
+  });
+
+  it('campfire counts a default skill that an agent also lists once', () => {
+    const reg = loadRegistries(cloneRoot);
+    const team = reg.teams.find((t) => t.id === 'team-lists-meditate');
+    assert.equal(campfire.countTeamSkills(team, reg), 3, 'gamma, meditate and heal');
+    const dir = project('campfire-count');
+    assert.match(cliOk(['campfire', 'team-lists-meditate'], dir).stdout, /^ {2}3 practices total$/m);
+    assert.match(cliOk(['campfire', '--all'], dir).stdout, /team-lists-meditate +1 keepers, 3 practices/);
+  });
+
+  it('findSharedSkills counts the default skills that two burning fires share', () => {
+    const reg = loadRegistries(cloneRoot);
+    const state = { fires: { 'team-one': { agents: ['agent-one'] }, 'team-two': { agents: ['agent-two'] } } };
+    assert.deepEqual([...findSharedSkills(state, reg)].sort(), ['heal', 'meditate']);
   });
 });
 
