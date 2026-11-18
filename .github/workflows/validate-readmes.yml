@@ -100,7 +100,7 @@ permissions:
 
 jobs:
   readmes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       # No `fetch-depth: 0`: unlike generate-translation-status.js, this generator
       # makes no git calls, so full history buys nothing and costs ~90s here.

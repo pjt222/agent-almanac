@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   scripts-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       # Prerequisite for the grep -> rg migration; no call site uses rg yet.

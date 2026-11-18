@@ -59,7 +59,7 @@ CRLF, a missing trailing newline and a BOM survive untouched outside the edited 
 rewritten (the rename needs directory permission only).
 
 `--verify` runs its fixtures in a temporary directory under $TMPDIR: ext4 here (findmnt, PR
-#813's fact sheet) and an ubuntu-latest runner in CI. Pointed at the Windows mount it would
+#813's fact sheet) and a GitHub-hosted Ubuntu runner in CI. Pointed at the Windows mount it would
 redden on the mode-bit case at least, since that mount reports 777 whatever was copied (a
 755 file patched there read 777 before and after; PR #813's probe log, in its fact sheet).
 The read-back after every real write is the measurement on that mount (/mnt/d, which findmnt

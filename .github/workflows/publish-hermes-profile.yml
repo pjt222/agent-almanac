@@ -88,7 +88,7 @@ jobs:
     # A fork that syncs tags has no deploy key, so the key step would fail the run there; skip
     # the job instead of reddening someone else's fork. It buys nothing else.
     if: github.repository == 'pjt222/agent-almanac'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     env:
       DIST_REPO: pjt222/agent-almanac-hermes-profile
       # GitHub's ed25519 host key and its fingerprint, both from
