@@ -347,9 +347,9 @@ async function clusterOnce(prev, label) {
   for (const f of r.families) for (const x of new Set(f.members.filter((m) => verifiable(f, m, map)).map(key))) claims.set(x, (claims.get(x) || 0) + 1)
   const contested = new Set([...claims].filter(([, n]) => n > 1).map(([k]) => k))
   for (const f of r.families) {
-    const before = f.members.length
-    f.members = f.members.filter((m) => !(contested.has(key(m)) && verifiable(f, m, map)))
-    f.contested = before - f.members.length
+    const withdrawn = f.members.filter((m) => contested.has(key(m)) && verifiable(f, m, map))
+    f.members = f.members.filter((m) => !withdrawn.includes(m))
+    f.contested = new Set(withdrawn.map(key)).size // hypotheses, not member entries
   }
   if (contested.size) log(`${label}: ${contested.size} hypothesis(es) verifiably assigned to more than one family, credited to none: ${[...contested].join(', ')}`)
   return r

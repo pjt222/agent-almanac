@@ -546,6 +546,13 @@ test('a contested claim is counted per family, in the stats and on the stop line
   assert.ok(logs.some((l) => /cluster 4: .*new with fewer: N3 \(2 contested\), N4 \(2 contested\)/.test(l)), logs.join('\n'));
 });
 
+test('the contested count is of hypotheses, not of member entries', async () => {
+  // N3 lists r29#0 twice; N4 also claims it. One hypothesis is contested, counted once.
+  const clusters = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], fam('N3', ['r29', 'r29', 'r30']), fam('N4', ['r29'])] };
+  const { out } = await run(baseArgs({ roster: roster(60) }), { clusters });
+  assert.equal(out.familyStats.find((f) => f.id === 'N3').contested, 1);
+});
+
 test('the readers are given verified agent names, not the clusterer\'s list', async () => {
   // The ghost is listed in the final pass too, which is the one the synthesis reads.
   const ghostN2 = fam('N2', ['r20', 'r21', 'r23', 'ghost-agent'], ['t2/d.mjs']);
