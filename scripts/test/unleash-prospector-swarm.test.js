@@ -51,8 +51,8 @@ const fam = (id, agents, instances = ['t1/a.sh']) => ({ id, name: id, mechanism:
 /** The default cluster script: N1 born strong (2 agents) in 1-2, N2 strong in 3, N3 weak in 4. */
 const CLUSTERS = {
   'cluster:1-2': [fam('S1', ['janitor', 'r1', 'r2']), fam('N1', ['r3', 'r4'])],
-  'cluster:3': [fam('S1', ['janitor', 'r1']), fam('N1', ['r3', 'r4']), fam('N2', ['r20', 'r21'], ['t2/d.mjs'])],
-  'cluster:4': [fam('S1', ['janitor']), fam('N1', ['r3']), fam('N2', ['r20', 'r21'], ['t2/d.mjs']), fam('N3', ['r30'])],
+  'cluster:3': [fam('S1', ['janitor', 'r1']), fam('N1', ['r3', 'r4']), fam('N2', ['r20', 'r21', 'r23'], ['t2/d.mjs'])],
+  'cluster:4': [fam('S1', ['janitor']), fam('N1', ['r3']), fam('N2', ['r20', 'r21', 'r23'], ['t2/d.mjs']), fam('N3', ['r30'])],
 };
 
 async function run(args, clusters = CLUSTERS, calls = []) {
@@ -215,10 +215,11 @@ test('the null model is computed in code from N, m and K', async () => {
 test('outside-home finders are counted from the citations, not taken from the clusterer', async () => {
   const { out } = await run(baseArgs());
   const n2 = out.familyStats.find((f) => f.id === 'N2');
-  // Both cite t2/d.mjs. Territories go round-robin from T1 after the pilot, so r20 is at home
-  // in T2 and r21, homed in T1, found it from outside.
-  assert.equal(n2.agents, 2);
-  assert.equal(n2.outsideHome, 1);
+  // All three cite t2/d.mjs. Territories go round-robin from T1 after the pilot, so r20 is at
+  // home in T2, while r21 and r23, homed in T1, found it from outside. Asymmetric on purpose:
+  // an inverted home test counts 1 here, not 2.
+  assert.equal(n2.agents, 3);
+  assert.equal(n2.outsideHome, 2);
 });
 
 test('the synthesis ranking keeps only real item ids', async () => {
