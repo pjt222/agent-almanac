@@ -1,15 +1,20 @@
 /**
  * `skills/unleash-the-agents/references/prospector-swarm.mjs` is a Workflow script that lives
  * outside `workflows/`, so neither `check-workflow-contract.js` nor `workflow-template.test.js`
- * reads it. This suite is what does.
+ * reads it, and `scripts/mutation-check.js` cannot mutate it (its Workflow dialect is
+ * root-anchored to workflows/). This suite is the file's only gate.
  *
- * It parses the file the way the runtime wraps it, then runs the body against a stubbed runtime.
- * The stubs are `agent`, `parallel`, `phase`, `log` and `args`; `agent` answers by label from a
- * script. The behaviours the skill quotes are pinned, each of which a real run measured:
+ * It parses the file the way the runtime wraps it, then runs the body against a stubbed runtime
+ * (`agent`, `parallel`, `phase`, `log`, `args`); `agent` answers by label from a script.
+ *
+ * Pinned, each from a measured run or the review of #1081:
  * - the argument refusals fire before the first agent is spawned;
- * - the stop rule needs a new family that at least `minNewAgents` agents filed;
- * - a cited id that is not an item is dropped;
- * - a family born after the wave-3 adversary's input goes to the late challenge.
+ * - the stop rule needs a new family with `minNewAgents` VERIFIED agents;
+ * - a cluster pass that dies twice stops the run as 'cluster-failed', never as convergence;
+ * - the late challenge covers every family the wave-3 adversary did not answer;
+ * - cited ids that are not items are dropped;
+ * - model routing and agent types are as documented;
+ * - the null model computes both of its forms.
  *
  * What it cannot check is the runtime itself: model routing, agentType resolution and
  * structured-output validation are the Workflow tool's, and a stub only records what was asked.
@@ -55,27 +60,46 @@ const CLUSTERS = {
   'cluster:4': [fam('S1', ['janitor']), fam('N1', ['r3']), fam('N2', ['r20', 'r21', 'r23'], ['t2/d.mjs']), fam('N3', ['r30'])],
 };
 
-async function run(args, clusters = CLUSTERS, calls = []) {
+const HYP = (extra = {}) => ({ seed: 'S1', family: 'f', mechanism: 'm', instances: ['t1/a.sh', '/fixture/corpus/t2/d.mjs', 'not/an/item.sh'], proposal: '', confidence: 'low', testable_prediction: 'PREDICTION-TEXT', domain_reasoning: 'REASONING-TEXT', ...extra });
+
+/**
+ * Run the template. `override(label, opts, prompt)` may return a value (null included) to answer
+ * one call; `undefined` falls through to the defaults. `hyps(agentId)` sets how many hypotheses a
+ * prospector files.
+ */
+async function run(args, { clusters = CLUSTERS, calls = [], override, hyps } = {}) {
   const logs = [];
+  const adversary = args?.adversary ?? 'advocatus-diaboli';
   const agent = async (prompt, opts = {}) => {
     calls.push({ prompt, opts });
     const label = opts.label || '';
+    if (override) { const v = override(label, opts, prompt); if (v !== undefined) return v; }
     if (label.startsWith('cluster:')) {
-      const families = clusters[label] ?? clusters[Object.keys(clusters).at(-1)];
+      const key = label.replace(/:retry$/, '');
+      const families = clusters[key] ?? clusters[Object.keys(clusters).at(-1)];
       return { families: structuredClone(families), noise: '' };
     }
-    if (opts.agentType === (args.adversary ?? 'advocatus-diaboli')) return { challenges: [], missed_family: '' };
+    if (label === `challenge:${adversary}`) {
+      // The wave-3 adversary answers every family it was shown.
+      const shown = [...prompt.matchAll(/"id":"([^"]+)"/g)].map((x) => x[1]);
+      return { challenges: shown.map((id) => ({ family_id: id, verdict: 'weakened', strongest_counterargument: '', alternative_explanation: '', falsification_experiment: '', better_home: '' })), missed_family: '' };
+    }
+    if (label === `late-challenge:${adversary}`) return { challenges: [], missed_family: '' };
     if (label === 'synthesize') return { ranking: [{ rank: 1, family_id: 'S1', name: 'S1', recommendation: '', instances: ['t1/a.sh', 'not/an/item.sh'], convergence: '', adversarial_verdict: '', testable_prediction: '', why_this_rank: '' }], dropped_families: [], notes: '' };
-    return {
-      hypotheses: [{ seed: 'S1', family: 'f', mechanism: 'm', instances: ['t1/a.sh', '/fixture/corpus/t2/d.mjs', 'not/an/item.sh'], proposal: '', confidence: 'low', testable_prediction: '', domain_reasoning: '' }],
-      files_read: ['t1/a.sh'],
-    };
+    const id = label.split(':').pop();
+    const n = hyps ? hyps(id) : 1;
+    return { hypotheses: Array.from({ length: n }, () => HYP()), files_read: ['t1/a.sh'] };
   };
   const parallel = (thunks) => Promise.all(thunks.map((t) => t().catch(() => null)));
   const fn = new AsyncFunction('agent', 'parallel', 'pipeline', 'phase', 'log', 'args', 'budget', body);
-  const out = await fn(agent, parallel, null, () => {}, (m) => logs.push(m), args, { total: null });
+  const out = await fn(agent, parallel, null, () => {}, (msg) => logs.push(msg), args, { total: null });
   return { out, calls, logs };
 }
+const labelled = (calls, re) => calls.filter((c) => re.test(c.opts.label || ''));
+const PROSPECTOR = /^(pilot|prospect|challenge|edge):r?\w/;
+const isProspector = (c, args) => PROSPECTOR.test(c.opts.label || '') && c.opts.agentType !== (args.adversary ?? 'advocatus-diaboli');
+
+// --- Parse and shape -----------------------------------------------------------------------
 
 test('the template passes the documented wrap-then-check recipe, in both goals', () => {
   const wrapped = wrapWorkflow(SOURCE);
@@ -90,14 +114,23 @@ test('the template exports nothing but meta', () => {
   assert.deepEqual(exports.map((l) => l.trim().slice(0, 18)), ['export const meta ']);
 });
 
+test('the template calls none of the Workflow runtime bans: Date.now, Math.random, argless new Date', () => {
+  const code = SOURCE.replace(/^\s*\/\/.*$/gm, '');
+  assert.doesNotMatch(code, /\bDate\.now\s*\(/);
+  assert.doesNotMatch(code, /\bMath\.random\s*\(/);
+  assert.doesNotMatch(code, /\bnew Date\s*\(\s*\)/);
+});
+
 test('the sidecar name, meta.name and every phase() title agree with meta', () => {
   assert.match(SOURCE, /^\/\/ name: prospector-swarm$/m);
   assert.match(SOURCE, /^\s*name: 'prospector-swarm',$/m);
-  const metaTitles = [...SOURCE.matchAll(/\{ title: '([^']+)'/g)].map((m) => m[1]);
-  const phaseCalls = [...new Set([...SOURCE.matchAll(/\bphase\('([^']+)'\)/g)].map((m) => m[1]))];
+  const metaTitles = [...SOURCE.matchAll(/\{ title: '([^']+)'/g)].map((x) => x[1]);
+  const phaseCalls = [...new Set([...SOURCE.matchAll(/\bphase\('([^']+)'\)/g)].map((x) => x[1]))];
   assert.ok(phaseCalls.length >= 6, `found ${phaseCalls.length} phase() calls`);
   for (const t of phaseCalls) assert.ok(metaTitles.includes(t), `phase('${t}') has no meta.phases entry`);
 });
+
+// --- Refusals -----------------------------------------------------------------------------
 
 const REFUSALS = [
   ['no mode', { mode: undefined }, /args\.mode/],
@@ -107,6 +140,7 @@ const REFUSALS = [
   ['a placeholder territory', { territories: '__FILL__' }, /args\.territories/],
   ['an item count that disagrees', { expectItems: 7 }, /hold 6 distinct items; args\.expectItems says 7/],
   ['a short roster', { roster: roster(3) }, /at least 8 agent ids/],
+  ['an angle-bracket placeholder in the roster', { roster: [...roster(9), '<agent-id>'] }, /at least 8 agent ids/],
   ['a duplicated agent', { roster: [...roster(9), 'r1'] }, /twice/],
   ['the adversary in the roster', { roster: [...roster(9), 'advocatus-diaboli'] }, /must not include advocatus-diaboli/],
   ['a pilot agent in the roster', { roster: [...roster(9), 'mystic'] }, /must not include mystic/],
@@ -119,7 +153,7 @@ for (const [name, over, re] of REFUSALS) {
     const args = baseArgs(over);
     for (const [k, v] of Object.entries(over)) if (v === undefined) delete args[k];
     const calls = [];
-    await assert.rejects(() => run(args, CLUSTERS, calls), re);
+    await assert.rejects(() => run(args, { calls }), re);
     assert.equal(calls.length, 0, `spawned ${calls.length} agent(s) before refusing`);
   });
 }
@@ -127,6 +161,8 @@ for (const [name, over, re] of REFUSALS) {
 test('refuses before spawning when args itself is missing', async () => {
   await assert.rejects(() => run(undefined), /args\.mode/);
 });
+
+// --- Pilot, citations, routing ----------------------------------------------------------------
 
 test('pilot mode spawns exactly the two pilot agents, on the prospector model, as their own types', async () => {
   const { out, calls } = await run(baseArgs({ mode: 'pilot' }));
@@ -144,16 +180,63 @@ test('a cited id that is not an item is dropped, and an itemRoot prefix is strip
   assert.deepEqual(out.pilot[0].hypotheses[0].instances, ['t1/a.sh', 't2/d.mjs']);
 });
 
-test('every prospector prompt carries the containment block with its one write location', async () => {
-  const { calls } = await run(baseArgs());
-  const prospectors = calls.filter((c) => c.opts.model === 'haiku');
-  assert.ok(prospectors.length >= 30);
+test('clustering and synthesis run on the session model, the adversary passes as the adversary type', async () => {
+  const args = baseArgs({ adversary: 'senior-researcher' });
+  const { calls } = await run(args);
+  const clusterCalls = labelled(calls, /^cluster:/);
+  assert.ok(clusterCalls.length >= 2);
+  for (const c of clusterCalls) assert.equal(c.opts.model, undefined, c.opts.label);
+  assert.equal(labelled(calls, /^synthesize$/)[0].opts.model, undefined);
+  const adv = labelled(calls, /challenge:senior-researcher$/);
+  assert.equal(adv.length, 2, 'the wave-3 pass and the late pass');
+  for (const c of adv) { assert.equal(c.opts.agentType, 'senior-researcher'); assert.equal(c.opts.model, undefined); }
+  for (const c of calls.filter((x) => isProspector(x, args))) assert.equal(c.opts.agentType, c.opts.label.split(':')[1]);
+});
+
+test('clusterModel routes the cluster passes and nothing else', async () => {
+  const { calls } = await run(baseArgs({ clusterModel: 'sonnet' }));
+  for (const c of labelled(calls, /^cluster:/)) assert.equal(c.opts.model, 'sonnet');
+  assert.equal(labelled(calls, /^synthesize$/)[0].opts.model, undefined);
+});
+
+test('every prompt carries the containment block, and every prospector its own write locations', async () => {
+  const args = baseArgs();
+  const { calls } = await run(args);
+  for (const c of calls) assert.match(c.prompt, /^CONTAINMENT \(binding/m, c.opts.label);
+  const prospectors = calls.filter((c) => isProspector(c, args));
+  assert.equal(prospectors.length, 40);
   for (const c of prospectors) {
-    assert.match(c.prompt, /^CONTAINMENT \(binding/m);
-    assert.ok(c.prompt.includes('mktemp -d "/fixture/scratch/prospect.XXXXXX"'), c.opts.label);
+    const who = c.opts.label.split(':')[1];
+    assert.ok(c.prompt.includes('mktemp -d "/fixture/scratch/prospect.XXXXXX")" || exit 1; echo "$DIR"'), c.opts.label);
     assert.ok(c.prompt.includes('"${DIR:?}/<file>"'), c.opts.label);
+    assert.ok(c.prompt.includes(`write only under /fixture/scratch/${who}/.`), c.opts.label);
   }
 });
+
+test('wave 3 and the edge waves carry their injections; waves 1-2 carry none', async () => {
+  const args = baseArgs();
+  const { calls } = await run(args);
+  const p = calls.filter((c) => isProspector(c, args));
+  for (const c of p.filter((x) => /^(pilot|prospect):/.test(x.opts.label))) assert.doesNotMatch(c.prompt, /Update from/);
+  for (const c of p.filter((x) => /^challenge:/.test(x.opts.label))) assert.match(c.prompt, /Update from waves 1-2 .*Families so far:\n- S1/s);
+  for (const c of p.filter((x) => /^edge:/.test(x.opts.label))) assert.match(c.prompt, /These are established\. Work the edges/);
+});
+
+test('the cluster prompt carries the predictions and confidence but not the free-text reasoning', async () => {
+  const { calls } = await run(baseArgs());
+  const c3 = labelled(calls, /^cluster:3$/)[0];
+  assert.ok(c3.prompt.includes('PREDICTION-TEXT'));
+  assert.ok(c3.prompt.includes('"confidence":"low"'));
+  assert.ok(!c3.prompt.includes('REASONING-TEXT'));
+  assert.ok(labelled(calls, /^synthesize$/)[0].prompt.includes('PREDICTION-TEXT'), 'the prospectors\' predictions reach the synthesis');
+});
+
+test('territory counts add up to the prospectors attempted', async () => {
+  const { out } = await run(baseArgs());
+  assert.equal(Object.values(out.terrCount).reduce((s, x) => s + x, 0), out.attempted);
+});
+
+// --- The stop rule ------------------------------------------------------------------------------
 
 test('the stop rule: a wave whose only new family has one agent ends the run', async () => {
   const { out, calls } = await run(baseArgs());
@@ -161,7 +244,7 @@ test('the stop rule: a wave whose only new family has one agent ends the run', a
   assert.equal(out.edgeWaves, 1);
   assert.equal(out.consulted, 2 + 18 + 10 + 10);
   assert.deepEqual(out.notConsulted, roster(50).slice(38));
-  assert.equal(calls.filter((c) => c.opts.label?.startsWith('cluster:')).length, 3);
+  assert.equal(labelled(calls, /^cluster:/).length, 3);
 });
 
 test('the stop rule counts agents, so minNewAgents 1 runs a wave further than 2', async () => {
@@ -173,28 +256,104 @@ test('the stop rule counts agents, so minNewAgents 1 runs a wave further than 2'
   assert.equal(one.out.stopReason, 'no-new-family-with-independent-convergence');
 });
 
+test('the stop rule counts only verified agents, not the clusterer\'s list', async () => {
+  // N3's list has padding, case variants and a ghost, but only r30 returned and cited its item.
+  const padded = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], fam('N3', ['r30', 'r30 ', 'R30', 'ghost-agent'])] };
+  const { out } = await run(baseArgs({ roster: roster(60) }), { clusters: padded });
+  assert.equal(out.edgeWaves, 1);
+  const n3 = out.familyStats.find((f) => f.id === 'N3');
+  assert.equal(n3.agents, 1);
+});
+
+test('a seed id first seen late, or a family with no items, is never a new family', async () => {
+  // S2 is a seed the brief named, first clustered in pass 3 with two verified agents; N7 has two
+  // agents and no items. Neither may buy another wave.
+  const seeded = { 'cluster:1-2': CLUSTERS['cluster:1-2'], 'cluster:3': [...CLUSTERS['cluster:1-2'], fam('S2', ['r20', 'r21']), fam('N7', ['r20', 'r21'], [])] };
+  const { out } = await run(baseArgs({ seeds: ['S1', 'S2'] }), { clusters: seeded });
+  assert.equal(out.edgeWaves, 0);
+  assert.equal(out.stopReason, 'no-new-family-with-independent-convergence');
+});
+
 test('no new family at cluster 3 means no edge wave at all', async () => {
   const flat = { 'cluster:1-2': CLUSTERS['cluster:1-2'], 'cluster:3': CLUSTERS['cluster:1-2'] };
-  const { out } = await run(baseArgs(), flat);
+  const { out } = await run(baseArgs(), { clusters: flat });
   assert.equal(out.edgeWaves, 0);
   assert.equal(out.consulted, 30);
 });
 
-test('a remainder smaller than half a wave joins the last wave instead of running alone', async () => {
-  const strongEvery = {
-    'cluster:1-2': CLUSTERS['cluster:1-2'],
-    'cluster:3': CLUSTERS['cluster:3'],
-    'cluster:4': [...CLUSTERS['cluster:3'], fam('N9', ['r30', 'r31'])],
-  };
-  const { out } = await run(baseArgs({ roster: roster(40) }), strongEvery);
+test('maxEdgeWaves 0 stops before the first edge wave, and says so', async () => {
+  const { out } = await run(baseArgs({ maxEdgeWaves: 0 }));
+  assert.equal(out.stopReason, 'max-edge-waves');
+  assert.equal(out.edgeWaves, 0);
+});
+
+// --- Wave shape -----------------------------------------------------------------------------
+
+test('a remainder smaller than half a wave joins the last edge wave instead of running alone', async () => {
+  const strongEvery = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], fam('N9', ['r30', 'r31'])] };
+  const { out } = await run(baseArgs({ roster: roster(40) }), { clusters: strongEvery });
   assert.equal(out.edgeWaves, 1);
   assert.equal(out.consulted, 2 + 40);
   assert.equal(out.stopReason, 'roster-exhausted');
 });
 
-test('families born after the wave-3 adversary saw the set go to the late challenge, and only those', async () => {
+test('a remainder after wave 3 smaller than half a wave joins wave 3', async () => {
+  const { out, calls } = await run(baseArgs({ roster: roster(29) }));
+  assert.equal(out.edgeWaves, 0);
+  assert.equal(calls.filter((c) => /^challenge:r\d+$/.test(c.opts.label)).length, 11);
+  assert.equal(out.stopReason, 'roster-exhausted');
+});
+
+test('an empty wave 3 runs the adversary but no second cluster pass', async () => {
+  const { out, calls } = await run(baseArgs({ roster: roster(8) }));
+  assert.equal(calls.filter((c) => /^challenge:r\d+$/.test(c.opts.label)).length, 0);
+  assert.equal(labelled(calls, /^challenge:advocatus-diaboli$/).length, 1);
+  assert.deepEqual(labelled(calls, /^cluster:/).map((c) => c.opts.label), ['cluster:1-2']);
+  assert.equal(out.consulted, 10);
+});
+
+test('territories no prospector was homed in are reported', async () => {
+  const many = Object.fromEntries(Array.from({ length: 12 }, (_, i) => [`T${i + 1}`, [`t${i + 1}/x.sh`]]));
+  const cites = (label, opts) => (opts.model === 'haiku' ? { hypotheses: [HYP({ instances: ['t1/x.sh'] })], files_read: [] } : undefined);
+  const { out, logs } = await run(baseArgs({ territories: many, expectItems: 12, roster: roster(8), itemRoot: undefined }), { override: cites });
+  assert.deepEqual(out.unvisited, ['T9', 'T10', 'T11', 'T12']);
+  assert.ok(logs.some((l) => l.includes('territories no prospector was homed in: T9, T10, T11, T12')));
+});
+
+// --- Failures that must not read as convergence -------------------------------------------------
+
+test('a cluster pass that dies twice stops the run as cluster-failed, and its wave reaches the synthesis', async () => {
+  const { out, calls } = await run(baseArgs(), { override: (label) => (label.startsWith('cluster:3') ? null : undefined) });
+  assert.equal(out.stopReason, 'cluster-failed');
+  assert.deepEqual(labelled(calls, /^cluster:3/).map((c) => c.opts.label), ['cluster:3', 'cluster:3:retry']);
+  assert.equal(out.clusters.length, 1);
+  assert.equal(out.unclustered, 10);
+  const syn = labelled(calls, /^synthesize$/)[0].prompt;
+  assert.match(syn, /NEVER CLUSTERED \(the run stopped with 'cluster-failed'/);
+  assert.match(syn, /"agent":"r19"/);
+});
+
+test('a cluster pass with zero families is a failure too, and one retry can recover it', async () => {
+  let first = true;
+  const once = (label) => { if (label === 'cluster:3' && first) { first = false; return { families: [], noise: '' }; } return undefined; };
+  const { out, calls } = await run(baseArgs(), { override: once });
+  assert.notEqual(out.stopReason, 'cluster-failed');
+  assert.ok(labelled(calls, /^cluster:3:retry$/).length === 1);
+  assert.equal(out.unclustered, 0);
+});
+
+test('a dead first cluster pass ends the run before wave 3, with every hypothesis unclustered', async () => {
+  const { out, calls } = await run(baseArgs(), { override: (label) => (label.startsWith('cluster:1-2') ? null : undefined) });
+  assert.equal(out.stopReason, 'cluster-failed');
+  assert.equal(calls.filter((c) => /^challenge:/.test(c.opts.label)).length, 0);
+  assert.equal(out.unclustered, 20);
+});
+
+// --- The late challenge ---------------------------------------------------------------------
+
+test('the late challenge covers the families the wave-3 adversary did not answer, and only those', async () => {
   const { calls, out } = await run(baseArgs());
-  const late = calls.find((c) => c.opts.label === 'late-challenge:advocatus-diaboli');
+  const late = labelled(calls, /^late-challenge:advocatus-diaboli$/)[0];
   assert.ok(late, 'no late challenge was spawned');
   assert.match(late.prompt, /"id":"N2"/);
   assert.match(late.prompt, /"id":"N3"/);
@@ -203,13 +362,27 @@ test('families born after the wave-3 adversary saw the set go to the late challe
   assert.ok(out.adversarial.late);
 });
 
-test('the null model is computed in code from N, m and K', async () => {
-  const { out } = await run(baseArgs());
-  const { N, m, K, expectedAgentsPerFamily } = out.nullModel;
+test('a wave-3 adversary that returns nothing leaves every family to the late challenge', async () => {
+  const { calls } = await run(baseArgs(), { override: (label) => (label === 'challenge:advocatus-diaboli' ? null : undefined) });
+  const late = labelled(calls, /^late-challenge:/)[0];
+  for (const id of ['S1', 'N1', 'N2', 'N3']) assert.match(late.prompt, new RegExp(`"id":"${id}"`));
+});
+
+// --- Measured in code -------------------------------------------------------------------------
+
+test('the null model computes both forms from N, m and K, and signals at 3x the higher', async () => {
+  // Odd-numbered roster agents file two hypotheses, so m is not 1 and N/K differs from both forms.
+  const { out } = await run(baseArgs(), { hyps: (id) => (/^r\d*[13579]$/.test(id) ? 2 : 1) });
+  const { N, m, K, expectedIndependent, expectedDistinct, signalAt3x } = out.nullModel;
   assert.equal(N, 40);
-  assert.equal(m, 1);
   assert.equal(K, 4);
-  assert.equal(expectedAgentsPerFamily, Number((40 * (1 - (1 - 1 / 4) ** 1)).toFixed(2)));
+  // 40 prospectors: the 2 pilots and r1..r38, of which the 19 odd-numbered file two.
+  const mm = (40 + 19) / 40;
+  assert.equal(m, Number(mm.toFixed(2)));
+  assert.equal(expectedIndependent, Number((40 * (1 - (1 - 1 / 4) ** mm)).toFixed(2)));
+  assert.equal(expectedDistinct, Number(((40 * mm) / 4).toFixed(2)));
+  assert.equal(signalAt3x, Number((3 * Math.max(40 * (1 - (1 - 1 / 4) ** mm), (40 * mm) / 4)).toFixed(2)));
+  assert.notEqual(expectedDistinct, Number((40 / 4).toFixed(2)));
 });
 
 test('outside-home finders are counted from the citations, not taken from the clusterer', async () => {

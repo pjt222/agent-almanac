@@ -10,9 +10,13 @@
 //
 // RUN IT ONLY ON AN EXPLICIT WORKFLOW OPT-IN. A Workflow run is the user's to ask for: the
 // keyword `ultracode`, or the user's own words asking for a workflow or a fan-out. The skill
-// alone is not that opt-in. The one measured run (tests/results/2026-11-17-unleash-prospector-
-// swarm/RESULT.md) used 84 agents and about 4 h, and the 9 session-model agents produced a
-// quarter of all output tokens. Tell the user the scale before launching.
+// alone is not that opt-in. Tell the user the scale before launching. The one measured run
+// (tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md) took about 4 h with 84 agents,
+// and it involved three models, not two:
+// - Haiku produced 66 % of the output tokens;
+// - the 9 session-model agents produced 22 %;
+// - the advisor that 57 of the 84 agents consulted produced 13 %, on a third model.
+// `message.usage` does not count the advisor; `message.usage.iterations` does.
 //
 // Why a script and not Option A:
 // - The stop rule, the citation filter, the wave sizes and the null model are fixed in code, so
@@ -20,11 +24,19 @@
 // - Raw hypotheses stay out of the lead's context. Only the cluster and synthesis passes read
 //   them, and the lead reads the journal afterwards.
 //
-// Why it lives under the skill and not in workflows/: every prospector spawns as its own
-// roster agent (`agentType: <agent id>`). The workflow contract checker accepts only a
-// literal agentType from a fixed map (scripts/check-workflow-contract.js), and refuses a
-// per-spawn persona type by design. The persona type is the point of an unleash, and it buys
-// containment: a mystic or a kabalist carries Read/Grep/Glob and no shell.
+// Why it lives under the skill and not in workflows/:
+// - The workflow contract checker (scripts/check-workflow-contract.js) accepts any registered
+//   agent as a literal agentType: it reads each agent's `intent:` line. What it refuses is this
+//   template's shape, for three reasons:
+//   - the type is computed per spawn (`agentType: a`), and the checker requires a plain string
+//     literal;
+//   - roster agents such as janitor and advocatus-diaboli are `intent: implementing`, which a
+//     phase must declare;
+//   - every shell-capable spawn must start its prompt with REPO_SAFETY and name WRITE_LOCATION.
+//     The prospectors get the narrower read-only CONTAINMENT block below instead.
+// - npm ships skills/ but not workflows/, so a seed there would not reach an npm install.
+// - The persona type per spawn is the point of an unleash, and it is also containment: a mystic
+//   or a kabalist carries Read/Grep/Glob and no shell.
 //
 // INVOKE (two launches; the second replays the pilot from cache):
 //   Workflow({ scriptPath: '<this skill directory>/references/prospector-swarm.mjs', args: {
@@ -39,34 +51,53 @@
 //                                          // excludes the adversary and the two pilot agents
 //     pilot: [{ agent: 'janitor', territory: 'T1-name' }, { agent: 'mystic', territory: 'T2-name' }],
 //     seeds: ['S1', 'S2'],                 // families the brief already names; [] if none
-//     writeRoot: '/abs/scratch/dir',       // the ONE place an agent may create a scratch file
+//     writeRoot: '/abs/scratch/dir',       // the ONE place an agent may create a file; outside
+//                                          // every repository
 //   } })
-// Optional args: prospectorModel ('haiku'), clusterModel (session model), adversary
-// ('advocatus-diaboli'), edgeWaveSize (10), minNewAgents (2), maxEdgeWaves (6), framing (a lens
-// sentence; `{agent}` is replaced by the agent id), extraSteps (array of instruction lines added
-// to every prospector prompt, e.g. "read the registry at X before proposing a new tool").
+// Optional args:
+// - prospectorModel ('haiku'); clusterModel (the session model); adversary ('advocatus-diaboli');
+// - edgeWaveSize (10); minNewAgents (2); maxEdgeWaves (6);
+// - framing: a lens sentence, in which `{agent}` is replaced by the agent id;
+// - extraSteps: an array of instruction lines added to every prospector prompt, for example
+//   "read the registry at X before proposing a new tool".
+//
+// resumeFromRunId works only within the session that ran the pilot. The cache matches on
+// (prompt, options), and a prompt names the brief by path, not by content. After a failed
+// pilot, or after editing the brief in place, relaunch WITHOUT resume, or the cache hands back
+// the old pilot.
 //
 // Waves:
 // - Pilot: 2 agents.
 // - Waves 1-2: the first 18 roster agents, 20 with the pilot.
 // - Wave 3: the next 10, plus the adversary.
-// - Edge waves: `edgeWaveSize` each. A remainder smaller than half a wave joins the last wave
-//   instead of running alone.
+// - Edge waves: `edgeWaveSize` each.
+// - A remainder smaller than half a wave joins the wave before it instead of running alone. An
+//   empty wave 3 runs only the adversary.
 //
-// The stop rule: an edge wave runs only while the previous cluster pass produced a NEW family
-// that at least `minNewAgents` agents filed. Measured: the first version continued on any new
-// family citing one valid item, and a cluster pass always names one. It ran the whole roster,
-// and its last four waves produced only one-agent families. That measurement is RESULT.md's
-// "The stop rule".
+// The stop rule: an edge wave runs only while the last cluster pass produced a NEW family that
+// at least `minNewAgents` agents filed. An agent counts only if it returned and cited one of the
+// family's items; the clusterer's list alone does not count.
+// - Measured: the first version continued on any new family citing one valid item, and every
+//   pass but the last named one, so it ran the whole roster.
+// - The default of 2 is fitted to that one run.
+// - The rule cannot see what later waves add to EXISTING families, which is part of their job.
+// - RESULT.md's "The stop rule" has both sides.
 //
-// Families born after wave 3 never met the wave-3 adversary, so a late challenge pass covers
-// them before the synthesis.
+// A cluster pass that dies, or returns no families, is retried once. If the retry fails too, the
+// run stops with stopReason 'cluster-failed'. The hypotheses it never clustered go to the
+// synthesis, marked as such, rather than vanishing behind a stale pass that reads as
+// convergence.
+//
+// The late challenge covers every family the wave-3 adversary did not answer: those born after
+// it was briefed, and all of them if it returned nothing.
 //
 // After the run, in the lead's own session, not here:
 // - read the return value from tasks/<id>.output or journal.jsonl; the notification truncates;
-// - read each transcript's message.model, to confirm the prospectors ran the model you asked for;
-// - check containment with the repo guard and before/after manifests of anything an agent could
-//   reach. A prompt is not a sandbox: in the measured run 6 of the 45 Bash-using prospectors wrote
+// - read each transcript's message.model AND message.usage.iterations[].model. The second shows
+//   an advisor running on a third model, which message.model and message.usage both miss;
+// - check containment with before-and-after listings of everything an agent could reach, plus the
+//   repository guard where one exists (agent-almanac: npm run guard:snapshot / guard:verify).
+//   A prompt is not a sandbox: in the measured run 6 of the 45 Bash-using prospectors wrote
 //   scratch copies despite a "write nothing" sentence;
 // - re-derive every cited claim you will repeat. The swarm executes nothing, so each
 //   testable_prediction it returns is unrun.
@@ -75,19 +106,19 @@ export const meta = {
   name: 'prospector-swarm',
   description: 'unleash-the-agents as a Workflow script: cheap-model prospectors in waves, session-model clustering, adversarial passes, and a convergence stop rule',
   phases: [
-    { title: 'Pilot', detail: 'two prospectors; check the model, the citations and containment before the full run' },
+    { title: 'Pilot', detail: 'two prospectors; check the models, the citations and containment before the full run' },
     { title: 'Prospect', detail: 'waves 1-2, one home territory each' },
     { title: 'Cluster', detail: 'group hypotheses into families by mechanism (session model)' },
     { title: 'Challenge', detail: 'wave 3 plus the adversary' },
     { title: 'Edge', detail: 'later waves, only while a new family has independent convergence' },
-    { title: 'Late challenge', detail: 'the adversary on families born after wave 3' },
+    { title: 'Late challenge', detail: 'the adversary on every family the wave-3 pass did not answer' },
     { title: 'Synthesize', detail: 'the final ranking (session model)' },
   ],
 }
 
 // --- Arguments: refuse before the first agent is spawned --------------------------------------
-// A launch with an unfilled placeholder once spawned nothing and failed deep inside the body;
-// these checks make every such launch fail here, naming the argument, at zero agents.
+// A launch with an unfilled placeholder once spawned nothing and failed at the first prompt it
+// built; these checks make every such launch fail here, naming the argument, at zero agents.
 
 const A = args && typeof args === 'object' && !Array.isArray(args) ? args : {}
 const refuse = (msg) => { throw new Error(`prospector-swarm: ${msg}`) }
@@ -152,11 +183,14 @@ const FRAMING = typeof A.framing === 'string' && A.framing.trim() ? A.framing
 // --- Prompts --------------------------------------------------------------------------------
 
 // Not "write nothing": agents that needed a temporary file broke that sentence. A sanctioned
-// place keeps their writes where the lead can find and delete them.
-const CONTAINMENT = [
+// place keeps their writes where the lead can find and delete them. An agent with Write but no
+// shell gets its own directory, because it cannot run mktemp.
+const containment = (who) => [
   'CONTAINMENT (binding; read before anything else).',
   '- Read only. Do not edit or delete any file, do not execute any script from the corpus, and do not run git, gh, npm, npx, node or python.',
-  `- If you need a scratch file, create your own directory first, in the same shell call, and write only under it: DIR="$(mktemp -d "${WRITE_ROOT}/prospect.XXXXXX")" || exit 1, then name every path as "\${DIR:?}/<file>". Never write anywhere else, /tmp included.`,
+  `- If you need a scratch file and have a shell, create your own directory first, in the same shell call, and print it: DIR="$(mktemp -d "${WRITE_ROOT}/prospect.XXXXXX")" || exit 1; echo "$DIR". Name every path as "\${DIR:?}/<file>", and reuse the printed absolute path in later shell calls and in any Write.`,
+  `- Without a shell, write only under ${WRITE_ROOT}/${who}/.`,
+  '- Never write anywhere else, /tmp included.',
   '- Your answer goes only through the structured output.',
 ].join('\n')
 
@@ -167,7 +201,7 @@ const seedLine = SEEDS.length ? `Label each hypothesis with the seed id it exten
 function prospectPrompt(a, t, injection) {
   return [
     `You are consulted as the ${a} agent in a prospecting swarm. The question: ${QUESTION}`,
-    CONTAINMENT,
+    containment(a),
     `Step 1. Read the brief: ${BRIEF}`,
     INDEX_FILE ? `Step 2. Read the index of citable items: ${INDEX_FILE}` : '',
     `Step 3. Your home territory is ${t}. Open each of its items:\n` + TERR[t].map((id) => `- ${itemPath(id)}`).join('\n'),
@@ -232,7 +266,7 @@ phase('Pilot')
 const pilot = await parallel(PILOT.map((p) => () => prospect(p.agent, p.territory, '1-2', '', 'Pilot')))
 const pilotOk = pilot.every((p) => p && p.hypotheses.some((h) => h.instances.length > 0))
 log(`pilot: ${pilot.map((p, i) => (p ? `${p.agent} ${p.hypotheses.length} hyp, ${p.hypotheses.reduce((s, h) => s + h.instances.length, 0)} valid ids, ${p.files_read_valid} items read` : `${PILOT[i].agent} returned nothing`)).join('; ')}; dropped ${dropped} of ${cited} cited ids`)
-if (!pilotOk) log('pilot FAILED: a pilot agent returned nothing or cited no valid item; fix the brief or the territories before a full run')
+if (!pilotOk) log('pilot FAILED: a pilot agent returned nothing or cited no valid item; fix the brief or the territories, then relaunch WITHOUT resume')
 if (MODE === 'pilot' || !pilotOk) return { mode: MODE, pilotOk, pilot, cited, dropped }
 
 const results = [...pilot]
@@ -263,16 +297,16 @@ const CLUSTER_SCHEMA = {
   required: ['families', 'noise'],
 }
 
-// Only what clustering needs. The cluster prompt carries every hypothesis so far, so it grows
-// with each wave; the reasoning text stays in the journal.
-const compact = () => results.filter(Boolean).map((r) => ({ agent: r.agent, territory: r.territory, wave: r.wave, hypotheses: r.hypotheses.map((h) => ({ seed: h.seed, family: h.family, mechanism: h.mechanism, instances: h.instances, proposal: h.proposal })) }))
+// What clustering and synthesis need, without the free-text domain_reasoning: the cluster prompt
+// carries every hypothesis so far and grows with each wave. The journal keeps everything.
+const compact = (from = 0, to = results.length) => results.slice(from, to).filter(Boolean).map((r) => ({ agent: r.agent, territory: r.territory, wave: r.wave, hypotheses: r.hypotheses.map((h) => ({ seed: h.seed, family: h.family, mechanism: h.mechanism, instances: h.instances, proposal: h.proposal, confidence: h.confidence, testable_prediction: h.testable_prediction })) }))
 
-async function cluster(prev, waveLabel) {
-  const opts = { label: `cluster:${waveLabel}`, phase: 'Cluster', schema: CLUSTER_SCHEMA }
+async function clusterOnce(prev, label) {
+  const opts = { label, phase: 'Cluster', schema: CLUSTER_SCHEMA }
   if (CLUSTER_MODEL) opts.model = CLUSTER_MODEL
   const r = await agent([
     'You group the hypotheses of a prospecting swarm into families by MECHANISM, not by wording.',
-    CONTAINMENT,
+    containment('cluster'),
     `The question: ${QUESTION}. The brief: ${BRIEF}.${INDEX_FILE ? ` The index: ${INDEX_FILE}.` : ''} Open any item you need to judge whether two hypotheses share a mechanism.`,
     'Rules:',
     `- ${SEEDS.length ? `Seeded families keep the ids ${SEEDS.join(', ')}.` : 'There are no seeded families.'} New families get N1, N2 and so on. An id from a previous round keeps its meaning; never reuse a retired id for a different mechanism.`,
@@ -281,25 +315,61 @@ async function cluster(prev, waveLabel) {
     prev ? `Families from the previous round (keep their ids): ${JSON.stringify(prev.families.map((f) => ({ id: f.id, name: f.name, mechanism: f.mechanism })))}` : '',
     `All hypotheses so far (instances are already filtered to real item ids): ${JSON.stringify(compact())}`,
   ].filter(Boolean).join('\n\n'), opts)
-  if (!r) return prev
-  for (const f of r.families) f.instances = [...new Set((f.instances || []).map(norm).filter((id) => ITEMS.has(id)))]
+  if (!r || !Array.isArray(r.families) || r.families.length === 0) return null
+  for (const f of r.families) {
+    f.instances = [...new Set((f.instances || []).map(norm).filter((id) => ITEMS.has(id)))]
+    f.agents = [...new Set((f.agents || []).map((a) => String(a).trim()))]
+  }
   return r
 }
 
-// New families are counted in code against the previous round's ids, not taken from the
-// clusterer's own list. A family "counts" toward another wave only when MIN_NEW agents filed it.
+// One retry; then null, which the caller turns into stopReason 'cluster-failed'.
+async function cluster(prev, waveLabel) {
+  for (const label of [`cluster:${waveLabel}`, `cluster:${waveLabel}:retry`]) {
+    const r = await clusterOnce(prev, label)
+    if (r) return r
+    log(`${label}: returned nothing or no families`)
+  }
+  return null
+}
+
+// An agent counts toward a family only if it returned and cited one of the family's items.
+const byAgent = () => new Map(results.filter(Boolean).map((r) => [r.agent, r]))
+function verifiedAgents(f, map = byAgent()) {
+  const own = new Set(f.instances)
+  return (f.agents || []).filter((a) => {
+    const r = map.get(a)
+    return r && r.hypotheses.some((h) => h.instances.some((id) => own.has(id)))
+  })
+}
+
+// New families are counted in code against the previous pass's ids, not taken from the
+// clusterer's own list. A family "counts" toward another wave only with MIN_NEW verified agents.
 function newFamilies(prev, c) {
   const seen = new Set((prev?.families || []).map((f) => f.id))
+  const map = byAgent()
   const fresh = (c?.families || []).filter((f) => !seen.has(f.id) && !SEEDS.includes(f.id) && f.instances.length > 0)
-  return { strong: fresh.filter((f) => new Set(f.agents).size >= MIN_NEW).map((f) => f.id), weak: fresh.filter((f) => new Set(f.agents).size < MIN_NEW).map((f) => f.id) }
+  return { strong: fresh.filter((f) => verifiedAgents(f, map).length >= MIN_NEW).map((f) => f.id), weak: fresh.filter((f) => verifiedAgents(f, map).length < MIN_NEW).map((f) => f.id) }
 }
-const summary = (c) => (c?.families || []).map((f) => `- ${f.id} ${f.name}: ${new Set(f.agents).size} agents, ${f.instances.length} items; proposals: ${f.proposals}; disagreements: ${f.disagreements}`).join('\n')
+const summary = (c) => (c?.families || []).map((f) => `- ${f.id} ${f.name}: ${f.agents.length} agents, ${f.instances.length} items; proposals: ${f.proposals}; disagreements: ${f.disagreements}`).join('\n')
 
 const clusters = []
-let c = await cluster(null, '1-2')
-clusters.push(c)
-let fresh = newFamilies(null, c)
-log(`cluster 1-2: ${c?.families?.length ?? 0} families; new with >= ${MIN_NEW} agents: ${fresh.strong.join(', ') || 'none'}; new with fewer: ${fresh.weak.join(', ') || 'none'}`)
+let c = null              // the last pass that succeeded
+let clusteredUpTo = 0     // results[0 .. clusteredUpTo) are covered by c
+let stopReason = null
+let fresh = { strong: [], weak: [] }
+
+async function clusterWave(waveLabel) {
+  const next = await cluster(c, waveLabel)
+  if (!next) { stopReason = 'cluster-failed'; log(`cluster ${waveLabel} FAILED twice; stopping, and the synthesis is told which hypotheses were never clustered`); return }
+  fresh = newFamilies(c, next)
+  c = next
+  clusteredUpTo = results.length
+  clusters.push(next)
+  log(`cluster ${waveLabel}: ${next.families.length} families; new with >= ${MIN_NEW} verified agents: ${fresh.strong.join(', ') || 'none'}; new with fewer: ${fresh.weak.join(', ') || 'none'}`)
+}
+
+await clusterWave('1-2')
 
 // --- Wave 3 and the adversary -----------------------------------------------------------------
 
@@ -320,7 +390,7 @@ const ADV_SCHEMA = {
 }
 const adversaryPrompt = (families, which) => [
   `You are the adversarial pass over a prospecting swarm. The question: ${QUESTION}`,
-  CONTAINMENT,
+  containment(ADVERSARY),
   `Read the brief (${BRIEF})${INDEX_FILE ? `, the index (${INDEX_FILE})` : ''} and every item you need.`,
   `${which}:\n${JSON.stringify(families)}`,
   'For each family: steelman it, then find the strongest counterargument.',
@@ -330,27 +400,31 @@ const adversaryPrompt = (families, which) => [
   'Give each a read-only falsification experiment.',
 ].join('\n\n')
 
-phase('Challenge')
-// The wave-3 adversary is shown the families of cluster 1-2; anything born later is unchallenged.
-const challengedIds = new Set((c?.families || []).map((f) => f.id))
-const inject3 = `Update from waves 1-2 (${results.filter(Boolean).length} agents). Families so far:\n${summary(c)}\n\nDo NOT restate these. Extend them: name items they missed, dispute a proposal with a reason, or find a NEW family. Every claim cites item ids.`
-const w3 = ROSTER.slice(18, 28).map((a) => ({ a, t: nextTerr() }))
-const [w3res, adv3] = await Promise.all([
-  parallel(w3.map((x) => () => prospect(x.a, x.t, '3', inject3, 'Challenge'))),
-  agent(adversaryPrompt(c?.families || [], `The families the first ${results.filter(Boolean).length} agents converged on`), { label: `challenge:${ADVERSARY}`, phase: 'Challenge', schema: ADV_SCHEMA, agentType: ADVERSARY }),
-])
-results.push(...w3res)
-log(`wave 3: ${w3res.filter(Boolean).length}/${w3.length} returned; adversary ${adv3 ? 'returned' : 'returned nothing'}; dropped ${dropped} of ${cited} cited ids`)
-let prev = c
-c = await cluster(c, '3')
-clusters.push(c)
-fresh = newFamilies(prev, c)
-log(`cluster 3: ${c?.families?.length ?? 0} families; new with >= ${MIN_NEW} agents: ${fresh.strong.join(', ') || 'none'}; new with fewer: ${fresh.weak.join(', ') || 'none'}`)
+let start = 18
+let adv3 = null
+if (!stopReason) {
+  phase('Challenge')
+  // A remainder after wave 3 smaller than half an edge wave joins wave 3 instead of running alone.
+  const end3 = ROSTER.length - 28 > 0 && ROSTER.length - 28 < Math.ceil(EDGE_SIZE / 2) ? ROSTER.length : 28
+  const w3 = ROSTER.slice(18, end3).map((a) => ({ a, t: nextTerr() }))
+  const inject3 = `Update from waves 1-2 (${results.filter(Boolean).length} agents). Families so far:\n${summary(c)}\n\nDo NOT restate these. Extend them: name items they missed, dispute a proposal with a reason, or find a NEW family. Every claim cites item ids.`
+  const [w3res, a3] = await Promise.all([
+    parallel(w3.map((x) => () => prospect(x.a, x.t, '3', inject3, 'Challenge'))),
+    agent(adversaryPrompt(c.families, `The families the first ${results.filter(Boolean).length} agents converged on`), { label: `challenge:${ADVERSARY}`, phase: 'Challenge', schema: ADV_SCHEMA, agentType: ADVERSARY }),
+  ])
+  adv3 = a3
+  results.push(...w3res)
+  start = end3
+  log(`wave 3: ${w3res.filter(Boolean).length}/${w3.length} returned; adversary ${adv3 ? 'returned' : 'returned nothing'}; dropped ${dropped} of ${cited} cited ids`)
+  if (w3.length > 0) await clusterWave('3')
+}
+// What the wave-3 adversary actually ANSWERED, not what it was shown.
+const answeredIds = new Set((adv3?.challenges || []).map((x) => x.family_id))
 
 // --- Edge waves ---------------------------------------------------------------------------------
 
-let start = 28, edgeWaves = 0, stopReason = 'roster-exhausted'
-while (start < ROSTER.length) {
+let edgeWaves = 0
+while (!stopReason && start < ROSTER.length) {
   if (fresh.strong.length === 0) { stopReason = 'no-new-family-with-independent-convergence'; break }
   if (edgeWaves >= MAX_EDGE) { stopReason = 'max-edge-waves'; break }
   phase('Edge')
@@ -361,47 +435,52 @@ while (start < ROSTER.length) {
   const w = ROSTER.slice(start, start + size).map((a) => ({ a, t: nextTerr() }))
   start += size; edgeWaves++
   results.push(...(await parallel(w.map((x) => () => prospect(x.a, x.t, waveLabel, inject, 'Edge')))))
-  prev = c
-  c = await cluster(c, waveLabel)
-  clusters.push(c)
-  fresh = newFamilies(prev, c)
-  log(`wave ${waveLabel} (${w.length} agents): ${c?.families?.length ?? 0} families; new with >= ${MIN_NEW} agents: ${fresh.strong.join(', ') || 'none'}; new with fewer: ${fresh.weak.join(', ') || 'none'}`)
+  await clusterWave(waveLabel)
 }
+if (!stopReason) stopReason = 'roster-exhausted'
 const notConsulted = ROSTER.slice(start)
+const unvisited = TERR_KEYS.filter((k) => terrCount[k] === 0)
 log(`stopped: ${stopReason}; ${notConsulted.length} roster agents not consulted${notConsulted.length ? ` (${notConsulted.join(', ')})` : ''}`)
+if (unvisited.length) log(`territories no prospector was homed in: ${unvisited.join(', ')}`)
 
-// --- Late challenge: families the wave-3 adversary never saw ------------------------------------
+// --- Late challenge: every family the wave-3 adversary did not answer ---------------------------
 
-const late = (c?.families || []).filter((f) => !challengedIds.has(f.id) && f.instances.length > 0)
+const late = (c?.families || []).filter((f) => !answeredIds.has(f.id) && f.instances.length > 0)
 let advLate = null
 if (late.length) {
   phase('Late challenge')
-  advLate = await agent(adversaryPrompt(late, 'Families that first appeared after wave 3, which no adversary has seen'), { label: `late-challenge:${ADVERSARY}`, phase: 'Late challenge', schema: ADV_SCHEMA, agentType: ADVERSARY })
+  advLate = await agent(adversaryPrompt(late, 'Families no adversary has answered yet'), { label: `late-challenge:${ADVERSARY}`, phase: 'Late challenge', schema: ADV_SCHEMA, agentType: ADVERSARY })
 }
 
 // --- Measured in code: convergence, outside-home finders, and the null model -------------------
 
 const done = results.filter(Boolean)
-const byAgent = new Map(done.map((r) => [r.agent, r]))
+const finalMap = byAgent()
 const familyStats = (c?.families || []).map((f) => {
-  const agents = [...new Set(f.agents)]
+  const agents = verifiedAgents(f, finalMap)
   const own = new Set(f.instances)
   const outsideHome = agents.filter((a) => {
-    const r = byAgent.get(a)
-    if (!r) return false
+    const r = finalMap.get(a)
     const home = new Set(TERR[r.territory])
     return r.hypotheses.some((h) => h.instances.some((id) => own.has(id) && !home.has(id)))
   }).length
-  return { id: f.id, agents: agents.length, outsideHome, items: f.instances.length }
+  return { id: f.id, listedAgents: f.agents.length, agents: agents.length, outsideHome, items: f.instances.length }
 })
-// Expected agents per family if N agents filing m hypotheses each picked uniformly among K
-// families: N * (1 - (1 - 1/K)^m). K is post hoc (the cluster passes chose it), and seeded
+// Expected agents per family under two assumptions. N agents file m hypotheses each among K
+// families:
+// - if an agent's hypotheses may land in the same family: N * (1 - (1 - 1/K)^m);
+// - if they always land in distinct families: N * m / K. This was the usual case in the measured
+//   run, and it is always the higher bar.
+// Signal is 3x the higher of the two. K is post hoc (the cluster passes chose it), and seeded
 // families were named in the brief, so treat a ratio as a screen, not a test.
 const N = done.length
 const m = N ? done.reduce((s, r) => s + r.hypotheses.length, 0) / N : 0
 const K = (c?.families || []).length
-const expected = K ? N * (1 - Math.pow(1 - 1 / K, m)) : 0
-const nullModel = { N, m: Number(m.toFixed(2)), K, expectedAgentsPerFamily: Number(expected.toFixed(2)), signalAt3x: Number((3 * expected).toFixed(2)) }
+const expectedIndependent = K ? N * (1 - Math.pow(1 - 1 / K, m)) : 0
+const expectedDistinct = K ? Math.min(N, (N * m) / K) : 0
+const round2 = (x) => Number(x.toFixed(2))
+const nullModel = { N, m: round2(m), K, expectedIndependent: round2(expectedIndependent), expectedDistinct: round2(expectedDistinct), signalAt3x: round2(3 * Math.max(expectedIndependent, expectedDistinct)) }
+const unclustered = compact(clusteredUpTo)
 
 // --- Synthesis ------------------------------------------------------------------------------
 
@@ -415,9 +494,9 @@ const SYN_SCHEMA = {
       name: { type: 'string' },
       recommendation: { type: 'string' },
       instances: { type: 'array', items: { type: 'string' } },
-      convergence: { type: 'string', description: 'agents, of whom outside home, against the null model' },
+      convergence: { type: 'string', description: 'verified agents, of whom outside home, against the null model' },
       adversarial_verdict: { type: 'string', description: 'the verdict, or "not challenged"' },
-      testable_prediction: { type: 'string' },
+      testable_prediction: { type: 'string', description: "the prospectors' own prediction where one fits, else yours, marked as yours" },
       why_this_rank: { type: 'string' },
     }, required: ['rank', 'family_id', 'name', 'recommendation', 'instances', 'convergence', 'adversarial_verdict', 'testable_prediction', 'why_this_rank'] } },
     dropped_families: { type: 'array', items: { type: 'object', properties: { family_id: { type: 'string' }, reason: { type: 'string' } }, required: ['family_id', 'reason'] } },
@@ -427,14 +506,16 @@ const SYN_SCHEMA = {
 }
 const final = await agent([
   `Synthesize the final ranking from a prospecting swarm and its adversarial passes. The question: ${QUESTION}`,
-  CONTAINMENT,
+  containment('synthesize'),
   `Brief: ${BRIEF}.${INDEX_FILE ? ` Index: ${INDEX_FILE}.` : ''}`,
-  'Rank by evidence: distinct items, agents who found the family OUTSIDE their home territory, convergence against the null model below, and whether the adversarial verdict holds. Drop a refuted family unless the evidence answers the refutation. Say which claims you re-read and which you carried. Every instance must be an item id.',
+  'Rank by evidence: distinct items, verified agents who found the family OUTSIDE their home territory, convergence against the null model below, and whether the adversarial verdict holds. Drop a refuted family unless the evidence answers the refutation. Say which claims you re-read and which you carried. Every instance must be an item id.',
   `Final families: ${JSON.stringify(c?.families || [])}`,
-  `Measured in code: ${JSON.stringify({ familyStats, nullModel, terrCount, stopReason })}`,
+  `Hypotheses so far, with the prospectors' own testable predictions: ${JSON.stringify(compact(0, clusteredUpTo))}`,
+  unclustered.length ? `NEVER CLUSTERED (the run stopped with '${stopReason}' before a pass covered them); weigh them yourself and say so: ${JSON.stringify(unclustered)}` : '',
+  `Measured in code: ${JSON.stringify({ familyStats, nullModel, terrCount, stopReason, unvisited })}`,
   `Wave-3 adversary: ${JSON.stringify(adv3)}`,
   `Late adversary: ${JSON.stringify(advLate)}`,
-].join('\n\n'), { label: 'synthesize', phase: 'Synthesize', schema: SYN_SCHEMA })
+].filter(Boolean).join('\n\n'), { label: 'synthesize', phase: 'Synthesize', schema: SYN_SCHEMA })
 if (final) for (const r of final.ranking) r.instances = [...new Set((r.instances || []).map(norm).filter((id) => ITEMS.has(id)))]
 
-return { mode: MODE, stopReason, consulted: done.length, attempted: results.length, edgeWaves, notConsulted, cited, dropped, terrCount, nullModel, familyStats, final, adversarial: { wave3: adv3, late: advLate }, clusters, results }
+return { mode: MODE, stopReason, consulted: done.length, attempted: results.length, edgeWaves, notConsulted, unvisited, unclustered: unclustered.length, cited, dropped, terrCount, nullModel, familyStats, final, adversarial: { wave3: adv3, late: advLate }, clusters, results }
