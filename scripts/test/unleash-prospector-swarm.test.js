@@ -547,7 +547,9 @@ test('a contested claim is counted per family, in the stats and on the stop line
 });
 
 test('the readers are given verified agent names, not the clusterer\'s list', async () => {
-  const clusters = { ...CLUSTERS, 'cluster:3': [...CLUSTERS['cluster:1-2'], fam('N2', ['r20', 'r21', 'r23', 'ghost-agent'], ['t2/d.mjs'])] };
+  // The ghost is listed in the final pass too, which is the one the synthesis reads.
+  const ghostN2 = fam('N2', ['r20', 'r21', 'r23', 'ghost-agent'], ['t2/d.mjs']);
+  const clusters = { ...CLUSTERS, 'cluster:3': [...CLUSTERS['cluster:1-2'], ghostN2], 'cluster:4': [...CLUSTERS['cluster:4'].filter((f) => f.id !== 'N2'), ghostN2] };
   const { calls } = await run(baseArgs(), { clusters });
   const syn = labelled(calls, /^synthesize$/)[0].prompt;
   assert.ok(syn.includes('"id":"N2"'));
