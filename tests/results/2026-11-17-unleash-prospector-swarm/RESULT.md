@@ -23,7 +23,7 @@ changed `skills/unleash-the-agents/references/prospector-swarm.mjs`, the templat
 | Brief | Problem, the six families the lead had already found (seeds S1-S6), success criteria, the verification method, and the source of each claim |
 | Prospectors | All 75 roster agents except the adversary, each spawned as its own agent type, on `claude-haiku-5-5` |
 | Session-model stages | 7 cluster passes, 1 adversary (`advocatus-diaboli`), 1 synthesis, on `claude-opus-5-5` |
-| A third model | The session's advisor tool reached the subagents, though no agent definition lists it. 57 agents (48 prospectors and all 9 session-model stages) called it 58 times, on `claude-fable-5-2` |
+| A third model | The session's advisor tool reached the subagents, though no agent definition lists it. 60 agents (51 prospectors and all 9 session-model stages) called it 61 times, on `claude-fable-5-2`. 58 calls, from 57 agents, were answered; 3 were refused with `too_many_requests` |
 | Models, as read | `message.model` per transcript: 75 Haiku, 9 Opus. The advisor appears only in `message.usage.iterations[]` (`type: advisor_message`). In all 58 messages that carry an advisor iteration, the outer `message.usage` counts only the agent's own iterations |
 
 ### Results
@@ -39,16 +39,16 @@ changed `skills/unleash-the-agents/references/prospector-swarm.mjs`, the templat
 
 | Tokens | Calls | Output | Input, uncached | Cache write / cache read |
 |---|---|---|---|---|
-| Haiku prospectors | 75 agents | 2.87 M (65.8 %) | | 13.86 M / 84.81 M |
-| Opus stages | 9 agents | 0.95 M (21.7 %) | | 2.96 M / 65.75 M |
-| Advisor (Fable) | 58 calls from 57 agents | 0.55 M (12.6 %) | 10.52 M | 0 / 0 |
+| Haiku prospectors | 75 agents | 2.87 M (65.8 %) | 1,282 | 13.86 M / 84.81 M |
+| Opus stages | 9 agents | 0.95 M (21.7 %) | 526 | 2.96 M / 65.75 M |
+| Advisor (Fable) | 61 calls from 60 agents; 58 answered | 0.55 M (12.6 %) | 10.52 M | 0 / 0 |
 
 Credited to the agents that called it, the advisor's output puts the Opus stages at 25.3 % and the prospectors at
 74.7 %. Summing `message.usage` alone misses the advisor entirely.
 
 **The stop rule never fired.** The script ran another edge wave while the last cluster pass named any new family citing
 one valid item. Every pass but the last named one, and the roster ran out. The table counts each new family's agents in
-the pass that created it. Counting only agents that returned and cited one of the family's items gives the same numbers:
+the pass that created it. Counting only agents that returned and cited one of the family's items gives the same numbers (the run's cluster output names agents, not hypotheses, so the template's stricter per-hypothesis check could not be applied to it):
 
 | Cluster pass | New families (agents at birth) |
 |---|---|
@@ -67,7 +67,8 @@ Under the template's rule (a new family filed by at least 2 agents), wave 5 is t
   - The families born there were all one-agent: N24, N25, N26, N27. The synthesis folded N24 into ranks 3 and 5, N25 into
     ranks 1 and 3, and N27 into rank 7. N26 itself became rank 10.
   - The existing families grew. Between the wave-5 and the final pass, S1 went from 17 to 21 agents, S4 from 21 to 28, S5
-    from 8 to 12 and S6 from 7 to 10. The order at the top did not change.
+    from 8 to 12 and S6 from 7 to 10. By agent count, S4 and S1 kept first and second place, while S5 (8 → 12) passed N1
+    (10 → 11).
 - **The default of 2 is fitted to this one run**, and has not been tested on another.
 
 **Containment by prompt leaked; containment by type and by the bracket held.**
@@ -90,8 +91,9 @@ adversarial verdict.
 case.**
 - After waves 1-2: N = 20, m = 2.90, K = 19.
   - If an agent's hypotheses may share a family, the expected count per family is N·(1−(1−1/K)^m) = 2.90, and 3x is 8.71.
-  - If they always land in distinct families, it is N·m/K = 3.05, and 3x is 9.16. 19 of the 20 agents did file into
-    distinct families.
+  - If they always land in distinct families, it is N·m/K = 3.05, and 3x is 9.16. The cluster pass lists 19 of the 20
+    agents in at least as many families as they filed hypotheses: a proxy, because it maps agents, not hypotheses, to
+    families.
   - S1 (11) and S4 (11) clear both bars. N1 (9) clears only the first.
 - At the end: N = 75, m = 2.57, K = 33 (post hoc). The bars are 17.13 and 17.55. S1 (21) and S4 (28) clear both.
 - S1 to S6 were named in the brief, and the territories were built around them and around N1's files. The less primed
@@ -100,7 +102,9 @@ case.**
 ### What changed in the template
 
 - **Stop rule:** a new family counts toward another wave only when `minNewAgents` agents (default 2) filed it.
-  - An agent counts only if it returned and cited one of the family's items.
+  - The cluster pass assigns hypotheses (`members: [{ agent, hypothesis }]`). An agent counts only if its assigned
+    hypothesis exists and cites one of the family's items. A review measured that the weaker "any of its hypotheses
+    cites an item" check would have passed a median 38 % of the returned agents for each new family of this run.
   - New ids are counted in code against the previous pass.
   - A remainder smaller than half a wave joins the wave before it. The measured run ended on a 1-agent wave 8.
 - **Cluster failure:** a pass that dies or returns no families is retried once, and then stops the run as
@@ -112,9 +116,11 @@ case.**
 - **Argument refusals before the first spawn:** the first launch of the measured run passed an unfilled placeholder for
   the territories. It spawned nothing, and failed at the first prompt it built:
   `undefined is not an object (evaluating 'TERR[t].map')`.
-- **Leaner cluster prompts:** each cluster pass gets the hypotheses without `domain_reasoning`. The predictions,
-  confidence and proposals now reach both the cluster pass and the synthesis; in the script that ran, the synthesis
-  never saw the prospectors' predictions.
+- **Leaner cluster prompts, a fuller synthesis:** each cluster pass gets the hypotheses without `domain_reasoning`.
+  The predictions, confidence and proposals now reach both the cluster pass and the synthesis; in the script that ran,
+  the synthesis never saw the prospectors' predictions. The synthesis now carries the whole hypothesis set besides the
+  final families, which on this run's data roughly doubles its prompt. Removing `domain_reasoning` saves less than that
+  costs.
 - **Computed in code:** the verified-agent and outside-home counts, and the null model in both forms (the signal is 3x the
   higher), so the synthesis is given numbers rather than asked for them.
 

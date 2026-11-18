@@ -15,7 +15,8 @@
 // and it involved three models, not two:
 // - Haiku produced 66 % of the output tokens;
 // - the 9 session-model agents produced 22 %;
-// - the advisor that 57 of the 84 agents consulted produced 13 %, on a third model.
+// - the advisor, which 60 of the 84 agents called (61 calls, 58 answered, 3 refused with
+//   too_many_requests), produced 13 %, on a third model.
 // `message.usage` does not count the advisor; `message.usage.iterations` does.
 //
 // Why a script and not Option A:
@@ -492,8 +493,9 @@ const familyStats = (c?.families || []).map((f) => {
 // Expected agents per family under two assumptions. N agents file m hypotheses each among K
 // families:
 // - if an agent's hypotheses may land in the same family: N * (1 - (1 - 1/K)^m);
-// - if they always land in distinct families: N * m / K. This was the usual case in the measured
-//   run, and it is always the higher bar.
+// - if they always land in distinct families: N * m / K. This fits the measured run as far as its
+//   cluster output shows (it maps agents, not hypotheses, to families), and it is always the
+//   higher bar.
 // Signal is 3x the higher of the two. K is post hoc (the cluster passes chose it), and seeded
 // families were named in the brief, so treat a ratio as a screen, not a test.
 const N = done.length

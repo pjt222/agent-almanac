@@ -136,7 +136,7 @@ Built-in team coordination — per-teammate ownership and lifecycle, with status
 Use this only when the user has opted into a Workflow run: the keyword `ultracode`, or their own words asking for a workflow or a fan-out. This skill alone is not that opt-in. Tell the user the scale first. The one measured run (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`) took about 4 hours with 84 agents, and it involved three models, not two:
 - the 75 Haiku prospectors produced 66 % of the output tokens;
 - the 9 session-model agents produced 22 %;
-- the advisor, which 57 of the agents consulted on its own model, produced 13 %.
+- the advisor, which 60 of the agents called on its own model (61 calls, 58 answered), produced 13 %.
 
 [references/prospector-swarm.mjs](references/prospector-swarm.mjs) runs the whole procedure as one script. Each prospector spawns as its own roster agent on a cheap model, and the clustering, the adversary and the synthesis run on the session model. The script fixes in code what Option A leaves to the lead:
 - the citation filter;
@@ -190,7 +190,7 @@ Build on this — what explains the remaining cases where this hypothesis fails?
 Do NOT simply restate this finding. Extend, challenge, or refine it.
 ```
 
-**Count a new family toward another wave only when at least 2 agents filed it independently**, each citing one of its items. A clustering pass almost always names something new. In the measured run, the rule "continue while any new family cites one valid item" never fired. The roster ran out, and the last four waves (34 agents) produced only one-agent families (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`). Two cautions:
+**Count a new family toward another wave only when at least 2 agents filed it independently**, each through a hypothesis of its own that cites one of the family's items, not merely listed by the clusterer. A clustering pass almost always names something new. In the measured run, the rule "continue while any new family cites one valid item" never fired. The roster ran out, and the last four waves (34 agents) produced only one-agent families (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`). Two cautions:
 - The cut has a cost the rule cannot see. Under it, waves 6 to 8 would not have run, and refinements from those waves were folded into four of the top seven families.
 - The threshold of 2 was fitted to that one run.
 
@@ -221,7 +221,7 @@ Test the top hypothesis against a null model to ensure the convergence is meanin
 
 - **Programmatic verification**: If the hypothesis produces a testable formula or algorithm, run it against held-out examples
 - **Null model**: Estimate how many agents would land on the same hypothesis family by chance, where each of N agents files m hypotheses among K families. The expected count per family depends on whether one agent's hypotheses can share a family:
-  - if they always land in distinct families, as they almost always did in the measured run, it is N·m/K;
+  - if they always land in distinct families, it is N·m/K (the measured run's cluster passes listed 19 of 20 agents in at least as many families as they filed hypotheses);
   - if they may share one, it is N·(1−(1−1/K)^m);
   - with one hypothesis each, both are N/K.
 
@@ -278,7 +278,7 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 - [ ] The top hypothesis was verified against a null model or programmatic test
 - [ ] An adversarial pass challenged the consensus
 - [ ] The final hypothesis includes testable predictions and known limitations
-- [ ] Option C only: the run had an explicit workflow opt-in. The pilot's models and citations were read before the full run, and containment was checked with the guard and the before-and-after listings
+- [ ] Option C only: the run had an explicit workflow opt-in. The pilot's models and citations were read before the full run, and containment was checked with the before-and-after listings, and with the repository guard where there is one
 
 ## Common Pitfalls
 
