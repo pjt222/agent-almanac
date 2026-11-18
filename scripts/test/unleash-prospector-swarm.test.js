@@ -173,6 +173,14 @@ test('pilot mode spawns exactly the two pilot agents, on the prospector model, a
   assert.equal(out.pilotOk, true);
 });
 
+test('a failed pilot stops a full-mode run after the two pilot agents', async () => {
+  const calls = [];
+  const { out } = await run(baseArgs(), { calls, override: (label) => (label === 'pilot:mystic' ? null : undefined) });
+  assert.equal(out.pilotOk, false);
+  assert.equal(out.mode, 'full');
+  assert.equal(calls.length, 2);
+});
+
 test('a cited id that is not an item is dropped, and an itemRoot prefix is stripped, not dropped', async () => {
   const { out } = await run(baseArgs({ mode: 'pilot' }));
   assert.equal(out.cited, 6);
