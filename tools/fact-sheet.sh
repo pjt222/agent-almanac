@@ -135,9 +135,9 @@
 # needs no tzdata), so a stamp that is not UTC is caught on any host; an interrupted and a terminated run (exit 130
 # and 143, OUT absent, no sibling left; `timeout -s` sends each signal to the tool's whole process
 # group, and the 7 s kill is a watchdog's rather than `timeout -k`'s, which uutils 0.10.0 turns
-# into an immediate SIGKILL for every signal but TERM; a self-test started with SIGINT ignored,
-# under a timeout that leaves its child ignoring it too, skips the interrupted run, as a control
-# child shows); and that no temporary file survives any of it. It exits by its own result
+# into an immediate SIGKILL for INT among others; where env has --default-signal, both signals
+# are reset for the tool, so a self-test started with them ignored still runs both arms); and
+# that no temporary file survives any of it. It exits by its own result
 # (0 clean, 1 a check failed, 2 it could not set up). The whole self-test runs with stdin closed
 # except for the one run that pipes a line in: a mutant dropping the tool's own `</dev/null`
 # first hung the un-piped runs forever (F8's `read` waited on the checker's open stdin) rather
@@ -430,37 +430,36 @@ EXPECTED
   printf 'F1 slow :: sleep 3\n' > "$tmp/slow.spec"
   # The two signal arms. `timeout -s SIGNAL 1` sends the signal to the tool's whole process group,
   # as a terminal's Ctrl-C does. Its `-k` backstop is not used: uutils coreutils' timeout 0.10.0
-  # (Ubuntu 26.04) ends the child with SIGKILL at the first deadline whenever -k is given with a
-  # signal other than TERM, so the INT arm read 137 there. A watchdog replaces it: timeout runs
-  # as a background job in its own process group (`set -m`), and the watchdog sends SIGKILL to
-  # that group at 7 s. rc is timeout's status, which --preserve-status makes the tool's own.
+  # (Ubuntu 26.04) ends the child with SIGKILL at the first deadline when -k comes with INT (and
+  # with HUP, QUIT, USR1, USR2, ALRM or PIPE; TERM, WINCH, URG, CONT and CHLD were delivered), so
+  # the INT arm read 137 there. A watchdog replaces it and sends SIGKILL to timeout's process group
+  # at 7 s. `set -m` makes both background jobs process-group leaders, so the watchdog, sleep and
+  # all, is killed as soon as the tool is done (without it each run waits out the watchdog), and
+  # bash then starts timeout without the ignored SIGINT it gives a background job otherwise.
+  # Where env has --default-signal (GNU coreutils 9.4 and uutils 0.10.0 both do), INT and TERM
+  # are reset for the tool, so a self-test started with either ignored still interrupts it;
+  # uutils' timeout leaves an ignored signal ignored in its child. rc is timeout's status, which
+  # --preserve-status makes the tool's own.
+  sigreset=
+  env --default-signal=INT,TERM true 2>/dev/null && sigreset=yes
   signalled() { # SIGNAL COMMAND... -- sets rc
     local sig=$1 pid dog; shift
     set -m
-    timeout --preserve-status -s "$sig" 1 "$@" >/dev/null 2>&1 &
+    if [ -n "$sigreset" ]; then
+      timeout --preserve-status -s "$sig" 1 env --default-signal=INT,TERM "$@" >/dev/null 2>&1 &
+    else
+      timeout --preserve-status -s "$sig" 1 "$@" >/dev/null 2>&1 &
+    fi
     pid=$!
     ( sleep 7; kill -s KILL -- "-$pid" ) >/dev/null 2>&1 &
     dog=$!
     set +m
     wait "$pid"; rc=$?
-    kill -- "-$dog" 2>/dev/null; wait "$dog" 2>/dev/null
+    kill -s KILL -- "-$dog" 2>/dev/null; wait "$dog" 2>/dev/null
   }
-  # A self-test started with SIGINT ignored (a background job of a non-interactive shell is;
-  # `trap -p` reports it) can interrupt the tool only through a timeout that resets the signal
-  # for its child: GNU's 9.4 does, uutils' 0.10.0 does not. A control child that only traps
-  # SIGINT decides it, so the INT arm is skipped where no tool could pass it, and runs elsewhere.
-  int_unreachable=
-  if [ -n "$(trap -p INT)" ]; then
-    signalled INT bash -c 'trap "exit 130" INT; sleep 3'
-    [ "$rc" -eq 130 ] || int_unreachable="SIGINT is ignored on entry, and the control child read $rc, not 130"
-  fi
-  if [ -z "$int_unreachable" ]; then
-    signalled INT bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow.md"
-    ck "v6 interrupted run (SIGINT after 1 s): exit 130" "$rc" 130
-    ck "v6 interrupted run (SIGINT): OUT not written" "$(absent "$tmp/slow.md")" absent
-  else
-    printf 'skip: v6 interrupted run (%s)\n' "$int_unreachable"
-  fi
+  signalled INT bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow.md"
+  ck "v6 interrupted run (SIGINT after 1 s): exit 130" "$rc" 130
+  ck "v6 interrupted run (SIGINT): OUT not written" "$(absent "$tmp/slow.md")" absent
   signalled TERM bash "$self" --root "$tmp/repo" "$tmp/slow.spec" "$tmp/slow2.md"
   ck "v6 terminated run (SIGTERM after 1 s): exit 143" "$rc" 143
   ck "v6 terminated run (SIGTERM): OUT not written" "$(absent "$tmp/slow2.md")" absent
