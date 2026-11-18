@@ -15,6 +15,7 @@
  */
 
 import { chalk } from './reporter.js';
+import { agentSkillIdsWithDefaults } from './registry.js';
 import { canRenderPixelArt } from './pixel-renderer.js';
 import { buildFireScene } from './scene.js';
 
@@ -525,17 +526,16 @@ function computeState(lastWarmed) {
 }
 
 /**
- * Count total unique skills for a team.
+ * Count total unique skills for a team: what `gather` links, the default
+ * skills among them, each once (#994). The TUI counts with this too.
  */
 function countTeamSkills(team, reg) {
   const skillIds = new Set();
   for (const memberId of team.members || []) {
     const agent = reg.agents.find(a => a.id === memberId);
     if (!agent) continue;
-    for (const s of agent.skills || []) skillIds.add(s);
+    for (const s of agentSkillIdsWithDefaults(reg, agent)) skillIds.add(s);
   }
-  // Add default skills
-  for (const s of reg.defaultSkills || []) skillIds.add(s);
   return skillIds.size;
 }
 

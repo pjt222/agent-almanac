@@ -48,9 +48,12 @@ import { copyDiff } from './placement.js';
  *   site's value, deleting that value is an EQUIVALENT mutation and the verb
  *   silently stops being covered. Measured — the first version defaulted to
  *   'installing to' and deleting installAll's explicit verb survived the suite.
+ * @param {(msg: string) => void} [opts.warn] - Where each line goes:
+ *   reporter.warn(), on stdout, unless the caller's stdout is a JSON document
+ *   (#984).
  * @returns {void}
  */
-export function warnUnsupportedScopes(adapters, scope, { contentTypes, explicit, verb = 'using' }) {
+export function warnUnsupportedScopes(adapters, scope, { contentTypes, explicit, verb = 'using', warn: emit = warn }) {
   if (!explicit) return;
 
   for (const adapter of adapters) {
@@ -82,7 +85,7 @@ export function warnUnsupportedScopes(adapters, scope, { contentTypes, explicit,
     // Every unhonoured type lands in the same place: say it once, without
     // naming types, which is the whole-adapter case for all but vibe.
     if (effectives.length === 1 && effectives[0] !== null && unhonoured.length === inPlay.length) {
-      warn(`${displayName} is ${effectives[0]}-only; --scope ${scope} ignored (${verb} ${effectives[0]}).`);
+      emit(`${displayName} is ${effectives[0]}-only; --scope ${scope} ignored (${verb} ${effectives[0]}).`);
       continue;
     }
 
@@ -98,7 +101,7 @@ export function warnUnsupportedScopes(adapters, scope, { contentTypes, explicit,
         ? `${type}s support ${adapter.scopesFor(type).join(', ') || 'no scope'}`
         : `${type}s are ${effective}-only`;
     });
-    warn(`${displayName}: ${parts.join('; ')}; --scope ${scope} ignored for ${unhonoured.map((t) => `${t}s`).join(' and ')}.`);
+    emit(`${displayName}: ${parts.join('; ')}; --scope ${scope} ignored for ${unhonoured.map((t) => `${t}s`).join(' and ')}.`);
   }
 }
 
@@ -108,11 +111,14 @@ export function warnUnsupportedScopes(adapters, scope, { contentTypes, explicit,
  * @param {import('../adapters/base.js').FrameworkAdapter[]} adapters
  * @param {string} projectDir
  * @param {string} scope
- * @param {object} options - { dryRun, force, almanacRoot }
+ * @param {object} options - { dryRun, force, almanacRoot, warn }. `warn` is
+ *   where the warnings go: reporter.warn(), on stdout, unless the caller's
+ *   stdout is a JSON document, which passes reporter.warnOnStderr (#984).
  * @returns {Promise<object[]>} Array of result objects
  */
 export async function installAll(resolved, adapters, projectDir, scope, options) {
   const results = [];
+  const emit = options?.warn ?? warn;
 
   const allItems = [
     ...resolved.skills,
@@ -131,6 +137,7 @@ export async function installAll(resolved, adapters, projectDir, scope, options)
     contentTypes: [...new Set(allItems.filter((i) => !i.unknown).map((i) => i.type))],
     explicit: options?.scopeExplicit === true,
     verb: 'installing to',
+    warn: emit,
   });
 
   for (const item of allItems) {
@@ -149,7 +156,7 @@ export async function installAll(resolved, adapters, projectDir, scope, options)
       if (!adapter.supports(item.type)) {
         // Warn once for non-skill types on skills-only adapters
         if (item.type !== 'skill' && adapter.constructor.id !== 'universal') {
-          warn(`${item.type}s not supported by ${adapter.constructor.displayName}. Skipping ${item.id}.`);
+          emit(`${item.type}s not supported by ${adapter.constructor.displayName}. Skipping ${item.id}.`);
         }
         continue;
       }
@@ -182,7 +189,7 @@ export async function installAll(resolved, adapters, projectDir, scope, options)
  * @param {import('../adapters/base.js').FrameworkAdapter[]} adapters
  * @param {string} projectDir
  * @param {string} scope
- * @param {object} options - { dryRun }
+ * @param {object} options - { dryRun, scopeExplicit, warn }, `warn` as for installAll()
  * @returns {Promise<object[]>}
  */
 export async function uninstallAll(resolved, adapters, projectDir, scope, options) {
@@ -202,6 +209,7 @@ export async function uninstallAll(resolved, adapters, projectDir, scope, option
     contentTypes: [...new Set(allItems.map((i) => i.type))],
     explicit: options?.scopeExplicit === true,
     verb: 'uninstalling from',
+    warn: options?.warn ?? warn,
   });
 
   for (const item of allItems) {

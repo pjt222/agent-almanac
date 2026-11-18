@@ -8,10 +8,10 @@ description: >
   than deep expertise. Produces a ranked hypothesis set with convergence
   analysis and adversarial refinement.
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
+allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage Workflow
 metadata:
   author: Philipp Thoss
-  version: "1.2"
+  version: "1.3"
   domain: swarm
   complexity: advanced
   language: multi
@@ -37,6 +37,7 @@ Consult all available agents in parallel waves to generate diverse hypotheses fo
 - **Optional**: Agent subset — specific agents to include or exclude (default: all registered agents)
 - **Optional**: Wave size — number of agents per wave (default: 10)
 - **Optional**: Output format — structured template for agent responses (default: hypothesis + reasoning + confidence + testable prediction)
+- **Optional**: Execution path — Option A, the Agent tool (default), or Option C, the prospector-swarm Workflow script, which needs an explicit workflow opt-in (Step 3)
 
 ## Procedure
 
@@ -101,7 +102,7 @@ Assign agents to waves. Plan for 4 waves initially — you may not need all of t
 
 ### Step 3: Launch Waves
 
-Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the value comes from perspective diversity, not individual depth).
+Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the value comes from perspective diversity, not individual depth). Option C defaults its prospectors to `haiku`.
 
 #### Option A: Agent tool spawning (recommended)
 
@@ -130,14 +131,45 @@ Launch all agents in a wave simultaneously with the Agent tool and `run_in_backg
 
 Built-in team coordination — per-teammate ownership and lifecycle, with status carried across waves — but the team scoping only exists where TeamCreate surfaces. In interactive sessions use Option A.
 
+#### Option C: Workflow script (the prospector swarm)
+
+Use this only when the user has opted into a Workflow run: the keyword `ultracode`, or their own words asking for a workflow or a fan-out. This skill alone is not that opt-in. Tell the user the scale first. The one measured run (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`) took about 4 hours with 84 agents, and it involved three models, not two:
+- the 75 Haiku prospectors produced 66 % of the output tokens;
+- the 9 session-model agents produced 22 %;
+- the advisor, which 60 of the agents called on its own model (61 calls, 58 answered), produced 13 %.
+
+[references/prospector-swarm.mjs](references/prospector-swarm.mjs) runs the whole procedure as one script. Each prospector spawns as its own roster agent on a cheap model, and the clustering, the adversary and the synthesis run on the session model. The script fixes in code what Option A leaves to the lead:
+- the citation filter;
+- the wave sizes and the stop rule;
+- the outside-home counts;
+- the null model.
+
+Its header documents every argument.
+
+1. **Prepare the corpus as citable item ids.** Split the ids into territories, one home territory per agent. Write the brief to a file. Shuffle the roster yourself, because a script cannot randomise; leave the adversary and the two pilot agents out of it. Name one scratch directory, the only place an agent may create a file.
+2. **Launch the pilot:** `Workflow({ scriptPath: '<this skill directory>/references/prospector-swarm.mjs', args: { mode: 'pilot', … } })`. Two agents run. In each one's transcript, read:
+   - `message.model`;
+   - `message.usage.iterations[].model`, which shows an advisor running on another model and is invisible to `message.model` and to `message.usage`;
+   - its cited ids and its commands.
+3. **Relaunch with `mode: 'full'`** and the pilot's `resumeFromRunId`, in the same session; resume does not cross sessions. The pilot replays from cache. The cache matches on the prompt, which names the brief by path. So after a failed pilot, or after editing the brief in place, relaunch without resume, or the cache hands back the old pilot.
+4. **Bracket the run** with before-and-after listings of everything an agent could reach, and with the repository's own guard where it has one (in agent-almanac: `npm run guard:snapshot` / `guard:verify`). Keep the scratch directory outside every repository. A prompt is not a sandbox. In the measured run, 6 of the 45 prospectors that used a shell wrote scratch files despite being told to write nothing. That is why the template gives them one write location instead.
+5. **Read the return value from the run's `journal.jsonl` or its task output file**, not from the notification, which truncates.
+
+The template lives under this skill, not in `workflows/`. The workflow contract check accepts any registered agent as a literal `agentType`, but it refuses three things this template does:
+- computing the type per spawn;
+- spawning `intent: implementing` agents such as janitor in a phase that does not declare them;
+- prompting a shell-capable agent without the REPO_SAFETY and WRITE_LOCATION preamble.
+
+A persona type per spawn is the point of an unleash, and it is also containment: a mystic carries no shell. npm also ships `skills/` but not `workflows/`.
+
 #### Choosing between options
 
-| | Agent tool (Option A) | TeamCreate (Option B) |
-|---|---|---|
-| Availability | Every session (primary) | FleetView / cloud only (gated) |
-| Best for | All interactive unleashes | Cloud runs wanting a shared task list |
-| Coordination | SendMessage, manual collection | Task list, messaging, ownership |
-| Inter-wave handoff | Track via the brief update | Task status carries over |
+| | Agent tool (Option A) | TeamCreate (Option B) | Workflow script (Option C) |
+|---|---|---|---|
+| Availability | Every session (primary) | FleetView / cloud only (gated) | Sessions with the Workflow tool, on an explicit workflow opt-in |
+| Best for | All interactive unleashes | Cloud runs wanting a shared task list | A full roster over a corpus of citable items |
+| Coordination | SendMessage, manual collection | Task list, messaging, ownership | Fixed in code: waves, citation filter, stop rule |
+| Inter-wave handoff | Track via the brief update | Task status carries over | Injected by the script from each cluster pass |
 
 **Expected:** Each wave returns ~10 structured responses within 2-5 minutes. Agents that fail to respond or return off-format output are noted but do not block the pipeline.
 
@@ -157,6 +189,10 @@ After waves 1-2, extract the emerging signal before launching the next wave.
 Build on this — what explains the remaining cases where this hypothesis fails?
 Do NOT simply restate this finding. Extend, challenge, or refine it.
 ```
+
+**Count a new family toward another wave only when at least 2 agents filed it independently**, each through a hypothesis of its own that cites one of the family's items, not merely listed by the clusterer. A clustering pass almost always names something new. In the measured run, the rule "continue while any new family cites one valid item" never fired. The roster ran out, and the last four waves (34 agents) produced only one-agent families (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`). Two cautions:
+- The cut has a cost the rule cannot see. Under it, waves 6 to 8 would not have run, and refinements from those waves were folded into four of the top seven families.
+- The threshold of 2 was fitted to that one run.
 
 **Early stopping guidance**: Not every unleash needs all agents. For well-defined problem domains (e.g., codebase analysis), convergence often stabilizes at 30-40 agents. For abstract or open-ended problems (e.g., unknown mathematical transformations), the full roster adds value because the correct domain is genuinely unpredictable. Check convergence after each wave — if the top family's count and null-model ratio have plateaued, additional waves yield diminishing returns.
 
@@ -184,7 +220,13 @@ After all waves complete, gather all responses into a single document. Deduplica
 Test the top hypothesis against a null model to ensure the convergence is meaningful, not an artifact of shared training data.
 
 - **Programmatic verification**: If the hypothesis produces a testable formula or algorithm, run it against held-out examples
-- **Null model**: Estimate the probability that N agents would converge on the same hypothesis family by chance (e.g., if there are K reasonable hypothesis families, random convergence probability is ~N/K)
+- **Null model**: Estimate how many agents would land on the same hypothesis family by chance, where each of N agents files m hypotheses among K families. The expected count per family depends on whether one agent's hypotheses can share a family:
+  - if they always land in distinct families, it is N·m/K (the measured run's cluster passes listed 19 of 20 agents in at least as many families as they filed hypotheses);
+  - if they may share one, it is N·(1−(1−1/K)^m);
+  - with one hypothesis each, both are N/K.
+
+  Use the higher of the two. In the measured run, a family with 9 agents cleared 3x the lower one (8.7) but not 3x the higher one (9.16).
+- **Priming**: K is chosen after the fact by the clustering. A family the brief named, or one whose territory was built around it, is partly the brief speaking back. The count of agents who found it outside their home territory is the less primed signal
 - **Threshold**: Signal is meaningful if convergence exceeds 3x the null model expectation
 
 **Expected:** The top hypothesis family significantly exceeds chance-level convergence and/or passes programmatic verification.
@@ -195,7 +237,7 @@ Test the top hypothesis against a null model to ensure the convergence is meanin
 
 **Preferred timing: Wave 3, not post-synthesis.** Including `advocatus-diaboli` in Wave 3 (alongside the inter-wave knowledge injection) is more effective than a standalone adversarial pass after all waves complete. Early challenge lets Waves 4+ refine against the critique rather than piling onto an unchallenged consensus.
 
-If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. For a structured pass, spawn both agents as parallel subagents via the Agent tool and coordinate them with `SendMessage` against the consensus:
+If the adversarial pass was already part of Wave 3, this step becomes a final check. If not (e.g., you ran all waves without it), spawn `advocatus-diaboli` (or `senior-researcher`) now. Either way, also challenge every family the Wave 3 adversary did not answer: those that appeared after it was briefed, and all of them if it returned nothing. In the measured run, 5 of the 13 ranked families had no adversarial verdict. Option C runs this pass itself. For a structured pass, spawn both agents as parallel subagents via the Agent tool and coordinate them with `SendMessage` against the consensus:
 
 ```text
 Here is the consensus hypothesis from [N] independent agents:
@@ -236,6 +278,7 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 - [ ] The top hypothesis was verified against a null model or programmatic test
 - [ ] An adversarial pass challenged the consensus
 - [ ] The final hypothesis includes testable predictions and known limitations
+- [ ] Option C only: the run had an explicit workflow opt-in. The pilot's models and citations were read before the full run, and containment was checked with the before-and-after listings, and with the repository guard where there is one
 
 ## Common Pitfalls
 
@@ -257,3 +300,4 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 - `coordinate-swarm` — broader swarm coordination patterns for distributed systems
 - `expand-awareness` — open perception before narrowing (complementary: use as individual agent preparation)
 - `meditate` — clear context noise before launching (recommended before Step 1)
+- `create-workflow` — the Workflow script conventions that Option C's template follows outside `workflows/`

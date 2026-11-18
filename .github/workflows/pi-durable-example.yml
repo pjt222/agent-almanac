@@ -31,7 +31,7 @@ permissions:
 
 jobs:
   pi-durable-example:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     defaults:
       run:
         working-directory: scripts/test/_pi-durable-example

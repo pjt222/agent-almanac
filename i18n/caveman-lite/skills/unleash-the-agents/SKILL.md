@@ -14,7 +14,7 @@ description: >
   than deep expertise. Produces a ranked hypothesis set with convergence
   analysis and adversarial refinement.
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
+allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage Workflow
 metadata:
   author: Philipp Thoss
   version: "1.2"

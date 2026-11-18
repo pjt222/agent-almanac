@@ -16,7 +16,7 @@ jobs:
   # unfiltered trigger, and unfiltering it was not in scope. The rename is still needed so the
   # PR page names it, and so it CAN be required later without renaming under a live ruleset.
   translations:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
