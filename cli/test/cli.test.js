@@ -8,7 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync, spawnSync } from 'child_process';
-import { chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, statSync, symlinkSync } from 'fs';
 import { createHash } from 'crypto';
 import { tmpdir, homedir } from 'os';
 import { dirname, isAbsolute, resolve } from 'path';
@@ -284,14 +284,20 @@ describe('detect', () => {
 // it sees. The control spawns with the caller's environment and must see all
 // three, so the other arms cannot pass because the fixture went unseen. pi
 // marks no project from its agent directory, so its arm asks for -g: a dry run
-// names the path it would write, and writes nothing. The first test checks
-// runEnv() itself against STARTUP_HOMES, which the arms cannot see.
+// names the path it would write, and writes nothing. The detect arms see a
+// spawn's HERMES_HOME only where that home holds a config.yaml, so a spawn
+// given the caller's HERMES_HOME would pass them on a machine without Hermes;
+// a -f hermes dry run needs no detection and names the path under the spawn's
+// own HERMES_HOME on any home (#1074, C1). The first test checks runEnv()
+// itself against STARTUP_HOMES, which the arms cannot see.
 describe('run() and runAllowFail() spawn with a home of their own (#1071)', () => {
   const KEYS = ['HOME', 'USERPROFILE', 'HERMES_HOME', 'LOCALAPPDATA', 'PI_CODING_AGENT_DIR'];
   const PI_DRY_RUN = 'install commit-changes -f pi -g --dry-run';
+  const HERMES_DRY_RUN = 'install commit-changes -f hermes -g --dry-run';
   // eslint-disable-next-line no-control-regex
   const stripAnsi = (text) => text.replace(/\x1b\[[0-9;]*m/g, '');
   const piLine = (agentDir) => `  + commit-changes [pi] ${resolve(agentDir, 'skills/commit-changes')}`;
+  const hermesLine = (hermesHome) => `  + commit-changes [hermes] ${resolve(hermesHome, 'skills/git/commit-changes')}`;
   const saved = {};
   let tmpRoot;
   let callerHome;
@@ -329,7 +335,19 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
   });
 
   it('runEnv() points every home variable at RUN_HOME, which is none of the homes this process started with', () => {
-    assert.ok(!STARTUP_HOMES.has(RUN_HOME), `RUN_HOME is a home this process started with: ${RUN_HOME}`);
+    // By spelling after resolve(), so a trailing slash does not hide a startup
+    // home, and by device and inode, so a symlink to one does not either (#1074,
+    // C3). An inode of 0 means the filesystem does not report one; there the
+    // spelling is the only comparison left.
+    assert.ok(!STARTUP_HOMES.has(resolve(RUN_HOME)), `RUN_HOME is a home this process started with: ${RUN_HOME}`);
+    const runHomeId = statSync(RUN_HOME, { bigint: true });
+    for (const startupHome of STARTUP_HOMES) {
+      let startupId;
+      try { startupId = statSync(startupHome, { bigint: true }); } catch { continue; }
+      if (startupId.ino === 0n || runHomeId.ino === 0n) continue;
+      assert.ok(startupId.dev !== runHomeId.dev || startupId.ino !== runHomeId.ino,
+        `RUN_HOME ${RUN_HOME} is the directory this process started with as ${startupHome}`);
+    }
     const env = runEnv();
     assert.equal(env.HOME, RUN_HOME);
     assert.equal(env.USERPROFILE, RUN_HOME);
@@ -370,6 +388,18 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
     const out = stripAnsi(stdout);
     assert.equal(status, 0, out);
     assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
+  });
+
+  it('run() names a Hermes path under its own home', () => {
+    const out = stripAnsi(run(HERMES_DRY_RUN));
+    assert.ok(out.split('\n').includes(hermesLine(resolve(RUN_HOME, '.hermes'))), out);
+  });
+
+  it('runAllowFail() names a Hermes path under its own home', () => {
+    const { stdout, status } = runAllowFail(HERMES_DRY_RUN);
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.ok(out.split('\n').includes(hermesLine(resolve(RUN_HOME, '.hermes'))), out);
   });
 });
 
@@ -1654,6 +1684,7 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
       await inSandbox(`cli-${framework}`, async (sb) => {
         const env = { ...process.env, HOME: sb.home, USERPROFILE: sb.home, HERMES_HOME: resolve(sb.home, '.hermes'), NO_COLOR: '1' };
         delete env.LOCALAPPDATA;
+        delete env.PI_CODING_AGENT_DIR;
         const run = (verb) => {
           const args = verb === 'install' ? installArgs : uninstallArgs;
           const res = spawnSync(process.execPath, [cliEntry, verb, ...args, '-f', framework, '--source', ROOT], { cwd: sb.proj, env, encoding: 'utf8', timeout: 20000 });
@@ -1704,6 +1735,7 @@ describe('audit exit codes end to end (#439)', () => {
   let savedUserProfile;
   let savedHermesHome;
   let savedLocalAppData;
+  let savedPiAgentDir;
 
   /** A project fixture copilot detects, via .github/copilot-instructions.md. */
   function project(name) {
@@ -1759,6 +1791,10 @@ describe('audit exit codes end to end (#439)', () => {
     savedLocalAppData = process.env.LOCALAPPDATA;
     process.env.HERMES_HOME = resolve(tmpRoot, 'home', '.hermes');
     delete process.env.LOCALAPPDATA;
+    // pi's directory follows $PI_CODING_AGENT_DIR wherever the CLI runs, so a
+    // caller's value would outlive the pinned home (#1075).
+    savedPiAgentDir = process.env.PI_CODING_AGENT_DIR;
+    delete process.env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
@@ -1770,6 +1806,8 @@ describe('audit exit codes end to end (#439)', () => {
     else process.env.HERMES_HOME = savedHermesHome;
     if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
     else process.env.LOCALAPPDATA = savedLocalAppData;
+    if (savedPiAgentDir === undefined) delete process.env.PI_CODING_AGENT_DIR;
+    else process.env.PI_CODING_AGENT_DIR = savedPiAgentDir;
     rmSync(tmpRoot, { recursive: true, force: true });
   });
 
@@ -2012,6 +2050,7 @@ describe('npm package root (#606)', () => {
 
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
@@ -3068,6 +3107,7 @@ describe('--json keeps stdout one JSON document (#984)', () => {
     writeFileSync(resolve(cloneRoot, 'teams/fixture-team.md'), '---\nname: fixture-team\n---\n');
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
@@ -4093,6 +4133,7 @@ describe('item names stay inside their install directories', () => {
     const fakeHome = resolve(tmpRoot, 'home');
     mkdirSync(fakeHome, { recursive: true });
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes'), NO_COLOR: '1' };
+    delete env.PI_CODING_AGENT_DIR;
   });
 
   after(() => rmTree(tmpRoot));
@@ -4966,6 +5007,7 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     plantUserFile(userFile);
     const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
     const spawnCli = (args) => {
       const res = spawnSync(process.execPath, [cliEntry, ...args, '-f', 'opencode', '--source', ROOT],
         { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
@@ -5015,6 +5057,7 @@ describe('sync keeps a user\'s own entry in .agents/skills (S3-B2 P6)', () => {
     writeFileSync(resolve(proj, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
     const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
 
     const res = spawnSync(process.execPath, [cliEntry, 'sync', '-f', 'universal', '--source', ROOT],
       { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
