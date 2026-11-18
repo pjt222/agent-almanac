@@ -1684,6 +1684,7 @@ describe('generated files: the CLI removes or replaces only its own (#998)', () 
       await inSandbox(`cli-${framework}`, async (sb) => {
         const env = { ...process.env, HOME: sb.home, USERPROFILE: sb.home, HERMES_HOME: resolve(sb.home, '.hermes'), NO_COLOR: '1' };
         delete env.LOCALAPPDATA;
+        delete env.PI_CODING_AGENT_DIR;
         const run = (verb) => {
           const args = verb === 'install' ? installArgs : uninstallArgs;
           const res = spawnSync(process.execPath, [cliEntry, verb, ...args, '-f', framework, '--source', ROOT], { cwd: sb.proj, env, encoding: 'utf8', timeout: 20000 });
@@ -1734,6 +1735,7 @@ describe('audit exit codes end to end (#439)', () => {
   let savedUserProfile;
   let savedHermesHome;
   let savedLocalAppData;
+  let savedPiAgentDir;
 
   /** A project fixture copilot detects, via .github/copilot-instructions.md. */
   function project(name) {
@@ -1789,6 +1791,10 @@ describe('audit exit codes end to end (#439)', () => {
     savedLocalAppData = process.env.LOCALAPPDATA;
     process.env.HERMES_HOME = resolve(tmpRoot, 'home', '.hermes');
     delete process.env.LOCALAPPDATA;
+    // pi's directory follows $PI_CODING_AGENT_DIR wherever the CLI runs, so a
+    // caller's value would outlive the pinned home (#1075).
+    savedPiAgentDir = process.env.PI_CODING_AGENT_DIR;
+    delete process.env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
@@ -1800,6 +1806,8 @@ describe('audit exit codes end to end (#439)', () => {
     else process.env.HERMES_HOME = savedHermesHome;
     if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
     else process.env.LOCALAPPDATA = savedLocalAppData;
+    if (savedPiAgentDir === undefined) delete process.env.PI_CODING_AGENT_DIR;
+    else process.env.PI_CODING_AGENT_DIR = savedPiAgentDir;
     rmSync(tmpRoot, { recursive: true, force: true });
   });
 
@@ -2042,6 +2050,7 @@ describe('npm package root (#606)', () => {
 
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
@@ -3098,6 +3107,7 @@ describe('--json keeps stdout one JSON document (#984)', () => {
     writeFileSync(resolve(cloneRoot, 'teams/fixture-team.md'), '---\nname: fixture-team\n---\n');
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
@@ -4123,6 +4133,7 @@ describe('item names stay inside their install directories', () => {
     const fakeHome = resolve(tmpRoot, 'home');
     mkdirSync(fakeHome, { recursive: true });
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes'), NO_COLOR: '1' };
+    delete env.PI_CODING_AGENT_DIR;
   });
 
   after(() => rmTree(tmpRoot));
@@ -4996,6 +5007,7 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     plantUserFile(userFile);
     const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
     const spawnCli = (args) => {
       const res = spawnSync(process.execPath, [cliEntry, ...args, '-f', 'opencode', '--source', ROOT],
         { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
@@ -5045,6 +5057,7 @@ describe('sync keeps a user\'s own entry in .agents/skills (S3-B2 P6)', () => {
     writeFileSync(resolve(proj, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
     const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
 
     const res = spawnSync(process.execPath, [cliEntry, 'sync', '-f', 'universal', '--source', ROOT],
       { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
