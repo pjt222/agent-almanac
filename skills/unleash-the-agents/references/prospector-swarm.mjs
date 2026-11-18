@@ -334,6 +334,15 @@ async function clusterOnce(prev, label) {
     f.members = (f.members || []).map((x) => ({ agent: String(x?.agent ?? '').trim(), hypothesis: x?.hypothesis }))
     f.agents = [...new Set(f.members.map((x) => x.agent))]
   }
+  // The prompt says each hypothesis goes to at most one family. If the clusterer assigns one to
+  // two, neither family may count it: one hypothesis would otherwise make two families strong.
+  const claims = new Map()
+  for (const f of r.families) for (const x of new Set(f.members.map((m) => `${m.agent}#${m.hypothesis}`))) claims.set(x, (claims.get(x) || 0) + 1)
+  const contested = [...claims].filter(([, n]) => n > 1).map(([k]) => k)
+  if (contested.length) {
+    for (const f of r.families) f.members = f.members.filter((m) => !contested.includes(`${m.agent}#${m.hypothesis}`))
+    log(`${label}: ${contested.length} hypothesis(es) assigned to more than one family, credited to none: ${contested.join(', ')}`)
+  }
   return r
 }
 
@@ -350,13 +359,16 @@ async function cluster(prev, waveLabel) {
 // An agent counts toward a family only if it returned, and the hypothesis the clusterer assigned
 // to it exists and cites one of the family's items.
 const byAgent = () => new Map(results.filter(Boolean).map((r) => [r.agent, r]))
-function verifiedAgents(f, map = byAgent()) {
+// The hypotheses assigned to agent `a` in family `f` that exist and cite one of its items. The index
+// must be a real integer: a string such as "0" or "length" would otherwise index the array.
+function assigned(f, a, map) {
   const own = new Set(f.instances)
-  return (f.agents || []).filter((a) => (f.members || []).some((x) => {
-    if (x.agent !== a || !Number.isInteger(x.hypothesis)) return false
-    const h = map.get(a)?.hypotheses[x.hypothesis]
-    return !!h && h.instances.some((id) => own.has(id))
-  }))
+  return (f.members || []).filter((x) => x.agent === a && Number.isInteger(x.hypothesis))
+    .map((x) => map.get(a)?.hypotheses[x.hypothesis])
+    .filter((h) => h && Array.isArray(h.instances) && h.instances.some((id) => own.has(id)))
+}
+function verifiedAgents(f, map = byAgent()) {
+  return (f.agents || []).filter((a) => assigned(f, a, map).length > 0)
 }
 
 // New families are counted in code against the previous pass's ids, not taken from the
@@ -367,7 +379,7 @@ function newFamilies(prev, c) {
   const fresh = (c?.families || []).filter((f) => !seen.has(f.id) && !SEEDS.includes(f.id) && f.instances.length > 0)
   return { strong: fresh.filter((f) => verifiedAgents(f, map).length >= MIN_NEW).map((f) => f.id), weak: fresh.filter((f) => verifiedAgents(f, map).length < MIN_NEW).map((f) => f.id) }
 }
-const summary = (c) => (c?.families || []).map((f) => `- ${f.id} ${f.name}: ${f.agents.length} agents, ${f.instances.length} items; proposals: ${f.proposals}; disagreements: ${f.disagreements}`).join('\n')
+const summary = (c) => (c?.families || []).map((f) => `- ${f.id} ${f.name}: ${verifiedAgents(f).length} agents, ${f.instances.length} items; proposals: ${f.proposals}; disagreements: ${f.disagreements}`).join('\n')
 
 const clusters = []
 let c = null              // the last pass that succeeded
@@ -404,11 +416,13 @@ const ADV_SCHEMA = {
   },
   required: ['challenges', 'missed_family'],
 }
+// Readers (the adversary, the synthesis) get the families without the member bookkeeping.
+const forReaders = (families) => families.map(({ members, ...f }) => f)
 const adversaryPrompt = (families, which) => [
   `You are the adversarial pass over a prospecting swarm. The question: ${QUESTION}`,
   containment(ADVERSARY),
   `Read the brief (${BRIEF})${INDEX_FILE ? `, the index (${INDEX_FILE})` : ''} and every item you need.`,
-  `${which}:\n${JSON.stringify(families)}`,
+  `${which}:\n${JSON.stringify(forReaders(families))}`,
   'For each family: steelman it, then find the strongest counterargument.',
   '- Is it real recurrence, or one purpose met differently each time?',
   '- Is it the brief speaking back: a family the brief named, found by agents whose territory was built around it?',
@@ -484,9 +498,8 @@ const familyStats = (c?.families || []).map((f) => {
   const agents = verifiedAgents(f, finalMap)
   const own = new Set(f.instances)
   const outsideHome = agents.filter((a) => {
-    const r = finalMap.get(a)
-    const home = new Set(TERR[r.territory])
-    return r.hypotheses.some((h) => h.instances.some((id) => own.has(id) && !home.has(id)))
+    const home = new Set(TERR[finalMap.get(a).territory])
+    return assigned(f, a, finalMap).some((h) => h.instances.some((id) => own.has(id) && !home.has(id)))
   }).length
   return { id: f.id, listedAgents: f.agents.length, agents: agents.length, outsideHome, items: f.instances.length }
 })
@@ -534,7 +547,7 @@ const final = await agent([
   containment('synthesize'),
   `Brief: ${BRIEF}.${INDEX_FILE ? ` Index: ${INDEX_FILE}.` : ''}`,
   'Rank by evidence: distinct items, verified agents who found the family OUTSIDE their home territory, convergence against the null model below, and whether the adversarial verdict holds. Drop a refuted family unless the evidence answers the refutation. Say which claims you re-read and which you carried. Every instance must be an item id.',
-  `Final families: ${JSON.stringify(c?.families || [])}`,
+  `Final families: ${JSON.stringify(forReaders(c?.families || []))}`,
   `Hypotheses so far, with the prospectors' own testable predictions: ${JSON.stringify(compact(0, clusteredUpTo))}`,
   unclustered.length ? `NEVER CLUSTERED (the run stopped with '${stopReason}' before a pass covered them); weigh them yourself and say so: ${JSON.stringify(unclustered)}` : '',
   `Measured in code: ${JSON.stringify({ familyStats, nullModel, terrCount, stopReason, unvisited })}`,

@@ -481,3 +481,45 @@ test('maxEdgeWaves 0 does not merge a short remainder into wave 3', async () => 
   assert.equal(out.consulted, 30);
   assert.deepEqual(out.notConsulted, ['r29', 'r30']);
 });
+
+// --- Round 3 of the #1081 review -----------------------------------------------------------------
+
+test('a member index that is not an integer counts for nothing, and does not crash the run', async () => {
+  // "0" would index the array; "length" would yield a number and throw on .instances.some.
+  const n3 = fam('N3', ['r29', { agent: 'r30', hypothesis: '0' }, { agent: 'r31', hypothesis: 'length' }]);
+  const clusters = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], n3] };
+  const { out } = await run(baseArgs({ roster: roster(60) }), { clusters });
+  assert.equal(out.edgeWaves, 1);
+  assert.equal(out.familyStats.find((f) => f.id === 'N3').agents, 1);
+});
+
+test('outside-home finders are counted through the assigned hypothesis only', async () => {
+  // r25 (home T1) is assigned hypothesis 0, which cites N8's home item; its hypothesis 1 cites
+  // N8's T2 item but is not assigned to N8, so r25 is not an outside-home finder of N8.
+  const n8 = fam('N8', ['r25'], ['t1/a.sh', 't2/d.mjs']);
+  const clusters = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:4'], n8] };
+  const split = (label) => (label === 'challenge:r25' ? { hypotheses: [HYP({ instances: ['t1/a.sh'] }), HYP({ instances: ['t2/d.mjs'] })], files_read: [] } : undefined);
+  const { out } = await run(baseArgs(), { clusters, override: split });
+  const stats = out.familyStats.find((f) => f.id === 'N8');
+  assert.equal(stats.agents, 1);
+  assert.equal(stats.outsideHome, 0);
+});
+
+test('a hypothesis assigned to two families is credited to neither', async () => {
+  const clusters = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], fam('N3', ['r29', 'r30']), fam('N4', ['r29', 'r30'])] };
+  const { out, logs } = await run(baseArgs({ roster: roster(60) }), { clusters });
+  assert.equal(out.edgeWaves, 1);
+  assert.ok(logs.some((l) => /cluster:4: 2 hypothesis\(es\) assigned to more than one family, credited to none: r29#0, r30#0/.test(l)));
+});
+
+test('the injected family summary counts verified agents, not listed ones', async () => {
+  const clusters = { ...CLUSTERS, 'cluster:3': [...CLUSTERS['cluster:1-2'], fam('N2', ['r20', 'r21', 'r23', 'ghost-agent'], ['t2/d.mjs'])] };
+  const { calls } = await run(baseArgs(), { clusters });
+  const edge = labelled(calls, /^edge:/)[0];
+  assert.match(edge.prompt, /^- N2 N2: 3 agents,/m);
+});
+
+test('the adversary and the synthesis are shown families without the member bookkeeping', async () => {
+  const { calls } = await run(baseArgs());
+  for (const c of labelled(calls, /challenge:advocatus-diaboli$|^synthesize$/)) assert.doesNotMatch(c.prompt, /"members"/, c.opts.label);
+});
