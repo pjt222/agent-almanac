@@ -39,7 +39,7 @@ permissions:
 jobs:
   # The job id is the status-check context name (#641). Not in the required set.
   tools-verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:

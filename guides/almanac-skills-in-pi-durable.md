@@ -22,7 +22,7 @@ The two `js` code blocks below are the files `almanac-skills.mjs` and `host.mjs`
 ## Prerequisites
 
 - Node.js: pi-durable requires `>=22.19.0`. This repository, and so the example's test, requires the `engines` floor in its `package.json`, Node 26 or newer.
-- `@earendil-works/pi-durable`, `@earendil-works/pi-ai` and `@earendil-works/chord`, all at `1.4.0`, the version this guide is tested against. pi-durable is marked experimental upstream, so pin exact versions. pi-durable depends on pi-ai and chord at exactly its own version, so move the three together: a host that pins pi-ai at another version gets a second copy of it.
+- `@earendil-works/pi-durable`, `@earendil-works/pi-ai` and `@earendil-works/chord`, all at `1.5.2`, the version this guide is tested against. pi-durable is marked experimental upstream, so pin exact versions. pi-durable depends on pi-ai and chord at exactly its own version, so move the three together: a host that pins pi-ai at another version gets a second copy of it.
 - `js-yaml`, which the extension imports to read a skill's frontmatter. Install it in your host. agent-almanac depends on it, but only a local npm install of agent-almanac, which hoists it, happens to make it importable from your code; a global or pnpm install does not.
 - A directory of skills laid out as `<id>/SKILL.md`. Either:
   - one that `agent-almanac install <ids> --framework universal` wrote, such as `.agents/skills/`;

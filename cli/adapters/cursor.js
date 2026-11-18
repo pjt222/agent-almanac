@@ -1,16 +1,17 @@
 /**
  * cursor.js — Cursor adapter.
  *
- * Primary: .cursor/skills/<id>/ (modern, uses universal SKILL.md)
- * Legacy: .cursor/rules/<id>.mdc (rule file format)
+ * Installs: .cursor/skills/<id>/ (a link, or a copy; uses universal SKILL.md).
+ * Also looks at .cursor/rules/<id>.mdc, which no CLI command writes: a link
+ * there, made as skills/README.md describes, is uninstalled and listed; a
+ * file there is the user's and is kept (#998).
  * Skills only.
  */
 
-import { existsSync, mkdirSync, unlinkSync, writeFileSync, readdirSync } from 'fs';
-import { resolve } from 'path';
+import { existsSync, readdirSync, readlinkSync } from 'fs';
+import { basename, resolve } from 'path';
 import { FrameworkAdapter, childPath } from './base.js';
 import { describeEntry, installAt, isInternalName, removeEntry } from '../lib/placement.js';
-import { condenseSkill, wrapAsMdc } from '../lib/transformer.js';
 
 export class CursorAdapter extends FrameworkAdapter {
   static id = 'cursor';
@@ -39,52 +40,27 @@ export class CursorAdapter extends FrameworkAdapter {
     });
   }
 
-  /**
-   * Install as legacy .mdc rule file (use with --legacy flag or explicit call).
-   */
-  async installLegacyRule(item, projectDir, options = {}) {
-    if (item.type !== 'skill') return { action: 'skipped', path: '', details: 'rules are skills only' };
-
-    const rulesDir = resolve(projectDir, '.cursor/rules');
-    const targetPath = childPath(rulesDir, `${item.id}.mdc`);
-
-    if (options.dryRun) return { action: 'created', path: targetPath, details: 'dry-run (.mdc)' };
-    if (existsSync(targetPath) && !options.force) return { action: 'skipped', path: targetPath, details: 'already exists' };
-
-    mkdirSync(rulesDir, { recursive: true });
-    const skillPath = resolve(item.sourceDir || resolve(options.almanacRoot, 'skills', item.id), 'SKILL.md');
-    const condensed = condenseSkill(skillPath);
-    const mdc = wrapAsMdc(item, condensed);
-    writeFileSync(targetPath, mdc, 'utf8');
-    return { action: 'created', path: targetPath };
-  }
-
   async uninstall(item, projectDir, scope, options = {}) {
-    // Remove from both paths
-    const results = [];
-    const skillsDir = resolve(projectDir, '.cursor/skills');
-    const skillPath = childPath(skillsDir, item.id);
-    const rulePath = childPath(resolve(projectDir, '.cursor/rules'), `${item.id}.mdc`);
+    // Both paths go through removeEntry, which removes a link, dangling or
+    // not, or an unedited copy, and keeps anything else with a note. No CLI
+    // command writes the .mdc rule (the unused installLegacyRule was removed
+    // in #998), so a file there is the user's own and is kept; a link there,
+    // made as skills/README.md describes, is removed.
+    const entries = [
+      removeEntry(resolve(projectDir, '.cursor/skills'), item.id, { dryRun: options.dryRun }),
+      removeEntry(resolve(projectDir, '.cursor/rules'), `${item.id}.mdc`, { dryRun: options.dryRun }),
+    ];
+    const removed = entries.filter((r) => r.action === 'removed');
+    const kept = entries.filter((r) => r.note);
+    const keptNote = kept.map((r) => `kept ${r.path}: ${r.note}`).join('; ');
 
-    // skillPath goes through removeEntry, which removes a link, dangling or
-    // not, or an unedited copy, and keeps anything else. No CLI command
-    // writes rulePath: installLegacyRule has no caller. A file there is the
-    // user's own, a regular file or a symlink made as skills/README.md
-    // describes. Deleting it here is pre-existing behaviour, kept on purpose
-    // for now and tracked in #998; existsSync also misses a dangling link at
-    // that path.
-    const skill = removeEntry(skillsDir, item.id, { dryRun: options.dryRun });
-    if (skill.action === 'removed') results.push(skillPath);
-    if (existsSync(rulePath)) {
-      if (!options.dryRun) unlinkSync(rulePath);
-      results.push(rulePath);
+    if (removed.length > 0) {
+      const result = { action: 'removed', path: removed.map((r) => r.path).join(', ') };
+      return kept.length > 0 ? { ...result, note: keptNote } : result;
     }
-
-    if (results.length === 0) {
-      return skill.note ? skill : { action: 'skipped', path: '', details: 'not installed' };
-    }
-    const removed = { action: 'removed', path: results.join(', ') };
-    return skill.note ? { ...removed, note: `kept ${skillPath}: ${skill.note}` } : removed;
+    if (kept.length === 1) return kept[0];
+    if (kept.length > 1) return { action: 'skipped', path: kept.map((r) => r.path).join(', '), reason: kept[0].reason, note: keptNote };
+    return { action: 'skipped', path: '', details: 'not installed' };
   }
 
   async listInstalled(projectDir) {
@@ -100,10 +76,15 @@ export class CursorAdapter extends FrameworkAdapter {
     const rulesDir = resolve(projectDir, '.cursor/rules');
     if (existsSync(rulesDir)) {
       for (const name of readdirSync(rulesDir)) {
-        if (name.endsWith('.mdc')) {
-          // Legacy .mdc rules are written files, not links — they cannot dangle.
-          items.push({ id: name.replace(/\.mdc$/, ''), type: 'skill', path: resolve(rulesDir, name), format: 'mdc', broken: false });
-        }
+        if (!name.endsWith('.mdc')) continue;
+        // No CLI command writes a .mdc file, so a regular .mdc is the user's
+        // own rule, not an installed skill (#998). Only a link to a SKILL.md
+        // is listed, the shape skills/README.md describes: a link to the
+        // user's own rule (from a dotfiles repository, say) is theirs too, and
+        // a dangling one would make `audit` exit 3 (#1067 round 1, SF-2).
+        const fullPath = resolve(rulesDir, name);
+        const { kind, fields } = describeEntry(fullPath);
+        if (kind === 'link' && basename(readlinkSync(fullPath)) === 'SKILL.md') items.push({ id: name.replace(/\.mdc$/, ''), type: 'skill', path: fullPath, format: 'mdc', ...fields });
       }
     }
     return items;

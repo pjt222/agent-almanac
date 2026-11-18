@@ -26,7 +26,7 @@ jobs:
   # integrity, skills, tests and translations -- so the four were one indistinguishable name and
   # none of them could be required individually (#641).
   integrity:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
 
