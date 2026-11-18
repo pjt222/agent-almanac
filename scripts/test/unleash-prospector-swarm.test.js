@@ -210,7 +210,10 @@ test('clusterModel routes the cluster passes and nothing else', async () => {
 test('every prompt carries the containment block, and every prospector its own write locations', async () => {
   const args = baseArgs();
   const { calls } = await run(args);
-  for (const c of calls) assert.match(c.prompt, /^CONTAINMENT \(binding/m, c.opts.label);
+  for (const c of calls) {
+    assert.match(c.prompt, /^CONTAINMENT \(binding/m, c.opts.label);
+    assert.match(c.prompt, /^- If you use a shell, use read commands \(cat, head, sed -n, rg, wc, ls, sha256sum\)/m, c.opts.label);
+  }
   const prospectors = calls.filter((c) => isProspector(c, args));
   assert.equal(prospectors.length, 40);
   for (const c of prospectors) {

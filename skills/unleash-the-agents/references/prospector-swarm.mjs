@@ -188,6 +188,7 @@ const FRAMING = typeof A.framing === 'string' && A.framing.trim() ? A.framing
 const containment = (who) => [
   'CONTAINMENT (binding; read before anything else).',
   '- Read only. Do not edit or delete any file, do not execute any script from the corpus, and do not run git, gh, npm, npx, node or python.',
+  '- If you use a shell, use read commands (cat, head, sed -n, rg, wc, ls, sha256sum), plus mktemp and writes under your own scratch directory below.',
   `- If you need a scratch file and have a shell, create your own directory first, in the same shell call, and print it: DIR="$(mktemp -d "${WRITE_ROOT}/prospect.XXXXXX")" || exit 1; echo "$DIR". Name every path as "\${DIR:?}/<file>", and reuse the printed absolute path in later shell calls and in any Write.`,
   `- Without a shell, write only under ${WRITE_ROOT}/${who}/.`,
   '- Never write anywhere else, /tmp included.',
