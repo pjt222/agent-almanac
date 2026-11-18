@@ -8,7 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync, spawnSync } from 'child_process';
-import { chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, statSync, symlinkSync } from 'fs';
 import { createHash } from 'crypto';
 import { tmpdir, homedir } from 'os';
 import { dirname, isAbsolute, resolve } from 'path';
@@ -335,7 +335,19 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
   });
 
   it('runEnv() points every home variable at RUN_HOME, which is none of the homes this process started with', () => {
-    assert.ok(!STARTUP_HOMES.has(RUN_HOME), `RUN_HOME is a home this process started with: ${RUN_HOME}`);
+    // By spelling after resolve(), so a trailing slash does not hide a startup
+    // home, and by device and inode, so a symlink to one does not either (#1074,
+    // C3). An inode of 0 means the filesystem does not report one; there the
+    // spelling is the only comparison left.
+    assert.ok(!STARTUP_HOMES.has(resolve(RUN_HOME)), `RUN_HOME is a home this process started with: ${RUN_HOME}`);
+    const runHomeId = statSync(RUN_HOME, { bigint: true });
+    for (const startupHome of STARTUP_HOMES) {
+      let startupId;
+      try { startupId = statSync(startupHome, { bigint: true }); } catch { continue; }
+      if (startupId.ino === 0n || runHomeId.ino === 0n) continue;
+      assert.ok(startupId.dev !== runHomeId.dev || startupId.ino !== runHomeId.ino,
+        `RUN_HOME ${RUN_HOME} is the directory this process started with as ${startupHome}`);
+    }
     const env = runEnv();
     assert.equal(env.HOME, RUN_HOME);
     assert.equal(env.USERPROFILE, RUN_HOME);
