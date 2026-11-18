@@ -5,7 +5,7 @@ description: >
   在面对无清晰起点的跨领域问题时、单代理方法停滞时，或多样视角比深度
   专长更有价值时使用。产出带收敛分析和对抗性精炼的有序假设集。
 license: MIT
-allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage
+allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage Workflow
 metadata:
   author: Philipp Thoss
   version: "1.2"
