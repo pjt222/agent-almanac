@@ -75,8 +75,10 @@
 //   empty wave 3 runs only the adversary.
 //
 // The stop rule: an edge wave runs only while the last cluster pass produced a NEW family that
-// at least `minNewAgents` agents filed. An agent counts only if it returned and cited one of the
-// family's items; the clusterer's list alone does not count.
+// at least `minNewAgents` agents filed. The clusterer assigns hypotheses, not just agents
+// (`members: [{ agent, hypothesis }]`), and an agent counts only if the hypothesis assigned to it
+// exists and cites one of the family's items. A name alone, or a citation from one of the agent's
+// other hypotheses, does not count.
 // - Measured: the first version continued on any new family citing one valid item, and every
 //   pass but the last named one, so it ran the whole roster.
 // - The default of 2 is fitted to that one run.
@@ -88,8 +90,13 @@
 // synthesis, marked as such, rather than vanishing behind a stale pass that reads as
 // convergence.
 //
-// The late challenge covers every family the wave-3 adversary did not answer: those born after
-// it was briefed, and all of them if it returned nothing.
+// The late challenge covers every family the wave-3 adversary did not answer among those it was
+// shown: those born after it was briefed, and all of them if it returned nothing. An answer about
+// a family it was not shown covers nothing. A dead late pass is retried once and logged.
+//
+// Cost note: the synthesis prompt carries the whole hypothesis set (without domain_reasoning) as
+// well as the final families, so the prospectors' own predictions reach it. On the measured
+// run's data that roughly doubles the synthesis prompt.
 //
 // After the run, in the lead's own session, not here:
 // - read the return value from tasks/<id>.output or journal.jsonl; the notification truncates;
@@ -288,11 +295,14 @@ const CLUSTER_SCHEMA = {
       id: { type: 'string', description: 'a seed id for a seeded family; N1, N2 ... for new ones; an id keeps its meaning across rounds' },
       name: { type: 'string' },
       mechanism: { type: 'string' },
-      agents: { type: 'array', items: { type: 'string' }, description: 'every agent who filed a hypothesis of this family' },
+      members: { type: 'array', items: { type: 'object', properties: {
+        agent: { type: 'string' },
+        hypothesis: { type: 'integer', description: "the hypothesis's `index` in that agent's list" },
+      }, required: ['agent', 'hypothesis'] }, description: 'every hypothesis assigned to this family, as (agent, index)' },
       instances: { type: 'array', items: { type: 'string' } },
       proposals: { type: 'string', description: 'a tally of what the agents proposed to do' },
       disagreements: { type: 'string' },
-    }, required: ['id', 'name', 'mechanism', 'agents', 'instances', 'proposals', 'disagreements'] } },
+    }, required: ['id', 'name', 'mechanism', 'members', 'instances', 'proposals', 'disagreements'] } },
     noise: { type: 'string', description: 'hypotheses that fit no family, or only restate the brief' },
   },
   required: ['families', 'noise'],
@@ -300,7 +310,7 @@ const CLUSTER_SCHEMA = {
 
 // What clustering and synthesis need, without the free-text domain_reasoning: the cluster prompt
 // carries every hypothesis so far and grows with each wave. The journal keeps everything.
-const compact = (from = 0, to = results.length) => results.slice(from, to).filter(Boolean).map((r) => ({ agent: r.agent, territory: r.territory, wave: r.wave, hypotheses: r.hypotheses.map((h) => ({ seed: h.seed, family: h.family, mechanism: h.mechanism, instances: h.instances, proposal: h.proposal, confidence: h.confidence, testable_prediction: h.testable_prediction })) }))
+const compact = (from = 0, to = results.length) => results.slice(from, to).filter(Boolean).map((r) => ({ agent: r.agent, territory: r.territory, wave: r.wave, hypotheses: r.hypotheses.map((h, index) => ({ index, seed: h.seed, family: h.family, mechanism: h.mechanism, instances: h.instances, proposal: h.proposal, confidence: h.confidence, testable_prediction: h.testable_prediction })) }))
 
 async function clusterOnce(prev, label) {
   const opts = { label, phase: 'Cluster', schema: CLUSTER_SCHEMA }
@@ -313,13 +323,15 @@ async function clusterOnce(prev, label) {
     `- ${SEEDS.length ? `Seeded families keep the ids ${SEEDS.join(', ')}.` : 'There are no seeded families.'} New families get N1, N2 and so on. An id from a previous round keeps its meaning; never reuse a retired id for a different mechanism.`,
     '- A family is NEW only when it is none of the seeds. Agents labelled their hypotheses themselves; correct a wrong label.',
     '- Put a hypothesis that only restates the brief in noise, credited to no family.',
+    "- In members, list every hypothesis you assign to the family as { agent, hypothesis }, where hypothesis is that hypothesis's `index`. Assign each hypothesis to at most one family.",
     prev ? `Families from the previous round (keep their ids): ${JSON.stringify(prev.families.map((f) => ({ id: f.id, name: f.name, mechanism: f.mechanism })))}` : '',
     `All hypotheses so far (instances are already filtered to real item ids): ${JSON.stringify(compact())}`,
   ].filter(Boolean).join('\n\n'), opts)
   if (!r || !Array.isArray(r.families) || r.families.length === 0) return null
   for (const f of r.families) {
     f.instances = [...new Set((f.instances || []).map(norm).filter((id) => ITEMS.has(id)))]
-    f.agents = [...new Set((f.agents || []).map((a) => String(a).trim()))]
+    f.members = (f.members || []).map((x) => ({ agent: String(x?.agent ?? '').trim(), hypothesis: x?.hypothesis }))
+    f.agents = [...new Set(f.members.map((x) => x.agent))]
   }
   return r
 }
@@ -334,14 +346,16 @@ async function cluster(prev, waveLabel) {
   return null
 }
 
-// An agent counts toward a family only if it returned and cited one of the family's items.
+// An agent counts toward a family only if it returned, and the hypothesis the clusterer assigned
+// to it exists and cites one of the family's items.
 const byAgent = () => new Map(results.filter(Boolean).map((r) => [r.agent, r]))
 function verifiedAgents(f, map = byAgent()) {
   const own = new Set(f.instances)
-  return (f.agents || []).filter((a) => {
-    const r = map.get(a)
-    return r && r.hypotheses.some((h) => h.instances.some((id) => own.has(id)))
-  })
+  return (f.agents || []).filter((a) => (f.members || []).some((x) => {
+    if (x.agent !== a || !Number.isInteger(x.hypothesis)) return false
+    const h = map.get(a)?.hypotheses[x.hypothesis]
+    return !!h && h.instances.some((id) => own.has(id))
+  }))
 }
 
 // New families are counted in code against the previous pass's ids, not taken from the
@@ -403,12 +417,14 @@ const adversaryPrompt = (families, which) => [
 
 let start = 18
 let adv3 = null
+let shownIds = new Set()
 if (!stopReason) {
   phase('Challenge')
   // A remainder after wave 3 smaller than half an edge wave joins wave 3 instead of running alone.
-  const end3 = ROSTER.length - 28 > 0 && ROSTER.length - 28 < Math.ceil(EDGE_SIZE / 2) ? ROSTER.length : 28
+  const end3 = MAX_EDGE > 0 && ROSTER.length - 28 > 0 && ROSTER.length - 28 < Math.ceil(EDGE_SIZE / 2) ? ROSTER.length : 28
   const w3 = ROSTER.slice(18, end3).map((a) => ({ a, t: nextTerr() }))
   const inject3 = `Update from waves 1-2 (${results.filter(Boolean).length} agents). Families so far:\n${summary(c)}\n\nDo NOT restate these. Extend them: name items they missed, dispute a proposal with a reason, or find a NEW family. Every claim cites item ids.`
+  shownIds = new Set(c.families.map((f) => f.id))
   const [w3res, a3] = await Promise.all([
     parallel(w3.map((x) => () => prospect(x.a, x.t, '3', inject3, 'Challenge'))),
     agent(adversaryPrompt(c.families, `The families the first ${results.filter(Boolean).length} agents converged on`), { label: `challenge:${ADVERSARY}`, phase: 'Challenge', schema: ADV_SCHEMA, agentType: ADVERSARY }),
@@ -419,8 +435,9 @@ if (!stopReason) {
   log(`wave 3: ${w3res.filter(Boolean).length}/${w3.length} returned; adversary ${adv3 ? 'returned' : 'returned nothing'}; dropped ${dropped} of ${cited} cited ids`)
   if (w3.length > 0) await clusterWave('3')
 }
-// What the wave-3 adversary actually ANSWERED, not what it was shown.
-const answeredIds = new Set((adv3?.challenges || []).map((x) => x.family_id))
+// What the wave-3 adversary actually ANSWERED among what it was SHOWN. An answer about a family it
+// was not shown (a seed from the brief, an id it invented) covers nothing.
+const answeredIds = new Set((adv3?.challenges || []).map((x) => x.family_id).filter((id) => shownIds.has(id)))
 
 // --- Edge waves ---------------------------------------------------------------------------------
 
@@ -450,7 +467,12 @@ const late = (c?.families || []).filter((f) => !answeredIds.has(f.id) && f.insta
 let advLate = null
 if (late.length) {
   phase('Late challenge')
-  advLate = await agent(adversaryPrompt(late, 'Families no adversary has answered yet'), { label: `late-challenge:${ADVERSARY}`, phase: 'Late challenge', schema: ADV_SCHEMA, agentType: ADVERSARY })
+  for (const label of [`late-challenge:${ADVERSARY}`, `late-challenge:${ADVERSARY}:retry`]) {
+    advLate = await agent(adversaryPrompt(late, 'Families no adversary has answered yet'), { label, phase: 'Late challenge', schema: ADV_SCHEMA, agentType: ADVERSARY })
+    if (advLate) break
+    log(`${label}: returned nothing`)
+  }
+  if (!advLate) log(`late challenge FAILED twice: ${late.map((f) => f.id).join(', ')} have no adversarial verdict`)
 }
 
 // --- Measured in code: convergence, outside-home finders, and the null model -------------------

@@ -51,7 +51,8 @@ const baseArgs = (over = {}) => ({
   ...over,
 });
 
-const fam = (id, agents, instances = ['t1/a.sh']) => ({ id, name: id, mechanism: `m-${id}`, agents, instances, proposals: '', disagreements: '' });
+// Each listed agent is assigned its hypothesis 0 unless an explicit { agent, hypothesis } is given.
+const fam = (id, agents, instances = ['t1/a.sh']) => ({ id, name: id, mechanism: `m-${id}`, members: agents.map((a) => (typeof a === 'string' ? { agent: a, hypothesis: 0 } : a)), instances, proposals: '', disagreements: '' });
 
 /** The default cluster script: N1 born strong (2 agents) in 1-2, N2 strong in 3, N3 weak in 4. */
 const CLUSTERS = {
@@ -84,7 +85,7 @@ async function run(args, { clusters = CLUSTERS, calls = [], override, hyps } = {
       const shown = [...prompt.matchAll(/"id":"([^"]+)"/g)].map((x) => x[1]);
       return { challenges: shown.map((id) => ({ family_id: id, verdict: 'weakened', strongest_counterargument: '', alternative_explanation: '', falsification_experiment: '', better_home: '' })), missed_family: '' };
     }
-    if (label === `late-challenge:${adversary}`) return { challenges: [], missed_family: '' };
+    if (label.startsWith(`late-challenge:${adversary}`)) return { challenges: [], missed_family: '' };
     if (label === 'synthesize') return { ranking: [{ rank: 1, family_id: 'S1', name: 'S1', recommendation: '', instances: ['t1/a.sh', 'not/an/item.sh'], convergence: '', adversarial_verdict: '', testable_prediction: '', why_this_rank: '' }], dropped_families: [], notes: '' };
     const id = label.split(':').pop();
     const n = hyps ? hyps(id) : 1;
@@ -409,4 +410,74 @@ test('outside-home finders are counted from the citations, not taken from the cl
 test('the synthesis ranking keeps only real item ids', async () => {
   const { out } = await run(baseArgs());
   assert.deepEqual(out.final.ranking[0].instances, ['t1/a.sh']);
+});
+
+// --- Round 2 of the #1081 review: one level down ------------------------------------------------
+
+test('an agent counts only through the hypothesis assigned to it, not through any of its hypotheses', async () => {
+  // r30's assigned hypothesis 0 cites t1/b.sh; its hypothesis 1 cites N3's item. r31's index is out
+  // of range. Only r29 is verified, so N3 is weak and the run stops after wave 4.
+  const n3 = fam('N3', ['r29', 'r30', { agent: 'r31', hypothesis: 5 }]);
+  const clusters = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], n3] };
+  const two = (label, opts) => (label === 'edge:r30' ? { hypotheses: [HYP({ instances: ['t1/b.sh'] }), HYP({ instances: ['t1/a.sh'] })], files_read: [] } : undefined);
+  const { out } = await run(baseArgs({ roster: roster(60) }), { clusters, override: two });
+  assert.equal(out.edgeWaves, 1);
+  const stats = out.familyStats.find((f) => f.id === 'N3');
+  assert.equal(stats.listedAgents, 3);
+  assert.equal(stats.agents, 1);
+});
+
+test('the cluster prompt numbers each hypothesis, so a member can name it', async () => {
+  const { calls } = await run(baseArgs());
+  assert.match(labelled(calls, /^cluster:1-2$/)[0].prompt, /"hypotheses":\[\{"index":0,"seed":"S1"/);
+});
+
+test('an adversary answer about a family it was not shown leaves that family to the late challenge', async () => {
+  // The wave-3 adversary is shown S1 and N1, and answers S1, N1 and S2 (a seed from the brief).
+  // S2 is first clustered in pass 3, so only the late challenge can cover it.
+  const clusters = { 'cluster:1-2': CLUSTERS['cluster:1-2'], 'cluster:3': [...CLUSTERS['cluster:3'], fam('S2', ['r22', 'r24'])], 'cluster:4': [...CLUSTERS['cluster:4'], fam('S2', ['r22', 'r24'])] };
+  const extra = (label) => (label === 'challenge:advocatus-diaboli' ? { challenges: ['S1', 'N1', 'S2'].map((family_id) => ({ family_id, verdict: 'holds', strongest_counterargument: '', alternative_explanation: '', falsification_experiment: '', better_home: '' })), missed_family: '' } : undefined);
+  const { calls } = await run(baseArgs({ seeds: ['S1', 'S2'] }), { clusters, override: extra });
+  const late = labelled(calls, /^late-challenge:/)[0];
+  assert.match(late.prompt, /"id":"S2"/);
+  assert.doesNotMatch(late.prompt, /"id":"S1"/);
+});
+
+test('an adversary answer under an id that does not exist yet covers nothing', async () => {
+  const early = (label) => (label === 'challenge:advocatus-diaboli' ? { challenges: ['S1', 'N1', 'N2'].map((family_id) => ({ family_id, verdict: 'holds', strongest_counterargument: '', alternative_explanation: '', falsification_experiment: '', better_home: '' })), missed_family: '' } : undefined);
+  const { calls } = await run(baseArgs(), { override: early });
+  const late = labelled(calls, /^late-challenge:/)[0];
+  assert.ok(late, 'no late challenge ran');
+  assert.match(late.prompt, /"id":"N2"/);
+});
+
+test('a late adversary that dies is retried once, and a second death is logged', async () => {
+  const dead = (label) => (label.startsWith('late-challenge:') ? null : undefined);
+  const { out, calls, logs } = await run(baseArgs(), { override: dead });
+  assert.deepEqual(labelled(calls, /^late-challenge:/).map((c) => c.opts.label), ['late-challenge:advocatus-diaboli', 'late-challenge:advocatus-diaboli:retry']);
+  assert.equal(out.adversarial.late, null);
+  assert.ok(logs.some((l) => /late challenge FAILED twice: N2, N3 have no adversarial verdict/.test(l)));
+});
+
+test('an edge remainder of more than half a wave runs as its own wave', async () => {
+  // Roster 45: wave 4 takes 10 (7 left, more than half of 10), wave 5 takes the 7.
+  const clusters = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], fam('N9', ['r30', 'r31'])], 'cluster:5': [...CLUSTERS['cluster:3'], fam('N9', ['r30', 'r31'])] };
+  const { out } = await run(baseArgs({ roster: roster(45) }), { clusters });
+  assert.equal(out.edgeWaves, 2);
+  const byWave = (w) => out.results.filter((r) => r && r.wave === w).length;
+  assert.equal(byWave('4'), 10);
+  assert.equal(byWave('5'), 7);
+});
+
+test('a remainder after wave 3 of exactly half a wave runs as its own edge wave', async () => {
+  const { out } = await run(baseArgs({ roster: roster(33) }));
+  const byWave = (w) => out.results.filter((r) => r && r.wave === w).length;
+  assert.equal(byWave('3'), 10);
+  assert.equal(byWave('4'), 5);
+});
+
+test('maxEdgeWaves 0 does not merge a short remainder into wave 3', async () => {
+  const { out } = await run(baseArgs({ roster: roster(30), maxEdgeWaves: 0 }));
+  assert.equal(out.consulted, 30);
+  assert.deepEqual(out.notConsulted, ['r29', 'r30']);
 });
