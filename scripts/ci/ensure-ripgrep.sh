@@ -7,9 +7,10 @@
 # TEMPLATE_NAMES), because the first edit to a duplicated block lands in three of four
 # copies and misses one.
 #
-# ripgrep is NOT on the runner image: absent from the Ubuntu 24.04 software manifest, and
-# not part of base Ubuntu. Measured on this branch's first CI run, which took the install
-# path and reported `ripgrep 14.1.0`.
+# ripgrep is NOT on the runner image: absent from the Ubuntu 24.04 software manifest and from
+# the 26.04 one every job pins since #1082, and not part of base Ubuntu. Measured on this
+# branch's first CI run, on 24.04, which took the install path and reported `ripgrep 14.1.0`;
+# #1082's first run on 26.04 took it too and installed `ripgrep (15.1.0-1ubuntu1)`.
 #
 # The verdict of this script is "is rg runnable on PATH", never "did apt succeed":
 #
