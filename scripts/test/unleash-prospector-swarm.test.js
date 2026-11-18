@@ -280,7 +280,9 @@ test('the stop rule counts only verified agents, not the clusterer\'s list', asy
 test('a seed id first seen late, or a family with no items, is never a new family', async () => {
   // S2 is a seed the brief named, first clustered in pass 3 with two verified agents; N7 has two
   // agents and no items. Neither may buy another wave.
-  const seeded = { 'cluster:1-2': CLUSTERS['cluster:1-2'], 'cluster:3': [...CLUSTERS['cluster:1-2'], fam('S2', ['r20', 'r21']), fam('N7', ['r20', 'r21'], [])] };
+  // N7 gets its own agents: sharing S2's hypotheses would make them contested, and that rule, not
+  // the seed rule, would then be what keeps S2 from counting.
+  const seeded = { 'cluster:1-2': CLUSTERS['cluster:1-2'], 'cluster:3': [...CLUSTERS['cluster:1-2'], fam('S2', ['r20', 'r21']), fam('N7', ['r22', 'r24'], [])] };
   const { out } = await run(baseArgs({ seeds: ['S1', 'S2'] }), { clusters: seeded });
   assert.equal(out.edgeWaves, 0);
   assert.equal(out.stopReason, 'no-new-family-with-independent-convergence');
