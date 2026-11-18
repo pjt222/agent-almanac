@@ -284,14 +284,20 @@ describe('detect', () => {
 // it sees. The control spawns with the caller's environment and must see all
 // three, so the other arms cannot pass because the fixture went unseen. pi
 // marks no project from its agent directory, so its arm asks for -g: a dry run
-// names the path it would write, and writes nothing. The first test checks
-// runEnv() itself against STARTUP_HOMES, which the arms cannot see.
+// names the path it would write, and writes nothing. The detect arms see a
+// spawn's HERMES_HOME only where that home holds a config.yaml, so a spawn
+// given the caller's HERMES_HOME would pass them on a machine without Hermes;
+// a -f hermes dry run needs no detection and names the path under the spawn's
+// own HERMES_HOME on any home (#1074, C1). The first test checks runEnv()
+// itself against STARTUP_HOMES, which the arms cannot see.
 describe('run() and runAllowFail() spawn with a home of their own (#1071)', () => {
   const KEYS = ['HOME', 'USERPROFILE', 'HERMES_HOME', 'LOCALAPPDATA', 'PI_CODING_AGENT_DIR'];
   const PI_DRY_RUN = 'install commit-changes -f pi -g --dry-run';
+  const HERMES_DRY_RUN = 'install commit-changes -f hermes -g --dry-run';
   // eslint-disable-next-line no-control-regex
   const stripAnsi = (text) => text.replace(/\x1b\[[0-9;]*m/g, '');
   const piLine = (agentDir) => `  + commit-changes [pi] ${resolve(agentDir, 'skills/commit-changes')}`;
+  const hermesLine = (hermesHome) => `  + commit-changes [hermes] ${resolve(hermesHome, 'skills/git/commit-changes')}`;
   const saved = {};
   let tmpRoot;
   let callerHome;
@@ -370,6 +376,18 @@ describe('run() and runAllowFail() spawn with a home of their own (#1071)', () =
     const out = stripAnsi(stdout);
     assert.equal(status, 0, out);
     assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
+  });
+
+  it('run() names a Hermes path under its own home', () => {
+    const out = stripAnsi(run(HERMES_DRY_RUN));
+    assert.ok(out.split('\n').includes(hermesLine(resolve(RUN_HOME, '.hermes'))), out);
+  });
+
+  it('runAllowFail() names a Hermes path under its own home', () => {
+    const { stdout, status } = runAllowFail(HERMES_DRY_RUN);
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.ok(out.split('\n').includes(hermesLine(resolve(RUN_HOME, '.hermes'))), out);
   });
 });
 
