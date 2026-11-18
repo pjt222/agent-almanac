@@ -511,7 +511,7 @@ test('a hypothesis assigned to two families is credited to neither', async () =>
   const clusters = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], fam('N3', ['r29', 'r30']), fam('N4', ['r29', 'r30'])] };
   const { out, logs } = await run(baseArgs({ roster: roster(60) }), { clusters });
   assert.equal(out.edgeWaves, 1);
-  assert.ok(logs.some((l) => /cluster:4: 2 hypothesis\(es\) assigned to more than one family, credited to none: r29#0, r30#0/.test(l)));
+  assert.ok(logs.some((l) => /cluster:4: 2 hypothesis\(es\) verifiably assigned to more than one family, credited to none: r29#0, r30#0/.test(l)));
 });
 
 test('the injected family summary counts verified agents, not listed ones', async () => {
@@ -524,4 +524,32 @@ test('the injected family summary counts verified agents, not listed ones', asyn
 test('the adversary and the synthesis are shown families without the member bookkeeping', async () => {
   const { calls } = await run(baseArgs());
   for (const c of labelled(calls, /challenge:advocatus-diaboli$|^synthesize$/)) assert.doesNotMatch(c.prompt, /"members"/, c.opts.label);
+});
+
+// --- Round 4 of the #1081 review -----------------------------------------------------------------
+
+test('a claim that could never verify contests nothing', async () => {
+  // S1 also lists r29#0 (r29's hypothesis 0 cites none of S1's items) and r30 as "0" (a string).
+  // Neither may withdraw N3's real claims, so N3 stays strong and a fifth wave runs.
+  const s1 = { ...fam('S1', ['janitor', 'r1', { agent: 'r29', hypothesis: 0 }, { agent: 'r30', hypothesis: '0' }], ['t1/b.sh']) };
+  const clusters = { ...CLUSTERS, 'cluster:4': [s1, ...CLUSTERS['cluster:3'].slice(1), fam('N3', ['r29', 'r30'])] };
+  const split = (label) => (label === 'prospect:r1' || label === 'pilot:janitor' ? { hypotheses: [HYP({ instances: ['t1/b.sh'] })], files_read: [] } : undefined);
+  const { out } = await run(baseArgs({ roster: roster(60) }), { clusters, override: split });
+  assert.equal(out.edgeWaves, 2);
+  assert.equal(out.familyStats.find((f) => f.id === 'N3').contested, 0);
+});
+
+test('a contested claim is counted per family, in the stats and on the stop line', async () => {
+  const clusters = { ...CLUSTERS, 'cluster:4': [...CLUSTERS['cluster:3'], fam('N3', ['r29', 'r30']), fam('N4', ['r29', 'r30'])] };
+  const { out, logs } = await run(baseArgs({ roster: roster(60) }), { clusters });
+  assert.equal(out.familyStats.find((f) => f.id === 'N3').contested, 2);
+  assert.ok(logs.some((l) => /cluster 4: .*new with fewer: N3 \(2 contested\), N4 \(2 contested\)/.test(l)), logs.join('\n'));
+});
+
+test('the readers are given verified agent names, not the clusterer\'s list', async () => {
+  const clusters = { ...CLUSTERS, 'cluster:3': [...CLUSTERS['cluster:1-2'], fam('N2', ['r20', 'r21', 'r23', 'ghost-agent'], ['t2/d.mjs'])] };
+  const { calls } = await run(baseArgs(), { clusters });
+  const syn = labelled(calls, /^synthesize$/)[0].prompt;
+  assert.ok(syn.includes('"id":"N2"'));
+  assert.ok(!syn.includes('ghost-agent'), 'a listed-only agent reached the synthesis');
 });

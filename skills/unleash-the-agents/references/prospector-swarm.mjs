@@ -334,15 +334,24 @@ async function clusterOnce(prev, label) {
     f.members = (f.members || []).map((x) => ({ agent: String(x?.agent ?? '').trim(), hypothesis: x?.hypothesis }))
     f.agents = [...new Set(f.members.map((x) => x.agent))]
   }
-  // The prompt says each hypothesis goes to at most one family. If the clusterer assigns one to
-  // two, neither family may count it: one hypothesis would otherwise make two families strong.
+  // The prompt says each hypothesis goes to at most one family. If the clusterer VERIFIABLY assigns
+  // one to two (an integer index whose hypothesis cites an item of each family), neither family may
+  // count it: one hypothesis would otherwise make two families strong. A claim that could never
+  // verify (a wrong index, a string, a hypothesis citing none of that family's items) contests
+  // nothing: an off-by-one in an unrelated family must not silence a real one. Each family records
+  // how many of its claims were withdrawn, so a split that kept the members in both halves is
+  // visible in the stats and the stop line, not only in this log.
+  const map = byAgent()
+  const key = (m) => `${m.agent}#${m.hypothesis}`
   const claims = new Map()
-  for (const f of r.families) for (const x of new Set(f.members.map((m) => `${m.agent}#${m.hypothesis}`))) claims.set(x, (claims.get(x) || 0) + 1)
-  const contested = [...claims].filter(([, n]) => n > 1).map(([k]) => k)
-  if (contested.length) {
-    for (const f of r.families) f.members = f.members.filter((m) => !contested.includes(`${m.agent}#${m.hypothesis}`))
-    log(`${label}: ${contested.length} hypothesis(es) assigned to more than one family, credited to none: ${contested.join(', ')}`)
+  for (const f of r.families) for (const x of new Set(f.members.filter((m) => verifiable(f, m, map)).map(key))) claims.set(x, (claims.get(x) || 0) + 1)
+  const contested = new Set([...claims].filter(([, n]) => n > 1).map(([k]) => k))
+  for (const f of r.families) {
+    const before = f.members.length
+    f.members = f.members.filter((m) => !(contested.has(key(m)) && verifiable(f, m, map)))
+    f.contested = before - f.members.length
   }
+  if (contested.size) log(`${label}: ${contested.size} hypothesis(es) verifiably assigned to more than one family, credited to none: ${[...contested].join(', ')}`)
   return r
 }
 
@@ -365,7 +374,13 @@ function assigned(f, a, map) {
   const own = new Set(f.instances)
   return (f.members || []).filter((x) => x.agent === a && Number.isInteger(x.hypothesis))
     .map((x) => map.get(a)?.hypotheses[x.hypothesis])
-    .filter((h) => h && Array.isArray(h.instances) && h.instances.some((id) => own.has(id)))
+    .filter((h) => h && h.instances.some((id) => own.has(id)))
+}
+// One member claim of family f that can verify: an integer index whose hypothesis cites f's items.
+function verifiable(f, m, map) {
+  if (!Number.isInteger(m.hypothesis)) return false
+  const h = map.get(m.agent)?.hypotheses[m.hypothesis]
+  return !!h && h.instances.some((id) => f.instances.includes(id))
 }
 function verifiedAgents(f, map = byAgent()) {
   return (f.agents || []).filter((a) => assigned(f, a, map).length > 0)
@@ -394,7 +409,8 @@ async function clusterWave(waveLabel) {
   c = next
   clusteredUpTo = results.length
   clusters.push(next)
-  log(`cluster ${waveLabel}: ${next.families.length} families; new with >= ${MIN_NEW} verified agents: ${fresh.strong.join(', ') || 'none'}; new with fewer: ${fresh.weak.join(', ') || 'none'}`)
+  const tag = (id) => { const n = next.families.find((f) => f.id === id)?.contested || 0; return n ? `${id} (${n} contested)` : id }
+  log(`cluster ${waveLabel}: ${next.families.length} families; new with >= ${MIN_NEW} verified agents: ${fresh.strong.map(tag).join(', ') || 'none'}; new with fewer: ${fresh.weak.map(tag).join(', ') || 'none'}`)
 }
 
 await clusterWave('1-2')
@@ -417,7 +433,7 @@ const ADV_SCHEMA = {
   required: ['challenges', 'missed_family'],
 }
 // Readers (the adversary, the synthesis) get the families without the member bookkeeping.
-const forReaders = (families) => families.map(({ members, ...f }) => f)
+const forReaders = (families) => families.map((f) => { const { members, ...rest } = f; return { ...rest, agents: verifiedAgents(f) } })
 const adversaryPrompt = (families, which) => [
   `You are the adversarial pass over a prospecting swarm. The question: ${QUESTION}`,
   containment(ADVERSARY),
@@ -501,7 +517,7 @@ const familyStats = (c?.families || []).map((f) => {
     const home = new Set(TERR[finalMap.get(a).territory])
     return assigned(f, a, finalMap).some((h) => h.instances.some((id) => own.has(id) && !home.has(id)))
   }).length
-  return { id: f.id, listedAgents: f.agents.length, agents: agents.length, outsideHome, items: f.instances.length }
+  return { id: f.id, listedAgents: f.agents.length, agents: agents.length, outsideHome, contested: f.contested || 0, items: f.instances.length }
 })
 // Expected agents per family under two assumptions. N agents file m hypotheses each among K
 // families:
