@@ -7,6 +7,7 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
+import { agentSkillIdsWithDefaults } from './registry.js';
 
 const STATE_DIR = '.agent-almanac';
 const STATE_FILE = 'state.json';
@@ -204,7 +205,8 @@ export function findHearthKeepers(state) {
  * Find skills shared between gathered fires.
  * @param {object} state
  * @param {object} reg - Registry (to look up agent skills)
- * @returns {Set<string>} Set of skill IDs that appear in multiple fires
+ * @returns {Set<string>} Set of skill IDs that appear in multiple fires,
+ *   the default skills among them (#994)
  */
 export function findSharedSkills(state, reg) {
   const skillFires = new Map();
@@ -212,7 +214,7 @@ export function findSharedSkills(state, reg) {
     for (const agentId of fire.agents || []) {
       const agent = reg.agents.find(a => a.id === agentId);
       if (!agent) continue;
-      for (const skillId of agent.skills || []) {
+      for (const skillId of agentSkillIdsWithDefaults(reg, agent)) {
         if (!skillFires.has(skillId)) skillFires.set(skillId, new Set());
         skillFires.get(skillId).add(teamId);
       }

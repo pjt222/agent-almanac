@@ -24,7 +24,7 @@ import { Command, Option } from 'commander';
 // advertised 1.1.0, and the published package was 1.3.0.
 import pkg from '../package.json' with { type: 'json' };
 import { createInterface } from 'readline';
-import { loadRegistries, resolveItems, filterSkills, search, findTeam, findAgent } from './lib/registry.js';
+import { loadRegistries, resolveItems, filterSkills, search, findTeam, findAgent, agentSkillIdsWithDefaults } from './lib/registry.js';
 import { detectAlmanacRoot, isNpmPackageRoot, resolveTargetDir } from './lib/resolver.js';
 import { detectFrameworks } from './lib/detector.js';
 import { getAdapter, getAdaptersForDetections, listAdapters } from './adapters/index.js';
@@ -749,14 +749,13 @@ program
     const agents = [];
     const allSkillItems = [];
     const allAgentItems = [];
-    const defaultSkillIds = (ctx.reg.defaultSkills || []).map(s => s.id);
 
     for (const memberId of memberIds) {
       const agent = findAgent(ctx.reg, memberId);
       if (!agent) continue;
       allAgentItems.push(agent);
 
-      const agentSkillIds = [...new Set([...(agent.skills || []), ...defaultSkillIds])];
+      const agentSkillIds = agentSkillIdsWithDefaults(ctx.reg, agent);
       const agentSkills = agentSkillIds.map(sid =>
         ctx.reg.skills.find(s => s.id === sid),
       ).filter(Boolean);
@@ -784,10 +783,12 @@ program
       teams: [team],
     };
 
-    if (options.dryRun) reporter.printDryRun();
+    // Under --json stdout is the document, so the header and the installer's
+    // warnings go to stderr (#984).
+    if (options.dryRun) reporter.printDryRun({ stderr: options.json === true });
 
     const installResults = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope,
-      installOptions(ctx, options, placed, { force: false }));
+      installOptions(ctx, options, placed, { force: false, warn: options.json ? reporter.warnOnStderr : reporter.warn }));
 
     // Categorize results
     const installed = installResults.filter(r => r.action === 'created').map(r => r.item.id);
@@ -826,11 +827,14 @@ program
     // link that copy mode does not replace by itself, a copy of another
     // version, an entry agent-almanac did not make. Its ceremony and JSON say
     // only "skipped", so each is named here (#993 §3 for links; critique F14
-    // for other versions). stderr, so `gather --json` stays one document;
-    // --quiet already printed every note with its result. A copy already at
-    // this version is not news. Nothing here in link mode: without --force,
-    // a link install keeps what it finds without a note.
-    if (!options.quiet) {
+    // for other versions). stderr, so `gather --json` stays one document.
+    // Skipped only where printResults() has already printed every note with
+    // its result: under --quiet without --json, since --json takes the output
+    // first (#1003, as scatter's failure loop below). A copy already at
+    // this version is not news. In link mode a link site keeps what it finds
+    // without a note; a generated site (windsurf, ai-edge, vibe agents, pi
+    // agents) names what it kept or took over, and that is printed here too.
+    if (options.json || !options.quiet) {
       for (const r of installResults) {
         if (r.note && r.reason !== 'already-copied') {
           console.error(reporter.chalk.yellow(`  NOTE: ${r.item.id} [${r.adapter}] ${r.path}: ${r.note}`));
@@ -878,7 +882,6 @@ program
 
     // Resolve what to remove
     const memberIds = team.members || [];
-    const defaultSkillIds = (ctx.reg.defaultSkills || []).map(s => s.id);
 
     const agents = [];
     const allSkillItems = [];
@@ -888,7 +891,7 @@ program
       const agent = findAgent(ctx.reg, memberId);
       if (!agent) continue;
 
-      const agentSkillIds = [...new Set([...(agent.skills || []), ...defaultSkillIds])];
+      const agentSkillIds = agentSkillIdsWithDefaults(ctx.reg, agent);
       const agentSkills = agentSkillIds.map(sid =>
         ctx.reg.skills.find(s => s.id === sid),
       ).filter(Boolean);
@@ -907,7 +910,8 @@ program
       }
     }
 
-    // Find skills/agents needed by other fires
+    // Find skills/agents needed by other fires. Every agent there brings the
+    // default skills too, so another fire keeps them (#994).
     const otherFires = Object.entries(state.fires).filter(([id]) => id !== name);
     const keptSkills = [];
     const keptAgents = [];
@@ -917,7 +921,7 @@ program
         const otherAgentIds = otherFire.agents || [];
         for (const oaId of otherAgentIds) {
           const oa = findAgent(ctx.reg, oaId);
-          if (oa && (oa.skills || []).includes(skill.id)) {
+          if (oa && agentSkillIdsWithDefaults(ctx.reg, oa).includes(skill.id)) {
             keptSkills.push({ id: skill.id, reason: otherId });
             break;
           }
@@ -952,7 +956,8 @@ program
       }
     }
 
-    if (options.dryRun) reporter.printDryRun();
+    // Under --json stdout is the document, as in gather (#984).
+    if (options.dryRun) reporter.printDryRun({ stderr: options.json === true });
 
     // Uninstall via standard machinery (only items not shared)
     const resolved = {
@@ -964,6 +969,7 @@ program
     const uninstallResults = await uninstallAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
       dryRun: options.dryRun,
       scopeExplicit: ctx.scopeExplicit,
+      warn: options.json ? reporter.warnOnStderr : reporter.warn,
     });
 
     // A copy edited since it was copied is kept, not removed (D1). This is
@@ -1039,13 +1045,15 @@ program
     const state = loadState();
     const fires = getFireStates(state);
 
-    if (fires.length === 0) {
-      console.log(reporter.chalk.dim('\n  No fires to tend. Gather a campfire first.\n'));
+    // Before the empty case: under --json stdout is one document, with no
+    // fire burning too (#984).
+    if (options.json) {
+      campfire.printJson({ fires });
       return;
     }
 
-    if (options.json) {
-      campfire.printJson({ fires });
+    if (fires.length === 0) {
+      console.log(reporter.chalk.dim('\n  No fires to tend. Gather a campfire first.\n'));
       return;
     }
 

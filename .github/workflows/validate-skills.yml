@@ -15,7 +15,7 @@ jobs:
   # Job id is the status-check CONTEXT name. It was `validate`, shared by four workflows, so
   # none of them could be required individually (#641).
   skills:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:

@@ -8,7 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync, spawnSync } from 'child_process';
-import { chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, symlinkSync } from 'fs';
+import { chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, renameSync, rmSync, readlinkSync, readFileSync, writeFileSync, statSync, symlinkSync } from 'fs';
 import { createHash } from 'crypto';
 import { tmpdir, homedir } from 'os';
 import { dirname, isAbsolute, resolve } from 'path';
@@ -33,7 +33,8 @@ import { VibeAdapter } from '../adapters/vibe.js';
 // New in #1006, so imported the way item-id.js is below: a missing module then
 // fails the tests that use it, not the whole file at link time.
 const piAgentDir = await import('../lib/pi-agent-dir.js').catch(() => ({}));
-const { PiAdapter } = await import('../adapters/pi.js').catch(() => ({}));
+const piAdapterModule = await import('../adapters/pi.js').catch(() => ({}));
+const { PiAdapter } = piAdapterModule;
 import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-renderer.js';
 import {
   CAMPFIRE_BURNING, CAMPFIRE_EMBERS, CAMPFIRE_COLD,
@@ -54,6 +55,9 @@ const itemId = await import('../lib/item-id.js').catch(() => ({}));
 import * as placement from '../lib/placement.js';
 import * as campfire from '../lib/campfire-reporter.js';
 import { loadRegistries } from '../lib/registry.js';
+// A namespace import too: defaultSkillIds is new in #994's fix.
+import * as registryLib from '../lib/registry.js';
+import { findSharedSkills } from '../lib/state.js';
 import { makeChalkStub } from '../lib/chalk-stub.js';
 import { detectFrameworks } from '../lib/detector.js';
 import { buildFireScene } from '../lib/scene.js';
@@ -62,8 +66,45 @@ import { canInlineImage, renderInlineImage } from '../lib/inline-image.js';
 const CLI = 'node cli/index.js';
 const ROOT = process.cwd();
 
+// run() and runAllowFail() spawn the CLI at the repository root. With the
+// caller's environment it saw the caller's home, and there it detects Hermes
+// (a config.yaml in the Hermes home) and OpenClaw (~/.openclaw/openclaw.json
+// or ~/.nemoclaw). Both take skills and agents at global scope only, so a
+// project-scope install or gather here also linked items into the real
+// ~/.hermes or ~/.openclaw (#1071). pi's agents are global only too, and go to
+// $PI_CODING_AGENT_DIR when it is set. So both spawn with a home made once for
+// this file, as the file's other spawns do with a fixture home: HERMES_HOME is
+// read before the home on every platform, LOCALAPPDATA is Hermes's win32
+// default, and without PI_CODING_AGENT_DIR pi's directory is under the home.
+// RUN_HOME is made once, at module scope, and a top-level after() removes it.
+//
+// STARTUP_HOMES are the homes this process started with, read before RUN_HOME
+// exists. The #1071 describe's arms stand in for the caller from a before(),
+// after anything taken at load time, so a RUN_HOME or a runEnv() value taken
+// from the caller's home at load would pass them on a machine without Hermes
+// or OpenClaw. A test there checks runEnv() names none of these (#1073 review
+// round 1, D1).
+const STARTUP_HOMES = new Set(
+  [homedir(), process.env.HOME, process.env.USERPROFILE, process.env.HERMES_HOME, resolveHermesHome(), resolve(homedir(), '.hermes')]
+    .filter(Boolean)
+    .flatMap((homePath) => {
+      const absolute = resolve(homePath);
+      try { return [absolute, realpathSync(absolute)]; } catch { return [absolute]; }
+    }),
+);
+const RUN_HOME = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-run-home-')));
+after(() => rmTree(RUN_HOME));
+
+/** The caller's environment with every home variable pinned to RUN_HOME (#1071). */
+function runEnv() {
+  const env = { ...process.env, HOME: RUN_HOME, USERPROFILE: RUN_HOME, HERMES_HOME: resolve(RUN_HOME, '.hermes') };
+  delete env.LOCALAPPDATA;
+  delete env.PI_CODING_AGENT_DIR;
+  return env;
+}
+
 function run(args) {
-  return execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 });
+  return execSync(`${CLI} ${args}`, { cwd: ROOT, env: runEnv(), encoding: 'utf8', timeout: 10000 });
 }
 
 /**
@@ -82,7 +123,7 @@ function run(args) {
  */
 function runAllowFail(args) {
   try {
-    const stdout = execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 });
+    const stdout = execSync(`${CLI} ${args}`, { cwd: ROOT, env: runEnv(), encoding: 'utf8', timeout: 10000 });
     return { stdout, status: 0 };
   } catch (err) {
     return { stdout: err.stdout ?? '', status: err.status ?? 1 };
@@ -233,6 +274,132 @@ describe('detect', () => {
     const out = run('detect');
     assert.match(out, /Universal/);
     assert.match(out, /Claude Code/);
+  });
+});
+
+// ── run() and runAllowFail() spawn with a home of their own (#1071) ──
+//
+// The caller's home variables point at a fixture home holding a Hermes home,
+// an OpenClaw config and a pi agent directory, and the arms ask the CLI what
+// it sees. The control spawns with the caller's environment and must see all
+// three, so the other arms cannot pass because the fixture went unseen. pi
+// marks no project from its agent directory, so its arm asks for -g: a dry run
+// names the path it would write, and writes nothing. The detect arms see a
+// spawn's HERMES_HOME only where that home holds a config.yaml, so a spawn
+// given the caller's HERMES_HOME would pass them on a machine without Hermes;
+// a -f hermes dry run needs no detection and names the path under the spawn's
+// own HERMES_HOME on any home (#1074, C1). The first test checks runEnv()
+// itself against STARTUP_HOMES, which the arms cannot see.
+describe('run() and runAllowFail() spawn with a home of their own (#1071)', () => {
+  const KEYS = ['HOME', 'USERPROFILE', 'HERMES_HOME', 'LOCALAPPDATA', 'PI_CODING_AGENT_DIR'];
+  const PI_DRY_RUN = 'install commit-changes -f pi -g --dry-run';
+  const HERMES_DRY_RUN = 'install commit-changes -f hermes -g --dry-run';
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => text.replace(/\x1b\[[0-9;]*m/g, '');
+  const piLine = (agentDir) => `  + commit-changes [pi] ${resolve(agentDir, 'skills/commit-changes')}`;
+  const hermesLine = (hermesHome) => `  + commit-changes [hermes] ${resolve(hermesHome, 'skills/git/commit-changes')}`;
+  const saved = {};
+  let tmpRoot;
+  let callerHome;
+
+  /** The CLI spawned with the caller's environment, as run() did before #1071. */
+  function spawnAsCaller(args) {
+    return stripAnsi(execSync(`${CLI} ${args}`, { cwd: ROOT, encoding: 'utf8', timeout: 10000 }));
+  }
+
+  before(() => {
+    // Saved first: after() runs even when before() throws, and restores from
+    // whatever was saved, so a key saved late would be deleted.
+    for (const key of KEYS) saved[key] = process.env[key];
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-1071-')));
+    callerHome = resolve(tmpRoot, 'home');
+    mkdirSync(resolve(callerHome, '.hermes'), { recursive: true });
+    writeFileSync(resolve(callerHome, '.hermes/config.yaml'), '');
+    mkdirSync(resolve(callerHome, '.openclaw'), { recursive: true });
+    writeFileSync(resolve(callerHome, '.openclaw/openclaw.json'), '{}\n');
+    mkdirSync(resolve(callerHome, 'pi-agent'), { recursive: true });
+    process.env.HOME = callerHome;
+    process.env.USERPROFILE = callerHome;
+    process.env.HERMES_HOME = resolve(callerHome, '.hermes');
+    process.env.PI_CODING_AGENT_DIR = resolve(callerHome, 'pi-agent');
+    // Set, not removed, so the check that runEnv() removes it has something to remove.
+    process.env.LOCALAPPDATA = resolve(callerHome, 'AppData/Local');
+  });
+
+  after(() => {
+    for (const key of KEYS) {
+      if (saved[key] === undefined) delete process.env[key];
+      else process.env[key] = saved[key];
+    }
+    rmTree(tmpRoot);
+  });
+
+  it('runEnv() points every home variable at RUN_HOME, which is none of the homes this process started with', () => {
+    // By spelling after resolve(), so a trailing slash does not hide a startup
+    // home, and by device and inode, so a symlink to one does not either (#1074,
+    // C3). An inode of 0 means the filesystem does not report one; there the
+    // spelling is the only comparison left.
+    assert.ok(!STARTUP_HOMES.has(resolve(RUN_HOME)), `RUN_HOME is a home this process started with: ${RUN_HOME}`);
+    const runHomeId = statSync(RUN_HOME, { bigint: true });
+    for (const startupHome of STARTUP_HOMES) {
+      let startupId;
+      try { startupId = statSync(startupHome, { bigint: true }); } catch { continue; }
+      if (startupId.ino === 0n || runHomeId.ino === 0n) continue;
+      assert.ok(startupId.dev !== runHomeId.dev || startupId.ino !== runHomeId.ino,
+        `RUN_HOME ${RUN_HOME} is the directory this process started with as ${startupHome}`);
+    }
+    const env = runEnv();
+    assert.equal(env.HOME, RUN_HOME);
+    assert.equal(env.USERPROFILE, RUN_HOME);
+    assert.equal(env.HERMES_HOME, resolve(RUN_HOME, '.hermes'));
+    assert.equal(env.LOCALAPPDATA, undefined);
+    assert.equal(env.PI_CODING_AGENT_DIR, undefined);
+  });
+
+  it('control: a spawn with the caller\'s environment sees the fixture\'s Hermes, OpenClaw and pi directory', () => {
+    const detected = spawnAsCaller('detect');
+    assert.match(detected, /Hermes Agent/, detected);
+    assert.match(detected, /OpenClaw\/NemoClaw/, detected);
+    const dryRun = spawnAsCaller(PI_DRY_RUN);
+    assert.ok(dryRun.split('\n').includes(piLine(resolve(callerHome, 'pi-agent'))), dryRun);
+  });
+
+  it('run() detects neither Hermes nor OpenClaw', () => {
+    const out = stripAnsi(run('detect'));
+    assert.doesNotMatch(out, /Hermes Agent/, out);
+    assert.doesNotMatch(out, /OpenClaw\/NemoClaw/, out);
+  });
+
+  it('runAllowFail() detects neither Hermes nor OpenClaw', () => {
+    const { stdout, status } = runAllowFail('detect');
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.doesNotMatch(out, /Hermes Agent/, out);
+    assert.doesNotMatch(out, /OpenClaw\/NemoClaw/, out);
+  });
+
+  it('run() puts pi\'s global directory under its own home', () => {
+    const out = stripAnsi(run(PI_DRY_RUN));
+    assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
+  });
+
+  it('runAllowFail() puts pi\'s global directory under its own home', () => {
+    const { stdout, status } = runAllowFail(PI_DRY_RUN);
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.ok(out.split('\n').includes(piLine(resolve(RUN_HOME, '.pi/agent'))), out);
+  });
+
+  it('run() names a Hermes path under its own home', () => {
+    const out = stripAnsi(run(HERMES_DRY_RUN));
+    assert.ok(out.split('\n').includes(hermesLine(resolve(RUN_HOME, '.hermes'))), out);
+  });
+
+  it('runAllowFail() names a Hermes path under its own home', () => {
+    const { stdout, status } = runAllowFail(HERMES_DRY_RUN);
+    const out = stripAnsi(stdout);
+    assert.equal(status, 0, out);
+    assert.ok(out.split('\n').includes(hermesLine(resolve(RUN_HOME, '.hermes'))), out);
   });
 });
 
@@ -966,6 +1133,579 @@ describe('pi adapter, end to end (#1006)', () => {
       `  = commit-changes [pi] ${target}  project scope in your home directory would write ~/.pi/skills/; install with -g`), stdout);
     assert.equal(existsSync(resolve(home, '.pi/skills')), false);
   });
+
+  it('installs an agent globally under --scope project, says so, and writes nothing under <project>/.pi/ (#1007)', () => {
+    const dir = resolve(tmpRoot, 'agent-scope');
+    mkdirSync(resolve(dir, '.pi'), { recursive: true });
+    const { status, stdout, stderr } = spawnCli(['install', '--agent', 'code-reviewer', '--scope', 'project', '-f', 'pi'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    assert.ok(`${stdout}\n${stderr}`.includes('Pi Coding Agent is global-only; --scope project ignored (installing to global).'), `${stdout}\n${stderr}`);
+    assert.deepEqual(readdirSync(resolve(dir, '.pi')), []);
+    assert.equal(existsSync(resolve(agentDir, 'agents/code-reviewer.md')), true, stdout);
+  });
+});
+
+// ── pi agents (#1007) ────────────────────────────────────────────
+//
+// pi has no built-in agent loader; its example subagent extension reads
+// <agent-dir>/agents/*.md and hands an agent's `tools` to `pi --tools` and its
+// `model` to `pi --model`. So the adapter generates the file: Claude Code tool
+// names become pi's built-ins, a tool with no built-in is dropped, and `model`
+// is left out. The file is owned through a sidecar marker like a copy, and a
+// link at the path is never touched. In-process, against a fixture content root.
+describe('pi agents (#1007)', () => {
+  let tmpRoot;
+  let src;
+  let agentDir;
+  const saved = {};
+  const agentsBase = () => resolve(agentDir, 'agents');
+  const agentFile = (id) => resolve(agentsBase(), `${id}.md`);
+  const sidecar = (id) => resolve(agentsBase(), `.${id}.md.agent-almanac-copy.json`);
+  const item = (id) => ({ type: 'agent', id, sourcePath: resolve(src, 'agents', `${id}.md`) });
+  const install = (id, extra = {}) => new PiAdapter().install(item(id), tmpRoot, 'global', { almanacRoot: src, ...extra });
+  const uninstall = (id) => new PiAdapter().uninstall(item(id), tmpRoot, 'global', {});
+  /** The generated file's frontmatter and body. */
+  const readGenerated = (id) => {
+    const match = readFileSync(agentFile(id), 'utf8').match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+    assert.ok(match, `no frontmatter in ${agentFile(id)}`);
+    return { fields: yamlLib.load(match[1]), body: match[2] };
+  };
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-pi-agents-')));
+    src = resolve(tmpRoot, 'src');
+    // Outside the home directory, so a resolver that ignored the variable
+    // would write somewhere else.
+    agentDir = resolve(tmpRoot, 'pi-agent');
+    mkdirSync(resolve(src, 'agents'), { recursive: true });
+    mkdirSync(resolve(tmpRoot, 'home'), { recursive: true });
+    writeFileSync(resolve(src, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: '9.9.9-test' }));
+    const agent = (tools, extra = '') => `---\nname: x\ndescription: An agent for the test.\ntools: [${tools}]\nmodel: sonnet\n${extra}---\n\n# Agent\n\nThe body line.\n`;
+    writeFileSync(resolve(src, 'agents/full-agent.md'), agent('Read, Write, Edit, Bash, Grep, Glob, WebFetch'));
+    writeFileSync(resolve(src, 'agents/readonly-agent.md'), agent('Read, Grep, Glob'));
+    writeFileSync(resolve(src, 'agents/web-agent.md'), agent('WebFetch, WebSearch'));
+    // A description that needs YAML quoting: a leading `@`, `: `, ` #`, both quote kinds, a newline.
+    writeFileSync(resolve(src, 'agents/quoted-agent.md'), '---\nname: x\ndescription: "@review: uses # and \\"double\\" and \'single\' quotes\\nsecond line"\ntools: [Read]\n---\n\nThe body line.\n');
+    for (const key of ['HOME', 'USERPROFILE', 'PI_CODING_AGENT_DIR']) saved[key] = process.env[key];
+    process.env.HOME = resolve(tmpRoot, 'home');
+    process.env.USERPROFILE = resolve(tmpRoot, 'home');
+    process.env.PI_CODING_AGENT_DIR = agentDir;
+  });
+
+  after(() => {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    rmTree(tmpRoot);
+  });
+
+  it('maps Claude Code tool names to pi built-ins, dropping and naming the rest', () => {
+    assert.deepEqual(piAdapterModule.mapAgentTools(['Read', 'Write', 'Edit', 'Bash', 'Grep', 'Glob', 'WebFetch', 'WebSearch', 'Read']), {
+      mapped: ['read', 'write', 'edit', 'bash', 'grep', 'find'],
+      dropped: ['WebFetch', 'WebSearch'],
+    });
+    assert.deepEqual(piAdapterModule.mapAgentTools('Read, Glob'), { mapped: ['read', 'find'], dropped: [] });
+    // A name the map inherits from Object.prototype is not a tool.
+    assert.deepEqual(piAdapterModule.mapAgentTools(['constructor', 'toString', 'Read']), { mapped: ['read'], dropped: ['constructor', 'toString'] });
+  });
+
+  it('declares agents global-only', () => {
+    assert.deepEqual(new PiAdapter().scopesFor('agent'), ['global']);
+  });
+
+  it('generates <agent-dir>/agents/<id>.md with mapped tools, no model, the body, and a sidecar marker', async () => {
+    const result = await install('full-agent');
+    assert.equal(result.action, 'created', JSON.stringify(result));
+    assert.equal(result.path, agentFile('full-agent'));
+    // The literal, not the imported constant, so a rewording of the note is seen.
+    assert.ok(result.note.startsWith("pi reads it only through its example subagent extension, or a compatible one, installed per that extension's README"), result.note);
+    assert.ok(result.note.endsWith('tools with no pi built-in were dropped: WebFetch'), result.note);
+    const { fields, body } = readGenerated('full-agent');
+    assert.deepEqual(fields, { name: 'full-agent', description: 'An agent for the test.', tools: 'read, write, edit, bash, grep, find' });
+    assert.ok(body.includes('The body line.'), body);
+    assert.equal(existsSync(sidecar('full-agent')), true);
+    assert.equal(existsSync(resolve(tmpRoot, 'home', '.pi')), false, 'the install ignored $PI_CODING_AGENT_DIR');
+  });
+
+  it('quotes a description that needs it, so the generated frontmatter reads back as the source', async () => {
+    // pi's discoverAgents parses this frontmatter; one unquoted description would make it throw (#1064 round 1, SF-2).
+    const result = await install('quoted-agent');
+    assert.equal(result.action, 'created', JSON.stringify(result));
+    assert.equal(readGenerated('quoted-agent').fields.description, '@review: uses # and "double" and \'single\' quotes\nsecond line');
+    rmSync(agentFile('quoted-agent'));
+    rmSync(sidecar('quoted-agent'));
+  });
+
+  it('never widens an agent: a read-only agent stays read-only', async () => {
+    await install('readonly-agent');
+    assert.equal(readGenerated('readonly-agent').fields.tools, 'read, grep, find');
+  });
+
+  it('refuses an agent whose tools all lack a pi built-in, and writes nothing', async () => {
+    const result = await install('web-agent');
+    assert.equal(result.action, 'skipped');
+    assert.match(result.note, /none of its tools has a pi built-in \(WebFetch, WebSearch\)/);
+    assert.equal(existsSync(agentFile('web-agent')), false);
+    // A dry run reports the refusal the real run makes, not "created" (#1064 round 1, NIT-4).
+    assert.equal((await install('web-agent', { dryRun: true })).action, 'skipped');
+  });
+
+  it('refuses an agent that declares no tools, and writes nothing', async () => {
+    // Without `tools:` the extension passes no --tools and pi uses its default set.
+    writeFileSync(resolve(src, 'agents/notools-agent.md'), '---\nname: x\ndescription: No tools.\n---\n\nThe body line.\n');
+    const result = await install('notools-agent');
+    assert.equal(result.action, 'skipped');
+    assert.equal(result.note, 'none of its tools has a pi built-in (it declares none); not installed');
+    assert.equal(existsSync(agentFile('notools-agent')), false);
+  });
+
+  it('falls back to the registry item\'s tools when the source declares none', async () => {
+    const result = await new PiAdapter().install({ ...item('notools-agent'), tools: ['Read', 'Glob'] }, tmpRoot, 'global', { almanacRoot: src });
+    assert.equal(result.action, 'created', JSON.stringify(result));
+    assert.equal(readGenerated('notools-agent').fields.tools, 'read, find');
+    rmSync(agentFile('notools-agent'));
+    rmSync(sidecar('notools-agent'));
+  });
+
+  it('generates the same file under --from-package copy', async () => {
+    rmSync(agentFile('readonly-agent'));
+    rmSync(sidecar('readonly-agent'));
+    const result = await install('readonly-agent', { placement: 'copy', copyFrom: { name: 'agent-almanac', version: '9.9.9-test' } });
+    assert.equal(result.action, 'created');
+    assert.equal(readGenerated('readonly-agent').fields.tools, 'read, grep, find');
+  });
+
+  it('lists only the agents it generated', async () => {
+    writeFileSync(agentFile('users-own'), '---\nname: users-own\ndescription: mine\n---\n');
+    const listed = (await new PiAdapter().listInstalled(tmpRoot, 'global')).filter((entry) => entry.type === 'agent').map((entry) => entry.id).sort();
+    assert.deepEqual(listed, ['full-agent', 'readonly-agent']);
+    // Agents are global only, so a project-scope listing (and the audit built on it) sees them too.
+    const atProject = (await new PiAdapter().listInstalled(tmpRoot, 'project')).filter((entry) => entry.type === 'agent').map((entry) => entry.id).sort();
+    assert.deepEqual(atProject, ['full-agent', 'readonly-agent']);
+  });
+
+  it('uninstall removes an unedited generated agent and its sidecar', async () => {
+    const result = await uninstall('readonly-agent');
+    assert.equal(result.action, 'removed', JSON.stringify(result));
+    assert.equal(existsSync(agentFile('readonly-agent')), false);
+    assert.equal(existsSync(sidecar('readonly-agent')), false);
+  });
+
+  it('keeps a user\'s own same-named file on install, install --force and uninstall', async () => {
+    const mine = '---\nname: full-agent-mine\n---\nmine\n';
+    rmSync(agentFile('full-agent'));
+    rmSync(sidecar('full-agent'));
+    writeFileSync(agentFile('full-agent'), mine);
+    for (const result of [await install('full-agent'), await install('full-agent', { force: true }), await uninstall('full-agent')]) {
+      assert.equal(result.action, 'skipped', JSON.stringify(result));
+    }
+    assert.equal(readFileSync(agentFile('full-agent'), 'utf8'), mine);
+    rmSync(agentFile('full-agent'));
+  });
+
+  it('keeps a generated agent the user edited, on install --force and uninstall', async () => {
+    await install('full-agent');
+    writeFileSync(agentFile('full-agent'), `${readFileSync(agentFile('full-agent'), 'utf8')}my own line\n`);
+    for (const [result, purpose] of [[await install('full-agent', { force: true }), 'replace'], [await uninstall('full-agent'), 'remove']]) {
+      assert.equal(result.action, 'skipped', JSON.stringify(result));
+      assert.equal(result.reason, 'edited');
+      assert.equal(result.note, `edited since it was copied (modified: full-agent.md); kept, delete it by hand to ${purpose} it`);
+    }
+    assert.match(readFileSync(agentFile('full-agent'), 'utf8'), /my own line\n$/);
+    rmSync(agentFile('full-agent'));
+    rmSync(sidecar('full-agent'));
+  });
+
+  it('never removes or replaces a link at the path, even with --force', async () => {
+    const target = resolve(tmpRoot, 'linked-agent.md');
+    writeFileSync(target, '---\nname: full-agent\n---\nlinked\n');
+    symlinkSync(target, agentFile('full-agent'));
+    for (const result of [await install('full-agent', { force: true }), await uninstall('full-agent')]) {
+      assert.equal(result.action, 'skipped', JSON.stringify(result));
+      assert.equal(result.reason, 'foreign');
+    }
+    assert.equal(lstatSync(agentFile('full-agent')).isSymbolicLink(), true);
+    assert.equal(readlinkSync(agentFile('full-agent')), target);
+  });
+
+  it('install without --force keeps what is there and says what it is', async () => {
+    const kept = (result) => ({ action: result.action, reason: result.reason, note: result.note });
+    // The link the test above left at the path.
+    assert.deepEqual(kept(await install('full-agent')), {
+      action: 'skipped', reason: 'foreign',
+      note: "a link is here, which agent-almanac never removes or replaces in pi's agents folder; not installed by agent-almanac; left in place",
+    });
+    rmSync(agentFile('full-agent'));
+    writeFileSync(agentFile('full-agent'), '---\nname: mine\n---\nmine\n');
+    assert.deepEqual(kept(await install('full-agent')), { action: 'skipped', reason: 'foreign', note: 'not installed by agent-almanac; left in place' });
+    rmSync(agentFile('full-agent'));
+    assert.equal((await install('full-agent')).action, 'created');
+    // Outside copy placement the note says to re-run the same install with `--force`;
+    // `--from-package copy` is refused from a clone (#1064 round 1, SF-3), and plain
+    // `install --force` from an npm package root (round 2, R2-SF-1).
+    const regenerate = 'run the same install with `--force` to regenerate it from the current source if it is unedited';
+    assert.deepEqual(kept(await install('full-agent')), { action: 'skipped', reason: 'already-copied', note: `already generated from agent-almanac 9.9.9-test; ${regenerate}` });
+    rmSync(agentFile('full-agent'));
+    rmSync(sidecar('full-agent'));
+    // Generated by an older package version, then installed again from this one.
+    assert.equal((await install('full-agent', { copyFrom: { name: 'agent-almanac', version: '1.0.0' } })).action, 'created');
+    assert.deepEqual(kept(await install('full-agent')), { action: 'skipped', reason: 'other-version', note: `already generated from agent-almanac 1.0.0; ${regenerate}` });
+    // In copy placement the package's own note stays: there `--from-package copy` is the command.
+    assert.match((await install('full-agent', { placement: 'copy', copyFrom: { name: 'agent-almanac', version: '9.9.9-test' } })).note, /^already a copy of agent-almanac 1\.0\.0; `install --force --from-package copy` replaces it/);
+  });
+
+  it('install --force replaces an unedited generated agent with the current source', async () => {
+    // Its own precondition, not the state the test above left: on an empty path a
+    // "created" would show nothing about replacing (#1064 round 1, NIT-2).
+    for (const path of [agentFile('full-agent'), sidecar('full-agent')]) rmSync(path, { force: true });
+    assert.equal((await install('full-agent')).action, 'created');
+    assert.equal(readGenerated('full-agent').fields.description, 'An agent for the test.');
+    // A changed source description shows the file was rewritten.
+    const sourcePath = resolve(src, 'agents/full-agent.md');
+    const original = readFileSync(sourcePath, 'utf8');
+    writeFileSync(sourcePath, original.replace('description: An agent for the test.', 'description: The agent, updated.'));
+    try {
+      const result = await install('full-agent', { force: true });
+      assert.equal(result.action, 'created', JSON.stringify(result));
+      assert.equal(readGenerated('full-agent').fields.description, 'The agent, updated.');
+      assert.equal(existsSync(sidecar('full-agent')), true);
+    } finally {
+      writeFileSync(sourcePath, original);
+    }
+  });
+});
+
+// ── generated files: the CLI removes or replaces only its own (#998) ──
+//
+// windsurf's rules, ai-edge's distillations and vibe's agent TOML are files the
+// CLI generates. Before #998 their uninstall unlinked whatever regular file sat
+// at the path, and install --force overwrote it. Now each is written through
+// placeGenerated(), with the sidecar marker a copy carries, and removed through
+// removeGenerated(): a marked, unedited file goes; an unmarked file holding
+// exactly what this version would generate (agent-almanac 1.9.1 and earlier
+// wrote no marker) is taken over; anything else is kept with a note.
+//
+// Each test builds its own sandbox, so a mutant that breaks one test cannot
+// fail a later one through the state it leaves.
+
+describe('generated files: the CLI removes or replaces only its own (#998)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  // The literals, not the imported constants, so a rewording is seen.
+  const UNMARKED = 'no agent-almanac marker, and not what this version would generate there: written by hand, or by agent-almanac 1.9.1 or earlier; left in place';
+  const UNCOMPARED = 'no agent-almanac marker, and its source could not be read to compare; left in place';
+  const ADOPTED = "an unmarked file holding exactly this content was here (as agent-almanac 1.9.1 and earlier wrote it, with no marker); it was replaced by an identical file carrying agent-almanac's marker";
+  const UNMARKED_REMOVED = 'unmarked, and exactly what this version generates (as agent-almanac 1.9.1 and earlier wrote it, with no marker); removed';
+  const MY_OWN = 'MY OWN file, never written by agent-almanac\n';
+
+  const SITES = [
+    { name: 'windsurf rule', adapter: () => getAdapter('windsurf'), item: (sb) => sb.skill, scope: 'project', path: (sb) => resolve(sb.proj, '.windsurf/rules/gen-skill.md') },
+    { name: 'ai-edge skill', adapter: () => getAdapter('ai-edge'), item: (sb) => sb.skill, scope: 'project', path: (sb) => resolve(sb.proj, '.ai-edge/skills/gen-skill.md') },
+    { name: 'ai-edge agent', adapter: () => getAdapter('ai-edge'), item: (sb) => sb.agent, scope: 'project', path: (sb) => resolve(sb.proj, '.ai-edge/agents/gen-agent.md') },
+    { name: 'vibe agent', adapter: () => getAdapter('vibe'), item: (sb) => sb.agent, scope: 'global', path: (sb) => resolve(sb.home, '.vibe/agents/gen-agent.toml') },
+  ];
+
+  /** A fresh content root, project and home for one test; HOME points at the home (vibe's agents live there). */
+  async function inSandbox(label, fn) {
+    const root = realpathSync(mkdtempSync(resolve(tmpdir(), `almanac-998-${label}-`)));
+    const saved = { HOME: process.env.HOME, USERPROFILE: process.env.USERPROFILE };
+    try {
+      const src = resolve(root, 'src');
+      const proj = resolve(root, 'proj');
+      const home = resolve(root, 'home');
+      mkdirSync(resolve(src, 'skills/gen-skill'), { recursive: true });
+      mkdirSync(resolve(src, 'agents'), { recursive: true });
+      mkdirSync(proj, { recursive: true });
+      mkdirSync(home, { recursive: true });
+      writeFileSync(resolve(src, 'package.json'), JSON.stringify({ name: 'agent-almanac', version: '9.9.9-test' }));
+      copyFileSync(resolve(ROOT, 'skills/commit-changes/SKILL.md'), resolve(src, 'skills/gen-skill/SKILL.md'));
+      copyFileSync(resolve(ROOT, 'agents/code-reviewer.md'), resolve(src, 'agents/gen-agent.md'));
+      process.env.HOME = home;
+      process.env.USERPROFILE = home;
+      await fn({
+        root, src, proj, home,
+        skill: { type: 'skill', id: 'gen-skill', sourceDir: resolve(src, 'skills/gen-skill'), sourcePath: resolve(src, 'skills/gen-skill/SKILL.md') },
+        agent: { type: 'agent', id: 'gen-agent', sourcePath: resolve(src, 'agents/gen-agent.md'), description: 'An agent for the test.', tools: ['Read', 'Grep'] },
+      });
+    } finally {
+      for (const [key, value] of Object.entries(saved)) {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+      }
+      rmTree(root);
+    }
+  }
+
+  const install = (site, sb, extra = {}) => site.adapter().install(site.item(sb), sb.proj, site.scope, { almanacRoot: sb.src, ...extra });
+  // No almanacRoot: the CLI's uninstall passes none (cli/index.js).
+  const uninstall = (site, sb, extra = {}) => site.adapter().uninstall(site.item(sb), sb.proj, site.scope, { ...extra });
+  const plant = (path, text) => {
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, text);
+  };
+
+  for (const site of SITES) {
+    it(`${site.name}: keeps a user's own file on uninstall, install and install --force, and names it as kept`, async () => {
+      await inSandbox('own', async (sb) => {
+        const path = site.path(sb);
+        plant(path, MY_OWN);
+        const kept = { action: 'skipped', path, reason: 'foreign', note: UNMARKED };
+        assert.deepEqual(await uninstall(site, sb), kept);
+        assert.deepEqual(await install(site, sb), kept);
+        assert.deepEqual(await install(site, sb, { force: true }), kept);
+        assert.equal(readFileSync(path, 'utf8'), MY_OWN);
+        assert.equal(existsSync(placement.sidecarPath(path)), false);
+      });
+    });
+
+    it(`${site.name}: installs a marked file, and uninstall removes it and its sidecar`, async () => {
+      await inSandbox('marked', async (sb) => {
+        const path = site.path(sb);
+        assert.deepEqual(await install(site, sb), { action: 'created', path, details: 'generated' });
+        assert.equal(existsSync(placement.sidecarPath(path)), true);
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path, details: 'generated' });
+        assert.equal(existsSync(path), false);
+        assert.equal(existsSync(placement.sidecarPath(path)), false);
+      });
+    });
+
+    it(`${site.name}: a second install keeps the file and names the same install with --force`, async () => {
+      await inSandbox('again', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        assert.deepEqual(await install(site, sb), {
+          action: 'skipped', path, reason: 'already-copied',
+          note: 'already generated from agent-almanac 9.9.9-test; run the same install with `--force` to regenerate it from the current source if it is unedited',
+        });
+      });
+    });
+
+    it(`${site.name}: keeps a generated file the user edited, on install --force and uninstall`, async () => {
+      await inSandbox('edited', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        writeFileSync(path, `${readFileSync(path, 'utf8')}an edit\n`);
+        const forced = await install(site, sb, { force: true });
+        assert.equal(forced.reason, 'edited', JSON.stringify(forced));
+        assert.ok(forced.note.startsWith('edited since it was generated'), forced.note);
+        const removed = await uninstall(site, sb);
+        assert.equal(removed.reason, 'edited', JSON.stringify(removed));
+        assert.ok(removed.note.startsWith('edited since it was generated'), removed.note);
+        assert.ok(readFileSync(path, 'utf8').endsWith('an edit\n'));
+      });
+    });
+
+    it(`${site.name}: a plain install takes over an unmarked file holding exactly this version's output, and marks it`, async () => {
+      await inSandbox('adopt', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        const bytes = readFileSync(path);
+        rmSync(placement.sidecarPath(path)); // as agent-almanac 1.9.1 left it
+        assert.deepEqual(await install(site, sb), { action: 'created', path, details: 'generated', note: ADOPTED });
+        assert.equal(existsSync(placement.sidecarPath(path)), true);
+        assert.ok(readFileSync(path).equals(bytes), 'taking the file over changed its content');
+      });
+    });
+
+    it(`${site.name}: a takeover keeps the file's permission bits`, { skip: process.platform === 'win32' && 'POSIX permission bits' }, async () => {
+      await inSandbox('mode', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        chmodSync(path, 0o444);
+        try {
+          assert.equal((await install(site, sb)).note, ADOPTED);
+          assert.equal(lstatSync(path).mode & 0o777, 0o444);
+        } finally {
+          chmodSync(path, 0o644);
+        }
+      });
+    });
+
+    it(`${site.name}: uninstall removes an unmarked file holding exactly this version's output`, async () => {
+      await inSandbox('legacy', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path, details: 'unmarked', note: UNMARKED_REMOVED });
+        assert.equal(existsSync(path), false);
+      });
+    });
+
+    it(`${site.name}: keeps an unmarked file one byte away from this version's output`, async () => {
+      await inSandbox('near', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        writeFileSync(path, `${readFileSync(path, 'utf8')}x`);
+        const kept = { action: 'skipped', path, reason: 'foreign', note: UNMARKED };
+        assert.deepEqual(await uninstall(site, sb), kept);
+        assert.deepEqual(await install(site, sb, { force: true }), kept);
+        assert.ok(readFileSync(path, 'utf8').endsWith('x'));
+      });
+    });
+
+    it(`${site.name}: keeps an unmarked file the size of this version's output with one byte changed`, async () => {
+      await inSandbox('same-size', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        // A file of another size is refused by the size check before its bytes
+        // are read, so only a file of the same size reaches the comparison of
+        // bytes. The appended byte in the case above never does.
+        const generated = readFileSync(path);
+        const changed = Buffer.from(generated);
+        changed[0] = changed[0] === 0x58 ? 0x59 : 0x58;
+        writeFileSync(path, changed);
+        assert.equal(lstatSync(path).size, generated.length);
+        const kept = { action: 'skipped', path, reason: 'foreign', note: UNMARKED };
+        assert.deepEqual(await uninstall(site, sb), kept);
+        assert.deepEqual(await install(site, sb), kept);
+        assert.deepEqual(await install(site, sb, { force: true }), kept);
+        assert.ok(readFileSync(path).equals(changed));
+      });
+    });
+
+    it(`${site.name}: replaces a link only with --force, never writes through it, and uninstall removes a dangling one`, async () => {
+      await inSandbox('link', async (sb) => {
+        const path = site.path(sb);
+        const target = resolve(sb.root, 'target.txt');
+        writeFileSync(target, 'TARGET\n');
+        mkdirSync(dirname(path), { recursive: true });
+        symlinkSync(target, path);
+        assert.deepEqual(await install(site, sb), {
+          action: 'skipped', path, reason: 'link-kept',
+          note: `a link is here (-> ${target}); run the same install with \`--force\` to replace it with the generated file`,
+        });
+        assert.equal((await install(site, sb, { force: true })).action, 'created');
+        assert.equal(lstatSync(path).isSymbolicLink(), false);
+        assert.equal(readFileSync(target, 'utf8'), 'TARGET\n');
+        await uninstall(site, sb);
+        symlinkSync(resolve(sb.root, 'gone.txt'), path);
+        assert.deepEqual(await uninstall(site, sb), { action: 'removed', path });
+        assert.throws(() => lstatSync(path), { code: 'ENOENT' });
+      });
+    });
+  }
+
+  for (const site of SITES) {
+    it(`${site.name}: keeps an unmarked file of this version's size that it cannot read, names the error, and does not throw (#1067 round 1, SF-1)`, { skip: (process.platform === 'win32' || process.getuid?.() === 0) && 'needs POSIX permissions and a non-root user' }, async () => {
+      await inSandbox('unreadable', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        chmodSync(path, 0o000); // same size as this version's output, so the comparison has to read it
+        try {
+          const kept = { action: 'skipped', path, reason: 'foreign', note: 'no agent-almanac marker, and it could not be read to compare (EACCES); left in place' };
+          assert.deepEqual(await uninstall(site, sb), kept);
+          assert.deepEqual(await install(site, sb), kept);
+          assert.deepEqual(await install(site, sb, { force: true }), kept);
+          assert.equal(existsSync(path), true);
+        } finally {
+          chmodSync(path, 0o644); // so the sandbox can be removed
+        }
+      });
+    });
+  }
+
+  // vibe's TOML is built from the registry item and reads no file, so it has no such case.
+  for (const site of SITES.filter((s) => s.name !== 'vibe agent')) {
+    it(`${site.name}: keeps an unmarked file when the source cannot be read to compare, without throwing`, async () => {
+      await inSandbox('nosource', async (sb) => {
+        const path = site.path(sb);
+        await install(site, sb);
+        rmSync(placement.sidecarPath(path));
+        const missing = { ...site.item(sb), sourceDir: resolve(sb.src, 'no-such-dir'), sourcePath: resolve(sb.src, 'no-such-dir/source.md') };
+        assert.deepEqual(await site.adapter().uninstall(missing, sb.proj, site.scope, {}), { action: 'skipped', path, reason: 'foreign', note: UNCOMPARED });
+        assert.equal(existsSync(path), true);
+      });
+    });
+  }
+
+  it('keeps an unmarked file holding exactly this version\'s output when a file that is not a marker sits at its marker\'s path', async () => {
+    await inSandbox('clash', async (sb) => {
+      const site = SITES[0];
+      const path = site.path(sb);
+      await install(site, sb);
+      writeFileSync(placement.sidecarPath(path), 'not a marker\n');
+      const kept = { action: 'skipped', path, reason: 'foreign', note: "beside it is a file at the marker's path that is not a marker this agent-almanac can read; left in place" };
+      assert.deepEqual(await uninstall(site, sb), kept);
+      assert.deepEqual(await install(site, sb, { force: true }), kept);
+      assert.equal(readFileSync(placement.sidecarPath(path), 'utf8'), 'not a marker\n');
+      assert.equal(existsSync(path), true);
+    });
+  });
+
+  it('refuses to generate from a content root that names no package and version', async () => {
+    await inSandbox('noident', async (sb) => {
+      rmSync(resolve(sb.src, 'package.json'));
+      await assert.rejects(install(SITES[0], sb), /^Error: not generated: .*package\.json names no package and version/);
+      assert.equal(existsSync(SITES[0].path(sb)), false);
+    });
+  });
+
+  it('never opens a FIFO at a generated path on uninstall', { skip: process.platform === 'win32' && 'POSIX FIFO' }, async () => {
+    await inSandbox('fifo', async (sb) => {
+      const path = SITES[0].path(sb);
+      mkdirSync(dirname(path), { recursive: true });
+      execSync(`mkfifo '${path}'`);
+      // In a child with a timeout: reading a FIFO blocks, and a block in this
+      // process would hang the whole suite instead of failing this test.
+      // The regular-file check refuses a FIFO before the size check. Without
+      // it (mutant P3), the size check would still refuse content of any
+      // other size, since a FIFO's size is 0, so only empty content would
+      // reach the read. That is not hypothetical: an empty SKILL.md condenses
+      // to '' (condenseSkill).
+      for (const content of ['x', '']) {
+        const script = `
+          import * as placement from ${JSON.stringify(resolve(ROOT, 'cli/lib/placement.js'))};
+          const r = placement.removeGenerated(${JSON.stringify(dirname(path))}, 'gen-skill.md', { content: ${JSON.stringify(content)} });
+          process.stdout.write(JSON.stringify(r));`;
+        const res = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 10000 });
+        assert.equal(res.error, undefined, `content ${JSON.stringify(content)}: the child blocked or failed to start: ${res.error}`);
+        assert.equal(res.status, 0, res.stderr);
+        assert.deepEqual(JSON.parse(res.stdout), { action: 'skipped', path, reason: 'foreign', note: UNMARKED });
+      }
+      assert.equal(lstatSync(path).isFIFO(), true);
+    });
+  });
+
+  // End to end through the CLI, so the item uninstall builds is the one install
+  // built: a vibe agent's TOML embeds its source path, and a difference there
+  // would make the takeover of an unmarked file never fire.
+  // uninstall takes bare names, resolved skill first, then agent: the same
+  // registry item install --agent resolves.
+  for (const [framework, installArgs, uninstallArgs, rel] of [
+    ['windsurf', ['commit-changes'], ['commit-changes'], (sb) => resolve(sb.proj, '.windsurf/rules/commit-changes.md')],
+    ['ai-edge', ['commit-changes'], ['commit-changes'], (sb) => resolve(sb.proj, '.ai-edge/skills/commit-changes.md')],
+    ['vibe', ['--agent', 'code-reviewer'], ['code-reviewer'], (sb) => resolve(sb.home, '.vibe/agents/code-reviewer.toml')],
+  ]) {
+    it(`${framework}, through the CLI: uninstall removes an unmarked file the same install wrote, and keeps one a byte away`, async () => {
+      await inSandbox(`cli-${framework}`, async (sb) => {
+        const env = { ...process.env, HOME: sb.home, USERPROFILE: sb.home, HERMES_HOME: resolve(sb.home, '.hermes'), NO_COLOR: '1' };
+        delete env.LOCALAPPDATA;
+        delete env.PI_CODING_AGENT_DIR;
+        const run = (verb) => {
+          const args = verb === 'install' ? installArgs : uninstallArgs;
+          const res = spawnSync(process.execPath, [cliEntry, verb, ...args, '-f', framework, '--source', ROOT], { cwd: sb.proj, env, encoding: 'utf8', timeout: 20000 });
+          assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+          assert.equal(res.status, 0, `${verb}: ${res.stdout}${res.stderr}`);
+          return res.stdout;
+        };
+        const path = rel(sb);
+        run('install');
+        rmSync(placement.sidecarPath(path));
+        const bytes = readFileSync(path);
+        assert.match(run('uninstall'), /1 removed/);
+        assert.equal(existsSync(path), false);
+        plant(path, Buffer.concat([bytes, Buffer.from('x')]));
+        const out = run('uninstall');
+        assert.match(out, /1 skipped/);
+        assert.ok(out.includes(UNMARKED), out);
+        assert.equal(existsSync(path), true);
+      });
+    });
+  }
 });
 
 // ── audit exit codes, end to end (#439) ──────────────────────────
@@ -992,8 +1732,10 @@ describe('audit exit codes end to end (#439)', () => {
   const cliEntry = resolve(ROOT, 'cli/index.js');
   let tmpRoot;
   let savedHome;
+  let savedUserProfile;
   let savedHermesHome;
   let savedLocalAppData;
+  let savedPiAgentDir;
 
   /** A project fixture copilot detects, via .github/copilot-instructions.md. */
   function project(name) {
@@ -1038,6 +1780,9 @@ describe('audit exit codes end to end (#439)', () => {
 
     savedHome = process.env.HOME;
     process.env.HOME = resolve(tmpRoot, 'home');
+    // os.homedir() reads USERPROFILE on win32, so the home is pinned there too (#1071).
+    savedUserProfile = process.env.USERPROFILE;
+    process.env.USERPROFILE = resolve(tmpRoot, 'home');
     // #604: resolveHermesHome() reads HERMES_HOME first, and on win32 probes
     // %LOCALAPPDATA%\hermes — a dev machine carrying either (this very
     // integration ran on one) would leak a real Hermes home into the fixture
@@ -1046,15 +1791,23 @@ describe('audit exit codes end to end (#439)', () => {
     savedLocalAppData = process.env.LOCALAPPDATA;
     process.env.HERMES_HOME = resolve(tmpRoot, 'home', '.hermes');
     delete process.env.LOCALAPPDATA;
+    // pi's directory follows $PI_CODING_AGENT_DIR wherever the CLI runs, so a
+    // caller's value would outlive the pinned home (#1075).
+    savedPiAgentDir = process.env.PI_CODING_AGENT_DIR;
+    delete process.env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
     if (savedHome === undefined) delete process.env.HOME;
     else process.env.HOME = savedHome;
+    if (savedUserProfile === undefined) delete process.env.USERPROFILE;
+    else process.env.USERPROFILE = savedUserProfile;
     if (savedHermesHome === undefined) delete process.env.HERMES_HOME;
     else process.env.HERMES_HOME = savedHermesHome;
     if (savedLocalAppData === undefined) delete process.env.LOCALAPPDATA;
     else process.env.LOCALAPPDATA = savedLocalAppData;
+    if (savedPiAgentDir === undefined) delete process.env.PI_CODING_AGENT_DIR;
+    else process.env.PI_CODING_AGENT_DIR = savedPiAgentDir;
     rmSync(tmpRoot, { recursive: true, force: true });
   });
 
@@ -1297,6 +2050,7 @@ describe('npm package root (#606)', () => {
 
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
   });
 
   after(() => {
@@ -1612,20 +2366,55 @@ describe('npm package root (#606)', () => {
     }
   });
 
-  it('gather --from-package copy names, on stderr, a link it kept', () => {
+  it('gather --from-package copy names, on stderr, a link it kept, under --json and --json --quiet', () => {
     // gather never passes --force, so an existing link stays (#993 §3); its
-    // JSON says only "skipped".
-    const dir = project('copy-gather-link');
+    // JSON says only "skipped". Under --json --quiet too: --json takes the
+    // output first, so printResults() never runs, and the note was printed on
+    // neither stream (#1003).
+    for (const flags of [['--json'], ['--json', '--quiet']]) {
+      const dir = project(`copy-gather-link${flags.join('')}`);
+      const link = resolve(dir, '.claude/skills/commit-changes');
+      const target = resolve(pkgRoot, 'skills/commit-changes');
+      mkdirSync(dirname(link), { recursive: true });
+      symlinkSync(target, link);
+      const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', ...flags, '--source', pkgRoot, '--from-package', 'copy'], dir);
+      assert.equal(status, 0, `${flags.join(' ')}: exit ${status}\n${stdout}\n${stderr}`);
+      assert.doesNotThrow(() => JSON.parse(stdout), `${flags.join(' ')}:\n${stdout}`);
+      const note = `  NOTE: commit-changes [claude-code] ${link}: a link is here (-> ${target}); ` +
+        '`install --force --from-package copy` replaces it with a copy';
+      assert.equal(stderr.split('\n').filter((line) => line === note).length, 1, `${flags.join(' ')}: the note, once:\n${stderr}`);
+      assert.equal(lstatSync(link).isSymbolicLink(), true);
+    }
+  });
+
+  it('gather --quiet without --json names a kept link with its result, on stdout only', () => {
+    // printResults() prints the note on the result's line, so the stderr loop
+    // must stay silent here, or the note is printed twice (#1003; review round 1, P-2).
+    const dir = project('copy-gather-link-quiet');
     const link = resolve(dir, '.claude/skills/commit-changes');
     const target = resolve(pkgRoot, 'skills/commit-changes');
     mkdirSync(dirname(link), { recursive: true });
     symlinkSync(target, link);
-    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--json', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--quiet', '--source', pkgRoot, '--from-package', 'copy'], dir);
     assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
-    assert.doesNotThrow(() => JSON.parse(stdout), stdout);
+    const note = `a link is here (-> ${target}); \`install --force --from-package copy\` replaces it with a copy`;
+    assert.equal(stdout.split('\n').filter((line) => line === `  = commit-changes [claude-code] ${link}  ${note}`).length, 1, stdout);
+    assert.equal(stderr.split('\n').filter((line) => line.includes(note)).length, 0, stderr);
+  });
+
+  it('gather without --json or --quiet names a kept link on stderr, once', () => {
+    // The ceremony says only "skipped", so the note loop is the one place the
+    // kept link is named. The test above pins the loop's --quiet half.
+    const dir = project('copy-gather-link-plain');
+    const link = resolve(dir, '.claude/skills/commit-changes');
+    const target = resolve(pkgRoot, 'skills/commit-changes');
+    mkdirSync(dirname(link), { recursive: true });
+    symlinkSync(target, link);
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--source', pkgRoot, '--from-package', 'copy'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
     const note = `  NOTE: commit-changes [claude-code] ${link}: a link is here (-> ${target}); ` +
       '`install --force --from-package copy` replaces it with a copy';
-    assert.ok(stderr.split('\n').includes(note), stderr);
+    assert.equal(stderr.split('\n').filter((line) => line === note).length, 1, stderr);
     assert.equal(lstatSync(link).isSymbolicLink(), true);
   });
 
@@ -2168,11 +2957,10 @@ describe('gather', () => {
 
   it('gather --dry-run --json outputs JSON', () => {
     const out = run('gather tending --dry-run --json');
-    // Extract JSON block from output (skip DRY RUN header line)
-    const jsonStart = out.indexOf('{');
-    const jsonEnd = out.lastIndexOf('}');
-    assert.ok(jsonStart >= 0, 'Should contain JSON');
-    const data = JSON.parse(out.slice(jsonStart, jsonEnd + 1));
+    // stdout is the document alone: the DRY RUN header goes to stderr (#984).
+    // This test used to cut the document out from between the first `{` and
+    // the last `}`, which passed with the header on stdout.
+    const data = JSON.parse(out);
     assert.equal(data.team, 'tending');
     assert.ok(data.agents.includes('mystic'));
   });
@@ -2239,6 +3027,432 @@ describe('tend', () => {
 
     // Clean up
     try { rmSync(resolve(ROOT, '.agent-almanac'), { recursive: true }); } catch {}
+  });
+});
+
+// ── --json keeps stdout one JSON document (#984) ───────────────────
+//
+// `gather --json`, `scatter --json` and `tend --json` print one JSON document
+// on stdout, and every other line goes to stderr: the installer's warnings (a
+// type an adapter does not support, a --scope it ignores) and the DRY RUN
+// header. At the base commit each case below printed such a line on stdout
+// ahead of the document, or instead of it, so JSON.parse(stdout) threw.
+// Each warning is asserted once, as a whole line, on stderr, so a fix that
+// dropped one would go red as well.
+//
+// The root is clone-shaped, not an npm package, so nothing here meets the
+// #606 refusal. HOME is redirected, so -g writes under the fixture.
+describe('--json keeps stdout one JSON document (#984)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  const DRY_RUN = '  DRY RUN — no changes will be made';
+  const unsupported = (type, framework, id) => `  WARN: ${type}s not supported by ${framework}. Skipping ${id}.`;
+  let tmpRoot;
+  let cloneRoot;
+  let env;
+
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+
+  function spawnCli(args, cwd) {
+    const res = spawnSync(process.execPath, [cliEntry, ...args, '--source', cloneRoot],
+      { cwd, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+  }
+
+  /** A fresh project with one framework marker: a directory (trailing /) or a file. */
+  function project(name, marker) {
+    const dir = resolve(tmpRoot, name);
+    mkdirSync(dir, { recursive: true });
+    if (marker.endsWith('/')) mkdirSync(resolve(dir, marker), { recursive: true });
+    else writeFileSync(resolve(dir, marker), '');
+    return dir;
+  }
+
+  /** Exit 0, stdout parses as one document, and each of `stderrLines` is on stderr once. */
+  function assertOneDocument({ status, stdout, stderr }, stderrLines) {
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    let doc;
+    assert.doesNotThrow(() => { doc = JSON.parse(stdout); }, `stdout is not one JSON document:\n${stdout}`);
+    const lines = stderr.split('\n');
+    for (const line of stderrLines) {
+      assert.equal(lines.filter((l) => l === line).length, 1, `not on stderr exactly once: ${line}\n${stderr}`);
+    }
+    return doc;
+  }
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-984-')));
+    const fakeHome = resolve(tmpRoot, 'home');
+    mkdirSync(fakeHome, { recursive: true });
+    cloneRoot = resolve(tmpRoot, 'clone/agent-almanac');
+    mkdirSync(resolve(cloneRoot, 'skills/commit-changes'), { recursive: true });
+    mkdirSync(resolve(cloneRoot, 'agents'), { recursive: true });
+    mkdirSync(resolve(cloneRoot, 'teams'), { recursive: true });
+    copyFileSync(resolve(ROOT, 'skills/commit-changes/SKILL.md'), resolve(cloneRoot, 'skills/commit-changes/SKILL.md'));
+    writeFileSync(resolve(cloneRoot, 'skills/_registry.yml'), [
+      'total_skills: 1', 'domains:', '  git:', '    description: fixture', '    skills:',
+      '      - id: commit-changes', '        path: commit-changes/SKILL.md', '',
+    ].join('\n'));
+    // An agent and a team, so the skills-only adapters have both to warn about.
+    writeFileSync(resolve(cloneRoot, 'agents/_registry.yml'), [
+      'total_agents: 1', 'agents:', '  - id: fixture-agent', '    path: agents/fixture-agent.md',
+      '    skills:', '      - commit-changes', '',
+    ].join('\n'));
+    writeFileSync(resolve(cloneRoot, 'agents/fixture-agent.md'), '---\nname: fixture-agent\n---\n');
+    writeFileSync(resolve(cloneRoot, 'teams/_registry.yml'), [
+      'total_teams: 1', 'teams:', '  - id: fixture-team', '    path: teams/fixture-team.md',
+      '    lead: fixture-agent', '    members:', '      - fixture-agent', '',
+    ].join('\n'));
+    writeFileSync(resolve(cloneRoot, 'teams/fixture-team.md'), '---\nname: fixture-team\n---\n');
+    env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
+    delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
+  });
+
+  after(() => {
+    rmTree(tmpRoot);
+  });
+
+  // The four project shapes #984 measured. Codex takes agents (into
+  // AGENTS.md), so it warns about the team only.
+  for (const [framework, marker, types] of [
+    ['Cursor', '.cursor/', ['agent', 'team']],
+    ['Gemini CLI', '.gemini/', ['agent', 'team']],
+    ['Windsurf', '.windsurf/', ['agent', 'team']],
+    ['OpenAI Codex', 'AGENTS.md', ['team']],
+  ]) {
+    it(`gather --json, where ${framework} is detected, prints the installer's warnings on stderr`, () => {
+      const dir = project(`gather-${marker.replace(/\W/g, '')}`, marker);
+      const ids = { agent: 'fixture-agent', team: 'fixture-team' };
+      const doc = assertOneDocument(spawnCli(['gather', 'fixture-team', '--json'], dir),
+        types.map((type) => unsupported(type, framework, ids[type])));
+      assert.equal(doc.team, 'fixture-team');
+    });
+  }
+
+  it('gather --json --dry-run prints the DRY RUN header on stderr', () => {
+    const dir = project('gather-dry-run', '.claude/');
+    assertOneDocument(spawnCli(['gather', 'fixture-team', '--json', '--dry-run'], dir), [DRY_RUN]);
+  });
+
+  /** Light the fixture team's fire without --json, so a scatter test does not depend on gather's fix. */
+  function gatherQuietly(dir, ...flags) {
+    const gathered = spawnCli(['gather', 'fixture-team', '--quiet', ...flags], dir);
+    assert.equal(gathered.status, 0, `setup gather: exit ${gathered.status}\n${gathered.stdout}\n${gathered.stderr}`);
+  }
+
+  it('scatter --json --dry-run prints the DRY RUN header on stderr', () => {
+    const dir = project('scatter-dry-run', '.claude/');
+    gatherQuietly(dir);
+    assertOneDocument(spawnCli(['scatter', 'fixture-team', '--json', '--dry-run', '-y'], dir), [DRY_RUN]);
+  });
+
+  // Cursor is project-only, so an explicit -g is ignored for it (#607's warning).
+  it('gather --json -g prints the ignored-scope warning on stderr', () => {
+    const dir = project('scope-global-gather', '.cursor/');
+    assertOneDocument(spawnCli(['gather', 'fixture-team', '--json', '-g'], dir), [
+      '  WARN: Cursor is project-only; --scope global ignored (installing to project).',
+      unsupported('agent', 'Cursor', 'fixture-agent'),
+      unsupported('team', 'Cursor', 'fixture-team'),
+    ]);
+  });
+
+  it('scatter --json -g prints the ignored-scope warning on stderr', () => {
+    const dir = project('scope-global-scatter', '.cursor/');
+    gatherQuietly(dir, '-g');
+    assertOneDocument(spawnCli(['scatter', 'fixture-team', '--json', '-y', '-g'], dir), [
+      '  WARN: Cursor is project-only; --scope global ignored (uninstalling from project).',
+    ]);
+  });
+
+  // No adapter declares `workspace`, so every adapter in play takes the
+  // warning's other branch, the one that names each type's scopes.
+  it('gather --json --scope workspace prints the per-type scope warnings on stderr', () => {
+    const dir = project('scope-workspace', '.claude/');
+    assertOneDocument(spawnCli(['gather', 'fixture-team', '--json', '--scope', 'workspace'], dir), [
+      '  WARN: Universal (.agents/): skills support project, global; --scope workspace ignored for skills.',
+      '  WARN: Claude Code: skills support project, global; agents support project, global; teams support project, global; ' +
+        '--scope workspace ignored for skills and agents and teams.',
+    ]);
+  });
+
+  it('tend --json with no fire burning prints a document with no fires', () => {
+    const dir = project('tend-empty', '.claude/');
+    assert.deepEqual(assertOneDocument(spawnCli(['tend', '--json'], dir), []), { fires: [] });
+  });
+
+  it('without --json, the warnings and the DRY RUN header stay on stdout', () => {
+    // The control: only --json moves them (#984's third criterion). The #607
+    // tests read the scope warnings through console.log.
+    const dir = project('plain-quiet', '.cursor/');
+    const { status, stdout, stderr } = spawnCli(['gather', 'fixture-team', '--quiet', '--dry-run'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const lines = stdout.split('\n');
+    for (const line of [DRY_RUN, unsupported('agent', 'Cursor', 'fixture-agent'), unsupported('team', 'Cursor', 'fixture-team')]) {
+      assert.equal(lines.filter((l) => l === line).length, 1, `not on stdout exactly once: ${line}\n${stdout}`);
+    }
+    assert.deepEqual(stderr.split('\n').filter((l) => l.includes('WARN:') || l === DRY_RUN), [], stderr);
+  });
+
+  it('without --json, scatter keeps the ignored-scope warning and the DRY RUN header on stdout', () => {
+    // The control above runs gather only; scatter has its own two call sites (review round 1, P-1).
+    const dir = project('plain-scatter', '.cursor/');
+    gatherQuietly(dir, '-g');
+    const { status, stdout, stderr } = spawnCli(['scatter', 'fixture-team', '--quiet', '--dry-run', '-y', '-g'], dir);
+    assert.equal(status, 0, `exit ${status}\n${stdout}\n${stderr}`);
+    const lines = stdout.split('\n');
+    for (const line of [DRY_RUN, '  WARN: Cursor is project-only; --scope global ignored (uninstalling from project).']) {
+      assert.equal(lines.filter((l) => l === line).length, 1, `not on stdout exactly once: ${line}\n${stdout}`);
+    }
+    assert.deepEqual(stderr.split('\n').filter((l) => l.includes('WARN:') || l === DRY_RUN), [], stderr);
+  });
+});
+
+// ── The default skills reach every fire (#994 §2) ──────────────────
+//
+// agents/_registry.yml lists its default skills as `{ skill: <id>, … }`, and
+// every agent inherits them. gather and scatter read `.id`, which gave
+// undefined once 347dbe1de renamed the key (closing #209), so they never
+// linked or removed meditate and heal. The two team counts added the registry
+// entries themselves to a set of skill ids, from the day each was written.
+// The fixture's agents do not list the defaults, except one, which lists
+// meditate: on that shape the counts were over by one, and on the others they
+// were right by accident.
+describe('the default skills reach every fire (#994)', () => {
+  const cliEntry = resolve(ROOT, 'cli/index.js');
+  let tmpRoot;
+  let cloneRoot;
+  let env;
+
+  // eslint-disable-next-line no-control-regex
+  const stripAnsi = (text) => (text ?? '').replace(/\x1b\[[0-9;]*m/g, '');
+
+  function spawnCli(args, cwd) {
+    const res = spawnSync(process.execPath, [cliEntry, ...args, '--source', cloneRoot],
+      { cwd, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(res.error, undefined, `spawn failed: ${res.error}`);
+    return { status: res.status, stdout: stripAnsi(res.stdout), stderr: stripAnsi(res.stderr) };
+  }
+
+  /** Run the CLI and require exit 0. */
+  function cliOk(args, cwd) {
+    const result = spawnCli(args, cwd);
+    assert.equal(result.status, 0, `${args.join(' ')}: exit ${result.status}\n${result.stdout}\n${result.stderr}`);
+    return result;
+  }
+
+  /** A fresh project that Claude Code is detected in. */
+  function project(name) {
+    const dir = resolve(tmpRoot, name);
+    mkdirSync(resolve(dir, '.claude'), { recursive: true });
+    return dir;
+  }
+
+  /** The skill ids linked into a project's .claude/skills/, sorted. */
+  function linkedSkills(dir) {
+    const skillsDir = resolve(dir, '.claude/skills');
+    return existsSync(skillsDir) ? readdirSync(skillsDir).sort() : [];
+  }
+
+  before(() => {
+    tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-994-')));
+    const fakeHome = resolve(tmpRoot, 'home');
+    mkdirSync(fakeHome, { recursive: true });
+    cloneRoot = resolve(tmpRoot, 'clone/agent-almanac');
+    for (const id of ['alpha', 'beta', 'gamma', 'meditate', 'heal']) {
+      mkdirSync(resolve(cloneRoot, 'skills', id), { recursive: true });
+      writeFileSync(resolve(cloneRoot, 'skills', id, 'SKILL.md'), `---\nname: ${id}\n---\n`);
+    }
+    mkdirSync(resolve(cloneRoot, 'agents'), { recursive: true });
+    mkdirSync(resolve(cloneRoot, 'teams'), { recursive: true });
+    writeFileSync(resolve(cloneRoot, 'skills/_registry.yml'), [
+      'total_skills: 5', 'domains:',
+      '  fixture:', '    description: fixture', '    skills:',
+      '      - id: alpha', '        path: alpha/SKILL.md',
+      '      - id: beta', '        path: beta/SKILL.md',
+      '      - id: gamma', '        path: gamma/SKILL.md',
+      '  esoteric:', '    description: fixture', '    skills:',
+      '      - id: meditate', '        path: meditate/SKILL.md',
+      '      - id: heal', '        path: heal/SKILL.md', '',
+    ].join('\n'));
+    // The shape of the shipped registry's default_skills block.
+    // agent-shares-alpha is team-pair's second keeper, not its lead, and lists
+    // team-one's own skill (review round 1, B1 and B2).
+    writeFileSync(resolve(cloneRoot, 'agents/_registry.yml'), [
+      'total_agents: 4',
+      'default_skills:',
+      '  - skill: meditate', '    domain: esoteric', '    description: fixture',
+      '  - skill: heal', '    domain: esoteric', '    description: fixture',
+      'agents:',
+      '  - id: agent-one', '    path: agents/agent-one.md', '    skills:', '      - alpha',
+      '  - id: agent-two', '    path: agents/agent-two.md', '    skills:', '      - beta',
+      '  - id: agent-lists-meditate', '    path: agents/agent-lists-meditate.md', '    skills:', '      - gamma', '      - meditate',
+      '  - id: agent-shares-alpha', '    path: agents/agent-shares-alpha.md', '    skills:', '      - alpha', '',
+    ].join('\n'));
+    for (const id of ['agent-one', 'agent-two', 'agent-lists-meditate', 'agent-shares-alpha']) {
+      writeFileSync(resolve(cloneRoot, 'agents', `${id}.md`), `---\nname: ${id}\n---\n`);
+    }
+    writeFileSync(resolve(cloneRoot, 'teams/_registry.yml'), [
+      'total_teams: 4', 'teams:',
+      '  - id: team-one', '    path: teams/team-one.md', '    lead: agent-one', '    members:', '      - agent-one',
+      '  - id: team-two', '    path: teams/team-two.md', '    lead: agent-two', '    members:', '      - agent-two',
+      '  - id: team-lists-meditate', '    path: teams/team-lists-meditate.md', '    lead: agent-lists-meditate',
+      '    members:', '      - agent-lists-meditate',
+      '  - id: team-pair', '    path: teams/team-pair.md', '    lead: agent-two',
+      '    members:', '      - agent-two', '      - agent-shares-alpha', '',
+    ].join('\n'));
+    for (const id of ['team-one', 'team-two', 'team-lists-meditate', 'team-pair']) {
+      writeFileSync(resolve(cloneRoot, 'teams', `${id}.md`), `---\nname: ${id}\n---\n`);
+    }
+    env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes') };
+    delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
+  });
+
+  after(() => {
+    rmTree(tmpRoot);
+  });
+
+  it('defaultSkillIds() reads the shipped registry\'s default skills by their `skill` key', () => {
+    assert.equal(typeof registryLib.defaultSkillIds, 'function', 'defaultSkillIds is exported from cli/lib/registry.js');
+    assert.deepEqual(registryLib.defaultSkillIds(loadRegistries(ROOT)), ['meditate', 'heal']);
+  });
+
+  it('gather links the default skills with the team\'s own, and its ceremony counts the links it made', () => {
+    const dir = project('gather-one');
+    const { stdout } = cliOk(['gather', 'team-one', '-f', 'claude-code', '--ceremonial'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'heal', 'meditate']);
+    const state = JSON.parse(readFileSync(resolve(dir, '.agent-almanac/state.json'), 'utf8'));
+    assert.equal(state.fires['team-one'].skillCount, 3, 'state.json records the skills gathered');
+    // A one-agent team, so the ceremony's per-agent sum is the number linked.
+    assert.match(stdout, /^ {2}3 practices settled\./m, stdout);
+    for (const id of ['alpha', 'meditate', 'heal']) {
+      assert.match(stdout, new RegExp(`✦ ${id}$`, 'm'), `the ceremony names ${id}\n${stdout}`);
+    }
+    assert.doesNotMatch(stdout, /undefined/, stdout);
+  });
+
+  it('gather counts and names a default skill that an agent also lists once', () => {
+    // The mutant table's H1: without the dedup, agent-lists-meditate brings
+    // meditate twice, and its ceremony counts 4 practices for 3 links.
+    const dir = project('gather-lists-meditate');
+    const { stdout } = cliOk(['gather', 'team-lists-meditate', '-f', 'claude-code', '--ceremonial'], dir);
+    assert.deepEqual(linkedSkills(dir), ['gamma', 'heal', 'meditate']);
+    assert.match(stdout, /^ {2}3 practices settled\./m, stdout);
+    assert.equal(stdout.split('\n').filter((line) => /✦ meditate$/.test(line)).length, 1, stdout);
+  });
+
+  it('gather of a two-keeper team links each skill once, the default skills among them', () => {
+    // Both keepers bring meditate and heal (review round 1, B1).
+    const dir = project('gather-pair');
+    cliOk(['gather', 'team-pair', '-f', 'claude-code', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'beta', 'heal', 'meditate']);
+    const state = JSON.parse(readFileSync(resolve(dir, '.agent-almanac/state.json'), 'utf8'));
+    assert.equal(state.fires['team-pair'].skillCount, 4, 'state.json counts each skill once');
+  });
+
+  it('gather --only a keeper who is not the lead brings the default skills, and scatter removes them', () => {
+    // A rule that gave the defaults to the lead alone passed every other test (review round 1, B1).
+    const dir = project('gather-only-non-lead');
+    cliOk(['gather', 'team-pair', '--only', 'agent-shares-alpha', '-f', 'claude-code', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'heal', 'meditate']);
+    const state = JSON.parse(readFileSync(resolve(dir, '.agent-almanac/state.json'), 'utf8'));
+    assert.equal(state.fires['team-pair'].skillCount, 3);
+    cliOk(['scatter', 'team-pair', '-f', 'claude-code', '-y', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), []);
+  });
+
+  it('scatter removes the default skills when no other fire burns, and its ceremony names them', () => {
+    const dir = project('scatter-one');
+    cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'heal', 'meditate'], 'setup: the gather linked the defaults');
+    // --ceremonial printed `✦ undefined scatters` here too (review round 1, A12).
+    const { stdout } = cliOk(['scatter', 'team-one', '-f', 'claude-code', '-y', '--ceremonial'], dir);
+    assert.deepEqual(linkedSkills(dir), []);
+    for (const id of ['alpha', 'meditate', 'heal']) {
+      assert.match(stdout, new RegExp(`✦ ${id} scatters$`, 'm'), `the ceremony names ${id}\n${stdout}`);
+    }
+    assert.doesNotMatch(stdout, /undefined/, stdout);
+  });
+
+  it('scatter of one fire keeps the default skills while another fire burns, and the last scatter removes them', () => {
+    const dir = project('two-fires');
+    cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
+    cliOk(['gather', 'team-two', '-f', 'claude-code', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'beta', 'heal', 'meditate'], 'setup: both gathers');
+    const first = JSON.parse(cliOk(['scatter', 'team-one', '-f', 'claude-code', '-y', '--json'], dir).stdout);
+    assert.deepEqual(linkedSkills(dir), ['beta', 'heal', 'meditate'], 'team-two still burns, and its agent brings the defaults');
+    assert.equal(first.skillsRemoved, 1, 'only alpha was team-one\'s alone');
+    assert.equal(first.skillsKept, 2, 'meditate and heal are kept for team-two');
+    cliOk(['scatter', 'team-two', '-f', 'claude-code', '-y', '--quiet'], dir);
+    assert.deepEqual(linkedSkills(dir), []);
+  });
+
+  it('scatter keeps an own skill that a second keeper of another burning fire brings', () => {
+    // The keep check counts each other fire's keepers, all of them, and their
+    // own skills as well as the defaults. Test 5's fires share no own skill,
+    // so a check for the defaults alone passed it (review round 1, B2).
+    const dir = project('keep-own-skill');
+    cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
+    cliOk(['gather', 'team-pair', '-f', 'claude-code', '--quiet'], dir);
+    const scattered = JSON.parse(cliOk(['scatter', 'team-one', '-f', 'claude-code', '-y', '--json'], dir).stdout);
+    assert.deepEqual(linkedSkills(dir), ['alpha', 'beta', 'heal', 'meditate'], 'agent-shares-alpha still brings alpha');
+    assert.equal(scattered.skillsRemoved, 0);
+    assert.equal(scattered.skillsKept, 3, 'alpha, meditate and heal');
+  });
+
+  it('campfire counts a default skill that an agent also lists once', () => {
+    const reg = loadRegistries(cloneRoot);
+    const team = reg.teams.find((t) => t.id === 'team-lists-meditate');
+    assert.equal(campfire.countTeamSkills(team, reg), 3, 'gamma, meditate and heal');
+    const dir = project('campfire-count');
+    assert.match(cliOk(['campfire', 'team-lists-meditate'], dir).stdout, /^ {2}3 practices total$/m);
+    assert.match(cliOk(['campfire', '--all'], dir).stdout, /team-lists-meditate +1 keepers, 3 practices/);
+  });
+
+  it('findSharedSkills counts the default skills that two burning fires share', () => {
+    const reg = loadRegistries(cloneRoot);
+    const state = { fires: { 'team-one': { agents: ['agent-one'] }, 'team-two': { agents: ['agent-two'] } } };
+    assert.deepEqual([...findSharedSkills(state, reg)].sort(), ['heal', 'meditate']);
+  });
+
+  it('with two other fires burning, gather marks the default skills already burning', () => {
+    // What findSharedSkills() now returns, as gather's ceremony shows it. Two
+    // other fires, because gather asks before it records the new one (review
+    // round 1, B7 and A13).
+    const dir = project('already-burning');
+    cliOk(['gather', 'team-one', '-f', 'claude-code', '--quiet'], dir);
+    cliOk(['gather', 'team-two', '-f', 'claude-code', '--quiet'], dir);
+    const { stdout } = cliOk(['gather', 'team-lists-meditate', '-f', 'claude-code', '--ceremonial'], dir);
+    for (const id of ['meditate', 'heal']) {
+      assert.match(stdout, new RegExp(`✦ ${id} \\(already burning\\)$`, 'm'), `${id} is marked\n${stdout}`);
+    }
+    assert.match(stdout, /✦ gamma$/m, `gamma, which no other fire brings, is not marked\n${stdout}`);
+  });
+
+  it('only cli/lib/registry.js names defaultSkills under cli/, a text tripwire against a copy of the old reads', () => {
+    // A text scan, not a check of any count. At 8ff93da83 each of the four
+    // consumers read the registry's entries itself, and each named
+    // `defaultSkills` to do it, the TUI's count among them. Nothing drives the
+    // TUI, so this is what stops such a copy coming back there. It does not
+    // check the number the TUI shows: a TUI count that drops the defaults
+    // without naming `defaultSkills` passes, and so does one that reaches them
+    // through defaultSkillIds(), the sanctioned way. It also fails on a comment
+    // that names the string (review round 1, B4).
+    const sources = [];
+    const walk = (dir) => {
+      for (const entry of readdirSync(resolve(ROOT, dir), { withFileTypes: true })) {
+        const rel = `${dir}/${entry.name}`;
+        if (entry.isDirectory()) { if (!['node_modules', 'test'].includes(entry.name)) walk(rel); } else if (entry.name.endsWith('.js')) sources.push(rel);
+      }
+    };
+    walk('cli');
+    assert.ok(sources.length > 20, `walked ${sources.length} files under cli/`);
+    const readers = sources.filter((rel) => readFileSync(resolve(ROOT, rel), 'utf8').includes('defaultSkills'));
+    assert.deepEqual(readers, ['cli/lib/registry.js']);
+    const registrySource = readFileSync(resolve(ROOT, 'cli/lib/registry.js'), 'utf8');
+    assert.equal(registrySource.split('reg.defaultSkills').length - 1, 1, 'registry.js reads reg.defaultSkills in defaultSkillIds() alone');
   });
 });
 
@@ -2585,8 +3799,9 @@ describe('adapter scope declarations (#607)', () => {
     process.env.HOME = sandbox;
     process.env.USERPROFILE = sandbox;
     process.env.HERMES_HOME = resolve(sandbox, '.hermes');
-    // pi's global site follows $PI_CODING_AGENT_DIR; unset, it is under HOME.
-    delete process.env.PI_CODING_AGENT_DIR;
+    // pi's global site follows $PI_CODING_AGENT_DIR, pinned into the sandbox as HERMES_HOME is,
+    // so a caller's exported value cannot reach a dry run (#1007).
+    process.env.PI_CODING_AGENT_DIR = resolve(sandbox, '.pi-agent');
   });
 
   after(() => {
@@ -2918,6 +4133,7 @@ describe('item names stay inside their install directories', () => {
     const fakeHome = resolve(tmpRoot, 'home');
     mkdirSync(fakeHome, { recursive: true });
     env = { ...process.env, HOME: fakeHome, USERPROFILE: fakeHome, HERMES_HOME: resolve(fakeHome, '.hermes'), NO_COLOR: '1' };
+    delete env.PI_CODING_AGENT_DIR;
   });
 
   after(() => rmTree(tmpRoot));
@@ -3697,26 +4913,88 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     });
   });
 
-  it('cursor\'s uninstall still reaches its second path, a .mdc rule, beside a kept skill entry, and names the kept one', async () => {
+  it('cursor\'s uninstall keeps a user\'s own .mdc rule beside a kept skill entry, and names both (#998)', async () => {
     // cursor's uninstall looks at two paths: .cursor/skills/<id> and
-    // .cursor/rules/<id>.mdc. What this pins is that a kept entry at the first
-    // does not stop the second, and the `kept <skillPath>: …` note. No CLI
-    // command writes the .mdc (installLegacyRule has no caller), so the rule
-    // planted here stands for a user's own file, and its deletion is
-    // pre-existing behaviour kept on purpose for now, tracked in #998.
+    // .cursor/rules/<id>.mdc. No CLI command writes the .mdc, so a file there
+    // is the user's own; until #998 the uninstall deleted it. A kept entry at
+    // the first path does not stop the second from being looked at.
     const site = LINK_SITES.find((s) => s.site === 'cursor skill');
     await inLinkSandbox(tmpRoot, 'cursor-rule', async (sb) => {
       const path = site.path(sb, 'project');
       const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
       plantUserFile(path);
       mkdirSync(dirname(rule), { recursive: true });
-      writeFileSync(rule, 'legacy rule\n');
+      writeFileSync(rule, 'my own rule\n');
       assert.deepEqual(
         await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
-        { action: 'removed', path: rule, note: `kept ${path}: ${KEPT_NOTE}` },
+        { action: 'skipped', path: `${path}, ${rule}`, reason: 'foreign', note: `kept ${path}: ${KEPT_NOTE}; kept ${rule}: ${KEPT_NOTE}` },
       );
       assert.equal(readFileSync(path, 'utf8'), USER_CONTENT);
-      assert.equal(existsSync(rule), false);
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall removes a skill link and names the user\'s own .mdc rule it kept beside it (#1067 round 1, SF-4)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-mixed', async (sb) => {
+      const path = site.path(sb, 'project');
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(path), { recursive: true });
+      symlinkSync(resolve(sb.src, 'skills/commit-changes'), path);
+      mkdirSync(dirname(rule), { recursive: true });
+      writeFileSync(rule, 'my own rule\n');
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'removed', path, note: `kept ${rule}: ${KEPT_NOTE}` },
+      );
+      assert.throws(() => lstatSync(path), { code: 'ENOENT' });
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall keeps a user\'s own .mdc rule alone, and names it (#998)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-alone', async (sb) => {
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(rule), { recursive: true });
+      writeFileSync(rule, 'my own rule\n');
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'skipped', path: rule, reason: 'foreign', note: KEPT_NOTE },
+      );
+      assert.equal(readFileSync(rule, 'utf8'), 'my own rule\n');
+    });
+  });
+
+  it('cursor\'s uninstall removes a dangling link at .cursor/rules/<id>.mdc instead of skipping it with an empty path (#998)', async () => {
+    const site = LINK_SITES.find((s) => s.site === 'cursor skill');
+    await inLinkSandbox(tmpRoot, 'cursor-rule-link', async (sb) => {
+      const rule = resolve(sb.proj, '.cursor/rules/commit-changes.mdc');
+      mkdirSync(dirname(rule), { recursive: true });
+      symlinkSync(resolve(sb.proj, 'gone/SKILL.md'), rule);
+      assert.deepEqual(
+        await site.adapter().uninstall(linkItem(site, sb), sb.proj, 'project', {}),
+        { action: 'removed', path: rule },
+      );
+      assert.throws(() => lstatSync(rule), { code: 'ENOENT' });
+    });
+  });
+
+  it('cursor lists a .mdc rule only when it is a link to a SKILL.md, and flags a dangling one (#998; #1067 round 1, SF-2)', async () => {
+    await inLinkSandbox(tmpRoot, 'cursor-rule-list', async (sb) => {
+      const rulesDir = resolve(sb.proj, '.cursor/rules');
+      mkdirSync(rulesDir, { recursive: true });
+      writeFileSync(resolve(rulesDir, 'my-own-rule.mdc'), 'my own rule\n');
+      // The user's own rules linked from a dotfiles repository, live and dangling: theirs, not listed.
+      const dotfiles = resolve(sb.proj, 'dotfiles');
+      mkdirSync(dotfiles, { recursive: true });
+      writeFileSync(resolve(dotfiles, 'my-live-rule.mdc'), 'my live rule\n');
+      symlinkSync(resolve(dotfiles, 'my-live-rule.mdc'), resolve(rulesDir, 'my-live-rule.mdc'));
+      symlinkSync(resolve(dotfiles, 'my-gone-rule.mdc'), resolve(rulesDir, 'my-gone-rule.mdc'));
+      symlinkSync(resolve(sb.proj, 'gone/SKILL.md'), resolve(rulesDir, 'commit-changes.mdc'));
+      assert.deepEqual(await new CursorAdapter().listInstalled(sb.proj), [
+        { id: 'commit-changes', type: 'skill', path: resolve(rulesDir, 'commit-changes.mdc'), format: 'mdc', broken: true },
+      ]);
     });
   });
 
@@ -3729,6 +5007,7 @@ describe('a user\'s own file or directory at a link site is kept (S3-B2 P2a, P2d
     plantUserFile(userFile);
     const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
     const spawnCli = (args) => {
       const res = spawnSync(process.execPath, [cliEntry, ...args, '-f', 'opencode', '--source', ROOT],
         { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
@@ -3778,6 +5057,7 @@ describe('sync keeps a user\'s own entry in .agents/skills (S3-B2 P6)', () => {
     writeFileSync(resolve(proj, 'agent-almanac.yml'), 'skills:\n  - commit-changes\n');
     const env = { ...process.env, HOME: home, USERPROFILE: home, HERMES_HOME: resolve(home, '.hermes'), NO_COLOR: '1' };
     delete env.LOCALAPPDATA;
+    delete env.PI_CODING_AGENT_DIR;
 
     const res = spawnSync(process.execPath, [cliEntry, 'sync', '-f', 'universal', '--source', ROOT],
       { cwd: proj, env, encoding: 'utf8', timeout: 10000 });
