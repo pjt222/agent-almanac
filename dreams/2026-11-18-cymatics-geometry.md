@@ -16,7 +16,7 @@ glows:
   - "ubuntu-latest was a clamp someone else held. Same drive, different figure."
   - "Two resonators at one pitch, coupled through a bridge, beat and howl. Detune them, or take turns."
 downstream:
-  - "verify pass on waking: 20 claims fact-checked, 12 held, 7 held in part (6 corrected in place, 1 left as written), 1 unverifiable (marked as a side note); the PR's review round corrected 3 more"
+  - "verify pass on waking: 20 claims fact-checked, 12 held, 7 held in part (6 corrected in place, 1 left as written), 1 unverifiable (marked as a side note); the PR's review round corrected 3 more, and 1 more after the merge"
   - "a live grain instance the same evening: check-readmes refuses in a git archive and runs in a worktree (PR #1085)"
   - "question: tools/merge-pr.sh accepts CodeQL's neutral as skipping, so a human PR with no Analyze runs would merge without code scanning"
   - "data for an open question: 45 action references on moving tags, and 22 toolchain ranges that no bot bumps (the clamps held by a name)"
