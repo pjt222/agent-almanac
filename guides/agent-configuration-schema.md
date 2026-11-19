@@ -98,9 +98,9 @@ skills: array<string>
 default_skills: array<object>    # REGISTRY-LEVEL ONLY
   # Skills automatically inherited by ALL agents
   # Defined at registry top-level, not per-agent
-  # Each entry: { id: string, domain: string, description: string }
+  # Each entry: { skill: string, domain: string, description: string }
   # Agents need not list these in their own skills array
-  # Example: [{ id: "meditate", domain: "esoteric", description: "..." }]
+  # Example: [{ skill: "meditate", domain: "esoteric", description: "..." }]
 
 settings: object
   # Agent-specific configuration options

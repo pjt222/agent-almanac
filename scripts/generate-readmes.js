@@ -298,19 +298,10 @@ export function generateSkillsTable(domainMap = domains) {
   return rows.join('\n');
 }
 
-function generateAgentsIntro(linkPrefix) {
-  let text = `The **[Agents Library](${linkPrefix})** provides ${totalAgents} specialized agent definitions for Claude Code. Agents define *who* handles a task (persona, tools, domain expertise), complementing skills which define *how* (procedure, validation).`;
-  if (defaultSkills.length > 0) {
-    const names = defaultSkills.map(s => s.id).join(', ');
-    text += ` All agents inherit default skills: ${names}.`;
-  }
-  return text;
-}
-
 function generateAgentsIntroStandalone() {
   let text = `A collection of ${totalAgents} specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.`;
   if (defaultSkills.length > 0) {
-    const names = defaultSkills.map(s => s.id).join(', ');
+    const names = defaultSkills.map(s => s.skill).join(', ');
     text += `\n\nAll agents inherit **default skills**: ${names}.`;
   }
   return text;
