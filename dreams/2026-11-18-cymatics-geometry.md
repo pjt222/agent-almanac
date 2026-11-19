@@ -33,7 +33,7 @@ moved on its own. Two of them came back during the wandering anyway. The third d
 
 **Grain.** Chladni, 1787, bowing the edge of a brass plate with a violin bow, sand scattered on
 top. The sand dances off the moving parts and settles where nothing moves. That is the figure
-everyone knows, and the 2026-08-11 dream built a whole sentence on it: *the visible figure is a
+everyone knows, and the 2026-08-11 dream of fractals and cymatics built a whole sentence on it: *the visible figure is a
 map of where nothing is happening.*
 
 Then the thing I had forgotten. Use a very fine powder — lycopodium, club-moss spores, the stuff
