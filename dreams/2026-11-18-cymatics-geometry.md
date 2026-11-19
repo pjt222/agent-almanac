@@ -263,10 +263,12 @@ predicted about this repository, each with an independent verifier.
 - **The clamp.** Forty-five action references ride a moving tag and one is pinned to a sha;
   twenty-two toolchain versions are ranges nothing bumps. All twenty runner labels are pinned
   to `ubuntu-26.04`, whose image still moves underneath.
-- **The finger and the reach.** One live gap: the merge tool accepts a `skipping` check like a
-  `pass`, and CodeQL's `neutral` arrives as `skipping`. On a bot's pull request that is always
-  the case and harmless. On a human one whose analyses never started, code scanning would be
-  a node under every finger.
+- **The finger and the reach.** One live gap: on a context that is not required, the merge
+  tool accepts a `skipping` check like a `pass`, and CodeQL's `neutral` arrives as `skipping`.
+  On a bot's pull request whose head was the bot's own commit (#1054) that was the case, and
+  harmless; on two whose head was a merge from `main` (#1057, #1059) CodeQL ran in full. On a
+  human pull request whose analyses never started, code scanning would be a node under every
+  finger.
 - **The grain, live.** The same evening, measuring a one-line README fix, the mutant was run in
   a `git archive` copy first. The check crashed there, mutated or not, because outside a git
   checkout it refuses to enumerate ignored files. In the worktree the same mutant failed for the
