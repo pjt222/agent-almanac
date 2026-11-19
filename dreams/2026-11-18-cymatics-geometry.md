@@ -84,8 +84,8 @@ the **perimeter**. You can hear how big it is and how much edge it has.
 
 Gordon, Webb and Wolpert, 1992: no. Two different polygons, each built from seven copies of one
 small triangle-ish piece, glued differently, with exactly the same spectrum. They proved it with an extension of Sunada's method, and
-the proof that stays in the mind is the elementary one beside it, a *transplantation*: take a vibration on the first drum, cut it into its seven pieces, rearrange
-and sign-flip them, and it becomes a vibration of the second drum at the same frequency.
+the proof that stays in the mind is the elementary one beside it, a *transplantation*: take a vibration on the first drum, cut it into its seven pieces, fill
+each triangle of the second drum with a signed sum of three of them, and it becomes a vibration of the second drum at the same frequency.
 
 A gate's output is a spectrum. Green-with-485-passing hears the area. A failure count hears
 some of the perimeter. Neither hears the shape. Two trees can ring identically.
