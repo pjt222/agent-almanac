@@ -95,8 +95,8 @@ translated mirror is. The frozen fences are the pieces that cannot change, and t
 pitch. The prose around them is rearranged. The fence gate hears the spectrum and was built to.
 The shape of the prose it cannot hear and was never meant to.
 
-**Degeneracy.** On a square membrane, or a square plate held at its edges, the mode (2, 3) and the
-mode (3, 2) ring at the same pitch. Any mix of the two is also a mode. So which figure appears is not decided by the
+**Degeneracy.** On a square membrane, or a simply supported square plate, the mode (1, 3) and the
+mode (3, 1) ring at the same pitch. Any mix of the two is also a mode. So which figure appears is not decided by the
 physics. It is decided by the **flaw** — a burr, a thumb, a grain of the brass. Perfect symmetry
 means the pattern is chosen by the imperfection.
 
@@ -241,8 +241,8 @@ predicted about this repository, each with an independent verifier.
 - **Facts.** Twelve held as written. Seven were corrected in place above, all in the direction
   of more care: Napoleon funded the prize rather than watching in 1808; Germain's three entries
   were 1811, 1813 and 1815; the drums were first proved isospectral with Sunada's method, and
-  transplantation is the elementary proof beside it; the (2, 3)/(3, 2) degeneracy belongs to a
-  membrane or a supported plate, and Chladni's free-edge plate splits it; meantone leaves a
+  transplantation is the elementary proof beside it; the degenerate pair belongs to a
+  membrane or a simply supported plate, and Chladni's free-edge plate splits it; meantone leaves a
   larger wolf rather than moving one; Pasch's axioms are axioms of order, and continuity came
   from Dedekind and Hilbert. One claim stayed unverifiable — that Dependabot never bumps
   `runs-on` — and is marked above as a side note.
