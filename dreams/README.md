@@ -69,7 +69,8 @@ dreams/<YYYY-MM-DD>-<slug>.md
 title: Geometry — the gnomon, and drawing the gaps   # required
 date: 2026-08-11                                     # required
 motifs: [geometry, growth, gnomon]                   # required — the eigenmodes, not tags
-session: private                                     # "private": a transcript exists, its id is not published (since 2026-11-09); "unrecorded": no transcript exists
+session: private                                     # "private": a transcript exists, its id is not published (since 2026-11-09);
+                                                     # "unrecorded": no transcript exists; entries from before 2026-11-09 may carry a transcript id, new ones do not
 seed: "the seed the dream was given"
 trigger: "why it was invoked"
 recovered: full            # full | partial | summary | none
