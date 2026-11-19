@@ -254,9 +254,10 @@ predicted about this repository, each with an independent verifier.
   fills each triangle with a signed sum of three pieces; it is not a rearrangement. And Pasch's
   order axioms came after Dedekind's continuity, not before it. The round also found the source
   the pass lacked: Faraday's 1831 paper sends the same silica to the lines of rest as sand and
-  to the vibrating parts as a fine powder. One of the round's notes was corrected after the
-  merge, on 2026-11-19: a clock exactly 5% fast runs at the rational ratio 21 to 20, so its
+  to the vibrating parts as a fine powder. Two of the round's notes were acted on after the
+  merge, on 2026-11-19. A clock exactly 5% fast runs at the rational ratio 21 to 20, so its
   figure does close, and the Lissajous passage now puts the non-closure on a rate that wanders.
+  And a glow lost the backticks that the atlas showed as characters.
 - **The drum.** The scouts looked for checks that accept a value from a set, and a second
   reader found more than they did, so the list is not a census. The ones that matter most —
   fence parity's any-revision rule and the repair tool built on it — state their blindness. A
