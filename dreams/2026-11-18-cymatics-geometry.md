@@ -13,10 +13,10 @@ glows:
   - "Twelve pure fifths overshoot seven octaves by a comma. Every tuning is a decision about where to put the wolf."
   - "Euclid's first construction assumes the two circles meet. The gap sits at step one, inside the overlap."
   - "A test is a finger on the plate: it silences every mode that moves where it touches. A surviving mutant has a node under every finger."
-  - "`ubuntu-latest` was a clamp someone else held. Same drive, different figure."
+  - "ubuntu-latest was a clamp someone else held. Same drive, different figure."
   - "Two resonators at one pitch, coupled through a bridge, beat and howl. Detune them, or take turns."
 downstream:
-  - "verify pass on waking: 20 claims fact-checked, 12 held, 7 held in part (6 corrected in place, 1 left as written), 1 unverifiable (marked as a side note); the PR's review round corrected 3 more"
+  - "verify pass on waking: 20 claims fact-checked, 12 held, 7 held in part (6 corrected in place, 1 left as written), 1 unverifiable (marked as a side note); the PR's review round corrected 3 more, and 1 more after the merge"
   - "a live grain instance the same evening: check-readmes refuses in a git archive and runs in a worktree (PR #1085)"
   - "question: tools/merge-pr.sh accepts CodeQL's neutral as skipping, so a human PR with no Analyze runs would merge without code scanning"
   - "data for an open question: 45 action references on moving tags, and 22 toolchain ranges that no bot bumps (the clamps held by a name)"
@@ -175,8 +175,8 @@ high enough reads as a continuum, and the eye cannot tell a proof from a smooth 
 
 **Lissajous.** Two oscillations at right angles. At a rational ratio the trace closes; at an
 irrational one it never closes and slowly fills the rectangle. Two clocks, one of them 5–10%
-fast, will never close their figure however long you wait. You cannot synchronise two clocks by
-patience.
+fast and never by the same amount twice, will never close their figure however long you wait.
+You cannot synchronise two clocks by patience.
 
 **Hooke, 1680.** Long before Chladni: Robert Hooke ran a bow along the edge of a glass plate
 covered in flour and saw the nodal patterns. A diary entry, then a hundred years of nothing.
@@ -254,7 +254,10 @@ predicted about this repository, each with an independent verifier.
   fills each triangle with a signed sum of three pieces; it is not a rearrangement. And Pasch's
   order axioms came after Dedekind's continuity, not before it. The round also found the source
   the pass lacked: Faraday's 1831 paper sends the same silica to the lines of rest as sand and
-  to the vibrating parts as a fine powder.
+  to the vibrating parts as a fine powder. Two of the round's notes were acted on after the
+  merge, on 2026-11-19. A clock exactly 5% fast runs at the rational ratio 21 to 20, so its
+  figure does close, and the Lissajous passage now puts the non-closure on a rate that wanders.
+  And a glow lost the backticks that the atlas showed as characters.
 - **The drum.** The scouts looked for checks that accept a value from a set, and a second
   reader found more than they did, so the list is not a census. The ones that matter most —
   fence parity's any-revision rule and the repair tool built on it — state their blindness. A
