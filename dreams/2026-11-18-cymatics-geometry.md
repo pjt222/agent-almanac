@@ -16,7 +16,7 @@ glows:
   - "`ubuntu-latest` was a clamp someone else held. Same drive, different figure."
   - "Two resonators at one pitch, coupled through a bridge, beat and howl. Detune them, or take turns."
 downstream:
-  - "verify pass on waking: 20 claims fact-checked, 12 held, 7 corrected in place, 1 unverifiable (marked as a side note)"
+  - "verify pass on waking: 20 claims fact-checked, 12 held, 7 held in part (6 corrected in place, 1 left as written), 1 unverifiable (marked as a side note); the PR's review round corrected 3 more"
   - "a live grain instance the same evening: check-readmes refuses in a git archive and runs in a worktree (PR #1085)"
   - "question: tools/merge-pr.sh accepts CodeQL's neutral as skipping, so a human PR with no Analyze runs would merge without code scanning"
   - "data for an open question: 45 moving action tags and 22 toolchain ranges that no bot bumps (the clamps held by a name)"
@@ -235,17 +235,26 @@ finger and the reach**, **the clamp held by a name**.
 ## Verified on waking
 
 The dream went through an adversarial pass before it was kept: two refute-first fact checkers
-over its twenty historical and mathematical claims, and three read-only scouts over what it
+over twenty of its claims, all but one historical or mathematical, and three read-only scouts over what it
 predicted about this repository, each with an independent verifier.
 
-- **Facts.** Twelve held as written. Seven were corrected in place above, all in the direction
-  of more care: Napoleon funded the prize rather than watching in 1808; Germain's three entries
-  were 1811, 1813 and 1815; the drums were first proved isospectral with Sunada's method, and
-  transplantation is the elementary proof beside it; the degenerate pair belongs to a
-  membrane or a simply supported plate, and Chladni's free-edge plate splits it; meantone leaves a
-  larger wolf rather than moving one; Pasch's axioms are axioms of order, and continuity came
-  from Dedekind and Hilbert. One claim stayed unverifiable — that Dependabot never bumps
-  `runs-on` — and is marked above as a side note.
+- **Facts.** Of the twenty claims, twelve held; one of them, Weyl's perimeter term, gained the
+  hedge "for a well-behaved outline". Seven held only in part, and six of those were corrected
+  in place above: Napoleon's part was funding the prize; Germain's three entries were 1811,
+  1813 and 1815, and Lagrange caught an early slip in her equation; the drums were first proved
+  isospectral with Sunada's method, and transplantation is the elementary proof beside it; the
+  degenerate pair belongs to a membrane or a simply supported plate, and Chladni's free-edge
+  plate splits it; meantone leaves a larger wolf rather than moving one; Pasch's axioms are
+  axioms of order, and continuity came from Dedekind and Hilbert. The seventh, sand and
+  lycopodium on one plate, was left as written for want of a source. One claim stayed
+  unverifiable — that Dependabot never bumps `runs-on` — and is marked above as a side note.
+- **Then the review.** The pull request's adversarial round found three errors the pass had
+  missed or made, all corrected above. The pass's own degeneracy correction had named
+  (2, 3)/(3, 2), which the square's symmetry keeps at one pitch on every plate. Transplantation
+  fills each triangle with a signed sum of three pieces; it is not a rearrangement. And Pasch's
+  order axioms came after Dedekind's continuity, not before it. The round also found the source
+  the pass lacked: Faraday's 1831 paper sends the same silica to the lines of rest as sand and
+  to the vibrating parts as a fine powder.
 - **The drum.** The scouts looked for checks that accept a value from a set, and a second
   reader found more than they did, so the list is not a census. The ones that matter most —
   fence parity's any-revision rule and the repair tool built on it — state their blindness. A
