@@ -175,9 +175,8 @@ high enough reads as a continuum, and the eye cannot tell a proof from a smooth 
 
 **Lissajous.** Two oscillations at right angles. At a rational ratio the trace closes; at an
 irrational one it never closes and slowly fills the rectangle. Two clocks, one of them 5–10%
-fast, close their figure only while the rate holds still: exactly 5% fast is 21 to 20, and the
-trace closes after twenty cycles of the slower clock. A rate that wanders keeps redrawing the
-figure instead. You cannot synchronise two clocks by patience.
+fast and never by the same amount twice, will never close their figure however long you wait.
+You cannot synchronise two clocks by patience.
 
 **Hooke, 1680.** Long before Chladni: Robert Hooke ran a bow along the edge of a glass plate
 covered in flour and saw the nodal patterns. A diary entry, then a hundred years of nothing.
@@ -257,7 +256,7 @@ predicted about this repository, each with an independent verifier.
   the pass lacked: Faraday's 1831 paper sends the same silica to the lines of rest as sand and
   to the vibrating parts as a fine powder. One of the round's notes was corrected after the
   merge, on 2026-11-19: a clock exactly 5% fast runs at the rational ratio 21 to 20, so its
-  figure does close, and the Lissajous passage now says so.
+  figure does close, and the Lissajous passage now puts the non-closure on a rate that wanders.
 - **The drum.** The scouts looked for checks that accept a value from a set, and a second
   reader found more than they did, so the list is not a census. The ones that matter most —
   fence parity's any-revision rule and the repair tool built on it — state their blindness. A
