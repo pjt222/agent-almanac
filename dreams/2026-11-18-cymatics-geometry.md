@@ -13,7 +13,7 @@ glows:
   - "Twelve pure fifths overshoot seven octaves by a comma. Every tuning is a decision about where to put the wolf."
   - "Euclid's first construction assumes the two circles meet. The gap sits at step one, inside the overlap."
   - "A test is a finger on the plate: it silences every mode that moves where it touches. A surviving mutant has a node under every finger."
-  - "`ubuntu-latest` was a clamp someone else held. Same drive, different figure."
+  - "ubuntu-latest was a clamp someone else held. Same drive, different figure."
   - "Two resonators at one pitch, coupled through a bridge, beat and howl. Detune them, or take turns."
 downstream:
   - "verify pass on waking: 20 claims fact-checked, 12 held, 7 held in part (6 corrected in place, 1 left as written), 1 unverifiable (marked as a side note); the PR's review round corrected 3 more"
