@@ -250,7 +250,7 @@ predicted about this repository, each with an independent verifier.
   unverifiable — that Dependabot never bumps `runs-on` — and is marked above as a side note.
 - **Then the review.** The pull request's adversarial round found three errors the pass had
   missed or made, all corrected above. The pass's own degeneracy correction had named
-  (2, 3)/(3, 2), which the square's symmetry keeps at one pitch on every plate. Transplantation
+  (2, 3)/(3, 2), which the square's symmetry keeps at one pitch on every square plate. Transplantation
   fills each triangle with a signed sum of three pieces; it is not a rearrangement. And Pasch's
   order axioms came after Dedekind's continuity, not before it. The round also found the source
   the pass lacked: Faraday's 1831 paper sends the same silica to the lines of rest as sand and
