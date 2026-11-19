@@ -154,8 +154,8 @@ segment. Draw a circle about each end through the other end, take a point where 
 meet, and join it to both ends. Done.
 
 Except nothing in the postulates says the circles meet. The intersection point is used, and its
-existence is never established. It took until the nineteenth century to close it: Pasch's order
-axioms, then continuity principles from Dedekind and Hilbert. The most rigorous book of antiquity has its first unstated
+existence is never established. It took until the nineteenth century to close it: continuity
+principles, Dedekind's and then Hilbert's, beside Pasch's axioms of order. The most rigorous book of antiquity has its first unstated
 assumption **at step one, inside the overlap of the two circles** — the vesica, the almond shape
 that the sacred-geometry people draw on everything.
 
