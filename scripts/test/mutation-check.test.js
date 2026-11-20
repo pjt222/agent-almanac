@@ -226,6 +226,9 @@ test('--names-out with no path is refused before any baseline, and no record is 
   assert.equal(r3.status, 1, r3.out);
   assert.match(r3.out, /INVALID MUTANT/, r3.out);
   assert.equal(existsSync(out), false, 'no record for a mutant that never ran');
+  // Not attempted at all: since the write is caught, dropping the guard would print a false
+  // "could not be written" for a record that was never due (the one survivor of the S1 table).
+  assert.doesNotMatch(r3.out, /names record could not be written/, r3.out);
   assert.equal(git('status', '--porcelain'), '');
 });
 
