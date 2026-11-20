@@ -48,13 +48,20 @@
 #     bash tools/mutation-envelope.sh --verify    # self-test in a throwaway repo
 #
 #   --test CMD    the command every mutant is measured under; name the one CI runs
-#   --plan FILE   the mutants, one per line: <id><TAB><file><TAB><old>::<new>
-#                 read once, so a pipe works and an edit made during the run is not seen;
-#                 blank lines and lines starting with `#` are ignored; `::` must occur exactly
-#                 once in the last field, so an OLD ending in `:` or holding `::`, or a NEW
-#                 starting with `:` or holding `::`, cannot be planned here: the checker takes
-#                 such a mutant as --from <old> --to <new> since #950, and this envelope does
-#                 not pass those flags (#957)
+#   --plan FILE   the mutants, in one of two forms, read once, so a pipe works and an edit made
+#                 during the run is not seen:
+#                 TAB   one per line: <id><TAB><file><TAB><old>::<new>, passed as --replace;
+#                       blank lines and lines starting with `#` are ignored; `::` must occur
+#                       exactly once in the last field, so an OLD ending in `:` or holding `::`,
+#                       a NEW starting with `:` or holding `::`, and any needle spanning lines
+#                       cannot be planned in this form: use JSON
+#                 JSON  when the first non-blank character is `[`: an array of rows
+#                       {"id": …, "file": …, "from": …, "to": …}, each passed as
+#                       --from <from> --to <to>, so either may hold newlines and any colons;
+#                       `to` may be empty (a deletion), `from` may not; a row holds exactly
+#                       those four string keys, and ids are unique and hold no `/`, tab or
+#                       newline. A TAB plan whose first id begins with `[` is read as JSON, and
+#                       refused when it does not parse.
 #   --out DIR     where the per-row logs land (default: a fresh mktemp -d, printed at the end)
 #
 # NAMES. Under each row the table prints the failing leaf tests that row's mutant added over the
@@ -86,8 +93,8 @@ CHECKER="$REPO/scripts/mutation-check.js"
 # The separator, held in a variable so that no line of the plan check spells it out. A mutant of
 # that check measured through this envelope is a `--replace <old>::<new>` row, and a needle
 # holding `::` is exactly the ambiguity the check refuses: spelling it inline would make the
-# guard impossible to mutate through the envelope (#783, one level down). The checker's own
-# --from/--to (#950) can carry such a needle when it is driven directly.
+# guard impossible to mutate through the envelope (#783, one level down). A JSON plan row, whose
+# from and to are passed as --from/--to (#950), carries such a needle.
 SEP='::'
 
 # Prints why a plan row is refused, or nothing when it may be measured.
@@ -109,7 +116,7 @@ row_problem() {
   # left, which the cut had already removed, so it could never fire, and its pattern (any two
   # single colons) refused OLD text that held no separator at all.
   case "$mutation" in *"$SEP"*"$SEP"*|*"$SEP":*)
-    printf "'%s' occurs more than once in its <old>%s<new> field (a run of three colons counts); mutation-check --replace refuses a run of three, and splits a value with two '%s' apart at the first one, which may not be the split the plan meant; run node scripts/mutation-check.js directly with --from <old> --to <new>, which this envelope cannot pass (#957)" "$SEP" "$SEP" "$SEP"
+    printf "'%s' occurs more than once in its <old>%s<new> field (a run of three colons counts); mutation-check --replace refuses a run of three, and splits a value with two '%s' apart at the first one, which may not be the split the plan meant; plan this mutant as a row of a JSON plan instead, whose from and to are passed as --from/--to" "$SEP" "$SEP" "$SEP"
     return ;;
   esac
 }
@@ -169,7 +176,10 @@ const path = require('path');
 const argv = process.argv.slice(2);
 const calls = path.join(__dirname, '..', 'calls.log');
 const first = !fs.existsSync(calls);
-fs.appendFileSync(calls, argv[argv.indexOf('--replace') + 1] + '\n');
+// One line per call: a --replace value as handed over, or a --from/--to pair JSON-encoded, so a
+// needle holding a newline stays on its line and an empty `to` stays visible.
+const value = (flag) => argv[argv.indexOf(flag) + 1];
+fs.appendFileSync(calls, (argv.includes('--replace') ? value('--replace') : `FROM ${JSON.stringify(value('--from'))} TO ${JSON.stringify(value('--to'))}`) + '\n');
 // On its first call, append a row the plan check refuses to the plan file it is told about.
 if (first && process.env.STUB_APPEND_TO) fs.appendFileSync(process.env.STUB_APPEND_TO, 'late\tsrc.js\ta::b::c\n');
 // On its first call, read stdin to the end, as a checker that prompted for input would.
@@ -296,6 +306,48 @@ JS
   printed names-none-added-printed "names: none added over the baseline" out.log
   unset STUB_NAMES
 
+  # ── JSON plans (S1) ──
+  # Handed over verbatim as --from/--to: a needle holding `::`, ending in `:`, ending in a
+  # newline, and an empty `to`, which `$(...)` and a TAB-split `read` would each have mangled.
+  # The leading blank line is part of the arm: the `[` test skips leading whitespace.
+  cat > "$P/verbatim.json" <<'JSON'
+
+  [
+    { "id": "colons-and-newline", "file": "src.js", "from": "a::b\nc:", "to": "" },
+    { "id": "trailing-newline", "file": "src.js", "from": "line one\n", "to": ":new::" }
+  ]
+JSON
+  arm json-accept "$P/verbatim.json" 0 2 ''
+  if [ "$(cat "${STUB:?}/calls.log" 2>/dev/null)" = "$(printf '%s\n%s' 'FROM "a::b\nc:" TO ""' 'FROM "line one\n" TO ":new::"')" ]; then
+    echo "  ok    json-verbatim"
+  else
+    echo "  FAIL  json-verbatim: the checker was not handed --from/--to unchanged:" >&2
+    sed 's/^/        /' "${STUB:?}/calls.log" >&2
+    ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
+  # Every refused row is named in one run, a good row among them is not measured either.
+  cat > "$P/refused.json" <<'JSON'
+[
+  { "id": "good", "file": "src.js", "from": "x", "to": "y" },
+  "a string",
+  { "id": "typo", "file": "src.js", "form": "x", "to": "y" },
+  { "id": "no-to", "file": "src.js", "from": "x" },
+  { "id": "empty-from", "file": "src.js", "from": "", "to": "y" },
+  { "id": "good", "file": "src.js", "from": "p", "to": "q" },
+  { "id": "a/b", "file": "src.js", "from": "x", "to": "y" },
+  { "id": "nul", "file": "src.js", "from": "x\u0000", "to": "y" }
+]
+JSON
+  arm json-refuse-before-any-measurement "$P/refused.json" 2 0 "7 of 8 row(s) refused"
+  for expected in "row '#2': not an object" "row 'typo': unknown key(s) form" "row 'no-to': \"to\" is missing" \
+    "row 'empty-from': \"from\" is empty" "row 'good': \"id\" repeats" "row 'a/b': \"id\" must be non-empty" "row 'nul': \"from\" holds a NUL"; do
+    printed "json-names-refused-row ($expected)" "$expected" err.log
+  done
+  printf '[ { "id": "x", ' > "$P/broken.json"
+  arm json-refuse-unparseable "$P/broken.json" 2 0 'read as JSON, which does not parse'
+  printf '[]\n' > "$P/empty.json"
+  arm json-refuse-empty "$P/empty.json" 2 0 'a non-empty array of rows'
+
   if [ "$ARMS_FAILED" -ne 0 ]; then
     echo "mutation-envelope --verify: FAILED — $ARMS_FAILED plan-check arm(s) above" >&2
     exit 1
@@ -338,6 +390,23 @@ JSON
   printf 'kill\tscripts/lib/subject.js\texport function covered(n) { return n > 10; }::export function covered(n) { return n >= 10; }\n' > plan.txt
   printf 'survive\tscripts/lib/subject.js\texport function uncovered(n) { return n > 10; }::export function uncovered(n) { return n >= 10; }\n' >> plan.txt
 
+  # A JSON row through the real checker: one needle spanning both lines, so only --from/--to can
+  # carry it. It weakens `covered`, which the fixture test asserts.
+  cat > plan.json <<'JSON'
+[ { "id": "multi-line", "file": "scripts/lib/subject.js",
+    "from": "export function covered(n) { return n > 10; }\nexport function uncovered(n)",
+    "to": "export function covered(n) { return n >= 10; }\nexport function uncovered(n)" } ]
+JSON
+  bash tools/mutation-envelope.sh --test 'npm run t' --plan plan.json --out "${DIR:?}/logs-json" > "${DIR:?}/run-json.log" 2>&1
+  JSON_STATUS=$?
+  JSON_NAMED=$(grep -c -x -F "$(printf 'multi-line\tMUTANT KILLED by 1 failing test(s) — the check can fail.\t1\tcovered is asserted')" "${DIR:?}/logs-json/names.tsv" 2>/dev/null || true)
+  if [ "$JSON_STATUS" -ne 0 ] || [ "$JSON_NAMED" -ne 1 ]; then
+    echo "mutation-envelope --verify: FAILED — want the multi-line JSON row killed naming 'covered is asserted', exit 0; got exit $JSON_STATUS" >&2
+    sed -n '1,30p' "${DIR:?}/run-json.log" >&2
+    exit 1
+  fi
+  echo "  ok    json-real-checker-multi-line"
+
   bash tools/mutation-envelope.sh --test 'npm run t' --plan plan.txt --out "${DIR:?}/logs" > "${DIR:?}/run.log" 2>&1
   STATUS=$?
   # Counted on each row's own line. An unanchored `grep -c KILLED` also counted the footer
@@ -377,21 +446,68 @@ fi
 # clean kill` with exit 0.
 PLAN_TEXT=$(cat -- "$PLAN") || { echo "mutation-envelope: cannot read plan: $PLAN" >&2; exit 2; }
 
+# A plan whose first non-blank character is `[` is a JSON plan (S1); anything else is a TAB plan.
+case "${PLAN_TEXT#"${PLAN_TEXT%%[![:space:]]*}"}" in '['*) PLAN_FORMAT=json ;; *) PLAN_FORMAT=tsv ;; esac
+
+# Checks (`check`) or emits (`rows`) a JSON plan read from stdin. `check` names every refused row
+# on stderr and prints the row count, exiting 2 on any refusal and 3 on a plan that is not a
+# non-empty array. `rows` prints each row as four NUL-terminated fields, id, file, from, to: a
+# needle may hold any other byte, a trailing newline included, and `$(...)` would strip that
+# newline while a TAB-split `read` would collapse an empty `to`. The check refuses a NUL in any
+# field, so the stream cannot be misread.
+PLAN_JS='
+const mode = process.argv[1];
+let plan;
+try { plan = JSON.parse(require("fs").readFileSync(0, "utf8")); }
+catch (error) { console.error(`mutation-envelope: the plan starts with "[" and is read as JSON, which does not parse: ${error.message}`); process.exit(3); }
+if (!Array.isArray(plan) || plan.length === 0) { console.error("mutation-envelope: a JSON plan must be a non-empty array of rows"); process.exit(3); }
+if (mode === "rows") {
+  process.stdout.write(plan.map((row) => [row.id, row.file, row.from, row.to].map((field) => `${field}\0`).join("")).join(""));
+  process.exit(0);
+}
+const KEYS = ["id", "file", "from", "to"];
+const seen = new Set();
+let refused = 0;
+plan.forEach((row, index) => {
+  const label = row !== null && typeof row === "object" && typeof row.id === "string" && row.id !== "" ? row.id : `#${index + 1}`;
+  const problem = (() => {
+    if (row === null || typeof row !== "object" || Array.isArray(row)) return "not an object";
+    const unknown = Object.keys(row).filter((key) => !KEYS.includes(key));
+    if (unknown.length > 0) return `unknown key(s) ${unknown.join(", ")}; a row holds exactly id, file, from, to`;
+    for (const key of KEYS) if (typeof row[key] !== "string") return `"${key}" is missing or not a string`;
+    for (const key of KEYS) if (row[key].includes("\0")) return `"${key}" holds a NUL character`;
+    if (row.id === "" || /[\/\t\r\n]/.test(row.id)) return `"id" must be non-empty and hold no "/", tab or newline: it names the log file of the row`;
+    if (seen.has(row.id)) return `"id" repeats an earlier row`;
+    seen.add(row.id);
+    if (row.file === "") return `"file" is empty`;
+    if (row.from === "") return `"from" is empty, which matches between every character`;
+    return null;
+  })();
+  if (problem) { console.error(`REFUSED: row '"'"'${label}'"'"': ${problem}`); refused++; }
+});
+if (refused > 0) { console.error(`mutation-envelope: ${refused} of ${plan.length} row(s) refused by the plan check; no mutant was measured`); process.exit(2); }
+console.log(String(plan.length));
+'
+
 # The plan check: every row, before any checker cycle. A refusal used to be discovered only when
 # the loop below reached the row, after every earlier row had spent its baseline and its mutant
 # run, and the exit 2 then suppressed the summary those rows had paid for. Every refused row is
 # named, not just the first, so a plan is repaired in one pass.
 PLANNED=0
 REFUSED=0
-while IFS=$'\t' read -r id file mutation; do
-  case "${id:-}" in ''|'#'*) continue ;; esac
-  PLANNED=$((PLANNED + 1))
-  problem=$(row_problem "${file:-}" "${mutation:-}")
-  if [ -n "$problem" ]; then
-    echo "REFUSED: row '$id': $problem" >&2
-    REFUSED=$((REFUSED + 1))
-  fi
-done <<< "$PLAN_TEXT"
+if [ "$PLAN_FORMAT" = json ]; then
+  PLANNED=$(node -e "$PLAN_JS" check <<< "$PLAN_TEXT") || exit 2
+else
+  while IFS=$'\t' read -r id file mutation; do
+    case "${id:-}" in ''|'#'*) continue ;; esac
+    PLANNED=$((PLANNED + 1))
+    problem=$(row_problem "${file:-}" "${mutation:-}")
+    if [ -n "$problem" ]; then
+      echo "REFUSED: row '$id': $problem" >&2
+      REFUSED=$((REFUSED + 1))
+    fi
+  done <<< "$PLAN_TEXT"
+fi
 if [ "$REFUSED" -gt 0 ]; then
   echo "mutation-envelope: $REFUSED of $PLANNED row(s) refused by the plan check; no mutant was measured" >&2
   exit 2
@@ -431,12 +547,15 @@ printf '# id\tverdict\tadded\tnames: the failing leaf tests each mutant added ov
 
 ROWS=0
 BAD=0
-while IFS=$'\t' read -r id file mutation; do
-  case "${id:-}" in ''|'#'*) continue ;; esac
+# One row, either form: <id> <file> <the checker's mutation flags…>. It runs in the loop's shell,
+# so ROWS and BAD count, and its stdin is the loop's, as the checker's always was.
+run_row() {
+  local id=$1 file=$2 names_json verdict summary added
+  shift 2
   ROWS=$((ROWS + 1))
   names_json="${OUT:?}/$id.names.json"
   rm -f -- "$names_json"
-  node "$CHECKER" --file "$file" --replace "$mutation" --test "$TEST_CMD" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
+  node "$CHECKER" --file "$file" "$@" --test "$TEST_CMD" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
   verdict=$(grep -E "$VERDICT_LINE" "${OUT:?}/$id.log" | tail -1)
   # Counted once per row. A row with no verdict line used to be counted twice, here and again by
   # a second check below the printf, so one such row read "1 row(s), 2 not a clean kill".
@@ -453,7 +572,18 @@ while IFS=$'\t' read -r id file mutation; do
     *) sed -n '3,$p' <<< "$summary" | while IFS= read -r name; do printf '%-24s   + %s\n' '' "$name"; done ;;
   esac
   printf '%s\t%s\t%s\t%s\n' "$id" "${verdict:-<no verdict line>}" "$added" "$(sed -n 2p <<< "$summary")" >> "$NAMES_TSV"
-done <<< "$PLAN_TEXT"
+}
+
+if [ "$PLAN_FORMAT" = json ]; then
+  while IFS= read -r -d '' id && IFS= read -r -d '' file && IFS= read -r -d '' from && IFS= read -r -d '' to; do
+    run_row "$id" "$file" --from "$from" --to "$to"
+  done < <(node -e "$PLAN_JS" rows <<< "$PLAN_TEXT")
+else
+  while IFS=$'\t' read -r id file mutation; do
+    case "${id:-}" in ''|'#'*) continue ;; esac
+    run_row "$id" "$file" --replace "$mutation"
+  done <<< "$PLAN_TEXT"
+fi
 
 echo
 echo "mutation-envelope: $ROWS row(s), $BAD not a clean kill; logs and names.tsv in ${OUT:?}"
