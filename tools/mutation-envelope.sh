@@ -73,7 +73,9 @@
 #                 archive   `git archive <rev>` extracted into a fresh mktemp -d and committed as
 #                           a one-commit repository of its own, the same links made after that
 #                           commit; removed at the end. A process standing in it cannot reach
-#                           your repository's .git at all
+#                           your repository's .git at all. It has no history, refs or remotes:
+#                           a --test that reads git history (a merge-base, an English-history
+#                           walk) measures something else there than in a worktree
 #                 in-place  your working tree, uncommitted edits included, mutated and restored
 #                           row by row, each row running its own baseline, as before S1;
 #                           --at is refused beside it
@@ -103,7 +105,8 @@
 # named). "names: none added over the baseline" (a red run that failed no node:test test) and
 # "names: could not be read (<run>)" (no node:test summary to read) are different findings. The
 # same names land in <out>/names.tsv, one row per mutant: id, verdict, added count (or
-# `unreadable:<run>`, or `-` for a row with no mutant verdict), names joined by ` | `.
+# `unreadable:<run>`, or `-` for a row with no mutant verdict), names joined by ` | `. A name
+# that itself holds ` | ` makes that column ambiguous; <out>/<id>.names.json is exact.
 #
 # Exit 0 when every row is `MUTANT KILLED`. Exit 1 when any row survives, is SUSPECT, INVALID,
 # HUNG or INCONCLUSIVE, or printed no verdict line at column 0 — read that row's log before
@@ -870,8 +873,10 @@ COMMON_DIR=$(git rev-parse --path-format=absolute --git-common-dir)
 cleanup() {
   cd / || return
   local made
-  # Unlinked one by one with a plain rm after an -L test, before anything removes the tree: a
-  # recursive removal reaching through one would empty the real node_modules or renv library.
+  # Unlinked one by one with a plain rm after an -L test, before anything removes the tree, so no
+  # removal is ever handed a link. Neither `git worktree remove --force` nor `rm -rf` follows one
+  # (measured: with this loop deleted, the lent target survives and every arm passes, #1100
+  # review), so the loop guards a future removal command, not today's two; no arm can tell.
   for made in "${MADE_LINKS[@]}"; do [ -L "$made" ] && rm -- "$made"; done
   if [ -n "$PARENT" ]; then
     # Its own registration only, never `git worktree prune`: prune drops EVERY registration whose
