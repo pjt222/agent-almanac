@@ -361,6 +361,13 @@ JS
   { row ../escapes src.js 'x::y'; echo; } > "$P/slash-id.tsv"
   arm refuse-slash-in-id "$P/slash-id.tsv" 2 0 "row '../escapes': its id holds '/'"
 
+  { row dup src.js 'x::y'; echo; row dup src.js 'p::q'; echo; } > "$P/dup-id.tsv"
+  arm refuse-repeated-id "$P/dup-id.tsv" 2 0 "row 'dup': its id repeats an earlier row"
+  { row baseline src.js 'x::y'; echo; } > "$P/baseline-id.tsv"
+  arm refuse-reserved-id "$P/baseline-id.tsv" 2 0 "row 'baseline': its id is 'baseline'"
+  printf '[ { "id": "baseline", "file": "src.js", "from": "x", "to": "y" } ]\n' > "$P/baseline-id.json"
+  arm json-refuse-reserved-id "$P/baseline-id.json" 2 0 "row 'baseline': \"id\" is \"baseline\""
+
   printf '# a comment\n\n' > "$P/empty.tsv"
   arm refuse-empty-plan "$P/empty.tsv" 2 0 "the plan holds no rows"
 
@@ -845,6 +852,7 @@ plan.forEach((row, index) => {
     for (const key of KEYS) if (row[key].includes("\0")) return `"${key}" holds a NUL character`;
     if (row.id === "" || /[\/\t\r\n]/.test(row.id)) return `"id" must be non-empty and hold no "/", tab or newline: it names the log file of the row`;
     if (seen.has(row.id)) return `"id" repeats an earlier row`;
+    if (row.id === "baseline") return `"id" is "baseline", which names the log file of the recorded baseline`;
     seen.add(row.id);
     if (row.file === "") return `"file" is empty`;
     if (row.from === "") return `"from" is empty, which matches between every character`;
@@ -862,6 +870,7 @@ console.log(String(plan.length));
 # named, not just the first, so a plan is repaired in one pass.
 PLANNED=0
 REFUSED=0
+SEEN_IDS=$'\n' # every TAB id so far, newline-delimited: a repeat would overwrite the first row's log
 if [ "$PLAN_FORMAT" = json ]; then
   PLANNED=$(node -e "$PLAN_JS" check <<< "$PLAN_TEXT") || exit 2
 else
@@ -872,6 +881,10 @@ else
     # The id names the row's log and names files under --out, so a `/` in it reaches outside
     # (a JSON id is refused for the same reason in PLAN_JS).
     case "$id" in */*) problem="its id holds '/', and the id names the row's log file under --out" ;; esac
+    # `baseline` would name baseline.log, the recorded baseline's own log (#1100 review round 2).
+    [ "$id" = baseline ] && problem="its id is 'baseline', which names the recorded baseline's own log file"
+    case "$SEEN_IDS" in *$'\n'"$id"$'\n'*) problem="its id repeats an earlier row, whose log it would overwrite" ;; esac
+    SEEN_IDS+="$id"$'\n'
     if [ -n "$problem" ]; then
       echo "REFUSED: row '$id': $problem" >&2
       REFUSED=$((REFUSED + 1))
