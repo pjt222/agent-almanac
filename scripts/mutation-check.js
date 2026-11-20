@@ -105,17 +105,18 @@ Options:
   --write-baseline <file>   Record a baseline and stop: run --test once, refuse a red run or a
                             tree with tracked changes or index flags, and write <file> with
                             HEAD, the run directory, the --test string, the tree's status
-                            (untracked included),
-                            the passing count and the failing leaf tests. Takes --test and
-                            --timeout only. Usage: node scripts/mutation-check.js
-                            --test <cmd> --write-baseline <file>
+                            (untracked included), the passing count and the failing leaf
+                            tests. Takes --test and --timeout only:
+                            node scripts/mutation-check.js --test <cmd> --write-baseline <file>
   --baseline <file>         Reuse such a record instead of running the baseline: refused unless
                             HEAD, the directory it was recorded from, the tree's status and the
-                            --test string all match it. The environment the test runs under is
-                            not recorded: reuse a record in the run that made it.
+                            --test string all match it. Not recorded, so not checked: the
+                            environment the test runs under, the CONTENT of untracked files
+                            (only their names are in the status), and ignored files. Reuse a
+                            record in the run that made it, over a tree nothing else writes.
   --names-out <file>        Write the failing leaf tests the mutant added over the baseline
                             to <file> as JSON, when the mutant run produced a verdict: either
-                            {"readable":true,"added":[{"file","name"}]} or
+                            {"readable":true,"added":[{"file","name"}],"unreadable":null} or
                             {"readable":false,"added":null,"unreadable":"baseline"|"mutant",
                             "reason":"<why it could not be read>"}.
                             The same names are printed after the mutant run either way.
