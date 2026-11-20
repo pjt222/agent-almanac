@@ -76,9 +76,12 @@
 #                           your repository's .git at all. It has no history, refs or remotes:
 #                           a --test that reads git history (a merge-base, an English-history
 #                           walk) measures something else there than in a worktree
-#                 in-place  your working tree, uncommitted edits included, mutated and restored
-#                           row by row, each row running its own baseline, as before S1;
-#                           --at is refused beside it
+#                 in-place  your working tree, mutated and restored row by row, each row running
+#                           its own baseline, as before S1; --at is refused beside it. Untracked
+#                           tests and uncommitted edits to other files are measured, but a file a
+#                           mutant changes must itself be committed: the checker refuses that row
+#                           ("<file> has uncommitted changes"), as it always has, rather than risk
+#                           restoring over edits git has not saved
 #                 In worktree and archive mode the run is refused while your checkout has
 #                 tracked changes or untracked, non-ignored files (the three link paths above
 #                 excepted when they are symlinks): the fresh tree would not hold them, and a
@@ -88,8 +91,8 @@
 #                 in every mode. The measured commit is printed and heads names.tsv.
 #   --at REV      the commit a fresh tree is made from (default: HEAD)
 #   --out DIR     where the per-row logs land (default: a fresh mktemp -d, printed at the end);
-#                 refused when it is inside the measured tree, where each log would change the
-#                 tree a reused baseline was recorded over
+#                 refused when it is inside the measured tree (reachable in place only), where
+#                 each log would be a new untracked file in the tree each row checks
 #
 # ONE BASELINE. In worktree and archive mode the baseline runs once per table, not once per row
 # (in place, every row runs its own, as before S1): the checker records it
@@ -113,8 +116,10 @@
 # quoting anything. Names never change the exit code. Exit 2 when the envelope itself
 # could not run: no plan, an unreadable plan, a plan with no rows, any row the plan check
 # refuses (a missing field, no `::`, or `::` more than once; for JSON, the refusals listed under
-# --plan), not a git repository, an --out inside the measured tree, or a baseline that is red,
-# hangs or cannot be recorded. Each of those is reached before the first mutant is measured.
+# --plan), not a git repository, an --out inside the measured tree, or (worktree and archive
+# mode) a baseline that is red, hangs or cannot be recorded. Each of those is reached before the
+# first mutant is measured. In place there is no recorded baseline: a red suite is an ERROR row
+# per mutant, each having spent its own baseline run, and the run exits 1.
 # Two exits 2 come after measuring has begun: a row that did not leave the tree as it found it
 # (the table stops at that row), and a run that measured a different number of rows than the
 # plan check counted: the run did not read the plan the check read (a checker that reads its
@@ -972,7 +977,7 @@ case "$TREE_MODE" in
     if [ -n "$UNSEEN" ]; then
       echo "mutation-envelope: --tree $TREE_MODE measures commit ${SHA:0:12}, and your checkout holds changes that tree would not, so a mutant they would catch could read as SURVIVED:" >&2
       printf '%s\n' "$UNSEEN" | head -20 | sed 's/^/  /' >&2
-      echo "Commit them, or measure them where they are with --tree in-place." >&2
+      echo "Commit them, or measure them where they are with --tree in-place (a file a mutant changes must still be committed)." >&2
       exit 2
     fi
     # Absolute: mktemp honours a relative TMPDIR, and the run changes directory before cleanup.
@@ -1029,7 +1034,7 @@ esac
 # any mutant: exit 2, because nothing was measured.
 #
 # Not in place. A record is made only over a clean tree, and in place the tree is the caller's,
-# uncommitted edits included, which is what that mode exists to measure; each row runs its own
+# uncommitted edits to other files included, which is what that mode exists to measure; each row runs its own
 # baseline there, as before S1 (#1100 review, B2). That also gives in-place what a record cannot:
 # a fresh look at the suite before each row, while the caller's untracked tests are live.
 TREE_STATUS=$(git -C "$TREE" status --porcelain=v1 --untracked-files=all)

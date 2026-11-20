@@ -316,7 +316,7 @@ tools:
     language: bash
     status: active
     superseded_by: null
-    description: "Runs a plan of mutants (TAB rows, or JSON rows passed as --from/--to for multi-line needles) through scripts/mutation-check.js under ONE test command and ONE recorded baseline, in a fresh detached worktree of a commit by default (--tree archive|in-place, --at), and prints a verdict table naming the failing tests each mutant added; exit 1 when any row is not a clean kill, exit 2 when nothing could be measured (a refused plan, a red baseline, uncommitted changes a fresh tree would miss) or a row left the tree changed"
+    description: "Runs a plan of mutants (TAB rows, or JSON rows passed as --from/--to for multi-line needles) through scripts/mutation-check.js under ONE test command, in a fresh detached worktree of a commit by default with ONE recorded baseline (--tree archive; or --tree in-place, a baseline per row; --at), and prints a verdict table naming the failing tests each mutant added; exit 1 when any row is not a clean kill, exit 2 when nothing could be measured (a refused plan, a red recorded baseline, uncommitted changes a fresh tree would miss) or a row left the tree changed"
     need: "Measuring a TABLE of mutants for a review round or a PR body, every row under the command CI runs rather than under whatever was convenient per row, with the names of the tests that killed each one."
     not_for: "scripts/mutation-check.js itself, which proves ONE line and is the right unit for that; a merge gate — this mutates a tree (a throwaway one by default), takes minutes, and needs a green baseline"
     tag: measurement

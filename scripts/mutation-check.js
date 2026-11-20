@@ -104,7 +104,8 @@ Options:
                             cannot be parsed, rather than passing silently.
   --write-baseline <file>   Record a baseline and stop: run --test once, refuse a red run or a
                             tree with tracked changes or index flags, and write <file> with
-                            HEAD, the --test string, the tree's status (untracked included),
+                            HEAD, the run directory, the --test string, the tree's status
+                            (untracked included),
                             the passing count and the failing leaf tests. Takes --test and
                             --timeout only. Usage: node scripts/mutation-check.js
                             --test <cmd> --write-baseline <file>
