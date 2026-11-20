@@ -278,10 +278,13 @@ if (process.env.STUB_PWD) fs.appendFileSync(here('pwd.log'), `${process.cwd()}\n
 // A checker that does not put the tree back: the row's file changed, or a stray file left.
 if (process.env.STUB_DIRTY) fs.appendFileSync(value('--file'), 'dirty\n');
 if (process.env.STUB_CRLF) fs.writeFileSync(value('--file'), fs.readFileSync(value('--file'), 'utf8').replace(/\n/g, '\r\n'));
-// An edit git status cannot see: the file is flagged assume-unchanged first.
-if (process.env.STUB_HIDDEN) {
+// An edit git status cannot see: the file is flagged assume-unchanged first. STUB_HIDDEN appends
+// a line, which any content hash sees; STUB_HIDDEN_CRLF only rewrites line endings, which a hash
+// taken after eol normalisation does not see either.
+if (process.env.STUB_HIDDEN || process.env.STUB_HIDDEN_CRLF) {
   require('child_process').execFileSync('git', ['update-index', '--assume-unchanged', '--', value('--file')]);
-  fs.appendFileSync(value('--file'), 'hidden\n');
+  if (process.env.STUB_HIDDEN) fs.appendFileSync(value('--file'), 'hidden\n');
+  else fs.writeFileSync(value('--file'), fs.readFileSync(value('--file'), 'utf8').replace(/\n/g, '\r\n'));
 }
 if (process.env.STUB_STRAY) fs.writeFileSync('stray.txt', 'stray\n');
 // A checker that dies after printing a name holding a verdict word, before any verdict line.
@@ -497,10 +500,15 @@ JSON
   export STUB_CRLF=1
   arm crlf-rewrite-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
   unset STUB_CRLF
-  # An edit hidden from git status by assume-unchanged: only the raw-byte hash sees it.
+  # An edit hidden from git status by assume-unchanged: the hash sees it, status cannot.
   export STUB_HIDDEN=1
   arm hidden-edit-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
   unset STUB_HIDDEN
+  # The same hidden file, rewritten to CRLF only: status cannot see it, and a hash taken after eol
+  # normalisation hashes it as unchanged; only the raw bytes (--no-filters) show it.
+  export STUB_HIDDEN_CRLF=1
+  arm hidden-crlf-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
+  unset STUB_HIDDEN_CRLF
   export STUB_STRAY=1
   arm stray-file-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
   unset STUB_STRAY
@@ -1084,9 +1092,9 @@ run_row() {
   before=$(git hash-object --no-filters -- "$file" 2>/dev/null)
   node "$CHECKER" --file "$file" "$@" --test "$TEST_CMD" "${BASELINE_ARGS[@]}" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
   # The row leaves the tree as it found it: the file byte-identical, and the status unchanged.
-  # --no-filters, or the hash is taken after eol normalisation and a CRLF rewrite under
-  # `text=auto eol=lf` hashes the same (status does show that one; measured). The hash is the
-  # only one of the two that sees an edit to a file flagged assume-unchanged.
+  # The hash is the only one of the two that sees an edit to a file flagged assume-unchanged, and
+  # --no-filters is what makes it see a CRLF-only rewrite of such a file under `text=auto eol=lf`:
+  # a filtered hash normalises it away (both pinned by arms, #1100 review round 2).
   # The next row's baseline check would refuse a leftover too, but only from the next row on;
   # this catches it at the row that made it, the last row included, and stops the table there.
   after=$(git hash-object --no-filters -- "$file" 2>/dev/null)
