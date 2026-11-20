@@ -68,7 +68,8 @@
 #   --tree MODE   which tree is mutated (S1):
 #                 worktree  (default) a detached worktree of <rev> in a fresh mktemp -d, with
 #                           node_modules, viz/node_modules and viz/renv/library linked from your
-#                           checkout when it has them; unlinked, removed and pruned at the end
+#                           checkout when it has them; unlinked and removed at the end, its own
+#                           registration only (the repository's worktrees are never pruned)
 #                 archive   `git archive <rev>` extracted into a fresh mktemp -d and committed as
 #                           a one-commit repository of its own, the same links made after that
 #                           commit; removed at the end. A process standing in it cannot reach
@@ -474,9 +475,9 @@ JSON
   gone() {
     local tree registered
     tree=$(sed -n 's/^mutation-envelope: measuring .*, \(.*\) (removed at the end)$/\1/p' "${STUB:?}/out.log" | head -1)
-    registered=$(git -C "${REPO_ARMS:?}" worktree list --porcelain | grep -c '^worktree ')
-    if [ -n "$tree" ] && [ ! -e "$tree" ] && [ "$registered" -eq 1 ]; then echo "  ok    $1"; else
-      echo "  FAIL  $1: tree '${tree:-<not named>}' exists or was not named, or $registered worktree(s) registered" >&2
+    registered=$(git -C "${REPO_ARMS:?}" worktree list --porcelain | grep -c -x -F "worktree $tree")
+    if [ -n "$tree" ] && [ ! -e "$tree" ] && [ "$registered" -eq 0 ]; then echo "  ok    $1"; else
+      echo "  FAIL  $1: tree '${tree:-<not named>}' exists, was not named, or is still registered" >&2
       ARMS_FAILED=$((ARMS_FAILED + 1))
     fi
   }
@@ -550,6 +551,17 @@ JSON
   else
     echo "  FAIL  rows-run-in-the-same-subdirectory" >&2; sed 's/^/        /' "${STUB:?}/err.log" "${STUB:?}/pwd.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
   fi
+  # A peer's registration that reads prunable (its directory moved away) survives a default run:
+  # the run removes its own worktree, and never prunes the repository's (#1100 review, B1).
+  git -C "${REPO_ARMS:?}" worktree add -q --detach "${STUB:?}/peer" HEAD >/dev/null 2>&1 && mv "${STUB:?}/peer" "${STUB:?}/peer-moved"
+  arm peer-registration-kept "$P/two-good.tsv" 0 2 ''
+  if git -C "${REPO_ARMS:?}" worktree list --porcelain | grep -q -x -F "worktree ${STUB:?}/peer"; then
+    echo "  ok    a-prunable-peer-registration-survives"
+  else
+    echo "  FAIL  a-prunable-peer-registration-survives: the run pruned a registration it did not make" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
+  gone peer-arm-tree-removed
+  mv "${STUB:?}/peer-moved" "${STUB:?}/peer" && git -C "${REPO_ARMS:?}" worktree remove --force "${STUB:?}/peer"
   # An inherited GIT_DIR names some other repository; the run ignores it and writes nothing there.
   (cd "${REPO_ARMS:?}" && GIT_DIR="${STUB:?}/decoy.git" GIT_WORK_TREE="${STUB:?}/decoy" bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${STUB:?}/logs") \
     > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
@@ -763,6 +775,8 @@ PREFIX=$(git rev-parse --show-prefix) # the subdirectory of CALLER the run was s
 LINKS=(node_modules viz/node_modules viz/renv/library)
 MADE_LINKS=()
 PARENT=""
+ADMIN="" # the fresh worktree's own admin directory, recorded when it is made
+COMMON_DIR=$(git rev-parse --path-format=absolute --git-common-dir)
 cleanup() {
   cd / || return
   local made
@@ -770,9 +784,18 @@ cleanup() {
   # recursive removal reaching through one would empty the real node_modules or renv library.
   for made in "${MADE_LINKS[@]}"; do [ -L "$made" ] && rm -- "$made"; done
   if [ -n "$PARENT" ]; then
-    [ "$TREE_MODE" = worktree ] && git -C "$CALLER" worktree remove --force "$TREE" >/dev/null 2>&1
+    # Its own registration only, never `git worktree prune`: prune drops EVERY registration whose
+    # directory reads as missing, and a peer's worktree registered from Windows (`D:/...`) always
+    # reads so from WSL. `worktree remove` deregisters the tree it is given; if it failed, the
+    # admin directory recorded at creation is removed by name, and only when it sits where git
+    # keeps worktree admin directories.
+    if [ "$TREE_MODE" = worktree ]; then
+      git -C "$CALLER" worktree remove --force "$TREE" >/dev/null 2>&1
+      if [ -n "$ADMIN" ] && [ -d "$ADMIN" ]; then
+        case "$ADMIN" in "$COMMON_DIR/worktrees/"?*) rm -rf -- "${ADMIN:?}" ;; esac
+      fi
+    fi
     rm -rf -- "${PARENT:?}"
-    [ "$TREE_MODE" = worktree ] && git -C "$CALLER" worktree prune >/dev/null 2>&1
   fi
   return 0
 }
@@ -806,6 +829,7 @@ case "$TREE_MODE" in
     if [ "$TREE_MODE" = worktree ]; then
       git -C "$CALLER" worktree add -q --detach "$TREE" "$SHA" >/dev/null 2>&1 \
         || { echo "mutation-envelope: git worktree add failed for ${SHA:0:12} at $TREE" >&2; exit 2; }
+      ADMIN=$(git -C "$TREE" rev-parse --absolute-git-dir)
       MEASURED="$SHA in a detached worktree, $TREE (removed at the end)"
     else
       mkdir -p "$TREE" "$PARENT/home" || exit 2
