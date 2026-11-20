@@ -1748,11 +1748,15 @@ describe('audit exit codes end to end (#439)', () => {
   // Absolute entry path: these run with cwd set to the fixture, so the relative
   // `node cli/index.js` that run() uses would not resolve.
   function auditStatusIn(dir) {
-    // argv, no shell: a space or quote in the checkout path cannot split the command.
-    // stderr inherited as execSync forwarded it; a timeout or signal leaves status null -> 1.
+    // argv, no shell: a space or quote in the checkout path cannot split the command. stderr
+    // is captured, as execSync captured it. A spawn error, a timeout or a signal is named
+    // rather than folded into an exit status: through a shell, execSync reported a signal as
+    // 128+n, and a bare `status ?? 1` would have read every one of them as 1.
     const auditRun = spawnSync(process.execPath, [cliEntry, 'audit', '--source', ROOT],
-      { cwd: dir, encoding: 'utf8', timeout: 10000, stdio: ['pipe', 'pipe', 'inherit'] });
-    return auditRun.status ?? 1;
+      { cwd: dir, encoding: 'utf8', timeout: 10000 });
+    assert.equal(auditRun.error, undefined, `audit did not run to an exit status: ${auditRun.error}\n${auditRun.stderr}`);
+    assert.equal(auditRun.signal, null, `audit was killed by ${auditRun.signal}\n${auditRun.stderr}`);
+    return auditRun.status;
   }
 
   before(() => {
