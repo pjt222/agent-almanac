@@ -93,7 +93,8 @@
 # (in place, every row runs its own, as before S1): the checker records it
 # (--write-baseline) and every row reuses the record (--baseline), which the checker refuses
 # unless HEAD, the directory, the tree's status and the --test string all still match it. N rows cost N + 1
-# suite runs, not 2N. After each row the row's file must be byte-identical (git hash-object) and
+# suite runs, not 2N. After each row the row's file must be byte-identical (git hash-object
+# --no-filters) and
 # the tree's status unchanged, or the table stops at that row.
 #
 # NAMES. Under each row the table prints the failing leaf tests that row's mutant added over the
@@ -252,6 +253,12 @@ if (process.env.STUB_SEE_LINK) fs.appendFileSync(here('seen.log'), fs.existsSync
 if (process.env.STUB_PWD) fs.appendFileSync(here('pwd.log'), `${process.cwd()}\n`);
 // A checker that does not put the tree back: the row's file changed, or a stray file left.
 if (process.env.STUB_DIRTY) fs.appendFileSync(value('--file'), 'dirty\n');
+if (process.env.STUB_CRLF) fs.writeFileSync(value('--file'), fs.readFileSync(value('--file'), 'utf8').replace(/\n/g, '\r\n'));
+// An edit git status cannot see: the file is flagged assume-unchanged first.
+if (process.env.STUB_HIDDEN) {
+  require('child_process').execFileSync('git', ['update-index', '--assume-unchanged', '--', value('--file')]);
+  fs.appendFileSync(value('--file'), 'hidden\n');
+}
 if (process.env.STUB_STRAY) fs.writeFileSync('stray.txt', 'stray\n');
 // A checker that dies after printing a name holding a verdict word, before any verdict line.
 if (process.env.STUB_NO_VERDICT) {
@@ -264,9 +271,10 @@ JS
   # plans and the stub's counters all sit outside it, in ${STUB}.
   REPO_ARMS="${STUB:?}/repo"
   mkdir -p "${REPO_ARMS:?}" || exit 2
-  printf 'x\n' > "${REPO_ARMS:?}/src.js"
+  printf 'x\ny\n' > "${REPO_ARMS:?}/src.js"
+  printf '* text=auto eol=lf\n' > "${REPO_ARMS:?}/.gitattributes" # as this repository declares
   { git -C "${REPO_ARMS:?}" init -q -b main && git -C "${REPO_ARMS:?}" config user.email t@example.invalid \
-    && git -C "${REPO_ARMS:?}" config user.name fixture && git -C "${REPO_ARMS:?}" add src.js \
+    && git -C "${REPO_ARMS:?}" config user.name fixture && git -C "${REPO_ARMS:?}" add src.js .gitattributes \
     && git -C "${REPO_ARMS:?}" commit -qm arms; } >/dev/null 2>&1 || { echo "mutation-envelope --verify: FAILED — could not build the arms' repository" >&2; exit 1; }
   export STUB_WANT_BASELINE="${STUB:?}/logs/baseline.json"
   ARMS_FAILED=0
@@ -451,6 +459,15 @@ JSON
   arm dirty-row-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
   unset STUB_DIRTY
   git -C "${REPO_ARMS:?}" checkout -q -- src.js
+  # A rewrite that changes only line endings under eol=lf: git status shows it, a hash after eol
+  # normalisation would not (measured with that mutant).
+  export STUB_CRLF=1
+  arm crlf-rewrite-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
+  unset STUB_CRLF
+  # An edit hidden from git status by assume-unchanged: only the raw-byte hash sees it.
+  export STUB_HIDDEN=1
+  arm hidden-edit-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
+  unset STUB_HIDDEN
   export STUB_STRAY=1
   arm stray-file-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
   unset STUB_STRAY
@@ -959,12 +976,15 @@ run_row() {
   ROWS=$((ROWS + 1))
   names_json="${OUT:?}/$id.names.json"
   rm -f -- "$names_json"
-  before=$(git hash-object -- "$file" 2>/dev/null)
+  before=$(git hash-object --no-filters -- "$file" 2>/dev/null)
   node "$CHECKER" --file "$file" "$@" --test "$TEST_CMD" "${BASELINE_ARGS[@]}" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
   # The row leaves the tree as it found it: the file byte-identical, and the status unchanged.
+  # --no-filters, or the hash is taken after eol normalisation and a CRLF rewrite under
+  # `text=auto eol=lf` hashes the same (status does show that one; measured). The hash is the
+  # only one of the two that sees an edit to a file flagged assume-unchanged.
   # The next row's baseline check would refuse a leftover too, but only from the next row on;
   # this catches it at the row that made it, the last row included, and stops the table there.
-  after=$(git hash-object -- "$file" 2>/dev/null)
+  after=$(git hash-object --no-filters -- "$file" 2>/dev/null)
   if [ "$before" != "$after" ] || [ "$(git -C "$TREE" status --porcelain=v1 --untracked-files=all)" != "$TREE_STATUS" ]; then
     echo "mutation-envelope: row '$id' did not leave the tree as it found it (${file}: ${before:-absent} before, ${after:-absent} after; or the status changed); no further row is measured. Read ${OUT:?}/$id.log and git status in $TREE." >&2
     exit 2
