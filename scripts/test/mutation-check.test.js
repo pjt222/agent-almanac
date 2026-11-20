@@ -347,6 +347,8 @@ test('a file that is not a baseline record is refused, and the record flags refu
     [['--test', 'true', '--write-baseline'], /--write-baseline needs a file path/],
     [['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--baseline'], /--baseline needs a file path/],
     [['--write-baseline', join(out, 'b.json')], /--test is required/],
+    // Inside the tree it would describe (#1100 review, checker N5).
+    [['--test', 'true', '--write-baseline', 'inside.json'], /is inside the tree it would describe/],
   ];
   for (const [flags, expected] of flagCases) {
     const r = runTool(dir, flags);
@@ -354,6 +356,7 @@ test('a file that is not a baseline record is refused, and the record flags refu
     assert.match(r.out, expected, `${flags.join(' ')}\n${r.out}`);
   }
   assert.equal(existsSync(join(out, 'b.json')), false);
+  assert.equal(existsSync(join(dir, 'inside.json')), false);
   assert.equal(git('status', '--porcelain'), '');
 });
 

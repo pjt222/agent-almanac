@@ -55,7 +55,7 @@
  */
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readFileSync, realpathSync, unlinkSync, writeFileSync } from 'node:fs';
-import { extname, relative, resolve } from 'node:path';
+import { basename, dirname, extname, isAbsolute, relative, resolve } from 'node:path';
 import { parseFailCount, parsePassCount, crashSuspicion, parseFailingLeafTests, addedFailingTests } from './lib/mutation-verdict.js';
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
@@ -515,6 +515,12 @@ function reuseBaseline(file) {
 }
 
 if (BASELINE_ONLY) {
+  // A record inside the tree it describes is a new untracked file there, so no reuse would find
+  // the tree it records (#1100 review, checker N5).
+  const recordAt = relative(realpathSync(repoRoot), resolve(realpathSync(dirname(resolve(opts.writeBaseline))), basename(opts.writeBaseline)));
+  if (!recordAt.startsWith('..') && !isAbsolute(recordAt)) {
+    fail(`--write-baseline ${opts.writeBaseline} is inside the tree it would describe; write it outside ${repoRoot}`);
+  }
   const head = headSha();
   const state = treeState();
   if (state.tracked.length > 0 || state.flagged.length > 0) {
