@@ -75,7 +75,8 @@
 #                           commit; removed at the end. A process standing in it cannot reach
 #                           your repository's .git at all
 #                 in-place  your working tree, uncommitted edits included, mutated and restored
-#                           row by row, as before S1; --at is refused beside it
+#                           row by row, each row running its own baseline, as before S1;
+#                           --at is refused beside it
 #                 In worktree and archive mode the run is refused while your checkout has
 #                 tracked changes or untracked, non-ignored files (the three link paths above
 #                 excepted when they are symlinks): the fresh tree would not hold them, and a
@@ -88,7 +89,8 @@
 #                 refused when it is inside the measured tree, where each log would change the
 #                 tree a reused baseline was recorded over
 #
-# ONE BASELINE. The baseline runs once per table, not once per row: the checker records it
+# ONE BASELINE. In worktree and archive mode the baseline runs once per table, not once per row
+# (in place, every row runs its own, as before S1): the checker records it
 # (--write-baseline) and every row reuses the record (--baseline), which the checker refuses
 # unless HEAD, the tree's status and the --test string all still match it. N rows cost N + 1
 # suite runs, not 2N. After each row the row's file must be byte-identical (git hash-object) and
@@ -217,6 +219,11 @@ const here = (name) => path.join(__dirname, '..', name);
 // means what it meant before the baseline moved out of the rows (S1).
 if (argv.includes('--write-baseline')) {
   fs.appendFileSync(here('baselines.log'), 'baseline\n');
+  // As the real checker: a baseline is recorded only over a tree with no tracked change.
+  if (require('child_process').execSync('git status --porcelain --untracked-files=no', { encoding: 'utf8' }).trim()) {
+    console.log('ERROR: a baseline is recorded only over a clean tree');
+    process.exit(1);
+  }
   if (process.env.STUB_RED_BASELINE) {
     console.log('ERROR: Baseline is already failing (exit 1). Fix that first');
     process.exit(1);
@@ -492,6 +499,8 @@ JSON
   ARM_ARGS=(--tree in-place)
   arm in-place-two-rows "$P/two-good.tsv" 0 2 ''
   printed in-place-names-the-tree "measuring the working tree of" out.log
+  counted in-place-records-no-baseline baselines.log 0
+  counted in-place-runs-a-baseline-per-row unbaselined.log 2
   ARM_ARGS=(--tree in-place --at HEAD)
   arm in-place-refuses-at "$P/two-good.tsv" 2 0 '--at names a commit'
   ARM_ARGS=(--tree bogus)
@@ -508,6 +517,7 @@ JSON
   arm tracked-change-refused-archive "$P/two-good.tsv" 2 0 ' M src.js'
   ARM_ARGS=(--tree in-place)
   arm tracked-change-measured-in-place "$P/two-good.tsv" 0 2 ''
+  counted tracked-change-in-place-records-no-baseline baselines.log 0
   ARM_ARGS=()
   git -C "${REPO_ARMS:?}" checkout -q -- src.js
   printf 'new\n' > "${REPO_ARMS:?}/new.test.js"
@@ -634,17 +644,20 @@ JSON
   fi
   echo "  ok    json-real-checker-multi-line (--tree archive)"
 
-  # The kill row again, in place: the real checker mutating and restoring the fixture itself.
+  # The kill row again, in place, over an uncommitted edit to another tracked file: the real
+  # checker mutating and restoring the fixture itself, each row with its own baseline.
+  printf '// an uncommitted edit\n' >> scripts/lib/mutation-parse.js
   head -1 "${DIR:?}/plan.txt" > "${DIR:?}/plan-in-place.txt"
   bash tools/mutation-envelope.sh --test 'npm run t' --plan "${DIR:?}/plan-in-place.txt" --out "${DIR:?}/logs-in-place" --tree in-place > "${DIR:?}/run-in-place.log" 2>&1
   IN_PLACE_STATUS=$?
   if [ "$IN_PLACE_STATUS" -ne 0 ] || ! grep -q -x -F "$(printf 'kill\tMUTANT KILLED by 1 failing test(s) — the check can fail.\t1\tcovered is asserted')" "${DIR:?}/logs-in-place/names.tsv" \
-     || [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+     || [ "$(git status --porcelain --untracked-files=no)" != ' M scripts/lib/mutation-parse.js' ]; then
     echo "mutation-envelope --verify: FAILED — want the in-place kill row killed naming 'covered is asserted', exit 0, the fixture clean; got exit $IN_PLACE_STATUS" >&2
     sed -n '1,30p' "${DIR:?}/run-in-place.log" >&2
     exit 1
   fi
-  echo "  ok    real-checker-in-place"
+  git checkout -q -- scripts/lib/mutation-parse.js
+  echo "  ok    real-checker-in-place-over-an-uncommitted-edit"
 
   bash tools/mutation-envelope.sh --test 'npm run t' --plan "${DIR:?}/plan.txt" --out "${DIR:?}/logs" > "${DIR:?}/run.log" 2>&1
   STATUS=$?
@@ -869,18 +882,30 @@ esac
 # the record (--baseline), which the checker refuses unless HEAD, the tree's status and the --test
 # string still match. A baseline that is red, hangs or cannot be read stops the run here, before
 # any mutant: exit 2, because nothing was measured.
+#
+# Not in place. A record is made only over a clean tree, and in place the tree is the caller's,
+# uncommitted edits included, which is what that mode exists to measure; each row runs its own
+# baseline there, as before S1 (#1100 review, B2). That also gives in-place what a record cannot:
+# a fresh look at the suite before each row, while the caller's untracked tests are live.
 TREE_STATUS=$(git -C "$TREE" status --porcelain=v1 --untracked-files=all)
-BASELINE="${OUT:?}/baseline.json"
-if ! node "$CHECKER" --test "$TEST_CMD" --write-baseline "$BASELINE" > "${OUT:?}/baseline.log" 2>&1 < /dev/null; then
-  echo "mutation-envelope: the baseline could not be recorded, so no mutant was measured:" >&2
-  grep -E '^ERROR' "${OUT:?}/baseline.log" | head -5 >&2
-  echo "  (the whole log: ${OUT:?}/baseline.log)" >&2
-  exit 2
+BASELINE_ARGS=()
+if [ "$TREE_MODE" = in-place ]; then
+  BASELINE_LINE="in place: every row runs its own baseline, as before S1"
+else
+  BASELINE="${OUT:?}/baseline.json"
+  if ! node "$CHECKER" --test "$TEST_CMD" --write-baseline "$BASELINE" > "${OUT:?}/baseline.log" 2>&1 < /dev/null; then
+    echo "mutation-envelope: the baseline could not be recorded, so no mutant was measured:" >&2
+    grep -E '^ERROR' "${OUT:?}/baseline.log" | head -5 >&2
+    echo "  (the whole log: ${OUT:?}/baseline.log)" >&2
+    exit 2
+  fi
+  BASELINE_ARGS=(--baseline "$BASELINE")
+  BASELINE_LINE="one baseline, $(grep -E '^ {6}green' "${OUT:?}/baseline.log" | sed -e 's/^ *//' -e 's/\.$//'), reused by every row"
 fi
 
 echo "mutation-envelope: measuring $MEASURED"
 echo "mutation-envelope: every row measured under: $TEST_CMD"
-echo "mutation-envelope: one baseline, $(grep -E '^ {6}green' "${OUT:?}/baseline.log" | sed 's/^ *//'), reused by every row"
+echo "mutation-envelope: $BASELINE_LINE"
 echo
 
 # The checker prints its verdict at column 0 and indents every other line, test names included
@@ -920,7 +945,7 @@ run_row() {
   names_json="${OUT:?}/$id.names.json"
   rm -f -- "$names_json"
   before=$(git hash-object -- "$file" 2>/dev/null)
-  node "$CHECKER" --file "$file" "$@" --test "$TEST_CMD" --baseline "$BASELINE" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
+  node "$CHECKER" --file "$file" "$@" --test "$TEST_CMD" "${BASELINE_ARGS[@]}" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
   # The row leaves the tree as it found it: the file byte-identical, and the status unchanged.
   # The next row's baseline check would refuse a leftover too, but only from the next row on;
   # this catches it at the row that made it, the last row included, and stops the table there.
