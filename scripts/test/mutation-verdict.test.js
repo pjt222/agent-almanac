@@ -630,6 +630,76 @@ test('a timed-out test and a file that throws on load are leaves, and cancelled 
   assert.deepEqual(names(parseFailingLeafTests(timeoutOnly)), ['d.test.js :: times out']);
 });
 
+test('a failing hook and a timed-out parent: cancelled children print no duration, and both reporters list the same five', () => {
+  // Measured on node v26.11.1 (#1100 review, S2): a describe whose before() throws, and a parent
+  // that times out with a child still running. `fail 0`, `cancelled 4`. Until the cancelled shape
+  // was read, the duration-less entries made the whole transcript unreadable.
+  const spec = [
+    'ℹ tests 4',
+    'ℹ pass 0',
+    'ℹ fail 0',
+    'ℹ cancelled 4',
+    '',
+    '✖ failing tests:',
+    '',
+    'test at hook.test.mjs:4:3',
+    '✖ child one',
+    "  'test did not finish before its parent and was cancelled'",
+    '',
+    'test at hook.test.mjs:5:3',
+    '✖ child two',
+    "  'test did not finish before its parent and was cancelled'",
+    '',
+    'test at hook.test.mjs:2:1',
+    '✖ suite with failing before (1.537871ms)',
+    '  Error: hook boom',
+    '',
+    'test at hook.test.mjs:8:11',
+    '✖ slow child (53.585143ms)',
+    "  'test did not finish before its parent and was cancelled'",
+    '',
+    'test at hook.test.mjs:7:1',
+    '✖ parent that times out (54.196835ms)',
+    "  'test timed out after 50ms'",
+  ].join('\n');
+  const tap = [
+    '    not ok 1 - child one',
+    '      ---',
+    "      location: '/w/hook.test.mjs:4:3'",
+    "      failureType: 'cancelledByParent'",
+    '      ...',
+    '    not ok 2 - child two',
+    '      ---',
+    "      location: '/w/hook.test.mjs:5:3'",
+    "      failureType: 'cancelledByParent'",
+    '      ...',
+    'not ok 1 - suite with failing before',
+    '  ---',
+    "  location: '/w/hook.test.mjs:2:1'",
+    "  failureType: 'hookFailed'",
+    '  ...',
+    '    not ok 1 - slow child',
+    '      ---',
+    "      location: '/w/hook.test.mjs:8:11'",
+    "      failureType: 'cancelledByParent'",
+    '      ...',
+    'not ok 2 - parent that times out',
+    '  ---',
+    "  location: '/w/hook.test.mjs:7:1'",
+    "  failureType: 'testTimeoutFailure'",
+    '  ...',
+    '# fail 0',
+    '# cancelled 4',
+  ].join('\n');
+  const five = ['child one', 'child two', 'suite with failing before', 'slow child', 'parent that times out'];
+  assert.deepEqual(parseFailingLeafTests(spec).map((leaf) => leaf.name), five);
+  assert.deepEqual(parseFailingLeafTests(tap).map((leaf) => leaf.name), five);
+  // A cancelled name holding ` # ` is not cut at it, and a timed name holding one is not either.
+  const hashes = ['ℹ fail 1', 'ℹ cancelled 1', '✖ failing tests:', 'test at h.test.mjs:1:1', '✖ cancelled # with a hash',
+    'test at h.test.mjs:2:1', '✖ timed # with a hash (2ms)'].join('\n');
+  assert.deepEqual(parseFailingLeafTests(hashes).map((leaf) => leaf.name), ['cancelled # with a hash', 'timed # with a hash']);
+});
+
 test('a green run returns an empty list, not null', () => {
   assert.deepEqual(parseFailingLeafTests(SPEC_TAIL.replace('ℹ fail 1', 'ℹ fail 0')), []);
   assert.deepEqual(parseFailingLeafTests(TAP_TAIL.replace('# fail 1', '# fail 0')), []);
@@ -646,7 +716,7 @@ test('an unreadable transcript is null, never an empty list', () => {
   // section: the same text without it occurs first in the tree, where a bare replace landed.
   const entry = 'test at a.test.js:8:29\n✖ deep fails (0.236128ms)';
   assert.equal(SPEC_FAILING.split(entry).length, 2, 'the edited entry must exist exactly once');
-  const malformed = SPEC_FAILING.replace(entry, 'test at a.test.js:8:29\n✖ deep fails, no duration');
+  const malformed = SPEC_FAILING.replace(entry, 'test at a.test.js:8:29\n  Error: an error line where the test line belongs');
   assert.equal(parseFailingLeafTests(malformed), null);
   // Leaves listed while the summary counts no failure and no cancellation.
   const contradicts = SPEC_FAILING.replace('ℹ fail 7', 'ℹ fail 0');

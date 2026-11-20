@@ -156,15 +156,21 @@ export function parsePassCount(output) {
 // one name failing in two files, a test past its timeout and a file that throws on load:
 //
 //   spec   The tree marks every failing node `✖`, parents included. The `✖ failing tests:`
-//          section after the summary lists LEAVES only, each as a column-0 `test at <file>:<l>:<c>`
-//          line, then `✖ <name> (<ms>ms)`, then the error indented. A failing TODO is listed too,
-//          as `⚠ <name> (<ms>ms) # TODO`, and counts toward neither `fail` nor `cancelled`.
+//          section after the summary lists every test that failed on its own account, each as a
+//          column-0 `test at <file>:<l>:<c>` line, then `✖ <name> (<ms>ms)`, then the error
+//          indented: the leaves, and also a suite whose hook failed and a parent that timed out.
+//          Only a parent whose sole failure is a failing subtest is left out. A child cancelled
+//          by its parent prints `✖ <name>` with no duration. A failing TODO is listed too, as
+//          `⚠ <name> (<ms>ms) # TODO`, and counts toward neither `fail` nor `cancelled`.
 //   TAP    Every failing node is `not ok N - <name>`, its YAML block two columns deeper carrying
-//          `failureType:` (`subtestsFailed` on a parent) and an absolute `location:`.
+//          `failureType:` and an absolute `location:`. Only `subtestsFailed` marks a parent left
+//          out; `hookFailed`, `testTimeoutFailure` and `cancelledByParent` are kept, so a hook
+//          or timeout fixture lists the same five tests in both reporters (measured, #1100 review).
 //   both   `fail N` counts a parent whose subtest failed but not a `describe`; a timed-out test
 //          counts under `cancelled`; a file that throws on load is one leaf named after the file.
 //
-// So the number of leaves is NOT the fail count (the fixture: 6 leaves, `fail 7`), and nothing
+// "Leaf" below means such a test. Their number is NOT the fail count (the fixture: 6, `fail 7`;
+// the hook fixture: 5, `fail 0` and `cancelled 4`), and nothing
 // below asserts that it is. What does hold is that a run with no failure and no cancellation
 // lists no leaf, and one with either lists at least one; a transcript breaking that is refused
 // as unreadable rather than read.
@@ -178,6 +184,10 @@ const SPEC_LOCATION = /^test at (.+):\d+:\d+$/;
 // The marker, not the suffix, says TODO: `{ todo: 'later' }` prints `⚠ <name> (<ms>ms) # later`,
 // with no `TODO` in it (measured on node v26.11.1).
 const SPEC_ENTRY = /^(✖|⚠) (.*) \(\d+(?:\.\d+)?ms\)(?: # .*)?$/;
+// A child cancelled by its parent prints no duration and no directive: the rest of the line is
+// its name. Tried only after SPEC_ENTRY, because a name may hold ` # ` itself, and an optional
+// duration in one pattern would read `✖ hash # x (2ms)` as the name `hash`.
+const SPEC_ENTRY_CANCELLED = /^(✖) (.+)$/;
 
 const TAP_POINT = /^( *)(not ok|ok) \d+(?: - (.*))?$/;
 
@@ -204,7 +214,8 @@ function readSpec(lines) {
     if (!inSection) continue;
     const location = line.match(SPEC_LOCATION);
     if (!location) continue;
-    const entry = (lines[index + 1] ?? '').match(SPEC_ENTRY);
+    const next = lines[index + 1] ?? '';
+    const entry = next.match(SPEC_ENTRY) ?? next.match(SPEC_ENTRY_CANCELLED);
     if (!entry) return { malformed: `a "test at" line is not followed by a test line: ${line}` };
     index++;
     if (entry[1] === '⚠') continue;
