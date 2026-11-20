@@ -24,7 +24,7 @@ export function getColor(domain) {
 }
 
 export function setTheme(name) {
-  if (PALETTES[name]) {
+  if (getThemeNames().includes(name)) {
     currentTheme = name;
   }
 }
