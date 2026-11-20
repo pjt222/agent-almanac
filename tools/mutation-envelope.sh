@@ -561,6 +561,17 @@ JSON
   else
     echo "  FAIL  rows-run-in-the-same-subdirectory" >&2; sed 's/^/        /' "${STUB:?}/err.log" "${STUB:?}/pwd.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
   fi
+  # Below a ceiling, a repository above it is not this run's: the scrub keeps the ceiling. The
+  # repository above has no commit, so finding it would end in a different refusal.
+  mkdir -p "${STUB:?}/outer/inner" && git -C "${STUB:?}/outer" init -q -b main >/dev/null 2>&1
+  (cd "${STUB:?}/outer/inner" && GIT_CEILING_DIRECTORIES="${STUB:?}/outer" bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${STUB:?}/logs") \
+    > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
+  if [ $? -eq 2 ] && grep -qF 'run it inside a git repository' "${STUB:?}/err.log"; then
+    echo "  ok    the-ceiling-survives-the-scrub"
+  else
+    echo "  FAIL  the-ceiling-survives-the-scrub" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
+
   # A peer's registration that reads prunable (its directory moved away) survives a default run:
   # the run removes its own worktree, and never prunes the repository's (#1100 review, B1).
   git -C "${REPO_ARMS:?}" worktree add -q --detach "${STUB:?}/peer" HEAD >/dev/null 2>&1 && mv "${STUB:?}/peer" "${STUB:?}/peer-moved"
@@ -691,7 +702,11 @@ fi
 # The repository is found from the current directory and nothing else. An inherited GIT_DIR or
 # GIT_WORK_TREE names the caller's repository, which is the wrong one for every git the checker
 # runs inside a fresh tree, and the fixture scrub (#930) showed a denylist of names misses some.
-unset "${!GIT_@}"
+# GIT_CEILING_DIRECTORIES stays: it only narrows that search, and dropping it let a run started
+# below a ceiling find a repository above it (#1100 review, bash-safety S1).
+for git_var in "${!GIT_@}"; do
+  [ "$git_var" = GIT_CEILING_DIRECTORIES ] || unset "$git_var"
+done
 [ -n "$TEST_CMD" ] || { echo "mutation-envelope: --test is required" >&2; exit 2; }
 [ -n "$PLAN" ] || { echo "mutation-envelope: --plan is required" >&2; exit 2; }
 [ -r "$PLAN" ] || { echo "mutation-envelope: cannot read plan: $PLAN" >&2; exit 2; }
