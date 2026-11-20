@@ -611,6 +611,17 @@ JSON
     echo "  FAIL  the-ceiling-survives-the-scrub" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
   fi
 
+  # The caller's post-checkout hook does not run in the fresh worktree.
+  mkdir -p "${STUB:?}/hooks"
+  printf '#!/bin/sh\ntouch "%s"\n' "${STUB:?}/hook-ran" > "${STUB:?}/hooks/post-checkout"
+  chmod +x "${STUB:?}/hooks/post-checkout"
+  git -C "${REPO_ARMS:?}" config core.hooksPath "${STUB:?}/hooks"
+  arm caller-hooks-not-run "$P/two-good.tsv" 0 2 ''
+  if [ ! -e "${STUB:?}/hook-ran" ]; then echo "  ok    post-checkout-hook-not-run"; else
+    echo "  FAIL  post-checkout-hook-not-run: the caller's hook ran for the fresh worktree" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
+  git -C "${REPO_ARMS:?}" config --unset core.hooksPath
+
   # A relative TMPDIR: the fresh tree is still found after the run changes directory, and removed.
   mkdir -p "${REPO_ARMS:?}/reltmp"
   (cd "${REPO_ARMS:?}" && TMPDIR=reltmp bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${STUB:?}/logs") \
@@ -907,7 +918,9 @@ case "$TREE_MODE" in
     trap 'exit 143' TERM
     trap 'exit 129' HUP
     if [ "$TREE_MODE" = worktree ]; then
-      git -C "$CALLER" worktree add -q --detach "$TREE" "$SHA" >/dev/null 2>&1 \
+      # No hooks: a caller's post-checkout hook would run in the fresh tree, unasked, and
+      # anything it wrote there would be measured as part of the commit.
+      git -C "$CALLER" -c core.hooksPath=/dev/null worktree add -q --detach "$TREE" "$SHA" >/dev/null 2>&1 \
         || { echo "mutation-envelope: git worktree add failed for ${SHA:0:12} at $TREE" >&2; exit 2; }
       ADMIN=$(git -C "$TREE" rev-parse --absolute-git-dir)
       MEASURED="$SHA in a detached worktree, $TREE (removed at the end)"
