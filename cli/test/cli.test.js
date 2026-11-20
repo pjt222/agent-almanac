@@ -1748,13 +1748,11 @@ describe('audit exit codes end to end (#439)', () => {
   // Absolute entry path: these run with cwd set to the fixture, so the relative
   // `node cli/index.js` that run() uses would not resolve.
   function auditStatusIn(dir) {
-    try {
-      execSync(`node ${cliEntry} audit --source ${ROOT}`,
-        { cwd: dir, encoding: 'utf8', timeout: 10000 });
-      return 0;
-    } catch (err) {
-      return err.status ?? 1;
-    }
+    // argv, no shell: a space or quote in the checkout path cannot split the command.
+    // stderr inherited as execSync forwarded it; a timeout or signal leaves status null -> 1.
+    const auditRun = spawnSync(process.execPath, [cliEntry, 'audit', '--source', ROOT],
+      { cwd: dir, encoding: 'utf8', timeout: 10000, stdio: ['pipe', 'pipe', 'inherit'] });
+    return auditRun.status ?? 1;
   }
 
   before(() => {
