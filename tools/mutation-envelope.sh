@@ -607,6 +607,15 @@ JSON
     echo "  FAIL  the-ceiling-survives-the-scrub" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
   fi
 
+  # A relative TMPDIR: the fresh tree is still found after the run changes directory, and removed.
+  mkdir -p "${REPO_ARMS:?}/reltmp"
+  (cd "${REPO_ARMS:?}" && TMPDIR=reltmp bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${STUB:?}/logs") \
+    > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
+  if [ $? -eq 0 ] && [ -z "$(ls -A "${REPO_ARMS:?}/reltmp")" ]; then echo "  ok    relative-tmpdir"; else
+    echo "  FAIL  relative-tmpdir" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
+  rm -rf -- "${REPO_ARMS:?}/reltmp"
+
   # A peer's registration that reads prunable (its directory moved away) survives a default run:
   # the run removes its own worktree, and never prunes the repository's (#1100 review, B1).
   git -C "${REPO_ARMS:?}" worktree add -q --detach "${STUB:?}/peer" HEAD >/dev/null 2>&1 && mv "${STUB:?}/peer" "${STUB:?}/peer-moved"
@@ -886,7 +895,8 @@ case "$TREE_MODE" in
       echo "Commit them, or measure them where they are with --tree in-place." >&2
       exit 2
     fi
-    PARENT=$(mktemp -d) || exit 2
+    # Absolute: mktemp honours a relative TMPDIR, and the run changes directory before cleanup.
+    PARENT=$(mktemp -d) && PARENT=$(cd "$PARENT" && pwd -P) || exit 2
     TREE="$PARENT/tree"
     trap cleanup EXIT
     trap 'exit 130' INT
