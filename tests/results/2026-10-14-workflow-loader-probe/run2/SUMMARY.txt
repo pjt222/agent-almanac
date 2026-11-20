@@ -8,6 +8,6 @@ ran (run-state record: status [log() lines]):
   A  completed [PROBE_BODY_A_91c2] (stream task status: task_updated=completed,task_notification=completed)
   B  no run-state record (stream task status: none)
   C  completed [PROBE_BODY_c1_5e1d] (stream task status: task_updated=completed,task_notification=completed)
-per-arm files: /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/101070ad-c454-4f29-b0df-f2453415c5c0/scratchpad/lanes/s3g/run2/arm-{A,B,C}.{cmdline.txt,stream.jsonl,stderr.txt,exitcode.txt,extracted.json,markers.txt,run-state.json}
+per-arm files: /tmp/claude-<uid>/-<project-slug>/<session-id>/scratchpad/lanes/s3g/run2/arm-{A,B,C}.{cmdline.txt,stream.jsonl,stderr.txt,exitcode.txt,extracted.json,markers.txt,run-state.json}
 C script copy (which file the loader dispatched): ~/.claude/projects/<scratch-slug>/77271bfb-ce47-49a0-8cf9-3e083ef99dd1/workflows/scripts/probe-arm-c-wf_6b5dadd4-898.js markers: PROBE_BODY_c1_5e1d 
-user scope listing: /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/101070ad-c454-4f29-b0df-f2453415c5c0/scratchpad/lanes/s3g/run2/user-scope-listing.txt
+user scope listing: /tmp/claude-<uid>/-<project-slug>/<session-id>/scratchpad/lanes/s3g/run2/user-scope-listing.txt
