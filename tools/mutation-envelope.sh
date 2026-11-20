@@ -266,6 +266,12 @@ if (process.env.STUB_LOCK && first) {
     fs.writeFileSync(path.join(admin, 'gitdir'), `${process.env.STUB_FOREIGN_ADMIN}\n`);
   }
 }
+// As the real checker's syntax probe does: a file written and removed under os.tmpdir().
+{
+  const probe = path.join(require('os').tmpdir(), `stub-probe-${process.pid}`);
+  fs.writeFileSync(probe, 'x');
+  fs.unlinkSync(probe);
+}
 // What a row sees from where it runs: the lent node_modules, and its working directory.
 if (process.env.STUB_SEE_LINK) fs.appendFileSync(here('seen.log'), fs.existsSync('node_modules/marker') ? 'LINK-VISIBLE\n' : 'LINK-ABSENT\n');
 if (process.env.STUB_PWD) fs.appendFileSync(here('pwd.log'), `${process.cwd()}\n`);
@@ -878,6 +884,13 @@ if [ "$REFUSED" -gt 0 ]; then
 fi
 [ "$PLANNED" -gt 0 ] || { echo "mutation-envelope: the plan holds no rows, only blank lines and comments: $PLAN" >&2; exit 2; }
 
+# A relative TMPDIR is made absolute before anything changes directory: the checker's syntax
+# probe writes under os.tmpdir(), which resolves against ITS cwd, inside the fresh tree, where
+# every row then failed with ENOENT and no verdict line (#1100 review round 2).
+if [ -n "${TMPDIR:-}" ]; then
+  TMPDIR=$(cd "$TMPDIR" 2>/dev/null && pwd -P) || { echo "mutation-envelope: TMPDIR does not exist" >&2; exit 2; }
+  export TMPDIR
+fi
 [ -n "$OUT" ] || OUT=$(mktemp -d)
 mkdir -p "${OUT:?}" || exit 2
 OUT=$(cd "${OUT:?}" && pwd -P) || exit 2 # absolute, before the run changes directory
