@@ -485,7 +485,8 @@ function reuseBaseline(file) {
   const wellFormed = record !== null && typeof record === 'object' && record.format === BASELINE_FORMAT
     && (record.passCount === null || Number.isInteger(record.passCount))
     && (record.leaves === null || Array.isArray(record.leaves))
-    && record.state !== null && typeof record.state === 'object';
+    && record.state !== null && typeof record.state === 'object'
+    && ['tracked', 'untracked', 'flagged'].every((key) => Array.isArray(record.state[key]));
   if (!wellFormed) fail(`--baseline ${file} is not a ${BASELINE_FORMAT} record; write one with --write-baseline`);
   const problems = [];
   if (record.test !== opts.test) {

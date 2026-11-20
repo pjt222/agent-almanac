@@ -329,6 +329,8 @@ test('a file that is not a baseline record is refused, and the record flags refu
     ['not json', /cannot be read as a baseline record/],
     [JSON.stringify({ format: 'something-else/1' }), /is not a mutation-check-baseline\/1 record/],
     [JSON.stringify({ format: 'mutation-check-baseline/1', passCount: 1, leaves: 'x', state: {} }), /is not a mutation-check-baseline\/1 record/],
+    // Its state without the three arrays: refused, not a TypeError (#1100 review, checker N4).
+    [JSON.stringify({ format: 'mutation-check-baseline/1', head: 'x', cwd: '.', test: 'true', passCount: null, leaves: [], state: {} }), /is not a mutation-check-baseline\/1 record/],
   ];
   cases.forEach(([content, expected], index) => {
     const record = join(out, `bad-${index}.json`);
