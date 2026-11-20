@@ -56,7 +56,7 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { extname, relative, resolve } from 'node:path';
-import { parseFailCount, parsePassCount, crashSuspicion } from './lib/mutation-verdict.js';
+import { parseFailCount, parsePassCount, crashSuspicion, parseFailingLeafTests, addedFailingTests } from './lib/mutation-verdict.js';
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
 /**
@@ -102,6 +102,11 @@ Options:
                             credited to the line you meant to test.
   --expect-killed-by <n>    Require exactly n failing tests. Errors if the count
                             cannot be parsed, rather than passing silently.
+  --names-out <file>        Write the failing leaf tests the mutant added over the baseline
+                            to <file> as JSON, when the mutant run produced a verdict: either
+                            {"readable":true,"added":[{"file","name"}]} or
+                            {"readable":false,"added":null,"unreadable":"baseline"|"mutant"}.
+                            The same names are printed after the mutant run either way.
   -h, --help                Show this message`;
 
 const BACKUP_SUFFIX = '.mutation-check.bak';
@@ -129,6 +134,17 @@ const MAX_OUTPUT_CHARS = 64 * 1024 * 1024;
 
 /** The test run in flight, so a signal handler can stop it: it no longer shares our group. */
 let activeChild = null;
+
+/**
+ * The test command's environment: this process's, without NODE_TEST_CONTEXT.
+ *
+ * node:test exports that variable to every test file's process, so a checker started from inside
+ * a test suite inherits it, and a `node --test` command it runs then reports to a parent runner
+ * that is not listening: measured on node v26.11.1, the value `child-v8` made a failing
+ * `node --test` exit 0 and print no summary (184 bytes, against exit 1 and the summary without
+ * it). Under it a baseline reads green, every mutant reads SURVIVED, and no name can be read.
+ */
+const TEST_ENV = Object.fromEntries(Object.entries(process.env).filter(([key]) => key !== 'NODE_TEST_CONTEXT'));
 
 /**
  * Kill the test's whole process group (#819).
@@ -159,7 +175,7 @@ async function runCommand(cmd, timeoutSeconds) {
   return new Promise((settle) => {
     // stdin is closed (#819): an inherited open pipe is what let a mutant's test wait forever
     // on a `read` in #816. Nothing in a mutation run should read the terminal.
-    const child = spawn(cmd, { shell: true, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(cmd, { shell: true, detached: true, stdio: ['ignore', 'pipe', 'pipe'], env: TEST_ENV });
     const startedAt = performance.now(); // monotonic: the wall clock steps on WSL
     activeChild = child;
     let output = '';
@@ -279,6 +295,7 @@ for (let i = 0; i < argv.length; i++) {
   else if (arg === '--to') opts.to = argv[++i];
   else if (arg === '--expect-killed-by') opts.expectKilledBy = Number(argv[++i]);
   else if (arg === '--timeout') opts.timeout = argv[++i] ?? ''; // a missing value is refused, not defaulted
+  else if (arg === '--names-out') opts.namesOut = argv[++i] ?? '';
   else fail(`Unknown argument: ${arg}\n\n${USAGE}`);
 }
 
@@ -330,6 +347,7 @@ if (opts.replace !== undefined) {
 // An empty <old> matches between every character: `--replace '::x'` rewrote the whole file
 // while reporting `0 site(s) mutated`.
 if (replaceFrom === '') fail('the mutation has an empty <old>, which matches between every character');
+if (opts.namesOut === '') fail('--names-out needs a file path');
 if (opts.expectKilledBy !== undefined && !Number.isInteger(opts.expectKilledBy)) {
   fail('--expect-killed-by needs an integer');
 }
@@ -465,6 +483,9 @@ if (baseline.status !== 0) {
   );
 }
 const baselinePassCount = parsePassCount(baseline.output);
+// Read once here, so the names the mutant ADDS are derived against the run that was judged green.
+// Null when the output carries no node:test summary: the names then cannot be read, and say so.
+const baselineLeaves = parseFailingLeafTests(baseline.output);
 console.log(`      green${baselinePassCount !== null ? ` (${baselinePassCount} passing)` : ''}.\n`);
 
 const original = readFileSync(absFile, 'utf8');
@@ -543,6 +564,33 @@ let failCount = null;
 // Kept outside the try so the crash check can read it after `restore()` — the verdict block
 // needs the mutant's OUTPUT, not just its exit status.
 let mutantOutput = '';
+// The names a mutant adds over the baseline, or why they could not be read. Set only when the
+// mutant run produced a verdict (killed or survived).
+let names = null;
+
+/**
+ * The names report. "None added" and "could not be read" are different findings and print
+ * differently: the first is a red run that failed no node:test test, the second a transcript this
+ * tool could not read. Every line is indented, so no name can stand at column 0, where the
+ * envelope reads verdict lines.
+ */
+function namesReport(mutantLeaves) {
+  const unreadable = baselineLeaves === null ? 'baseline' : mutantLeaves === null ? 'mutant' : null;
+  if (unreadable) {
+    return {
+      record: { readable: false, added: null, unreadable },
+      lines: [`      failing test names: could not be read from the ${unreadable} run's output (no node:test summary, or a failing-tests section that contradicts it)`],
+    };
+  }
+  const added = addedFailingTests(baselineLeaves, mutantLeaves);
+  return {
+    record: { readable: true, added, unreadable: null },
+    lines: [
+      `      failing tests added over the baseline: ${added.length}`,
+      ...added.map((leaf) => `        ✖ ${leaf.name}  (${leaf.file})`),
+    ],
+  };
+}
 
 try {
   console.log('[2/5] writing backup and applying mutation ...');
@@ -584,13 +632,20 @@ try {
       mutantOutput = mutant.output;
       failCount = parseFailCount(mutant.output);
       verdict = mutant.status !== 0 ? 'killed' : 'survived';
-      console.log(`      exit ${mutant.status}${failCount !== null ? `, ${failCount} failing` : ''}\n`);
+      names = namesReport(parseFailingLeafTests(mutant.output));
+      console.log(`      exit ${mutant.status}${failCount !== null ? `, ${failCount} failing` : ''}`);
+      console.log(`${names.lines.join('\n')}\n`);
     }
   }
 } finally {
   console.log('[5/5] restoring ...');
   restore();
   console.log('      restored.\n');
+}
+
+// After the restore, so a path that cannot be written costs the record and never the file.
+if (opts.namesOut !== undefined && names !== null) {
+  writeFileSync(opts.namesOut, `${JSON.stringify(names.record)}\n`);
 }
 
 // ── verdict ──────────────────────────────────────────────────────

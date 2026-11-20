@@ -105,6 +105,116 @@ test('--from/--to are refused half-given, beside another mutation flag, or with 
   assert.equal(git('status', '--porcelain'), '');
 });
 
+// ── failing test names (S1) ─────────────────────────────────────────────────
+
+/**
+ * A repository whose committed `notes.md` holds `alpha`, with an untracked node:test file that
+ * asserts it (and a second test that always passes). Untracked on purpose: only the mutated file
+ * must be tracked, and a test file the fixture never commits keeps `git status` honest about it.
+ */
+function makeNodeTestRepo(t) {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  writeFileSync(join(dir, 'check.test.mjs'), [
+    "import { test } from 'node:test';",
+    "import assert from 'node:assert/strict';",
+    "import { readFileSync } from 'node:fs';",
+    "test('notes hold alpha', () => { assert.match(readFileSync('notes.md', 'utf8'), /alpha/); });",
+    "test('an unrelated test passes', () => {});",
+    '',
+  ].join('\n'));
+  writeFileSync(join(dir, 'ok.test.mjs'), "import { test } from 'node:test';\ntest('always passes', () => {});\n");
+  return { dir, git };
+}
+
+/** A path outside the fixture repository, so the record cannot dirty it. */
+function namesPath(t) {
+  const dir = mkdtempSync(join(tmpdir(), 'mutation-check-names-'));
+  t.after(() => rmTree(dir));
+  return join(dir, 'names.json');
+}
+
+test('a node --test command run from inside node:test still reports its failures', (t) => {
+  // This suite runs under node:test, which exports NODE_TEST_CONTEXT, and runTool passes it on.
+  // A `node --test` that inherits it exits 0 with no summary, so without the checker removing it
+  // the baseline reads green and this mutant SURVIVES with no names.
+  assert.ok(process.env.NODE_TEST_CONTEXT, 'precondition: the variable reaches the checker, or this proves nothing');
+  const { dir, git } = makeNodeTestRepo(t);
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'node --test check.test.mjs', '--replace', 'alpha::beta']);
+  assert.match(r.out, /MUTANT KILLED by 1 failing test\(s\)/, r.out);
+  assert.match(r.out, /green \(2 passing\)/, 'the baseline summary was read');
+  assert.equal(git('status', '--porcelain', '--untracked-files=no'), '', 'restored');
+});
+
+test('the leaves a mutant adds are printed, indented, and written to --names-out', (t) => {
+  const { dir } = makeNodeTestRepo(t);
+  const out = namesPath(t);
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'node --test check.test.mjs', '--replace', 'alpha::beta', '--names-out', out]);
+  assert.match(r.out, /^ {6}failing tests added over the baseline: 1$/m, r.out);
+  assert.match(r.out, /^ {8}✖ notes hold alpha {2}\(check\.test\.mjs\)$/m, r.out);
+  assert.doesNotMatch(r.out, /an unrelated test passes {2}\(/, 'a passing test is not a name');
+  assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), {
+    readable: true, added: [{ file: 'check.test.mjs', name: 'notes hold alpha' }], unreadable: null,
+  });
+});
+
+test('a red run that fails no test says none were added; an output with no summary says it could not be read', (t) => {
+  const NONE = 'failing tests added over the baseline: 0';
+  const UNREAD = 'failing test names: could not be read';
+  const { dir } = makeNodeTestRepo(t);
+  // node:test passes (fail 0), then the grep goes red under the mutant: a kill that names no test.
+  const none = namesPath(t);
+  const r1 = runTool(dir, ['--file', 'notes.md', '--test', 'node --test ok.test.mjs && grep -q alpha notes.md', '--replace', 'alpha::beta', '--names-out', none]);
+  assert.match(r1.out, /MUTANT KILLED/, r1.out);
+  assert.ok(r1.out.includes(NONE) && !r1.out.includes(UNREAD), r1.out);
+  assert.deepEqual(JSON.parse(readFileSync(none, 'utf8')), { readable: true, added: [], unreadable: null });
+  // No node:test at all: nothing to read in either run.
+  const unread = namesPath(t);
+  const r2 = runTool(dir, ['--file', 'notes.md', '--test', 'grep -q alpha notes.md', '--replace', 'alpha::beta', '--names-out', unread]);
+  assert.match(r2.out, /MUTANT KILLED/, r2.out);
+  assert.ok(r2.out.includes(`${UNREAD} from the baseline run's output`) && !r2.out.includes(NONE), r2.out);
+  assert.deepEqual(JSON.parse(readFileSync(unread, 'utf8')), { readable: false, added: null, unreadable: 'baseline' });
+  // A survivor still writes its record: the mutant ran and added nothing.
+  const survived = namesPath(t);
+  const r3 = runTool(dir, ['--file', 'notes.md', '--test', 'node --test ok.test.mjs', '--replace', 'alpha::beta', '--names-out', survived]);
+  assert.match(r3.out, /MUTANT SURVIVED/, r3.out);
+  assert.deepEqual(JSON.parse(readFileSync(survived, 'utf8')), { readable: true, added: [], unreadable: null });
+});
+
+test('a test already failing in a baseline that exits 0 is not credited to the mutant', (t) => {
+  // "Green" is the exit status. `node --test …; grep …` exits with the grep's status, so a failing
+  // node:test leaf can sit in a green baseline; the mutant must be credited only with what it adds.
+  const { dir } = makeNodeTestRepo(t);
+  writeFileSync(join(dir, 'red.test.mjs'), "import { test } from 'node:test';\ntest('fails before any mutation', () => { throw new Error('already red'); });\n");
+  const out = namesPath(t);
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'node --test red.test.mjs; grep -q alpha notes.md', '--replace', 'alpha::beta', '--names-out', out]);
+  assert.match(r.out, /MUTANT KILLED/, r.out);
+  assert.match(r.out, /failing tests added over the baseline: 0/, r.out);
+  assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), { readable: true, added: [], unreadable: null });
+});
+
+test('--names-out with no path is refused before any baseline, and no record is written for a run with no verdict', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--names-out']);
+  assert.equal(r.status, 1, r.out);
+  assert.match(r.out, /--names-out needs a file path/, r.out);
+  assert.doesNotMatch(r.out, /\[1\/5\]/, 'refused before a baseline');
+  // A mutation that matches nothing ends before any mutant run: there is nothing to record.
+  const out = namesPath(t);
+  const r2 = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'absent::beta', '--names-out', out]);
+  assert.equal(r2.status, 1, r2.out);
+  assert.equal(existsSync(out), false, 'no record without a mutant verdict');
+  // A mutant that does not parse reaches the verdict block with no names: it must still print its
+  // own verdict, not die on the absent record after the restore.
+  writeFileSync(join(dir, 'gen.js'), 'module.exports.width = 4;\n', 'utf8'); // no package.json: CommonJS
+  git('add', 'gen.js');
+  git('commit', '-qm', 'js');
+  const r3 = runTool(dir, ['--file', 'gen.js', '--test', 'true', '--replace', 'width = 4;::width = ;', '--names-out', out]);
+  assert.equal(r3.status, 1, r3.out);
+  assert.match(r3.out, /INVALID MUTANT/, r3.out);
+  assert.equal(existsSync(out), false, 'no record for a mutant that never ran');
+  assert.equal(git('status', '--porcelain'), '');
+});
+
 // ── stdin (#819 AC2) ────────────────────────────────────────────────────────
 
 test('the test command gets no stdin: a command that reads it sees EOF instead of waiting', (t) => {

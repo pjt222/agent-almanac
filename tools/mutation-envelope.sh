@@ -57,8 +57,17 @@
 #                 not pass those flags (#957)
 #   --out DIR     where the per-row logs land (default: a fresh mktemp -d, printed at the end)
 #
-# Exit 0 when every row is `MUTANT KILLED`. Exit 1 when any row survives, is SUSPECT, INVALID or
-# INCONCLUSIVE — read that row's log before quoting anything. Exit 2 when the envelope itself
+# NAMES. Under each row the table prints the failing leaf tests that row's mutant added over the
+# baseline, as `+ <name>` lines, read by the checker from what the --test command already prints
+# (node:test, either reporter; no reporter flag is added, so the command measured is the command
+# named). "names: none added over the baseline" (a red run that failed no node:test test) and
+# "names: could not be read (<run>)" (no node:test summary to read) are different findings. The
+# same names land in <out>/names.tsv, one row per mutant: id, verdict, added count (or
+# `unreadable:<run>`, or `-` for a row with no mutant verdict), names joined by ` | `.
+#
+# Exit 0 when every row is `MUTANT KILLED`. Exit 1 when any row survives, is SUSPECT, INVALID,
+# HUNG or INCONCLUSIVE, or printed no verdict line at column 0 — read that row's log before
+# quoting anything. Names never change the exit code. Exit 2 when the envelope itself
 # could not run: no plan, an unreadable plan, a plan with no rows, or any row the plan check
 # refuses (a missing field, no `::`, or `::` more than once). Each of those is reached before
 # the first mutant is measured. The one exit 2 that comes after measuring is a run that measured
@@ -165,6 +174,14 @@ fs.appendFileSync(calls, argv[argv.indexOf('--replace') + 1] + '\n');
 if (first && process.env.STUB_APPEND_TO) fs.appendFileSync(process.env.STUB_APPEND_TO, 'late\tsrc.js\ta::b::c\n');
 // On its first call, read stdin to the end, as a checker that prompted for input would.
 if (first && process.env.STUB_READ_STDIN) fs.readFileSync(0);
+// The names record the envelope asked for, when the arm supplies one.
+const namesOut = argv.includes('--names-out') ? argv[argv.indexOf('--names-out') + 1] : null;
+if (namesOut && process.env.STUB_NAMES) fs.writeFileSync(namesOut, process.env.STUB_NAMES);
+// A checker that dies after printing a name holding a verdict word, before any verdict line.
+if (process.env.STUB_NO_VERDICT) {
+  console.log('        ✖ reports MUTANT KILLED in its name  (x.test.js)');
+  process.exit(1);
+}
 console.log('MUTANT KILLED by 1 failing test(s)');
 JS
   ARMS_FAILED=0
@@ -247,6 +264,38 @@ JS
   arm refuse-plan-drained-by-checker "$P/three-good.tsv" 2 1 "measured 1 of 3 planned row(s)"
   unset STUB_READ_STDIN
 
+  # stdout must carry <text>, after the last arm: for what the table prints rather than refuses.
+  printed() {
+    if grep -qF -- "$2" "${STUB:?}/$3"; then
+      echo "  ok    $1"
+    else
+      echo "  FAIL  $1: ${3} does not carry: $2" >&2
+      sed 's/^/        /' "${STUB:?}/$3" >&2
+      ARMS_FAILED=$((ARMS_FAILED + 1))
+    fi
+  }
+  { row named src.js 'x::y'; echo; } > "$P/one-good.tsv"
+  # A name holding a verdict word, printed by a checker that then died with no verdict line, is
+  # not a verdict: the row is not a clean kill, and it is counted once.
+  export STUB_NO_VERDICT=1
+  arm verdict-line-is-anchored "$P/one-good.tsv" 1 1 ''
+  printed verdict-line-is-anchored-row "named                    <no verdict line" out.log
+  printed verdict-line-counted-once "1 row(s), 1 not a clean kill" out.log
+  unset STUB_NO_VERDICT
+  # The names a row added are printed under it and recorded in names.tsv; an unreadable record
+  # says so instead.
+  export STUB_NAMES='{"readable":true,"added":[{"file":"s.test.js","name":"a named leaf"},{"file":"s.test.js","name":"a second leaf"}],"unreadable":null}'
+  arm names-under-row "$P/one-good.tsv" 0 1 ''
+  printed names-under-row-printed "   + a second leaf" out.log
+  printed names-in-names-tsv "$(printf 'named\tMUTANT KILLED by 1 failing test(s)\t2\ta named leaf | a second leaf')" logs/names.tsv
+  export STUB_NAMES='{"readable":false,"added":null,"unreadable":"mutant"}'
+  arm names-unreadable "$P/one-good.tsv" 0 1 ''
+  printed names-unreadable-printed "names: could not be read (mutant)" out.log
+  export STUB_NAMES='{"readable":true,"added":[],"unreadable":null}'
+  arm names-none-added "$P/one-good.tsv" 0 1 ''
+  printed names-none-added-printed "names: none added over the baseline" out.log
+  unset STUB_NAMES
+
   if [ "$ARMS_FAILED" -ne 0 ]; then
     echo "mutation-envelope --verify: FAILED — $ARMS_FAILED plan-check arm(s) above" >&2
     exit 1
@@ -297,13 +346,18 @@ JSON
   # why the fixture test now asserts `covered(10)`.
   KILLED=$(grep -c '^kill .*MUTANT KILLED' "${DIR:?}/run.log" || true)
   SURVIVED=$(grep -c '^survive .*MUTANT SURVIVED' "${DIR:?}/run.log" || true)
+  # Through the real checker: the kill row names the one test that killed it, read from what the
+  # --test command printed, and the survivor added none.
+  NAMED=$(grep -c -x -F "$(printf 'kill\tMUTANT KILLED by 1 failing test(s) — the check can fail.\t1\tcovered is asserted')" "${DIR:?}/logs/names.tsv" || true)
+  UNNAMED=$(grep -c -x -F "$(printf 'survive\tMUTANT SURVIVED — this line is not covered.\t0\t')" "${DIR:?}/logs/names.tsv" || true)
 
-  printf 'exit=%s killed-rows=%s survived-rows=%s\n' "$STATUS" "$KILLED" "$SURVIVED"
-  if [ "$STATUS" -eq 1 ] && [ "$KILLED" -eq 1 ] && [ "$SURVIVED" -eq 1 ]; then
-    echo "mutation-envelope --verify: OK (every plan-check arm holds; under the --test command, the covered row is reported killed, the uncovered row survives, and the survivor fails the run)"
+  printf 'exit=%s killed-rows=%s survived-rows=%s named-kill=%s unnamed-survivor=%s\n' "$STATUS" "$KILLED" "$SURVIVED" "$NAMED" "$UNNAMED"
+  if [ "$STATUS" -eq 1 ] && [ "$KILLED" -eq 1 ] && [ "$SURVIVED" -eq 1 ] && [ "$NAMED" -eq 1 ] && [ "$UNNAMED" -eq 1 ]; then
+    echo "mutation-envelope --verify: OK (every plan-check arm holds; under the --test command, the covered row is reported killed and names its test, the uncovered row survives naming none, and the survivor fails the run)"
     exit 0
   fi
-  echo "mutation-envelope --verify: FAILED — want exit 1, the kill row killed and the survive row survived" >&2
+  echo "mutation-envelope --verify: FAILED — want exit 1, the kill row killed naming 'covered is asserted', and the survive row survived naming none" >&2
+  sed -n '1,20p' "${DIR:?}/logs/names.tsv" >&2
   sed -n '1,40p' "${DIR:?}/run.log" >&2
   exit 1
 fi
@@ -350,23 +404,59 @@ mkdir -p "${OUT:?}" || exit 2
 echo "mutation-envelope: every row measured under: $TEST_CMD"
 echo
 
+# The checker prints its verdict at column 0 and indents every other line, test names included
+# (S1). The match is anchored, so a name holding a verdict word cannot become a row's verdict:
+# unanchored, `tail -1` took the last matching line anywhere in the log, and a checker that died
+# after printing a name such as "reports MUTANT KILLED" left that name as the row's verdict.
+VERDICT_LINE='^(MUTANT KILLED|MUTANT SURVIVED|SUSPECT KILL|INVALID MUTANT|INCONCLUSIVE|HUNG|ERROR:)'
+
+# The checker writes each row's names record as JSON (--names-out). This reads one back: the
+# added count (or `unreadable:<run>`, or `-` when the row produced no mutant verdict), the names
+# joined by ` | `, then one name per line. stdin is closed: inside the run loop it would be the
+# plan's here-string, and a reader of stdin drains the rows not yet measured.
+NAMES_JS='
+const fs = require("fs");
+const file = process.argv[1];
+if (!fs.existsSync(file)) { console.log("-"); process.exit(0); }
+let record;
+try { record = JSON.parse(fs.readFileSync(file, "utf8")); } catch { console.log("unreadable:record"); process.exit(0); }
+if (!record.readable) { console.log(`unreadable:${record.unreadable}`); process.exit(0); }
+const names = record.added.map((leaf) => String(leaf.name).replace(/[\t\r\n]+/g, " "));
+console.log(String(names.length));
+console.log(names.join(" | "));
+for (const name of names) console.log(name);
+'
+NAMES_TSV="${OUT:?}/names.tsv"
+printf '# id\tverdict\tadded\tnames: the failing leaf tests each mutant added over the baseline, under: %s\n' "$TEST_CMD" > "$NAMES_TSV"
+
 ROWS=0
 BAD=0
 while IFS=$'\t' read -r id file mutation; do
   case "${id:-}" in ''|'#'*) continue ;; esac
   ROWS=$((ROWS + 1))
-  node "$CHECKER" --file "$file" --replace "$mutation" --test "$TEST_CMD" > "${OUT:?}/$id.log" 2>&1
-  verdict=$(grep -E 'MUTANT KILLED|MUTANT SURVIVED|SUSPECT KILL|INVALID|INCONCLUSIVE|^ERROR' "${OUT:?}/$id.log" | tail -1)
+  names_json="${OUT:?}/$id.names.json"
+  rm -f -- "$names_json"
+  node "$CHECKER" --file "$file" --replace "$mutation" --test "$TEST_CMD" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
+  verdict=$(grep -E "$VERDICT_LINE" "${OUT:?}/$id.log" | tail -1)
+  # Counted once per row. A row with no verdict line used to be counted twice, here and again by
+  # a second check below the printf, so one such row read "1 row(s), 2 not a clean kill".
   case "$verdict" in
-    *'MUTANT KILLED'*) : ;;
+    'MUTANT KILLED'*) : ;;
     *) BAD=$((BAD + 1)) ;;
   esac
   printf '%-24s %s\n' "$id" "${verdict:-<no verdict line — read ${OUT:?}/$id.log>}"
-  [ -n "$verdict" ] || BAD=$((BAD + 1))
+  summary=$(node -e "$NAMES_JS" "$names_json" < /dev/null)
+  added=$(sed -n 1p <<< "$summary")
+  case "$added" in
+    -|0) [ "$added" = 0 ] && [ "${verdict#MUTANT SURVIVED}" = "$verdict" ] && printf '%-24s   names: none added over the baseline\n' '' ;;
+    unreadable:*) printf '%-24s   names: could not be read (%s)\n' '' "${added#unreadable:}" ;;
+    *) sed -n '3,$p' <<< "$summary" | while IFS= read -r name; do printf '%-24s   + %s\n' '' "$name"; done ;;
+  esac
+  printf '%s\t%s\t%s\t%s\n' "$id" "${verdict:-<no verdict line>}" "$added" "$(sed -n 2p <<< "$summary")" >> "$NAMES_TSV"
 done <<< "$PLAN_TEXT"
 
 echo
-echo "mutation-envelope: $ROWS row(s), $BAD not a clean kill; logs in ${OUT:?}"
+echo "mutation-envelope: $ROWS row(s), $BAD not a clean kill; logs and names.tsv in ${OUT:?}"
 # Both loops read one string, but the run loop's here-string is also the checker's stdin, so a
 # checker that reads stdin ends the run early, and a short table would otherwise exit 0. This
 # detects a run that read a different plan after the fact; it does not save the time spent.
