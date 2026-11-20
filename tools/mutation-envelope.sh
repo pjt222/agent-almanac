@@ -568,6 +568,16 @@ JSON
   arm archive-two-rows "$P/two-good.tsv" 0 2 ''
   printed archive-names-the-commit "measuring $ARMS_HEAD as a one-commit repository" out.log
   gone archive-removed
+  # Archive mode commits under a throwaway HOME: a caller whose git config demands signing by a
+  # program that always fails must still get its archive (#1100 review, bash-safety N2).
+  mkdir -p "${STUB:?}/signing-home"
+  printf '[commit]\n\tgpgsign = true\n[gpg]\n\tprogram = false\n' > "${STUB:?}/signing-home/.gitconfig"
+  rm -f "${STUB:?}/calls.log"
+  (cd "${REPO_ARMS:?}" && HOME="${STUB:?}/signing-home" XDG_CONFIG_HOME="${STUB:?}/signing-home/.config" bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${STUB:?}/logs" --tree archive) \
+    > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
+  if [ $? -eq 0 ] && [ "$(wc -l < "${STUB:?}/calls.log" 2>/dev/null)" = 2 ]; then echo "  ok    archive-ignores-the-callers-git-config"; else
+    echo "  FAIL  archive-ignores-the-callers-git-config" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
   ARM_ARGS=(--tree in-place)
   arm in-place-two-rows "$P/two-good.tsv" 0 2 ''
   printed in-place-names-the-tree "measuring the working tree of" out.log
