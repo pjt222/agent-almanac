@@ -339,6 +339,9 @@ JS
   { row good src.js 'x::y'; echo; row last-bad src.js 'a::b::c'; } > "$P/no-newline-bad.tsv"
   arm check-last-row-without-newline "$P/no-newline-bad.tsv" 2 0 "row 'last-bad'"
 
+  { row ../escapes src.js 'x::y'; echo; } > "$P/slash-id.tsv"
+  arm refuse-slash-in-id "$P/slash-id.tsv" 2 0 "row '../escapes': its id holds '/'"
+
   printf '# a comment\n\n' > "$P/empty.tsv"
   arm refuse-empty-plan "$P/empty.tsv" 2 0 "the plan holds no rows"
 
@@ -809,6 +812,9 @@ else
     case "${id:-}" in ''|'#'*) continue ;; esac
     PLANNED=$((PLANNED + 1))
     problem=$(row_problem "${file:-}" "${mutation:-}")
+    # The id names the row's log and names files under --out, so a `/` in it reaches outside
+    # (a JSON id is refused for the same reason in PLAN_JS).
+    case "$id" in */*) problem="its id holds '/', and the id names the row's log file under --out" ;; esac
     if [ -n "$problem" ]; then
       echo "REFUSED: row '$id': $problem" >&2
       REFUSED=$((REFUSED + 1))
