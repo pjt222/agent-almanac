@@ -165,6 +165,11 @@ AT=""
 VERIFY=0
 
 while [ $# -gt 0 ]; do
+  # A value flag given last has no value, and `shift 2` then fails without shifting: the loop
+  # spun forever on a trailing --tree, and on a trailing --test, --plan or --out before S1.
+  case "$1" in
+    --test|--plan|--out|--tree|--at) [ $# -ge 2 ] || { echo "mutation-envelope: $1 needs a value" >&2; exit 2; } ;;
+  esac
   case "$1" in
     --test) TEST_CMD=${2:-}; shift 2 ;;
     --plan) PLAN=${2:-}; shift 2 ;;
@@ -491,6 +496,16 @@ JSON
   else
     echo "  FAIL  outside-a-repository-refused" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
   fi
+
+  # A value flag given last is refused at once, not looped on (bounded, so a regression fails
+  # this arm instead of hanging the self-test).
+  for flag in --tree --test --plan --out --at; do
+    (cd "${REPO_ARMS:?}" && timeout 20 bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" "$flag") \
+      > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
+    if [ $? -eq 2 ] && grep -qF -- "$flag needs a value" "${STUB:?}/err.log"; then echo "  ok    trailing-$flag-refused"; else
+      echo "  FAIL  trailing-$flag-refused" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+    fi
+  done
 
   # ── the measured tree (S1) ──
   ARMS_HEAD=$(git -C "${REPO_ARMS:?}" rev-parse HEAD)
