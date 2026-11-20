@@ -558,6 +558,10 @@ JSON
   printf 'new\n' > "${REPO_ARMS:?}/new.test.js"
   arm untracked-file-refused "$P/two-good.tsv" 2 0 '?? new.test.js'
   rm -f "${REPO_ARMS:?}/new.test.js"
+  # A regular untracked FILE named node_modules is not exempt either: only a symlink is.
+  printf 'not a link\n' > "${REPO_ARMS:?}/node_modules"
+  arm untracked-file-named-node-modules-refused "$P/two-good.tsv" 2 0 '?? node_modules'
+  rm -f -- "${REPO_ARMS:?}/node_modules"
   # A real, untracked node_modules directory is not one of the exempt symlinks.
   mkdir -p "${REPO_ARMS:?}/node_modules" && printf 'x\n' > "${REPO_ARMS:?}/node_modules/marker"
   arm untracked-directory-refused "$P/two-good.tsv" 2 0 '?? node_modules/marker'
