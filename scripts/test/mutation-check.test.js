@@ -172,7 +172,10 @@ test('a red run that fails no test says none were added; an output with no summa
   const r2 = runTool(dir, ['--file', 'notes.md', '--test', 'grep -q alpha notes.md', '--replace', 'alpha::beta', '--names-out', unread]);
   assert.match(r2.out, /MUTANT KILLED/, r2.out);
   assert.ok(r2.out.includes(`${UNREAD} from the baseline run's output`) && !r2.out.includes(NONE), r2.out);
-  assert.deepEqual(JSON.parse(readFileSync(unread, 'utf8')), { readable: false, added: null, unreadable: 'baseline' });
+  assert.deepEqual(JSON.parse(readFileSync(unread, 'utf8')), {
+    readable: false, added: null, unreadable: 'baseline', reason: 'it holds no node:test summary line (`ℹ fail N` or `# fail N`)',
+  });
+  assert.ok(r2.out.includes("could not be read from the baseline run's output: it holds no node:test summary line"), r2.out);
   // A survivor still writes its record: the mutant ran and added nothing.
   const survived = namesPath(t);
   const r3 = runTool(dir, ['--file', 'notes.md', '--test', 'node --test ok.test.mjs', '--replace', 'alpha::beta', '--names-out', survived]);

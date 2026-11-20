@@ -224,7 +224,7 @@ function readSpec(lines) {
       const ends = after === undefined || after === '' || /^\s/.test(after) || SPEC_LOCATION.test(after);
       entry = ends ? next.match(SPEC_ENTRY_CANCELLED) : null;
     }
-    if (!entry) return { malformed: `a "test at" line is not followed by a test line: ${line}` };
+    if (!entry) return { malformed: `an entry it cannot read in the failing-tests section: "${line}" then "${next}"` };
     index++;
     if (entry[1] === '⚠') continue;
     leaves.push({ file: location[1], name: entry[2] });
@@ -290,6 +290,19 @@ function readTap(lines) {
  * @returns {{ file: string, name: string }[] | null}
  */
 export function parseFailingLeafTests(output) {
+  return readLeaves(output).leaves;
+}
+
+/**
+ * Why parseFailingLeafTests returns null for this output, or null when it does not: a caller that
+ * prints one fixed guess ("no summary, or a contradiction") prints a false one whenever the real
+ * cause is the other, or a malformed entry (#1100 review round 2).
+ */
+export function unreadableReason(output) {
+  return readLeaves(output).reason;
+}
+
+function readLeaves(output) {
   const lines = stripAnsi(output).split('\n').map((line) => line.replace(/\r$/, ''));
   let specSummaries = 0;
   let tapSummaries = 0;
@@ -303,17 +316,20 @@ export function parseFailingLeafTests(output) {
     }
     failures += Number(summary[2]);
   }
-  if (specSummaries + tapSummaries === 0) return null;
+  if (specSummaries + tapSummaries === 0) return { leaves: null, reason: 'it holds no node:test summary line (`ℹ fail N` or `# fail N`)' };
   // Each reader runs only where its reporter's summary appears: a test that prints `not ok 3 - x`
   // to stdout lands it at column 0 of a spec transcript, where the TAP reader took it for a leaf
-  // (#1100 review, checker N2). A test can still print a spec-shaped `test at` pair at column 0;
-  // no reader can tell that from the runner's own lines, and the consistency rule below catches
+  // (#1100 review, checker N2). A test can still print a spec-shaped `test at` pair at column 0,
+  // or a TAP `# fail 0` beside a `not ok` line, which turns the TAP reader back on (round 2); no
+  // reader can tell those from the runner's own lines, and the consistency rule below catches
   // only the forgeries that contradict the summary.
   const spec = specSummaries > 0 ? readSpec(lines) : { leaves: [] };
-  if (spec.malformed) return null;
+  if (spec.malformed) return { leaves: null, reason: spec.malformed };
   const leaves = [...spec.leaves, ...(tapSummaries > 0 ? readTap(lines).leaves : [])];
-  if ((leaves.length === 0) !== (failures === 0)) return null;
-  return leaves;
+  if ((leaves.length === 0) !== (failures === 0)) {
+    return { leaves: null, reason: `it lists ${leaves.length} failing test(s) against a summary of ${failures} failed or cancelled` };
+  }
+  return { leaves, reason: null };
 }
 
 /**

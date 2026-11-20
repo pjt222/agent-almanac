@@ -56,7 +56,7 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readFileSync, realpathSync, unlinkSync, writeFileSync } from 'node:fs';
 import { basename, dirname, extname, isAbsolute, relative, resolve } from 'node:path';
-import { parseFailCount, parsePassCount, crashSuspicion, parseFailingLeafTests, addedFailingTests } from './lib/mutation-verdict.js';
+import { parseFailCount, parsePassCount, crashSuspicion, parseFailingLeafTests, addedFailingTests, unreadableReason } from './lib/mutation-verdict.js';
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
 /**
@@ -116,7 +116,8 @@ Options:
   --names-out <file>        Write the failing leaf tests the mutant added over the baseline
                             to <file> as JSON, when the mutant run produced a verdict: either
                             {"readable":true,"added":[{"file","name"}]} or
-                            {"readable":false,"added":null,"unreadable":"baseline"|"mutant"}.
+                            {"readable":false,"added":null,"unreadable":"baseline"|"mutant",
+                            "reason":"<why it could not be read>"}.
                             The same names are printed after the mutant run either way.
   -h, --help                Show this message`;
 
@@ -472,7 +473,7 @@ async function measureBaseline() {
   // Null when the output carries no node:test summary: the names then cannot be read, and say so.
   const leaves = parseFailingLeafTests(baseline.output);
   console.log(`      green${passCount !== null ? ` (${passCount} passing)` : ''}.\n`);
-  return { passCount, leaves };
+  return { passCount, leaves, leavesReason: unreadableReason(baseline.output) };
 }
 
 /** A record `--baseline` may use here, or a refusal naming every condition that fails. */
@@ -535,13 +536,13 @@ if (BASELINE_ONLY) {
   console.log(`  test:     ${opts.test}`);
   console.log(`  timeout:  ${timeoutSeconds} s\n`);
   console.log('[1/1] baseline (expect green) ...');
-  const { passCount, leaves } = await measureBaseline();
+  const { passCount, leaves, leavesReason } = await measureBaseline();
   // Read again after the run: a test that writes into the tree leaves a state no row will find,
   // and that is better refused here than discovered as a refusal on every row.
   if (JSON.stringify(treeState()) !== JSON.stringify(state)) {
     fail('the baseline run changed the tree it ran in (a new untracked or modified file), so no row\nwould find the tree this record describes. Make the --test command write outside the tree.');
   }
-  writeFileSync(opts.writeBaseline, `${JSON.stringify({ format: BASELINE_FORMAT, head, cwd: runDirectory(), test: opts.test, state, passCount, leaves })}\n`);
+  writeFileSync(opts.writeBaseline, `${JSON.stringify({ format: BASELINE_FORMAT, head, cwd: runDirectory(), test: opts.test, state, passCount, leaves, leavesReason })}\n`);
   console.log(`baseline recorded in ${opts.writeBaseline}`);
   process.exit(0);
 }
@@ -643,15 +644,17 @@ console.log(`  timeout:  ${timeoutSeconds} s\n`);
 
 let baselinePassCount;
 let baselineLeaves;
+let baselineLeavesReason;
 if (opts.baseline !== undefined) {
   console.log(`[1/5] baseline: reusing the record in ${opts.baseline} ...`);
   const record = reuseBaseline(opts.baseline);
   baselinePassCount = record.passCount;
   baselineLeaves = record.leaves;
+  baselineLeavesReason = record.leavesReason ?? 'it could not be read when the record was made';
   console.log(`      green when recorded${baselinePassCount !== null ? ` (${baselinePassCount} passing)` : ''}; HEAD, tree status and --test match it.\n`);
 } else {
   console.log('[1/5] baseline (expect green) ...');
-  ({ passCount: baselinePassCount, leaves: baselineLeaves } = await measureBaseline());
+  ({ passCount: baselinePassCount, leaves: baselineLeaves, leavesReason: baselineLeavesReason } = await measureBaseline());
 }
 
 const original = readFileSync(absFile, 'utf8');
@@ -740,12 +743,14 @@ let names = null;
  * tool could not read. Every line is indented, so no name can stand at column 0, where the
  * envelope reads verdict lines.
  */
-function namesReport(mutantLeaves) {
+function namesReport(mutantOutput) {
+  const mutantLeaves = parseFailingLeafTests(mutantOutput);
   const unreadable = baselineLeaves === null ? 'baseline' : mutantLeaves === null ? 'mutant' : null;
   if (unreadable) {
+    const reason = unreadable === 'baseline' ? baselineLeavesReason : unreadableReason(mutantOutput);
     return {
-      record: { readable: false, added: null, unreadable },
-      lines: [`      failing test names: could not be read from the ${unreadable} run's output (no node:test summary, or a failing-tests section that contradicts it)`],
+      record: { readable: false, added: null, unreadable, reason },
+      lines: [`      failing test names: could not be read from the ${unreadable} run's output: ${reason}`],
     };
   }
   const added = addedFailingTests(baselineLeaves, mutantLeaves);
@@ -798,7 +803,7 @@ try {
       mutantOutput = mutant.output;
       failCount = parseFailCount(mutant.output);
       verdict = mutant.status !== 0 ? 'killed' : 'survived';
-      names = namesReport(parseFailingLeafTests(mutant.output));
+      names = namesReport(mutant.output);
       console.log(`      exit ${mutant.status}${failCount !== null ? `, ${failCount} failing` : ''}`);
       console.log(`${names.lines.join('\n')}\n`);
     }

@@ -1074,7 +1074,7 @@ const file = process.argv[1];
 if (!fs.existsSync(file)) { console.log("-"); process.exit(0); }
 let record;
 try { record = JSON.parse(fs.readFileSync(file, "utf8")); } catch { console.log("unreadable:record"); process.exit(0); }
-if (!record.readable) { console.log(`unreadable:${record.unreadable}`); process.exit(0); }
+if (!record.readable) { console.log(`unreadable:${record.unreadable}`); console.log(String(record.reason ?? "").replace(/[\t\r\n]+/g, " ")); process.exit(0); }
 const names = record.added.map((leaf) => String(leaf.name).replace(/[\t\r\n]+/g, " "));
 console.log(String(names.length));
 console.log(names.join(" | "));
@@ -1089,7 +1089,7 @@ BAD=0
 # One row, either form: <id> <file> <the checker's mutation flags…>. It runs in the loop's shell,
 # so ROWS and BAD count, and its stdin is the loop's, as the checker's always was.
 run_row() {
-  local id=$1 file=$2 names_json verdict summary added before after
+  local id=$1 file=$2 names_json verdict summary added before after reason
   shift 2
   ROWS=$((ROWS + 1))
   names_json="${OUT:?}/$id.names.json"
@@ -1119,7 +1119,7 @@ run_row() {
   added=$(sed -n 1p <<< "$summary")
   case "$added" in
     -|0) [ "$added" = 0 ] && [ "${verdict#MUTANT SURVIVED}" = "$verdict" ] && printf '%-24s   names: none added over the baseline\n' '' ;;
-    unreadable:*) printf '%-24s   names: could not be read (%s)\n' '' "${added#unreadable:}" ;;
+    unreadable:*) reason=$(sed -n 2p <<< "$summary"); printf '%-24s   names: could not be read (%s%s)\n' '' "${added#unreadable:}" "${reason:+: $reason}" ;;
     *) sed -n '3,$p' <<< "$summary" | while IFS= read -r name; do printf '%-24s   + %s\n' '' "$name"; done ;;
   esac
   printf '%s\t%s\t%s\t%s\n' "$id" "${verdict:-<no verdict line>}" "$added" "$(sed -n 2p <<< "$summary")" >> "$NAMES_TSV"

@@ -23,6 +23,7 @@ import {
   parsePassCount,
   parseFailingLeafTests,
   addedFailingTests,
+  unreadableReason,
   BROAD_KILL_SHARE,
   MIN_BASELINE_FOR_SHARE,
   CRASH_SIGNATURES,
@@ -730,6 +731,13 @@ test('a TODO child cancelled by its parent is read and skipped; a name split by 
   assert.deepEqual(parseFailingLeafTests(shapes.join('\n')).map((leaf) => leaf.name), ['plain child', 'suite whose hook fails']);
   const split = [...shapes, 'test at shapes.test.mjs:7:1', '✖ failing name with', 'newline (0.37929ms)', '  Error: x'];
   assert.equal(parseFailingLeafTests(split.join('\n')), null, 'a name cut at its newline would be a wrong name, read as a cancelled child');
+});
+
+test('an unreadable transcript says which of the three reasons applies, and a readable one gives none', () => {
+  assert.match(unreadableReason('npm error code 1'), /no node:test summary line/);
+  assert.match(unreadableReason(SPEC_FAILING.replace('test at a.test.js:8:29\n✖ deep fails (0.236128ms)', 'test at a.test.js:8:29\n  Error: where the test line belongs')), /an entry it cannot read in the failing-tests section/);
+  assert.match(unreadableReason(SPEC_FAILING.replace('ℹ fail 7', 'ℹ fail 0')), /lists 6 failing test\(s\) against a summary of 0 failed or cancelled/);
+  assert.equal(unreadableReason(SPEC_FAILING), null);
 });
 
 test('a green run returns an empty list, not null', () => {
