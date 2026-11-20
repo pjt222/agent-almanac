@@ -54,7 +54,7 @@
  * locally but GNU grep in CI — the two failure modes this tool exists to catch.
  */
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, lstatSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, realpathSync, unlinkSync, writeFileSync } from 'node:fs';
 import { extname, relative, resolve } from 'node:path';
 import { parseFailCount, parsePassCount, crashSuspicion, parseFailingLeafTests, addedFailingTests } from './lib/mutation-verdict.js';
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
@@ -109,7 +109,9 @@ Options:
                             --timeout only. Usage: node scripts/mutation-check.js
                             --test <cmd> --write-baseline <file>
   --baseline <file>         Reuse such a record instead of running the baseline: refused unless
-                            HEAD, the tree's status and the --test string all match it.
+                            HEAD, the directory it was recorded from, the tree's status and the
+                            --test string all match it. The environment the test runs under is
+                            not recorded: reuse a record in the run that made it.
   --names-out <file>        Write the failing leaf tests the mutant added over the baseline
                             to <file> as JSON, when the mutant run produced a verdict: either
                             {"readable":true,"added":[{"file","name"}]} or
@@ -399,14 +401,21 @@ if (!repoRoot) fail('Not inside a git repository.');
 //
 // A table of N mutants used to cost 2N suite runs, because every row ran its own baseline over
 // the same tree. `--write-baseline` runs it once and records what makes it valid; `--baseline`
-// lets a row reuse it, and refuses unless all three hold: the same HEAD, the same tree status,
-// the same --test string.
+// lets a row reuse it, and refuses unless all four hold: the same HEAD, the same directory, the
+// same tree status, the same --test string.
 
 /** The one record format `--baseline` accepts. */
 const BASELINE_FORMAT = 'mutation-check-baseline/1';
 
 /** `git ls-files -v` here is 13,720 lines; spawnSync's 1 MiB default would cut it short. */
 const GIT_OUTPUT_BYTES = 256 * 1024 * 1024;
+
+/**
+ * The directory the test command runs in, relative to the repository root ('.' at the root). A
+ * relative --test means something else from a subdirectory, so a record reused from another one
+ * judged a run that could not find its own files: red, and scored as a kill (#1100 review, S1).
+ */
+const runDirectory = () => relative(realpathSync(repoRoot), realpathSync(process.cwd())) || '.';
 
 /** HEAD's full sha, or a refusal: a baseline is pinned to a commit. */
 function headSha() {
@@ -484,6 +493,9 @@ function reuseBaseline(file) {
   }
   const head = headSha();
   if (record.head !== head) problems.push(`it was recorded at ${record.head}, and HEAD is ${head}`);
+  if (record.cwd !== runDirectory()) {
+    problems.push(`it was recorded from ${JSON.stringify(record.cwd)}, and this run starts in ${JSON.stringify(runDirectory())}`);
+  }
   const state = treeState();
   for (const key of ['tracked', 'untracked', 'flagged']) {
     if (JSON.stringify(state[key]) !== JSON.stringify(record.state[key])) {
@@ -494,7 +506,8 @@ function reuseBaseline(file) {
     fail(
       'the recorded baseline does not apply to this run, so no mutant is measured against it:\n' +
       `${problems.map((problem) => `  - ${problem}`).join('\n')}\n` +
-      '  A baseline is reused only at the same HEAD, over the same tree status, under the same --test.'
+      '  A baseline is reused only at the same HEAD, from the same directory, over the same tree status,\n' +
+      '  under the same --test.'
     );
   }
   return record;
@@ -520,7 +533,7 @@ if (BASELINE_ONLY) {
   if (JSON.stringify(treeState()) !== JSON.stringify(state)) {
     fail('the baseline run changed the tree it ran in (a new untracked or modified file), so no row\nwould find the tree this record describes. Make the --test command write outside the tree.');
   }
-  writeFileSync(opts.writeBaseline, `${JSON.stringify({ format: BASELINE_FORMAT, head, test: opts.test, state, passCount, leaves })}\n`);
+  writeFileSync(opts.writeBaseline, `${JSON.stringify({ format: BASELINE_FORMAT, head, cwd: runDirectory(), test: opts.test, state, passCount, leaves })}\n`);
   console.log(`baseline recorded in ${opts.writeBaseline}`);
   process.exit(0);
 }

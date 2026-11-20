@@ -92,7 +92,7 @@
 # ONE BASELINE. In worktree and archive mode the baseline runs once per table, not once per row
 # (in place, every row runs its own, as before S1): the checker records it
 # (--write-baseline) and every row reuses the record (--baseline), which the checker refuses
-# unless HEAD, the tree's status and the --test string all still match it. N rows cost N + 1
+# unless HEAD, the directory, the tree's status and the --test string all still match it. N rows cost N + 1
 # suite runs, not 2N. After each row the row's file must be byte-identical (git hash-object) and
 # the tree's status unchanged, or the table stops at that row.
 #
@@ -879,7 +879,7 @@ esac
 
 # ONE baseline for the whole table (S1). Every row used to run its own over the same tree, so N
 # rows cost 2N suite runs. The checker records it once (--write-baseline) and every row reuses
-# the record (--baseline), which the checker refuses unless HEAD, the tree's status and the --test
+# the record (--baseline), which the checker refuses unless HEAD, the directory, the tree's status and the --test
 # string still match. A baseline that is red, hangs or cannot be read stops the run here, before
 # any mutant: exit 2, because nothing was measured.
 #

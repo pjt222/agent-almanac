@@ -8,7 +8,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -273,6 +273,24 @@ test('a recorded baseline is refused when the --test string, HEAD, an untracked 
   git('checkout', '--', 'other.md');
   git('commit', '-q', '--allow-empty', '-m', 'moves HEAD');
   refused(row(), /it was recorded at [0-9a-f]{40}, and HEAD is [0-9a-f]{40}/, 'HEAD moved');
+});
+
+test('a recorded baseline is refused from another directory, where a relative --test would score a kill it did not earn', (t) => {
+  // #1100 review, S1: recorded at the root, reused from sub/, `grep -q alpha notes.md` cannot find
+  // its file, goes red under the mutant for that reason alone, and read as MUTANT KILLED (exit 0).
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  mkdirSync(join(dir, 'sub'));
+  writeFileSync(join(dir, 'sub', 'keep.md'), 'x\n');
+  git('add', 'sub/keep.md');
+  git('commit', '-qm', 'sub');
+  const record = join(outsideDir(t), 'baseline.json');
+  assert.equal(runTool(dir, ['--test', 'grep -q alpha notes.md', '--write-baseline', record]).status, 0);
+  assert.equal(JSON.parse(readFileSync(record, 'utf8')).cwd, '.');
+  const r = runTool(join(dir, 'sub'), ['--file', '../notes.md', '--test', 'grep -q alpha notes.md', '--replace', 'alpha::beta', '--baseline', record]);
+  assert.equal(r.status, 1, r.out);
+  assert.match(r.out, /it was recorded from "\.", and this run starts in "sub"/, r.out);
+  assert.doesNotMatch(r.out, /\[2\/5\]|MUTANT KILLED/, 'refused before any mutation');
+  assert.equal(git('status', '--porcelain'), '');
 });
 
 test('a baseline is not recorded over a dirty tree, over a red run, or when the run writes into the tree', (t) => {
