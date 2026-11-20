@@ -1,1 +1,1 @@
-~/.claude/projects/<scratch-slug>/ac089113-0360-4a54-9951-5be440dcca58/workflows/scripts/probe-arm-a-wf_5a4fe9ae-e11.js
+~/.claude/projects/<scratch-slug>/<session-run1-A>/workflows/scripts/probe-arm-a-wf_5a4fe9ae-e11.js

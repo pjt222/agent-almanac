@@ -1,16 +1,16 @@
-== /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/101070ad-c454-4f29-b0df-f2453415c5c0/scratchpad/lanes/s3g/run2/arm-A/.claude/workflows/probe-a.js
+== /tmp/claude-<uid>/-<project-slug>/<session-id>/scratchpad/lanes/s3g/run2/arm-A/.claude/workflows/probe-a.js
 export const meta = { name: 'probe-arm-a', description: 'loader probe, no agents' }
 log('PROBE_BODY_A_91c2')
 return { arm: 'probe-arm-a', body: 'a', marker: 'PROBE_BODY_A_91c2' }
-== /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/101070ad-c454-4f29-b0df-f2453415c5c0/scratchpad/lanes/s3g/run2/arm-B/.claude/workflows/probe-b.mjs
+== /tmp/claude-<uid>/-<project-slug>/<session-id>/scratchpad/lanes/s3g/run2/arm-B/.claude/workflows/probe-b.mjs
 export const meta = { name: 'probe-arm-b', description: 'loader probe, no agents' }
 log('PROBE_BODY_B_4d7e')
 return { arm: 'probe-arm-b', body: 'b', marker: 'PROBE_BODY_B_4d7e' }
-== /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/101070ad-c454-4f29-b0df-f2453415c5c0/scratchpad/lanes/s3g/run2/arm-C/.claude/workflows/probe-c1.js
+== /tmp/claude-<uid>/-<project-slug>/<session-id>/scratchpad/lanes/s3g/run2/arm-C/.claude/workflows/probe-c1.js
 export const meta = { name: 'probe-arm-c', description: 'loader probe, no agents' }
 log('PROBE_BODY_c1_5e1d')
 return { arm: 'probe-arm-c', body: 'c1', marker: 'PROBE_BODY_c1_5e1d' }
-== /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/101070ad-c454-4f29-b0df-f2453415c5c0/scratchpad/lanes/s3g/run2/arm-C/.claude/workflows/probe-c2.js
+== /tmp/claude-<uid>/-<project-slug>/<session-id>/scratchpad/lanes/s3g/run2/arm-C/.claude/workflows/probe-c2.js
 export const meta = { name: 'probe-arm-c', description: 'loader probe, no agents' }
 log('PROBE_BODY_c2_b83f')
 return { arm: 'probe-arm-c', body: 'c2', marker: 'PROBE_BODY_c2_b83f' }
