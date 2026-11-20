@@ -700,6 +700,15 @@ test('a failing hook and a timed-out parent: cancelled children print no duratio
   assert.deepEqual(parseFailingLeafTests(hashes).map((leaf) => leaf.name), ['cancelled # with a hash', 'timed # with a hash']);
 });
 
+test('a TAP-shaped line a test prints into a spec transcript is not read as a leaf', () => {
+  // Measured (#1100 review, checker N2): a passing test that console.logs `not ok 3 - phantom`
+  // puts it at column 0 of the spec output, where the TAP reader used to find a leaf.
+  const green = ['not ok 3 - phantom printed by a passing test', '✔ prints a line (1ms)', 'ℹ tests 1', 'ℹ pass 1', 'ℹ fail 0', 'ℹ cancelled 0'].join('\n');
+  assert.deepEqual(parseFailingLeafTests(green), [], 'a green spec run with a printed TAP line fails nothing');
+  const red = ['not ok 3 - phantom', 'ℹ fail 1', 'ℹ cancelled 0', '✖ failing tests:', 'test at r.test.mjs:1:1', '✖ the real one (1ms)'].join('\n');
+  assert.deepEqual(parseFailingLeafTests(red).map((leaf) => leaf.name), ['the real one']);
+});
+
 test('a green run returns an empty list, not null', () => {
   assert.deepEqual(parseFailingLeafTests(SPEC_TAIL.replace('ℹ fail 1', 'ℹ fail 0')), []);
   assert.deepEqual(parseFailingLeafTests(TAP_TAIL.replace('# fail 1', '# fail 0')), []);

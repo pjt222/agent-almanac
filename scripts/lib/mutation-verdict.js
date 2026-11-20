@@ -283,18 +283,27 @@ function readTap(lines) {
  */
 export function parseFailingLeafTests(output) {
   const lines = stripAnsi(output).split('\n').map((line) => line.replace(/\r$/, ''));
-  let summaries = 0;
+  let specSummaries = 0;
+  let tapSummaries = 0;
   let failures = 0;
   for (const line of lines) {
     const summary = line.match(SUMMARY_LINE);
     if (!summary) continue;
-    if (summary[1] === 'fail') summaries++;
+    if (summary[1] === 'fail') {
+      if (line.startsWith('ℹ')) specSummaries++;
+      else tapSummaries++;
+    }
     failures += Number(summary[2]);
   }
-  if (summaries === 0) return null;
-  const spec = readSpec(lines);
+  if (specSummaries + tapSummaries === 0) return null;
+  // Each reader runs only where its reporter's summary appears: a test that prints `not ok 3 - x`
+  // to stdout lands it at column 0 of a spec transcript, where the TAP reader took it for a leaf
+  // (#1100 review, checker N2). A test can still print a spec-shaped `test at` pair at column 0;
+  // no reader can tell that from the runner's own lines, and the consistency rule below catches
+  // only the forgeries that contradict the summary.
+  const spec = specSummaries > 0 ? readSpec(lines) : { leaves: [] };
   if (spec.malformed) return null;
-  const leaves = [...spec.leaves, ...readTap(lines).leaves];
+  const leaves = [...spec.leaves, ...(tapSummaries > 0 ? readTap(lines).leaves : [])];
   if ((leaves.length === 0) !== (failures === 0)) return null;
   return leaves;
 }
