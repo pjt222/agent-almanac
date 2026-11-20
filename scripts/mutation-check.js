@@ -801,9 +801,15 @@ try {
   console.log('      restored.\n');
 }
 
-// After the restore, so a path that cannot be written costs the record and never the file.
+// After the restore, so a path that cannot be written costs the record and never the file, and
+// caught, so it never costs the verdict either: uncaught, an unwritable path ended a killed
+// mutant in a stack trace with no verdict line (#1100 review, checker N3).
 if (opts.namesOut !== undefined && names !== null) {
-  writeFileSync(opts.namesOut, `${JSON.stringify(names.record)}\n`);
+  try {
+    writeFileSync(opts.namesOut, `${JSON.stringify(names.record)}\n`);
+  } catch (error) {
+    console.log(`      the names record could not be written to ${opts.namesOut}: ${error.code ?? error.message}\n`);
+  }
 }
 
 // ── verdict ──────────────────────────────────────────────────────

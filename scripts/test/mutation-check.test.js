@@ -192,6 +192,17 @@ test('a test already failing in a baseline that exits 0 is not credited to the m
   assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), { readable: true, added: [], unreadable: null });
 });
 
+test('a names record that cannot be written costs the record, never the verdict', (t) => {
+  // #1100 review, checker N3: an unwritable --names-out threw after the restore, and a killed
+  // mutant ended in a stack trace with no verdict line for the envelope to read.
+  const { dir } = makeNodeTestRepo(t);
+  const unwritable = join(namesPath(t), '..', 'no-such-directory', 'names.json');
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'node --test check.test.mjs', '--replace', 'alpha::beta', '--names-out', unwritable]);
+  assert.equal(r.status, 0, r.out);
+  assert.match(r.out, /the names record could not be written to .*: ENOENT/, r.out);
+  assert.match(r.out, /^MUTANT KILLED by 1 failing test\(s\)/m, r.out);
+});
+
 test('--names-out with no path is refused before any baseline, and no record is written for a run with no verdict', (t) => {
   const { dir, git } = makeRepo(t, 'alpha\n');
   const r = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--names-out']);
