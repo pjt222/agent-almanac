@@ -146,6 +146,210 @@ export function parsePassCount(output) {
   return match ? Number(match[1]) : null;
 }
 
+// ── failing leaf tests: names, not a count (S1) ──────────────────────────────────────────────
+//
+// A count says how many tests a mutant failed; a review round needs to know WHICH. The archived
+// names-pass drivers (#994 §2, #1071/#1072) got names by adding `--test-reporter=tap` to the
+// command, which measures a different command from the one CI runs. These read what the default
+// command already prints. Measured on node v26.11.1, piped, with a fixture holding a failing
+// top-level test, a failing test two `describe`s deep, a test whose subtest fails, a failing TODO,
+// one name failing in two files, a test past its timeout and a file that throws on load:
+//
+//   spec   The tree marks every failing node `✖`, parents included. The `✖ failing tests:`
+//          section after the summary lists every test that failed on its own account, each as a
+//          column-0 `test at <file>:<l>:<c>` line, then `✖ <name> (<ms>ms)`, then the error
+//          indented: the leaves, and also a suite whose hook failed and a parent that timed out.
+//          Only a parent whose sole failure is a failing subtest is left out. A child cancelled
+//          by its parent prints `✖ <name>` with no duration. A failing TODO is listed too, as
+//          `⚠ <name> (<ms>ms) # TODO`, and counts toward neither `fail` nor `cancelled`.
+//   TAP    Every failing node is `not ok N - <name>`, its YAML block two columns deeper carrying
+//          `failureType:` and an absolute `location:`. Only `subtestsFailed` marks a parent left
+//          out; `hookFailed`, `testTimeoutFailure` and `cancelledByParent` are kept, so a hook
+//          or timeout fixture lists the same five tests in both reporters (measured, #1100 review).
+//   both   `fail N` counts a parent whose subtest failed but not a `describe`; a timed-out test
+//          counts under `cancelled`; a file that throws on load is one leaf named after the file.
+//
+// "Leaf" below means such a test. Their number is NOT the fail count (the fixture: 6, `fail 7`;
+// the hook fixture: 5, `fail 0` and `cancelled 4`), and nothing
+// below asserts that it is. What does hold is that a run with no failure and no cancellation
+// lists no leaf, and one with either lists at least one; a transcript breaking that is refused
+// as unreadable rather than read.
+
+/** A node:test summary line, at column 0 in either reporter. */
+const SUMMARY_LINE = /^(?:ℹ|#) (fail|cancelled) (\d+)$/;
+
+const SPEC_SECTION = '✖ failing tests:';
+const SPEC_LOCATION = /^test at (.+):\d+:\d+$/;
+// The name is greedy, so a name holding ` (` keeps it: only the LAST `(<ms>ms)` is the duration.
+// The marker, not the suffix, says TODO: `{ todo: 'later' }` prints `⚠ <name> (<ms>ms) # later`,
+// with no `TODO` in it (measured on node v26.11.1).
+const SPEC_ENTRY = /^(✖|⚠) (.*) \(\d+(?:\.\d+)?ms\)(?: # .*)?$/;
+// A child cancelled by its parent prints no duration: `✖ <name>`, or `⚠ <name> # TODO` for a TODO
+// child (measured, node v26.11.1). Tried only after SPEC_ENTRY, because a name may hold ` # `
+// itself, and an optional duration in one pattern would read `✖ hash # x (2ms)` as the name
+// `hash`. Accepted only when the line after it is blank, indented, a column-0 `test at`, or the
+// end: a name holding a newline prints across two column-0 lines, its duration on the second,
+// and would otherwise read as a cancelled child named by its first line (#1100 review round 2).
+const SPEC_ENTRY_CANCELLED = /^(✖|⚠) (.+)$/;
+
+const TAP_POINT = /^( *)(not ok|ok) \d+(?: - (.*))?$/;
+
+/** node's TAP reporter escapes `\`, `#` and control characters in a name; undo it. */
+function tapUnescape(text) {
+  const controls = { b: '\b', f: '\f', t: '\t', n: '\n', r: '\r', v: '\v' };
+  return text.replace(/\\(.)/g, (_, character) => controls[character] ?? character);
+}
+
+/** Strip the `:<line>:<col>` a location ends in: a mutant moves lines, never the file. */
+const fileOf = (location) => location.replace(/:\d+:\d+$/, '');
+
+function readSpec(lines) {
+  const leaves = [];
+  let inSection = false;
+  for (let index = 0; index < lines.length; index++) {
+    const line = lines[index];
+    if (line === SPEC_SECTION) {
+      inSection = true;
+      continue;
+    }
+    // Once a section has opened, only a column-0 `test at` line starts an entry. A later run's
+    // tree, printed after this section by a command that runs node:test twice, holds no such line.
+    if (!inSection) continue;
+    const location = line.match(SPEC_LOCATION);
+    if (!location) continue;
+    const next = lines[index + 1] ?? '';
+    let entry = next.match(SPEC_ENTRY);
+    if (!entry) {
+      const after = lines[index + 2];
+      const ends = after === undefined || after === '' || /^\s/.test(after) || SPEC_LOCATION.test(after);
+      entry = ends ? next.match(SPEC_ENTRY_CANCELLED) : null;
+    }
+    if (!entry) return { malformed: `an entry it cannot read in the failing-tests section: "${line}" then "${next}"` };
+    index++;
+    if (entry[1] === '⚠') continue;
+    leaves.push({ file: location[1], name: entry[2] });
+  }
+  return { leaves };
+}
+
+function readTap(lines) {
+  const leaves = [];
+  // The last test point, passing or not: its YAML block is skipped whatever it holds, so text
+  // quoted in a passing test's or a TODO's block cannot pass for a test point.
+  let point = null; // { indent, leaf } — `leaf` is set only for a counted failure
+  let block = null; // { indent, failureType, location } while inside `---` … `...`
+  const settle = (failureType, location) => {
+    if (point?.leaf && failureType !== 'subtestsFailed') leaves.push({ file: fileOf(location ?? ''), name: point.leaf });
+    point = null;
+  };
+  for (const line of lines) {
+    if (block) {
+      const pad = ' '.repeat(block.indent);
+      if (line === `${pad}...`) {
+        settle(block.failureType, block.location);
+        block = null;
+        continue;
+      }
+      // Fields sit exactly at the block's indent; an error's text is deeper, so a transcript
+      // quoted inside an error cannot set them.
+      const failureType = line.match(new RegExp(`^${pad}failureType: '(\\w+)'$`));
+      if (failureType) block.failureType = failureType[1];
+      const location = line.match(new RegExp(`^${pad}location: '(.*)'$`));
+      if (location) block.location = location[1].replace(/''/g, "'");
+      continue;
+    }
+    if (point && line === `${' '.repeat(point.indent + 2)}---`) {
+      block = { indent: point.indent + 2, failureType: null, location: null };
+      continue;
+    }
+    const match = line.match(TAP_POINT);
+    if (!match) continue;
+    settle(null, null); // the previous point had no YAML block
+    // An unescaped `#` starts a directive; one inside the name was escaped as `\#`.
+    const [, rawName, directive] = (match[3] ?? '').match(/^((?:[^\\#]|\\.)*?)(?:\s*# *(TODO|SKIP)\b.*)?$/) ?? [];
+    const counted = match[2] === 'not ok' && directive !== 'TODO' && rawName !== undefined;
+    point = { indent: match[1].length, leaf: counted ? tapUnescape(rawName.trimEnd()) : null };
+  }
+  settle(null, null);
+  return { leaves };
+}
+
+/**
+ * The failing LEAF tests a node:test run reports, as `{ file, name }` in the order printed, or
+ * null when the output does not say.
+ *
+ * Null and `[]` are different answers and callers must keep them apart: `[]` is "this run failed
+ * no test", null is "this transcript could not be read" (no summary line, a malformed section, or
+ * leaves that contradict the summary's counts). A reader that folds the two together reports a
+ * suite it could not parse as one that passed.
+ *
+ * Both reporters are read. Column 0 is load-bearing in each: node indents an error's text, so a
+ * transcript quoted inside a failing test's diff cannot contribute a leaf or a count.
+ *
+ * @param {string} output - combined stdout/stderr of one test command
+ * @returns {{ file: string, name: string }[] | null}
+ */
+export function parseFailingLeafTests(output) {
+  return readLeaves(output).leaves;
+}
+
+/**
+ * Why parseFailingLeafTests returns null for this output, or null when it does not: a caller that
+ * prints one fixed guess ("no summary, or a contradiction") prints a false one whenever the real
+ * cause is the other, or a malformed entry (#1100 review round 2).
+ */
+export function unreadableReason(output) {
+  return readLeaves(output).reason;
+}
+
+function readLeaves(output) {
+  const lines = stripAnsi(output).split('\n').map((line) => line.replace(/\r$/, ''));
+  let specSummaries = 0;
+  let tapSummaries = 0;
+  let failures = 0;
+  for (const line of lines) {
+    const summary = line.match(SUMMARY_LINE);
+    if (!summary) continue;
+    if (summary[1] === 'fail') {
+      if (line.startsWith('ℹ')) specSummaries++;
+      else tapSummaries++;
+    }
+    failures += Number(summary[2]);
+  }
+  if (specSummaries + tapSummaries === 0) return { leaves: null, reason: 'it holds no node:test summary line (`ℹ fail N` or `# fail N`)' };
+  // Each reader runs only where its reporter's summary appears: a test that prints `not ok 3 - x`
+  // to stdout lands it at column 0 of a spec transcript, where the TAP reader took it for a leaf
+  // (#1100 review, checker N2). A test can still print a spec-shaped `test at` pair at column 0,
+  // or a TAP `# fail 0` beside a `not ok` line, which turns the TAP reader back on (round 2); no
+  // reader can tell those from the runner's own lines, and the consistency rule below catches
+  // only the forgeries that contradict the summary.
+  const spec = specSummaries > 0 ? readSpec(lines) : { leaves: [] };
+  if (spec.malformed) return { leaves: null, reason: spec.malformed };
+  const leaves = [...spec.leaves, ...(tapSummaries > 0 ? readTap(lines).leaves : [])];
+  if ((leaves.length === 0) !== (failures === 0)) {
+    return { leaves: null, reason: `it lists ${leaves.length} failing test(s) against a summary of ${failures} failed or cancelled` };
+  }
+  return { leaves, reason: null };
+}
+
+/**
+ * The failing leaves `mutant` has beyond `baseline`, matched on file and name, never on line, and
+ * counted as a multiset, so a name that fails twice in one file is not hidden by one baseline
+ * failure. Null when either side is null: an added set cannot be derived from an unread side.
+ */
+export function addedFailingTests(baseline, mutant) {
+  if (baseline === null || mutant === null) return null;
+  const key = (leaf) => `${leaf.file}\u0000${leaf.name}`;
+  const remaining = new Map();
+  for (const leaf of baseline) remaining.set(key(leaf), (remaining.get(key(leaf)) ?? 0) + 1);
+  return mutant.filter((leaf) => {
+    const left = remaining.get(key(leaf)) ?? 0;
+    if (left === 0) return true;
+    remaining.set(key(leaf), left - 1);
+    return false;
+  });
+}
+
 /** Share of the baseline suite at or above which a kill is called broad. */
 export const BROAD_KILL_SHARE = 0.25;
 

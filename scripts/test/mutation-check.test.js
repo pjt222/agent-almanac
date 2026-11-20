@@ -8,7 +8,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -103,6 +103,293 @@ test('--from/--to are refused half-given, beside another mutation flag, or with 
     assert.doesNotMatch(r.out, /\[1\/5\]/, `${flags.join(' ')}: refused before a baseline`);
   }
   assert.equal(git('status', '--porcelain'), '');
+});
+
+// ── failing test names (S1) ─────────────────────────────────────────────────
+
+/**
+ * A repository whose committed `notes.md` holds `alpha`, with an untracked node:test file that
+ * asserts it (and a second test that always passes). Untracked on purpose: only the mutated file
+ * must be tracked, and a test file the fixture never commits keeps `git status` honest about it.
+ */
+function makeNodeTestRepo(t) {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  writeFileSync(join(dir, 'check.test.mjs'), [
+    "import { test } from 'node:test';",
+    "import assert from 'node:assert/strict';",
+    "import { readFileSync } from 'node:fs';",
+    "test('notes hold alpha', () => { assert.match(readFileSync('notes.md', 'utf8'), /alpha/); });",
+    "test('an unrelated test passes', () => {});",
+    '',
+  ].join('\n'));
+  writeFileSync(join(dir, 'ok.test.mjs'), "import { test } from 'node:test';\ntest('always passes', () => {});\n");
+  return { dir, git };
+}
+
+/** A path outside the fixture repository, so the record cannot dirty it. */
+function namesPath(t) {
+  const dir = mkdtempSync(join(tmpdir(), 'mutation-check-names-'));
+  t.after(() => rmTree(dir));
+  return join(dir, 'names.json');
+}
+
+test('a node --test command run from inside node:test still reports its failures', (t) => {
+  // This suite runs under node:test, which exports NODE_TEST_CONTEXT, and runTool passes it on.
+  // A `node --test` that inherits it exits 0 with no summary, so without the checker removing it
+  // the baseline reads green and this mutant SURVIVES with no names.
+  assert.ok(process.env.NODE_TEST_CONTEXT, 'precondition: the variable reaches the checker, or this proves nothing');
+  const { dir, git } = makeNodeTestRepo(t);
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'node --test check.test.mjs', '--replace', 'alpha::beta']);
+  assert.match(r.out, /MUTANT KILLED by 1 failing test\(s\)/, r.out);
+  assert.match(r.out, /green \(2 passing\)/, 'the baseline summary was read');
+  assert.equal(git('status', '--porcelain', '--untracked-files=no'), '', 'restored');
+});
+
+test('the leaves a mutant adds are printed, indented, and written to --names-out', (t) => {
+  const { dir } = makeNodeTestRepo(t);
+  const out = namesPath(t);
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'node --test check.test.mjs', '--replace', 'alpha::beta', '--names-out', out]);
+  assert.match(r.out, /^ {6}failing tests added over the baseline: 1$/m, r.out);
+  assert.match(r.out, /^ {8}✖ notes hold alpha {2}\(check\.test\.mjs\)$/m, r.out);
+  assert.doesNotMatch(r.out, /an unrelated test passes {2}\(/, 'a passing test is not a name');
+  assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), {
+    readable: true, added: [{ file: 'check.test.mjs', name: 'notes hold alpha' }], unreadable: null,
+  });
+});
+
+test('a red run that fails no test says none were added; an output with no summary says it could not be read', (t) => {
+  const NONE = 'failing tests added over the baseline: 0';
+  const UNREAD = 'failing test names: could not be read';
+  const { dir } = makeNodeTestRepo(t);
+  // node:test passes (fail 0), then the grep goes red under the mutant: a kill that names no test.
+  const none = namesPath(t);
+  const r1 = runTool(dir, ['--file', 'notes.md', '--test', 'node --test ok.test.mjs && grep -q alpha notes.md', '--replace', 'alpha::beta', '--names-out', none]);
+  assert.match(r1.out, /MUTANT KILLED/, r1.out);
+  assert.ok(r1.out.includes(NONE) && !r1.out.includes(UNREAD), r1.out);
+  assert.deepEqual(JSON.parse(readFileSync(none, 'utf8')), { readable: true, added: [], unreadable: null });
+  // No node:test at all: nothing to read in either run.
+  const unread = namesPath(t);
+  const r2 = runTool(dir, ['--file', 'notes.md', '--test', 'grep -q alpha notes.md', '--replace', 'alpha::beta', '--names-out', unread]);
+  assert.match(r2.out, /MUTANT KILLED/, r2.out);
+  assert.ok(r2.out.includes(`${UNREAD} from the baseline run's output`) && !r2.out.includes(NONE), r2.out);
+  assert.deepEqual(JSON.parse(readFileSync(unread, 'utf8')), {
+    readable: false, added: null, unreadable: 'baseline', reason: 'it holds no node:test summary line (`ℹ fail N` or `# fail N`)',
+  });
+  assert.ok(r2.out.includes("could not be read from the baseline run's output: it holds no node:test summary line"), r2.out);
+  // A survivor still writes its record: the mutant ran and added nothing.
+  const survived = namesPath(t);
+  const r3 = runTool(dir, ['--file', 'notes.md', '--test', 'node --test ok.test.mjs', '--replace', 'alpha::beta', '--names-out', survived]);
+  assert.match(r3.out, /MUTANT SURVIVED/, r3.out);
+  assert.deepEqual(JSON.parse(readFileSync(survived, 'utf8')), { readable: true, added: [], unreadable: null });
+});
+
+test('a test already failing in a baseline that exits 0 is not credited to the mutant', (t) => {
+  // "Green" is the exit status. `node --test …; grep …` exits with the grep's status, so a failing
+  // node:test leaf can sit in a green baseline; the mutant must be credited only with what it adds.
+  const { dir } = makeNodeTestRepo(t);
+  writeFileSync(join(dir, 'red.test.mjs'), "import { test } from 'node:test';\ntest('fails before any mutation', () => { throw new Error('already red'); });\n");
+  const out = namesPath(t);
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'node --test red.test.mjs; grep -q alpha notes.md', '--replace', 'alpha::beta', '--names-out', out]);
+  assert.match(r.out, /MUTANT KILLED/, r.out);
+  assert.match(r.out, /failing tests added over the baseline: 0/, r.out);
+  assert.deepEqual(JSON.parse(readFileSync(out, 'utf8')), { readable: true, added: [], unreadable: null });
+});
+
+test('a names record that cannot be written costs the record, never the verdict', (t) => {
+  // #1100 review, checker N3: an unwritable --names-out threw after the restore, and a killed
+  // mutant ended in a stack trace with no verdict line for the envelope to read.
+  const { dir } = makeNodeTestRepo(t);
+  const unwritable = join(namesPath(t), '..', 'no-such-directory', 'names.json');
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'node --test check.test.mjs', '--replace', 'alpha::beta', '--names-out', unwritable]);
+  assert.equal(r.status, 0, r.out);
+  assert.match(r.out, /the names record could not be written to .*: ENOENT/, r.out);
+  assert.match(r.out, /^MUTANT KILLED by 1 failing test\(s\)/m, r.out);
+});
+
+test('--names-out with no path is refused before any baseline, and no record is written for a run with no verdict', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const r = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--names-out']);
+  assert.equal(r.status, 1, r.out);
+  assert.match(r.out, /--names-out needs a file path/, r.out);
+  assert.doesNotMatch(r.out, /\[1\/5\]/, 'refused before a baseline');
+  // A mutation that matches nothing ends before any mutant run: there is nothing to record.
+  const out = namesPath(t);
+  const r2 = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'absent::beta', '--names-out', out]);
+  assert.equal(r2.status, 1, r2.out);
+  assert.equal(existsSync(out), false, 'no record without a mutant verdict');
+  // A mutant that does not parse reaches the verdict block with no names: it must still print its
+  // own verdict, not die on the absent record after the restore.
+  writeFileSync(join(dir, 'gen.js'), 'module.exports.width = 4;\n', 'utf8'); // no package.json: CommonJS
+  git('add', 'gen.js');
+  git('commit', '-qm', 'js');
+  const r3 = runTool(dir, ['--file', 'gen.js', '--test', 'true', '--replace', 'width = 4;::width = ;', '--names-out', out]);
+  assert.equal(r3.status, 1, r3.out);
+  assert.match(r3.out, /INVALID MUTANT/, r3.out);
+  assert.equal(existsSync(out), false, 'no record for a mutant that never ran');
+  // Not attempted at all: since the write is caught, dropping the guard would print a false
+  // "could not be written" for a record that was never due (the one survivor of the S1 table).
+  assert.doesNotMatch(r3.out, /names record could not be written/, r3.out);
+  assert.equal(git('status', '--porcelain'), '');
+});
+
+// ── one baseline per run: --write-baseline and --baseline (S1) ──────────────
+
+/** A directory outside the fixture repository for records and counters. */
+function outsideDir(t) {
+  const dir = mkdtempSync(join(tmpdir(), 'mutation-check-baseline-'));
+  t.after(() => rmTree(dir));
+  return dir;
+}
+
+test('a baseline recorded once is reused, and the row runs its test command once instead of twice', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const out = outsideDir(t);
+  const record = join(out, 'baseline.json');
+  const counter = join(out, 'runs');
+  const testCmd = `echo run >> '${counter}'; grep -q alpha notes.md`;
+  const r1 = runTool(dir, ['--test', testCmd, '--write-baseline', record]);
+  assert.equal(r1.status, 0, r1.out);
+  const written = JSON.parse(readFileSync(record, 'utf8'));
+  assert.equal(written.format, 'mutation-check-baseline/1');
+  assert.equal(written.head, git('rev-parse', 'HEAD').trim());
+  assert.equal(written.test, testCmd);
+  assert.deepEqual(written.state, { tracked: [], untracked: [], flagged: [] });
+  assert.equal(readFileSync(counter, 'utf8'), 'run\n', 'recording ran the command once');
+  const r2 = runTool(dir, ['--file', 'notes.md', '--test', testCmd, '--replace', 'alpha::beta', '--baseline', record]);
+  assert.match(r2.out, /\[1\/5\] baseline: reusing the record in /, r2.out);
+  assert.match(r2.out, /MUTANT KILLED/, r2.out);
+  assert.equal(readFileSync(counter, 'utf8'), 'run\nrun\n', 'the row ran only the mutant, not a second baseline');
+  assert.equal(git('status', '--porcelain'), '');
+});
+
+test('a recorded baseline is refused when the --test string, HEAD, an untracked entry, an index flag or a tracked file differs', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  writeFileSync(join(dir, 'other.md'), 'other\n');
+  git('add', 'other.md');
+  git('commit', '-qm', 'other');
+  const out = outsideDir(t);
+  const record = join(out, 'baseline.json');
+  const row = (testCmd = 'grep -q alpha notes.md') => runTool(dir, ['--file', 'notes.md', '--test', testCmd, '--replace', 'alpha::beta', '--baseline', record]);
+  const refused = (r, why, label) => {
+    assert.equal(r.status, 1, `${label}\n${r.out}`);
+    assert.match(r.out, /the recorded baseline does not apply to this run/, `${label}\n${r.out}`);
+    assert.match(r.out, why, `${label}\n${r.out}`);
+    assert.doesNotMatch(r.out, /\[2\/5\]/, `${label}: refused before any mutation`);
+    assert.equal(readFileSync(join(dir, 'notes.md'), 'utf8'), 'alpha\n', label);
+  };
+  assert.equal(runTool(dir, ['--test', 'grep -q alpha notes.md', '--write-baseline', record]).status, 0);
+  refused(row('grep -q alpha notes.md && true'), /recorded under --test "grep -q alpha notes\.md"/, 'another --test');
+  writeFileSync(join(dir, 'stray.txt'), 'x\n');
+  refused(row(), /the tree's untracked entries differ: now \["stray\.txt"\], recorded \[\]/, 'an untracked file');
+  rmTree(join(dir, 'stray.txt'));
+  git('update-index', '--assume-unchanged', 'other.md');
+  refused(row(), /the tree's flagged entries differ/, 'an index flag');
+  git('update-index', '--no-assume-unchanged', 'other.md');
+  writeFileSync(join(dir, 'other.md'), 'changed\n');
+  refused(row(), /the tree's tracked entries differ/, 'a tracked change elsewhere');
+  git('checkout', '--', 'other.md');
+  git('commit', '-q', '--allow-empty', '-m', 'moves HEAD');
+  refused(row(), /it was recorded at [0-9a-f]{40}, and HEAD is [0-9a-f]{40}/, 'HEAD moved');
+});
+
+test('a recorded baseline is refused from another directory, where a relative --test would score a kill it did not earn', (t) => {
+  // #1100 review, S1: recorded at the root, reused from sub/, `grep -q alpha notes.md` cannot find
+  // its file, goes red under the mutant for that reason alone, and read as MUTANT KILLED (exit 0).
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  mkdirSync(join(dir, 'sub'));
+  writeFileSync(join(dir, 'sub', 'keep.md'), 'x\n');
+  git('add', 'sub/keep.md');
+  git('commit', '-qm', 'sub');
+  const record = join(outsideDir(t), 'baseline.json');
+  assert.equal(runTool(dir, ['--test', 'grep -q alpha notes.md', '--write-baseline', record]).status, 0);
+  assert.equal(JSON.parse(readFileSync(record, 'utf8')).cwd, '.');
+  const r = runTool(join(dir, 'sub'), ['--file', '../notes.md', '--test', 'grep -q alpha notes.md', '--replace', 'alpha::beta', '--baseline', record]);
+  assert.equal(r.status, 1, r.out);
+  assert.match(r.out, /it was recorded from "\.", and this run starts in "sub"/, r.out);
+  assert.doesNotMatch(r.out, /\[2\/5\]|MUTANT KILLED/, 'refused before any mutation');
+  assert.equal(git('status', '--porcelain'), '');
+});
+
+test('a baseline is not recorded over a dirty tree, over a red run, or when the run writes into the tree', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const record = join(outsideDir(t), 'baseline.json');
+  writeFileSync(join(dir, 'notes.md'), 'alpha, edited\n');
+  const dirty = runTool(dir, ['--test', 'true', '--write-baseline', record]);
+  assert.equal(dirty.status, 1, dirty.out);
+  assert.match(dirty.out, /recorded only over a clean tree/, dirty.out);
+  assert.doesNotMatch(dirty.out, /\[1\/1\]/, 'refused before the run');
+  git('checkout', '--', 'notes.md');
+  const red = runTool(dir, ['--test', 'exit 1', '--write-baseline', record]);
+  assert.equal(red.status, 1, red.out);
+  assert.match(red.out, /Baseline is already failing/, red.out);
+  const writes = runTool(dir, ['--test', 'touch made-by-the-test.txt', '--write-baseline', record]);
+  assert.equal(writes.status, 1, writes.out);
+  assert.match(writes.out, /the baseline run changed the tree it ran in/, writes.out);
+  assert.equal(existsSync(record), false, 'no record from any of the three');
+});
+
+test('a file that is not a baseline record is refused, and the record flags refuse what they cannot honour', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const out = outsideDir(t);
+  const cases = [
+    ['not json', /cannot be read as a baseline record/],
+    [JSON.stringify({ format: 'something-else/1' }), /is not a mutation-check-baseline\/1 record/],
+    [JSON.stringify({ format: 'mutation-check-baseline/1', passCount: 1, leaves: 'x', state: {} }), /is not a mutation-check-baseline\/1 record/],
+    // Its state without the three arrays: refused, not a TypeError (#1100 review, checker N4).
+    [JSON.stringify({ format: 'mutation-check-baseline/1', head: 'x', cwd: '.', test: 'true', passCount: null, leaves: [], state: {} }), /is not a mutation-check-baseline\/1 record/],
+  ];
+  cases.forEach(([content, expected], index) => {
+    const record = join(out, `bad-${index}.json`);
+    writeFileSync(record, content);
+    const r = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--baseline', record]);
+    assert.equal(r.status, 1, r.out);
+    assert.match(r.out, expected, r.out);
+    assert.doesNotMatch(r.out, /\[2\/5\]/, 'refused before any mutation');
+  });
+  const flagCases = [
+    [['--test', 'true', '--write-baseline', join(out, 'b.json'), '--file', 'notes.md'], /records a baseline only.*refusing file/],
+    [['--test', 'true', '--write-baseline', join(out, 'b.json'), '--replace', 'alpha::beta'], /refusing replace/],
+    [['--test', 'true', '--write-baseline', join(out, 'b.json'), '--baseline', join(out, 'b.json')], /mutually exclusive/],
+    [['--test', 'true', '--write-baseline'], /--write-baseline needs a file path/],
+    [['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--baseline'], /--baseline needs a file path/],
+    [['--write-baseline', join(out, 'b.json')], /--test is required/],
+    // Inside the tree it would describe (#1100 review, checker N5), a name starting with `..`
+    // included (round 2), and a directory that does not exist, refused without a stack trace.
+    [['--test', 'true', '--write-baseline', 'inside.json'], /is inside the tree it would describe/],
+    [['--test', 'true', '--write-baseline', '..rec.json'], /is inside the tree it would describe/],
+    [['--test', 'true', '--write-baseline', join(out, 'no-such-dir', 'b.json')], /its directory cannot be resolved \(ENOENT\)/],
+  ];
+  for (const [flags, expected] of flagCases) {
+    const r = runTool(dir, flags);
+    assert.equal(r.status, 1, `${flags.join(' ')}\n${r.out}`);
+    assert.match(r.out, expected, `${flags.join(' ')}\n${r.out}`);
+  }
+  assert.equal(existsSync(join(out, 'b.json')), false);
+  assert.equal(existsSync(join(dir, 'inside.json')), false);
+  assert.equal(existsSync(join(dir, '..rec.json')), false);
+  assert.equal(git('status', '--porcelain'), '');
+  // An ignored path inside the tree is not part of its state: the record may live there.
+  writeFileSync(join(dir, '.git', 'info', 'exclude'), 'records/\n');
+  mkdirSync(join(dir, 'records'));
+  const ignored = runTool(dir, ['--test', 'true', '--write-baseline', 'records/b.json']);
+  assert.equal(ignored.status, 0, ignored.out);
+  assert.equal(git('status', '--porcelain'), '', 'an ignored record leaves the status clean');
+});
+
+test('a reused baseline carries its failing leaves, and the mutant is credited only with what it adds', (t) => {
+  // The masked failure of the earlier names test, through a record: the leaf failing in the green
+  // baseline must come from the record, or it is credited to the mutant.
+  const { dir } = makeNodeTestRepo(t);
+  writeFileSync(join(dir, 'red.test.mjs'), "import { test } from 'node:test';\ntest('fails before any mutation', () => { throw new Error('already red'); });\n");
+  const out = outsideDir(t);
+  const record = join(out, 'baseline.json');
+  const testCmd = 'node --test red.test.mjs; grep -q alpha notes.md';
+  assert.equal(runTool(dir, ['--test', testCmd, '--write-baseline', record]).status, 0);
+  assert.deepEqual(JSON.parse(readFileSync(record, 'utf8')).leaves, [{ file: 'red.test.mjs', name: 'fails before any mutation' }]);
+  const names = join(out, 'names.json');
+  const r = runTool(dir, ['--file', 'notes.md', '--test', testCmd, '--replace', 'alpha::beta', '--baseline', record, '--names-out', names]);
+  assert.match(r.out, /MUTANT KILLED/, r.out);
+  assert.deepEqual(JSON.parse(readFileSync(names, 'utf8')), { readable: true, added: [], unreadable: null });
 });
 
 // ── stdin (#819 AC2) ────────────────────────────────────────────────────────

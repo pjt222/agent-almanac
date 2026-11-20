@@ -54,9 +54,9 @@
  * locally but GNU grep in CI — the two failure modes this tool exists to catch.
  */
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, lstatSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
-import { extname, relative, resolve } from 'node:path';
-import { parseFailCount, parsePassCount, crashSuspicion } from './lib/mutation-verdict.js';
+import { existsSync, lstatSync, readFileSync, realpathSync, unlinkSync, writeFileSync } from 'node:fs';
+import { basename, dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
+import { parseFailCount, parsePassCount, crashSuspicion, parseFailingLeafTests, addedFailingTests, unreadableReason } from './lib/mutation-verdict.js';
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
 /**
@@ -102,6 +102,24 @@ Options:
                             credited to the line you meant to test.
   --expect-killed-by <n>    Require exactly n failing tests. Errors if the count
                             cannot be parsed, rather than passing silently.
+  --write-baseline <file>   Record a baseline and stop: run --test once, refuse a red run or a
+                            tree with tracked changes or index flags, and write <file> with
+                            HEAD, the run directory, the --test string, the tree's status
+                            (untracked included), the passing count and the failing leaf
+                            tests. Takes --test and --timeout only:
+                            node scripts/mutation-check.js --test <cmd> --write-baseline <file>
+  --baseline <file>         Reuse such a record instead of running the baseline: refused unless
+                            HEAD, the directory it was recorded from, the tree's status and the
+                            --test string all match it. Not recorded, so not checked: the
+                            environment the test runs under, the CONTENT of untracked files
+                            (only their names are in the status), and ignored files. Reuse a
+                            record in the run that made it, over a tree nothing else writes.
+  --names-out <file>        Write the failing leaf tests the mutant added over the baseline
+                            to <file> as JSON, when the mutant run produced a verdict: either
+                            {"readable":true,"added":[{"file","name"}],"unreadable":null} or
+                            {"readable":false,"added":null,"unreadable":"baseline"|"mutant",
+                            "reason":"<why it could not be read>"}.
+                            The same names are printed after the mutant run either way.
   -h, --help                Show this message`;
 
 const BACKUP_SUFFIX = '.mutation-check.bak';
@@ -129,6 +147,17 @@ const MAX_OUTPUT_CHARS = 64 * 1024 * 1024;
 
 /** The test run in flight, so a signal handler can stop it: it no longer shares our group. */
 let activeChild = null;
+
+/**
+ * The test command's environment: this process's, without NODE_TEST_CONTEXT.
+ *
+ * node:test exports that variable to every test file's process, so a checker started from inside
+ * a test suite inherits it, and a `node --test` command it runs then reports to a parent runner
+ * that is not listening: measured on node v26.11.1, the value `child-v8` made a failing
+ * `node --test` exit 0 and print no summary (184 bytes, against exit 1 and the summary without
+ * it). Under it a baseline reads green, every mutant reads SURVIVED, and no name can be read.
+ */
+const TEST_ENV = Object.fromEntries(Object.entries(process.env).filter(([key]) => key !== 'NODE_TEST_CONTEXT'));
 
 /**
  * Kill the test's whole process group (#819).
@@ -159,7 +188,7 @@ async function runCommand(cmd, timeoutSeconds) {
   return new Promise((settle) => {
     // stdin is closed (#819): an inherited open pipe is what let a mutant's test wait forever
     // on a `read` in #816. Nothing in a mutation run should read the terminal.
-    const child = spawn(cmd, { shell: true, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(cmd, { shell: true, detached: true, stdio: ['ignore', 'pipe', 'pipe'], env: TEST_ENV });
     const startedAt = performance.now(); // monotonic: the wall clock steps on WSL
     activeChild = child;
     let output = '';
@@ -279,6 +308,9 @@ for (let i = 0; i < argv.length; i++) {
   else if (arg === '--to') opts.to = argv[++i];
   else if (arg === '--expect-killed-by') opts.expectKilledBy = Number(argv[++i]);
   else if (arg === '--timeout') opts.timeout = argv[++i] ?? ''; // a missing value is refused, not defaulted
+  else if (arg === '--names-out') opts.namesOut = argv[++i] ?? '';
+  else if (arg === '--write-baseline') opts.writeBaseline = argv[++i] ?? '';
+  else if (arg === '--baseline') opts.baseline = argv[++i] ?? '';
   else fail(`Unknown argument: ${arg}\n\n${USAGE}`);
 }
 
@@ -286,7 +318,22 @@ if (opts.help) {
   console.log(USAGE);
   process.exit(0);
 }
-if (!opts.file || !opts.test) fail(`--file and --test are both required\n\n${USAGE}`);
+if (opts.writeBaseline === '') fail('--write-baseline needs a file path');
+if (opts.baseline === '') fail('--baseline needs a file path');
+if (opts.writeBaseline !== undefined && opts.baseline !== undefined) {
+  fail('--write-baseline and --baseline are mutually exclusive: one records a baseline, the other reuses one');
+}
+// Recording a baseline mutates nothing, so every flag about a mutation is refused beside it
+// rather than ignored: a caller passing one believed something would be measured.
+const BASELINE_ONLY = opts.writeBaseline !== undefined;
+if (BASELINE_ONLY) {
+  const mutationOnly = ['file', 'deleteMatching', 'replace', 'from', 'to', 'expectKilledBy', 'namesOut',
+    'allowMultiple', 'allowBroad', 'allowCrashText'].filter((key) => opts[key] !== undefined);
+  if (mutationOnly.length > 0) {
+    fail(`--write-baseline records a baseline only and takes --test and --timeout; refusing ${mutationOnly.join(', ')}`);
+  }
+  if (!opts.test) fail(`--test is required\n\n${USAGE}`);
+} else if (!opts.file || !opts.test) fail(`--file and --test are both required\n\n${USAGE}`);
 // Presence, never truthiness: `--to ''` is a deletion and must stay expressible (#783).
 if ((opts.from === undefined) !== (opts.to === undefined)) {
   fail(`--from and --to must be given together\n\n${USAGE}`);
@@ -296,7 +343,7 @@ const mutationFlags = [
   opts.replace !== undefined && '--replace',
   opts.from !== undefined && '--from/--to',
 ].filter(Boolean);
-if (mutationFlags.length === 0) {
+if (mutationFlags.length === 0 && !BASELINE_ONLY) {
   fail(`One of --delete-matching, --replace or --from/--to is required\n\n${USAGE}`);
 }
 if (mutationFlags.length > 1) {
@@ -330,6 +377,7 @@ if (opts.replace !== undefined) {
 // An empty <old> matches between every character: `--replace '::x'` rewrote the whole file
 // while reporting `0 site(s) mutated`.
 if (replaceFrom === '') fail('the mutation has an empty <old>, which matches between every character');
+if (opts.namesOut === '') fail('--names-out needs a file path');
 if (opts.expectKilledBy !== undefined && !Number.isInteger(opts.expectKilledBy)) {
   fail('--expect-killed-by needs an integer');
 }
@@ -351,6 +399,163 @@ process.on('SIGHUP', () => { killGroup(activeChild); onInterrupt(129); });
 
 const repoRoot = git(['rev-parse', '--show-toplevel']).stdout?.trim();
 if (!repoRoot) fail('Not inside a git repository.');
+
+// ── the baseline: run, recorded once, or reused (S1) ─────────────
+//
+// A table of N mutants used to cost 2N suite runs, because every row ran its own baseline over
+// the same tree. `--write-baseline` runs it once and records what makes it valid; `--baseline`
+// lets a row reuse it, and refuses unless all four hold: the same HEAD, the same directory, the
+// same tree status, the same --test string.
+
+/** The one record format `--baseline` accepts. */
+const BASELINE_FORMAT = 'mutation-check-baseline/1';
+
+/** `git ls-files -v` here is 13,720 lines; spawnSync's 1 MiB default would cut it short. */
+const GIT_OUTPUT_BYTES = 256 * 1024 * 1024;
+
+/**
+ * The directory the test command runs in, relative to the repository root ('.' at the root). A
+ * relative --test means something else from a subdirectory, so a record reused from another one
+ * judged a run that could not find its own files: red, and scored as a kill (#1100 review, S1).
+ */
+const runDirectory = () => relative(realpathSync(repoRoot), realpathSync(process.cwd())) || '.';
+
+/** HEAD's full sha, or a refusal: a baseline is pinned to a commit. */
+function headSha() {
+  const run = git(['rev-parse', '--verify', 'HEAD'], { cwd: repoRoot });
+  if (run.status !== 0) fail('HEAD does not resolve to a commit, so a baseline cannot be pinned to one.');
+  return run.stdout.trim();
+}
+
+/**
+ * What a reused baseline must find unchanged beyond HEAD: every status line, untracked entries
+ * included, and every index entry with a flag other than `H`. Tracked changes and flags are
+ * refused when recording, so at reuse they must still be absent; untracked entries are allowed
+ * (a worktree's node_modules symlink is one) but must be the same set.
+ *
+ * Not seen: ignored files, and an untracked file whose content changes while its status line
+ * does not. The second is the blind spot `git status` has everywhere; the guard (`guard:verify`)
+ * hashes content for that reason, and this does not.
+ */
+function treeState() {
+  const status = git(['status', '--porcelain=v1', '--untracked-files=all'], { cwd: repoRoot, maxBuffer: GIT_OUTPUT_BYTES });
+  const index = git(['ls-files', '-v'], { cwd: repoRoot, maxBuffer: GIT_OUTPUT_BYTES });
+  for (const run of [status, index]) {
+    if (run.error || run.status !== 0) fail(`git could not report the tree's state: ${run.error?.code ?? run.stderr.trim()}`);
+  }
+  const lines = status.stdout.split('\n').filter(Boolean);
+  return {
+    tracked: lines.filter((line) => !line.startsWith('?? ')),
+    untracked: lines.filter((line) => line.startsWith('?? ')).map((line) => line.slice(3)),
+    flagged: index.stdout.split('\n').filter((line) => line && !line.startsWith('H ')),
+  };
+}
+
+/** Run the baseline and judge it: anything but a green, finished, interpretable run is refused. */
+async function measureBaseline() {
+  const baseline = await runCommand(opts.test, timeoutSeconds);
+  if (baseline.timedOut) {
+    fail(
+      `Baseline HUNG — the test command ran past --timeout ${timeoutSeconds} s and its process group\n` +
+      'was killed. INCONCLUSIVE: a mutant cannot be judged against a suite that does not finish.\n' +
+      'Raise --timeout if the suite is genuinely that slow.'
+    );
+  }
+  const baselineProblem = inconclusiveReason(baseline);
+  if (baselineProblem) fail(`Baseline inconclusive — ${baselineProblem}`);
+  if (baseline.status !== 0) {
+    fail(
+      `Baseline is already failing (exit ${baseline.status}). Fix that first — a killed or\n` +
+      'surviving mutant means nothing when the suite is red to begin with.'
+    );
+  }
+  const passCount = parsePassCount(baseline.output);
+  // Read here, so the names a mutant ADDS are derived against the run that was judged green.
+  // Null when the output carries no node:test summary: the names then cannot be read, and say so.
+  const leaves = parseFailingLeafTests(baseline.output);
+  console.log(`      green${passCount !== null ? ` (${passCount} passing)` : ''}.\n`);
+  return { passCount, leaves, leavesReason: unreadableReason(baseline.output) };
+}
+
+/** A record `--baseline` may use here, or a refusal naming every condition that fails. */
+function reuseBaseline(file) {
+  let record;
+  try {
+    record = JSON.parse(readFileSync(file, 'utf8'));
+  } catch (error) {
+    fail(`--baseline ${file} cannot be read as a baseline record: ${error.message}`);
+  }
+  const wellFormed = record !== null && typeof record === 'object' && record.format === BASELINE_FORMAT
+    && (record.passCount === null || Number.isInteger(record.passCount))
+    && (record.leaves === null || Array.isArray(record.leaves))
+    && record.state !== null && typeof record.state === 'object'
+    && ['tracked', 'untracked', 'flagged'].every((key) => Array.isArray(record.state[key]));
+  if (!wellFormed) fail(`--baseline ${file} is not a ${BASELINE_FORMAT} record; write one with --write-baseline`);
+  const problems = [];
+  if (record.test !== opts.test) {
+    problems.push(`it was recorded under --test ${JSON.stringify(record.test)}, and this run's is ${JSON.stringify(opts.test)}`);
+  }
+  const head = headSha();
+  if (record.head !== head) problems.push(`it was recorded at ${record.head}, and HEAD is ${head}`);
+  if (record.cwd !== runDirectory()) {
+    problems.push(`it was recorded from ${JSON.stringify(record.cwd)}, and this run starts in ${JSON.stringify(runDirectory())}`);
+  }
+  const state = treeState();
+  for (const key of ['tracked', 'untracked', 'flagged']) {
+    if (JSON.stringify(state[key]) !== JSON.stringify(record.state[key])) {
+      problems.push(`the tree's ${key} entries differ: now ${JSON.stringify(state[key]).slice(0, 400)}, recorded ${JSON.stringify(record.state[key]).slice(0, 400)}`);
+    }
+  }
+  if (problems.length > 0) {
+    fail(
+      'the recorded baseline does not apply to this run, so no mutant is measured against it:\n' +
+      `${problems.map((problem) => `  - ${problem}`).join('\n')}\n` +
+      '  A baseline is reused only at the same HEAD, from the same directory, over the same tree status,\n' +
+      '  under the same --test.'
+    );
+  }
+  return record;
+}
+
+if (BASELINE_ONLY) {
+  // A record inside the tree it describes is a new untracked file there, so no reuse would find
+  // the tree it records (#1100 review, checker N5). Inside means a path segment `..` does not
+  // lead out, not a name that merely starts with `..` (`..rec.json`, round 2); an ignored path is
+  // never part of the tree's state, so it is allowed; a directory that does not exist is refused
+  // here rather than crashing in realpathSync.
+  let recordAt;
+  try {
+    recordAt = relative(realpathSync(repoRoot), resolve(realpathSync(dirname(resolve(opts.writeBaseline))), basename(opts.writeBaseline)));
+  } catch (error) {
+    fail(`--write-baseline ${opts.writeBaseline}: its directory cannot be resolved (${error.code ?? error.message})`);
+  }
+  const insideTree = recordAt !== '..' && !recordAt.startsWith(`..${sep}`) && !isAbsolute(recordAt);
+  if (insideTree && git(['check-ignore', '-q', '--', recordAt], { cwd: repoRoot }).status !== 0) {
+    fail(`--write-baseline ${opts.writeBaseline} is inside the tree it would describe; write it outside ${repoRoot}, or under an ignored path`);
+  }
+  const head = headSha();
+  const state = treeState();
+  if (state.tracked.length > 0 || state.flagged.length > 0) {
+    fail(
+      'a baseline is recorded only over a clean tree, and this one has tracked changes or index\n' +
+      'flags that a later row could not tell apart from its own leftovers:\n' +
+      [...state.tracked, ...state.flagged].slice(0, 10).map((line) => `  ${line}`).join('\n')
+    );
+  }
+  console.log(`\nmutation-check: recording a baseline at ${head}`);
+  console.log(`  test:     ${opts.test}`);
+  console.log(`  timeout:  ${timeoutSeconds} s\n`);
+  console.log('[1/1] baseline (expect green) ...');
+  const { passCount, leaves, leavesReason } = await measureBaseline();
+  // Read again after the run: a test that writes into the tree leaves a state no row will find,
+  // and that is better refused here than discovered as a refusal on every row.
+  if (JSON.stringify(treeState()) !== JSON.stringify(state)) {
+    fail('the baseline run changed the tree it ran in (a new untracked or modified file), so no row\nwould find the tree this record describes. Make the --test command write outside the tree.');
+  }
+  writeFileSync(opts.writeBaseline, `${JSON.stringify({ format: BASELINE_FORMAT, head, cwd: runDirectory(), test: opts.test, state, passCount, leaves, leavesReason })}\n`);
+  console.log(`baseline recorded in ${opts.writeBaseline}`);
+  process.exit(0);
+}
 
 const absFile = resolve(process.cwd(), opts.file);
 const relFile = relative(repoRoot, absFile);
@@ -447,25 +652,20 @@ console.log(`  test:     ${opts.test}`);
 // rather than only the one --help documents.
 console.log(`  timeout:  ${timeoutSeconds} s\n`);
 
-console.log('[1/5] baseline (expect green) ...');
-const baseline = await runCommand(opts.test, timeoutSeconds);
-if (baseline.timedOut) {
-  fail(
-    `Baseline HUNG — the test command ran past --timeout ${timeoutSeconds} s and its process group\n` +
-    'was killed. INCONCLUSIVE: a mutant cannot be judged against a suite that does not finish.\n' +
-    'Raise --timeout if the suite is genuinely that slow.'
-  );
+let baselinePassCount;
+let baselineLeaves;
+let baselineLeavesReason;
+if (opts.baseline !== undefined) {
+  console.log(`[1/5] baseline: reusing the record in ${opts.baseline} ...`);
+  const record = reuseBaseline(opts.baseline);
+  baselinePassCount = record.passCount;
+  baselineLeaves = record.leaves;
+  baselineLeavesReason = record.leavesReason ?? 'it could not be read when the record was made';
+  console.log(`      green when recorded${baselinePassCount !== null ? ` (${baselinePassCount} passing)` : ''}; HEAD, tree status and --test match it.\n`);
+} else {
+  console.log('[1/5] baseline (expect green) ...');
+  ({ passCount: baselinePassCount, leaves: baselineLeaves, leavesReason: baselineLeavesReason } = await measureBaseline());
 }
-const baselineProblem = inconclusiveReason(baseline);
-if (baselineProblem) fail(`Baseline inconclusive — ${baselineProblem}`);
-if (baseline.status !== 0) {
-  fail(
-    `Baseline is already failing (exit ${baseline.status}). Fix that first — a killed or\n` +
-    'surviving mutant means nothing when the suite is red to begin with.'
-  );
-}
-const baselinePassCount = parsePassCount(baseline.output);
-console.log(`      green${baselinePassCount !== null ? ` (${baselinePassCount} passing)` : ''}.\n`);
 
 const original = readFileSync(absFile, 'utf8');
 
@@ -543,6 +743,35 @@ let failCount = null;
 // Kept outside the try so the crash check can read it after `restore()` — the verdict block
 // needs the mutant's OUTPUT, not just its exit status.
 let mutantOutput = '';
+// The names a mutant adds over the baseline, or why they could not be read. Set only when the
+// mutant run produced a verdict (killed or survived).
+let names = null;
+
+/**
+ * The names report. "None added" and "could not be read" are different findings and print
+ * differently: the first is a red run that failed no node:test test, the second a transcript this
+ * tool could not read. Every line is indented, so no name can stand at column 0, where the
+ * envelope reads verdict lines.
+ */
+function namesReport(mutantOutput) {
+  const mutantLeaves = parseFailingLeafTests(mutantOutput);
+  const unreadable = baselineLeaves === null ? 'baseline' : mutantLeaves === null ? 'mutant' : null;
+  if (unreadable) {
+    const reason = unreadable === 'baseline' ? baselineLeavesReason : unreadableReason(mutantOutput);
+    return {
+      record: { readable: false, added: null, unreadable, reason },
+      lines: [`      failing test names: could not be read from the ${unreadable} run's output: ${reason}`],
+    };
+  }
+  const added = addedFailingTests(baselineLeaves, mutantLeaves);
+  return {
+    record: { readable: true, added, unreadable: null },
+    lines: [
+      `      failing tests added over the baseline: ${added.length}`,
+      ...added.map((leaf) => `        ✖ ${leaf.name}  (${leaf.file})`),
+    ],
+  };
+}
 
 try {
   console.log('[2/5] writing backup and applying mutation ...');
@@ -584,13 +813,26 @@ try {
       mutantOutput = mutant.output;
       failCount = parseFailCount(mutant.output);
       verdict = mutant.status !== 0 ? 'killed' : 'survived';
-      console.log(`      exit ${mutant.status}${failCount !== null ? `, ${failCount} failing` : ''}\n`);
+      names = namesReport(mutant.output);
+      console.log(`      exit ${mutant.status}${failCount !== null ? `, ${failCount} failing` : ''}`);
+      console.log(`${names.lines.join('\n')}\n`);
     }
   }
 } finally {
   console.log('[5/5] restoring ...');
   restore();
   console.log('      restored.\n');
+}
+
+// After the restore, so a path that cannot be written costs the record and never the file, and
+// caught, so it never costs the verdict either: uncaught, an unwritable path ended a killed
+// mutant in a stack trace with no verdict line (#1100 review, checker N3).
+if (opts.namesOut !== undefined && names !== null) {
+  try {
+    writeFileSync(opts.namesOut, `${JSON.stringify(names.record)}\n`);
+  } catch (error) {
+    console.log(`      the names record could not be written to ${opts.namesOut}: ${error.code ?? error.message}\n`);
+  }
 }
 
 // ── verdict ──────────────────────────────────────────────────────

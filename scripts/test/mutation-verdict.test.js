@@ -12,10 +12,18 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { rmTree } from './_tmp.js';
 import {
   crashSuspicion,
   parseFailCount,
   parsePassCount,
+  parseFailingLeafTests,
+  addedFailingTests,
+  unreadableReason,
   BROAD_KILL_SHARE,
   MIN_BASELINE_FOR_SHARE,
   CRASH_SIGNATURES,
@@ -388,4 +396,491 @@ test('the share signal is reporter-independent because its inputs are — shown,
     assert.equal(reasons.length, 1, `share signal under ${label}: ${JSON.stringify(reasons)}`);
     assert.match(reasons[0], /which is broad for one line/);
   }
+});
+
+// ── failing leaf tests, by name (S1) ─────────────────────────────────────────────────────────
+//
+// Cut from transcripts measured on node v26.11.1, piped, over a fixture holding a failing
+// top-level test, a failing test two `describe`s deep, a test whose subtest fails, a skipped test,
+// a failing TODO, and one name failing in two files. Shortened in two ways only: error bodies to
+// a line or two, and absolute paths to `/w/`. The column structure, which is all the parser reads,
+// is the transcript's.
+
+const SPEC_FAILING = [
+  '✔ top passes (2.296201ms)',
+  '✖ top fails | with a pipe (3.5011ms)',
+  '▶ suite one',
+  '  ✔ nested passes (0.360805ms)',
+  '  ✖ nested fails (0.50559ms)',
+  '  ▶ inner',
+  '    ✖ deep fails (0.236128ms)',
+  '  ✖ inner (0.647269ms)',
+  '✖ suite one (2.261275ms)',
+  '▶ parent with subtests',
+  '  ✔ sub passes (0.285612ms)',
+  '  ✖ sub fails (11.64609ms)',
+  '✖ parent with subtests (12.940608ms)',
+  '﹣ skipped one (0.274943ms) # SKIP',
+  '⚠ todo one (0.691684ms) # TODO',
+  '✖ same name in two files (20.718722ms)',
+  '✖ same name in two files (18.134213ms)',
+  'ℹ tests 12',
+  'ℹ suites 2',
+  'ℹ pass 3',
+  'ℹ fail 7',
+  'ℹ cancelled 0',
+  'ℹ skipped 1',
+  'ℹ todo 1',
+  'ℹ duration_ms 157.698366',
+  '',
+  '✖ failing tests:',
+  '',
+  'test at a.test.js:4:1',
+  '✖ top fails | with a pipe (3.5011ms)',
+  '  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:',
+  '  ',
+  '  1 !== 2',
+  '',
+  'test at a.test.js:7:3',
+  '✖ nested fails (0.50559ms)',
+  "  'a' !== 'b'",
+  '',
+  'test at a.test.js:8:29',
+  '✖ deep fails (0.236128ms)',
+  '  Error: boom',
+  '',
+  'test at a.test.js:12:11',
+  '✖ sub fails (11.64609ms)',
+  '    assert.ok(false)',
+  '',
+  'test at a.test.js:15:1',
+  '⚠ todo one (0.691684ms) # TODO',
+  '    assert.ok(false)',
+  '',
+  'test at b.test.js:3:1',
+  '✖ same name in two files (20.718722ms)',
+  '    assert.ok(false)',
+  '',
+  'test at c.test.js:3:1',
+  '✖ same name in two files (18.134213ms)',
+  '    assert.ok(false)',
+].join('\n');
+
+// The same fixture under `--test-reporter=tap`, over a.test.js and b.test.js only.
+const TAP_FAILING = [
+  'TAP version 13',
+  '# Subtest: top passes',
+  'ok 1 - top passes',
+  '  ---',
+  "  type: 'test'",
+  '  ...',
+  '# Subtest: top fails | with a pipe',
+  'not ok 2 - top fails | with a pipe',
+  '  ---',
+  "  type: 'test'",
+  "  location: '/w/a.test.js:4:1'",
+  "  failureType: 'testCodeFailure'",
+  '  error: |-',
+  '    Expected values to be strictly equal:',
+  '  ...',
+  '# Subtest: suite one',
+  '    # Subtest: nested passes',
+  '    ok 1 - nested passes',
+  '      ---',
+  "      type: 'test'",
+  '      ...',
+  '    # Subtest: nested fails',
+  '    not ok 2 - nested fails',
+  '      ---',
+  "      type: 'test'",
+  "      location: '/w/a.test.js:7:3'",
+  "      failureType: 'testCodeFailure'",
+  '      ...',
+  '    # Subtest: inner',
+  '        # Subtest: deep fails',
+  '        not ok 1 - deep fails',
+  '          ---',
+  "          type: 'test'",
+  "          location: '/w/a.test.js:8:29'",
+  "          failureType: 'testCodeFailure'",
+  '          ...',
+  '        1..1',
+  '    not ok 3 - inner',
+  '      ---',
+  "      type: 'suite'",
+  "      location: '/w/a.test.js:8:3'",
+  "      failureType: 'subtestsFailed'",
+  '      ...',
+  '    1..3',
+  'not ok 3 - suite one',
+  '  ---',
+  "  type: 'suite'",
+  "  location: '/w/a.test.js:5:1'",
+  "  failureType: 'subtestsFailed'",
+  '  ...',
+  '# Subtest: parent with subtests',
+  '    # Subtest: sub passes',
+  '    ok 1 - sub passes',
+  '      ---',
+  "      type: 'test'",
+  '      ...',
+  '    # Subtest: sub fails',
+  '    not ok 2 - sub fails',
+  '      ---',
+  "      type: 'test'",
+  "      location: '/w/a.test.js:12:11'",
+  "      failureType: 'testCodeFailure'",
+  '      ...',
+  '    1..2',
+  'not ok 4 - parent with subtests',
+  '  ---',
+  "  type: 'test'",
+  "  location: '/w/a.test.js:10:1'",
+  "  failureType: 'subtestsFailed'",
+  '  ...',
+  '# Subtest: skipped one',
+  'ok 5 - skipped one # SKIP',
+  '  ---',
+  "  type: 'test'",
+  '  ...',
+  '# Subtest: todo one',
+  'not ok 6 - todo one # TODO',
+  '  ---',
+  "  type: 'test'",
+  "  location: '/w/a.test.js:15:1'",
+  "  failureType: 'testCodeFailure'",
+  '  ...',
+  '# Subtest: same name in two files',
+  'not ok 7 - same name in two files',
+  '  ---',
+  "  type: 'test'",
+  "  location: '/w/b.test.js:3:1'",
+  "  failureType: 'testCodeFailure'",
+  '  ...',
+  '1..7',
+  '# tests 11',
+  '# suites 2',
+  '# pass 3',
+  '# fail 6',
+  '# cancelled 0',
+  '# skipped 1',
+  '# todo 1',
+  '# duration_ms 144.657037',
+].join('\n');
+
+const names = (leaves) => leaves.map((leaf) => `${leaf.file} :: ${leaf.name}`);
+
+test('spec: the failing-tests section yields the leaves, without their parents or the failing TODO', () => {
+  assert.deepEqual(names(parseFailingLeafTests(SPEC_FAILING)), [
+    'a.test.js :: top fails | with a pipe',
+    'a.test.js :: nested fails',
+    'a.test.js :: deep fails',
+    'a.test.js :: sub fails',
+    'b.test.js :: same name in two files',
+    'c.test.js :: same name in two files',
+  ]);
+});
+
+test('the leaf count is not the fail count, and nothing equates them', () => {
+  // `fail 7` counts `parent with subtests`, which the section leaves out; six leaves are listed.
+  assert.equal(parseFailCount(SPEC_FAILING), 7);
+  assert.equal(parseFailingLeafTests(SPEC_FAILING).length, 6);
+});
+
+test('TAP: the same run yields the same leaves, parents dropped by their failureType', () => {
+  assert.deepEqual(names(parseFailingLeafTests(TAP_FAILING)), [
+    '/w/a.test.js :: top fails | with a pipe',
+    '/w/a.test.js :: nested fails',
+    '/w/a.test.js :: deep fails',
+    '/w/a.test.js :: sub fails',
+    '/w/b.test.js :: same name in two files',
+  ]);
+});
+
+test('a timed-out test and a file that throws on load are leaves, and cancelled counts as a failure', () => {
+  // Measured: the timeout is counted under `cancelled`, not `fail`, so a rule reading `fail`
+  // alone would call this transcript contradictory.
+  const spec = [
+    '✖ times out (53.13136ms)',
+    '✖ e.test.js (64.704231ms)',
+    'ℹ tests 4',
+    'ℹ pass 2',
+    'ℹ fail 1',
+    'ℹ cancelled 1',
+    '',
+    '✖ failing tests:',
+    '',
+    'test at d.test.js:2:1',
+    '✖ times out (53.13136ms)',
+    "  'test timed out after 50ms'",
+    '',
+    'test at e.test.js:1:1',
+    '✖ e.test.js (64.704231ms)',
+    "  'test failed'",
+  ].join('\n');
+  assert.deepEqual(names(parseFailingLeafTests(spec)), ['d.test.js :: times out', 'e.test.js :: e.test.js']);
+  // A timeout alone: `fail 0`, `cancelled 1`, one leaf. Reading `fail` alone refuses this one.
+  const timeoutOnly = [
+    'ℹ fail 0',
+    'ℹ cancelled 1',
+    '✖ failing tests:',
+    'test at d.test.js:2:1',
+    '✖ times out (53.13136ms)',
+    "  'test timed out after 50ms'",
+  ].join('\n');
+  assert.deepEqual(names(parseFailingLeafTests(timeoutOnly)), ['d.test.js :: times out']);
+});
+
+test('a failing hook and a timed-out parent: cancelled children print no duration, and both reporters list the same five', () => {
+  // Measured on node v26.11.1 (#1100 review, S2): a describe whose before() throws, and a parent
+  // that times out with a child still running. `fail 0`, `cancelled 4`. Until the cancelled shape
+  // was read, the duration-less entries made the whole transcript unreadable.
+  const spec = [
+    'ℹ tests 4',
+    'ℹ pass 0',
+    'ℹ fail 0',
+    'ℹ cancelled 4',
+    '',
+    '✖ failing tests:',
+    '',
+    'test at hook.test.mjs:4:3',
+    '✖ child one',
+    "  'test did not finish before its parent and was cancelled'",
+    '',
+    'test at hook.test.mjs:5:3',
+    '✖ child two',
+    "  'test did not finish before its parent and was cancelled'",
+    '',
+    'test at hook.test.mjs:2:1',
+    '✖ suite with failing before (1.537871ms)',
+    '  Error: hook boom',
+    '',
+    'test at hook.test.mjs:8:11',
+    '✖ slow child (53.585143ms)',
+    "  'test did not finish before its parent and was cancelled'",
+    '',
+    'test at hook.test.mjs:7:1',
+    '✖ parent that times out (54.196835ms)',
+    "  'test timed out after 50ms'",
+  ].join('\n');
+  const tap = [
+    '    not ok 1 - child one',
+    '      ---',
+    "      location: '/w/hook.test.mjs:4:3'",
+    "      failureType: 'cancelledByParent'",
+    '      ...',
+    '    not ok 2 - child two',
+    '      ---',
+    "      location: '/w/hook.test.mjs:5:3'",
+    "      failureType: 'cancelledByParent'",
+    '      ...',
+    'not ok 1 - suite with failing before',
+    '  ---',
+    "  location: '/w/hook.test.mjs:2:1'",
+    "  failureType: 'hookFailed'",
+    '  ...',
+    '    not ok 1 - slow child',
+    '      ---',
+    "      location: '/w/hook.test.mjs:8:11'",
+    "      failureType: 'cancelledByParent'",
+    '      ...',
+    'not ok 2 - parent that times out',
+    '  ---',
+    "  location: '/w/hook.test.mjs:7:1'",
+    "  failureType: 'testTimeoutFailure'",
+    '  ...',
+    '# fail 0',
+    '# cancelled 4',
+  ].join('\n');
+  const five = ['child one', 'child two', 'suite with failing before', 'slow child', 'parent that times out'];
+  assert.deepEqual(parseFailingLeafTests(spec).map((leaf) => leaf.name), five);
+  assert.deepEqual(parseFailingLeafTests(tap).map((leaf) => leaf.name), five);
+  // A cancelled name holding ` # ` is not cut at it, and a timed name holding one is not either.
+  const hashes = ['ℹ fail 1', 'ℹ cancelled 1', '✖ failing tests:', 'test at h.test.mjs:1:1', '✖ cancelled # with a hash',
+    'test at h.test.mjs:2:1', '✖ timed # with a hash (2ms)'].join('\n');
+  assert.deepEqual(parseFailingLeafTests(hashes).map((leaf) => leaf.name), ['cancelled # with a hash', 'timed # with a hash']);
+});
+
+test('a TAP-shaped line a test prints into a spec transcript is not read as a leaf', () => {
+  // Measured (#1100 review, checker N2): a passing test that console.logs `not ok 3 - phantom`
+  // puts it at column 0 of the spec output, where the TAP reader used to find a leaf.
+  const green = ['not ok 3 - phantom printed by a passing test', '✔ prints a line (1ms)', 'ℹ tests 1', 'ℹ pass 1', 'ℹ fail 0', 'ℹ cancelled 0'].join('\n');
+  assert.deepEqual(parseFailingLeafTests(green), [], 'a green spec run with a printed TAP line fails nothing');
+  const red = ['not ok 3 - phantom', 'ℹ fail 1', 'ℹ cancelled 0', '✖ failing tests:', 'test at r.test.mjs:1:1', '✖ the real one (1ms)'].join('\n');
+  assert.deepEqual(parseFailingLeafTests(red).map((leaf) => leaf.name), ['the real one']);
+});
+
+test('a TODO child cancelled by its parent is read and skipped; a name split by a newline is refused, not cut', () => {
+  // Measured on node v26.11.1 (#1100 review round 2): a describe whose before() throws, holding a
+  // plain child and a TODO child, and a timed test whose name holds a newline.
+  const shapes = [
+    'ℹ fail 1',
+    'ℹ cancelled 1',
+    'ℹ todo 1',
+    '✖ failing tests:',
+    'test at shapes.test.mjs:4:3',
+    '✖ plain child',
+    "  'test did not finish before its parent and was cancelled'",
+    'test at shapes.test.mjs:5:3',
+    '⚠ todo child # TODO',
+    "  'test did not finish before its parent and was cancelled'",
+    'test at shapes.test.mjs:2:1',
+    '✖ suite whose hook fails (15.659313ms)',
+    '  Error: hook boom',
+  ];
+  assert.deepEqual(parseFailingLeafTests(shapes.join('\n')).map((leaf) => leaf.name), ['plain child', 'suite whose hook fails']);
+  const split = [...shapes, 'test at shapes.test.mjs:7:1', '✖ failing name with', 'newline (0.37929ms)', '  Error: x'];
+  assert.equal(parseFailingLeafTests(split.join('\n')), null, 'a name cut at its newline would be a wrong name, read as a cancelled child');
+});
+
+test('an unreadable transcript says which of the three reasons applies, and a readable one gives none', () => {
+  assert.match(unreadableReason('npm error code 1'), /no node:test summary line/);
+  assert.match(unreadableReason(SPEC_FAILING.replace('test at a.test.js:8:29\n✖ deep fails (0.236128ms)', 'test at a.test.js:8:29\n  Error: where the test line belongs')), /an entry it cannot read in the failing-tests section/);
+  assert.match(unreadableReason(SPEC_FAILING.replace('ℹ fail 7', 'ℹ fail 0')), /lists 6 failing test\(s\) against a summary of 0 failed or cancelled/);
+  assert.equal(unreadableReason(SPEC_FAILING), null);
+});
+
+test('a green run returns an empty list, not null', () => {
+  assert.deepEqual(parseFailingLeafTests(SPEC_TAIL.replace('ℹ fail 1', 'ℹ fail 0')), []);
+  assert.deepEqual(parseFailingLeafTests(TAP_TAIL.replace('# fail 1', '# fail 0')), []);
+});
+
+test('an unreadable transcript is null, never an empty list', () => {
+  // No summary at all: a pretest hook that failed before node:test ran, say.
+  assert.equal(parseFailingLeafTests('npm error code 1\nnpm error path /w'), null);
+  assert.equal(parseFailingLeafTests(''), null);
+  // A failure counted and no section to name it.
+  assert.equal(parseFailingLeafTests(SPEC_TAIL), null);
+  assert.equal(parseFailingLeafTests(TAP_TAIL), null);
+  // A section entry in a shape the parser does not know. The `test at` prefix pins the edit to the
+  // section: the same text without it occurs first in the tree, where a bare replace landed.
+  const entry = 'test at a.test.js:8:29\n✖ deep fails (0.236128ms)';
+  assert.equal(SPEC_FAILING.split(entry).length, 2, 'the edited entry must exist exactly once');
+  const malformed = SPEC_FAILING.replace(entry, 'test at a.test.js:8:29\n  Error: an error line where the test line belongs');
+  assert.equal(parseFailingLeafTests(malformed), null);
+  // Leaves listed while the summary counts no failure and no cancellation.
+  const contradicts = SPEC_FAILING.replace('ℹ fail 7', 'ℹ fail 0');
+  assert.equal(parseFailingLeafTests(contradicts), null);
+});
+
+test('a name keeps its parentheses, pipes, # and backslashes; a TODO with a reason is still a TODO', () => {
+  // Measured: `{ todo: 'later' }` prints `# later` with no TODO in it, and TAP escapes `#` and `\`.
+  const spec = [
+    'ℹ fail 2',
+    'ℹ cancelled 0',
+    '✖ failing tests:',
+    'test at f.test.js:2:1',
+    '✖ hash # inside and back\\slash (1.986984ms)',
+    'test at f.test.js:3:1',
+    '⚠ todo with reason (0.320709ms) # later',
+    'test at f.test.js:4:1',
+    '✖ calls f(x) (twice) (2.5ms)',
+  ].join('\n');
+  assert.deepEqual(names(parseFailingLeafTests(spec)), [
+    'f.test.js :: hash # inside and back\\slash',
+    'f.test.js :: calls f(x) (twice)',
+  ]);
+  const tap = [
+    'not ok 1 - hash \\# inside and back\\\\slash',
+    '  ---',
+    "  location: '/w/f.test.js:2:1'",
+    "  failureType: 'testCodeFailure'",
+    '  ...',
+    'not ok 2 - todo with reason # TODO later',
+    '  ---',
+    "  location: '/w/f.test.js:3:1'",
+    "  failureType: 'testCodeFailure'",
+    '  ...',
+    '# fail 1',
+    '# cancelled 0',
+  ].join('\n');
+  assert.deepEqual(names(parseFailingLeafTests(tap)), ['/w/f.test.js :: hash # inside and back\\slash']);
+});
+
+test('colour forced into the pipe does not hide the section', () => {
+  // Measured with FORCE_COLOR=1: the header and the entry are wrapped in SGR sequences.
+  const coloured = [
+    '\x1b[34mℹ fail 1\x1b[39m',
+    '\x1b[34mℹ cancelled 0\x1b[39m',
+    '',
+    '\x1b[31m✖ failing tests:\x1b[39m',
+    '',
+    'test at b.test.js:3:1',
+    '\x1b[31m✖ same name in two files \x1b[90m(15.641273ms)\x1b[39m\x1b[39m',
+  ].join('\n');
+  assert.deepEqual(names(parseFailingLeafTests(coloured)), ['b.test.js :: same name in two files']);
+});
+
+test('a transcript quoted inside a failing test adds no leaf and no count, in either reporter', () => {
+  // node indents an error's text, so a fixture printed inside an assertion diff sits off column 0.
+  // These quote a whole failing transcript, summary included, in exactly that position.
+  const spec = [
+    'ℹ fail 1',
+    'ℹ cancelled 0',
+    '✖ failing tests:',
+    'test at real.test.js:9:1',
+    '✖ the real leaf (1ms)',
+    '  AssertionError: unexpected',
+    '  ℹ fail 9',
+    '  ✖ failing tests:',
+    '  test at quoted.test.js:1:1',
+    '  ✖ a quoted leaf (1ms)',
+  ].join('\n');
+  assert.deepEqual(names(parseFailingLeafTests(spec)), ['real.test.js :: the real leaf']);
+  const tap = [
+    'ok 1 - passes, with quoted text in its block',
+    '  ---',
+    '  note: |-',
+    '    not ok 7 - quoted in a passing block',
+    '  ...',
+    'not ok 2 - the real leaf',
+    '  ---',
+    "  location: '/w/real.test.js:9:1'",
+    "  failureType: 'testCodeFailure'",
+    '  error: |-',
+    '    not ok 8 - quoted in a failing block',
+    // A field read at any indent would take this one and drop the real leaf as a parent.
+    "    failureType: 'subtestsFailed'",
+    '    # fail 9',
+    '  ...',
+    '# fail 1',
+    '# cancelled 0',
+  ].join('\n');
+  assert.deepEqual(names(parseFailingLeafTests(tap)), ['/w/real.test.js :: the real leaf']);
+});
+
+test('a real failing node:test run whose error message is a transcript yields only its own leaf', (t) => {
+  // The case the column-0 anchor exists for, run rather than described. The shape matters and was
+  // measured (node v26.11.1): an `assert.equal` diff prints a multi-line string ESCAPED on one
+  // line (`+ 'ℹ fail 3\n✖ failing tests:\n…'`), which no line-anchored reader can misread, while a
+  // thrown Error prints each line of its message on its own line, indented two columns. That is
+  // the shape a parser without the anchor misreads, so it is the one run here.
+  const dir = mkdtempSync(join(tmpdir(), 'leaf-names-'));
+  t.after(() => rmTree(dir));
+  const quoted = ['ℹ fail 3', '✖ failing tests:', 'test at quoted.test.js:1:1', '✖ a quoted leaf (1ms)'].join('\n');
+  writeFileSync(join(dir, 'quotes.test.mjs'), [
+    "import { test } from 'node:test';",
+    `test('throws a transcript as its message', () => { throw new Error(${JSON.stringify(quoted)}); });`,
+    '',
+  ].join('\n'));
+  // NODE_TEST_CONTEXT goes: node:test exports it to this file's process, and a nested `node --test`
+  // that inherits it reports to a parent that is not listening, exiting 0 with no summary
+  // (measured on node v26.11.1: `child-v8`, exit 0, 184 bytes, against exit 1 with the summary).
+  const env = { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' };
+  delete env.NODE_TEST_CONTEXT;
+  const run = spawnSync(process.execPath, ['--test', 'quotes.test.mjs'], { cwd: dir, encoding: 'utf8', env });
+  const output = `${run.stdout}${run.stderr}`;
+  assert.notEqual(run.status, 0, 'the fixture test must fail');
+  assert.match(output, /^ {2}test at quoted\.test\.js:1:1$/m, 'the quoted lines must arrive on lines of their own, or this proves nothing');
+  assert.deepEqual(names(parseFailingLeafTests(output)), ['quotes.test.mjs :: throws a transcript as its message']);
+});
+
+test('addedFailingTests subtracts the baseline by file and name, as a multiset, and keeps null', () => {
+  const leaf = (file, name) => ({ file, name });
+  const baseline = [leaf('a.js', 'shared'), leaf('a.js', 'twice')];
+  const mutant = [leaf('a.js', 'shared'), leaf('a.js', 'twice'), leaf('a.js', 'twice'), leaf('b.js', 'shared'), leaf('a.js', 'new')];
+  assert.deepEqual(names(addedFailingTests(baseline, mutant)), ['a.js :: twice', 'b.js :: shared', 'a.js :: new']);
+  assert.deepEqual(addedFailingTests([], []), []);
+  assert.equal(addedFailingTests(null, mutant), null);
+  assert.equal(addedFailingTests(baseline, null), null);
 });
