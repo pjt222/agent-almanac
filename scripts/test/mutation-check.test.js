@@ -350,8 +350,11 @@ test('a file that is not a baseline record is refused, and the record flags refu
     [['--test', 'true', '--write-baseline'], /--write-baseline needs a file path/],
     [['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--baseline'], /--baseline needs a file path/],
     [['--write-baseline', join(out, 'b.json')], /--test is required/],
-    // Inside the tree it would describe (#1100 review, checker N5).
+    // Inside the tree it would describe (#1100 review, checker N5), a name starting with `..`
+    // included (round 2), and a directory that does not exist, refused without a stack trace.
     [['--test', 'true', '--write-baseline', 'inside.json'], /is inside the tree it would describe/],
+    [['--test', 'true', '--write-baseline', '..rec.json'], /is inside the tree it would describe/],
+    [['--test', 'true', '--write-baseline', join(out, 'no-such-dir', 'b.json')], /its directory cannot be resolved \(ENOENT\)/],
   ];
   for (const [flags, expected] of flagCases) {
     const r = runTool(dir, flags);
@@ -360,7 +363,14 @@ test('a file that is not a baseline record is refused, and the record flags refu
   }
   assert.equal(existsSync(join(out, 'b.json')), false);
   assert.equal(existsSync(join(dir, 'inside.json')), false);
+  assert.equal(existsSync(join(dir, '..rec.json')), false);
   assert.equal(git('status', '--porcelain'), '');
+  // An ignored path inside the tree is not part of its state: the record may live there.
+  writeFileSync(join(dir, '.git', 'info', 'exclude'), 'records/\n');
+  mkdirSync(join(dir, 'records'));
+  const ignored = runTool(dir, ['--test', 'true', '--write-baseline', 'records/b.json']);
+  assert.equal(ignored.status, 0, ignored.out);
+  assert.equal(git('status', '--porcelain'), '', 'an ignored record leaves the status clean');
 });
 
 test('a reused baseline carries its failing leaves, and the mutant is credited only with what it adds', (t) => {

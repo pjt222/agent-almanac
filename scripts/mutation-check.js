@@ -55,7 +55,7 @@
  */
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readFileSync, realpathSync, unlinkSync, writeFileSync } from 'node:fs';
-import { basename, dirname, extname, isAbsolute, relative, resolve } from 'node:path';
+import { basename, dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { parseFailCount, parsePassCount, crashSuspicion, parseFailingLeafTests, addedFailingTests, unreadableReason } from './lib/mutation-verdict.js';
 import { checkSyntax, CHECKED_EXTENSIONS, SYNTAX_FREE_EXTENSIONS } from './lib/mutation-parse.js';
 
@@ -518,10 +518,19 @@ function reuseBaseline(file) {
 
 if (BASELINE_ONLY) {
   // A record inside the tree it describes is a new untracked file there, so no reuse would find
-  // the tree it records (#1100 review, checker N5).
-  const recordAt = relative(realpathSync(repoRoot), resolve(realpathSync(dirname(resolve(opts.writeBaseline))), basename(opts.writeBaseline)));
-  if (!recordAt.startsWith('..') && !isAbsolute(recordAt)) {
-    fail(`--write-baseline ${opts.writeBaseline} is inside the tree it would describe; write it outside ${repoRoot}`);
+  // the tree it records (#1100 review, checker N5). Inside means a path segment `..` does not
+  // lead out, not a name that merely starts with `..` (`..rec.json`, round 2); an ignored path is
+  // never part of the tree's state, so it is allowed; a directory that does not exist is refused
+  // here rather than crashing in realpathSync.
+  let recordAt;
+  try {
+    recordAt = relative(realpathSync(repoRoot), resolve(realpathSync(dirname(resolve(opts.writeBaseline))), basename(opts.writeBaseline)));
+  } catch (error) {
+    fail(`--write-baseline ${opts.writeBaseline}: its directory cannot be resolved (${error.code ?? error.message})`);
+  }
+  const insideTree = recordAt !== '..' && !recordAt.startsWith(`..${sep}`) && !isAbsolute(recordAt);
+  if (insideTree && git(['check-ignore', '-q', '--', recordAt], { cwd: repoRoot }).status !== 0) {
+    fail(`--write-baseline ${opts.writeBaseline} is inside the tree it would describe; write it outside ${repoRoot}, or under an ignored path`);
   }
   const head = headSha();
   const state = treeState();
