@@ -256,6 +256,16 @@ if (first && process.env.STUB_READ_STDIN) fs.readFileSync(0);
 // The names record the envelope asked for, when the arm supplies one.
 const namesOut = argv.includes('--names-out') ? argv[argv.indexOf('--names-out') + 1] : null;
 if (namesOut && process.env.STUB_NAMES) fs.writeFileSync(namesOut, process.env.STUB_NAMES);
+// A tree `worktree remove --force` cannot remove: locked. With STUB_FOREIGN_ADMIN its admin
+// directory's gitdir is also pointed elsewhere, as when a peer's worktree reused the name.
+if (process.env.STUB_LOCK && first) {
+  const cp = require('child_process');
+  cp.execFileSync('git', ['worktree', 'lock', process.cwd()]);
+  if (process.env.STUB_FOREIGN_ADMIN) {
+    const admin = cp.execFileSync('git', ['rev-parse', '--absolute-git-dir'], { encoding: 'utf8' }).trim();
+    fs.writeFileSync(path.join(admin, 'gitdir'), `${process.env.STUB_FOREIGN_ADMIN}\n`);
+  }
+}
 // What a row sees from where it runs: the lent node_modules, and its working directory.
 if (process.env.STUB_SEE_LINK) fs.appendFileSync(here('seen.log'), fs.existsSync('node_modules/marker') ? 'LINK-VISIBLE\n' : 'LINK-ABSENT\n');
 if (process.env.STUB_PWD) fs.appendFileSync(here('pwd.log'), `${process.cwd()}\n`);
@@ -643,6 +653,22 @@ JSON
   fi
   gone peer-arm-tree-removed
   mv "${STUB:?}/peer-moved" "${STUB:?}/peer" && git -C "${REPO_ARMS:?}" worktree remove --force "${STUB:?}/peer"
+  # A locked tree survives `worktree remove --force`: the fallback removes its own admin directory,
+  # so no registration is left. And when that admin directory's gitdir names another tree (a peer
+  # reused the name), the fallback leaves it alone.
+  export STUB_LOCK=1
+  arm locked-tree "$P/two-good.tsv" 0 2 ''
+  gone locked-tree-deregistered-by-the-fallback
+  export STUB_FOREIGN_ADMIN="${STUB:?}/someone-else/.git"
+  arm locked-tree-foreign-admin "$P/two-good.tsv" 0 2 ''
+  if git -C "${REPO_ARMS:?}" worktree list --porcelain | grep -q -x -F "worktree ${STUB:?}/someone-else"; then
+    echo "  ok    a-foreign-admin-dir-is-left-alone"
+  else
+    echo "  FAIL  a-foreign-admin-dir-is-left-alone: the fallback removed an admin dir whose gitdir named another tree" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
+  unset STUB_LOCK STUB_FOREIGN_ADMIN
+  git -C "${REPO_ARMS:?}" worktree prune # the arms' own repository: clear the registration the arm left on purpose
+
   # An inherited GIT_DIR names some other repository; the run ignores it and writes nothing there.
   (cd "${REPO_ARMS:?}" && GIT_DIR="${STUB:?}/decoy.git" GIT_WORK_TREE="${STUB:?}/decoy" bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${STUB:?}/logs") \
     > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
@@ -879,12 +905,14 @@ cleanup() {
   if [ -n "$PARENT" ]; then
     # Its own registration only, never `git worktree prune`: prune drops EVERY registration whose
     # directory reads as missing, and a peer's worktree registered from Windows (`D:/...`) always
-    # reads so from WSL. `worktree remove` deregisters the tree it is given; if it failed, the
-    # admin directory recorded at creation is removed by name, and only when it sits where git
-    # keeps worktree admin directories.
+    # reads so from WSL. `worktree remove` deregisters the tree it is given. When the admin
+    # directory recorded at creation still exists afterwards (the remove failed, on a locked tree
+    # say), it is removed only if it sits where git keeps worktree admin directories AND its
+    # gitdir file still points at this run's tree: git reuses a freed name (tree, tree1, ...), so
+    # a peer's worktree made in between can hold the same name (#1100 review round 2).
     if [ "$TREE_MODE" = worktree ]; then
       git -C "$CALLER" worktree remove --force "$TREE" >/dev/null 2>&1
-      if [ -n "$ADMIN" ] && [ -d "$ADMIN" ]; then
+      if [ -n "$ADMIN" ] && [ -d "$ADMIN" ] && [ "$(cat "$ADMIN/gitdir" 2>/dev/null)" = "$TREE/.git" ]; then
         case "$ADMIN" in "$COMMON_DIR/worktrees/"?*) rm -rf -- "${ADMIN:?}" ;; esac
       fi
     fi
