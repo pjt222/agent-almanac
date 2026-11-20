@@ -215,6 +215,133 @@ test('--names-out with no path is refused before any baseline, and no record is 
   assert.equal(git('status', '--porcelain'), '');
 });
 
+// ── one baseline per run: --write-baseline and --baseline (S1) ──────────────
+
+/** A directory outside the fixture repository for records and counters. */
+function outsideDir(t) {
+  const dir = mkdtempSync(join(tmpdir(), 'mutation-check-baseline-'));
+  t.after(() => rmTree(dir));
+  return dir;
+}
+
+test('a baseline recorded once is reused, and the row runs its test command once instead of twice', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const out = outsideDir(t);
+  const record = join(out, 'baseline.json');
+  const counter = join(out, 'runs');
+  const testCmd = `echo run >> '${counter}'; grep -q alpha notes.md`;
+  const r1 = runTool(dir, ['--test', testCmd, '--write-baseline', record]);
+  assert.equal(r1.status, 0, r1.out);
+  const written = JSON.parse(readFileSync(record, 'utf8'));
+  assert.equal(written.format, 'mutation-check-baseline/1');
+  assert.equal(written.head, git('rev-parse', 'HEAD').trim());
+  assert.equal(written.test, testCmd);
+  assert.deepEqual(written.state, { tracked: [], untracked: [], flagged: [] });
+  assert.equal(readFileSync(counter, 'utf8'), 'run\n', 'recording ran the command once');
+  const r2 = runTool(dir, ['--file', 'notes.md', '--test', testCmd, '--replace', 'alpha::beta', '--baseline', record]);
+  assert.match(r2.out, /\[1\/5\] baseline: reusing the record in /, r2.out);
+  assert.match(r2.out, /MUTANT KILLED/, r2.out);
+  assert.equal(readFileSync(counter, 'utf8'), 'run\nrun\n', 'the row ran only the mutant, not a second baseline');
+  assert.equal(git('status', '--porcelain'), '');
+});
+
+test('a recorded baseline is refused when the --test string, HEAD, an untracked entry, an index flag or a tracked file differs', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  writeFileSync(join(dir, 'other.md'), 'other\n');
+  git('add', 'other.md');
+  git('commit', '-qm', 'other');
+  const out = outsideDir(t);
+  const record = join(out, 'baseline.json');
+  const row = (testCmd = 'grep -q alpha notes.md') => runTool(dir, ['--file', 'notes.md', '--test', testCmd, '--replace', 'alpha::beta', '--baseline', record]);
+  const refused = (r, why, label) => {
+    assert.equal(r.status, 1, `${label}\n${r.out}`);
+    assert.match(r.out, /the recorded baseline does not apply to this run/, `${label}\n${r.out}`);
+    assert.match(r.out, why, `${label}\n${r.out}`);
+    assert.doesNotMatch(r.out, /\[2\/5\]/, `${label}: refused before any mutation`);
+    assert.equal(readFileSync(join(dir, 'notes.md'), 'utf8'), 'alpha\n', label);
+  };
+  assert.equal(runTool(dir, ['--test', 'grep -q alpha notes.md', '--write-baseline', record]).status, 0);
+  refused(row('grep -q alpha notes.md && true'), /recorded under --test "grep -q alpha notes\.md"/, 'another --test');
+  writeFileSync(join(dir, 'stray.txt'), 'x\n');
+  refused(row(), /the tree's untracked entries differ: now \["stray\.txt"\], recorded \[\]/, 'an untracked file');
+  rmTree(join(dir, 'stray.txt'));
+  git('update-index', '--assume-unchanged', 'other.md');
+  refused(row(), /the tree's flagged entries differ/, 'an index flag');
+  git('update-index', '--no-assume-unchanged', 'other.md');
+  writeFileSync(join(dir, 'other.md'), 'changed\n');
+  refused(row(), /the tree's tracked entries differ/, 'a tracked change elsewhere');
+  git('checkout', '--', 'other.md');
+  git('commit', '-q', '--allow-empty', '-m', 'moves HEAD');
+  refused(row(), /it was recorded at [0-9a-f]{40}, and HEAD is [0-9a-f]{40}/, 'HEAD moved');
+});
+
+test('a baseline is not recorded over a dirty tree, over a red run, or when the run writes into the tree', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const record = join(outsideDir(t), 'baseline.json');
+  writeFileSync(join(dir, 'notes.md'), 'alpha, edited\n');
+  const dirty = runTool(dir, ['--test', 'true', '--write-baseline', record]);
+  assert.equal(dirty.status, 1, dirty.out);
+  assert.match(dirty.out, /recorded only over a clean tree/, dirty.out);
+  assert.doesNotMatch(dirty.out, /\[1\/1\]/, 'refused before the run');
+  git('checkout', '--', 'notes.md');
+  const red = runTool(dir, ['--test', 'exit 1', '--write-baseline', record]);
+  assert.equal(red.status, 1, red.out);
+  assert.match(red.out, /Baseline is already failing/, red.out);
+  const writes = runTool(dir, ['--test', 'touch made-by-the-test.txt', '--write-baseline', record]);
+  assert.equal(writes.status, 1, writes.out);
+  assert.match(writes.out, /the baseline run changed the tree it ran in/, writes.out);
+  assert.equal(existsSync(record), false, 'no record from any of the three');
+});
+
+test('a file that is not a baseline record is refused, and the record flags refuse what they cannot honour', (t) => {
+  const { dir, git } = makeRepo(t, 'alpha\n');
+  const out = outsideDir(t);
+  const cases = [
+    ['not json', /cannot be read as a baseline record/],
+    [JSON.stringify({ format: 'something-else/1' }), /is not a mutation-check-baseline\/1 record/],
+    [JSON.stringify({ format: 'mutation-check-baseline/1', passCount: 1, leaves: 'x', state: {} }), /is not a mutation-check-baseline\/1 record/],
+  ];
+  cases.forEach(([content, expected], index) => {
+    const record = join(out, `bad-${index}.json`);
+    writeFileSync(record, content);
+    const r = runTool(dir, ['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--baseline', record]);
+    assert.equal(r.status, 1, r.out);
+    assert.match(r.out, expected, r.out);
+    assert.doesNotMatch(r.out, /\[2\/5\]/, 'refused before any mutation');
+  });
+  const flagCases = [
+    [['--test', 'true', '--write-baseline', join(out, 'b.json'), '--file', 'notes.md'], /records a baseline only.*refusing file/],
+    [['--test', 'true', '--write-baseline', join(out, 'b.json'), '--replace', 'alpha::beta'], /refusing replace/],
+    [['--test', 'true', '--write-baseline', join(out, 'b.json'), '--baseline', join(out, 'b.json')], /mutually exclusive/],
+    [['--test', 'true', '--write-baseline'], /--write-baseline needs a file path/],
+    [['--file', 'notes.md', '--test', 'true', '--replace', 'alpha::beta', '--baseline'], /--baseline needs a file path/],
+    [['--write-baseline', join(out, 'b.json')], /--test is required/],
+  ];
+  for (const [flags, expected] of flagCases) {
+    const r = runTool(dir, flags);
+    assert.equal(r.status, 1, `${flags.join(' ')}\n${r.out}`);
+    assert.match(r.out, expected, `${flags.join(' ')}\n${r.out}`);
+  }
+  assert.equal(existsSync(join(out, 'b.json')), false);
+  assert.equal(git('status', '--porcelain'), '');
+});
+
+test('a reused baseline carries its failing leaves, and the mutant is credited only with what it adds', (t) => {
+  // The masked failure of the earlier names test, through a record: the leaf failing in the green
+  // baseline must come from the record, or it is credited to the mutant.
+  const { dir } = makeNodeTestRepo(t);
+  writeFileSync(join(dir, 'red.test.mjs'), "import { test } from 'node:test';\ntest('fails before any mutation', () => { throw new Error('already red'); });\n");
+  const out = outsideDir(t);
+  const record = join(out, 'baseline.json');
+  const testCmd = 'node --test red.test.mjs; grep -q alpha notes.md';
+  assert.equal(runTool(dir, ['--test', testCmd, '--write-baseline', record]).status, 0);
+  assert.deepEqual(JSON.parse(readFileSync(record, 'utf8')).leaves, [{ file: 'red.test.mjs', name: 'fails before any mutation' }]);
+  const names = join(out, 'names.json');
+  const r = runTool(dir, ['--file', 'notes.md', '--test', testCmd, '--replace', 'alpha::beta', '--baseline', record, '--names-out', names]);
+  assert.match(r.out, /MUTANT KILLED/, r.out);
+  assert.deepEqual(JSON.parse(readFileSync(names, 'utf8')), { readable: true, added: [], unreadable: null });
+});
+
 // ── stdin (#819 AC2) ────────────────────────────────────────────────────────
 
 test('the test command gets no stdin: a command that reads it sees EOF instead of waiting', (t) => {

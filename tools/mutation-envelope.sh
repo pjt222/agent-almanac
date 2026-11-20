@@ -62,7 +62,15 @@
 #                       those four string keys, and ids are unique and hold no `/`, tab or
 #                       newline. A TAB plan whose first id begins with `[` is read as JSON, and
 #                       refused when it does not parse.
-#   --out DIR     where the per-row logs land (default: a fresh mktemp -d, printed at the end)
+#   --out DIR     where the per-row logs land (default: a fresh mktemp -d, printed at the end);
+#                 refused when it is inside the measured tree, where each log would change the
+#                 tree a reused baseline was recorded over
+#
+# ONE BASELINE. The baseline runs once per table, not once per row: the checker records it
+# (--write-baseline) and every row reuses the record (--baseline), which the checker refuses
+# unless HEAD, the tree's status and the --test string all still match it. N rows cost N + 1
+# suite runs, not 2N. After each row the row's file must be byte-identical (git hash-object) and
+# the tree's status unchanged, or the table stops at that row.
 #
 # NAMES. Under each row the table prints the failing leaf tests that row's mutant added over the
 # baseline, as `+ <name>` lines, read by the checker from what the --test command already prints
@@ -75,11 +83,14 @@
 # Exit 0 when every row is `MUTANT KILLED`. Exit 1 when any row survives, is SUSPECT, INVALID,
 # HUNG or INCONCLUSIVE, or printed no verdict line at column 0 — read that row's log before
 # quoting anything. Names never change the exit code. Exit 2 when the envelope itself
-# could not run: no plan, an unreadable plan, a plan with no rows, or any row the plan check
-# refuses (a missing field, no `::`, or `::` more than once). Each of those is reached before
-# the first mutant is measured. The one exit 2 that comes after measuring is a run that measured
-# a different number of rows than the plan check counted: the run did not read the plan the check
-# read (a checker that reads its stdin drains the rows after its own), so do not quote the table.
+# could not run: no plan, an unreadable plan, a plan with no rows, any row the plan check
+# refuses (a missing field, no `::`, or `::` more than once; for JSON, the refusals listed under
+# --plan), not a git repository, an --out inside the measured tree, or a baseline that is red,
+# hangs or cannot be recorded. Each of those is reached before the first mutant is measured.
+# Two exits 2 come after measuring has begun: a row that did not leave the tree as it found it
+# (the table stops at that row), and a run that measured a different number of rows than the
+# plan check counted: the run did not read the plan the check read (a checker that reads its
+# stdin drains the rows after its own). Do not quote the table after either.
 set -uo pipefail
 
 # Resolved once, absolutely, and used for both the self-test's fixture and the checker call: an
@@ -174,11 +185,27 @@ if [ "$VERIFY" -eq 1 ]; then
 const fs = require('fs');
 const path = require('path');
 const argv = process.argv.slice(2);
-const calls = path.join(__dirname, '..', 'calls.log');
+const value = (flag) => argv[argv.indexOf(flag) + 1];
+const here = (name) => path.join(__dirname, '..', name);
+// A baseline call is counted apart from row calls, in baselines.log, so every arm's row count
+// means what it meant before the baseline moved out of the rows (S1).
+if (argv.includes('--write-baseline')) {
+  fs.appendFileSync(here('baselines.log'), 'baseline\n');
+  if (process.env.STUB_RED_BASELINE) {
+    console.log('ERROR: Baseline is already failing (exit 1). Fix that first');
+    process.exit(1);
+  }
+  fs.writeFileSync(value('--write-baseline'), '{}\n');
+  console.log('      green (5 passing).');
+  process.exit(0);
+}
+if (!argv.includes('--baseline') || value('--baseline') !== process.env.STUB_WANT_BASELINE) {
+  fs.appendFileSync(here('unbaselined.log'), `${value('--baseline')}\n`);
+}
+const calls = here('calls.log');
 const first = !fs.existsSync(calls);
 // One line per call: a --replace value as handed over, or a --from/--to pair JSON-encoded, so a
 // needle holding a newline stays on its line and an empty `to` stays visible.
-const value = (flag) => argv[argv.indexOf(flag) + 1];
 fs.appendFileSync(calls, (argv.includes('--replace') ? value('--replace') : `FROM ${JSON.stringify(value('--from'))} TO ${JSON.stringify(value('--to'))}`) + '\n');
 // On its first call, append a row the plan check refuses to the plan file it is told about.
 if (first && process.env.STUB_APPEND_TO) fs.appendFileSync(process.env.STUB_APPEND_TO, 'late\tsrc.js\ta::b::c\n');
@@ -187,6 +214,9 @@ if (first && process.env.STUB_READ_STDIN) fs.readFileSync(0);
 // The names record the envelope asked for, when the arm supplies one.
 const namesOut = argv.includes('--names-out') ? argv[argv.indexOf('--names-out') + 1] : null;
 if (namesOut && process.env.STUB_NAMES) fs.writeFileSync(namesOut, process.env.STUB_NAMES);
+// A checker that does not put the tree back: the row's file changed, or a stray file left.
+if (process.env.STUB_DIRTY) fs.appendFileSync(value('--file'), 'dirty\n');
+if (process.env.STUB_STRAY) fs.writeFileSync('stray.txt', 'stray\n');
 // A checker that dies after printing a name holding a verdict word, before any verdict line.
 if (process.env.STUB_NO_VERDICT) {
   console.log('        ✖ reports MUTANT KILLED in its name  (x.test.js)');
@@ -194,11 +224,20 @@ if (process.env.STUB_NO_VERDICT) {
 }
 console.log('MUTANT KILLED by 1 failing test(s)');
 JS
+  # The arms run inside a repository of their own: the envelope measures a git tree. Its logs,
+  # plans and the stub's counters all sit outside it, in ${STUB}.
+  REPO_ARMS="${STUB:?}/repo"
+  mkdir -p "${REPO_ARMS:?}" || exit 2
+  printf 'x\n' > "${REPO_ARMS:?}/src.js"
+  { git -C "${REPO_ARMS:?}" init -q -b main && git -C "${REPO_ARMS:?}" config user.email t@example.invalid \
+    && git -C "${REPO_ARMS:?}" config user.name fixture && git -C "${REPO_ARMS:?}" add src.js \
+    && git -C "${REPO_ARMS:?}" commit -qm arms; } >/dev/null 2>&1 || { echo "mutation-envelope --verify: FAILED — could not build the arms' repository" >&2; exit 1; }
+  export STUB_WANT_BASELINE="${STUB:?}/logs/baseline.json"
   ARMS_FAILED=0
   # arm <name> <plan> <wanted exit> <wanted checker calls> <text stderr must carry, or ''>
   arm() {
-    rm -f "${STUB:?}/calls.log"
-    bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$2" --out "${STUB:?}/logs" \
+    rm -f "${STUB:?}/calls.log" "${STUB:?}/baselines.log" "${STUB:?}/unbaselined.log"
+    (cd "${REPO_ARMS:?}" && bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$2" --out "${STUB:?}/logs") \
       > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
     local rc=$? calls=0
     [ -f "${STUB:?}/calls.log" ] && calls=$(wc -l < "${STUB:?}/calls.log")
@@ -348,12 +387,67 @@ JSON
   printf '[]\n' > "$P/empty.json"
   arm json-refuse-empty "$P/empty.json" 2 0 'a non-empty array of rows'
 
+  # ── one baseline per run (S1) ──
+  # counted <name> <file under STUB> <wanted lines>: a stub counter after the last arm.
+  counted() {
+    local lines=0
+    [ -f "${STUB:?}/$2" ] && lines=$(wc -l < "${STUB:?}/$2")
+    if [ "$lines" -eq "$3" ]; then echo "  ok    $1"; else
+      echo "  FAIL  $1: want $3 line(s) in $2, got $lines" >&2
+      ARMS_FAILED=$((ARMS_FAILED + 1))
+    fi
+  }
+  arm baseline-two-rows "$P/two-good.tsv" 0 2 ''
+  counted one-baseline-for-two-rows baselines.log 1
+  counted every-row-reuses-the-record unbaselined.log 0
+  arm baseline-json-rows "$P/verbatim.json" 0 2 ''
+  counted one-baseline-for-json-rows baselines.log 1
+  counted every-json-row-reuses-the-record unbaselined.log 0
+  arm baseline-not-spent-on-a-refused-plan "$P/two-apart.tsv" 2 0 ''
+  counted no-baseline-for-a-refused-plan baselines.log 0
+  export STUB_RED_BASELINE=1
+  arm red-baseline-stops-the-run "$P/two-good.tsv" 2 0 'Baseline is already failing'
+  printed red-baseline-says-why "the baseline could not be recorded, so no mutant was measured" err.log
+  unset STUB_RED_BASELINE
+  # A row that does not put the tree back stops the table at that row.
+  export STUB_DIRTY=1
+  arm dirty-row-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
+  unset STUB_DIRTY
+  git -C "${REPO_ARMS:?}" checkout -q -- src.js
+  export STUB_STRAY=1
+  arm stray-file-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
+  unset STUB_STRAY
+  rm -f "${REPO_ARMS:?}/stray.txt"
+  # The logs may not land in the tree they measure, and the tree must be a repository.
+  rm -f "${STUB:?}/calls.log" "${STUB:?}/baselines.log"
+  (cd "${REPO_ARMS:?}" && bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${REPO_ARMS:?}/logs") \
+    > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
+  if [ $? -eq 2 ] && [ ! -f "${STUB:?}/baselines.log" ] && grep -qF 'is inside the measured tree' "${STUB:?}/err.log"; then
+    echo "  ok    out-inside-the-tree-refused"
+  else
+    echo "  FAIL  out-inside-the-tree-refused" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
+  rm -rf "${REPO_ARMS:?}/logs"
+  # The ceiling stops git's search at the throwaway directory, so a TMPDIR inside some repository
+  # cannot lend this arm a tree.
+  (cd "${STUB:?}" && GIT_CEILING_DIRECTORIES="${DIR:?}" bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${STUB:?}/logs") \
+    > "${STUB:?}/out.log" 2> "${STUB:?}/err.log"
+  if [ $? -eq 2 ] && grep -qF 'run it inside a git repository' "${STUB:?}/err.log"; then
+    echo "  ok    outside-a-repository-refused"
+  else
+    echo "  FAIL  outside-a-repository-refused" >&2; sed 's/^/        /' "${STUB:?}/err.log" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
+  fi
+
   if [ "$ARMS_FAILED" -ne 0 ]; then
     echo "mutation-envelope --verify: FAILED — $ARMS_FAILED plan-check arm(s) above" >&2
     exit 1
   fi
   rm -rf "${STUB:?}"
 
+  # The fixture is a subdirectory, so the plans, logs and run transcripts below sit outside the
+  # tree being measured: the envelope refuses an --out inside it.
+  FIXTURE="${DIR:?}/fixture"
+  mkdir -p "${FIXTURE:?}" && cd "${FIXTURE:?}" || exit 2
   git init -q -b main . >/dev/null 2>&1
   git config user.email t@example.invalid
   git config user.name fixture
@@ -363,7 +457,7 @@ JSON
   cp "$REPO/scripts/mutation-check.js" scripts/ || exit 2
   cp "$REPO/scripts/lib/mutation-parse.js" scripts/lib/ || exit 2
   cp "$REPO/scripts/lib/mutation-verdict.js" scripts/lib/ || exit 2
-  ln -s "$REPO/node_modules" "${DIR:?}/node_modules"
+  ln -s "$REPO/node_modules" "${FIXTURE:?}/node_modules"
   cat > scripts/lib/subject.js <<'JS'
 export function covered(n) { return n > 10; }
 export function uncovered(n) { return n > 10; }
@@ -387,17 +481,17 @@ JSON
     exit 1
   fi
 
-  printf 'kill\tscripts/lib/subject.js\texport function covered(n) { return n > 10; }::export function covered(n) { return n >= 10; }\n' > plan.txt
-  printf 'survive\tscripts/lib/subject.js\texport function uncovered(n) { return n > 10; }::export function uncovered(n) { return n >= 10; }\n' >> plan.txt
+  printf 'kill\tscripts/lib/subject.js\texport function covered(n) { return n > 10; }::export function covered(n) { return n >= 10; }\n' > "${DIR:?}/plan.txt"
+  printf 'survive\tscripts/lib/subject.js\texport function uncovered(n) { return n > 10; }::export function uncovered(n) { return n >= 10; }\n' >> "${DIR:?}/plan.txt"
 
   # A JSON row through the real checker: one needle spanning both lines, so only --from/--to can
   # carry it. It weakens `covered`, which the fixture test asserts.
-  cat > plan.json <<'JSON'
+  cat > "${DIR:?}/plan.json" <<'JSON'
 [ { "id": "multi-line", "file": "scripts/lib/subject.js",
     "from": "export function covered(n) { return n > 10; }\nexport function uncovered(n)",
     "to": "export function covered(n) { return n >= 10; }\nexport function uncovered(n)" } ]
 JSON
-  bash tools/mutation-envelope.sh --test 'npm run t' --plan plan.json --out "${DIR:?}/logs-json" > "${DIR:?}/run-json.log" 2>&1
+  bash tools/mutation-envelope.sh --test 'npm run t' --plan "${DIR:?}/plan.json" --out "${DIR:?}/logs-json" > "${DIR:?}/run-json.log" 2>&1
   JSON_STATUS=$?
   JSON_NAMED=$(grep -c -x -F "$(printf 'multi-line\tMUTANT KILLED by 1 failing test(s) — the check can fail.\t1\tcovered is asserted')" "${DIR:?}/logs-json/names.tsv" 2>/dev/null || true)
   if [ "$JSON_STATUS" -ne 0 ] || [ "$JSON_NAMED" -ne 1 ]; then
@@ -407,8 +501,11 @@ JSON
   fi
   echo "  ok    json-real-checker-multi-line"
 
-  bash tools/mutation-envelope.sh --test 'npm run t' --plan plan.txt --out "${DIR:?}/logs" > "${DIR:?}/run.log" 2>&1
+  bash tools/mutation-envelope.sh --test 'npm run t' --plan "${DIR:?}/plan.txt" --out "${DIR:?}/logs" > "${DIR:?}/run.log" 2>&1
   STATUS=$?
+  # One baseline through the real checker: recorded once, and both rows reused it.
+  REUSED=$(grep -l -F 'baseline: reusing the record in' "${DIR:?}/logs/kill.log" "${DIR:?}/logs/survive.log" 2>/dev/null | wc -l)
+  RECORDED=$(grep -c -F 'baseline recorded in' "${DIR:?}/logs/baseline.log" 2>/dev/null || true)
   # Counted on each row's own line. An unanchored `grep -c KILLED` also counted the footer
   # ("Read every row above that is not 'MUTANT KILLED' ..."), so it reported one kill while both
   # rows survived: `covered(11)` and `covered(5)` cannot tell `n > 10` from `n >= 10`, which is
@@ -420,9 +517,10 @@ JSON
   NAMED=$(grep -c -x -F "$(printf 'kill\tMUTANT KILLED by 1 failing test(s) — the check can fail.\t1\tcovered is asserted')" "${DIR:?}/logs/names.tsv" || true)
   UNNAMED=$(grep -c -x -F "$(printf 'survive\tMUTANT SURVIVED — this line is not covered.\t0\t')" "${DIR:?}/logs/names.tsv" || true)
 
-  printf 'exit=%s killed-rows=%s survived-rows=%s named-kill=%s unnamed-survivor=%s\n' "$STATUS" "$KILLED" "$SURVIVED" "$NAMED" "$UNNAMED"
-  if [ "$STATUS" -eq 1 ] && [ "$KILLED" -eq 1 ] && [ "$SURVIVED" -eq 1 ] && [ "$NAMED" -eq 1 ] && [ "$UNNAMED" -eq 1 ]; then
-    echo "mutation-envelope --verify: OK (every plan-check arm holds; under the --test command, the covered row is reported killed and names its test, the uncovered row survives naming none, and the survivor fails the run)"
+  printf 'exit=%s killed-rows=%s survived-rows=%s named-kill=%s unnamed-survivor=%s baseline-recorded=%s rows-reusing-it=%s\n' "$STATUS" "$KILLED" "$SURVIVED" "$NAMED" "$UNNAMED" "$RECORDED" "$REUSED"
+  if [ "$STATUS" -eq 1 ] && [ "$KILLED" -eq 1 ] && [ "$SURVIVED" -eq 1 ] && [ "$NAMED" -eq 1 ] && [ "$UNNAMED" -eq 1 ] \
+     && [ "$RECORDED" -eq 1 ] && [ "$REUSED" -eq 2 ]; then
+    echo "mutation-envelope --verify: OK (every plan-check arm holds; under the --test command, one baseline is recorded and reused by both rows, the covered row is reported killed and names its test, the uncovered row survives naming none, and the survivor fails the run)"
     exit 0
   fi
   echo "mutation-envelope --verify: FAILED — want exit 1, the kill row killed naming 'covered is asserted', and the survive row survived naming none" >&2
@@ -517,7 +615,30 @@ fi
 [ -n "$OUT" ] || OUT=$(mktemp -d)
 mkdir -p "${OUT:?}" || exit 2
 
+# The measured tree: the checkout this is run in.
+TREE=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "mutation-envelope: run it inside a git repository" >&2; exit 2; }
+# The logs never land in the tree they measure: each would be a new untracked file, the tree
+# would differ after every row, and a reused baseline would be refused from the second row on.
+case "$(cd "${OUT:?}" && pwd -P)/" in
+  "$(cd "$TREE" && pwd -P)/"*) echo "mutation-envelope: --out $OUT is inside the measured tree $TREE; name a directory outside it" >&2; exit 2 ;;
+esac
+
+# ONE baseline for the whole table (S1). Every row used to run its own over the same tree, so N
+# rows cost 2N suite runs. The checker records it once (--write-baseline) and every row reuses
+# the record (--baseline), which the checker refuses unless HEAD, the tree's status and the --test
+# string still match. A baseline that is red, hangs or cannot be read stops the run here, before
+# any mutant: exit 2, because nothing was measured.
+TREE_STATUS=$(git -C "$TREE" status --porcelain=v1 --untracked-files=all)
+BASELINE="${OUT:?}/baseline.json"
+if ! node "$CHECKER" --test "$TEST_CMD" --write-baseline "$BASELINE" > "${OUT:?}/baseline.log" 2>&1 < /dev/null; then
+  echo "mutation-envelope: the baseline could not be recorded, so no mutant was measured:" >&2
+  grep -E '^ERROR' "${OUT:?}/baseline.log" | head -5 >&2
+  echo "  (the whole log: ${OUT:?}/baseline.log)" >&2
+  exit 2
+fi
+
 echo "mutation-envelope: every row measured under: $TEST_CMD"
+echo "mutation-envelope: one baseline, $(grep -E '^ {6}green' "${OUT:?}/baseline.log" | sed 's/^ *//'), reused by every row"
 echo
 
 # The checker prints its verdict at column 0 and indents every other line, test names included
@@ -550,12 +671,21 @@ BAD=0
 # One row, either form: <id> <file> <the checker's mutation flags…>. It runs in the loop's shell,
 # so ROWS and BAD count, and its stdin is the loop's, as the checker's always was.
 run_row() {
-  local id=$1 file=$2 names_json verdict summary added
+  local id=$1 file=$2 names_json verdict summary added before after
   shift 2
   ROWS=$((ROWS + 1))
   names_json="${OUT:?}/$id.names.json"
   rm -f -- "$names_json"
-  node "$CHECKER" --file "$file" "$@" --test "$TEST_CMD" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
+  before=$(git hash-object -- "$file" 2>/dev/null)
+  node "$CHECKER" --file "$file" "$@" --test "$TEST_CMD" --baseline "$BASELINE" --names-out "$names_json" > "${OUT:?}/$id.log" 2>&1
+  # The row leaves the tree as it found it: the file byte-identical, and the status unchanged.
+  # The next row's baseline check would refuse a leftover too, but only from the next row on;
+  # this catches it at the row that made it, the last row included, and stops the table there.
+  after=$(git hash-object -- "$file" 2>/dev/null)
+  if [ "$before" != "$after" ] || [ "$(git -C "$TREE" status --porcelain=v1 --untracked-files=all)" != "$TREE_STATUS" ]; then
+    echo "mutation-envelope: row '$id' did not leave the tree as it found it (${file}: ${before:-absent} before, ${after:-absent} after; or the status changed); no further row is measured. Read ${OUT:?}/$id.log and git status in $TREE." >&2
+    exit 2
+  fi
   verdict=$(grep -E "$VERDICT_LINE" "${OUT:?}/$id.log" | tail -1)
   # Counted once per row. A row with no verdict line used to be counted twice, here and again by
   # a second check below the printf, so one such row read "1 row(s), 2 not a clean kill".
