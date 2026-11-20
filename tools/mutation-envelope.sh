@@ -469,7 +469,6 @@ JSON
   export STUB_DIRTY=1
   arm dirty-row-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
   unset STUB_DIRTY
-  git -C "${REPO_ARMS:?}" checkout -q -- src.js
   # A rewrite that changes only line endings under eol=lf: git status shows it, a hash after eol
   # normalisation would not (measured with that mutant).
   export STUB_CRLF=1
@@ -482,7 +481,6 @@ JSON
   export STUB_STRAY=1
   arm stray-file-stops-the-run "$P/two-good.tsv" 2 1 "row 'pipe-one' did not leave the tree as it found it"
   unset STUB_STRAY
-  rm -f "${REPO_ARMS:?}/stray.txt"
   # The logs may not land in the tree they measure, and the tree must be a repository.
   rm -f "${STUB:?}/calls.log" "${STUB:?}/baselines.log"
   (cd "${REPO_ARMS:?}" && bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${REPO_ARMS:?}/logs" --tree in-place) \
@@ -529,7 +527,7 @@ JSON
   arm worktree-by-default "$P/two-good.tsv" 0 2 ''
   printed worktree-names-the-commit "measuring $ARMS_HEAD in a detached worktree" out.log
   printed worktree-heads-names-tsv "# measured: $ARMS_HEAD in a detached worktree" logs/names.tsv
-  gone worktree-removed-and-pruned
+  gone worktree-removed
   ARM_ARGS=(--tree archive)
   arm archive-two-rows "$P/two-good.tsv" 0 2 ''
   printed archive-names-the-commit "measuring $ARMS_HEAD as a one-commit repository" out.log
