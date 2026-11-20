@@ -709,6 +709,29 @@ test('a TAP-shaped line a test prints into a spec transcript is not read as a le
   assert.deepEqual(parseFailingLeafTests(red).map((leaf) => leaf.name), ['the real one']);
 });
 
+test('a TODO child cancelled by its parent is read and skipped; a name split by a newline is refused, not cut', () => {
+  // Measured on node v26.11.1 (#1100 review round 2): a describe whose before() throws, holding a
+  // plain child and a TODO child, and a timed test whose name holds a newline.
+  const shapes = [
+    'ℹ fail 1',
+    'ℹ cancelled 1',
+    'ℹ todo 1',
+    '✖ failing tests:',
+    'test at shapes.test.mjs:4:3',
+    '✖ plain child',
+    "  'test did not finish before its parent and was cancelled'",
+    'test at shapes.test.mjs:5:3',
+    '⚠ todo child # TODO',
+    "  'test did not finish before its parent and was cancelled'",
+    'test at shapes.test.mjs:2:1',
+    '✖ suite whose hook fails (15.659313ms)',
+    '  Error: hook boom',
+  ];
+  assert.deepEqual(parseFailingLeafTests(shapes.join('\n')).map((leaf) => leaf.name), ['plain child', 'suite whose hook fails']);
+  const split = [...shapes, 'test at shapes.test.mjs:7:1', '✖ failing name with', 'newline (0.37929ms)', '  Error: x'];
+  assert.equal(parseFailingLeafTests(split.join('\n')), null, 'a name cut at its newline would be a wrong name, read as a cancelled child');
+});
+
 test('a green run returns an empty list, not null', () => {
   assert.deepEqual(parseFailingLeafTests(SPEC_TAIL.replace('ℹ fail 1', 'ℹ fail 0')), []);
   assert.deepEqual(parseFailingLeafTests(TAP_TAIL.replace('# fail 1', '# fail 0')), []);

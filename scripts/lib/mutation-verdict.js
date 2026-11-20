@@ -184,10 +184,13 @@ const SPEC_LOCATION = /^test at (.+):\d+:\d+$/;
 // The marker, not the suffix, says TODO: `{ todo: 'later' }` prints `⚠ <name> (<ms>ms) # later`,
 // with no `TODO` in it (measured on node v26.11.1).
 const SPEC_ENTRY = /^(✖|⚠) (.*) \(\d+(?:\.\d+)?ms\)(?: # .*)?$/;
-// A child cancelled by its parent prints no duration and no directive: the rest of the line is
-// its name. Tried only after SPEC_ENTRY, because a name may hold ` # ` itself, and an optional
-// duration in one pattern would read `✖ hash # x (2ms)` as the name `hash`.
-const SPEC_ENTRY_CANCELLED = /^(✖) (.+)$/;
+// A child cancelled by its parent prints no duration: `✖ <name>`, or `⚠ <name> # TODO` for a TODO
+// child (measured, node v26.11.1). Tried only after SPEC_ENTRY, because a name may hold ` # `
+// itself, and an optional duration in one pattern would read `✖ hash # x (2ms)` as the name
+// `hash`. Accepted only when the line after it is blank, indented, a column-0 `test at`, or the
+// end: a name holding a newline prints across two column-0 lines, its duration on the second,
+// and would otherwise read as a cancelled child named by its first line (#1100 review round 2).
+const SPEC_ENTRY_CANCELLED = /^(✖|⚠) (.+)$/;
 
 const TAP_POINT = /^( *)(not ok|ok) \d+(?: - (.*))?$/;
 
@@ -215,7 +218,12 @@ function readSpec(lines) {
     const location = line.match(SPEC_LOCATION);
     if (!location) continue;
     const next = lines[index + 1] ?? '';
-    const entry = next.match(SPEC_ENTRY) ?? next.match(SPEC_ENTRY_CANCELLED);
+    let entry = next.match(SPEC_ENTRY);
+    if (!entry) {
+      const after = lines[index + 2];
+      const ends = after === undefined || after === '' || /^\s/.test(after) || SPEC_LOCATION.test(after);
+      entry = ends ? next.match(SPEC_ENTRY_CANCELLED) : null;
+    }
     if (!entry) return { malformed: `a "test at" line is not followed by a test line: ${line}` };
     index++;
     if (entry[1] === '⚠') continue;
