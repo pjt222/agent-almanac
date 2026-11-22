@@ -112,14 +112,15 @@
 # (node:test, either reporter; no reporter flag is added, so the command measured is the command
 # named). "names: none added over the baseline" (a red run that failed no node:test test) and
 # "names: could not be read (<run>: <reason>)" are different findings. <run> is `mutant` or
-# `baseline`, and <reason> says why the reader gave up: the output holds no node:test summary
+# `baseline`, or `record` (with no reason) when the names record itself does not parse as JSON,
+# and <reason> says why the reader gave up: the output holds no node:test summary
 # line, it holds an entry in the failing-tests section the reader cannot parse (quoted), or it
 # lists failing tests while the summary counts none, or none while the summary counts some (the
 # two counts are not compared otherwise). The same names land in <out>/names.tsv, one row per
-# mutant: id, verdict, added count (or `unreadable:<run>`, or `-`
-# for a row with no mutant verdict), then the names joined by ` | `, or the reason when column 3
-# is `unreadable:<run>`. A name or reason that itself holds ` | ` makes that column ambiguous;
-# <out>/<id>.names.json is exact.
+# mutant: id, verdict, added count (or `unreadable:<run>`, or `-` for a row with no mutant
+# verdict), then the names joined by ` | `, or the reason when column 3 is `unreadable:<run>`.
+# A name or reason that itself holds ` | ` makes that column ambiguous; <out>/<id>.names.json is
+# exact.
 #
 # Exit 0 when every row is `MUTANT KILLED`. Exit 1 when any row survives, is SUSPECT, INVALID,
 # HUNG or INCONCLUSIVE, or printed no verdict line at column 0 — read that row's log before
@@ -1106,7 +1107,7 @@ for (const name of names) console.log(name);
 '
 NAMES_TSV="${OUT:?}/names.tsv"
 { printf '# measured: %s\n' "$MEASURED"
-  printf '# id\tverdict\tadded, or unreadable:<run>\tnames: the failing leaf tests each mutant added over the baseline, or why they could not be read when added is unreadable:<run>; under: %s\n' "$TEST_CMD"; } > "$NAMES_TSV"
+  printf '# id\tverdict\tadded, or unreadable:<run>, or - for a row with no mutant verdict\tnames: the failing leaf tests each mutant added over the baseline, or why they could not be read when added is unreadable:<run>; under: %s\n' "$TEST_CMD"; } > "$NAMES_TSV"
 
 ROWS=0
 BAD=0
