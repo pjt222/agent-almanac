@@ -1750,12 +1750,12 @@ describe('audit exit codes end to end (#439)', () => {
   function runAuditIn(dir) {
     // argv, no shell: a space or quote in the checkout path cannot split the command. A spawn
     // error, a timeout or a signal is named rather than folded into an exit status, and stderr is
-    // returned so each assertion below quotes it when the status is not the one expected; the
-    // execSync helper this replaced discarded it on every non-zero exit.
+    // returned so each assertion below quotes it when the status is not the one expected. The
+    // old execSync helper wrote stderr to the test output after every run, unattached to a test.
     const auditRun = spawnSync(process.execPath, [cliEntry, 'audit', '--source', ROOT],
       { cwd: dir, encoding: 'utf8', timeout: 10000 });
-    assert.equal(auditRun.error, undefined, `audit did not run to an exit status: ${auditRun.error}\n${auditRun.stderr}`);
-    assert.equal(auditRun.signal, null, `audit was killed by ${auditRun.signal}\n${auditRun.stderr}`);
+    assert.equal(auditRun.error, undefined, `audit did not run to an exit status: ${auditRun.error}\n${auditRun.stderr ?? ''}`);
+    assert.equal(auditRun.signal, null, `audit was killed by ${auditRun.signal}\n${auditRun.stderr ?? ''}`);
     return { status: auditRun.status, stderr: auditRun.stderr };
   }
 
