@@ -858,13 +858,9 @@ test('a real failing node:test run whose error message is a transcript yields on
   const dir = mkdtempSync(join(tmpdir(), 'leaf-names-'));
   t.after(() => rmTree(dir));
   const quoted = ['ℹ fail 3', '✖ failing tests:', 'test at quoted.test.js:1:1', '✖ a quoted leaf (1ms)'].join('\n');
-  // The transcript is a data file the fixture reads, not text spliced into its source, so no code
-  // is built from a string (code-scanning alert 22, js/bad-code-sanitization).
-  writeFileSync(join(dir, 'quoted.txt'), quoted);
   writeFileSync(join(dir, 'quotes.test.mjs'), [
     "import { test } from 'node:test';",
-    "import { readFileSync } from 'node:fs';",
-    "test('throws a transcript as its message', () => { throw new Error(readFileSync(new URL('./quoted.txt', import.meta.url), 'utf8')); });",
+    `test('throws a transcript as its message', () => { throw new Error(${JSON.stringify(quoted)}); });`,
     '',
   ].join('\n'));
   // NODE_TEST_CONTEXT goes: node:test exports it to this file's process, and a nested `node --test`
