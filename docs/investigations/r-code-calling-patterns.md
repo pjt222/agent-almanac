@@ -366,7 +366,7 @@ script_dir <- if (nzchar(Sys.getenv("RSCRIPT_DIR"))) {
 ### Priority 3: Address Minor Issues
 
 7. **Clean up r-developer MCP servers**: Remove `r-mcp-server` or add explanatory comment.
-8. **Document that server's status**: Either integrate into relevant agents or explicitly note "not configured" in agent definitions.
+8. **Document the third R MCP server's status** (Finding 8): Either integrate into relevant agents or explicitly note "not configured" in agent definitions.
 9. **Docker examples**: Updated as part of item 2.
 10. **Consolidate get_script_dir()**: Extract canonical implementation to `R/utils.R`.
 
