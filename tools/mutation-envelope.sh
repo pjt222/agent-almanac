@@ -81,9 +81,9 @@
 #                           its own baseline, as before S1; --at is refused beside it. Untracked
 #                           tests and uncommitted edits to other files are measured, but a file a
 #                           mutant changes must itself be committed: the checker refuses that row
-#                           ("<file> has uncommitted changes", or "<file> is not tracked by git"
-#                           for one never committed), as it always has, rather than risk
-#                           restoring over edits git has not saved
+#                           ("<file> has uncommitted changes", which a staged new file gets too,
+#                           or "<file> is not tracked by git" for one never `git add`ed), as it
+#                           always has, rather than risk restoring over edits git has not saved
 #                 In worktree and archive mode the run is refused while your checkout has
 #                 tracked changes or untracked, non-ignored files (the three link paths above
 #                 excepted when they are symlinks): the fresh tree would not hold them, and a
