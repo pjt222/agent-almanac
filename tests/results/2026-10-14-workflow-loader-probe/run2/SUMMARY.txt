@@ -1,13 +1,13 @@
 SUMMARY  date_utc=2026-10-14T15:19:11Z  claude=2.1.299 (Claude Code)  model=sonnet  mode=reextract (raw streams of the run at 2026-10-14T14:18:39Z)
 control gate: OK
 ARM  FILES                  DISCOVERED  INVOKED   DISPATCHED     DETAIL
-A    probe-a.js             yes         yes       PROBE_BODY_A_91c2  exit=0 Workflow launched in background. Task ID: w4u6korui Summary: loader probe, no agents Transcript dir: ~/.claude/projects/<scratch-slug>/4e6ebd9c-13fe-4942-ad17-568ec19abb0b/subagents/workflows/
+A    probe-a.js             yes         yes       PROBE_BODY_A_91c2  exit=0 Workflow launched in background. Task ID: w4u6korui Summary: loader probe, no agents Transcript dir: ~/.claude/projects/<scratch-slug>/<session-run2-A>/subagents/workflows/
 B    probe-b.mjs            no          yes       none           exit=0 <tool_use_error>Workflow "probe-arm-b" not found. Available: deep-research</tool_use_error>
-C    probe-c1.js+c2.js      yes         yes       file=c1 (probe-c1.js) exit=0 Workflow launched in background. Task ID: wla99s9tj Summary: loader probe, no agents Transcript dir: ~/.claude/projects/<scratch-slug>/77271bfb-ce47-49a0-8cf9-3e083ef99dd1/subagents/workflows/
+C    probe-c1.js+c2.js      yes         yes       file=c1 (probe-c1.js) exit=0 Workflow launched in background. Task ID: wla99s9tj Summary: loader probe, no agents Transcript dir: ~/.claude/projects/<scratch-slug>/<session-run2-C>/subagents/workflows/
 ran (run-state record: status [log() lines]):
   A  completed [PROBE_BODY_A_91c2] (stream task status: task_updated=completed,task_notification=completed)
   B  no run-state record (stream task status: none)
   C  completed [PROBE_BODY_c1_5e1d] (stream task status: task_updated=completed,task_notification=completed)
-per-arm files: /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/101070ad-c454-4f29-b0df-f2453415c5c0/scratchpad/lanes/s3g/run2/arm-{A,B,C}.{cmdline.txt,stream.jsonl,stderr.txt,exitcode.txt,extracted.json,markers.txt,run-state.json}
-C script copy (which file the loader dispatched): ~/.claude/projects/<scratch-slug>/77271bfb-ce47-49a0-8cf9-3e083ef99dd1/workflows/scripts/probe-arm-c-wf_6b5dadd4-898.js markers: PROBE_BODY_c1_5e1d 
-user scope listing: /tmp/claude-1000/-mnt-d-dev-p-agent-almanac/101070ad-c454-4f29-b0df-f2453415c5c0/scratchpad/lanes/s3g/run2/user-scope-listing.txt
+per-arm files: /tmp/claude-<uid>/-<project-slug>/<session-id>/scratchpad/lanes/s3g/run2/arm-{A,B,C}.{cmdline.txt,stream.jsonl,stderr.txt,exitcode.txt,extracted.json,markers.txt,run-state.json}
+C script copy (which file the loader dispatched): ~/.claude/projects/<scratch-slug>/<session-run2-C>/workflows/scripts/probe-arm-c-wf_6b5dadd4-898.js markers: PROBE_BODY_c1_5e1d 
+user scope listing: /tmp/claude-<uid>/-<project-slug>/<session-id>/scratchpad/lanes/s3g/run2/user-scope-listing.txt

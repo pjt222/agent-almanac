@@ -144,7 +144,7 @@ Finding 4 also corrects the namespacing advice at `create-workflow:171` and `:17
   - `run-state.json`: the runtime's run-state record, reduced to `workflowName`, `status`, `logs` and `result` (`[]` for arm B, which ran nothing);
   - the three marker files, `script-file.txt`, and `arm-*.script-copy.js.txt` (the persisted copy of the resolved script, renamed so it is not mistaken for runnable code).
 
-**Re-extraction after review round 1.** `--reextract` regenerated the derived files over the original outdirs; no session was re-run. `extracted.json`, `markers.txt` and the verdict rows are read from the raw `stream.jsonl`. `run-state.json`, `transcript-markers.txt`, `script-file.txt`, the script copy, `script-markers.txt` and SUMMARY's `ran` lines are read from each run's session directory under `~/.claude/projects`, which still existed. `meta.txt`, `cmdline`, `exitcode`, `stderr`, `user-scope-listing.txt` and `workflow-sources.txt` are the run's own and were not rewritten.
+**Re-extraction after review round 1.** `--reextract` regenerated the derived files over the original outdirs; no session was re-run. `extracted.json`, `markers.txt` and the verdict rows are read from the raw `stream.jsonl`. `run-state.json`, `transcript-markers.txt`, `script-file.txt`, the script copy, `script-markers.txt` and SUMMARY's `ran` lines are read from each run's session directory under `~/.claude/projects`, which still existed. `meta.txt`, `cmdline`, `exitcode`, `stderr`, `user-scope-listing.txt` and `workflow-sources.txt` are the run's own, and the re-extraction did not rewrite them. The later redaction below did rewrite the scratch path in `meta.txt` and `workflow-sources.txt` (#1101).
 
 - **Byte-identical where unchanged.** Every field of the earlier `extracted.json` is byte-identical: with the three new keys deleted, each file compares equal to the earlier commit's with `cmp`. `markers.txt` (under the new system/user filter) did not change. The script files and `transcript-markers.txt` were re-read from session directories that still held them, and did not change either.
 - **What changed.** Besides the new keys and the new `run-state.json` files, only `SUMMARY.txt` changed. It gained `ran` lines, and `run-state.json` joined its file list. The `BODY_MARKERS` column became `DISPATCHED` (arm C's `body=` became `file=`), and "resolved" became "dispatched" on the script-copy line. Its first line now carries the re-extraction time, with the run's own start time beside it. The rows' verdicts are unchanged.
@@ -152,14 +152,21 @@ Finding 4 also corrects the namespacing advice at `create-workflow:171` and `:17
 
 Not committed: the raw `stream.jsonl` event logs. Their `init` events carry the operator's whole local environment (plugin list, 446 slash commands, agent definitions, a messaging socket path), which is not this repository's to publish. They are kept outside the repository with the session record.
 
-Redaction: `/home/<operator>` was rewritten to `~` in the derived files. The Claude Code project-store slug in every `~/.claude/projects/<slug>/…` path was rewritten to the placeholder `<scratch-slug>`. A re-runner must do both before committing new or re-extracted output, copying, never editing in place:
+Redaction: `/home/<operator>` was rewritten to `~` in the derived files. The Claude Code project-store slug in every `~/.claude/projects/<slug>/…` path was rewritten to the placeholder `<scratch-slug>`. Two more rewrites followed in #1101. The operator's live session scratch path became `/tmp/claude-<uid>/-<project-slug>/<session-id>/` (14 lines, in `SUMMARY.txt`, `meta.txt` and `workflow-sources.txt`). Each child session's id became a label naming its run and arm, `<session-run1-A>`, `<session-run1-C>`, `<session-run2-A>` or `<session-run2-C>` (26 occurrences, in `SUMMARY.txt`, `extracted.json` and `script-file.txt`). A re-runner must do all four before committing new or re-extracted output, copying, never editing in place. The first three are one `sed`:
 
 ```bash
-sed -e 's#/home/[a-z0-9_]*#~#g' -e 's#\(claude/projects/\)-[^ /`"]*#\1<scratch-slug>#g' src > dst
+sed -e 's#/home/[a-z0-9_]*#~#g' -e 's#\(claude/projects/\)-[^ /`"]*#\1<scratch-slug>#g' \
+    -e 's#/tmp/claude-[0-9]*/[^/]*/[0-9a-f-]\{36\}/#/tmp/claude-<uid>/-<project-slug>/<session-id>/#g' src > dst
+```
+
+The fourth maps each child session's id to its own label, so no single pattern does it. Afterwards no session id may be left:
+
+```bash
+rg -n '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' dst   # must print nothing
 ```
 
 Then run `node scripts/scan-skill-content.js` and `bash tools/check-redaction.sh` over every file to be committed. `probe.sh` does not redact (#971).
 
 - **Home paths.** 28 replacements in all, re-counted after the re-extraction: 26 in the regenerated files and 2 in the files the re-extraction does not write.
 - **Store slugs.** 26 replacements, in `SUMMARY.txt`, `extracted.json` and `script-file.txt`. A first commit classified these paths as harmless evidence. The repository's `content-security` CI job (`scripts/scan-skill-content.js`, rule `private-store-slug`) treats any slug other than this repository's own as a disclosure, default-deny, and reported all 26 as HIGH findings. So they were rewritten rather than argued.
-- **Scanners.** `node scripts/scan-skill-content.js` reports 0 findings. `tools/check-redaction.sh` over this file, `probe.sh` and every file under `run1/` and `run2/` (68 files) reports clean.
+- **Scanners.** Neither scanner flags a session id or a `/tmp/claude-<uid>/…` scratch path, so the `rg` check above is what catches those. `node scripts/scan-skill-content.js` reports 0 findings. `tools/check-redaction.sh` over this file, `probe.sh` and every file under `run1/` and `run2/` (68 files) reports clean.

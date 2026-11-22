@@ -50,7 +50,7 @@ The agent-almanac project uses R as its second runtime (after Node.js), primaril
 | designer | hf-mcp-server | Configured (not R) |
 | nlp-specialist | hf-mcp-server | Configured (not R) |
 
-**Health**: STALE (r-mcp-server listed but not configured; rcon server documented but not assigned)
+**Health**: STALE (r-mcp-server listed but not configured; another R-execution MCP server, neither `r-mcptools` nor `r-mcp-server`, documented but not assigned)
 
 ### Category C: Documented R Examples (skills + guides)
 
@@ -267,16 +267,16 @@ Also in `agents/_registry.yml:24`.
 
 ---
 
-### Finding 8: rcon MCP server undocumented in agents [MINOR]
+### Finding 8: a third R-execution MCP server undocumented in agents [MINOR]
 
-**File**: `/mnt/d/dev/p/CLAUDE.md:86-90` documents `rcon` as an available MCP server for "Direct R code execution through MCP tools".
+**File**: `/mnt/d/dev/p/CLAUDE.md:86-90` documents a third R-execution MCP server, neither `r-mcptools` nor `r-mcp-server`, for "Direct R code execution through MCP tools".
 
-No agent in `agents/` references `rcon` in its `mcp_servers` field. It exists as an alternative to `r-mcptools` but has no agent integration.
+No agent in `agents/` references that server in its `mcp_servers` field. It exists as an alternative to `r-mcptools` but has no agent integration.
 
 **Likelihood**: Low
 **Severity**: MINOR (missed integration opportunity)
 
-**Recommendation**: Consider adding `rcon` to the r-developer agent's `mcp_servers` as an alternative, or document why it's excluded.
+**Recommendation**: Consider adding that server to the r-developer agent's `mcp_servers` as an alternative, or document why it's excluded.
 
 ---
 
@@ -339,7 +339,7 @@ script_dir <- if (nzchar(Sys.getenv("RSCRIPT_DIR"))) {
 | 5 | No R CI coverage | N/A | High (silent regression) | **IMPORTANT** | Infrastructure |
 | 6 | library() vs :: rule too broad | N/A | Medium (incorrect edits) | **IMPORTANT** | Documentation |
 | 7 | r-mcp-server listed but unconfigured | Low | Low (cosmetic) | **MINOR** | MCP integration |
-| 8 | rcon undocumented in agents | Low | Low (missed opportunity) | **MINOR** | MCP integration |
+| 8 | Third R MCP server undocumented in agents | Low | Low (missed opportunity) | **MINOR** | MCP integration |
 | 9 | Docker examples use stale base image | Certain | Low (still functional) | **MINOR** | Documentation |
 | 10 | get_script_dir() duplication | Low | Low (divergence risk) | **MINOR** | Code quality |
 
@@ -366,7 +366,7 @@ script_dir <- if (nzchar(Sys.getenv("RSCRIPT_DIR"))) {
 ### Priority 3: Address Minor Issues
 
 7. **Clean up r-developer MCP servers**: Remove `r-mcp-server` or add explanatory comment.
-8. **Document rcon status**: Either integrate into relevant agents or explicitly note "not configured" in agent definitions.
+8. **Document the third R MCP server's status** (Finding 8): Either integrate into relevant agents or explicitly note "not configured" in agent definitions.
 9. **Docker examples**: Updated as part of item 2.
 10. **Consolidate get_script_dir()**: Extract canonical implementation to `R/utils.R`.
 
@@ -422,12 +422,12 @@ Two R 4.5.2 installations exist:
 `viz/build-wordmark.R`, `viz/.Rprofile`, `tests/results/.Rprofile`, `viz/Dockerfile`, `agents/r-developer.md`, `.claude/settings.local.json`, `.dockerignore`, `memory/viz-architecture.md`, `memory/patterns.md`, `viz/build.sh`, `viz/docker-entrypoint.sh`, `viz/renv.lock`, `viz/package.json`, `agents/shiny-developer.md`, `skills/_registry.yml`, plus all R files inventoried by the background agent.
 
 ### Searches Performed
-- `r-mcp-server|rcon` in agents/ → 10 matches
+- `r-mcp-server` or the third server in agents/ → 10 matches (query withheld)
 - `mcp_servers` in agents/ → 10 matches (5 agents with MCP)
 - `total_agents|total_skills|total_teams` in registries → 66/326/15
 - `rocker/r-ver:4.5.0` in skills/ → 8 stale references
 - `Rscript|r-lib|setup-r` in .github/ → 0 matches (no R CI)
-- `rcon` in parent CLAUDE.md → 1 match (line 86)
+- the third server in parent CLAUDE.md → 1 match (line 86, query withheld)
 - Domain count in skills/_registry.yml → 58 domains
 
 ---
