@@ -1747,14 +1747,16 @@ describe('audit exit codes end to end (#439)', () => {
 
   // Absolute entry path: these run with cwd set to the fixture, so the relative
   // `node cli/index.js` that run() uses would not resolve.
-  function auditStatusIn(dir) {
-    try {
-      execSync(`node ${cliEntry} audit --source ${ROOT}`,
-        { cwd: dir, encoding: 'utf8', timeout: 10000 });
-      return 0;
-    } catch (err) {
-      return err.status ?? 1;
-    }
+  function runAuditIn(dir) {
+    // argv, no shell: a space or quote in the checkout path cannot split the command. A spawn
+    // error, a timeout or a signal is named rather than folded into an exit status, and stderr is
+    // returned so each assertion below quotes it when the status is not the one expected. The
+    // old execSync helper wrote stderr to the test output after every run, unattached to a test.
+    const auditRun = spawnSync(process.execPath, [cliEntry, 'audit', '--source', ROOT],
+      { cwd: dir, encoding: 'utf8', timeout: 10000 });
+    assert.equal(auditRun.error, undefined, `audit did not run to an exit status: ${auditRun.error}\n${auditRun.stderr ?? ''}`);
+    assert.equal(auditRun.signal, null, `audit was killed by ${auditRun.signal}\n${auditRun.stderr ?? ''}`);
+    return { status: auditRun.status, stderr: auditRun.stderr };
   }
 
   before(() => {
@@ -1812,15 +1814,18 @@ describe('audit exit codes end to end (#439)', () => {
   });
 
   it('exits CLEAN when every link resolves', () => {
-    assert.equal(auditStatusIn(resolve(tmpRoot, 'clean')), AUDIT_EXIT.CLEAN);
+    const audit = runAuditIn(resolve(tmpRoot, 'clean'));
+    assert.equal(audit.status, AUDIT_EXIT.CLEAN, audit.stderr);
   });
 
   it('exits FINDINGS when an adapter reports a dangling symlink', () => {
-    assert.equal(auditStatusIn(resolve(tmpRoot, 'findings')), AUDIT_EXIT.FINDINGS);
+    const audit = runAuditIn(resolve(tmpRoot, 'findings'));
+    assert.equal(audit.status, AUDIT_EXIT.FINDINGS, audit.stderr);
   });
 
   it('exits CRASHED when an adapter throws', () => {
-    assert.equal(auditStatusIn(resolve(tmpRoot, 'crashed')), AUDIT_EXIT.CRASHED);
+    const audit = runAuditIn(resolve(tmpRoot, 'crashed'));
+    assert.equal(audit.status, AUDIT_EXIT.CRASHED, audit.stderr);
   });
 });
 

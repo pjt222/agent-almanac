@@ -71,6 +71,14 @@ describe('setTheme', () => {
     setTheme('invalid-theme-xyz');
     expect(getCurrentThemeName()).toBe(before);
   });
+
+  it('ignores inherited Object.prototype names', () => {
+    const before = getCurrentThemeName();
+    for (const name of ['constructor', '__proto__', 'toString']) {
+      setTheme(name);
+      expect(getCurrentThemeName()).toBe(before);
+    }
+  });
 });
 
 describe('hexToRgba', () => {
