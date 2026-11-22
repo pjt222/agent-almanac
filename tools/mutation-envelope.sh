@@ -57,14 +57,15 @@
 #                       blank lines and lines starting with `#` are ignored; `::` must occur
 #                       exactly once in the last field, so an OLD ending in `:` or holding `::`,
 #                       a NEW starting with `:` or holding `::`, and any needle spanning lines
-#                       cannot be planned in this form: use JSON
+#                       cannot be planned in this form: use JSON; ids are unique, are not
+#                       `baseline` and hold no `/`, since each names a log file under --out
 #                 JSON  when the first non-blank character is `[`: an array of rows
 #                       {"id": …, "file": …, "from": …, "to": …}, each passed as
 #                       --from <from> --to <to>, so either may hold newlines and any colons;
 #                       `to` may be empty (a deletion), `from` may not; a row holds exactly
-#                       those four string keys, and ids are unique and hold no `/`, tab or
-#                       newline. A TAB plan whose first id begins with `[` is read as JSON, and
-#                       refused when it does not parse.
+#                       those four string keys, and ids are unique, are not `baseline` and hold
+#                       no `/`, tab or newline. A TAB plan whose first id begins with `[` is read
+#                       as JSON, and refused when it does not parse.
 #   --tree MODE   which tree is mutated (S1):
 #                 worktree  (default) a detached worktree of <rev> in a fresh mktemp -d, with
 #                           node_modules, viz/node_modules and viz/renv/library linked from your
@@ -80,7 +81,8 @@
 #                           its own baseline, as before S1; --at is refused beside it. Untracked
 #                           tests and uncommitted edits to other files are measured, but a file a
 #                           mutant changes must itself be committed: the checker refuses that row
-#                           ("<file> has uncommitted changes"), as it always has, rather than risk
+#                           ("<file> has uncommitted changes", or "<file> is not tracked by git"
+#                           for one never committed), as it always has, rather than risk
 #                           restoring over edits git has not saved
 #                 In worktree and archive mode the run is refused while your checkout has
 #                 tracked changes or untracked, non-ignored files (the three link paths above
@@ -92,7 +94,10 @@
 #   --at REV      the commit a fresh tree is made from (default: HEAD)
 #   --out DIR     where the per-row logs land (default: a fresh mktemp -d, printed at the end);
 #                 refused when it is inside the measured tree (reachable in place only), where
-#                 each log would be a new untracked file in the tree each row checks
+#                 each log would be a new untracked file in the tree each row checks. In
+#                 worktree and archive mode an --out inside your checkout is allowed, but its
+#                 logs are untracked files there, so every later fresh-tree run is refused
+#                 until they are removed or ignored
 #
 # ONE BASELINE. In worktree and archive mode the baseline runs once per table, not once per row
 # (in place, every row runs its own, as before S1): the checker records it
@@ -119,9 +124,10 @@
 # HUNG or INCONCLUSIVE, or printed no verdict line at column 0 — read that row's log before
 # quoting anything. Names never change the exit code. Exit 2 when the envelope itself
 # could not run: no plan, an unreadable plan, a plan with no rows, any row the plan check
-# refuses (a missing field, no `::`, or `::` more than once; for JSON, the refusals listed under
-# --plan), not a git repository, an --out inside the measured tree, or (worktree and archive
-# mode) a baseline that is red, hangs or cannot be recorded. Each of those is reached before the
+# refuses (a missing field, no `::`, `::` more than once, or an id that holds `/`, repeats an
+# earlier row or is `baseline`; for JSON, the refusals listed under --plan), not a git
+# repository, an --out inside the measured tree, or (worktree and archive mode) a baseline that
+# is red, hangs or cannot be recorded. Each of those is reached before the
 # first mutant is measured. In place there is no recorded baseline: a red suite is an ERROR row
 # per mutant, each having spent its own baseline run, and the run exits 1.
 # Two exits 2 come after measuring has begun: a row that did not leave the tree as it found it
