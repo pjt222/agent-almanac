@@ -188,8 +188,10 @@ const SPEC_ENTRY = /^(✖|⚠) (.*) \(\d+(?:\.\d+)?ms\)(?: # .*)?$/;
 // child (measured, node v26.11.1). Tried only after SPEC_ENTRY, because a name may hold ` # `
 // itself, and an optional duration in one pattern would read `✖ hash # x (2ms)` as the name
 // `hash`. Accepted only when the line after it is blank, indented, a column-0 `test at`, or the
-// end: a name holding a newline prints across two column-0 lines, its duration on the second,
-// and would otherwise read as a cancelled child named by its first line (#1100 review round 2).
+// end: a name whose continuation starts at column 0 prints across two column-0 lines, its
+// duration on the second, and would otherwise read as a cancelled child named by its first line
+// (#1100 review round 2). A continuation that is indented, blank or empty still passes that
+// test, so such a name is read as its first line (#1100 review round 3, N1).
 const SPEC_ENTRY_CANCELLED = /^(✖|⚠) (.+)$/;
 
 const TAP_POINT = /^( *)(not ok|ok) \d+(?: - (.*))?$/;
