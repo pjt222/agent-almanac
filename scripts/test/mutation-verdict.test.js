@@ -710,7 +710,7 @@ test('a TAP-shaped line a test prints into a spec transcript is not read as a le
   assert.deepEqual(parseFailingLeafTests(red).map((leaf) => leaf.name), ['the real one']);
 });
 
-test('a TODO child cancelled by its parent is read and skipped; a name split by a newline is refused, not cut', () => {
+test('a TODO child cancelled by its parent is read and skipped; a name split by a newline, its continuation at column 0, is refused, not cut', () => {
   // Measured on node v26.11.1 (#1100 review round 2): a describe whose before() throws, holding a
   // plain child and a TODO child, and a timed test whose name holds a newline.
   const shapes = [
