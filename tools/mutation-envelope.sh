@@ -113,9 +113,10 @@
 # named). "names: none added over the baseline" (a red run that failed no node:test test) and
 # "names: could not be read (<run>: <reason>)" are different findings. <run> is `mutant` or
 # `baseline`, and <reason> says why the reader gave up: the output holds no node:test summary
-# line, it holds an entry in the failing-tests section the reader cannot parse (quoted), or the
-# failing tests it lists disagree with the summary's count. The same names land in
-# <out>/names.tsv, one row per mutant: id, verdict, added count (or `unreadable:<run>`, or `-`
+# line, it holds an entry in the failing-tests section the reader cannot parse (quoted), or it
+# lists failing tests while the summary counts none, or none while the summary counts some (the
+# two counts are not compared otherwise). The same names land in <out>/names.tsv, one row per
+# mutant: id, verdict, added count (or `unreadable:<run>`, or `-`
 # for a row with no mutant verdict), then the names joined by ` | `, or the reason when column 3
 # is `unreadable:<run>`. A name or reason that itself holds ` | ` makes that column ambiguous;
 # <out>/<id>.names.json is exact.
