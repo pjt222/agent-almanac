@@ -271,8 +271,10 @@ if (first && process.env.STUB_READ_STDIN) fs.readFileSync(0);
 // The names record the envelope asked for, when the arm supplies one.
 const namesOut = argv.includes('--names-out') ? argv[argv.indexOf('--names-out') + 1] : null;
 if (namesOut && process.env.STUB_NAMES) fs.writeFileSync(namesOut, process.env.STUB_NAMES);
-// A tree `worktree remove --force` cannot remove: locked. With STUB_FOREIGN_ADMIN its admin
-// directory's gitdir is also pointed elsewhere, as when a peer's worktree reused the name.
+// A tree `worktree remove --force` cannot remove. Locked, the remove fails with "cannot remove a
+// locked working tree". With STUB_FOREIGN_ADMIN its admin directory's gitdir is also pointed
+// elsewhere, as when a peer's worktree reused the name, and then the rewritten gitdir alone fails
+// the remove ("is not a working tree"), locked or not (git 2.43, #1100 review round 3).
 if (process.env.STUB_LOCK && first) {
   const cp = require('child_process');
   cp.execFileSync('git', ['worktree', 'lock', process.cwd()]);
@@ -713,7 +715,8 @@ JSON
     echo "  FAIL  a-foreign-admin-dir-is-left-alone: the fallback removed an admin dir whose gitdir named another tree" >&2; ARMS_FAILED=$((ARMS_FAILED + 1))
   fi
   unset STUB_LOCK STUB_FOREIGN_ADMIN
-  git -C "${REPO_ARMS:?}" worktree prune # the arms' own repository: clear the registration the arm left on purpose
+  # The someone-else registration the arm left on purpose stays: `worktree prune` keeps a locked
+  # entry, and the arms' repository is deleted with "${STUB}" below (#1100 review round 3).
 
   # An inherited GIT_DIR names some other repository; the run ignores it and writes nothing there.
   (cd "${REPO_ARMS:?}" && GIT_DIR="${STUB:?}/decoy.git" GIT_WORK_TREE="${STUB:?}/decoy" bash "${STUB:?}/tools/mutation-envelope.sh" --test true --plan "$P/two-good.tsv" --out "${STUB:?}/logs") \
