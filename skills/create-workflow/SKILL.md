@@ -297,7 +297,7 @@ treating it as a pass.
 ## Validation
 
 - [ ] File exists at `workflows/<name>.mjs` (or `.claude/workflows/<name>.js` for personal use).
-- [ ] Filename stem, sidecar `name:`, and `meta.name` are identical (triple-name contract).
+- [ ] Filename stem, sidecar `name:`, and `meta.name` are identical (triple-name convention).
 - [ ] `export const meta` is a pure literal; sidecar mirrors `name`/`description`/`phases`.
 - [ ] Sidecar `phases:` ⊇ every title passed to `phase()` or a stage `phase:` option.
 - [ ] Body defaults its `args`, uses an appropriate fan-out primitive, and returns a value.
