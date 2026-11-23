@@ -30,11 +30,11 @@ export const meta = {
 }
 ```
 
-The runtime `export const meta` literal is required by the Workflow tool; the **sidecar comment is the catalog source of truth**, the analogue of YAML frontmatter on the other four content types, so the existing grep+count tooling can read the metadata without a JavaScript parser. Keep the two in agreement, and keep `meta.name` equal to the filename stem — that triple equality (filename ↔ sidecar `name:` ↔ `meta.name`) is the `Workflow({ name })` / `/<name>` discovery contract.
+The runtime `export const meta` literal is required by the Workflow tool; the **sidecar comment is the catalog source of truth**, the analogue of YAML frontmatter on the other four content types, so the existing grep+count tooling can read the metadata without a JavaScript parser. Keep the two in agreement, and keep `meta.name` equal to the filename stem — that triple equality (filename ↔ sidecar `name:` ↔ `meta.name`) is this repository's convention, enforced by integrity check A7. The Workflow tool itself registers a workflow under `meta.name` and ignores the file name.
 
 ## Invoking
 
-Once a workflow is installed into `.claude/workflows/<name>.mjs`, invoke it either way:
+The Workflow tool does not discover a `.mjs` file in `.claude/workflows/`, so install a copy with a `.js` extension (`cp workflows/<name>.mjs .claude/workflows/<name>.js`; `tests/results/2026-10-14-workflow-loader-probe/RESULT.md`). Once it is installed, invoke it by its `meta.name` either way:
 
 ```js
 // As a tool call (optionally parameterized via args)
