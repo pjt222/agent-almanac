@@ -76,7 +76,7 @@ Rename in the three places that **must stay identical** — the filename stem, t
 grep -n "name:" workflows/<name>.mjs   # sidecar + meta.name must equal the filename stem
 ```
 
-That triple equality (`filename ↔ sidecar name ↔ meta.name`) is this repository's convention, and integrity check A7 enforces it for `workflows/`. It is not how the Workflow tool finds a workflow: the tool registers a workflow under its `meta.name` and ignores the file name (Step 9).
+That triple equality (`filename ↔ sidecar name ↔ meta.name`) is this repository's convention, and integrity check A7 enforces it for `workflows/`. It is not how the Workflow tool finds a workflow: the tool registers a workflow under its `meta.name`, not under its file name (Step 9).
 
 **Expected:** All three read the same kebab-case name.
 
@@ -171,7 +171,7 @@ The Workflow tool discovers a project workflow in `.claude/workflows/` only from
 cp workflows/<name>.mjs .claude/workflows/<name>.js
 ```
 
-Then invoke `Workflow({ name: '<name>' })` or the `/<name>` slash command, where `<name>` is the `meta.name`. `.claude/workflows/` is user-writable and the save-flow writes there. Two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns. A file-name prefix such as `almanac-<name>.js` does not prevent that, because the loader ignores file names; it only stops `cp` from overwriting a file. A *curated* install must therefore namespace `meta.name` itself (for example `almanac-<name>`).
+Then invoke `Workflow({ name: '<name>' })` or the `/<name>` slash command, where `<name>` is the `meta.name`. `.claude/workflows/` is user-writable and the save-flow writes there. Two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns. A file-name prefix such as `almanac-<name>.js` does not prevent that, because the workflow is registered under its `meta.name`; it only stops `cp` from overwriting a file. A *curated* install must therefore namespace `meta.name` itself (for example `almanac-<name>`).
 
 **Expected:** The workflow runs end-to-end and returns its value.
 

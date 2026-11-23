@@ -30,7 +30,7 @@ export const meta = {
 }
 ```
 
-The runtime `export const meta` literal is required by the Workflow tool; the **sidecar comment is the catalog source of truth**, the analogue of YAML frontmatter on the other four content types, so the existing grep+count tooling can read the metadata without a JavaScript parser. Keep the two in agreement, and keep `meta.name` equal to the filename stem — that triple equality (filename ↔ sidecar `name:` ↔ `meta.name`) is this repository's convention, enforced by integrity check A7. The Workflow tool itself registers a workflow under `meta.name` and ignores the file name.
+The runtime `export const meta` literal is required by the Workflow tool; the **sidecar comment is the catalog source of truth**, the analogue of YAML frontmatter on the other four content types, so the existing grep+count tooling can read the metadata without a JavaScript parser. Keep the two in agreement, and keep `meta.name` equal to the filename stem — that triple equality (filename ↔ sidecar `name:` ↔ `meta.name`) is this repository's convention, enforced by integrity check A7. The Workflow tool itself registers a workflow under its `meta.name`, not under its file name.
 
 ## Invoking
 

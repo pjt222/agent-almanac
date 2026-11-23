@@ -18,8 +18,8 @@
 //   2. Rename in THREE places that must stay identical — the sidecar `name:`
 //      above, the meta.name literal below, and the filename stem. That triple
 //      equality is this repository's convention (integrity check A7). The
-//      Workflow tool itself registers a workflow under meta.name, ignores the
-//      file name, and discovers only a .js copy in .claude/workflows/.
+//      Workflow tool itself registers a workflow under its meta.name, not its
+//      file name, and does not discover a .mjs copy in .claude/workflows/.
 //   3. Replace the meta block, phases, and body with your orchestration.
 //   4. Syntax-check it (see "Validating" at the bottom of this file).
 //
