@@ -117,7 +117,7 @@ Workflow({ name: 'review-changes', args: { files: ['a.js'] } })  // parameterize
 
 The Workflow tool discovers a project workflow in `.claude/workflows/` only from a file whose name ends in `.js`; a `.mjs` file there is skipped without any message. The repository keeps `.mjs` as its source extension, so the installed copy changes extension: `cp workflows/<name>.mjs .claude/workflows/<name>.js`. The tool registers each workflow under its `meta.name`, not under its file name, and two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`).
 
-`.claude/workflows/` is user-writable and the Workflow save-flow writes there, so a curated install must namespace `meta.name` itself (for example `almanac-<name>`) to avoid colliding with a user's own workflow. A file-name prefix such as `almanac-<name>.js` only stops `cp` from overwriting a file; it does not prevent the collision. The CLI install adapter for this is deferred (Phase 2) — for now, copy a reviewed workflow into `.claude/workflows/` by hand.
+`.claude/workflows/` is user-writable and the Workflow save-flow writes there. A hand-installed copy keeps the source's `meta.name`, so it collides silently with any other workflow of that name; check before copying. A file-name prefix such as `almanac-<name>.js` only stops `cp` from overwriting a file; it does not prevent the collision. Namespacing curated installs is the job of the CLI install adapter, which is deferred (Phase 2, #293) — for now, copy a reviewed workflow into `.claude/workflows/` by hand.
 
 ## Validating a Workflow Script
 

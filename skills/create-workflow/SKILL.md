@@ -171,7 +171,7 @@ The Workflow tool discovers a project workflow in `.claude/workflows/` only from
 cp workflows/<name>.mjs .claude/workflows/<name>.js
 ```
 
-Then invoke `Workflow({ name: '<name>' })` or the `/<name>` slash command, where `<name>` is the `meta.name`. `.claude/workflows/` is user-writable and the save-flow writes there. Two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns. A file-name prefix such as `almanac-<name>.js` does not prevent that, because the workflow is registered under its `meta.name`; it only stops `cp` from overwriting a file. A *curated* install must therefore namespace `meta.name` itself (for example `almanac-<name>`).
+Then invoke `Workflow({ name: '<name>' })` or the `/<name>` slash command, where `<name>` is the `meta.name`. `.claude/workflows/` is user-writable and the save-flow writes there. The copy keeps the source's `meta.name`, and two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns. Before copying, check that no workflow already in `.claude/workflows/` uses that `meta.name`. A file-name prefix such as `almanac-<name>.js` does not prevent a collision, because the workflow is registered under its `meta.name`; it only stops `cp` from overwriting a file. How a curated install should namespace is left to the deferred CLI install adapter (#293).
 
 **Expected:** The workflow runs end-to-end and returns its value.
 
