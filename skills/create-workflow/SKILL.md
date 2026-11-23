@@ -165,7 +165,7 @@ The authoritative check is running it: `Workflow({ name: '<name>' })`.
 
 ### Step 9: Install and Run
 
-The Workflow tool discovers a project workflow in `.claude/workflows/` only from a file whose name ends in `.js`; a `.mjs` file there is skipped without any message. It registers the workflow under its `meta.name`, not its file name (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`). In Phase 1, install by hand. The source in `workflows/` keeps `.mjs`, and the installed copy changes extension:
+The Workflow tool discovers a project workflow in `.claude/workflows/` from a `.js` file; a `.mjs` file there is not discovered, and the not-found error does not mention it. It registers the workflow under its `meta.name`, not its file name (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`). In Phase 1, install by hand. The source in `workflows/` keeps `.mjs`, and the installed copy changes extension:
 
 ```bash
 cp workflows/<name>.mjs .claude/workflows/<name>.js
