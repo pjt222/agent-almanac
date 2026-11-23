@@ -21,7 +21,6 @@ metadata:
   locale: es
   source_locale: en
   source_commit: "f51262bc6e8d3dcc06e2bb126dd80ce550d902d8"
-  fence_basis_commit: "f51262bc6e8d3dcc06e2bb126dd80ce550d902d8"
   translator: "(untranslated stub)"
   translation_date: "2026-06-16"
 ---
@@ -68,7 +67,7 @@ Start from the canonical scaffold — never a blank file:
 cp workflows/_template.mjs workflows/<name>.mjs
 ```
 
-For a personal (non-library) workflow, copy into `.claude/workflows/<name>.js` instead: the Workflow tool does not discover a `.mjs` file there (Step 9). The template carries the sidecar block, a pure-literal `meta`, a `phase()`, a `pipeline()` fan-out, an `agent({ schema })` call, and the hard constraints inline.
+For a personal (non-library) workflow, copy into `.claude/workflows/<name>.js` instead: the Workflow tool does not discover a `.mjs` file there (Step 9). Read `workflows/<name>.mjs` in the commands of Steps 3 and 8 as that file, and skip Step 9's copy. The template carries the sidecar block, a pure-literal `meta`, a `phase()`, a `pipeline()` fan-out, an `agent({ schema })` call, and the hard constraints inline.
 
 **Expected:** A new `.mjs` file (`.js` for a personal workflow) that is a verbatim copy of the template.
 
@@ -82,7 +81,7 @@ Rename in the three places that **must stay identical** — the filename stem, t
 grep -n "name:" workflows/<name>.mjs   # sidecar + meta.name must equal the filename stem
 ```
 
-That triple equality (`filename ↔ sidecar name ↔ meta.name`) is this repository's convention, and integrity check A7 enforces it for `workflows/`. It is not how the Workflow tool finds a workflow: the tool registers a workflow under its `meta.name` and ignores the file name (Step 9).
+That triple equality (`filename ↔ sidecar name ↔ meta.name`) is this repository's convention, and integrity check A7 enforces it for `workflows/`. It is not how the Workflow tool finds a workflow: the tool registers a workflow under its `meta.name`, not under its file name (Step 9).
 
 **Expected:** All three read the same kebab-case name.
 
@@ -163,7 +162,7 @@ Workflow scripts use a top-level `return`, which the runtime accepts (it wraps t
   echo '})()'; } | node --check -
 ```
 
-The authoritative check is running it: `Workflow({ name: '<name>' })`.
+The authoritative check is running it once installed (Step 9): `Workflow({ name: '<name>' })`.
 
 **Expected:** The wrap-check passes with no syntax error.
 
@@ -171,13 +170,13 @@ The authoritative check is running it: `Workflow({ name: '<name>' })`.
 
 ### Step 9: Install and Run
 
-The Workflow tool discovers a project workflow in `.claude/workflows/` only from a file whose name ends in `.js`; a `.mjs` file there is skipped without any message. It registers the workflow under its `meta.name`, not its file name (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`). In Phase 1, install by hand. The source in `workflows/` keeps `.mjs`, and the installed copy changes extension:
+The Workflow tool discovers a project workflow in `.claude/workflows/` from a `.js` file; a `.mjs` file there is not discovered, and the not-found error does not mention it. It registers the workflow under its `meta.name`, not its file name (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`). In Phase 1, install by hand. The source in `workflows/` keeps `.mjs`, and the installed copy changes extension:
 
 ```bash
 cp workflows/<name>.mjs .claude/workflows/<name>.js
 ```
 
-Then invoke `Workflow({ name: '<name>' })` or the `/<name>` slash command, where `<name>` is the `meta.name`. `.claude/workflows/` is user-writable and the save-flow writes there. Two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns. A file-name prefix such as `almanac-<name>.js` does not prevent that, because the loader ignores file names; it only stops `cp` from overwriting a file. A *curated* install must therefore namespace `meta.name` itself (for example `almanac-<name>`).
+Then invoke `Workflow({ name: '<name>' })` or the `/<name>` slash command, where `<name>` is the `meta.name`. `.claude/workflows/` is user-writable and the save-flow writes there. The copy keeps the source's `meta.name`, and two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns. Before copying, check that no workflow already in `.claude/workflows/` uses that `meta.name`. A file-name prefix such as `almanac-<name>.js` does not prevent a collision, because the workflow is registered under its `meta.name`; it only stops `cp` from overwriting a file. How a curated install should namespace is left to the deferred CLI install adapter (#293).
 
 **Expected:** The workflow runs end-to-end and returns its value.
 
@@ -303,7 +302,7 @@ treating it as a pass.
 ## Validation
 
 - [ ] File exists at `workflows/<name>.mjs` (or `.claude/workflows/<name>.js` for personal use).
-- [ ] Filename stem, sidecar `name:`, and `meta.name` are identical (triple-name contract).
+- [ ] Filename stem, sidecar `name:`, and `meta.name` are identical (triple-name convention).
 - [ ] `export const meta` is a pure literal; sidecar mirrors `name`/`description`/`phases`.
 - [ ] Sidecar `phases:` ⊇ every title passed to `phase()` or a stage `phase:` option.
 - [ ] Body defaults its `args`, uses an appropriate fan-out primitive, and returns a value.
