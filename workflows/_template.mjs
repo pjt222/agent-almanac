@@ -17,7 +17,9 @@
 //   1. Copy this file to  workflows/<your-name>.mjs
 //   2. Rename in THREE places that must stay identical — the sidecar `name:`
 //      above, the meta.name literal below, and the filename stem. That triple
-//      equality is the Workflow({ name }) / "/<your-name>" discovery contract.
+//      equality is this repository's convention (integrity check A7). The
+//      Workflow tool itself registers a workflow under its meta.name, not its
+//      file name, and does not discover a .mjs copy in .claude/workflows/.
 //   3. Replace the meta block, phases, and body with your orchestration.
 //   4. Syntax-check it (see "Validating" at the bottom of this file).
 //
@@ -291,7 +293,8 @@ return { confirmed, total: results.filter(Boolean).length }
 //     sed 's/^[[:space:]]*export const meta/const meta/' workflows/<name>.mjs; \
 //     echo '})()'; } | node --check -
 //
-// The authoritative check is running it: Workflow({ name: '<name>' }). The
+// The authoritative check is running it once installed as a .js copy in
+// .claude/workflows/: Workflow({ name: '<name>' }). The
 // authoring globals above are an evolving vendor surface (observed in Claude
 // Code v2.1.x, subject to change) — never CI-enforced.
 // ============================================================================

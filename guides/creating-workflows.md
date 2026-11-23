@@ -64,7 +64,7 @@ return { findings }
 
 ### The `meta` contract
 
-`export const meta` must be a **pure literal** — no variables, function calls, spreads, or template interpolation. Required fields are `name` and `description`; `phases` (one entry per phase the workflow uses — whether opened by a global `phase()` call or assigned via a stage's `phase:` option) is optional but recommended. The `name` **must equal the filename stem** — that is the `Workflow({ name })` and `/<name>` discovery contract.
+`export const meta` must be a **pure literal** — no variables, function calls, spreads, or template interpolation. Required fields are `name` and `description`; `phases` (one entry per phase the workflow uses — whether opened by a global `phase()` call or assigned via a stage's `phase:` option) is optional but recommended. The `name` **must equal the filename stem**. That is this repository's convention, enforced by integrity check A7; the Workflow tool itself registers a workflow under its `meta.name`, not under its file name (see [Invoking and Installing](#invoking-and-installing)).
 
 ### Sidecar frontmatter
 
@@ -104,7 +104,7 @@ The same `intent` rule from #285 applies: an agent type is **`implementing`** wh
 
 ## Invoking and Installing
 
-A workflow installed at `.claude/workflows/<name>.mjs` is invocable two ways:
+A workflow installed at `.claude/workflows/<name>.js` is invocable by its `meta.name` two ways:
 
 ```js
 Workflow({ name: 'review-changes' })                              // as a tool call
@@ -115,7 +115,9 @@ Workflow({ name: 'review-changes', args: { files: ['a.js'] } })  // parameterize
 /review-changes        # as a slash command
 ```
 
-`.claude/workflows/` is user-writable and the Workflow save-flow writes there, so a curated install must namespace its files (for example `almanac-<name>.mjs`) to avoid shadowing a user's own workflow. The CLI install adapter for this is deferred (Phase 2) — for now, copy a reviewed `.mjs` into `.claude/workflows/` by hand.
+The Workflow tool discovers a project workflow in `.claude/workflows/` from a `.js` file; a `.mjs` file there is not discovered, and the not-found error does not mention it. The repository keeps `.mjs` as its source extension, so the installed copy changes extension: `cp workflows/<name>.mjs .claude/workflows/<name>.js`. The tool registers each workflow under its `meta.name`, not under its file name, and two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`).
+
+`.claude/workflows/` is user-writable and the Workflow save-flow writes there. A hand-installed copy keeps the source's `meta.name`, so it collides silently with any other workflow of that name in `.claude/workflows/`; check before copying. A file-name prefix such as `almanac-<name>.js` only stops `cp` from overwriting a file; it does not prevent the collision. Namespacing curated installs is the job of the CLI install adapter, which is deferred (Phase 2, #293) — for now, copy a reviewed workflow into `.claude/workflows/` by hand.
 
 ## Validating a Workflow Script
 
@@ -127,7 +129,7 @@ Workflow scripts use a top-level `return`, which the runtime accepts (it wraps t
   echo '})()'; } | node --check -
 ```
 
-The authoritative check is running it: `Workflow({ name: '<name>' })`.
+The authoritative check is running it once installed (see [Invoking and Installing](#invoking-and-installing)): `Workflow({ name: '<name>' })`.
 
 ## Hard Constraints
 
@@ -387,7 +389,8 @@ The Workflow **run model** is generally available on paid Claude Code plans (~v2
 |---|---|---|
 | `Illegal return statement` from `node --check` | Raw ESM check rejects the top-level `return` that the runtime accepts | Use the wrap-then-check recipe above |
 | `meta must be a pure literal` | `meta` references a variable or call | Inline every value into the `export const meta` object literal |
-| Workflow not found by name | `meta.name` ≠ filename stem, or not installed in `.claude/workflows/` | Make the triple (filename ↔ sidecar `name:` ↔ `meta.name`) identical and install the file |
+| `Workflow "<name>" not found` | The installed copy ends in `.mjs` (the tool loads only `.js` from `.claude/workflows/`), it is not in `.claude/workflows/`, or `<name>` is not its `meta.name` | Install it as `.claude/workflows/<name>.js` and invoke it by its `meta.name` |
+| A different workflow's body runs | Another file in `.claude/workflows/` carries the same `meta.name`; the collision is silent | Give each installed workflow a distinct `meta.name` |
 | A mutating stage is rejected / misbehaves | Stage targets an advisory `agentType` but needs to write | Target an `implementing` agent type for any Write/Edit/Bash or `worktree` stage |
 | A "read-only" run left the repo changed | Agents inherit the repo as their cwd; the declared `intent` does not constrain Bash | Apply the containments in [Fanning Out Against a Live Repository](#fanning-out-against-a-live-repository) and bracket the run with `npm run guard:snapshot` / `guard:verify` |
 | `guard:verify` says "no snapshot" | The snapshot was released, or never taken | Re-snapshot and re-run. Never read exit 2 as a pass — it means the comparison did not happen |

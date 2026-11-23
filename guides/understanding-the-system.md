@@ -128,7 +128,7 @@ A workflow is a code-driven orchestration script run by Claude Code's Workflow t
 - A pure-literal **`export const meta`** with `name` (equal to the filename stem), `description`, and `phases`.
 - An **async body** using the injected primitives `agent()`, `pipeline()`, `parallel()`, `phase()`, and `log()`, plus the `args` and `budget` globals.
 
-Claude Code discovers workflows from `.claude/workflows/<name>.mjs`, invocable as `Workflow({ name })` or the `/<name>` slash command. The seeds that ship are listed in [the workflows README](../workflows/README.md); this sentence names neither a count nor a set, having already been corrected once when a second seed landed (#350). The number is derived into `SECURITY.md` by the README generator and pinned by `scripts/test/workflow-contract.test.js`. A `create-workflow` meta-skill ships alongside them; the full registry, CLI install, and registry-sync validation are deferred (Phase 2). See [Creating Workflows](creating-workflows.md).
+Claude Code discovers a project workflow from a `.js` file in `.claude/workflows/` (a `.mjs` file there is not discovered) and registers it under its `meta.name`, invocable as `Workflow({ name })` or the `/<name>` slash command. The seeds that ship are listed in [the workflows README](../workflows/README.md); this sentence names neither a count nor a set, having already been corrected once when a second seed landed (#350). The number is derived into `SECURITY.md` by the README generator and pinned by `scripts/test/workflow-contract.test.js`. A `create-workflow` meta-skill ships alongside them; the full registry, CLI install, and registry-sync validation are deferred (Phase 2). See [Creating Workflows](creating-workflows.md).
 
 > **Teams vs Workflows.** Teams are declarative, model-driven coordination — the lead coordinates members at runtime by spawning them as subagents via the Agent tool and exchanging `SendMessage`. Workflows are code-driven orchestration with deterministic *control flow* — the `.mjs` script fixes the phases and fan-out via `agent()` / `pipeline()` / `phase()`. The control flow is deterministic and rereadable; the `agent()` outputs are not. Choose a team for adaptive, judgment-based coordination; choose a workflow for a repeatable, auditable, parameterized procedure.
 
@@ -251,7 +251,7 @@ Four YAML registry files serve as the machine-readable catalogs for the system:
 | Skills | `skills/_registry.yml` | Lists all skills with id, path, complexity, language, and description |
 | Agents | `agents/_registry.yml` | Lists all agents with id, path, tags, tools, and skill assignments |
 | Teams | `teams/_registry.yml` | Lists all teams with id, path, lead, members, and coordination pattern |
-| Workflows | `workflows/` | Workflow scripts, discovered by filename from `.claude/workflows/`; no `_registry.yml` yet (deferred to Phase 2) |
+| Workflows | `workflows/` | Workflow scripts, discovered by `meta.name` from `.js` copies in `.claude/workflows/`; no `_registry.yml` yet (deferred to Phase 2) |
 | Tests | `tests/_registry.yml` | Lists test scenarios with target, coordination pattern, and acceptance criteria |
 
 Registries must stay in sync with files on disk. When you add or remove a skill, agent, or team, update its registry and the `total_*` count.
