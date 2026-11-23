@@ -293,7 +293,8 @@ return { confirmed, total: results.filter(Boolean).length }
 //     sed 's/^[[:space:]]*export const meta/const meta/' workflows/<name>.mjs; \
 //     echo '})()'; } | node --check -
 //
-// The authoritative check is running it: Workflow({ name: '<name>' }). The
+// The authoritative check is running it once installed as a .js copy in
+// .claude/workflows/: Workflow({ name: '<name>' }). The
 // authoring globals above are an evolving vendor surface (observed in Claude
 // Code v2.1.x, subject to change) — never CI-enforced.
 // ============================================================================

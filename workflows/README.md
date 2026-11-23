@@ -78,7 +78,7 @@ Workflow scripts use a top-level `return`, which is valid in the Workflow runtim
   echo '})()'; } | node --check -
 ```
 
-The authoritative check is running it: `Workflow({ name: '<name>' })`.
+The authoritative check is running it once installed (see [Invoking](#invoking)): `Workflow({ name: '<name>' })`.
 
 ## Vendor-API caveat
 

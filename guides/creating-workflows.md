@@ -129,7 +129,7 @@ Workflow scripts use a top-level `return`, which the runtime accepts (it wraps t
   echo '})()'; } | node --check -
 ```
 
-The authoritative check is running it: `Workflow({ name: '<name>' })`.
+The authoritative check is running it once installed (see [Invoking and Installing](#invoking-and-installing)): `Workflow({ name: '<name>' })`.
 
 ## Hard Constraints
 
