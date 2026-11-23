@@ -3,7 +3,7 @@ name: create-workflow
 description: >
   Author a new agent-almanac workflow — a self-contained `.mjs` orchestration
   script run by Claude Code's Workflow tool. Covers choosing a workflow over a
-  team, copying the template, the triple-name discovery contract, the pure-literal
+  team, copying the template, the triple-name convention, the pure-literal
   meta and sidecar frontmatter, building the body with the injected primitives,
   the advisory/implementing capability contract, the adversarial-verification
   fail-safes, validation, and manual installation. Use when you have a repeatable,
@@ -21,7 +21,6 @@ metadata:
   locale: de
   source_locale: en
   source_commit: "d49f498d41cd470482b69cce9fee0e0fddda13a7"
-  fence_basis_commit: "d49f498d41cd470482b69cce9fee0e0fddda13a7"
   translator: "(untranslated stub)"
   translation_date: "2026-06-16"
 ---
@@ -68,13 +67,13 @@ Start from the canonical scaffold — never a blank file:
 cp workflows/_template.mjs workflows/<name>.mjs
 ```
 
-For a personal (non-library) workflow, copy into `.claude/workflows/<name>.mjs` instead. The template carries the sidecar block, a pure-literal `meta`, a `phase()`, a `pipeline()` fan-out, an `agent({ schema })` call, and the hard constraints inline.
+For a personal (non-library) workflow, copy into `.claude/workflows/<name>.js` instead: the Workflow tool does not discover a `.mjs` file there (Step 9). The template carries the sidecar block, a pure-literal `meta`, a `phase()`, a `pipeline()` fan-out, an `agent({ schema })` call, and the hard constraints inline.
 
-**Expected:** A new `.mjs` file that is a verbatim copy of the template.
+**Expected:** A new `.mjs` file (`.js` for a personal workflow) that is a verbatim copy of the template.
 
 **On failure:** If `workflows/_template.mjs` is missing, you are on a pre-Phase-1 checkout — fetch `main`.
 
-### Step 3: Satisfy the Triple-Name Discovery Contract
+### Step 3: Satisfy the Triple-Name Convention
 
 Rename in the three places that **must stay identical** — the filename stem, the sidecar `// name:`, and the `meta.name` literal:
 
@@ -82,11 +81,11 @@ Rename in the three places that **must stay identical** — the filename stem, t
 grep -n "name:" workflows/<name>.mjs   # sidecar + meta.name must equal the filename stem
 ```
 
-That triple equality (`filename ↔ sidecar name ↔ meta.name`) is the `Workflow({ name })` and `/<name>` discovery contract.
+That triple equality (`filename ↔ sidecar name ↔ meta.name`) is this repository's convention, and integrity check A7 enforces it for `workflows/`. It is not how the Workflow tool finds a workflow: the tool registers a workflow under its `meta.name` and ignores the file name (Step 9).
 
 **Expected:** All three read the same kebab-case name.
 
-**On failure:** A `Workflow not found by name` error at runtime means the triple is out of sync — re-check all three.
+**On failure:** If integrity check A7 reports a mismatch, re-check all three. A `Workflow "<name>" not found` error at runtime is a different fault; Step 9 covers it.
 
 ### Step 4: Write the Pure-Literal `meta` and Sidecar
 
@@ -171,21 +170,21 @@ The authoritative check is running it: `Workflow({ name: '<name>' })`.
 
 ### Step 9: Install and Run
 
-The Workflow tool resolves `Workflow({ name })` from `.claude/workflows/<name>.mjs`. In Phase 1, install by hand:
+The Workflow tool discovers a project workflow in `.claude/workflows/` only from a file whose name ends in `.js`; a `.mjs` file there is skipped without any message. It registers the workflow under its `meta.name`, not its file name (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`). In Phase 1, install by hand. The source in `workflows/` keeps `.mjs`, and the installed copy changes extension:
 
 ```bash
-cp workflows/<name>.mjs .claude/workflows/<name>.mjs   # curated installs prefix: almanac-<name>.mjs
+cp workflows/<name>.mjs .claude/workflows/<name>.js
 ```
 
-Then invoke `Workflow({ name: '<name>' })` or the `/<name>` slash command. `.claude/workflows/` is user-writable and the save-flow writes there, so a *curated* install must namespace (`almanac-<name>.mjs`) to avoid shadowing a user's own workflow.
+Then invoke `Workflow({ name: '<name>' })` or the `/<name>` slash command, where `<name>` is the `meta.name`. `.claude/workflows/` is user-writable and the save-flow writes there. Two files with the same `meta.name` collide silently: one slash command is registered, only one body runs, and nothing warns. A file-name prefix such as `almanac-<name>.js` does not prevent that, because the loader ignores file names; it only stops `cp` from overwriting a file. A *curated* install must therefore namespace `meta.name` itself (for example `almanac-<name>`).
 
 **Expected:** The workflow runs end-to-end and returns its value.
 
-**On failure:** If `/<name>` is not found, confirm the file is in `.claude/workflows/` and the triple-name contract holds (Step 3).
+**On failure:** If the call reports `Workflow "<name>" not found`, check that the file is in `.claude/workflows/`, that its name ends in `.js` rather than `.mjs`, and that `<name>` is its `meta.name`. If a different workflow's body runs, another file in `.claude/workflows/` carries the same `meta.name`.
 
 ### Step 10: Register (Library Contributions)
 
-> **Phase-2-pending.** A `workflows/_registry.yml`, CI validation of the sidecar, and a CLI install adapter are deferred behind the #288 promotion gate (~8–10 workflows + a real install request). Until they land, a library workflow needs **no** registry entry — the sidecar frontmatter is its catalog metadata and discovery is by filename. When the registry exists, this step becomes "add an entry derived from the sidecar."
+> **Phase-2-pending.** A `workflows/_registry.yml`, CI validation of the sidecar, and a CLI install adapter are deferred behind the #288 promotion gate (~8–10 workflows + a real install request). Until they land, a library workflow needs **no** registry entry — the sidecar frontmatter is its catalog metadata, and an installed copy is found by its `meta.name` (Step 9). When the registry exists, this step becomes "add an entry derived from the sidecar."
 >
 > **Workflows are excluded from i18n.** Unlike skills/agents/teams/guides, a workflow is executable code, not prose — do **not** scaffold translations for it.
 
@@ -302,7 +301,7 @@ treating it as a pass.
 
 ## Validation
 
-- [ ] File exists at `workflows/<name>.mjs` (or `.claude/workflows/<name>.mjs` for personal use).
+- [ ] File exists at `workflows/<name>.mjs` (or `.claude/workflows/<name>.js` for personal use).
 - [ ] Filename stem, sidecar `name:`, and `meta.name` are identical (triple-name contract).
 - [ ] `export const meta` is a pure literal; sidecar mirrors `name`/`description`/`phases`.
 - [ ] Sidecar `phases:` ⊇ every title passed to `phase()` or a stage `phase:` option.
