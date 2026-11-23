@@ -62,7 +62,7 @@ Start from the canonical scaffold — never a blank file:
 cp workflows/_template.mjs workflows/<name>.mjs
 ```
 
-For a personal (non-library) workflow, copy into `.claude/workflows/<name>.js` instead: the Workflow tool does not discover a `.mjs` file there (Step 9). Read `workflows/<name>.mjs` in the commands of Steps 3 and 8 as that file, and skip Step 9's copy. The template carries the sidecar block, a pure-literal `meta`, a `phase()`, a `pipeline()` fan-out, an `agent({ schema })` call, and the hard constraints inline.
+For a personal (non-library) workflow, copy into `.claude/workflows/<name>.js` instead: the Workflow tool does not discover a `.mjs` file there (Step 9). Read `workflows/<name>.mjs` in the commands of Steps 3 and 8 as that file, and skip Step 9's copy, but not its collision check. The template carries the sidecar block, a pure-literal `meta`, a `phase()`, a `pipeline()` fan-out, an `agent({ schema })` call, and the hard constraints inline.
 
 **Expected:** A new `.mjs` file (`.js` for a personal workflow) that is a verbatim copy of the template.
 
