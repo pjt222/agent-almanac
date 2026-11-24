@@ -38,9 +38,10 @@
  *     ran, refuses a type it has no checker for before spending a baseline, and is
  *     INCONCLUSIVE when the interpreter is absent or answered with no verdict.
  *     Syntax-free types (`.md`, `.markdown`, `.txt`) proceed and say the INVALID
- *     verdict cannot apply. `workflows/*.mjs` are checked in the Workflow dialect
- *     (wrapped, so their top-level `return` is legal) — plain `node --check` refused
- *     every one of them, unmutated. What stays JavaScript-only is the crash heuristic
+ *     verdict cannot apply. `workflows/*.mjs`, `.claude/workflows/*.mjs` and, since
+ *     #1109, `.claude/workflows/*.js` are checked in the Workflow dialect (wrapped, so
+ *     their top-level `return` is legal); plain `node --check` refused every
+ *     `workflows/*.mjs`, unmutated. What stays JavaScript-only is the crash heuristic
  *     one level up: `crashSuspicion` matches node runtime-error text, so a Python
  *     `NameError` raised at import time by a mutant that PARSES (a deleted
  *     assignment whose name is read at module scope, say) still reads as a kill.
@@ -80,7 +81,8 @@ Options:
   --file <path>             File to mutate. Must be tracked, unmodified, and a
                             regular file (symlinks are refused). Syntax-checked
                             types: ${CHECKED_EXTENSIONS.join(' ')}
-                            (workflows/*.mjs in the Workflow dialect);
+                            (workflows/*.mjs, .claude/workflows/*.mjs and
+                            .claude/workflows/*.js in the Workflow dialect);
                             ${[...SYNTAX_FREE_EXTENSIONS].join(' ')} proceed with no
                             syntax to check; any other type is refused (#758).
   --test <cmd>              Command whose red/green decides whether the mutant died

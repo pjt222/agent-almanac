@@ -1,0 +1,16 @@
+[
+  {
+    "workflowName": "probe-scriptpath-mjs",
+    "status": "completed",
+    "scriptPath": "<scratch git repo>/.claude/workflows/probe-mjs.mjs",
+    "logs": [
+      "probe-mjs running"
+    ],
+    "result": {
+      "ran": true,
+      "ext": "mjs"
+    },
+    "agentCount": 0,
+    "timestamp": "2026-11-24T07:02:57.980Z"
+  }
+]

@@ -74,8 +74,9 @@ test('the stdin checkers run isolated from startup files (review S3)', () => {
 
 test('the Workflow dialect is ROOT-ANCHORED, not "some parent is called workflows" (review S-B)', () => {
   assert.ok(isWorkflowScript('/r/workflows/review-changes.mjs', '/r'));
-  assert.ok(isWorkflowScript('/r/.claude/workflows/x.mjs', '/r'), 'the discovery directory counts too');
-  assert.ok(!isWorkflowScript('/r/workflows/helper.js', '/r'), 'the dialect is .mjs only');
+  assert.ok(isWorkflowScript('/r/.claude/workflows/x.mjs', '/r'),
+    'the install form the docs taught before #1108, which Workflow({ scriptPath }) runs in the dialect (tests/results/2026-11-24-workflow-scriptpath-probe/)');
+  assert.ok(!isWorkflowScript('/r/workflows/helper.js', '/r'), 'a .js file in workflows/ is a helper, not a workflow: the dialect is .mjs only there');
   assert.ok(!isWorkflowScript('/r/scripts/review-changes.mjs', '/r'), 'a different directory is not the dialect');
   // The dangerous direction: a fixture under SOME OTHER workflows/ must not get the looser goal.
   assert.ok(!isWorkflowScript('/r/tests/fixtures/workflows/fx.mjs', '/r'), 'depth-agnostic matching is the bug');
@@ -86,6 +87,27 @@ test('the Workflow dialect is ROOT-ANCHORED, not "some parent is called workflow
   assert.equal(checkerName('/r/tests/workflows/x.mjs', '/r'), 'node --check', 'the ordinary probe, not the dialect');
   const src = "export const meta = { name: 'x' }\nreturn 1\n";
   assert.equal(wrapWorkflow(src), "(async()=>{\nconst meta = { name: 'x' }\nreturn 1\n\n})()");
+});
+
+test('an installed copy, .claude/workflows/<name>.js, gets the Workflow dialect (#1109)', async () => {
+  // The Workflow tool finds a .js file in .claude/workflows/ by name, and runs a .mjs file there
+  // only by path (tests/results/2026-10-14-workflow-loader-probe/ and
+  // tests/results/2026-11-24-workflow-scriptpath-probe/). Before #1109 the .js copy got plain
+  // `node --check`, which refuses its top-level `return`.
+  assert.ok(isWorkflowScript('/r/.claude/workflows/x.js', '/r'), 'the installed copy is a workflow script');
+  assert.equal(checkerName('/r/.claude/workflows/x.js', '/r'), WORKFLOW_DIALECT_CHECKER);
+  const installed = "export const meta = { name: 'x', description: 'd' }\nlog('x')\nreturn { ran: true }\n";
+  const r = await checkSyntax('/r/.claude/workflows/x.js', installed, '/r');
+  assert.equal(r.verdict, 'ok', `a top-level return parses in the dialect: ${r.detail}`);
+  assert.equal(r.checker, WORKFLOW_DIALECT_CHECKER);
+  // Still root-anchored, and still one directory only.
+  assert.ok(!isWorkflowScript('/r/.claude/workflows/sub/x.js', '/r'), 'nested below .claude/workflows/ is not a workflow');
+  assert.ok(!isWorkflowScript('/r/tests/.claude/workflows/x.js', '/r'), 'another .claude/workflows/ below the root is not the anchor');
+  assert.ok(!isWorkflowScript('/elsewhere/.claude/workflows/x.js', '/r'), 'outside the root at all');
+  assert.ok(!isWorkflowScript('/r/.claude/workflows/x.cjs', '/r'), '.cjs is not listed');
+  // WORKFLOW_DIRS is an object since #1109, so a top-level directory named after an
+  // Object.prototype key must not reach it through the prototype chain.
+  assert.ok(!isWorkflowScript('/r/constructor/x.js', '/r'), 'an Object.prototype key is not a workflow directory');
 });
 
 test('the dialect checks under the module goal, which is stricter than bare node --check (review S-C)', async () => {

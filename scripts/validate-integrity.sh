@@ -481,8 +481,8 @@ done
 [ "$a6_fail" -eq 0 ] && echo "OK: All agents have a valid intent agreeing with tools; team implementation roles map to implementing agents"
 
 # A7: Workflow sidecar convention (#288 Phase-1 DoD)
-# Sidecar comment block present (name/description/phases) and the discovery
-# triple-equality holds: filename stem == sidecar name == meta.name. Grep only,
+# Sidecar comment block present (name/description/phases) and the repository's
+# naming convention holds: filename stem == sidecar name == meta.name. Grep only,
 # no JS parser; registry-count sync stays deferred to #294 (no registry yet).
 # Assumes every non-template workflows/*.mjs is a full workflow carrying an
 # `export const meta` literal (the bare-file authoring convention) — a helper
@@ -522,7 +522,7 @@ done
 [ "$a7_fail" -eq 0 ] && echo "OK: All $a7_count workflow(s) have a valid sidecar; filename == sidecar name == meta.name"
 
 # A7b: Workflow capability contract and phase titles (#773)
-# A7 proves the discovery triple-equality and reads nothing INSIDE the body, so two mutants
+# A7 proves the naming convention and reads nothing INSIDE the body, so two mutants
 # the adversarial review of #772 named passed it: `agentType: 'Explore'` -> 'general-purpose'
 # on a read-only stage (the contract in workflows/README.md, violated with no red) and
 # `phase('Verfiy')` (a title no meta.phases[] entry carries). check-workflow-contract.js
