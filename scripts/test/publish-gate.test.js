@@ -51,11 +51,23 @@ import {
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const ASSERT_PATH = resolve(REPO_ROOT, ASSERT_SCRIPT);
 
-/** A script map matching the repository's intended arrangement. */
-function healthyScripts() {
+/**
+ * The one suite file each hermetic tree below names. Those trees are built with a named
+ * `cli.test.js` and, where the test needs one, an unnamed file beside it.
+ */
+const HERMETIC_SUITE = [`${CLI_TEST_DIR}/cli.test.js`];
+
+/**
+ * A script map matching the repository's intended arrangement, with `test:cli` naming
+ * `suiteFiles`. The default is every suite file this repository's cli/test/ holds, read from
+ * disk, because the rule compares the named set with that tree: a literal one-file list here
+ * went red, in a fixture meant to be healthy by construction, once a second suite file landed
+ * (cli/test/sandbox-env.test.js). A hermetic tree passes its own list.
+ */
+function healthyScripts(suiteFiles = discoverTestFiles(REPO_ROOT)) {
   return {
     test: 'npm run validate:integrity && npm run check-readmes && npm run test:scripts && npm run test:cli',
-    'test:cli': 'node --test cli/test/cli.test.js',
+    'test:cli': `node --test ${suiteFiles.join(' ')}`,
     'pretest:cli': 'node scripts/assert-publish-gate.js',
     prepublishOnly: 'npm run test:cli',
   };
@@ -293,7 +305,7 @@ test('a test file added BESIDE a named one is reported — the real #486 shape',
   writeFileSync(join(dir, CLI_TEST_DIR, 'cli.test.js'), '// named\n', 'utf8');
   writeFileSync(join(dir, CLI_TEST_DIR, 'adapters.test.js'), '// added later, unnamed\n', 'utf8');
 
-  const { problems } = inspectPublishGate(dir, healthyScripts());
+  const { problems } = inspectPublishGate(dir, healthyScripts(HERMETIC_SUITE));
 
   assert.equal(problems.length, 1, `expected exactly the unrun-file problem, got:\n${problems.join('\n')}`);
   assert.match(problems[0], /adapters\.test\.js/);
@@ -317,7 +329,7 @@ test('discovery is recursive and not .js-only, or the comparison has a blind spo
     `${CLI_TEST_DIR}/util.test.mjs`,
   ]);
 
-  const { problems } = inspectPublishGate(dir, healthyScripts());
+  const { problems } = inspectPublishGate(dir, healthyScripts(HERMETIC_SUITE));
   assert.equal(problems.length, 2, problems.join('\n'));
 });
 
@@ -329,7 +341,7 @@ test('THE RED PATH: assert-publish-gate.js exits 1 on a broken gate', (t) => {
   t.after(() => rmTree(dir));
   mkdirSync(join(dir, CLI_TEST_DIR), { recursive: true });
   writeFileSync(join(dir, CLI_TEST_DIR, 'cli.test.js'), '// suite\n', 'utf8');
-  const broken = { ...healthyScripts(), [PUBLISH_HOOK]: 'node --test cli/test/cli.test.js' };
+  const broken = { ...healthyScripts(HERMETIC_SUITE), [PUBLISH_HOOK]: 'node --test cli/test/cli.test.js' };
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ scripts: broken }, null, 2), 'utf8');
 
   const red = spawnSync(process.execPath, [ASSERT_PATH, `--root=${dir}`], { encoding: 'utf8' });
@@ -339,7 +351,7 @@ test('THE RED PATH: assert-publish-gate.js exits 1 on a broken gate', (t) => {
   assert.match(red.stderr, /#697/);
 
   // And the green path, so the red above is not simply "this script always fails".
-  writeFileSync(join(dir, 'package.json'), JSON.stringify({ scripts: healthyScripts() }, null, 2), 'utf8');
+  writeFileSync(join(dir, 'package.json'), JSON.stringify({ scripts: healthyScripts(HERMETIC_SUITE) }, null, 2), 'utf8');
   const green = spawnSync(process.execPath, [ASSERT_PATH, `--root=${dir}`], { encoding: 'utf8' });
 
   assert.equal(green.status, 0, `${green.stdout}${green.stderr}`);
