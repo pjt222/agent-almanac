@@ -14,11 +14,17 @@
  *   changed by a form it does not look for, such as a plain `HOME=…` assignment (HOME is
  *   already exported, so that changes the environment too).
  *
- *   THE SOURCE runs the fragment in a real shell and compares the whole environment a child
- *   process receives after `almanac_sandbox` with what `sandboxEnv()` builds from the same
- *   starting environment. It sees every form, as the probe does. `scripts/test/
- *   template-predicate.test.js` moved from a regex to sourcing for this reason: a regex over
- *   the shell half was evaded by a second assignment, with every test green.
+ *   THE SOURCE runs the fragment in a real shell. It compares the whole environment a child
+ *   process receives after `almanac_sandbox` with what `sandboxEnv()` builds from the one it
+ *   received before the fragment was sourced. It runs twice. The plain pass is what a probe
+ *   gets: it sees a change to any variable the starting environment exports, made by export,
+ *   unset or a plain assignment alike. The second pass turns allexport (`set -a`) on first,
+ *   so a plain assignment to a variable the starting environment does not export reaches the
+ *   child too. Such an assignment still changes a real caller whose shell exports that name;
+ *   git and gh read XDG_CONFIG_HOME, for one. Neither pass sees what a child cannot inherit,
+ *   such as a function, an alias or a shell option. `scripts/test/template-predicate.test.js`
+ *   moved from a regex to sourcing for the same reason: a regex over the shell half was evaded
+ *   by a second assignment, with every test green.
  *
  * The parse stays because it is the one that names a key and the side that lacks it before
  * any shell runs.
@@ -222,14 +228,20 @@ function shellPresent(shell) {
 /** argv that runs `script` in `shell` without reading any startup file. */
 const shellArgv = (shell, script, args) => (shell === 'zsh' ? ['-f', '-c', script, '_', ...args] : ['--norc', '--noprofile', '-c', script, '_', ...args]);
 
-// Prints the environment a child process receives, before and after almanac_sandbox, one JSON
-// object per line. $1 is node, $2 the sandbox home. Exit 3-6 say which step failed.
+// Prints the environment a child process receives before the fragment is sourced and after
+// almanac_sandbox, one JSON object per line. $1 is node, $2 the sandbox home, and $3 `allexport`
+// turns allexport on first. Exit 3-6 say which step failed.
+const DUMP_ENV = '"$1" -e \'process.stdout.write(JSON.stringify(process.env) + "\\n")\'';
 const ENV_SCRIPT = [
+  'if [ "$3" = allexport ]; then set -a; fi',
+  `${DUMP_ENV} || exit 4`,
   '. tools/sandbox-env.sh || exit 3',
-  '"$1" -e \'process.stdout.write(JSON.stringify(process.env) + "\\n")\' || exit 4',
   'almanac_sandbox "$2" || exit 5',
-  '"$1" -e \'process.stdout.write(JSON.stringify(process.env) + "\\n")\' || exit 6',
+  `${DUMP_ENV} || exit 6`,
 ].join('\n');
+
+/** Under allexport bash exports every function it then defines, as BASH_FUNC_<name>%%. */
+const BASH_FUNCTION_EXPORT = /^BASH_FUNC_.+%%$/;
 
 for (const shell of ['bash', 'zsh']) {
   const present = shellPresent(shell);
@@ -270,21 +282,28 @@ for (const shell of ['bash', 'zsh']) {
       return result;
     }
 
-    it('almanac_sandbox changes exactly what sandboxEnv() changes, in both directions', () => {
-      const result = runShell(ENV_SCRIPT, [process.execPath, home]);
-      assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stderr}`);
-      const lines = result.stdout.trim().split('\n');
-      assert.equal(lines.length, 2, `want two environment dumps, got:\n${result.stdout}`);
-      const [beforeEnv, afterEnv] = lines.map((line) => JSON.parse(line));
-      // Control: the planted values reached the child, so a removal below is not vacuous.
-      for (const name of SANDBOX_KEYS) assert.equal(beforeEnv[name], baseEnv[name], `${name} did not reach the child before almanac_sandbox`);
-      const expected = sandboxEnv(home, beforeEnv);
-      const names = [...new Set([...Object.keys(afterEnv), ...Object.keys(expected)])].sort();
-      const differences = names
-        .filter((name) => afterEnv[name] !== expected[name])
-        .map((name) => `${name}: after ${SH_FILE} a child sees ${JSON.stringify(afterEnv[name])}; sandboxEnv() in ${JS_FILE} gives ${JSON.stringify(expected[name])}`);
-      assert.deepEqual(differences, [], differences.join('\n'));
-    });
+    for (const [mode, title] of [
+      ['plain', 'almanac_sandbox changes exactly what sandboxEnv() changes, in both directions'],
+      ['allexport', 'with allexport on, almanac_sandbox still changes only what sandboxEnv() changes, so a plain assignment to an unexported variable is seen'],
+    ]) {
+      it(title, () => {
+        const result = runShell(ENV_SCRIPT, [process.execPath, home, mode]);
+        assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stderr}`);
+        const lines = result.stdout.trim().split('\n');
+        assert.equal(lines.length, 2, `want two environment dumps, got:\n${result.stdout}`);
+        const [beforeEnv, afterEnv] = lines.map((line) => JSON.parse(line));
+        // Control: the planted values reached the child, so a removal below is not vacuous.
+        for (const name of SANDBOX_KEYS) assert.equal(beforeEnv[name], baseEnv[name], `${name} did not reach the child before almanac_sandbox`);
+        const expected = sandboxEnv(home, beforeEnv);
+        const names = [...new Set([...Object.keys(afterEnv), ...Object.keys(expected)])]
+          .filter((name) => !(mode === 'allexport' && BASH_FUNCTION_EXPORT.test(name)))
+          .sort();
+        const differences = names
+          .filter((name) => afterEnv[name] !== expected[name])
+          .map((name) => `${name}: after ${SH_FILE} (${mode}) a child sees ${JSON.stringify(afterEnv[name])}; sandboxEnv() in ${JS_FILE} gives ${JSON.stringify(expected[name])}`);
+        assert.deepEqual(differences, [], differences.join('\n'));
+      });
+    }
 
     it('almanac_sandbox refuses, exit 2 and nothing changed, a missing argument, a relative path, a missing directory and the current HOME', () => {
       const missing = resolve(tmpRoot, 'no-such-home');
