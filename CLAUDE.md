@@ -361,11 +361,11 @@ and reading either alone gets one direction wrong. Measured from the check-runs 
   Security → Code scanning → Protection rules) in the UI; the `code-scanning/default-setup`
   response carries no such field. On 2026-11-22 its security-alert level changed from the default
   "High or higher" to "Medium or higher"; the standard-alert level is "Only errors". The #1100 row
-  predates the change, and probe PR #1107, which re-added the same alert after it, concluded
-  `failure` at `2279dd8a5` with the same title. A low-severity security alert, or a warning- or
-  note-level standard alert, is expected to stay `success` (inferred from the settings page, not
-  measured), and `tools/merge-pr.sh` reads only each context's bucket, so read the title as well
-  as the conclusion.
+  predates the change. On probe PR #1107, which re-added the same alert after it, the `CodeQL`
+  check concluded `failure` at `2279dd8a5` with the same title. A low-severity security alert, or
+  a warning- or note-level standard alert, is expected to stay `success` (inferred from the
+  settings page, not measured), and `tools/merge-pr.sh` reads only each context's bucket, so read
+  the title as well as the conclusion.
 
 Neither check is one of the five required contexts, and the maintainer merges as a bypass
 actor, so by hand nothing but the reader stands between a red aggregate and a merge.
