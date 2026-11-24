@@ -662,7 +662,9 @@ test('archive: a C:/ handoff archives, its walk reading each parent up to the dr
   // Linux cannot give a path a drive, but a directory named C: in the working directory lets C:/…
   // resolve, so the fence runs end to end on a drive-letter ROOT: outside a repository, ROOT is the
   // handoff's directory as given. The archive line sits in one parent at a time, and the drive
-  // root's row pins the walk test's decision end to end.
+  // root's row pins the walk test's decision end to end. GIT_CEILING_DIRECTORIES keeps git from
+  // finding a repository above the fixture: with TMPDIR inside a checkout, ROOT became that
+  // checkout and the walk climbed its parents, which can declare a real archive.
   for (const declaring of ['C:/a', 'C:']) {
     const cwd = mkdtempSync(join(tmpdir(), 'drive-'));
     try {
@@ -674,7 +676,7 @@ test('archive: a C:/ handoff archives, its walk reading each parent up to the dr
       const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
         cwd,
         timeout: 15000,
-        env: { CONTINUE_FILE: 'C:/a/proj/CONTINUE_HERE.md', ARCHIVE_STATE: 'consumed', HOME: join(cwd, 'home') },
+        env: { CONTINUE_FILE: 'C:/a/proj/CONTINUE_HERE.md', ARCHIVE_STATE: 'consumed', HOME: join(cwd, 'home'), GIT_CEILING_DIRECTORIES: cwd },
       });
       assert.equal(res.signal, null, `${declaring}/CLAUDE.md: the fence never finished`);
       assert.equal(res.status, 0, `${declaring}/CLAUDE.md: ${res.stderr}`);
