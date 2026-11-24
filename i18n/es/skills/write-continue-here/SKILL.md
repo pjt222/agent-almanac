@@ -21,7 +21,7 @@ metadata:
   source_locale: en
   source_commit: 025eea68
   fence_basis_commit: 025eea68
-  translator: scaffold
+  translator: claude
   translation_date: "2026-05-03"
 ---
 
