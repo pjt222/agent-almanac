@@ -651,13 +651,13 @@ contexts — `line-endings`, `integrity`, `skills`, `scripts-test`, `cli-test` �
 so a red one of those does refuse the merge. Every other *gate* in
 `.github/workflows/` is job-blocking only: `readmes`, `tests`, `translations`,
 `content-style`, `yaml-fences`, `banned-invocations`, `content-security`,
-`dreams`, `locales-json`, `tools-verify` and `pi-durable-example` all go red visibly on a PR and none stops a merge.
+`dreams`, `locales-json`, `tools-verify`, `pi-durable-example` and `sandbox-env-zsh` all go red visibly on a PR and none stops a merge.
 Four further jobs are neither, because they never report on a PR at all —
 `deploy`, `publish`, `release` and `update` trigger on push-to-main or on a tag. And the
 CodeQL analyses are not jobs in `.github/workflows/` in the first place: default
 setup is server-managed and commits no workflow YAML, which is why grepping that
 directory for them finds nothing (`guides/protecting-github-repositories.md`).
-That is 20 job ids across 18 files, five required and fifteen not — counted, not
+That is 21 job ids across 19 files, five required and sixteen not — counted, not
 recalled: the sentence said 17 across 15 while `publish` existed and nobody had re-run
 the count (the one-liner: load every `.github/workflows/*.yml` and list `jobs` keys).
 

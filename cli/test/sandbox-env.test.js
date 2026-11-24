@@ -286,8 +286,10 @@ for (const shell of ['bash', 'zsh']) {
   // shell the operator's probes source this from. Where zsh is not on PATH, this arm and the
   // zsh run-as-a-script case below skip, and what only they check goes unchecked in that run:
   // the zsh clause of the run-as-a-script guard, and the zsh half of every other check.
-  // The cli-test job is such a run: its runner image lists no zsh (read from the image's
-  // readme, not measured in a job), and no workflow installs it.
+  // The required cli-test job is such a run: its runner image lists no zsh (read from the
+  // image's readme, not measured in a job). The non-required sandbox-env-zsh job
+  // (.github/workflows/ci-sandbox-env-zsh.yml) installs zsh and runs this file with
+  // SANDBOX_ENV_REQUIRE_ZSH=1, so there the last test fails if the zsh arms did not run.
   const skip = NATIVE_WINDOWS || (shell === 'zsh' && !present ? 'zsh is not installed here; the bash arm still runs' : false);
 
   describe(`tools/sandbox-env.sh sourced in ${shell} gives a child what sandboxEnv() gives`, { skip }, () => {
@@ -556,11 +558,15 @@ describe('tools/sandbox-env.sh run as a script', { skip: NATIVE_WINDOWS }, () =>
 });
 
 // Last in the file, so every arm above has started or been skipped by now: node:test runs a
-// file's top-level tests in the order they are declared.
-it('on a POSIX platform the bash arm ran, and the zsh arm ran wherever zsh is on PATH', () => {
-  const shells = process.platform === 'win32' ? [] : ['bash', ...(shellPresent('zsh') ? ['zsh'] : [])];
+// file's top-level tests in the order they are declared. SANDBOX_ENV_REQUIRE_ZSH=1, which the
+// sandbox-env-zsh job sets, requires the zsh arms whatever shellPresent() answers, so a probe
+// that misread an installed zsh as missing cannot turn that job green.
+it('on a POSIX platform the bash arm ran, and the zsh arm ran wherever zsh is on PATH or SANDBOX_ENV_REQUIRE_ZSH=1 requires it', () => {
+  const zshRequired = process.env.SANDBOX_ENV_REQUIRE_ZSH === '1';
+  const zshFound = shellPresent('zsh');
+  const shells = process.platform === 'win32' ? [] : ['bash', ...(zshRequired || zshFound ? ['zsh'] : [])];
   const expected = shells.flatMap((shell) => [`${shell} sourced`, `${shell} run as a script`]).sort();
   const ran = [...ranShellArms].sort();
   assert.deepEqual(ran, expected,
-    `on ${process.platform}, with zsh ${shellPresent('zsh') ? 'on' : 'not on'} PATH, want the arms ${JSON.stringify(expected)} to have run; ran ${JSON.stringify(ran)}`);
+    `on ${process.platform}, with zsh ${zshFound ? 'on' : 'not on'} PATH and SANDBOX_ENV_REQUIRE_ZSH ${zshRequired ? 'set to 1' : 'not set to 1'}, want the arms ${JSON.stringify(expected)} to have run; ran ${JSON.stringify(ran)}`);
 });
