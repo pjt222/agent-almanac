@@ -266,8 +266,12 @@ const ALMANAC_CLI_LOCALS = new Set(['sandbox_home', 'almanac_repo']);
 
 for (const shell of ['bash', 'zsh']) {
   const present = shellPresent(shell);
-  // bash is required: the repository's own gates are bash, and CI has it. zsh is the shell
-  // the operator's probes source this from, and CI may not install it.
+  // bash is required: the repository's own gates are bash, and every runner has it. zsh is the
+  // shell the operator's probes source this from. Where zsh is not on PATH, this arm and the
+  // zsh run-as-a-script case below skip, and what only they check goes unchecked in that run:
+  // the zsh clause of the run-as-a-script guard, and the zsh half of every other check.
+  // The cli-test job is such a run: its runner image lists no zsh (read from the image's
+  // readme, not measured in a job), and no workflow installs it.
   const skip = shell === 'zsh' && !present ? 'zsh is not installed here; the bash arm still runs' : false;
 
   describe(`tools/sandbox-env.sh sourced in ${shell} gives a child what sandboxEnv() gives`, { skip }, () => {
@@ -519,7 +523,8 @@ for (const shell of ['bash', 'zsh']) {
 
 describe('tools/sandbox-env.sh run as a script', () => {
   // The sourced arms above are the control: a guard that also fired when sourced would end
-  // their shell with exit 2.
+  // their shell with exit 2. Where zsh is not on PATH the zsh case skips, and the guard's zsh
+  // clause is then unchecked; the note at the sourced arms says which runs those are.
   for (const shell of ['bash', 'zsh']) {
     const skip = shell === 'zsh' && !shellPresent('zsh') ? 'zsh is not installed here; the bash case still runs' : false;
     it(`refuses under ${shell}, exit 2, because a script cannot change the shell that started it`, { skip }, () => {
