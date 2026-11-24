@@ -49,10 +49,13 @@
 
 # Run as a script, this file could not change the shell that started it, and every probe after
 # it would run against the real home while looking sandboxed. Each shell it supports says when
-# it runs the file as a script: bash names the file in BASH_SOURCE and in $0 alike, and zsh's
-# ZSH_EVAL_CONTEXT is then exactly `toplevel` (sourced, it ends in `:file`, as in
-# `cmdarg:file`, `toplevel:file` or `cmdarg:eval:file`). sh (dash) gives no such signal, so
-# under sh this guard does not fire; the file is for bash and zsh only.
+# it runs the file by name as a script: bash names the file in BASH_SOURCE and in $0 alike, and
+# zsh's ZSH_EVAL_CONTEXT is then exactly `toplevel` (sourced, it ends in `:file`, as in
+# `cmdarg:file`, `toplevel:file` or `cmdarg:eval:file`). zsh also refuses the file read from
+# stdin (`zsh < file`). bash does not: read from stdin, it sets BASH_SOURCE and $0 as an eval
+# of the file's text does, which is a load into the current shell, so `bash < file` exits 0.
+# sh (dash) gives no such signal at all, so under sh this guard does not fire; the file is for
+# bash and zsh only.
 if { [ -n "${BASH_VERSION:-}" ] && [ "${BASH_SOURCE[0]:-}" = "$0" ]; } ||
   { [ -n "${ZSH_VERSION:-}" ] && [ "${ZSH_EVAL_CONTEXT:-}" = toplevel ]; }; then
   printf 'sandbox-env.sh: refused: source this file (. tools/sandbox-env.sh) rather than running it; a script cannot change the shell that started it\n' >&2
