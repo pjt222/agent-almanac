@@ -11,6 +11,9 @@ name: Validate Tools
 # generate-translation-status.js and reads the stub literal from translate-content.sh; the
 # refresh-untranslated-stubs suite imports repository modules), so `scripts/**` is included
 # whole rather than listed by hand, and `workflow_dispatch` is the backstop for anything else.
+# The sandbox-env row's suite also reads cli/ (it imports cli/test/sandbox-env.js and reads and
+# runs cli/index.js), which the filter does not list: the required cli-test job, which has no
+# filter, runs that suite on every PR, so a change under cli/ alone is still measured.
 on:
   push:
     branches: [main]
