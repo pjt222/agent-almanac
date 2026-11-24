@@ -244,15 +244,17 @@ const ENV_SCRIPT = [
 const BASH_FUNCTION_EXPORT = /^BASH_FUNC_.+%%$/;
 
 // Prints the environment a child of the calling shell receives before the fragment is sourced,
-// then runs almanac_cli against the stand-in CLI, which prints its own. $1 is node, $2 the
-// sandbox home, $3 the stand-in repo, and $4 `allexport` turns allexport on first. The probe is
-// a plain assignment, so a child receives it only when allexport is on: it shows which pass ran.
+// then runs almanac_cli against the stand-in CLI, which prints its own, then prints the calling
+// shell's child's environment again. $1 is node, $2 the sandbox home, $3 the stand-in repo, and
+// $4 `allexport` turns allexport on first. The probe is a plain assignment, so a child receives
+// it only when allexport is on: it shows which pass ran.
 const CLI_SCRIPT = [
   'if [ "$4" = allexport ]; then set -a; fi',
   'SANDBOX_ALLEXPORT_PROBE=reached',
   `${DUMP_ENV} || exit 4`,
   '. tools/sandbox-env.sh || exit 3',
   'almanac_cli "$2" "$3" install commit-changes || exit 5',
+  `${DUMP_ENV} || exit 6`,
 ].join('\n');
 
 /**
@@ -370,39 +372,40 @@ for (const shell of ['bash', 'zsh']) {
       }
     });
 
-    it('almanac_cli runs the CLI with the sandbox applied and leaves the calling shell as it was', () => {
+    it('almanac_cli runs the real CLI with the sandbox applied, so pi\'s dry run names the sandbox home\'s pi directory', () => {
       // A pi dry run names the directory pi would write to and writes nothing. With the
-      // caller's PI_CODING_AGENT_DIR still set it would name that directory instead.
+      // caller's PI_CODING_AGENT_DIR still set it would name that directory instead. What
+      // almanac_cli leaves in the calling shell is compared whole by the stand-in arms below.
       const script = [
         '. tools/sandbox-env.sh || exit 3',
         'almanac_cli "$2" "$3" install commit-changes -f pi -g --dry-run || exit 4',
-        'printf "CALLER_HOME=%s\\n" "$HOME"',
       ].join('\n');
       const result = runShell(script, [process.execPath, home, ROOT], { ...baseEnv, NO_COLOR: '1' });
       assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
       const lines = result.stdout.split('\n');
       const piLine = `  + commit-changes [pi] ${resolve(home, '.pi/agent/skills/commit-changes')}`;
       assert.ok(lines.includes(piLine), `want the line ${JSON.stringify(piLine)} in:\n${result.stdout}`);
-      assert.ok(lines.includes(`CALLER_HOME=${baseEnv.HOME}`), `the calling shell's HOME moved:\n${result.stdout}`);
     });
 
     /**
      * Runs CLI_SCRIPT in `mode` and returns the environment the caller's child received before
-     * the fragment was sourced and the one the stand-in CLI received through almanac_cli.
+     * the fragment was sourced, the one the stand-in CLI received through almanac_cli, and the
+     * one the caller's child received after almanac_cli returned.
      */
     function runAlmanacCli(mode) {
       const result = runShell(CLI_SCRIPT, [process.execPath, home, fixtureRepo, mode]);
       assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
       const lines = result.stdout.trim().split('\n');
-      assert.equal(lines.length, 2, `want the caller's environment and the CLI's, got:\n${result.stdout}`);
+      assert.equal(lines.length, 3, `want the caller's environment, the CLI's and the caller's again, got:\n${result.stdout}`);
       const callerEnv = JSON.parse(lines[0]);
       const cliEnv = JSON.parse(lines[1]).env;
+      const callerAfterEnv = JSON.parse(lines[2]);
       for (const name of SANDBOX_KEYS) assert.equal(callerEnv[name], baseEnv[name], `${name} did not reach the caller's child`);
       // Control: the pass is the one its title names. Without allexport the plain probe
       // assignment stays in the shell, so a pass that never turned allexport on fails here.
       assert.equal(cliEnv.SANDBOX_ALLEXPORT_PROBE, mode === 'allexport' ? 'reached' : undefined,
         `the ${mode} pass: the CLI saw the probe as ${JSON.stringify(cliEnv.SANDBOX_ALLEXPORT_PROBE)}`);
-      return { callerEnv, cliEnv };
+      return { callerEnv, cliEnv, callerAfterEnv };
     }
 
     for (const [mode, title] of [
@@ -422,6 +425,27 @@ for (const shell of ['bash', 'zsh']) {
           .sort()
           .filter((name) => cliEnv[name] !== expected[name])
           .map((name) => `${name}: through almanac_cli (${mode}) the CLI sees ${JSON.stringify(cliEnv[name])}; sandboxEnv() in ${JS_FILE} gives ${JSON.stringify(expected[name])}`);
+        assert.deepEqual(differences, [], differences.join('\n'));
+      });
+    }
+
+    for (const [mode, title] of [
+      ['plain', 'a child of the calling shell gets the same environment after almanac_cli as before the fragment was sourced'],
+      ['allexport', 'with allexport on, a child of the calling shell still gets the same environment after almanac_cli, so a plain assignment to an unexported variable is seen'],
+    ]) {
+      it(title, () => {
+        // almanac_cli runs the CLI in a subshell so that the calling shell keeps its own homes.
+        // A change made in the function body outside that subshell, or a variable it forgets to
+        // declare local, stays in the calling shell. The plain pass sees such a change to any
+        // variable the starting environment exports; the allexport pass also sees a plain
+        // assignment to one it does not. A cd shows too, as PWD, which bash and zsh export.
+        // Neither pass sees a shell option, an alias or a function.
+        const { callerEnv, callerAfterEnv } = runAlmanacCli(mode);
+        const differences = [...new Set([...Object.keys(callerEnv), ...Object.keys(callerAfterEnv)])]
+          .filter((name) => !(mode === 'allexport' && BASH_FUNCTION_EXPORT.test(name)))
+          .sort()
+          .filter((name) => callerAfterEnv[name] !== callerEnv[name])
+          .map((name) => `${name}: after almanac_cli (${mode}) a child of the calling shell sees ${JSON.stringify(callerAfterEnv[name])}; before the fragment was sourced it saw ${JSON.stringify(callerEnv[name])}`);
         assert.deepEqual(differences, [], differences.join('\n'));
       });
     }
