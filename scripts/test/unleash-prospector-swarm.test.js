@@ -205,9 +205,16 @@ test('clustering and synthesis run on the session model, the adversary passes as
 test('clusterModel routes the cluster passes and nothing else', async () => {
   // Not 'sonnet': a value equal to the prospector default cannot tell a cluster pass handed
   // the prospector model from one handed clusterModel.
-  const { calls } = await run(baseArgs({ clusterModel: 'opus' }));
+  const args = baseArgs({ clusterModel: 'opus' });
+  const { calls } = await run(args);
   for (const c of labelled(calls, /^cluster:/)) assert.equal(c.opts.model, 'opus', c.opts.label);
   assert.equal(labelled(calls, /^synthesize$/)[0].opts.model, undefined);
+  // Nothing else: the prospectors keep the default, and every other call (the adversary passes,
+  // the synthesis) stays on the session model.
+  const prospectors = calls.filter((c) => isProspector(c, args));
+  assert.equal(prospectors.length, 40);
+  for (const c of prospectors) assert.equal(c.opts.model, 'sonnet', c.opts.label);
+  for (const c of calls.filter((x) => !/^cluster:/.test(x.opts.label || '') && !isProspector(x, args))) assert.equal(c.opts.model, undefined, c.opts.label);
 });
 
 test('prospectorModel routes every prospector and nothing else', async () => {
