@@ -105,6 +105,9 @@ test('an installed copy, .claude/workflows/<name>.js, gets the Workflow dialect 
   assert.ok(!isWorkflowScript('/r/tests/.claude/workflows/x.js', '/r'), 'another .claude/workflows/ below the root is not the anchor');
   assert.ok(!isWorkflowScript('/elsewhere/.claude/workflows/x.js', '/r'), 'outside the root at all');
   assert.ok(!isWorkflowScript('/r/.claude/workflows/x.cjs', '/r'), '.cjs is not listed');
+  // WORKFLOW_DIRS is an object since #1109, so a top-level directory named after an
+  // Object.prototype key must not reach it through the prototype chain.
+  assert.ok(!isWorkflowScript('/r/constructor/x.js', '/r'), 'an Object.prototype key is not a workflow directory');
 });
 
 test('the dialect checks under the module goal, which is stricter than bare node --check (review S-C)', async () => {
