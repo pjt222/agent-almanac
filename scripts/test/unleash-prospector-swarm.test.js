@@ -2,7 +2,7 @@
  * `skills/unleash-the-agents/references/prospector-swarm.mjs` is a Workflow script that lives
  * outside `workflows/`, so neither `check-workflow-contract.js` nor `workflow-template.test.js`
  * reads it, and `scripts/mutation-check.js` cannot mutate it (its Workflow dialect is
- * root-anchored to workflows/). This suite is the file's only gate.
+ * root-anchored to workflows/ and .claude/workflows/). This suite is the file's only gate.
  *
  * It parses the file the way the runtime wraps it, then runs the body against a stubbed runtime
  * (`agent`, `parallel`, `phase`, `log`, `args`); `agent` answers by label from a script.
