@@ -360,7 +360,7 @@ tools:
     status: active
     superseded_by: null
     description: "Sourced, never run: `almanac_sandbox <home>` pins HOME, USERPROFILE and HERMES_HOME under a scratch home and removes LOCALAPPDATA and PI_CODING_AGENT_DIR, the list in cli/test/sandbox-env.js; `almanac_cli <home> <repo> <args>` runs the CLI in a subshell under it"
-    need: "Running the CLI by hand in a probe or a review round so that it cannot reach your real Hermes, OpenClaw or pi directory, under the same home variables the CLI tests spawn with."
+    need: "Running the CLI by hand in a probe or a review round so that it cannot reach your real Hermes, OpenClaw or pi directory, under the same home variables the CLI tests spawn with, by sourcing the file into your shell (`. tools/sandbox-env.sh`) rather than running it."
     not_for: "a test, which imports sandboxEnv() from cli/test/sandbox-env.js; isolating git, gh or npm, which read their configuration from the home it moves"
     tag: measurement
     invoke: '. tools/sandbox-env.sh && almanac_cli <scratch-home> "$PWD" install commit-changes -f pi -g --dry-run'
