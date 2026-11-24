@@ -372,10 +372,16 @@ for (const shell of ['bash', 'zsh']) {
 }
 
 describe('tools/sandbox-env.sh run as a script', () => {
-  it('refuses, exit 2, because a script cannot change the shell that started it', () => {
-    const result = spawnSync('bash', [SH_FILE], { cwd: ROOT, encoding: 'utf8', timeout: 20000 });
-    assert.equal(result.error, undefined, `spawn of bash failed: ${result.error}`);
-    assert.equal(result.status, 2, `want exit 2, got ${result.status}\n${result.stderr}`);
-    assert.match(result.stderr, /^sandbox-env\.sh: refused: source this file/);
-  });
+  // The sourced arms above are the control: a guard that also fired when sourced would end
+  // their shell with exit 2.
+  for (const shell of ['bash', 'zsh']) {
+    const skip = shell === 'zsh' && !shellPresent('zsh') ? 'zsh is not installed here; the bash case still runs' : false;
+    it(`refuses under ${shell}, exit 2, because a script cannot change the shell that started it`, { skip }, () => {
+      const argv = shell === 'zsh' ? ['-f', SH_FILE] : [SH_FILE];
+      const result = spawnSync(shell, argv, { cwd: ROOT, encoding: 'utf8', timeout: 20000 });
+      assert.equal(result.error, undefined, `spawn of ${shell} failed: ${result.error}`);
+      assert.equal(result.status, 2, `want exit 2, got ${result.status}\n${result.stderr}`);
+      assert.match(result.stderr, /^sandbox-env\.sh: refused: source this file/);
+    });
+  }
 });

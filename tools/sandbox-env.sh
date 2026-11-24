@@ -43,8 +43,13 @@
 # shellcheck shell=bash
 
 # Run as a script, this file could not change the shell that started it, and every probe after
-# it would run against the real home while looking sandboxed.
-if [ -n "${BASH_VERSION:-}" ] && [ "${BASH_SOURCE[0]:-}" = "$0" ]; then
+# it would run against the real home while looking sandboxed. Each shell it supports says when
+# it runs the file as a script: bash names the file in BASH_SOURCE and in $0 alike, and zsh's
+# ZSH_EVAL_CONTEXT is then exactly `toplevel` (sourced, it ends in `:file`, as in
+# `cmdarg:file`, `toplevel:file` or `cmdarg:eval:file`). sh (dash) gives no such signal, so
+# under sh this guard does not fire; the file is for bash and zsh only.
+if { [ -n "${BASH_VERSION:-}" ] && [ "${BASH_SOURCE[0]:-}" = "$0" ]; } ||
+  { [ -n "${ZSH_VERSION:-}" ] && [ "${ZSH_EVAL_CONTEXT:-}" = toplevel ]; }; then
   printf 'sandbox-env.sh: refused: source this file (. tools/sandbox-env.sh) rather than running it; a script cannot change the shell that started it\n' >&2
   exit 2
 fi
