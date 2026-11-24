@@ -1,6 +1,6 @@
 ## Run: 2026-11-24-workflow-scriptpath-probe
 
-**Observer**: Claude (Opus 5.5 main loop ran the probe; a subagent wrote this record from the main loop's evidence file and added the `node --check` rows) | **Issue**: #1109 (AC 2) | **Relates**: #293, #1108
+**Observer**: Claude (Opus 5.5 main loop ran the probe; a subagent wrote this record from the main loop's evidence file and added the `node --check` rows; after review round 1 a subagent added the runtime's run-state records, reduced) | **Issue**: #1109 (AC 2) | **Relates**: #293, #1108
 
 ### Objective
 
@@ -15,13 +15,13 @@ The loader probe (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`, Cl
 | Binary | Claude Code **2.1.331** |
 | Caller | the main loop of a Claude Code session, calling the Workflow tool directly. Whether the session was interactive or headless was not recorded. |
 | Project | a scratch git repository, written `<scratch git repo>` here |
-| Date | 2026-11-24, 07:03Z |
+| Date | 2026-11-24, 07:02:57.980Z (`.mjs`) and 07:02:59.199Z (`.js`), the `timestamp` fields of the run-state records |
 
 ### Method
 
 Two files sit in `<scratch git repo>/.claude/workflows/`: `probe-mjs.mjs` and `probe-js.js`. The copies beside this record are byte-identical to them (`cmp`). Each has three lines: a pure-literal `export const meta`, a `log()` line, and a top-level `return` of an object that names the file's extension. Neither calls `agent()`.
 
-Each file was run once with `Workflow({ scriptPath })` naming it. The observable is the run's return value, which can only come from the top-level `return`. Whether the path passed was absolute or relative was not recorded.
+Each file was run once with `Workflow({ scriptPath })` naming it. The observable is the run's return value, which can only come from the top-level `return`. The path passed was absolute in both calls. That was read after review round 1 from the `Workflow` inputs in the main loop's session transcript, which holds exactly two such calls, one per file.
 
 ### Results
 
@@ -29,6 +29,13 @@ Each file was run once with `Workflow({ scriptPath })` naming it. The observable
 |---|---|---|---|
 | `probe-mjs.mjs` | not run | `{"ran":true,"ext":"mjs"}` | 0 |
 | `probe-js.js` | rc=1, `SyntaxError: Illegal return statement` | `{"ran":true,"ext":"js"}` | 0 |
+
+The last two columns were first written from the main loop's evidence file. After review round 1 they were checked against the runtime's own run-state record of each run (`wf_<runId>.json` in the session directory). The two records are committed, reduced, as `probe-mjs.run-state.json` and `probe-js.run-state.json`:
+
+- Both have `status` `completed` and `agentCount` 0.
+- Each `result` is the return value in the table, and each `logs` holds the file's one `log()` line.
+- Each `scriptPath` names the file in `<scratch git repo>/.claude/workflows/`.
+- The reduction drops the `script` field. Before it was dropped, that field was compared with the copy beside this record: byte-identical for both files (190 and 186 bytes).
 
 The `node --check` row for `probe-mjs.mjs` was left empty at the run. It was filled in when this record was written, on byte-identical copies in a directory with no `package.json` above it (Node v26.11.1, 2026-11-24T07:31Z):
 
@@ -63,5 +70,6 @@ Runnability alone would not decide it. `skills/unleash-the-agents/SKILL.md` inst
 
 - `probe-mjs.mjs` and `probe-js.js` are the two scripts, byte-identical to the files the main loop ran. To re-run, copy both into `<a scratch git repository>/.claude/workflows/` and call `Workflow({ scriptPath: '<that file>' })` for each.
   - They are evidence, not this repository's workflows. Nothing in this repository discovers them: `tests/results/` is not a workflow directory, and `mutation-parse.js` does not give them the dialect there. Plain `node --check` refuses them, as the table shows.
+- `probe-mjs.run-state.json` and `probe-js.run-state.json` are the runtime's run-state records, reduced. They keep `workflowName`, `status`, `scriptPath`, `logs`, `result`, `agentCount` and `timestamp`. The unreduced records stay outside the repository, in the session directory.
 
-Redaction: the scratch repository's path is written `<scratch git repo>`, as in the main loop's evidence file. The run ids are omitted. No home path, scratch path or session id appears in these three files.
+Redaction: the scratch repository's path is written `<scratch git repo>`, as in the main loop's evidence file. The run-state records carry it the same way in `scriptPath`. The run ids and task ids are omitted. No home path, scratch path or session id appears in these five files.
