@@ -243,6 +243,25 @@ const ENV_SCRIPT = [
 /** Under allexport bash exports every function it then defines, as BASH_FUNC_<name>%%. */
 const BASH_FUNCTION_EXPORT = /^BASH_FUNC_.+%%$/;
 
+// Prints the environment a child of the calling shell receives before the fragment is sourced,
+// then runs almanac_cli against the stand-in CLI, which prints its own. $1 is node, $2 the
+// sandbox home, $3 the stand-in repo, and $4 `allexport` turns allexport on first. The probe is
+// a plain assignment, so a child receives it only when allexport is on: it shows which pass ran.
+const CLI_SCRIPT = [
+  'if [ "$4" = allexport ]; then set -a; fi',
+  'SANDBOX_ALLEXPORT_PROBE=reached',
+  `${DUMP_ENV} || exit 4`,
+  '. tools/sandbox-env.sh || exit 3',
+  'almanac_cli "$2" "$3" install commit-changes || exit 5',
+].join('\n');
+
+/**
+ * almanac_cli's own locals. Under allexport a shell exports them to the CLI that almanac_cli
+ * runs (measured in bash 5.2 and zsh 5.9), so that pass skips them, by these names only: a
+ * renamed or added local is reported rather than skipped.
+ */
+const ALMANAC_CLI_LOCALS = new Set(['sandbox_home', 'almanac_repo']);
+
 for (const shell of ['bash', 'zsh']) {
   const present = shellPresent(shell);
   // bash is required: the repository's own gates are bash, and CI has it. zsh is the shell
@@ -367,28 +386,45 @@ for (const shell of ['bash', 'zsh']) {
       assert.ok(lines.includes(`CALLER_HOME=${baseEnv.HOME}`), `the calling shell's HOME moved:\n${result.stdout}`);
     });
 
-    it('almanac_cli gives the CLI exactly the environment sandboxEnv() builds', () => {
-      // The pi dry run above shows only pi's directory, so it cannot see HERMES_HOME,
-      // USERPROFILE or LOCALAPPDATA. The stand-in prints the whole environment it was given.
-      const script = [
-        `${DUMP_ENV} || exit 4`,
-        '. tools/sandbox-env.sh || exit 3',
-        'almanac_cli "$2" "$3" install commit-changes || exit 5',
-      ].join('\n');
-      const result = runShell(script, [process.execPath, home, fixtureRepo]);
+    /**
+     * Runs CLI_SCRIPT in `mode` and returns the environment the caller's child received before
+     * the fragment was sourced and the one the stand-in CLI received through almanac_cli.
+     */
+    function runAlmanacCli(mode) {
+      const result = runShell(CLI_SCRIPT, [process.execPath, home, fixtureRepo, mode]);
       assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
       const lines = result.stdout.trim().split('\n');
       assert.equal(lines.length, 2, `want the caller's environment and the CLI's, got:\n${result.stdout}`);
       const callerEnv = JSON.parse(lines[0]);
       const cliEnv = JSON.parse(lines[1]).env;
       for (const name of SANDBOX_KEYS) assert.equal(callerEnv[name], baseEnv[name], `${name} did not reach the caller's child`);
-      const expected = sandboxEnv(home, callerEnv);
-      const differences = [...new Set([...Object.keys(cliEnv), ...Object.keys(expected)])]
-        .sort()
-        .filter((name) => cliEnv[name] !== expected[name])
-        .map((name) => `${name}: through almanac_cli the CLI sees ${JSON.stringify(cliEnv[name])}; sandboxEnv() in ${JS_FILE} gives ${JSON.stringify(expected[name])}`);
-      assert.deepEqual(differences, [], differences.join('\n'));
-    });
+      // Control: the pass is the one its title names. Without allexport the plain probe
+      // assignment stays in the shell, so a pass that never turned allexport on fails here.
+      assert.equal(cliEnv.SANDBOX_ALLEXPORT_PROBE, mode === 'allexport' ? 'reached' : undefined,
+        `the ${mode} pass: the CLI saw the probe as ${JSON.stringify(cliEnv.SANDBOX_ALLEXPORT_PROBE)}`);
+      return { callerEnv, cliEnv };
+    }
+
+    for (const [mode, title] of [
+      ['plain', 'almanac_cli gives the CLI exactly the environment sandboxEnv() builds'],
+      ['allexport', 'with allexport on, almanac_cli still gives the CLI what sandboxEnv() builds, its own locals aside, so a plain assignment to an unexported variable is seen'],
+    ]) {
+      it(title, () => {
+        // The pi dry run above shows only pi's directory, so it cannot see HERMES_HOME,
+        // USERPROFILE or LOCALAPPDATA. The stand-in prints the whole environment it was given.
+        // The plain pass cannot see a plain assignment, in almanac_cli's subshell, to a name the
+        // starting environment does not export, although a real caller that exports the name
+        // would pass the new value to the CLI; the allexport pass sees it.
+        const { callerEnv, cliEnv } = runAlmanacCli(mode);
+        const expected = sandboxEnv(home, callerEnv);
+        const differences = [...new Set([...Object.keys(cliEnv), ...Object.keys(expected)])]
+          .filter((name) => !(mode === 'allexport' && (BASH_FUNCTION_EXPORT.test(name) || ALMANAC_CLI_LOCALS.has(name))))
+          .sort()
+          .filter((name) => cliEnv[name] !== expected[name])
+          .map((name) => `${name}: through almanac_cli (${mode}) the CLI sees ${JSON.stringify(cliEnv[name])}; sandboxEnv() in ${JS_FILE} gives ${JSON.stringify(expected[name])}`);
+        assert.deepEqual(differences, [], differences.join('\n'));
+      });
+    }
 
     it('almanac_cli adds --source <repo> for exactly the commands cli/index.js declares it on', () => {
       const declared = commandsDeclaringSource(readFileSync(resolve(ROOT, CLI_FILE), 'utf8'));
