@@ -341,7 +341,8 @@ force-pushed over while its tracking ref went stale (#896).
 **Code scanning is green only when the `CodeQL` check AND every `Analyze (…)` run are
 `success`; each has disagreed with the other, in both directions** (#643, #905). The aggregate
 check named `CodeQL` and the per-language `Analyze (<language>)` runs report different things,
-and reading either alone gets one direction wrong. Measured from the check-runs API on real PRs:
+and reading either alone gets one direction wrong. Even all `success` is not enough: the `CodeQL`
+title must also count no new alert (the #1100 row). Measured from the check-runs API on real PRs:
 
 | sha (PR) | `Analyze (…)` runs | `CodeQL` conclusion | `CodeQL` `output.title` | what it was |
 |---|---|---|---|---|
