@@ -340,6 +340,29 @@ for (const shell of ['bash', 'zsh']) {
       assert.ok(lines.includes(`CALLER_HOME=${baseEnv.HOME}`), `the calling shell's HOME moved:\n${result.stdout}`);
     });
 
+    it('almanac_cli gives the CLI exactly the environment sandboxEnv() builds', () => {
+      // The pi dry run above shows only pi's directory, so it cannot see HERMES_HOME,
+      // USERPROFILE or LOCALAPPDATA. The stand-in prints the whole environment it was given.
+      const script = [
+        `${DUMP_ENV} || exit 4`,
+        '. tools/sandbox-env.sh || exit 3',
+        'almanac_cli "$2" "$3" install commit-changes || exit 5',
+      ].join('\n');
+      const result = runShell(script, [process.execPath, home, fixtureRepo]);
+      assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
+      const lines = result.stdout.trim().split('\n');
+      assert.equal(lines.length, 2, `want the caller's environment and the CLI's, got:\n${result.stdout}`);
+      const callerEnv = JSON.parse(lines[0]);
+      const cliEnv = JSON.parse(lines[1]).env;
+      for (const name of SANDBOX_KEYS) assert.equal(callerEnv[name], baseEnv[name], `${name} did not reach the caller's child`);
+      const expected = sandboxEnv(home, callerEnv);
+      const differences = [...new Set([...Object.keys(cliEnv), ...Object.keys(expected)])]
+        .sort()
+        .filter((name) => cliEnv[name] !== expected[name])
+        .map((name) => `${name}: through almanac_cli the CLI sees ${JSON.stringify(cliEnv[name])}; sandboxEnv() in ${JS_FILE} gives ${JSON.stringify(expected[name])}`);
+      assert.deepEqual(differences, [], differences.join('\n'));
+    });
+
     it('almanac_cli adds --source <repo> for exactly the commands cli/index.js declares it on', () => {
       const declared = commandsDeclaringSource(readFileSync(resolve(ROOT, CLI_FILE), 'utf8'));
       // Known answers, one each way, so a scan that broke reads as a broken scan.
