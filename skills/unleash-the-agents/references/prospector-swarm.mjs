@@ -5,19 +5,25 @@
 // ---
 //
 // prospector-swarm — Option C of the unleash-the-agents skill (Step 3): the whole roster as
-// a Workflow script, with the prospectors on a cheap model and the judgement stages (cluster,
-// adversary, synthesis) on the session model.
+// a Workflow script, with the prospectors on `prospectorModel` (sonnet by default) and the
+// judgement stages (cluster, adversary, synthesis) on the session model.
 //
 // RUN IT ONLY ON AN EXPLICIT WORKFLOW OPT-IN. A Workflow run is the user's to ask for: the
 // keyword `ultracode`, or the user's own words asking for a workflow or a fan-out. The skill
 // alone is not that opt-in. Tell the user the scale before launching. The one measured run
-// (tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md) took about 4 h with 84 agents,
-// and it involved three models, not two:
-// - Haiku produced 66 % of the output tokens;
+// (tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md) took about 4 h with 84 agents.
+// Its prospectors ran on haiku, this template's default when it was merged (#1081). The default
+// is now sonnet, and no run has measured it. The measured run involved three models, not two:
+// - the 75 Haiku prospectors produced 66 % of the output tokens;
 // - the 9 session-model agents produced 22 %;
 // - the advisor, which 60 of the 84 agents called (61 calls, 58 answered, 3 refused with
 //   too_many_requests), produced 13 %, on a third model.
 // `message.usage` does not count the advisor; `message.usage.iterations` does.
+//
+// The prospector model does not bound the cost. In a session with the advisor tool, the agents
+// this script spawns can call it, and nothing here controls that. In the measured run 51 of the
+// 75 prospectors and all 9 session-model agents called it. It ran on Fable (claude-fable-5-2)
+// and took 10.52 M uncached input tokens and 0.55 M output tokens.
 //
 // Why a script and not Option A:
 // - The stop rule, the citation filter, the wave sizes and the null model are fixed in code, so
@@ -56,7 +62,8 @@
 //                                          // every repository
 //   } })
 // Optional args:
-// - prospectorModel ('haiku'); clusterModel (the session model); adversary ('advocatus-diaboli');
+// - prospectorModel ('sonnet'; the measured run used 'haiku'); clusterModel (the session model);
+//   adversary ('advocatus-diaboli');
 // - edgeWaveSize (10); minNewAgents (2); maxEdgeWaves (6);
 // - framing: a lens sentence, in which `{agent}` is replaced by the agent id;
 // - extraSteps: an array of instruction lines added to every prospector prompt, for example
@@ -178,7 +185,7 @@ for (const x of [ADVERSARY, ...PILOT.map((p) => p.agent)]) if (ROSTER.includes(x
 const SEEDS = A.seeds === undefined ? [] : A.seeds
 if (!Array.isArray(SEEDS) || !SEEDS.every((s) => typeof s === 'string' && /^[A-Za-z][\w-]*$/.test(s) && s !== 'NEW'))
   refuse('args.seeds must be an array of short family ids (not NEW)')
-const PROSPECTOR_MODEL = A.prospectorModel === undefined ? 'haiku' : A.prospectorModel
+const PROSPECTOR_MODEL = A.prospectorModel === undefined ? 'sonnet' : A.prospectorModel
 const CLUSTER_MODEL = A.clusterModel // undefined: the session model
 const EDGE_SIZE = intArg('edgeWaveSize', 10, 1)
 const MIN_NEW = intArg('minNewAgents', 2, 1)
