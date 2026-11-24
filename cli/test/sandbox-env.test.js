@@ -368,6 +368,23 @@ for (const shell of ['bash', 'zsh']) {
         assert.match(result.stderr, /^almanac_cli: refused: /, label);
       }
     });
+
+    it('almanac_cli refuses, exit 2 and the CLI never run, a home almanac_sandbox refuses', () => {
+      // The stand-in CLI prints a line whenever it runs, so an empty stdout means it did not.
+      // Without the `|| exit 2` after almanac_sandbox, each case printed the refusal and then
+      // ran the CLI against the caller's homes, exit 0.
+      const missing = resolve(tmpRoot, 'no-such-home');
+      for (const [label, homeArg, env] of [
+        ['a missing directory', missing, baseEnv],
+        ['a relative path', 'relative-home', baseEnv],
+        ['the current HOME', home, { ...baseEnv, HOME: home }],
+      ]) {
+        const result = runShell('. tools/sandbox-env.sh || exit 3\nalmanac_cli "$1" "$2" install commit-changes', [homeArg, fixtureRepo], env);
+        assert.equal(result.status, 2, `${label}: want exit 2, got ${result.status}\n${result.stdout}\n${result.stderr}`);
+        assert.match(result.stderr, /^almanac_sandbox: refused: /, label);
+        assert.equal(result.stdout, '', `${label}: the CLI ran although the home was refused`);
+      }
+    });
   });
 }
 
