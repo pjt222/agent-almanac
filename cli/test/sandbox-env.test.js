@@ -29,8 +29,14 @@
  * The parse stays because it is the one that names a key and the side that lacks it before
  * any shell runs.
  *
- * Shell paths are literal and every value is a positional argument: the CodeQL finding
- * recorded in template-predicate.test.js was a path from `import.meta.url` reaching `bash -c`.
+ * Every shell script here is built from literals, and no path this file computes reaches a
+ * shell's argv. A path a script needs, from `import.meta.url`, `tmpdir()` or
+ * `process.execPath`, reaches it in the shell's environment as a SANDBOX_ARG_ variable the
+ * script expands (runShell says why every comparison still sees what it saw); the positional
+ * arguments left are words, a pass's mode or a command name. The CodeQL finding recorded in
+ * template-predicate.test.js was a path from `import.meta.url` reaching `bash -c`, and so was
+ * alert 23 on this file (js/shell-command-injection-from-environment): its paths reached the
+ * shell as positional arguments.
  */
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -252,14 +258,15 @@ function shellPresent(shell) {
 const shellArgv = (shell, script, args) => (shell === 'zsh' ? ['-f', '-c', script, '_', ...args] : ['--norc', '--noprofile', '-c', script, '_', ...args]);
 
 // Prints the environment a child process receives before the fragment is sourced and after
-// almanac_sandbox, one JSON object per line. $1 is node, $2 the sandbox home, $3 `allexport`
-// turns allexport on first, and $4 is the fragment. Exit 3-6 say which step failed.
-const DUMP_ENV = '"$1" -e \'process.stdout.write(JSON.stringify(process.env) + "\\n")\'';
+// almanac_sandbox, one JSON object per line. $1 `allexport` turns allexport on first;
+// SANDBOX_ARG_NODE is node, SANDBOX_ARG_HOME the sandbox home and SANDBOX_ARG_FRAGMENT the
+// fragment (see runShell). Exit 3-6 say which step failed.
+const DUMP_ENV = '"$SANDBOX_ARG_NODE" -e \'process.stdout.write(JSON.stringify(process.env) + "\\n")\'';
 const ENV_SCRIPT = [
-  'if [ "$3" = allexport ]; then set -a; fi',
+  'if [ "$1" = allexport ]; then set -a; fi',
   `${DUMP_ENV} || exit 4`,
-  '. "$4" || exit 3',
-  'almanac_sandbox "$2" || exit 5',
+  '. "$SANDBOX_ARG_FRAGMENT" || exit 3',
+  'almanac_sandbox "$SANDBOX_ARG_HOME" || exit 5',
   `${DUMP_ENV} || exit 6`,
 ].join('\n');
 
@@ -268,15 +275,16 @@ const BASH_FUNCTION_EXPORT = /^BASH_FUNC_.+%%$/;
 
 // Prints the environment a child of the calling shell receives before the fragment is sourced,
 // then runs almanac_cli against the stand-in CLI, which prints its own, then prints the calling
-// shell's child's environment again. $1 is node, $2 the sandbox home, $3 the stand-in repo, and
-// $4 `allexport` turns allexport on first. The probe is a plain assignment, so a child receives
-// it only when allexport is on: it shows which pass ran.
+// shell's child's environment again. $1 `allexport` turns allexport on first; SANDBOX_ARG_NODE
+// is node, SANDBOX_ARG_HOME the sandbox home and SANDBOX_ARG_REPO the stand-in repo. The probe
+// is a plain assignment, so a child receives it only when allexport is on: it shows which pass
+// ran.
 const CLI_SCRIPT = [
-  'if [ "$4" = allexport ]; then set -a; fi',
+  'if [ "$1" = allexport ]; then set -a; fi',
   'SANDBOX_ALLEXPORT_PROBE=reached',
   `${DUMP_ENV} || exit 4`,
   '. tools/sandbox-env.sh || exit 3',
-  'almanac_cli "$2" "$3" install commit-changes || exit 5',
+  'almanac_cli "$SANDBOX_ARG_HOME" "$SANDBOX_ARG_REPO" install commit-changes || exit 5',
   `${DUMP_ENV} || exit 6`,
 ].join('\n');
 
@@ -326,9 +334,25 @@ for (const shell of ['bash', 'zsh']) {
 
     after(() => rmTree(tmpRoot));
 
-    /** Runs `script` in this arm's shell from the repository root. */
-    function runShell(script, args, env = baseEnv) {
-      const result = spawnSync(shell, shellArgv(shell, script, args), { cwd: ROOT, env, encoding: 'utf8', timeout: 20000 });
+    /**
+     * Runs `script` in this arm's shell from the repository root. `args` are its positional
+     * arguments and hold words only. Every path the script needs reaches it in its environment
+     * instead, so that no path this file computes is in the shell's argv (the header says why):
+     * SANDBOX_ARG_NODE is always node, and `carried` adds the others, each a SANDBOX_ARG_ name.
+     * They are added to the spawn's environment, not to baseEnv, so the child's dumps before and
+     * after the call carry them alike, and sandboxEnv() copies them from the dump it is given:
+     * a comparison of whole environments sees a carrier on both of its sides with one value, so
+     * none is excluded by name, and a script that changed one would still be reported. A carrier
+     * may not take a name `env` already holds: it would replace that variable's planted value,
+     * and a fragment that pinned the name would then compare equal.
+     */
+    function runShell(script, { args = [], carried = {}, env = baseEnv } = {}) {
+      const carriers = { SANDBOX_ARG_NODE: process.execPath, ...carried };
+      for (const name of Object.keys(carriers)) {
+        assert.match(name, /^SANDBOX_ARG_[A-Z]+$/, `${name} is not a SANDBOX_ARG_ name`);
+        assert.ok(!Object.hasOwn(env, name), `${name} is in the environment already, so carrying a path in it would replace that value`);
+      }
+      const result = spawnSync(shell, shellArgv(shell, script, args), { cwd: ROOT, env: { ...env, ...carriers }, encoding: 'utf8', timeout: 20000 });
       assert.equal(result.error, undefined, `spawn of ${shell} failed: ${result.error}`);
       return result;
     }
@@ -338,7 +362,7 @@ for (const shell of ['bash', 'zsh']) {
      * differently after almanac_sandbox than sandboxEnv() predicts, as { name, after, expected }.
      */
     function envDifferences(fragment, mode) {
-      const result = runShell(ENV_SCRIPT, [process.execPath, home, mode, fragment]);
+      const result = runShell(ENV_SCRIPT, { args: [mode], carried: { SANDBOX_ARG_HOME: home, SANDBOX_ARG_FRAGMENT: fragment } });
       assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stderr}`);
       const lines = result.stdout.trim().split('\n');
       assert.equal(lines.length, 2, `want two environment dumps, got:\n${result.stdout}`);
@@ -385,16 +409,15 @@ for (const shell of ['bash', 'zsh']) {
 
     it('almanac_sandbox refuses, exit 2 and nothing changed, a missing argument, a relative path, a missing directory and the current HOME', () => {
       const missing = resolve(tmpRoot, 'no-such-home');
-      for (const [label, args] of [
-        ['no argument', []],
-        ['a relative path', ['relative-home']],
-        ['a missing directory', [missing]],
-        ['the current HOME', ['$HOME']],
+      for (const [label, call, carried] of [
+        ['no argument', 'almanac_sandbox', {}],
+        ['a relative path', 'almanac_sandbox "$SANDBOX_ARG_HOME"', { SANDBOX_ARG_HOME: 'relative-home' }],
+        ['a missing directory', 'almanac_sandbox "$SANDBOX_ARG_HOME"', { SANDBOX_ARG_HOME: missing }],
+        ['the current HOME', 'almanac_sandbox "$HOME"', {}],
       ]) {
-        const call = args[0] === '$HOME' ? 'almanac_sandbox "$HOME"' : `almanac_sandbox ${args.map((_, i) => `"$${i + 2}"`).join(' ')}`;
-        const script = `. tools/sandbox-env.sh || exit 3\n${call}\nrc=$?\n"$1" -e 'process.stdout.write(JSON.stringify(process.env))'\nexit $rc`;
+        const script = `. tools/sandbox-env.sh || exit 3\n${call}\nrc=$?\n"$SANDBOX_ARG_NODE" -e 'process.stdout.write(JSON.stringify(process.env))'\nexit $rc`;
         const env = label === 'the current HOME' ? { ...baseEnv, HOME: home } : baseEnv;
-        const result = runShell(script, [process.execPath, ...args], env);
+        const result = runShell(script, { carried, env });
         assert.equal(result.status, 2, `${label}: want exit 2, got ${result.status}\n${result.stderr}`);
         assert.match(result.stderr, /^almanac_sandbox: refused: /, label);
         const seen = JSON.parse(result.stdout);
@@ -408,9 +431,9 @@ for (const shell of ['bash', 'zsh']) {
       // almanac_cli leaves in the calling shell is compared whole by the stand-in arms below.
       const script = [
         '. tools/sandbox-env.sh || exit 3',
-        'almanac_cli "$2" "$3" install commit-changes -f pi -g --dry-run || exit 4',
+        'almanac_cli "$SANDBOX_ARG_HOME" "$SANDBOX_ARG_REPO" install commit-changes -f pi -g --dry-run || exit 4',
       ].join('\n');
-      const result = runShell(script, [process.execPath, home, ROOT], { ...baseEnv, NO_COLOR: '1' });
+      const result = runShell(script, { carried: { SANDBOX_ARG_HOME: home, SANDBOX_ARG_REPO: ROOT }, env: { ...baseEnv, NO_COLOR: '1' } });
       assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
       const lines = result.stdout.split('\n');
       const piLine = `  + commit-changes [pi] ${resolve(home, '.pi/agent/skills/commit-changes')}`;
@@ -423,7 +446,7 @@ for (const shell of ['bash', 'zsh']) {
      * one the caller's child received after almanac_cli returned.
      */
     function runAlmanacCli(mode) {
-      const result = runShell(CLI_SCRIPT, [process.execPath, home, fixtureRepo, mode]);
+      const result = runShell(CLI_SCRIPT, { args: [mode], carried: { SANDBOX_ARG_HOME: home, SANDBOX_ARG_REPO: fixtureRepo } });
       assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
       const lines = result.stdout.trim().split('\n');
       assert.equal(lines.length, 3, `want the caller's environment, the CLI's and the caller's again, got:\n${result.stdout}`);
@@ -489,14 +512,12 @@ for (const shell of ['bash', 'zsh']) {
       const cases = [['', false], ...declared];
       const script = [
         '. tools/sandbox-env.sh || exit 3',
-        'sandbox_home="$1" fixture_repo="$2"',
-        'shift 2',
         'for command_name in "$@"; do',
-        '  if [ -z "$command_name" ]; then almanac_cli "$sandbox_home" "$fixture_repo" || exit 4',
-        '  else almanac_cli "$sandbox_home" "$fixture_repo" "$command_name" || exit 4; fi',
+        '  if [ -z "$command_name" ]; then almanac_cli "$SANDBOX_ARG_HOME" "$SANDBOX_ARG_REPO" || exit 4',
+        '  else almanac_cli "$SANDBOX_ARG_HOME" "$SANDBOX_ARG_REPO" "$command_name" || exit 4; fi',
         'done',
       ].join('\n');
-      const result = runShell(script, [home, fixtureRepo, ...cases.map(([name]) => name)]);
+      const result = runShell(script, { args: cases.map(([name]) => name), carried: { SANDBOX_ARG_HOME: home, SANDBOX_ARG_REPO: fixtureRepo } });
       assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
       const lines = result.stdout.trim().split('\n');
       assert.equal(lines.length, cases.length, `want one line per command, got:\n${result.stdout}`);
@@ -518,7 +539,8 @@ for (const shell of ['bash', 'zsh']) {
         ['detect', ['detect', '--exit-7']],
         ['install', ['install', '--exit-7', '--source', fixtureRepo]],
       ]) {
-        const result = runShell('. tools/sandbox-env.sh || exit 3\nalmanac_cli "$1" "$2" "$3" --exit-7', [home, fixtureRepo, command]);
+        const result = runShell('. tools/sandbox-env.sh || exit 3\nalmanac_cli "$SANDBOX_ARG_HOME" "$SANDBOX_ARG_REPO" "$1" --exit-7',
+          { args: [command], carried: { SANDBOX_ARG_HOME: home, SANDBOX_ARG_REPO: fixtureRepo } });
         assert.equal(result.status, 7, `${command}: want the CLI's exit 7 back, got ${result.status}\n${result.stdout}\n${result.stderr}`);
         assert.deepEqual(JSON.parse(result.stdout.trim()).argv, want, `${command}: the CLI did not get the arguments of the branch this case is for`);
       }
@@ -527,8 +549,9 @@ for (const shell of ['bash', 'zsh']) {
     it('almanac_cli runs the real detect, demo and bare program, which take no --source, each to exit 0', () => {
       // With no TTY the bare program prints its help rather than starting the TUI.
       for (const [label, args] of [['detect', ['detect']], ['demo', ['demo']], ['the bare program', []]]) {
-        const call = `almanac_cli "$1" "$2"${args.map((_, index) => ` "$${index + 3}"`).join('')}`;
-        const result = runShell(`. tools/sandbox-env.sh || exit 3\n${call}`, [home, ROOT, ...args], { ...baseEnv, NO_COLOR: '1' });
+        const call = `almanac_cli "$SANDBOX_ARG_HOME" "$SANDBOX_ARG_REPO"${args.map((_, index) => ` "$${index + 1}"`).join('')}`;
+        const result = runShell(`. tools/sandbox-env.sh || exit 3\n${call}`,
+          { args, carried: { SANDBOX_ARG_HOME: home, SANDBOX_ARG_REPO: ROOT }, env: { ...baseEnv, NO_COLOR: '1' } });
         assert.equal(result.status, 0, `${label}: ${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
         assert.doesNotMatch(result.stderr, /unknown option/, label);
       }
@@ -539,12 +562,12 @@ for (const shell of ['bash', 'zsh']) {
       // after the refused call, and the two must be equal. No CLI can run here, since neither
       // repo holds a cli/index.js; a third line of output would be one that did.
       for (const [label, call] of [
-        ['a lone argument', 'almanac_cli "$2"'],
-        ['a relative repo', 'almanac_cli "$2" relative-repo --version'],
-        ['a repo without cli/index.js', 'almanac_cli "$2" "$3" --version'],
+        ['a lone argument', 'almanac_cli "$SANDBOX_ARG_HOME"'],
+        ['a relative repo', 'almanac_cli "$SANDBOX_ARG_HOME" relative-repo --version'],
+        ['a repo without cli/index.js', 'almanac_cli "$SANDBOX_ARG_HOME" "$SANDBOX_ARG_REPO" --version'],
       ]) {
         const script = [`${DUMP_ENV} || exit 4`, '. tools/sandbox-env.sh || exit 3', call, 'rc=$?', `${DUMP_ENV} || exit 6`, 'exit $rc'].join('\n');
-        const result = runShell(script, [process.execPath, home, tmpRoot]);
+        const result = runShell(script, { carried: { SANDBOX_ARG_HOME: home, SANDBOX_ARG_REPO: tmpRoot } });
         assert.equal(result.status, 2, `${label}: want exit 2, got ${result.status}\n${result.stdout}\n${result.stderr}`);
         assert.match(result.stderr, /^almanac_cli: refused: /, label);
         const lines = result.stdout.trim().split('\n');
@@ -568,7 +591,8 @@ for (const shell of ['bash', 'zsh']) {
         ['a relative path', 'relative-home', baseEnv],
         ['the current HOME', home, { ...baseEnv, HOME: home }],
       ]) {
-        const result = runShell('. tools/sandbox-env.sh || exit 3\nalmanac_cli "$1" "$2" install commit-changes', [homeArg, fixtureRepo], env);
+        const result = runShell('. tools/sandbox-env.sh || exit 3\nalmanac_cli "$SANDBOX_ARG_HOME" "$SANDBOX_ARG_REPO" install commit-changes',
+          { carried: { SANDBOX_ARG_HOME: homeArg, SANDBOX_ARG_REPO: fixtureRepo }, env });
         assert.equal(result.status, 2, `${label}: want exit 2, got ${result.status}\n${result.stdout}\n${result.stderr}`);
         assert.match(result.stderr, /^almanac_sandbox: refused: /, label);
         assert.equal(result.stdout, '', `${label}: the CLI ran although the home was refused`);
