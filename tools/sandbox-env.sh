@@ -40,6 +40,11 @@
 # in the current shell, git, gh and npm read their configuration from the sandbox home until the
 # shell exits, which is why almanac_cli is the one to reach for.
 #
+# The sandbox moves the home variables and nothing else; the working directory stays where it
+# is. The CLI's default scope, project, writes under $PWD, so a probe run from a checkout
+# installs into that checkout's tracked .claude/skills/. cd to a scratch project first, or pass
+# -g. The tests spawn with cwd at the repository root, as a probe from the checkout does.
+#
 # shellcheck shell=bash
 
 # Run as a script, this file could not change the shell that started it, and every probe after
