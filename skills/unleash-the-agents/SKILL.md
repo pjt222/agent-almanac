@@ -133,7 +133,7 @@ Built-in team coordination — per-teammate ownership and lifecycle, with status
 
 #### Option C: Workflow script (the prospector swarm)
 
-Use this only when the user has opted into a Workflow run: the keyword `ultracode`, or their own words asking for a workflow or a fan-out. This skill alone is not that opt-in. Tell the user the scale first. The one measured run (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`) took about 4 hours with 84 agents. Its prospectors ran on `haiku`, the template's default at the time. The default is now `sonnet`, and no run has measured it. The measured run involved three models, not two:
+Use this only when the user has opted into a Workflow run: the keyword `ultracode`, or their own words asking for a workflow or a fan-out. This skill alone is not that opt-in. Tell the user the scale first. The one measured run (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`) took about 4 hours with 84 agents. Its prospectors ran on `haiku`, which was also the template's first default. The default is now `sonnet`, and no run has measured it. The measured run involved three models, not two:
 - the 75 Haiku prospectors produced 66 % of the output tokens;
 - the 9 session-model agents produced 22 %;
 - the advisor, which 60 of the agents called on its own model (61 calls, 58 answered), produced 13 %.
