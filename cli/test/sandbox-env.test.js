@@ -29,7 +29,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, realpathSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { delimiter, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -118,6 +118,26 @@ function compareLists(js, fragment) {
 
 const JS_LISTS = { set: new Map(Object.entries(SANDBOX_SET)), unset: new Set(SANDBOX_UNSET) };
 const fragmentText = () => readFileSync(resolve(ROOT, SH_FILE), 'utf8');
+
+const CLI_FILE = 'cli/index.js';
+
+/**
+ * Each command cli/index.js registers, mapped to whether it declares --source. A command's
+ * block runs from its `.command('` to the next one, and the last to the end of the file.
+ *
+ * @param {string} text cli/index.js
+ * @returns {Map<string, boolean>}
+ */
+function commandsDeclaringSource(text) {
+  const starts = [...text.matchAll(/\.command\('([^' ]+)/g)];
+  return new Map(starts.map((match, index) => {
+    const block = text.slice(match.index, starts[index + 1]?.index ?? text.length);
+    return [match[1], block.includes(".option('--source")];
+  }));
+}
+
+/** A stand-in for cli/index.js that prints the arguments and environment it was given. */
+const FIXTURE_CLI = "process.stdout.write(JSON.stringify({ argv: process.argv.slice(2), env: process.env }) + '\\n');\n";
 
 describe('the sandbox key list: cli/test/sandbox-env.js against the text of tools/sandbox-env.sh', () => {
   it('the fragment holds no line that changes the environment in a form the parse cannot read', () => {
@@ -220,12 +240,18 @@ for (const shell of ['bash', 'zsh']) {
   describe(`tools/sandbox-env.sh sourced in ${shell} gives a child what sandboxEnv() gives`, { skip }, () => {
     let tmpRoot;
     let home;
+    let fixtureRepo;
     let baseEnv;
 
     before(() => {
       tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-sandbox-env-')));
       home = resolve(tmpRoot, 'home');
       mkdirSync(home, { recursive: true });
+      // In a directory of its own: the refusal test below uses tmpRoot as a repo without
+      // cli/index.js.
+      fixtureRepo = resolve(tmpRoot, 'fixture-repo');
+      mkdirSync(resolve(fixtureRepo, 'cli'), { recursive: true });
+      writeFileSync(resolve(fixtureRepo, CLI_FILE), FIXTURE_CLI);
       // Every variable either list names starts with a value of its own, so a removal is seen
       // as a removal and a pin as a change. The parse's names are included so a variable only
       // the fragment touches is planted too.
@@ -293,6 +319,46 @@ for (const shell of ['bash', 'zsh']) {
       const piLine = `  + commit-changes [pi] ${resolve(home, '.pi/agent/skills/commit-changes')}`;
       assert.ok(lines.includes(piLine), `want the line ${JSON.stringify(piLine)} in:\n${result.stdout}`);
       assert.ok(lines.includes(`CALLER_HOME=${baseEnv.HOME}`), `the calling shell's HOME moved:\n${result.stdout}`);
+    });
+
+    it('almanac_cli adds --source <repo> for exactly the commands cli/index.js declares it on', () => {
+      const declared = commandsDeclaringSource(readFileSync(resolve(ROOT, CLI_FILE), 'utf8'));
+      // Known answers, one each way, so a scan that broke reads as a broken scan.
+      assert.equal(declared.get('install'), true, `the scan of ${CLI_FILE} did not see install's --source`);
+      assert.equal(declared.get('detect'), false, `the scan of ${CLI_FILE} saw a --source on detect`);
+      // '' is the bare program, which declares no --source either.
+      const cases = [['', false], ...declared];
+      const script = [
+        '. tools/sandbox-env.sh || exit 3',
+        'sandbox_home="$1" fixture_repo="$2"',
+        'shift 2',
+        'for command_name in "$@"; do',
+        '  if [ -z "$command_name" ]; then almanac_cli "$sandbox_home" "$fixture_repo" || exit 4',
+        '  else almanac_cli "$sandbox_home" "$fixture_repo" "$command_name" || exit 4; fi',
+        'done',
+      ].join('\n');
+      const result = runShell(script, [home, fixtureRepo, ...cases.map(([name]) => name)]);
+      assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
+      const lines = result.stdout.trim().split('\n');
+      assert.equal(lines.length, cases.length, `want one line per command, got:\n${result.stdout}`);
+      const wrong = cases
+        .map(([name, declares], index) => {
+          const want = [...(name ? [name] : []), ...(declares ? ['--source', fixtureRepo] : [])];
+          const got = JSON.parse(lines[index]).argv;
+          return JSON.stringify(got) === JSON.stringify(want) ? null : `${name || '(no command)'}: the CLI got ${JSON.stringify(got)}, want ${JSON.stringify(want)}`;
+        })
+        .filter(Boolean);
+      assert.deepEqual(wrong, [], wrong.join('\n'));
+    });
+
+    it('almanac_cli runs the real detect, demo and bare program, which take no --source, each to exit 0', () => {
+      // With no TTY the bare program prints its help rather than starting the TUI.
+      for (const [label, args] of [['detect', ['detect']], ['demo', ['demo']], ['the bare program', []]]) {
+        const call = `almanac_cli "$1" "$2"${args.map((_, index) => ` "$${index + 3}"`).join('')}`;
+        const result = runShell(`. tools/sandbox-env.sh || exit 3\n${call}`, [home, ROOT, ...args], { ...baseEnv, NO_COLOR: '1' });
+        assert.equal(result.status, 0, `${label}: ${shell} exited ${result.status}:\n${result.stdout}\n${result.stderr}`);
+        assert.doesNotMatch(result.stderr, /unknown option/, label);
+      }
     });
 
     it('almanac_cli refuses, exit 2, a relative repo and a repo without cli/index.js', () => {

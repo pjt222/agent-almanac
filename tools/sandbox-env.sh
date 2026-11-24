@@ -24,15 +24,17 @@
 #     . tools/sandbox-env.sh                 defines the two functions below; changes nothing
 #     almanac_cli <home> <repo> <args...>    runs node <repo>/cli/index.js <args...> --source <repo>
 #                                            in a subshell that almanac_sandbox <home> set up, so
-#                                            the calling shell keeps its own HOME
+#                                            the calling shell keeps its own HOME; detect, demo
+#                                            and no command at all get no --source, since they
+#                                            declare none and commander refuses it
 #     almanac_sandbox <home>                 pins the variables in THIS shell, for a probe whose
 #                                            every command must see the sandbox
 #
 #   <home>   an existing directory, by absolute path, that is not the current $HOME. Make one
 #            with mktemp -d. HOME and USERPROFILE become <home>; HERMES_HOME <home>/.hermes;
 #            LOCALAPPDATA and PI_CODING_AGENT_DIR are removed, so pi uses <home>/.pi/agent.
-#   <repo>   a checkout holding cli/index.js, by absolute path: the CLI that runs, and its
-#            --source.
+#   <repo>   a checkout holding cli/index.js, by absolute path: the CLI that runs, and the
+#            --source of every command that declares one.
 #
 # Both functions return 2 and change nothing when an argument is refused. After almanac_sandbox
 # in the current shell, git, gh and npm read their configuration from the sandbox home until the
@@ -97,6 +99,13 @@ almanac_cli() {
   fi
   (
     almanac_sandbox "$sandbox_home" || exit 2
-    node "$almanac_repo/cli/index.js" "$@" --source "$almanac_repo"
+    # Commander refuses an option a command does not declare (`error: unknown option
+    # '--source'`, exit 1), and detect, demo and the bare program declare no --source.
+    # cli/test/sandbox-env.test.js holds this list equal to the commands cli/index.js registers
+    # without the option.
+    case "${1:-}" in
+      ''|detect|demo) node "$almanac_repo/cli/index.js" "$@" ;;
+      *) node "$almanac_repo/cli/index.js" "$@" --source "$almanac_repo" ;;
+    esac
   )
 }
