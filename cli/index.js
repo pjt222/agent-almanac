@@ -145,6 +145,12 @@ const FORCE_HELP = 'Replace existing content: a link, whoever made it, or a copy
  * including the few that write files rather than links, because which adapters
  * run depends on what is detected in the project, not on anything the user
  * chose (#606, decided by the maintainer 2026-10-14).
+ * The maintainer re-affirmed this for every run, `-f` runs included, and so
+ * for an agent-only pi install, whose agents are generated, never linked
+ * (#1065, 2026-11-19): the guard runs before any name is resolved and reads
+ * neither the adapters nor the content types, and an adapter declares one
+ * `strategy` for all its content types, so it cannot tell a run that links
+ * nothing from one that links.
  *
  * With `link`, the warning names the remover to run before `npm uninstall`,
  * one clause for all three callers, each measured against a packed tarball

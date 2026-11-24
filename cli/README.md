@@ -43,6 +43,8 @@ What this means when installing:
 
   `uninstall` and `install --force` remove or replace a generated file only while it is unedited. They never touch a link or your own file at that path. Re-running `install` keeps an agent already generated, even when its source has changed since; the same install with `--force` regenerates an unedited one from the current source.
 
+  From an npm package root, an agent-only pi install is refused like any install there, `--dry-run` and `--force` included (`ERROR: Not installing from the npm package at …`, exit 1), though it links nothing. The refusal is decided before any name is resolved, and no adapter declares which of its content types it links, so it cannot tell a run that links nothing from one that links (#1065). `--from-package copy` and `--from-package link` both get past it and generate the same file; `link`'s warning about links then describes nothing the agent install did ([Installing from the npm package](#installing-from-the-npm-package)).
+
 Project-scope skills load only in a project pi trusts. pi asks before it loads a project's resources (pi's `docs/security.md`). Measured with links and with `--from-package copy` copies: [tests/results/2026-10-22-pi-skill-discovery/RESULT.md](../tests/results/2026-10-22-pi-skill-discovery/RESULT.md).
 
 ## Usage
