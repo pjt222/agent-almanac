@@ -220,6 +220,14 @@ describe('the comparison names the side that differs (known answers)', () => {
   });
 });
 
+/**
+ * The fragment is for bash and zsh with a POSIX home: almanac_sandbox refuses a home that does
+ * not start with `/`, and on native Windows tmpdir() gives a `C:\…` path. So the describes
+ * below that run a shell skip there, as cli.test.js skips its POSIX-only cases; the parse and
+ * the comparison above still run. Inferred from the code, not measured on Windows.
+ */
+const NATIVE_WINDOWS = process.platform === 'win32' && 'native Windows: the fragment takes a POSIX home, and tmpdir() gives none there';
+
 /** Is this shell on PATH? spawnSync reports a missing binary as an ENOENT error, not a status. */
 function shellPresent(shell) {
   return spawnSync(shell, ['-c', 'exit 0'], { encoding: 'utf8' }).error === undefined;
@@ -272,7 +280,7 @@ for (const shell of ['bash', 'zsh']) {
   // the zsh clause of the run-as-a-script guard, and the zsh half of every other check.
   // The cli-test job is such a run: its runner image lists no zsh (read from the image's
   // readme, not measured in a job), and no workflow installs it.
-  const skip = shell === 'zsh' && !present ? 'zsh is not installed here; the bash arm still runs' : false;
+  const skip = NATIVE_WINDOWS || (shell === 'zsh' && !present ? 'zsh is not installed here; the bash arm still runs' : false);
 
   describe(`tools/sandbox-env.sh sourced in ${shell} gives a child what sandboxEnv() gives`, { skip }, () => {
     let tmpRoot;
@@ -521,7 +529,7 @@ for (const shell of ['bash', 'zsh']) {
   });
 }
 
-describe('tools/sandbox-env.sh run as a script', () => {
+describe('tools/sandbox-env.sh run as a script', { skip: NATIVE_WINDOWS }, () => {
   // The sourced arms above are the control: a guard that also fired when sourced would end
   // their shell with exit 2. Where zsh is not on PATH the zsh case skips, and the guard's zsh
   // clause is then unchecked; the note at the sourced arms says which runs those are.
