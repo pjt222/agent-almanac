@@ -21,7 +21,7 @@ The loader probe (`tests/results/2026-10-14-workflow-loader-probe/RESULT.md`, Cl
 
 Two files sit in `<scratch git repo>/.claude/workflows/`: `probe-mjs.mjs` and `probe-js.js`. The copies beside this record are byte-identical to them (`cmp`). Each has three lines: a pure-literal `export const meta`, a `log()` line, and a top-level `return` of an object that names the file's extension. Neither calls `agent()`.
 
-Each file was run once with `Workflow({ scriptPath })` naming it. The observable is the run's return value, which can only come from the top-level `return`. The path passed was absolute in both calls. That was read after review round 1 from the `Workflow` inputs in the main loop's session transcript, which holds exactly two such calls, one per file.
+Each file was run once with `Workflow({ scriptPath })` naming it. The observable is the run's return value, which can only come from the top-level `return`. The path passed was absolute in both calls. That was read after review round 1 from the `Workflow` inputs in the main loop's session transcript. The transcript holds one `Workflow({ scriptPath })` call naming each probe file, and each call's tool result carries the task id of that file's unreduced run-state record; the committed copies omit it (Redaction, below). The transcript's other `Workflow` calls run other scripts.
 
 ### Results
 
