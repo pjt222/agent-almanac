@@ -348,6 +348,7 @@ and reading either alone gets one direction wrong. Measured from the check-runs 
 | `13f7bd5d3` (#640) | 2 `failure`, 1 `success` | `neutral` | `2 configurations not found` | the tool failing: a GitHub-side 503 in the `Analyze` log |
 | `327ec481b` (#904) | 3 `success` | `failure` | `3 new alerts including 2 high severity security vulnerabilities` | a finding: three alerts in the diff, fixed in `e0b9d96e5` |
 | `4ff5a4900` (#904) | 3 `success` | `success` | `No new alerts in code changed by this pull request` | clean |
+| `53fc1bff9` (#1100) | 3 `success` | `success` | `1 new alert including 1 medium severity security vulnerability` | a finding the conclusion hid: medium alert 22 (`js/bad-code-sanitization`), before the threshold change below |
 
 - **`Analyze` red, `CodeQL` `neutral`: `neutral` is not evidence that code scanning passed.**
   Read the failed `Analyze` job's log (step 2). An error from GitHub's side there is the tool
@@ -355,6 +356,16 @@ and reading either alone gets one direction wrong. Measured from the check-runs 
 - **`Analyze` green, `CodeQL` red: that is a finding, and a finding is never merged past**
   (step 2). The analysis ran and reported alerts in the diff; its title counts them. Read them
   from the PR's code-scanning alerts, fix them, and wait for the aggregate on the new head.
+- **`CodeQL` `success` with a title that counts a new alert: still a finding.** Which alerts turn
+  the check red is set by the repository's "Check runs failure threshold" (Settings → Advanced
+  Security → Code scanning → Protection rules) in the UI; the `code-scanning/default-setup`
+  response carries no such field. On 2026-11-22 its security-alert level changed from the default
+  "High or higher" to "Medium or higher"; the standard-alert level is "Only errors". The #1100 row
+  predates the change, and probe PR #1107, which re-added the same alert after it, concluded
+  `failure` at `2279dd8a5` with the same title. A low-severity security alert, or a warning- or
+  note-level standard alert, is expected to stay `success` (inferred from the settings page, not
+  measured), and `tools/merge-pr.sh` reads only each context's bucket, so read the title as well
+  as the conclusion.
 
 Neither check is one of the five required contexts, and the maintainer merges as a bypass
 actor, so by hand nothing but the reader stands between a red aggregate and a merge.
