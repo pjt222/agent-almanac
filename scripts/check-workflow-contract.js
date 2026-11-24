@@ -3,9 +3,11 @@
  * check-workflow-contract.js — every `agent()` spawn in `workflows/*.mjs` honours the capability
  * contract, and every phase title is declared (#773).
  *
- * Integrity check A7 reads a workflow's sidecar and proves the discovery triple-equality
- * (filename == sidecar name == meta.name). It reads nothing INSIDE the body, so two mutants the
- * adversarial review of #772 named passed every gate:
+ * Integrity check A7 reads a workflow's sidecar and proves a naming convention of this repository
+ * (filename stem == sidecar name == meta.name). That is a convention, not what discovery needs:
+ * the Workflow tool registers a workflow under its meta.name, not its file name
+ * (tests/results/2026-10-14-workflow-loader-probe/). A7 reads nothing INSIDE the body, so two
+ * mutants the adversarial review of #772 named passed every gate:
  *
  *   agentType: 'Explore'  ->  'general-purpose'   a read-only stage silently becomes an
  *                                                  implementing one — the contract in
