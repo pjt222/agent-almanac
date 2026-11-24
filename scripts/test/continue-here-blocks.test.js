@@ -574,9 +574,13 @@ test('archive: any failure refuses, and the cleanup run after it in the same cal
   }
 });
 
-test('archive: a relative CONTINUE_FILE is made absolute, not walked forever', () => {
-  // `${dir%/*}` leaves a slash-free path unchanged, so a relative path never shortens to nothing
-  // and the parent walk never ends (#1042 round 1 measured rc 124 under bash and zsh).
+test('archive: a relative CONTINUE_FILE is made absolute, and archives', () => {
+  // `${dir%/*}` leaves a slash-free path unchanged. Before #1096 the parent walk stopped only on an
+  // empty string, so a relative path never ended it (#1042 round 1 measured rc 124 under bash and
+  // zsh). Since #1096 the walk also ends on a slash-free remainder, so without the line that prefixes
+  // $PWD the fence no longer hangs: HOME_DIR is the bare file name, the copy into it fails, and the
+  // fence refuses at once (measured under bash and zsh). That refusal is what this test now catches.
+  // The timeout stays, for a walk that loses its stop condition again.
   for (const tracked of [false, true]) {
     const tree = archiveTree({}, { tracked });
     try {
