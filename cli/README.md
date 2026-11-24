@@ -37,7 +37,7 @@ What this means when installing:
 - **The home directory.** At `~` the pi adapter refuses a project-scope install: it would write `~/.pi/skills/`, which is not where pi keeps user skills. The refusal is a skip (exit 0) with a note naming `-g`, and it covers `install` only; `uninstall` and `audit` at `~` still act on `~/.pi/skills/`.
 - **Agents.** `install --agent <id> -f pi` writes `<agent-dir>/agents/<id>.md` (global only). pi has no built-in agent loader: the file is read by pi's example subagent extension, or a compatible one, which you install by hand per that extension's README. The file is generated rather than linked:
   - tool names become pi's built-ins (`Read`→`read`, `Write`→`write`, `Edit`→`edit`, `Bash`→`bash`, `Grep`→`grep`, `Glob`→`find`; `Glob` does not also grant `ls`);
-  - the generated `tools` line, which the extension hands to `pi --tools`, limits pi's built-in tools only: pi 1.4.0's `docs/cli.md` says `--tools` does not remove MCP tools, which with an MCP server configured stay callable from `codemode` scripts, turned on by pi's MCP extension when a server needs them (read in pi's docs, not run with a generated agent);
+  - the generated `tools` line, which the extension hands to `pi --tools`, names only pi built-ins, and pi 1.4.0's `docs/cli.md` says `--tools` does not remove MCP tools: with an MCP server configured they stay callable from `codemode` scripts, which pi's MCP extension turns on when a server needs them (read in pi's docs, not run with a generated agent);
   - a tool with no pi built-in, such as `WebFetch`, is dropped and named;
   - `model` is left out, so the subagent runs on the model of the session that calls it;
   - an agent none of whose tools has a pi built-in is not installed.
