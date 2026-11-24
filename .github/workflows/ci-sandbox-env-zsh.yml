@@ -5,9 +5,13 @@ name: CI sandbox-env under zsh
 # those arms check is the zsh clause of the run-as-a-script guard in tools/sandbox-env.sh, and the
 # zsh half of every other check in the file.
 #
-# Deliberately NOT a required status check: it installs zsh with apt, and a required context that
-# can go red on a package-mirror outage is what CLAUDE.md § Merging With a Red Check forbids. The
-# five required contexts are unchanged. The job id is the status-check context name (#641).
+# NOT a required status check, by the maintainer's decision (2026-11-24). A red run here, for
+# example from an apt outage, shows on the PR without GitHub refusing the merge. tools/merge-pr.sh
+# still refuses it, as it refuses every context that is not pass or skipping, until the job is
+# re-run (`gh run rerun --failed`) or fixed. Apt is not what keeps it out of the required set:
+# integrity, skills and scripts-test already install ripgrep from apt through
+# scripts/ci/ensure-ripgrep.sh. The five required contexts are unchanged. The job id is the
+# status-check context name (#641).
 #
 # No `paths:` filter, so it reports on every pull request, as cli-test does. The suite reads
 # tools/sandbox-env.sh, cli/test/ and cli/index.js, and a filter would be one more list to keep in
