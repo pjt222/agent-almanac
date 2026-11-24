@@ -44,7 +44,12 @@ A control for the wrapped check: a wrapped body with an unclosed `{` gives rc=1,
 1. **`Workflow({ scriptPath })` runs a `.mjs` file in `.claude/workflows/` and accepts its top-level `return`.** The run returned the value of that `return`. Node refuses the same bytes as a plain ES module. So the Workflow tool did not run the file as a plain ES module.
 2. **It does the same for a `.js` file there.** That file is the one the loader probe found discoverable by name.
 
-Consequence for #1109 AC 2: `mutation-parse.js` keeps the dialect for a `.mjs` file directly in `.claude/workflows/`, because the file can still run by path. It also grants the dialect to a `.js` file there. The `.js` file is the installed copy the docs teach since #1108.
+Consequence for #1109 AC 2: `mutation-parse.js` keeps the dialect for a `.mjs` file directly in `.claude/workflows/`. Two facts decide it together:
+
+- Before #1108 this repository's docs taught installing a workflow as exactly that file (`cp workflows/<name>.mjs .claude/workflows/<name>.mjs`, quoted in the loader probe's Objective). So a `.mjs` file there is a workflow body by provenance.
+- Finding 1 shows that the runtime runs such a file in the dialect.
+
+Runnability alone would not decide it. `skills/unleash-the-agents/SKILL.md` instructs running `skills/unleash-the-agents/references/prospector-swarm.mjs` by `scriptPath` too, and that file stays outside the anchor, gated by its own suite. `mutation-parse.js` also grants the dialect to a `.js` file in `.claude/workflows/`, the installed copy the docs teach since #1108.
 
 ### What this record does not establish
 

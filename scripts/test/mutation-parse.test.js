@@ -75,7 +75,7 @@ test('the stdin checkers run isolated from startup files (review S3)', () => {
 test('the Workflow dialect is ROOT-ANCHORED, not "some parent is called workflows" (review S-B)', () => {
   assert.ok(isWorkflowScript('/r/workflows/review-changes.mjs', '/r'));
   assert.ok(isWorkflowScript('/r/.claude/workflows/x.mjs', '/r'),
-    'not discovered by name there, but Workflow({ scriptPath }) runs it in the dialect (tests/results/2026-11-24-workflow-scriptpath-probe/)');
+    'the install form the docs taught before #1108, which Workflow({ scriptPath }) runs in the dialect (tests/results/2026-11-24-workflow-scriptpath-probe/)');
   assert.ok(!isWorkflowScript('/r/workflows/helper.js', '/r'), 'a .js file in workflows/ is a helper, not a workflow: the dialect is .mjs only there');
   assert.ok(!isWorkflowScript('/r/scripts/review-changes.mjs', '/r'), 'a different directory is not the dialect');
   // The dangerous direction: a fixture under SOME OTHER workflows/ must not get the looser goal.

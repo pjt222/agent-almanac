@@ -79,9 +79,22 @@
  *   .claude/workflows/<name>.js    an installed copy: the Workflow tool discovers a `.js` file
  *                                  there and registers it under its `meta.name`, not its file
  *                                  name (tests/results/2026-10-14-workflow-loader-probe/)
- *   .claude/workflows/<name>.mjs   not discovered by name, but `Workflow({ scriptPath })` runs
- *                                  it with its top-level `return` accepted
+ *   .claude/workflows/<name>.mjs   the install form this repository's docs taught before #1108
+ *                                  (`cp workflows/<name>.mjs .claude/workflows/<name>.mjs`,
+ *                                  quoted in the loader probe's Objective), so a `.mjs` file
+ *                                  there is a workflow body by provenance. It is not discovered
+ *                                  by name, but `Workflow({ scriptPath })` runs it with its
+ *                                  top-level `return` accepted
  *                                  (tests/results/2026-11-24-workflow-scriptpath-probe/)
+ *
+ * A row needs both halves: a directory where workflow bodies are kept, and a runtime that runs
+ * them in the dialect. Being runnable by `scriptPath` does not qualify a file on its own:
+ * `skills/unleash-the-agents/SKILL.md` instructs running
+ * `skills/unleash-the-agents/references/prospector-swarm.mjs` that way, and that file carries a
+ * top-level `return`, yet it stays outside the anchor and is gated by
+ * `scripts/test/unleash-prospector-swarm.test.js` instead. A skill's `references/` directory is
+ * not a workflow directory, and widening the anchor to every place a script can be run from
+ * would hand the dialect to files that are not workflow bodies: the #758 class described below.
  *
  * A `.js` file in `workflows/` does not qualify. No workflow is kept there under that
  * extension, and granting it would hand the dialect to any helper module placed beside them.
