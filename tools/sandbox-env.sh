@@ -37,7 +37,9 @@
 #   <repo>   a checkout holding cli/index.js, by absolute path: the CLI that runs, and the
 #            --source of every command that declares one.
 #
-# Both functions return 2 and change nothing when an argument is refused. After almanac_sandbox
+# Both functions return 2 and change nothing in the calling shell when an argument is refused:
+# almanac_sandbox refuses before its first export, and almanac_cli refuses a missing argument
+# or a bad repo before its subshell starts, and a refused home inside it. After almanac_sandbox
 # in the current shell, git, gh and npm read their configuration from the sandbox home until the
 # shell exits, which is why almanac_cli is the one to reach for.
 #

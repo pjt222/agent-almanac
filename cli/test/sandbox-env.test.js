@@ -534,11 +534,27 @@ for (const shell of ['bash', 'zsh']) {
       }
     });
 
-    it('almanac_cli refuses, exit 2, a relative repo and a repo without cli/index.js', () => {
-      for (const [label, repo] of [['a relative repo', 'relative-repo'], ['a repo without cli/index.js', tmpRoot]]) {
-        const result = runShell('. tools/sandbox-env.sh || exit 3\nalmanac_cli "$1" "$2" --version', [home, repo]);
+    it('almanac_cli refuses, exit 2 and the calling shell unchanged, a lone argument, a relative repo and a repo without cli/index.js', () => {
+      // A child of the calling shell prints its environment before the fragment is sourced and
+      // after the refused call, and the two must be equal. No CLI can run here, since neither
+      // repo holds a cli/index.js; a third line of output would be one that did.
+      for (const [label, call] of [
+        ['a lone argument', 'almanac_cli "$2"'],
+        ['a relative repo', 'almanac_cli "$2" relative-repo --version'],
+        ['a repo without cli/index.js', 'almanac_cli "$2" "$3" --version'],
+      ]) {
+        const script = [`${DUMP_ENV} || exit 4`, '. tools/sandbox-env.sh || exit 3', call, 'rc=$?', `${DUMP_ENV} || exit 6`, 'exit $rc'].join('\n');
+        const result = runShell(script, [process.execPath, home, tmpRoot]);
         assert.equal(result.status, 2, `${label}: want exit 2, got ${result.status}\n${result.stdout}\n${result.stderr}`);
         assert.match(result.stderr, /^almanac_cli: refused: /, label);
+        const lines = result.stdout.trim().split('\n');
+        assert.equal(lines.length, 2, `${label}: want the environment before and after the call, got:\n${result.stdout}`);
+        const [beforeEnv, afterEnv] = lines.map((line) => JSON.parse(line));
+        const moved = [...new Set([...Object.keys(beforeEnv), ...Object.keys(afterEnv)])]
+          .sort()
+          .filter((name) => afterEnv[name] !== beforeEnv[name])
+          .map((name) => `${name}: ${JSON.stringify(beforeEnv[name])} before the fragment was sourced, ${JSON.stringify(afterEnv[name])} after the refused call`);
+        assert.deepEqual(moved, [], `${label}: the refused call changed the calling shell:\n${moved.join('\n')}`);
       }
     });
 
