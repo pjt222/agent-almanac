@@ -18,6 +18,7 @@ import { dirname, isAbsolute, resolve } from 'path';
 // SyntaxError instead of the individual tests failing for their own reasons.
 import * as resolver from '../lib/resolver.js';
 import { rmTree } from '../../scripts/test/_tmp.js';
+import { sandboxEnv, SANDBOX_KEYS } from './sandbox-env.js';
 
 // Direct imports for unit tests.
 import { ClaudeCodeAdapter } from '../adapters/claude-code.js';
@@ -76,6 +77,8 @@ const ROOT = process.cwd();
 // this file, as the file's other spawns do with a fixture home: HERMES_HOME is
 // read before the home on every platform, LOCALAPPDATA is Hermes's win32
 // default, and without PI_CODING_AGENT_DIR pi's directory is under the home.
+// That list of variables is SANDBOX_SET and SANDBOX_UNSET in ./sandbox-env.js,
+// which tools/sandbox-env.sh mirrors for a probe run by hand.
 // RUN_HOME is made once, at module scope, and a top-level after() removes it.
 //
 // STARTUP_HOMES are the homes this process started with, read before RUN_HOME
@@ -97,10 +100,7 @@ after(() => rmTree(RUN_HOME));
 
 /** The caller's environment with every home variable pinned to RUN_HOME (#1071). */
 function runEnv() {
-  const env = { ...process.env, HOME: RUN_HOME, USERPROFILE: RUN_HOME, HERMES_HOME: resolve(RUN_HOME, '.hermes') };
-  delete env.LOCALAPPDATA;
-  delete env.PI_CODING_AGENT_DIR;
-  return env;
+  return sandboxEnv(RUN_HOME);
 }
 
 function run(args) {
@@ -291,7 +291,10 @@ describe('detect', () => {
 // own HERMES_HOME on any home (#1074, C1). The first test checks runEnv()
 // itself against STARTUP_HOMES, which the arms cannot see.
 describe('run() and runAllowFail() spawn with a home of their own (#1071)', () => {
-  const KEYS = ['HOME', 'USERPROFILE', 'HERMES_HOME', 'LOCALAPPDATA', 'PI_CODING_AGENT_DIR'];
+  // The variables runEnv() pins or removes, saved and restored around the
+  // fixture. The first test below still names each one and its value, so it
+  // pins the list rather than reading it back.
+  const KEYS = SANDBOX_KEYS;
   const PI_DRY_RUN = 'install commit-changes -f pi -g --dry-run';
   const HERMES_DRY_RUN = 'install commit-changes -f hermes -g --dry-run';
   // eslint-disable-next-line no-control-regex
