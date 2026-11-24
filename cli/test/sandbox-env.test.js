@@ -228,6 +228,14 @@ describe('the comparison names the side that differs (known answers)', () => {
  */
 const NATIVE_WINDOWS = process.platform === 'win32' && 'native Windows: the fragment takes a POSIX home, and tmpdir() gives none there';
 
+/**
+ * Each shell arm below that started, as `<shell> sourced` or `<shell> run as a script`. A skip
+ * whose condition holds where it should not skips its arms rather than failing them, and the
+ * run goes green having run no shell at all, so the last test in this file reads this set
+ * against the platform and PATH, which it reads afresh rather than through the skips.
+ */
+const ranShellArms = new Set();
+
 /** Is this shell on PATH? spawnSync reports a missing binary as an ENOENT error, not a status. */
 function shellPresent(shell) {
   return spawnSync(shell, ['-c', 'exit 0'], { encoding: 'utf8' }).error === undefined;
@@ -289,6 +297,7 @@ for (const shell of ['bash', 'zsh']) {
     let baseEnv;
 
     before(() => {
+      ranShellArms.add(`${shell} sourced`);
       tmpRoot = realpathSync(mkdtempSync(resolve(tmpdir(), 'almanac-sandbox-env-')));
       home = resolve(tmpRoot, 'home');
       mkdirSync(home, { recursive: true });
@@ -536,6 +545,7 @@ describe('tools/sandbox-env.sh run as a script', { skip: NATIVE_WINDOWS }, () =>
   for (const shell of ['bash', 'zsh']) {
     const skip = shell === 'zsh' && !shellPresent('zsh') ? 'zsh is not installed here; the bash case still runs' : false;
     it(`refuses under ${shell}, exit 2, because a script cannot change the shell that started it`, { skip }, () => {
+      ranShellArms.add(`${shell} run as a script`);
       const argv = shell === 'zsh' ? ['-f', SH_FILE] : [SH_FILE];
       const result = spawnSync(shell, argv, { cwd: ROOT, encoding: 'utf8', timeout: 20000 });
       assert.equal(result.error, undefined, `spawn of ${shell} failed: ${result.error}`);
@@ -543,4 +553,14 @@ describe('tools/sandbox-env.sh run as a script', { skip: NATIVE_WINDOWS }, () =>
       assert.match(result.stderr, /^sandbox-env\.sh: refused: source this file/);
     });
   }
+});
+
+// Last in the file, so every arm above has started or been skipped by now: node:test runs a
+// file's top-level tests in the order they are declared.
+it('on a POSIX platform the bash arm ran, and the zsh arm ran wherever zsh is on PATH', () => {
+  const shells = process.platform === 'win32' ? [] : ['bash', ...(shellPresent('zsh') ? ['zsh'] : [])];
+  const expected = shells.flatMap((shell) => [`${shell} sourced`, `${shell} run as a script`]).sort();
+  const ran = [...ranShellArms].sort();
+  assert.deepEqual(ran, expected,
+    `on ${process.platform}, with zsh ${shellPresent('zsh') ? 'on' : 'not on'} PATH, want the arms ${JSON.stringify(expected)} to have run; ran ${JSON.stringify(ran)}`);
 });
