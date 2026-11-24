@@ -316,22 +316,20 @@ for (const shell of ['bash', 'zsh']) {
     }
 
     it('known answer: a plain assignment to an unexported variable is seen by the allexport pass alone', () => {
-      // A copy of the fragment whose almanac_sandbox also assigns, without export, a name the
-      // starting environment does not carry. Each pass is read as what the copy adds over the
-      // real fragment, so a defect in the fragment or the JS list, which the arms above report,
-      // cancels out here instead of failing this arm as well.
-      const anchor = '  unset PI_CODING_AGENT_DIR\n';
-      const text = fragmentText();
-      assert.equal(text.split(anchor).length, 2, `${SH_FILE} no longer holds the line ${JSON.stringify(anchor)} once`);
+      // A copy of the fragment that also assigns, without export, a name the starting
+      // environment does not carry. The line is appended at file scope so that no line of the
+      // fragment anchors it. Each pass is read as what the copy adds over the real fragment, so
+      // a defect in the fragment or the JS list, which the arms above report, cancels out here
+      // instead of failing this arm as well.
       const planted = resolve(tmpRoot, 'planted-sandbox-env.sh');
-      writeFileSync(planted, text.replace(anchor, `${anchor}  SANDBOX_KNOWN_ANSWER="$sandbox_home"\n`));
+      writeFileSync(planted, `${fragmentText()}\nSANDBOX_KNOWN_ANSWER=planted\n`);
       assert.equal(baseEnv.SANDBOX_KNOWN_ANSWER, undefined);
       const added = (mode) => {
         const real = new Set(envDifferences(SH_FILE, mode).map(({ name }) => name));
         return envDifferences(planted, mode).filter(({ name }) => !real.has(name));
       };
       assert.deepEqual(added('plain'), [], 'the plain pass saw an assignment no child of a real caller receives');
-      assert.deepEqual(added('allexport'), [{ name: 'SANDBOX_KNOWN_ANSWER', after: home, expected: undefined }]);
+      assert.deepEqual(added('allexport'), [{ name: 'SANDBOX_KNOWN_ANSWER', after: 'planted', expected: undefined }]);
     });
 
     it('almanac_sandbox refuses, exit 2 and nothing changed, a missing argument, a relative path, a missing directory and the current HOME', () => {
