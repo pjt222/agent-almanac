@@ -662,6 +662,35 @@ test('archive: a C:/ CONTINUE_FILE is absolute, not prefixed with the working di
   }
 });
 
+test('archive: a relative path holding a colon is still made absolute, so the walk reaches the working directory (#1096)', () => {
+  // Only one letter, a colon and a slash mark a path as absolute. ab:/… (two letters) and the
+  // drive-relative C:x/… are relative, so they take the $PWD prefix and the walk climbs through the
+  // working directory, whose CLAUDE.md declares the archive. Taken as absolute instead, the walk
+  // stops at the relative remainder (ab: and C:x strip to themselves), reads no CLAUDE.md above it,
+  // and the handoff falls back to CONTINUE_HERE.prev.md beside it, so the printed path tells the two
+  // apart. The archive line sits in the working directory itself, so the walk reads nothing above
+  // it, and GIT_CEILING_DIRECTORIES keeps ROOT from becoming an enclosing checkout, as in the next test.
+  for (const file of ['ab:/proj/CONTINUE_HERE.md', 'C:x/proj/CONTINUE_HERE.md']) {
+    const cwd = mkdtempSync(join(tmpdir(), 'colon-'));
+    try {
+      mkdirSync(join(cwd, 'home', '.claude'), { recursive: true });
+      mkdirSync(join(cwd, dirname(file)), { recursive: true });
+      writeFileSync(join(cwd, file), '# Continue Here\nedition one\n');
+      writeFileSync(join(cwd, 'CLAUDE.md'), `Handoff archive: ${join(cwd, 'arch')}\n`);
+      const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
+        cwd,
+        timeout: 15000,
+        env: { CONTINUE_FILE: file, ARCHIVE_STATE: 'consumed', HOME: join(cwd, 'home'), GIT_CEILING_DIRECTORIES: cwd },
+      });
+      assert.equal(res.signal, null, `${file}: the fence never finished`);
+      assert.equal(res.status, 0, `${file}: ${res.stderr}`);
+      assertArchived(res.stdout, join(cwd, 'arch'), 'consumed', `${file} was taken as absolute: the walk never reached the working directory's CLAUDE.md: ${res.stdout}`);
+    } finally {
+      rmTree(cwd);
+    }
+  }
+});
+
 test('archive: a C:/ handoff archives, its walk reading each parent up to the drive root (#1096)', () => {
   // Linux cannot give a path a drive, but a directory named C: in the working directory lets C:/…
   // resolve, so the fence runs end to end on a drive-letter ROOT: outside a repository, ROOT is the
