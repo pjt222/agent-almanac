@@ -69,13 +69,25 @@
  * keeping a second copy, since both sides are JavaScript in the same module graph and this
  * repository has paid for a set that exists twice.
  *
- * The dialect is keyed by PATH, ROOT-ANCHORED: `workflows/<name>.mjs` or
- * `.claude/workflows/<name>.mjs` relative to the repository root, never "any parent directory
- * happens to be called workflows". A depth-agnostic test was written first and is the same
- * shape CLAUDE.md records being measured wrong for `_template` and reverted.
+ * The dialect is keyed by PATH, ROOT-ANCHORED: a file directly in one of the directories
+ * `WORKFLOW_DIRS` lists, relative to the repository root, carrying an extension listed for that
+ * directory — never "any parent directory happens to be called workflows". A depth-agnostic
+ * test was written first and is the same shape CLAUDE.md records being measured wrong for
+ * `_template` and reverted. Three combinations qualify (#1109):
+ *
+ *   workflows/<name>.mjs           this repository's workflow sources
+ *   .claude/workflows/<name>.js    an installed copy: the Workflow tool discovers a `.js` file
+ *                                  there and registers it under its `meta.name`, not its file
+ *                                  name (tests/results/2026-10-14-workflow-loader-probe/)
+ *   .claude/workflows/<name>.mjs   not discovered by name, but `Workflow({ scriptPath })` runs
+ *                                  it with its top-level `return` accepted
+ *                                  (tests/results/2026-11-24-workflow-scriptpath-probe/)
+ *
+ * A `.js` file in `workflows/` does not qualify. No workflow is kept there under that
+ * extension, and granting it would hand the dialect to any helper module placed beside them.
  *
  * What makes the anchor load-bearing is the WRAP, not the goal — the goal is now the stricter
- * of the two (below), so do not read that paragraph as licence to delete this one. A `.mjs`
+ * of the two (below), so do not read that paragraph as licence to delete this one. A file
  * wrongly given the dialect has a top-level `return` accepted and its first `export const meta`
  * silently stripped, so a mutant that strands a `return` outside every function, or that breaks
  * a second export, is scored `ok` and then read as a kill. That is the #758 class.
@@ -139,8 +151,16 @@ export const CHECKED_EXTENSIONS = [
 
 export const WORKFLOW_DIALECT_CHECKER = 'node --input-type=module --check (workflow dialect)';
 
-/** Root-relative directories whose `.mjs` files the runtime treats as Workflow scripts. */
-export const WORKFLOW_DIRS = Object.freeze(['workflows', '.claude/workflows']);
+/**
+ * Root-relative directories whose files get the Workflow dialect, each with the extensions
+ * that qualify there (the module docstring gives the evidence for each row). `.js` is listed for
+ * `.claude/workflows` only: an installed copy is saved there as `.js`, while a `.js` file in
+ * `workflows/` is not a workflow.
+ */
+export const WORKFLOW_DIRS = Object.freeze({
+  workflows: Object.freeze(['.mjs']),
+  '.claude/workflows': Object.freeze(['.mjs', '.js']),
+});
 
 /**
  * A Claude Code Workflow script — root-anchored, never "some parent is called workflows".
@@ -148,10 +168,11 @@ export const WORKFLOW_DIRS = Object.freeze(['workflows', '.claude/workflows']);
  * shape this repository has already measured wrong once (CLAUDE.md, `_template`).
  */
 export function isWorkflowScript(filePath, repoRootDir) {
-  if (extname(filePath) !== '.mjs' || !repoRootDir) return false;
+  if (!repoRootDir) return false;
   const rel = relative(repoRootDir, filePath);
   if (rel.startsWith('..') || isAbsolute(rel)) return false;
-  return WORKFLOW_DIRS.includes(dirname(rel.split(sep).join('/')));
+  const dir = dirname(rel.split(sep).join('/'));
+  return Object.hasOwn(WORKFLOW_DIRS, dir) && WORKFLOW_DIRS[dir].includes(extname(filePath));
 }
 
 /**
