@@ -229,13 +229,13 @@ function shellPresent(shell) {
 const shellArgv = (shell, script, args) => (shell === 'zsh' ? ['-f', '-c', script, '_', ...args] : ['--norc', '--noprofile', '-c', script, '_', ...args]);
 
 // Prints the environment a child process receives before the fragment is sourced and after
-// almanac_sandbox, one JSON object per line. $1 is node, $2 the sandbox home, and $3 `allexport`
-// turns allexport on first. Exit 3-6 say which step failed.
+// almanac_sandbox, one JSON object per line. $1 is node, $2 the sandbox home, $3 `allexport`
+// turns allexport on first, and $4 is the fragment. Exit 3-6 say which step failed.
 const DUMP_ENV = '"$1" -e \'process.stdout.write(JSON.stringify(process.env) + "\\n")\'';
 const ENV_SCRIPT = [
   'if [ "$3" = allexport ]; then set -a; fi',
   `${DUMP_ENV} || exit 4`,
-  '. tools/sandbox-env.sh || exit 3',
+  '. "$4" || exit 3',
   'almanac_sandbox "$2" || exit 5',
   `${DUMP_ENV} || exit 6`,
 ].join('\n');
@@ -282,28 +282,50 @@ for (const shell of ['bash', 'zsh']) {
       return result;
     }
 
+    /**
+     * Sources `fragment` in this arm's shell, in `mode`, and lists every variable a child sees
+     * differently after almanac_sandbox than sandboxEnv() predicts.
+     */
+    function envDifferences(fragment, mode) {
+      const result = runShell(ENV_SCRIPT, [process.execPath, home, mode, fragment]);
+      assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stderr}`);
+      const lines = result.stdout.trim().split('\n');
+      assert.equal(lines.length, 2, `want two environment dumps, got:\n${result.stdout}`);
+      const [beforeEnv, afterEnv] = lines.map((line) => JSON.parse(line));
+      // Control: the planted values reached the child, so a removal below is not vacuous.
+      for (const name of SANDBOX_KEYS) assert.equal(beforeEnv[name], baseEnv[name], `${name} did not reach the child before almanac_sandbox`);
+      const expected = sandboxEnv(home, beforeEnv);
+      return [...new Set([...Object.keys(afterEnv), ...Object.keys(expected)])]
+        .filter((name) => !(mode === 'allexport' && BASH_FUNCTION_EXPORT.test(name)))
+        .sort()
+        .filter((name) => afterEnv[name] !== expected[name])
+        .map((name) => `${name}: after ${fragment} (${mode}) a child sees ${JSON.stringify(afterEnv[name])}; sandboxEnv() in ${JS_FILE} gives ${JSON.stringify(expected[name])}`);
+    }
+
     for (const [mode, title] of [
       ['plain', 'almanac_sandbox changes exactly what sandboxEnv() changes, in both directions'],
       ['allexport', 'with allexport on, almanac_sandbox still changes only what sandboxEnv() changes, so a plain assignment to an unexported variable is seen'],
     ]) {
       it(title, () => {
-        const result = runShell(ENV_SCRIPT, [process.execPath, home, mode]);
-        assert.equal(result.status, 0, `${shell} exited ${result.status}:\n${result.stderr}`);
-        const lines = result.stdout.trim().split('\n');
-        assert.equal(lines.length, 2, `want two environment dumps, got:\n${result.stdout}`);
-        const [beforeEnv, afterEnv] = lines.map((line) => JSON.parse(line));
-        // Control: the planted values reached the child, so a removal below is not vacuous.
-        for (const name of SANDBOX_KEYS) assert.equal(beforeEnv[name], baseEnv[name], `${name} did not reach the child before almanac_sandbox`);
-        const expected = sandboxEnv(home, beforeEnv);
-        const names = [...new Set([...Object.keys(afterEnv), ...Object.keys(expected)])]
-          .filter((name) => !(mode === 'allexport' && BASH_FUNCTION_EXPORT.test(name)))
-          .sort();
-        const differences = names
-          .filter((name) => afterEnv[name] !== expected[name])
-          .map((name) => `${name}: after ${SH_FILE} (${mode}) a child sees ${JSON.stringify(afterEnv[name])}; sandboxEnv() in ${JS_FILE} gives ${JSON.stringify(expected[name])}`);
+        const differences = envDifferences(SH_FILE, mode);
         assert.deepEqual(differences, [], differences.join('\n'));
       });
     }
+
+    it('known answer: a plain assignment to an unexported variable is seen by the allexport pass alone', () => {
+      // A copy of the fragment whose almanac_sandbox also assigns, without export, a name the
+      // starting environment does not carry.
+      const anchor = '  unset PI_CODING_AGENT_DIR\n';
+      const text = fragmentText();
+      assert.equal(text.split(anchor).length, 2, `${SH_FILE} no longer holds the line ${JSON.stringify(anchor)} once`);
+      const planted = resolve(tmpRoot, 'planted-sandbox-env.sh');
+      writeFileSync(planted, text.replace(anchor, `${anchor}  SANDBOX_KNOWN_ANSWER="$sandbox_home"\n`));
+      assert.equal(baseEnv.SANDBOX_KNOWN_ANSWER, undefined);
+      assert.deepEqual(envDifferences(planted, 'plain'), [], 'the plain pass saw an assignment no child of a real caller receives');
+      assert.deepEqual(envDifferences(planted, 'allexport'), [
+        `SANDBOX_KNOWN_ANSWER: after ${planted} (allexport) a child sees ${JSON.stringify(home)}; sandboxEnv() in ${JS_FILE} gives undefined`,
+      ]);
+    });
 
     it('almanac_sandbox refuses, exit 2 and nothing changed, a missing argument, a relative path, a missing directory and the current HOME', () => {
       const missing = resolve(tmpRoot, 'no-such-home');
