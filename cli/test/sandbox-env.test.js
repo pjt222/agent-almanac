@@ -142,8 +142,15 @@ function commandsDeclaringSource(text) {
   }));
 }
 
-/** A stand-in for cli/index.js that prints the arguments and environment it was given. */
-const FIXTURE_CLI = "process.stdout.write(JSON.stringify({ argv: process.argv.slice(2), env: process.env }) + '\\n');\n";
+/**
+ * A stand-in for cli/index.js that prints the arguments and environment it was given. Given
+ * --exit-7 it exits 7, a status neither almanac_cli's refusal (2) nor a success can be.
+ */
+const FIXTURE_CLI = [
+  "process.stdout.write(JSON.stringify({ argv: process.argv.slice(2), env: process.env }) + '\\n');",
+  "if (process.argv.includes('--exit-7')) process.exitCode = 7;",
+  '',
+].join('\n');
 
 describe('the sandbox key list: cli/test/sandbox-env.js against the text of tools/sandbox-env.sh', () => {
   it('the fragment holds no line that changes the environment in a form the parse cannot read', () => {
@@ -501,6 +508,20 @@ for (const shell of ['bash', 'zsh']) {
         })
         .filter(Boolean);
       assert.deepEqual(wrong, [], wrong.join('\n'));
+    });
+
+    it('almanac_cli returns the CLI\'s exit status from both branches of its --source case', () => {
+      // A probe written as `almanac_cli … && check` reads this status, so a branch that dropped
+      // it would read a failed CLI run as a success. detect takes the branch without --source,
+      // install the one with it; the argv says which branch ran.
+      for (const [command, want] of [
+        ['detect', ['detect', '--exit-7']],
+        ['install', ['install', '--exit-7', '--source', fixtureRepo]],
+      ]) {
+        const result = runShell('. tools/sandbox-env.sh || exit 3\nalmanac_cli "$1" "$2" "$3" --exit-7', [home, fixtureRepo, command]);
+        assert.equal(result.status, 7, `${command}: want the CLI's exit 7 back, got ${result.status}\n${result.stdout}\n${result.stderr}`);
+        assert.deepEqual(JSON.parse(result.stdout.trim()).argv, want, `${command}: the CLI did not get the arguments of the branch this case is for`);
+      }
     });
 
     it('almanac_cli runs the real detect, demo and bare program, which take no --source, each to exit 0', () => {

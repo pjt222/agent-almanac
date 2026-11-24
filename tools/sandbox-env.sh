@@ -26,7 +26,8 @@
 #                                            in a subshell that almanac_sandbox <home> set up, so
 #                                            the calling shell keeps its own HOME; detect, demo
 #                                            and no command at all get no --source, since they
-#                                            declare none and commander refuses it
+#                                            declare none and commander refuses it. It returns
+#                                            the CLI's exit status
 #     almanac_sandbox <home>                 pins the variables in THIS shell, for a probe whose
 #                                            every command must see the sandbox
 #
