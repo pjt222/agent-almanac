@@ -20,7 +20,7 @@ metadata:
   locale: es
   source_locale: en
   source_commit: 025eea68
-  fence_basis_commit: 194e01240c4a3f3b436802558dd22844e6735b0f
+  fence_basis_commit: 928ddebf3c321dc4feaa13b5aa473bf9855a3bb2
   translator: claude
   translation_date: "2026-05-03"
 ---

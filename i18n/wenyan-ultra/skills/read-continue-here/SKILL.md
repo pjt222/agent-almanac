@@ -3,7 +3,7 @@ name: read-continue-here
 locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
-fence_basis_commit: 194e01240c4a3f3b436802558dd22844e6735b0f
+fence_basis_commit: 928ddebf3c321dc4feaa13b5aa473bf9855a3bb2
 translator: "Julius Brussee homage — caveman"
 translation_date: "2026-04-26"
 description: >
