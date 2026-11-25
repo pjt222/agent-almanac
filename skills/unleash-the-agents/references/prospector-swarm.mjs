@@ -13,7 +13,8 @@
 // alone is not that opt-in. Tell the user the scale before launching. The one measured run
 // (tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md) took about 4 h with 84 agents.
 // Its prospectors ran on haiku, this template's default when it was merged (#1081). The default
-// is now sonnet, and no run has measured it. The measured run involved three models, not two:
+// is now sonnet, and no run has measured it; a sonnet run is expected to cost more than the
+// measured one [estimated, requires measurement]. The measured run involved three models, not two:
 // - the 75 Haiku prospectors produced 66 % of the output tokens;
 // - the 9 session-model agents produced 22 %;
 // - the advisor, which 60 of the 84 agents called (61 calls, 58 answered, 3 refused with
