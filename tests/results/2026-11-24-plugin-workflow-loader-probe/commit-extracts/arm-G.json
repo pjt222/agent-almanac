@@ -1,0 +1,36 @@
+{
+  "arm": "G",
+  "calls": [
+    {
+      "name": "agent-almanac:no-such-name"
+    }
+  ],
+  "results": [
+    {
+      "is_error": true,
+      "text": "<tool_use_error>Workflow \"agent-almanac:no-such-name\" not found. Available: deep-research, agent-almanac:verify-handoff</tool_use_error>"
+    }
+  ],
+  "init_events": 1,
+  "slash_count_per_init": [
+    453
+  ],
+  "slash_workflow_entries": [
+    [
+      "deep-research",
+      "agent-almanac:verify-handoff"
+    ]
+  ],
+  "inline_plugins": [
+    {
+      "name": "agent-almanac",
+      "source": "agent-almanac@inline",
+      "version": "1.9.1"
+    }
+  ],
+  "task_started": [],
+  "task_status": [],
+  "total_cost_usd_per_result_event": [
+    0.11488620000000001
+  ]
+}

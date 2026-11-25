@@ -1,0 +1,36 @@
+{
+  "arm": "B",
+  "calls": [
+    {
+      "name": "probe-a-name"
+    }
+  ],
+  "results": [
+    {
+      "is_error": true,
+      "text": "<tool_use_error>Workflow \"probe-a-name\" not found. Available: deep-research, probeplug:probe-a-name</tool_use_error>"
+    }
+  ],
+  "init_events": 1,
+  "slash_count_per_init": [
+    453
+  ],
+  "slash_workflow_entries": [
+    [
+      "deep-research",
+      "probeplug:probe-a-name"
+    ]
+  ],
+  "inline_plugins": [
+    {
+      "name": "probeplug",
+      "source": "probeplug@inline",
+      "version": "0.0.1"
+    }
+  ],
+  "task_started": [],
+  "task_status": [],
+  "total_cost_usd_per_result_event": [
+    0.1151374
+  ]
+}

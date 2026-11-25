@@ -1,0 +1,50 @@
+{
+  "arm": "C",
+  "calls": [
+    {
+      "name": "control-name"
+    }
+  ],
+  "results": [
+    {
+      "is_error": false,
+      "text": "Workflow launched in background. Task ID: we4xgt1zr"
+    }
+  ],
+  "init_events": 2,
+  "slash_count_per_init": [
+    453,
+    453
+  ],
+  "slash_workflow_entries": [
+    [
+      "deep-research",
+      "control-name"
+    ],
+    [
+      "deep-research",
+      "control-name"
+    ]
+  ],
+  "inline_plugins": [],
+  "task_started": [
+    {
+      "workflow_name": "control-name",
+      "task_id": "we4xgt1zr"
+    }
+  ],
+  "task_status": [
+    {
+      "subtype": "task_updated",
+      "status": "completed"
+    },
+    {
+      "subtype": "task_notification",
+      "status": "completed"
+    }
+  ],
+  "total_cost_usd_per_result_event": [
+    0.1181105,
+    0.1283029
+  ]
+}
