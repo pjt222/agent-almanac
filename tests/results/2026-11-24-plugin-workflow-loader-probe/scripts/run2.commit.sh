@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # Sanitized copy of run2.sh for commit. Usage: bash run2.commit.sh <outdir> <repo-checkout>
-# <outdir> must be outside any git repository. Changes from the script that was run: the outdir equality
-# check (which hardcoded a scratch path) became a refuse-inside-a-repo check; REPO is an argument;
+# <outdir> must be an absolute path outside any git repository. Changes from the script that was run: the
+# outdir equality check (which hardcoded a scratch path) became a refuse-inside-a-repo check and a refusal
+# of a relative outdir (the arms cd before writing to it); REPO is an argument;
 # the two capture lines marked "ADDED" were not in the original run (HEAD sha and user-scope listing).
 set -u
 OUT="${1:?outdir}"
 REPO="${2:?repo checkout (the plugin source)}"
+case "$OUT" in /*) ;; *) echo "refusing: outdir must be an absolute path"; exit 2 ;; esac
 mkdir -p "$OUT"
 if git -C "$OUT" rev-parse --show-toplevel >/dev/null 2>&1; then echo "refusing: outdir is inside a git repository"; exit 2; fi
 git -C "$REPO" rev-parse HEAD > "$OUT/repo-head.txt"            # ADDED, not in the original run
