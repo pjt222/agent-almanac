@@ -1,6 +1,6 @@
 // ---
 // name: prospector-swarm
-// description: unleash-the-agents as a Workflow script — cheap-model prospectors in waves over a territory-split corpus, session-model clustering, adversarial passes, and a stop rule that needs independent convergence
+// description: unleash-the-agents as a Workflow script — prospectors on prospectorModel (sonnet by default) in waves over a territory-split corpus, session-model clustering, adversarial passes, and a stop rule that needs independent convergence
 // phases: Pilot, Prospect, Cluster, Challenge, Edge, Late challenge, Synthesize
 // ---
 //
@@ -119,7 +119,7 @@
 
 export const meta = {
   name: 'prospector-swarm',
-  description: 'unleash-the-agents as a Workflow script: cheap-model prospectors in waves, session-model clustering, adversarial passes, and a convergence stop rule',
+  description: 'unleash-the-agents as a Workflow script: prospectors on prospectorModel (sonnet by default) in waves, session-model clustering, adversarial passes, and a convergence stop rule',
   phases: [
     { title: 'Pilot', detail: 'two prospectors; check the models, the citations and containment before the full run' },
     { title: 'Prospect', detail: 'waves 1-2, one home territory each' },
