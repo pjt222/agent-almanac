@@ -30,10 +30,12 @@
  * any shell runs.
  *
  * Every shell script here is built from literals, and no path this file computes reaches a
- * shell's argv. A path a script needs, from `import.meta.url`, `tmpdir()` or
- * `process.execPath`, reaches it in the shell's environment as a SANDBOX_ARG_ variable the
- * script expands (runShell says why every comparison still sees what it saw); the positional
- * arguments left are words, a pass's mode or a command name. The CodeQL finding recorded in
+ * shell's argv. A path a script expands, from `import.meta.url`, `tmpdir()` or
+ * `process.execPath`, reaches it in the shell's environment instead: node, the sandbox home,
+ * the repo and the fragment as SANDBOX_ARG_ variables, node's directory as the first entry of
+ * PATH, and the sandbox home as HOME in the current-HOME cases. The positional arguments left
+ * are words, a pass's mode or a command name. The SANDBOX_ARG_ variables are exported into the
+ * environment the fragment runs in (runShell says what that costs). The CodeQL finding recorded in
  * template-predicate.test.js was a path from `import.meta.url` reaching `bash -c`, and so was
  * alert 23 on this file (js/shell-command-injection-from-environment): its paths reached the
  * shell as positional arguments.
@@ -344,7 +346,14 @@ for (const shell of ['bash', 'zsh']) {
      * a comparison of whole environments sees a carrier on both of its sides with one value, so
      * none is excluded by name, and a script that changed one would still be reported. A carrier
      * may not take a name `env` already holds: it would replace that variable's planted value,
-     * and a fragment that pinned the name would then compare equal.
+     * and a fragment that pinned the name would then compare equal. No test exercises that
+     * refusal or the name check above it: deleting either leaves the suite green.
+     *
+     * What the carriers cost: the fragment runs with them in its environment. A script that
+     * assigns one its own value compares equal, where an allexport pass used to see a new
+     * variable. A function that read SANDBOX_ARG_HOME or SANDBOX_ARG_REPO instead of its
+     * arguments would pass every arm; only a refusal arm that matched the input's value, which
+     * no arm does yet, would see it.
      */
     function runShell(script, { args = [], carried = {}, env = baseEnv } = {}) {
       const carriers = { SANDBOX_ARG_NODE: process.execPath, ...carried };
