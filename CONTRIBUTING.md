@@ -214,7 +214,9 @@ regenerates.
 
 A skill PR reports these contexts, measured on #763's first commit: `banned-invocations`,
 `cli-test`, `content-security`, `content-style`, `integrity`, `line-endings`, `scripts-test`,
-`skills`, `tests`, `yaml-fences`. Five of them are required by branch protection and refuse the
+`skills`, `tests`, `yaml-fences`. The non-required `sandbox-env-zsh` job came after that
+measurement and has no path filter, so a skill PR reports it too (read from its workflow file,
+not yet seen on a PR). Five of them are required by branch protection and refuse the
 merge while red: `line-endings`, `integrity`, `skills`, `scripts-test`, `cli-test`. The others
 go red visibly and are still findings to fix — the distinction only decides whether the merge
 button works, not whether a red is merged past. It is stated here so a red check does not read as

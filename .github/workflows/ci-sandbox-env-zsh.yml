@@ -1,0 +1,57 @@
+name: CI sandbox-env under zsh
+# Runs cli/test/sandbox-env.test.js with zsh installed, so the zsh half of that suite runs in CI.
+# The required cli-test job (ci-node-cli.yml) runs the same file under bash alone: its runner
+# image lists no zsh, and the suite skips its zsh arms there, each with its reason. What only
+# those arms check is the zsh clause of the run-as-a-script guard in tools/sandbox-env.sh, and the
+# zsh half of every other check in the file.
+#
+# NOT a required status check, by the maintainer's decision (2026-11-24). A red run here, for
+# example from an apt outage, shows on the PR without GitHub refusing the merge. tools/merge-pr.sh
+# still refuses it, as it refuses every context that is not pass or skipping, until the job is
+# re-run (`gh run rerun --failed`) or fixed. Apt is not what keeps it out of the required set:
+# integrity, skills and scripts-test already install ripgrep from apt through
+# scripts/ci/ensure-ripgrep.sh. The five required contexts are unchanged. The job id is the
+# status-check context name (#641).
+#
+# No `paths:` filter, so it reports on every pull request, as cli-test does. The suite reads
+# tools/sandbox-env.sh, cli/test/ and cli/index.js, and a filter would be one more list to keep in
+# step with those.
+#
+# It cannot go green having skipped the zsh half. The step before the suite fails the job when
+# zsh is not on PATH, and SANDBOX_ENV_REQUIRE_ZSH=1 makes the suite's last test require the zsh
+# arms to have run, whatever the suite's own probe for zsh answers.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sandbox-env-zsh:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+          cache: 'npm'
+      # The suite runs the real cli/index.js, which needs the CLI's dependencies.
+      - run: npm ci
+      # As scripts/ci/ensure-ripgrep.sh does for rg: `apt-get update` is `|| true`, because apt
+      # exits 100 when any configured source fails to fetch, and the verdict is the next step,
+      # not apt's status.
+      - name: Install zsh
+        run: |
+          sudo apt-get update -qq || true
+          sudo apt-get install -y -qq zsh
+      - name: zsh is on PATH
+        run: |
+          command -v zsh
+          zsh --version
+      - name: The sandbox-env suite, its zsh arms required
+        env:
+          SANDBOX_ENV_REQUIRE_ZSH: '1'
+        run: node --test cli/test/sandbox-env.test.js

@@ -37,11 +37,11 @@
  *   1. **A rename updated in one spelling and not the other.** Removed structurally:
  *      exactly one script may name the suite directory. Two again is a failure, whatever
  *      the two say.
- *   2. **A newly added test file that no script names.** `test:cli` names its file
+ *   2. **A newly added test file that no script names.** `test:cli` names its files
  *      explicitly rather than globbing, which is what makes it fail loudly on a rename
  *      (`test:scripts` globs and so goes vacuously green instead — see
  *      `scripts/test/_assert-suite-nonempty.js`). The cost of naming is that a file
- *      added beside it is simply never run, and every gate stays green. So the named set
+ *      added beside them is simply never run, and every gate stays green. So the named set
  *      is compared against the discovered set, in both directions.
  *
  * Direction matters: named-but-absent is a broken gate, absent-but-present is an unrun

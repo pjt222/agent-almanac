@@ -14,7 +14,7 @@
  *
  * That is the same vacuous green the PR adding this directory (#486) exists to
  * eliminate in the normalizer, so it should not be how the normalizer's own gate
- * behaves. The sibling `test:cli` names its file explicitly and dies loudly instead;
+ * behaves. The sibling `test:cli` names its files explicitly and dies loudly instead;
  * this keeps the glob's convenience without inheriting its silence.
  *
  * Deliberately named with a leading underscore: `*.test.js` must not match it, or it
