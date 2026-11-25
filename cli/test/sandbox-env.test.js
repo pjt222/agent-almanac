@@ -352,8 +352,9 @@ for (const shell of ['bash', 'zsh']) {
      * What the carriers cost: the fragment runs with them in its environment. A script that
      * assigns one its own value compares equal, where an allexport pass used to see a new
      * variable. A function that read SANDBOX_ARG_HOME or SANDBOX_ARG_REPO instead of its
-     * arguments would pass every arm; only a refusal arm that matched the input's value, which
-     * no arm does yet, would see it.
+     * arguments would pass every arm, since each case either passes the value it carries or is
+     * a refusal, and the refusal arms accept a refusal from any check; a refusal arm that pinned
+     * which check refused each case was measured seeing both.
      */
     function runShell(script, { args = [], carried = {}, env = baseEnv } = {}) {
       const carriers = { SANDBOX_ARG_NODE: process.execPath, ...carried };
