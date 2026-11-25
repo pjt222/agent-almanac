@@ -1,0 +1,11 @@
+{
+  "taskId": "wip2osbo2",
+  "workflowName": "probe-a-name",
+  "status": "completed",
+  "logs": [
+    "PROBE_BODY_PLUGIN_A_71c3"
+  ],
+  "result": {
+    "marker": "PROBE_BODY_PLUGIN_A_71c3"
+  }
+}

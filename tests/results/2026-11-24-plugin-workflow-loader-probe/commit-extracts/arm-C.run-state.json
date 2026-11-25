@@ -1,0 +1,11 @@
+{
+  "taskId": "we4xgt1zr",
+  "workflowName": "control-name",
+  "status": "completed",
+  "logs": [
+    "PROBE_BODY_CONTROL_52aa"
+  ],
+  "result": {
+    "marker": "PROBE_BODY_CONTROL_52aa"
+  }
+}

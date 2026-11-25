@@ -1,0 +1,56 @@
+{
+  "arm": "F",
+  "calls": [
+    {
+      "name": "agent-almanac:probe-f-name"
+    }
+  ],
+  "results": [
+    {
+      "is_error": false,
+      "text": "Workflow launched in background. Task ID: w7tkxbf2w"
+    }
+  ],
+  "init_events": 2,
+  "slash_count_per_init": [
+    453,
+    453
+  ],
+  "slash_workflow_entries": [
+    [
+      "deep-research",
+      "agent-almanac:probe-f-name"
+    ],
+    [
+      "deep-research",
+      "agent-almanac:probe-f-name"
+    ]
+  ],
+  "inline_plugins": [
+    {
+      "name": "agent-almanac",
+      "source": "agent-almanac@inline",
+      "version": "1.9.1"
+    }
+  ],
+  "task_started": [
+    {
+      "workflow_name": "probe-f-name",
+      "task_id": "w7tkxbf2w"
+    }
+  ],
+  "task_status": [
+    {
+      "subtype": "task_updated",
+      "status": "completed"
+    },
+    {
+      "subtype": "task_notification",
+      "status": "completed"
+    }
+  ],
+  "total_cost_usd_per_result_event": [
+    0.1182163,
+    0.1281553
+  ]
+}
