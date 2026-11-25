@@ -71,7 +71,7 @@ Further `init` observations (derived from the stream `init` events by `scripts/e
 
 ### Files
 
-Not for commit (the raw logs hold home paths, session ids and the operator's installed-plugin list): the scratch `run1/` and `run2/` directories (`arm-*.stream.jsonl`, `cmdline.txt`, `stderr.txt`, `exitcode.txt`, the `extracted.json` files, `env-scrub.txt`, `version.txt`) and the `strings` dump used for the static reads. Run 2 has no `extracted.json` or run-state files; its slash counts are read from the stream `init` events. `env-scrub.txt` and `version.txt` hold only variable names and a version string; they are not shipped, so the scrubbed names are inlined here: the Method's `env -u` list is every `CLAUDECODE`, `CLAUDE_CODE_*`, `CLAUDE_PID` and `CLAUDE_EFFORT` variable set in the session, minus the OAuth, `USE_*` and API-key-helper ones.
+Not for commit: the scratch `run1/` and `run2/` directories (`arm-*.stream.jsonl`, `cmdline.txt`, `stderr.txt`, `exitcode.txt`, the `extracted.json` files, `env-scrub.txt`, `version.txt`), whose raw logs hold home paths, session ids and the operator's installed-plugin list, and the 87 MB `strings` dump of the binary used for the static reads. Run 2 has no `extracted.json` or run-state files; its slash counts are read from the stream `init` events. `env-scrub.txt` and `version.txt` hold only variable names and a version string; they are not shipped, so the scrubbed names are inlined here: the Method's `env -u` list is every `CLAUDECODE`, `CLAUDE_CODE_*`, `CLAUDE_PID` and `CLAUDE_EFFORT` variable set in the session, minus the OAuth, `USE_*` and API-key-helper ones.
 
 For commit, with placeholders:
 
