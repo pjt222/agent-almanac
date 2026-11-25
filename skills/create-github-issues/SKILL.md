@@ -124,6 +124,7 @@ Create the issues using `gh` CLI and report results.
 - [ ] All findings are represented in at least one issue
 - [ ] Each issue has at least one label
 - [ ] Each issue has checkbox acceptance criteria
+- [ ] Each criterion names a result in the branch the fix actually takes, so the narrowest wrong fix fails at least one
 - [ ] No duplicate issues were created (check titles against existing open issues)
 - [ ] Issue count is reasonable for the finding count (not 1:1 for large sets)
 - [ ] Summary table was printed with all issue URLs
@@ -132,6 +133,7 @@ Create the issues using `gh` CLI and report results.
 
 - **Issue sprawl**: Creating one issue per finding produces 20+ issues that are hard to manage. Group aggressively — 5-10 issues from a full review is ideal
 - **Missing acceptance criteria**: Issues without checkboxes cannot be verified as complete. Every finding should map to at least one checkbox
+- **A criterion a wrong fix can meet**: Each criterion must name an observable result in the branch the fix actually takes, such as a named test that fails before the fix and passes after it. A criterion like "a test covers this" or "an arm pins it" is met by an arm that never reaches the changed line. Before posting, name the narrowest wrong fix and check that at least one criterion refuses it
 - **Label chaos**: Creating too many labels makes filtering useless. Stick to severity + theme, not per-finding labels
 - **Stale references**: If creating issues from an old review, verify findings still apply before creating issues. Code may have changed
 - **Forgetting dry run**: For large finding sets, always preview with `dry_run: true` first. It is much easier to edit a plan than to close 15 incorrect issues
