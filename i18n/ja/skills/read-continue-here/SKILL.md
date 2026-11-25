@@ -20,7 +20,7 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: 025eea68
-  fence_basis_commit: 194e01240c4a3f3b436802558dd22844e6735b0f
+  fence_basis_commit: 928ddebf3c321dc4feaa13b5aa473bf9855a3bb2
   translator: "Claude + human review"
   translation_date: "2026-05-03"
 ---
@@ -139,14 +139,14 @@ Next Steps item 1（またはユーザーが指示した場所）から作業を
 ```bash
 : "${CONTINUE_FILE:?set it to the path of the handoff, as the resolver printed it}"
 : "${ARCHIVE_STATE:?set it to consumed when reading, superseded when replacing}"
-case "$CONTINUE_FILE" in /*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac
+case "$CONTINUE_FILE" in /*|[A-Za-z]:/*) ;; *) CONTINUE_FILE=$PWD/$CONTINUE_FILE ;; esac # a C:/ path is absolute in Git Bash
 HOME_DIR=${CONTINUE_FILE%/*} ARCHIVED=
 ROOT=$(git -C "$HOME_DIR" rev-parse --show-toplevel 2>/dev/null) || ROOT=$HOME_DIR
 PROJECT=$(git -C "$HOME_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || PROJECT=$ROOT
 case "$PROJECT" in --path-format=*) PROJECT=${PROJECT#*$'\n'}; case "$PROJECT" in /*) ;; *) PROJECT=$ROOT ;; esac ;; esac # git < 2.31 echoes it
 PROJECT=${PROJECT%/.git}; PROJECT=${PROJECT##*/} # a linked worktree names its project, not itself
 SEARCH=("$ROOT/CLAUDE.md" "$ROOT/.claude/CLAUDE.md") dir=${ROOT%/*} ARCHIVE=
-while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); dir=${dir%/*}; done
+while [ -n "$dir" ]; do SEARCH+=("$dir/CLAUDE.md"); [ "${dir%/*}" = "$dir" ] && break; dir=${dir%/*}; done # C: strips to itself
 for f in "${SEARCH[@]}" "$HOME/.claude/CLAUDE.md" "$ROOT/README.md"; do # nearest first, builtins only
   [ -f "$f" ] && while IFS= read -r l || [ -n "$l" ]; do
     l=${l%$'\r'}; case "$l" in "Handoff archive: "*) ARCHIVE=${l#Handoff archive: }; break 2 ;; esac

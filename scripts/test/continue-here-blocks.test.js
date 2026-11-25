@@ -574,9 +574,13 @@ test('archive: any failure refuses, and the cleanup run after it in the same cal
   }
 });
 
-test('archive: a relative CONTINUE_FILE is made absolute, not walked forever', () => {
-  // `${dir%/*}` leaves a slash-free path unchanged, so a relative path never shortens to nothing
-  // and the parent walk never ends (#1042 round 1 measured rc 124 under bash and zsh).
+test('archive: a relative CONTINUE_FILE is made absolute, and archives', () => {
+  // `${dir%/*}` leaves a slash-free path unchanged. Before #1096 the parent walk stopped only on an
+  // empty string, so a relative path never ended it (#1042 round 1 measured rc 124 under bash and
+  // zsh). Since #1096 the walk also ends on a slash-free remainder, so without the line that prefixes
+  // $PWD the fence no longer hangs: HOME_DIR is the bare file name, the copy into it fails, and the
+  // fence refuses at once (measured under bash and zsh). That refusal is what this test now catches.
+  // The timeout stays, for a walk that loses its stop condition again.
   for (const tracked of [false, true]) {
     const tree = archiveTree({}, { tracked });
     try {
@@ -590,6 +594,128 @@ test('archive: a relative CONTINUE_FILE is made absolute, not walked forever', (
       assert.match(res.stdout, /^archive: /m);
     } finally {
       rmTree(tree.base);
+    }
+  }
+});
+
+/** The archive fence's parent walk: its `SEARCH=(` line through the loop that extends SEARCH. */
+function archiveWalk() {
+  const lines = extractBlock(READ, ARCHIVE_MARKER).split('\n');
+  const start = lines.findIndex((l) => l.startsWith('SEARCH=('));
+  const end = lines.findIndex((l, i) => i > start && l.startsWith('while ') && l.includes('SEARCH+=('));
+  assert.ok(start >= 0 && end > start, `${READ}'s archive fence no longer builds SEARCH with a SEARCH=( line and a while loop extending it`);
+  return lines.slice(start, end + 1).join('\n');
+}
+
+test('archive: the parent walk ends at a drive root as it ends at /, every parent nearest first (#1096)', () => {
+  // Git for Windows prints the toplevel as C:/Users/…, and `${dir%/*}` takes C:/Users to C: and then
+  // leaves C: as it is, so a walk that stops only on an empty string never ends there (#1096 measured
+  // rc 124 under Git Bash). `${dir%/*}` behaves the same in Linux bash, so the shipped walk is driven
+  // here with crafted ROOT values: no Windows needed, and a hang is a timeout rather than a stall.
+  //
+  // The drive root's own CLAUDE.md is read, because the walk already read it when the same directory
+  // arrives in Git Bash's POSIX form (/c/… collects /c/CLAUDE.md): the drive-letter row is the /c row
+  // spelled C:. On Linux, / is never read, before this change and after it.
+  const walk = archiveWalk();
+  const expected = {
+    '/a/b/c': ['/a/b/c/CLAUDE.md', '/a/b/c/.claude/CLAUDE.md', '/a/b/CLAUDE.md', '/a/CLAUDE.md'],
+    '/c/a/b': ['/c/a/b/CLAUDE.md', '/c/a/b/.claude/CLAUDE.md', '/c/a/CLAUDE.md', '/c/CLAUDE.md'],
+    'C:/a/b': ['C:/a/b/CLAUDE.md', 'C:/a/b/.claude/CLAUDE.md', 'C:/a/CLAUDE.md', 'C:/CLAUDE.md'],
+  };
+  for (const [root, list] of Object.entries(expected)) {
+    const res = spawnSync('bash', ['-c', `${walk}\nprintf '%s\\n' "\${SEARCH[@]}"`], {
+      encoding: 'utf8',
+      env: { PATH: process.env.PATH, ROOT: root },
+      timeout: 5000,
+    });
+    assert.equal(res.signal, null, `ROOT=${root}: the walk never ended (killed after 5 s)`);
+    assert.equal(res.status, 0, `ROOT=${root}: ${res.stderr}`);
+    assert.deepEqual(res.stdout.split('\n').filter(Boolean), list, `ROOT=${root}: not every parent's CLAUDE.md, nearest first`);
+  }
+});
+
+test('archive: a C:/ CONTINUE_FILE is absolute, not prefixed with the working directory (#1096)', () => {
+  // In a repository, Git Bash's Step 1 resolver prints C:/…/CONTINUE_HERE.md. Read as relative, it
+  // became $PWD/C:/…, the copy failed and the fence refused (#1096). On Linux that path resolves
+  // nowhere, so the fence refuses here too, and what tells the fix from the old line is the path the
+  // refusal prints. Under a timeout: with this line fixed and the walk not, this input hangs.
+  const cwd = mkdtempSync(join(tmpdir(), 'drive-'));
+  try {
+    mkdirSync(join(cwd, 'home', '.claude'), { recursive: true });
+    for (const file of ['C:/no/such/proj/CONTINUE_HERE.md', 'd:/no/such/proj/CONTINUE_HERE.md']) {
+      const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
+        cwd,
+        timeout: 15000,
+        env: { CONTINUE_FILE: file, ARCHIVE_STATE: 'consumed', HOME: join(cwd, 'home') },
+      });
+      assert.equal(res.signal, null, `${file}: the fence never finished`);
+      assert.notEqual(res.status, 0, `${file}: a handoff that does not exist was reported archived`);
+      assert.ok(
+        res.stderr.split('\n').some((l) => l.startsWith(`REFUSED: ${file} was not archived`)),
+        `${file}: the refusal does not name the path as given:\n${res.stderr}`,
+      );
+      assert.ok(!res.stderr.includes(`${cwd}/`), `${file}: the working directory was prefixed:\n${res.stderr}`);
+    }
+    assert.deepEqual(readdirSync(cwd), ['home'], 'a refused fence wrote into the working directory');
+  } finally {
+    rmTree(cwd);
+  }
+});
+
+test('archive: a relative path holding a colon is still made absolute, so the walk reaches the working directory (#1096)', () => {
+  // Only one letter, a colon and a slash mark a path as absolute. ab:/… (two letters) and the
+  // drive-relative C:x/… are relative, so they take the $PWD prefix and the walk climbs through the
+  // working directory, whose CLAUDE.md declares the archive. Taken as absolute instead, the walk
+  // stops at the relative remainder (ab: and C:x strip to themselves), reads no CLAUDE.md above it,
+  // and the handoff falls back to CONTINUE_HERE.prev.md beside it, so the printed path tells the two
+  // apart. The archive line sits in the working directory itself, so the walk reads nothing above
+  // it, and GIT_CEILING_DIRECTORIES keeps ROOT from becoming an enclosing checkout, as in the next test.
+  for (const file of ['ab:/proj/CONTINUE_HERE.md', 'C:x/proj/CONTINUE_HERE.md']) {
+    const cwd = mkdtempSync(join(tmpdir(), 'colon-'));
+    try {
+      mkdirSync(join(cwd, 'home', '.claude'), { recursive: true });
+      mkdirSync(join(cwd, dirname(file)), { recursive: true });
+      writeFileSync(join(cwd, file), '# Continue Here\nedition one\n');
+      writeFileSync(join(cwd, 'CLAUDE.md'), `Handoff archive: ${join(cwd, 'arch')}\n`);
+      const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
+        cwd,
+        timeout: 15000,
+        env: { CONTINUE_FILE: file, ARCHIVE_STATE: 'consumed', HOME: join(cwd, 'home'), GIT_CEILING_DIRECTORIES: cwd },
+      });
+      assert.equal(res.signal, null, `${file}: the fence never finished`);
+      assert.equal(res.status, 0, `${file}: ${res.stderr}`);
+      assertArchived(res.stdout, join(cwd, 'arch'), 'consumed', `${file} was taken as absolute: the walk never reached the working directory's CLAUDE.md: ${res.stdout}`);
+    } finally {
+      rmTree(cwd);
+    }
+  }
+});
+
+test('archive: a C:/ handoff archives, its walk reading each parent up to the drive root (#1096)', () => {
+  // Linux cannot give a path a drive, but a directory named C: in the working directory lets C:/…
+  // resolve, so the fence runs end to end on a drive-letter ROOT: outside a repository, ROOT is the
+  // handoff's directory as given. The archive line sits in one parent at a time, and the drive
+  // root's row pins the walk test's decision end to end. GIT_CEILING_DIRECTORIES keeps git from
+  // finding a repository above the fixture: with TMPDIR inside a checkout, ROOT became that
+  // checkout and the walk climbed its parents, which can declare a real archive.
+  for (const declaring of ['C:/a', 'C:']) {
+    const cwd = mkdtempSync(join(tmpdir(), 'drive-'));
+    try {
+      const proj = join(cwd, 'C:', 'a', 'proj');
+      mkdirSync(join(cwd, 'home', '.claude'), { recursive: true });
+      mkdirSync(proj, { recursive: true });
+      writeFileSync(join(proj, 'CONTINUE_HERE.md'), '# Continue Here\nedition one\n');
+      writeFileSync(join(cwd, declaring, 'CLAUDE.md'), `Handoff archive: ${join(cwd, 'arch')}\n`);
+      const res = runBash(extractBlock(READ, ARCHIVE_MARKER), {
+        cwd,
+        timeout: 15000,
+        env: { CONTINUE_FILE: 'C:/a/proj/CONTINUE_HERE.md', ARCHIVE_STATE: 'consumed', HOME: join(cwd, 'home'), GIT_CEILING_DIRECTORIES: cwd },
+      });
+      assert.equal(res.signal, null, `${declaring}/CLAUDE.md: the fence never finished`);
+      assert.equal(res.status, 0, `${declaring}/CLAUDE.md: ${res.stderr}`);
+      assertArchived(res.stdout, join(cwd, 'arch'), 'consumed', `${declaring}/CLAUDE.md was not read: ${res.stdout}`);
+    } finally {
+      rmTree(cwd);
     }
   }
 });
