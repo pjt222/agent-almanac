@@ -95,7 +95,7 @@ Build each issue using a standard template.
 3. Apply labels: severity label + theme label + any custom labels
 4. If findings reference specific files, mention them in the body (not as assignees)
 
-**Expected:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria, and appropriate labels.
+**Expected:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria, at least one of which fails the narrowest wrong fix named for its finding, and appropriate labels.
 
 **On failure:** If the body exceeds GitHub's issue size limit (65536 chars), split the issue into parts and cross-reference them.
 
@@ -124,7 +124,7 @@ Create the issues using `gh` CLI and report results.
 - [ ] All findings are represented in at least one issue
 - [ ] Each issue has at least one label
 - [ ] Each issue has checkbox acceptance criteria
-- [ ] Each criterion names a result in the branch the fix actually takes, so the narrowest wrong fix fails at least one
+- [ ] For each finding, at least one criterion fails the narrowest wrong fix named for it, and a criterion that waits on a measurement checks every outcome
 - [ ] No duplicate issues were created (check titles against existing open issues)
 - [ ] Issue count is reasonable for the finding count (not 1:1 for large sets)
 - [ ] Summary table was printed with all issue URLs
@@ -133,7 +133,7 @@ Create the issues using `gh` CLI and report results.
 
 - **Issue sprawl**: Creating one issue per finding produces 20+ issues that are hard to manage. Group aggressively — 5-10 issues from a full review is ideal
 - **Missing acceptance criteria**: Issues without checkboxes cannot be verified as complete. Every finding should map to at least one checkbox
-- **A criterion a wrong fix can meet**: Each criterion must name an observable result in the branch the fix actually takes, such as a named test that fails before the fix and passes after it. A criterion like "a test covers this" or "an arm pins it" is met by an arm that never reaches the changed line. Before posting, name the narrowest wrong fix and check that at least one criterion refuses it
+- **A criterion a wrong fix can meet**: "A test covers this" is met by a test that never exercises the defect, and "if X, change Y" asks for nothing once X turns out false. For each finding, name the narrowest wrong fix (the smallest change that looks like a fix but leaves the defect; for a test gap, the narrowest test that still misses it) and write a criterion it fails: a named test that fails on today's code, a named mutant the new test must fail, or, for a finding that waits on a measurement, a check in each outcome, since which one holds is not known yet. Name the wrong fix in that criterion
 - **Label chaos**: Creating too many labels makes filtering useless. Stick to severity + theme, not per-finding labels
 - **Stale references**: If creating issues from an old review, verify findings still apply before creating issues. Code may have changed
 - **Forgetting dry run**: For large finding sets, always preview with `dry_run: true` first. It is much easier to edit a plan than to close 15 incorrect issues
