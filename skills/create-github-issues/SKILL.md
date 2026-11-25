@@ -95,7 +95,7 @@ Build each issue using a standard template.
 3. Apply labels: severity label + theme label + any custom labels
 4. If findings reference specific files, mention them in the body (not as assignees)
 
-**Expected:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria, at least one of which fails the narrowest wrong fix named for its finding, and appropriate labels.
+**Expected:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria in which each finding's narrowest wrong fix fails at least one criterion, and appropriate labels.
 
 **On failure:** If the body exceeds GitHub's issue size limit (65536 chars), split the issue into parts and cross-reference them.
 
