@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage Workflow
 metadata:
   author: Philipp Thoss
-  version: "1.3"
+  version: "1.4"
   domain: swarm
   complexity: advanced
   language: multi
@@ -102,7 +102,7 @@ Assign agents to waves. Plan for 4 waves initially — you may not need all of t
 
 ### Step 3: Launch Waves
 
-Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the value comes from perspective diversity, not individual depth). Option C defaults its prospectors to `haiku`.
+Launch each wave as parallel agents. Use `sonnet` model for cost efficiency (the value comes from perspective diversity, not individual depth). Option C defaults its prospectors to `sonnet` too; its one measured run used `haiku`.
 
 #### Option A: Agent tool spawning (recommended)
 
@@ -133,12 +133,14 @@ Built-in team coordination — per-teammate ownership and lifecycle, with status
 
 #### Option C: Workflow script (the prospector swarm)
 
-Use this only when the user has opted into a Workflow run: the keyword `ultracode`, or their own words asking for a workflow or a fan-out. This skill alone is not that opt-in. Tell the user the scale first. The one measured run (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`) took about 4 hours with 84 agents, and it involved three models, not two:
+Use this only when the user has opted into a Workflow run: the keyword `ultracode`, or their own words asking for a workflow or a fan-out. This skill alone is not that opt-in. Tell the user the scale first. The one measured run (`tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md`) took about 4 hours with 84 agents. Its prospectors ran on `haiku`, which was also the template's first default. The default is now `sonnet`, and no run has measured it. Sonnet's per-token price is above Haiku's, so a `sonnet` run is expected to cost more in API price than the measured one [estimated, requires measurement]; how often `sonnet` prospectors call the advisor is not measured. The measured run involved three models, not two:
 - the 75 Haiku prospectors produced 66 % of the output tokens;
 - the 9 session-model agents produced 22 %;
 - the advisor, which 60 of the agents called on its own model (61 calls, 58 answered), produced 13 %.
 
-[references/prospector-swarm.mjs](references/prospector-swarm.mjs) runs the whole procedure as one script. Each prospector spawns as its own roster agent on a cheap model, and the clustering, the adversary and the synthesis run on the session model. The script fixes in code what Option A leaves to the lead:
+The prospector model does not bound the cost. In a session with the advisor tool, the swarm's agents can call it, and nothing in the template controls that. In the measured run, 51 of the 75 prospectors and all 9 session-model agents called it. It ran on Fable and took 10.52 M uncached input tokens and 0.55 M output tokens, none of which `message.usage` counts.
+
+[references/prospector-swarm.mjs](references/prospector-swarm.mjs) runs the whole procedure as one script. Each prospector spawns as its own roster agent on the prospector model (`prospectorModel`, `sonnet` by default), and the clustering, the adversary and the synthesis run on the session model. The script fixes in code what Option A leaves to the lead:
 - the citation filter;
 - the wave sizes and the stop rule;
 - the outside-home counts;

@@ -169,7 +169,7 @@ test('pilot mode spawns exactly the two pilot agents, on the prospector model, a
   const { out, calls } = await run(baseArgs({ mode: 'pilot' }));
   assert.equal(calls.length, 2);
   assert.deepEqual(calls.map((c) => c.opts.agentType), ['janitor', 'mystic']);
-  assert.deepEqual(calls.map((c) => c.opts.model), ['haiku', 'haiku']);
+  assert.deepEqual(calls.map((c) => c.opts.model), ['sonnet', 'sonnet']);
   assert.equal(out.mode, 'pilot');
   assert.equal(out.pilotOk, true);
 });
@@ -203,9 +203,28 @@ test('clustering and synthesis run on the session model, the adversary passes as
 });
 
 test('clusterModel routes the cluster passes and nothing else', async () => {
-  const { calls } = await run(baseArgs({ clusterModel: 'sonnet' }));
-  for (const c of labelled(calls, /^cluster:/)) assert.equal(c.opts.model, 'sonnet');
+  // Not 'sonnet': a value equal to the prospector default cannot tell a cluster pass handed
+  // the prospector model from one handed clusterModel.
+  const args = baseArgs({ clusterModel: 'opus' });
+  const { calls } = await run(args);
+  for (const c of labelled(calls, /^cluster:/)) assert.equal(c.opts.model, 'opus', c.opts.label);
   assert.equal(labelled(calls, /^synthesize$/)[0].opts.model, undefined);
+  // Nothing else: the prospectors keep the default, and every other call (the adversary passes,
+  // the synthesis) stays on the session model.
+  const prospectors = calls.filter((c) => isProspector(c, args));
+  assert.equal(prospectors.length, 40);
+  for (const c of prospectors) assert.equal(c.opts.model, 'sonnet', c.opts.label);
+  for (const c of calls.filter((x) => !/^cluster:/.test(x.opts.label || '') && !isProspector(x, args))) assert.equal(c.opts.model, undefined, c.opts.label);
+});
+
+test('prospectorModel routes every prospector and nothing else', async () => {
+  // 'haiku' is what the measured run used; passing it must still reach every prospector.
+  const args = baseArgs({ prospectorModel: 'haiku' });
+  const { calls } = await run(args);
+  const prospectors = calls.filter((c) => isProspector(c, args));
+  assert.equal(prospectors.length, 40);
+  for (const c of prospectors) assert.equal(c.opts.model, 'haiku', c.opts.label);
+  for (const c of calls.filter((x) => !isProspector(x, args))) assert.equal(c.opts.model, undefined, c.opts.label);
 });
 
 test('every prompt carries the containment block, and every prospector its own write locations', async () => {
@@ -328,8 +347,9 @@ test('an empty wave 3 runs the adversary but no second cluster pass', async () =
 
 test('territories no prospector was homed in are reported', async () => {
   const many = Object.fromEntries(Array.from({ length: 12 }, (_, i) => [`T${i + 1}`, [`t${i + 1}/x.sh`]]));
-  const cites = (label, opts) => (opts.model === 'haiku' ? { hypotheses: [HYP({ instances: ['t1/x.sh'] })], files_read: [] } : undefined);
-  const { out, logs } = await run(baseArgs({ territories: many, expectItems: 12, roster: roster(8), itemRoot: undefined }), { override: cites });
+  const args = baseArgs({ territories: many, expectItems: 12, roster: roster(8), itemRoot: undefined });
+  const cites = (label, opts) => (isProspector({ opts }, args) ? { hypotheses: [HYP({ instances: ['t1/x.sh'] })], files_read: [] } : undefined);
+  const { out, logs } = await run(args, { override: cites });
   assert.deepEqual(out.unvisited, ['T9', 'T10', 'T11', 'T12']);
   assert.ok(logs.some((l) => l.includes('territories no prospector was homed in: T9, T10, T11, T12')));
 });
