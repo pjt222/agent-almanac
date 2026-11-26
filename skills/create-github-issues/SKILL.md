@@ -10,7 +10,7 @@ license: MIT
 allowed-tools: Read Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: git
   complexity: intermediate
   language: multi
