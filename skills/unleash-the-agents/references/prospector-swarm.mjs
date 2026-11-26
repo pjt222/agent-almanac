@@ -13,10 +13,12 @@
 // alone is not that opt-in. Tell the user the scale before launching. The one measured run
 // (tests/results/2026-11-17-unleash-prospector-swarm/RESULT.md) took about 4 h with 84 agents.
 // Its prospectors ran on haiku, this template's default when it was merged (#1081). The default
-// is now sonnet, and no run has measured it. Sonnet's per-token price is above Haiku's, so a
-// sonnet run is expected to cost more in API price than the measured one [estimated, requires
-// measurement]; how often sonnet prospectors call the advisor is not measured. The measured run
-// involved three models, not two:
+// is now sonnet, and no run has measured it. Sonnet's per-token price is above Haiku's, so the
+// prospectors' own tokens are expected to cost more in API price than in the measured run
+// [estimated, requires measurement]. Whether the whole run costs more depends on how often sonnet
+// prospectors call the advisor, which is not measured: in the measured run the prospectors'
+// advisor calls cost more than that increase [estimated from the run's token counts at
+// November 2026 prices]. The measured run involved three models, not two:
 // - the 75 Haiku prospectors produced 66 % of the output tokens;
 // - the 9 session-model agents produced 22 %;
 // - the advisor, which 60 of the 84 agents called (61 calls, 58 answered, 3 refused with
