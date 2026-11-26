@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob Agent ToolSearch TeamCreate TaskCreate TaskUpdate TaskList SendMessage Workflow
 metadata:
   author: Philipp Thoss
-  version: "1.4"
+  version: "1.5"
   domain: swarm
   complexity: advanced
   language: multi
