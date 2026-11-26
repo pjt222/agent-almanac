@@ -140,3 +140,24 @@ Also different from the script that ran, so the template is not that script with
 - **Whether the changes improve a ranking.** One run is not a comparison.
 - **Sonnet prospectors.** Option A's default, `sonnet`, was not run beside `haiku`.
 - **Whether the advisor helped the prospectors.** It was available to them by accident of the session, not by design.
+
+### Addendum 2026-11-26: Haiku's long-context price tier
+
+The token table under Results counts tokens and does not say which price tier the Haiku prospectors' requests fell into.
+Anthropic's price list as of November 2026 prices a Claude Haiku 5.5 request at higher rates when its prompt is over
+100,000 tokens, counting cache reads and cache writes. Claude Sonnet 5.5 has no such tier. The run's 84 subagent
+transcripts were re-read for this in the review rounds of #1122:
+
+- The Haiku prospectors' 641 iterations (entries of `message.usage.iterations`) came in 589 responses. The 52 responses
+  with two iterations are exactly the prospectors' 52 advisor calls, 49 answered and 3 refused.
+- 578 of the 641 iterations had prompts over 100,000 tokens. They carry 2,818,673 of the 2,866,303 output tokens (98 %)
+  and 83,655,721 of the 84,805,311 cache-read tokens (99 %).
+- Prompt sizes: p10 100,573, median 156,326, p90 199,981, maximum 231,748 tokens.
+- No response has iterations on both sides of the threshold.
+
+At that price list the prospectors' own tokens cost about $18, not the about $4 that pricing every request below the
+threshold gives; #1122 carries the arithmetic. Two independently written parsers produced these counts, and each
+reproduces that token table. The transcripts are local and are deleted after the 60-day retention period, around
+mid-January 2027, so this addendum is the durable record of the split.
+
+Nothing above this addendum changed.
