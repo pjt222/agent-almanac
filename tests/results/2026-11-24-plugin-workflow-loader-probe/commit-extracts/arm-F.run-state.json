@@ -1,0 +1,11 @@
+{
+  "taskId": "w7tkxbf2w",
+  "workflowName": "probe-f-name",
+  "status": "completed",
+  "logs": [
+    "PROBE_BODY_REPO_F_9d1e"
+  ],
+  "result": {
+    "marker": "PROBE_BODY_REPO_F_9d1e"
+  }
+}
