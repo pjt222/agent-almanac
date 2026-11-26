@@ -97,7 +97,7 @@ Build each issue using a standard template.
 
 **Expected:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria in which each finding's narrowest wrong fix fails at least one criterion, and appropriate labels.
 
-**On failure:** If the body exceeds GitHub's issue size limit (65536 chars), split the issue into parts and cross-reference them.
+**On failure:** If the body exceeds GitHub's issue size limit (65536 chars), split the issue into parts and cross-reference them. If a finding's narrowest wrong fix meets every criterion written for it, add one it fails (see Common Pitfalls).
 
 ### Step 4: Create Issues
 
@@ -133,7 +133,7 @@ Create the issues using `gh` CLI and report results.
 
 - **Issue sprawl**: Creating one issue per finding produces 20+ issues that are hard to manage. Group aggressively — 5-10 issues from a full review is ideal
 - **Missing acceptance criteria**: Issues without checkboxes cannot be verified as complete. Every finding should map to at least one checkbox
-- **A criterion a wrong fix can meet**: "A test covers this" is met by a test that never exercises the defect, "if X, change Y" asks for nothing once X turns out false, and "the maintainer decides, and the issue records why" is met by a sentence nothing checks. For each finding, name the narrowest wrong fix (the smallest change that looks like a fix but leaves the defect; for a test gap, the narrowest test that still misses it), or have someone who did not write the criteria name it, and write a criterion it fails: a named test that fails on today's code; a named mutant the new test must fail; for a finding that waits on a measurement, a check in each outcome, since which one holds is not known yet; or, for a finding that leaves a decision open (to the maintainer or to whoever takes the issue), a check for each option, passing under it and failing under the others. Name the wrong fix in that criterion
+- **A criterion a wrong fix can meet**: "A test covers this" is met by a test that never exercises the defect, "if X, change Y" asks for nothing once X turns out false, and "the maintainer decides, and the issue records why" is met by a sentence nothing checks. For each finding, name the narrowest wrong fix (the smallest change that looks like a fix but leaves the defect; for a test gap, the narrowest test that still misses it), or have someone who did not write the criteria name it, and write a criterion it fails: a named test that fails on today's code and under that wrong fix; a named mutant the new test must fail; for a finding that waits on a measurement, a check in each outcome, since which one holds is not known yet; or, for a finding that leaves a decision open (to the maintainer or to whoever takes the issue), a check for each option, passing under it and failing under the others. Name the wrong fix in that criterion
 - **Label chaos**: Creating too many labels makes filtering useless. Stick to severity + theme, not per-finding labels
 - **Stale references**: If creating issues from an old review, verify findings still apply before creating issues. Code may have changed
 - **Forgetting dry run**: For large finding sets, always preview with `dry_run: true` first. It is much easier to edit a plan than to close 15 incorrect issues
