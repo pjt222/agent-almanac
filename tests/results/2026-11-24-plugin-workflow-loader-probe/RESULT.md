@@ -78,3 +78,19 @@ For commit, with placeholders:
 - `scripts/run.commit.sh` (arms A to E) and `scripts/run2.commit.sh` (arms F and G). The scripts that ran hardcoded the real scratch output path (project slug and session id included) in an outdir equality check, and the repository path; do **not** commit `run.sh` or `run2.sh`. The `.commit.sh` versions replace the equality check with a refusal to run inside a git repository and a refusal of a relative outdir, take the repository checkout as an argument, and add two capture lines that were not in the run (`git rev-parse HEAD` and a listing of the user-scope workflows directory). Otherwise they are identical to the scripts that ran, `diff`-checked.
 - `scripts/extract.commit.sh`: reduces a stream log to the fields the tables read (calls, first line of each result, slash counts and workflow entries per `init`, inline plugin only, task events (a `task_updated` status is read from its `patch` object, a `task_notification` status from its top level), every `total_cost_usd`). The original `arm-*.extracted.json` were produced by a script that was not captured and carry the full installed-plugin list, so they are not committed; the outputs of this script replace them: `commit-extracts/arm-{A,B,C,D,E,F,G}.json`.
 - `commit-extracts/arm-{A,C}.run-state.json`: reduced from the runtime's `wf_<runId>.json` under each arm's session directory in the Claude Code project store (`<home>/.claude/projects/<slug>/<session-id>/workflows/`), keeping `taskId`, `workflowName`, `status`, `logs`, `result` (projection: `jq '{taskId, workflowName, status, logs, result}' <wf_runId.json>`; re-run against the live records it reproduces both committed files byte-for-byte). That store is deleted after the retention period, so these copies are the durable evidence that the body ran.
+
+### Addendum 2026-11-26: arm F's run-state record
+
+Arm F's run record was still in the Claude Code project store on 2026-11-26 and is now committed as
+`commit-extracts/arm-F.run-state.json`. It uses the same projection as arms A and C
+(`jq '{taskId, workflowName, status, logs, result}' <wf_runId.json>`). Its `taskId`, `w7tkxbf2w`, is the task id
+arm F's stream reports at launch. Its `workflowName` is `probe-f-name` and its `status` is `completed`, and its `logs`
+and `result` carry `PROBE_BODY_REPO_F_9d1e`, the marker `scripts/run2.commit.sh` writes into `probe-f.js`. So the
+`.js` file added to a copy of this repository's plugin ran its body to completion. The Results table shows its launch,
+and `commit-extracts/arm-F.json` shows its stream's `task_updated` and `task_notification` events, both `completed`.
+
+As a control, the same projection, re-run on 2026-11-26 against arm A's live record, reproduced the committed
+`arm-A.run-state.json` byte for byte. Arm G launched no workflow (its one call was refused as not found), so run 2
+has no other run-state record.
+
+Nothing above this addendum changed.
