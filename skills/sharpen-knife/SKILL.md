@@ -185,7 +185,7 @@ Prevention is easier than restoration:
 
 1. Strop 10 strokes per side before each use (keeps blades sharp for weeks between stone sessions)
 2. Cut on wood — never stone, glass, ceramic, or metal; never pry or twist with the edge
-3. Clean, dry, and oil after use (mandatory for carbon steel; beneficial for stainless)
+3. Clean, dry, and oil after use (mandatory for carbon steel — e.g., camellia oil or mineral oil; beneficial for stainless)
 4. Store in sheaths, magnetic strips, or blade guards — never loose in drawers
 
 See [reference-tables.md](references/reference-tables.md#sharpening-frequency) for recommended stropping and stone frequencies by use pattern.

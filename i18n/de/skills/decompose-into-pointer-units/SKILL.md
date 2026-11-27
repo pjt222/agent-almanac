@@ -25,7 +25,6 @@ metadata:
   locale: de
   source_locale: en
   source_commit: "e88230978"
-  fence_basis_commit: "e88230978"
   translator: "(untranslated stub)"
   translation_date: "2026-10-28"
 ---
@@ -135,10 +134,13 @@ A stop (from a safety classifier, policy hook, or reviewer) is a decision about 
 
 Follow the seven stop rules and unit-log grammar in [stop-and-batch-rules.md](references/stop-and-batch-rules.md#detailed-step-8-stop-hold-owner-spec--release-rules), using the exact writers and checks in [ledger-snippets.md](references/ledger-snippets.md#step-8-unit-log-writers-no-result-release-and-pre-rerun-check):
 
-1. Log stops (`STOP-<n> unit=<id> ...`, `stage=after-run` when found in transcripts), holds (`HELD`), no-results (`NORESULT`, moving any partial to `partials/`), and owner-named re-runs (`RERUN-<n>`).
+1. Log stops by id (`STOP-<n> unit=<id> ...`, `stage=after-run` when found in transcripts), holds (`HELD`), no-results (`NORESULT`, moving any partial to `partials/`), and owner-named re-runs (`RERUN-<n>`).
 2. Never re-run, reword, or reproduce stopped work (including lead drafting). Once any stop or no-result exists, nothing that already ran launches again without an owner `RERUN-<n>` line — except one transient no-result re-run released via `BY=transient:<transcript>` (verifiers/critics also require the pre-rerun check).
-3. Bind stops at the **pointer** level (`HELD reason=overlaps-STOP-<n>` for unlaunched overlapping specs; reported-not-used for overlapping specs already finished).
-4. Re-scope a stopped unit only as a single `owner` spec (`OW-<n>`) quoting the owner's `STOP-<n>` Answered line verbatim, validated by the owner-spec check in [EXAMPLES.md](references/EXAMPLES.md).
+3. Batch every stop in `OWNER-QUESTIONS.md` (Step 9) with plain options: hold (recommended), owner sets a different scope, or owner does the work.
+4. Continue all other units — stops route to the owner batch and never block unrelated units.
+5. Re-scope a stopped unit only as a single `owner` spec (`OW-<n>`) quoting the owner's `STOP-<n>` Answered line verbatim, validated by the owner-spec check in [EXAMPLES.md](references/EXAMPLES.md).
+6. Bind stops at the **pointer** level: log `HELD unit=<id> reason=overlaps-STOP-<n>` for unlaunched overlapping specs (never `HELD` on specs that already reported — list those under the stop entry as reported-not-used).
+7. Handle stops found after the run (transcript audit): the report counts as reported and stopped, its verifiers' claims stay unverified (never re-run), and critics/gaps citing it are isolated for the owner batch rather than transiently re-run or derived by topic.
 
 **Expected:** Every stop, no-result, and overlap hold is logged in `UNIT-LOG.txt` and routed to the owner batch; no stopped unit was re-run/reworded outside an authorised `owner` spec, and no held id ran before its `RELEASED` line.
 
