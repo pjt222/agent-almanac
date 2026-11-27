@@ -72,7 +72,7 @@ Other projects use **absolute symlinks** that chain through `~/.claude/` to the 
 
 ## Recommended: Use the CLI
 
-The `agent-almanac` CLI automates symlink creation through 14 adapters (Claude Code, Universal `.agents/skills/`, and 12 framework-specific adapters). It is the recommended way to install content:
+The `agent-almanac` CLI automates installation (symlinks where supported, generated or appended files where required) across 14 adapters (Claude Code, Universal `.agents/skills/`, and 12 framework-specific adapters). It is the recommended way to install content:
 
 ```bash
 # Detect which frameworks are present

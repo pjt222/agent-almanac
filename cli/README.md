@@ -394,7 +394,7 @@ cli/
     claude-code.js     # Claude Code adapter (full support)
     codex.js           # Codex adapter
     cursor.js          # Cursor adapter
-    ...                # 14 framework adapters total
+    ...                # 14 adapters total
   test/
     cli.test.js        # CLI integration tests
 ```

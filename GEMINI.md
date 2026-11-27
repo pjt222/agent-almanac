@@ -30,17 +30,17 @@ Five GitHub Actions contexts are required on `main`: `line-endings`, `integrity`
 
 ### 2. Skills, Agents, Teams & i18n
 
-- **Skill length caps:** `SKILL.md` must stay under **500 lines** across English and all `i18n/` mirrors — which means **494 lines** for English skills with scaffolded mirrors (mirrors add 6 provenance frontmatter lines). Also keep `SKILL.md` bodies under **24,000 bytes** so Antigravity CLI loads them without truncation; extract long examples/tables into `references/`.
+- **Skill length caps:** CI enforces `<= 494` lines on **all** English `SKILL.md` files (`scripts/check-skill-line-ceiling.js`, leaving 6 lines of headroom for i18n provenance frontmatter) and `<= 500` lines on `i18n/` mirrors. As an **advisory** compatibility target (not CI-enforced; tracked in #1128), keep `SKILL.md` bodies under **24,000 bytes** so Antigravity CLI loads them without truncation; extract long examples/tables into `references/`.
 - **Skill sections:** YAML frontmatter (`name`, `description`, `allowed-tools`, `metadata`) plus `When to Use`, `Inputs`, `Procedure` (with `**Expected:**` / `**On failure:**` per step), `Validation`, `Common Pitfalls`, and `Related Skills`.
 - **Templates:** Author scaffolding uses three exact names (`_template`, `_template.md`, `_template.mjs`), kept in sync across `scripts/lib/content-paths.js` and `scripts/lib/template-names.sh`. Never symlink `_template` into discovery directories.
-- **Frozen code fences in `i18n/`:** Every fenced code block in a translated file is frozen (must match English bytes) unless tagged `text`, `markdown`, or `md`. If you edit a frozen fence in an English skill/agent/team/guide, propagate it to mirrors and verify with `npm run check:fence-propagation -- --id <id>`.
+- **Frozen code fences in `i18n/`:** Every fenced code block in a translated file is frozen (must match English bytes) unless tagged `text`, `markdown`, or `md`. If you edit a frozen fence in an English skill/agent/team/guide, propagate it to mirrors and verify with `npm run check:fence-propagation -- --id <id> [--tree <tree>]`.
 - **No `.claude/teams` symlink:** Teams are blueprints in `teams/`; never symlink `~/.claude/teams` or `.claude/teams`.
 
 ### 3. Tests, Worktrees & Peer-Session Safety
 
 - **Test teardown:** Use `rmTree(dir)` from `scripts/test/_tmp.js` in test suites, never bare `rmSync(dir, { recursive: true, force: true })`.
 - **CLI test isolation:** Always use `sandboxEnv()` from `cli/test/sandbox-env.js` (or source `tools/sandbox-env.sh` for manual probes) so CLI runs never touch a user's real `~/.hermes`, `~/.openclaw`, or pi directory.
-- **Worktrees:** Prefer a separate git worktree (`.claude/worktrees/<name>`) over sharing the main checkout. In a fresh worktree, symlink all three gitignored dependency dirs before running scripts/viz (never stage them):
+- **Worktrees:** Prefer a separate git worktree (`.claude/worktrees/<name>`) over sharing the main checkout. In a fresh worktree, symlink the three dependency dirs before running scripts/viz — note that trailing-slash `.gitignore` rules (`node_modules/`, `library/`) ignore directories, **not** symlinks, so on a fresh clone these appear untracked unless added to local `.git/info/exclude`; never stage them:
   - `node_modules` -> `<main>/node_modules`
   - `viz/node_modules` -> `<main>/viz/node_modules`
   - `viz/renv/library` -> `<main>/viz/renv/library`
