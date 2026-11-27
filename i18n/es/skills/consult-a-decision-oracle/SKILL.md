@@ -19,7 +19,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: general
   complexity: advanced
   language: multi
@@ -27,7 +27,6 @@ metadata:
   locale: es
   source_locale: en
   source_commit: "98e025c46e6e412c887576b04a99d6370aba6c8e"
-  fence_basis_commit: "98e025c46e6e412c887576b04a99d6370aba6c8e"
   translator: "(untranslated stub)"
   translation_date: "2026-09-18"
 ---
@@ -224,42 +223,14 @@ including the control that stops the other two passing vacuously:
 python3 references/separation.py          # 3 arms; exits non-zero if any fails
 ```
 
-**State the gate operator, because the interval's closed end depends on it.**
-The notation above assumes `scalar >= threshold`. Under a strict `>` the free
-endpoint is the *lower* one and the interval is `[highest harmful, lowest
-beneficial)`. This is not pedantry: on a corpus whose beneficial rows all score
-1.00, taking 1.00 as the threshold under `>` fires on nothing at all and
-silently disables the oracle — the endpoint you were told was free. A missing
-scalar — a yes/no question type may return none — disables it the same way: the
-comparison is false and raises nothing, so assert the field is present before
-comparing it.
-
-**Report the width and the row counts, not only the bounds.** A gap is evidence
-that the scalar orders right above wrong, and a narrow gap over few rows is weak
-evidence twice over:
+**State the gate operator and report width plus row counts.** Under `scalar >= threshold` the free interval is `(highest harmful, lowest beneficial]`; under strict `>` it is `[highest harmful, lowest beneficial)` (assert the scalar is present before comparing — a missing scalar or strict `>` at `1.00` silently disables the oracle). Report width alongside per-side row counts (`n harmful`, `n beneficial`):
 
 ```text
   (0.54, 1.00]   width 0.46   +/- 0.23 headroom      n harmful=5, n beneficial=2
   (0.44, 0.52]   width 0.08   +/- 0.04 headroom      n harmful=2, n beneficial=3
 ```
 
-The first row is real — model `jev-1.13.0`, measured 2026-09-17 — and the
-second is the synthetic fixture. Both are shapes to copy, not values to reuse.
-
-Width alone does not rescue this — 0.46 from two rows and 0.46 from two hundred
-are the same width and not the same finding, which is the argument for reporting
-width applied one level up. Both numbers, always.
-
-The choice of a point inside the gap is then a judgement about which direction
-you would rather be wrong in, stated in terms arithmetic can check — *0.36 above
-the highest harmful row and 0.10 below the lowest beneficial one, off-centre
-toward the upper end so the policy is biased against acting.* A reader can
-recompute every number in that sentence.
-
-The alternative is what actually happened: a threshold documented as "the
-midpoint" of an interval whose midpoint it was not, with a vendor's number
-unacknowledged in the same file ([the full
-case](references/EXAMPLES.md#worked-derivation-and-the-mistake-in-it)).
+The first row is real (`jev-1.13.0`, 2026-09-17) and the second is the synthetic fixture (shapes to copy, not values to reuse). State the chosen operating point in arithmetic a reader can recompute (full details on gate operators, missing scalars, and borrowed thresholds: [references/EXAMPLES.md](references/EXAMPLES.md#gate-operator-brackets-and-missing-scalars) and [worked derivation](references/EXAMPLES.md#worked-derivation-and-the-mistake-in-it)).
 
 > **A borrowed number can enter through the justification even when you believe
 > you measured it.** The tell is that the reason does not survive arithmetic.
@@ -308,35 +279,7 @@ scope reduction when no fallback exists — use
 that ground. What this skill adds is the part that ladder does not cover:
 
 **A mitigation that swaps one silent failure for another is not a mitigation.**
-Consider pinning an oracle to a specific model version. The floating alias fails
-silently in one direction: the version moves and your measured threshold quietly
-stops describing the model it was measured against. The pinned version fails
-silently in the other: the version is retired, every call errors, fail-open
-returns the pre-oracle answer, and a dead oracle is indistinguishable from an
-uneventful week. Pinning is right — but **pin plus a tripwire** on the specific
-error that a retired pin produces, or you have moved the failure rather than
-removed it.
-
-**Step 6 is a precondition of that pin, not a later refinement.** Where the model
-identifier is environment-sourced, pinning is the change that first puts a value
-in that variable, so an unguarded read is armed by the pin itself: placeholder
-text (Step 6's case) goes out as the model id on every call. A tripwire tells you afterwards, and
-only if that is the error it watches; the guard refuses the value beforehand.
-
-Log the oracle's answer, the scalar, the resolved model identifier and the
-outcome on **every** call, including agreements. Logging only disagreements is
-how an incident becomes unattributable.
-
-**And the logged identifier needs a reader.** That tripwire covers the PINNED
-direction only. The floating direction — the alias moves and the threshold
-quietly stops describing the model it was measured against — has no detector
-unless one is built, and the symmetric one is cheap: read the recorded identifier
-back out of the log and compare it against the one the operating point was
-measured on. It should not move an exit code — a floating model is not the same
-question as a service being down — but a mismatch must reach a person, or the
-reader is one more unread record. Reported from production, the identifier was
-logged on every call exactly as this step says and nothing read it — detectable
-in principle, undetected in practice.
+Pin the model version **plus a tripwire** on the pin-retired error (otherwise a retired pin fails open silently), and guard every environment-sourced variable **first** (Step 6 is a precondition of pinning, since pinning arms an unguarded model-id env var). Log the oracle's answer, scalar, resolved model identifier, and outcome on **every** call (including agreements), and attach a **reader** that compares the logged identifier against the measured one so floating-alias drift reaches a person. Full analysis of both failure directions: [references/EXAMPLES.md](references/EXAMPLES.md#silent-failures-in-pinned-vs-floating-model-versions).
 
 **Expected:** A call site that produces byte-identical output to the pre-oracle
 path whenever the oracle fails; a log line per consult; an alert on the

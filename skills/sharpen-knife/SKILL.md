@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: bushcraft
   complexity: intermediate
   language: natural
@@ -45,40 +45,13 @@ Sharpen and maintain a knife edge using whetstones, strops, and field-expedient 
 
 ### Step 1: Assess the Blade
 
-Examine the knife to determine what level of sharpening is needed.
+Examine the knife using the fingernail and light tests (hold edge-on under bright light: a sharp edge is invisible; a dull edge reflects a thin line of light):
 
-```text
-Blade Assessment:
-┌─────────────────────┬──────────────────────────────────┬─────────────────────┐
-│ Condition           │ Signs                            │ Action Needed       │
-├─────────────────────┼──────────────────────────────────┼─────────────────────┤
-│ Dull (most common)  │ Won't catch on fingernail;       │ Medium grit → fine  │
-│                     │ slides off tomato skin;          │ grit → strop        │
-│                     │ reflects light along edge        │                     │
-├─────────────────────┼──────────────────────────────────┼─────────────────────┤
-│ Very dull / abused  │ Visible flat spot along edge;    │ Coarse grit →       │
-│                     │ tears rather than cuts;          │ medium → fine →     │
-│                     │ edge shines under light          │ strop               │
-├─────────────────────┼──────────────────────────────────┼─────────────────────┤
-│ Nicked / chipped    │ Visible notches in edge;         │ Coarse grit to      │
-│                     │ snags on material when drawing   │ grind past nicks →  │
-│                     │ across                           │ reprofile → strop   │
-├─────────────────────┼──────────────────────────────────┼─────────────────────┤
-│ Slightly dull       │ Catches on fingernail but not    │ Strop only (or a    │
-│ (maintenance)       │ crisply; still cuts paper but    │ few passes on fine  │
-│                     │ not cleanly                      │ grit then strop)    │
-├─────────────────────┼──────────────────────────────────┼─────────────────────┤
-│ Rolled edge         │ Edge feels sharp on one side     │ Strop firmly on     │
-│                     │ but dull on the other; blade     │ both sides; if that │
-│                     │ curves microscopically           │ fails, light passes │
-│                     │                                  │ on fine stone       │
-└─────────────────────┴──────────────────────────────────┴─────────────────────┘
+- **Slightly dull / rolled edge:** Strop firmly on both sides (or light fine-grit passes then strop)
+- **Dull (most common):** Medium grit → fine grit → strop
+- **Very dull / nicked / chipped:** Coarse grit to reprofile past nicks → medium → fine → strop
 
-Light Test:
-Hold the blade edge-on under a bright light. A sharp edge is invisible —
-it has no width. A dull edge reflects a thin line of light where metal
-has folded or flattened.
-```
+See [reference-tables.md](references/reference-tables.md#blade-assessment--light-test) for the full 5-condition diagnostic matrix.
 
 **Expected:** You know the blade's condition and which grits you need to use.
 
@@ -86,50 +59,14 @@ has folded or flattened.
 
 ### Step 2: Know Your Abrasives
 
-Choose the right stone for the job.
+Select and prepare the abrasive for the task (soak water stones 5–15 min; oil oil-stones; wet diamond plates; ceramic needs no soaking):
 
-```text
-Abrasive Types:
-┌─────────────────────┬─────────────────────────────────┬──────────────────────┐
-│ Type                │ Characteristics                 │ Best For             │
-├─────────────────────┼─────────────────────────────────┼──────────────────────┤
-│ Water stones        │ Soak 5-15 min before use;       │ Home sharpening;     │
-│ (natural/synthetic) │ fast cutting; wear quickly;      │ best feedback and    │
-│                     │ need flattening periodically     │ finest edges         │
-├─────────────────────┼─────────────────────────────────┼──────────────────────┤
-│ Diamond plates      │ No soaking needed (use water    │ Field use; hard      │
-│                     │ as lubricant); very durable;     │ steels; flattening   │
-│                     │ aggressive cut                   │ water stones         │
-├─────────────────────┼─────────────────────────────────┼──────────────────────┤
-│ Ceramic stones/rods │ No soaking; very fine grit;     │ Touch-up and         │
-│                     │ hard and slow-wearing            │ maintenance; field   │
-│                     │                                  │ carry                │
-├─────────────────────┼─────────────────────────────────┼──────────────────────┤
-│ Oil stones          │ Use honing oil; slower cutting;  │ Traditional;         │
-│ (Arkansas, India)   │ very durable; less messy         │ workshop use         │
-├─────────────────────┼─────────────────────────────────┼──────────────────────┤
-│ Field stones        │ Any smooth, fine-grained stone;  │ Wilderness emergency │
-│ (improvised)        │ river stones, slate, sandstone;  │ when no other       │
-│                     │ unpredictable grit               │ abrasive available   │
-└─────────────────────┴─────────────────────────────────┴──────────────────────┘
+- **Coarse (220–400):** Reprofiling, chip removal, new bevel
+- **Medium (800–1000):** Standard dull-blade workhorse grit
+- **Fine (3000–6000):** Refining and polishing after medium
+- **Ultra-fine (8000+):** Optional mirror polish
 
-Grit Progression:
-┌──────────────┬────────────────┬──────────────────────────────────┐
-│ Grit Range   │ Purpose        │ When to Use                      │
-├──────────────┼────────────────┼──────────────────────────────────┤
-│ 220-400      │ Coarse         │ Reprofiling, removing chips,     │
-│              │                │ establishing a new bevel         │
-├──────────────┼────────────────┼──────────────────────────────────┤
-│ 800-1000     │ Medium         │ Standard sharpening of a dull    │
-│              │                │ blade; the workhorse grit        │
-├──────────────┼────────────────┼──────────────────────────────────┤
-│ 3000-6000    │ Fine           │ Refining the edge after medium;  │
-│              │                │ polishing the bevel              │
-├──────────────┼────────────────┼──────────────────────────────────┤
-│ 8000+        │ Ultra-fine     │ Mirror polish; razors; optional  │
-│              │                │ for most knives                  │
-└──────────────┴────────────────┴──────────────────────────────────┘
-```
+See [reference-tables.md](references/reference-tables.md#abrasive-types--grit-progression) for stone characteristics (water, diamond, ceramic, oil, improvised field stones) and grit guidance.
 
 **Expected:** Correct abrasive selected and prepared (soaked, oiled, or wetted as required).
 
@@ -137,47 +74,13 @@ Grit Progression:
 
 ### Step 3: Find and Match the Bevel Angle
 
-The bevel angle determines the edge geometry. Match the existing angle unless reprofiling.
+Match the existing bevel angle unless reprofiling (typical per-side targets: Japanese kitchen 10–15°, kitchen/hori-hori 15–20°, EDC folding 20°, bushcraft fixed blade 20–25°, machete/chopper 25–30°):
 
-```text
-Common Bevel Angles:
-┌─────────────────────┬───────────────┬──────────────────────────────┐
-│ Knife Type          │ Angle (per    │ Notes                        │
-│                     │ side)         │                              │
-├─────────────────────┼───────────────┼──────────────────────────────┤
-│ Bushcraft / fixed   │ 20-25°        │ Balance of sharpness and     │
-│ blade               │               │ durability for wood, rope,   │
-│                     │               │ and general camp tasks       │
-├─────────────────────┼───────────────┼──────────────────────────────┤
-│ Kitchen knife       │ 15-20°        │ Thinner for clean food cuts; │
-│                     │               │ less durable on hard items   │
-├─────────────────────┼───────────────┼──────────────────────────────┤
-│ Japanese kitchen    │ 10-15°        │ Very acute; exceptional      │
-│                     │               │ sharpness; fragile on bone   │
-├─────────────────────┼───────────────┼──────────────────────────────┤
-│ Machete / chopper   │ 25-30°        │ Thick for impact resistance  │
-├─────────────────────┼───────────────┼──────────────────────────────┤
-│ Folding knife (EDC) │ 20°           │ General purpose              │
-├─────────────────────┼───────────────┼──────────────────────────────┤
-│ Hori-hori / garden  │ 15-20°        │ Similar to kitchen; for soil │
-│ blade               │               │ and root cutting             │
-└─────────────────────┴───────────────┴──────────────────────────────┘
+1. Lay the blade flat on the stone (0°) and raise the spine until the bevel sits flush
+2. **Marker trick:** Color the bevel with a Sharpie and make one stroke — ink removed across the whole bevel = correct angle; edge only = too high; shoulder only = too low
+3. Use a coin stack under the spine (1–3 coins depending on angle and blade width) to anchor muscle memory
 
-Finding the Angle:
-1. Lay the blade flat on the stone (0°)
-2. Slowly raise the spine until the bevel sits flush on the stone
-3. The point where the entire bevel contacts the stone is the correct angle
-4. Marker trick: color the bevel with a Sharpie, make one stroke on the stone.
-   - Ink removed from the whole bevel = correct angle
-   - Ink removed only at the edge = angle too high
-   - Ink removed only at the shoulder = angle too low
-
-Coin Stack Reference (for consistent angle):
-- 1 coin under spine ≈ 12-15° (thin kitchen knives)
-- 2 coins under spine ≈ 17-20° (general purpose)
-- 3 coins under spine ≈ 22-25° (bushcraft / heavy use)
-(Varies with blade width — wider blades need more coins for the same angle)
-```
+See [reference-tables.md](references/reference-tables.md#common-bevel-angles--coin-stack-reference) for the full angle table and coin-stack guide.
 
 **Expected:** You can hold the knife at a consistent angle that matches the existing bevel.
 
@@ -262,43 +165,7 @@ Field Strop Alternatives:
 
 ### Step 6: Test Sharpness
 
-Use progressive tests to gauge the edge quality.
-
-```text
-Sharpness Tests (from easiest to most demanding):
-
-1. FINGERNAIL TEST (basic):
-   Lightly draw the edge across a fingernail at 45°.
-   Sharp: catches and digs in immediately
-   Dull: slides across without catching
-
-2. PAPER TEST (good):
-   Hold a sheet of printer paper by one edge and slice downward.
-   Sharp: cuts cleanly with no tearing
-   Acceptable: cuts with slight drag
-   Dull: tears, folds, or won't start a cut
-
-3. TOMATO TEST (kitchen standard):
-   Place a ripe tomato on a cutting board.
-   Sharp: the weight of the blade alone starts the cut
-   Dull: requires downward pressure to break the skin
-
-4. ARM HAIR TEST (very sharp):
-   Lightly draw the blade across arm hair without touching skin.
-   Sharp: hair pops cleanly
-   Not quite: hair bends or pushes aside
-
-5. HANGING HAIR TEST (razor sharp):
-   Hold a single hair and bring the blade to it.
-   Razor: cuts the hair with minimal pressure
-   This level is unnecessary for most bushcraft/garden use.
-
-Sharpness Standards by Use:
-- Bushcraft / camp knife: pass paper test cleanly → good to go
-- Kitchen knife: pass tomato test → good to go
-- Carving knife: pass arm hair test → ideal
-- Garden blade (hori-hori): pass paper test → sufficient
-```
+Run progressive tests from easiest to most demanding: **fingernail** (catches at 45°) → **paper** (clean downward slice; standard for bushcraft & garden blades) → **tomato** (cuts under blade weight; kitchen standard) → **arm hair** (pops cleanly; carving standard) → **hanging hair** (razor). See [reference-tables.md](references/reference-tables.md#sharpness-tests--standards-by-use) for detailed pass/fail criteria.
 
 **Expected:** The blade passes the sharpness test appropriate for its intended use.
 
@@ -306,42 +173,7 @@ Sharpness Standards by Use:
 
 ### Step 7: Field Sharpening (Wilderness Methods)
 
-When proper stones are not available.
-
-```text
-Field Expedient Sharpening:
-
-RIVER STONES:
-1. Find a smooth, flat, fine-grained stone (slate, granite, basalt)
-2. Wet the surface
-3. Use the same technique as Step 4 — angle, stroke, alternate
-4. Won't produce a polished edge but will restore cutting ability
-5. Look for stones with a slightly gritty feel — glassy smooth
-   stones won't cut fast enough
-
-CERAMIC:
-- Bottom of a ceramic mug (unglazed ring) serves as a fine hone
-- Excellent for maintenance touch-ups in camp
-
-CAR WINDOW EDGE:
-- The edge of a car window (rolled down slightly) is fine-grit ceramic
-- 5-10 strokes per side for a quick field touch-up
-
-SANDPAPER ON FLAT SURFACE:
-- If you have sandpaper (any grit), place it on a flat log or rock
-- Sharpen as you would on a stone
-- Works surprisingly well
-
-LEATHER BELT STROP:
-- Always available in the field if wearing a belt
-- Hold taut between hand and fixed point
-- Strop spine-first after any field sharpening
-
-Minimum Field Sharpening Kit (recommended carry):
-- Small diamond plate (credit-card size) or ceramic rod
-- Leather strop strip (10cm x 3cm, fits in sheath)
-These two items weigh almost nothing and handle all field needs.
-```
+When proper stones are unavailable, improvise with a wet fine-grained river stone (slate, granite, basalt — slightly gritty, not glassy), the unglazed bottom ring of a ceramic mug, a rolled-down car window edge, sandpaper on a flat log/rock, and a taut leather belt strop (spine-first). See [reference-tables.md](references/reference-tables.md#field-expedient-sharpening--minimum-kit) for full field protocols and the minimum recommended carry kit.
 
 **Expected:** Blade restored to functional sharpness sufficient for camp tasks.
 
@@ -349,32 +181,14 @@ These two items weigh almost nothing and handle all field needs.
 
 ### Step 8: Maintain the Edge
 
-Prevention is easier than restoration.
+Prevention is easier than restoration:
 
-```text
-Edge Maintenance Habits:
-1. Strop before each use — 10 strokes per side on leather or cardboard
-   (this alone can keep a knife sharp for weeks between stone sessions)
-2. Cut on wood, not stone, glass, ceramic, or metal surfaces
-3. Never pry, twist, or use the edge as a screwdriver
-4. Clean and dry the blade after use — moisture causes corrosion,
-   and corrosion eats the fine edge
-5. Store knives in sheaths, on magnetic strips, or in blade guards —
-   never loose in a drawer where edges contact other metal
-6. Carbon steel: oil the blade after cleaning (camellia oil, mineral oil)
-7. Stainless steel: less maintenance, but still benefits from drying
-   and occasional oiling
+1. Strop 10 strokes per side before each use (keeps blades sharp for weeks between stone sessions)
+2. Cut on wood — never stone, glass, ceramic, or metal; never pry or twist with the edge
+3. Clean, dry, and oil after use (mandatory for carbon steel; beneficial for stainless)
+4. Store in sheaths, magnetic strips, or blade guards — never loose in drawers
 
-Sharpening Frequency:
-┌───────────────────┬────────────────────────────────────────┐
-│ Use Pattern        │ Recommended Frequency                  │
-├───────────────────┼────────────────────────────────────────┤
-│ Daily kitchen use  │ Strop daily; stone weekly              │
-│ Weekend bushcraft  │ Strop before each trip; stone monthly  │
-│ Occasional garden  │ Strop before use; stone seasonally     │
-│ Heavy field use    │ Strop daily; stone every 2-3 days      │
-└───────────────────┴────────────────────────────────────────┘
-```
+See [reference-tables.md](references/reference-tables.md#sharpening-frequency) for recommended stropping and stone frequencies by use pattern.
 
 **Expected:** A maintenance routine that keeps the blade sharp between full sharpening sessions.
 

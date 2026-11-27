@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: bushcraft
   complexity: advanced
   language: natural
@@ -44,43 +44,14 @@ Identify and safely gather edible and useful wild plants in wilderness settings.
 
 ### Step 1: Know the Deadly Plants First
 
-Before learning what to eat, learn what will kill you. Memorize these high-risk families and species for your region.
+Before learning what to eat, memorize the highest-risk Northern Hemisphere killers — **Water hemlock (*Cicuta*)**, **Poison hemlock (*Conium maculatum*)**, **Destroying angel / Death cap (*Amanita*)**, **Castor bean (*Ricinus communis*)**, **Foxglove (*Digitalis*)**, and wild **Nightshades (*Solanum*, *Atropa*)** (diagnostic traits and toxin mechanisms in [field-reference.md](references/field-reference.md#critical-never-eat-plants-northern-hemisphere)).
 
-```text
-Critical "Never Eat" Plants (Northern Hemisphere):
-┌─────────────────────┬────────────────────────────────┬─────────────────────┐
-│ Plant               │ Key Identification             │ Danger              │
-├─────────────────────┼────────────────────────────────┼─────────────────────┤
-│ Water hemlock       │ Hollow, chambered stem base;   │ Deadly in minutes.  │
-│ (Cicuta)            │ smells like carrot/parsnip;    │ Seizures, death.    │
-│                     │ wet habitats; compound leaves  │ No safe dose.       │
-├─────────────────────┼────────────────────────────────┼─────────────────────┤
-│ Poison hemlock      │ Smooth stem with purple        │ Deadly. Ascending   │
-│ (Conium maculatum)  │ blotches; musty smell;         │ paralysis.          │
-│                     │ finely divided leaves          │                     │
-├─────────────────────┼────────────────────────────────┼─────────────────────┤
-│ Destroying angel /  │ White mushroom; white gills;   │ Deadly (liver       │
-│ Death cap (Amanita) │ ring on stem; cup (volva)      │ failure in 3-5      │
-│                     │ at base; grows near trees      │ days). No antidote. │
-├─────────────────────┼────────────────────────────────┼─────────────────────┤
-│ Castor bean         │ Large star-shaped leaves;      │ Seeds contain ricin. │
-│ (Ricinus communis)  │ spiny seed pods                │ Deadly if chewed.   │
-├─────────────────────┼────────────────────────────────┼─────────────────────┤
-│ Foxglove            │ Tall spike of tubular flowers; │ Cardiac glycosides. │
-│ (Digitalis)         │ fuzzy, wrinkled leaves         │ Heart failure.      │
-├─────────────────────┼────────────────────────────────┼─────────────────────┤
-│ Nightshade family   │ Some edible (tomato, pepper),  │ Berries and foliage │
-│ (Solanum, Atropa)   │ many toxic; 5-petaled flowers; │ of wild species can │
-│                     │ alternate leaves               │ be lethal.          │
-└─────────────────────┴────────────────────────────────┴─────────────────────┘
-
-Absolute Rules:
-1. NEVER eat a plant you cannot positively identify
-2. NEVER eat white or red berries unless specifically identified as safe
-3. NEVER eat mushrooms in a survival situation unless expert-level confident
-4. NEVER eat plants with milky or discolored sap (exceptions exist but require expertise)
-5. NEVER eat plants from the carrot/parsley family (Apiaceae) unless certain — this family contains the deadliest plants alongside the most common herbs
-```
+**Absolute Rules:**
+1. **NEVER** eat a plant you cannot positively identify
+2. **NEVER** eat white or red berries unless specifically identified as safe
+3. **NEVER** eat mushrooms in a survival situation unless expert-level confident
+4. **NEVER** eat plants with milky or discolored sap (rare exceptions require expertise)
+5. **NEVER** eat plants from the carrot/parsley family (Apiaceae) unless certain — it contains both common herbs and the deadliest plants
 
 **Expected:** You can recognize the most dangerous plants in your region on sight and will not confuse them with edible species.
 
@@ -88,36 +59,7 @@ Absolute Rules:
 
 ### Step 2: Read the Habitat
 
-Different habitats produce different resources. Survey the area before collecting.
-
-```text
-Habitat-to-Resource Mapping:
-┌──────────────────┬─────────────────────────────┬──────────────────────────┐
-│ Habitat          │ Common Edible Plants        │ Look for                 │
-├──────────────────┼─────────────────────────────┼──────────────────────────┤
-│ Open meadow /    │ Dandelion, clover, plantain,│ Sunny, disturbed ground  │
-│ field edges      │ chicory, wild onion,        │ with diverse low plants  │
-│                  │ lamb's quarters             │                          │
-├──────────────────┼─────────────────────────────┼──────────────────────────┤
-│ Forest floor     │ Wood sorrel, ramps (spring),│ Dappled shade; look near │
-│                  │ violets, fiddleheads (spring│ logs and clearings       │
-│                  │ only), nuts (fall)          │                          │
-├──────────────────┼─────────────────────────────┼──────────────────────────┤
-│ Forest edge /    │ Berries (blackberry,        │ Transitional zone with   │
-│ hedgerow         │ raspberry, elderberry),     │ maximum species diversity │
-│                  │ rose hips, hawthorn         │                          │
-├──────────────────┼─────────────────────────────┼──────────────────────────┤
-│ Wetland / stream │ Cattail, watercress,        │ Moist soil, standing or  │
-│ bank             │ wild rice, arrowhead        │ slow water               │
-├──────────────────┼─────────────────────────────┼──────────────────────────┤
-│ Shoreline /      │ Seaweed (kelp, dulse, nori),│ Rocky intertidal zones,  │
-│ coastal          │ sea lettuce, glasswort      │ salt marshes             │
-├──────────────────┼─────────────────────────────┼──────────────────────────┤
-│ Disturbed ground │ Lamb's quarters, amaranth,  │ Trailsides, old fields, │
-│ (ruderal)        │ purslane, chickweed,        │ roadsides (avoid        │
-│                  │ stinging nettle             │ herbicide areas)        │
-└──────────────────┴─────────────────────────────┴──────────────────────────┘
-```
+Survey the habitat before collecting to narrow likely edible species: **meadows/field edges** (dandelion, clover, plantain, wild onion), **forest floor** (wood sorrel, ramps, violets), **forest edges** (berries, rose hips, hawthorn), **wetlands** (cattail, watercress, arrowhead), **shorelines** (seaweed, glasswort), and **disturbed ground** (lamb's quarters, purslane, chickweed, nettle — avoid herbicide zones). Full table in [field-reference.md](references/field-reference.md#habitat-to-resource-mapping).
 
 **Expected:** You identify which habitat type you are in and have a shortlist of likely edible species to look for.
 
@@ -217,39 +159,7 @@ CRITICAL WARNINGS:
 
 ### Step 5: Harvest Sustainably
 
-Take only what you need and preserve the plant population.
-
-```text
-Sustainable Harvesting Rules:
-1. Never take more than 1/3 of any plant stand
-2. Never pull entire plants when leaves or fruits will do
-3. Cut cleanly with a knife rather than tearing
-4. Spread harvesting across a wide area
-5. Leave root systems intact for perennials
-6. Never harvest rare or protected species
-7. Avoid plants near roads (exhaust contamination),
-   agricultural fields (pesticides), or industrial areas
-
-Harvest by Plant Part:
-┌──────────────┬───────────────────────────────────────────────┐
-│ Plant Part   │ Harvest Method                                │
-├──────────────┼───────────────────────────────────────────────┤
-│ Leaves       │ Pick individual leaves; leave at least 2/3    │
-│              │ of the plant's foliage                        │
-├──────────────┼───────────────────────────────────────────────┤
-│ Roots/tubers │ Dig carefully; replant any root crown or      │
-│              │ small tubers to regenerate                    │
-├──────────────┼───────────────────────────────────────────────┤
-│ Berries/fruit│ Pick ripe fruit only; leave some for wildlife │
-│              │ and seed dispersal                            │
-├──────────────┼───────────────────────────────────────────────┤
-│ Bark/cambium │ Only harvest from downed or already damaged   │
-│              │ trees; never ring-bark a living tree          │
-├──────────────┼───────────────────────────────────────────────┤
-│ Seeds/nuts   │ Collect from the ground when possible;        │
-│              │ leave enough for wildlife and regeneration    │
-└──────────────┴───────────────────────────────────────────────┘
-```
+Take only what you need and preserve the plant population: never take more than 1/3 of any stand, leave root systems intact for perennials, cut cleanly with a knife, spread harvest across a wide area, never harvest rare/protected species, and avoid roadsides, agricultural fields, or industrial runoff. See [field-reference.md](references/field-reference.md#harvest-by-plant-part) for plant-part harvest methods (leaves, roots/tubers, berries, bark/cambium, seeds/nuts).
 
 **Expected:** A reasonable quantity of positively identified plant material, harvested without destroying the source population.
 
@@ -257,41 +167,7 @@ Harvest by Plant Part:
 
 ### Step 6: Prepare for Consumption
 
-Many edible wild plants benefit from or require preparation.
-
-```text
-Preparation Methods:
-┌──────────────┬──────────────────────────────┬──────────────────────────┐
-│ Method       │ When to Use                  │ How                      │
-├──────────────┼──────────────────────────────┼──────────────────────────┤
-│ Raw          │ Known-safe species like       │ Wash in purified water;  │
-│              │ dandelion, wood sorrel, most  │ eat fresh               │
-│              │ berries, watercress           │                          │
-├──────────────┼──────────────────────────────┼──────────────────────────┤
-│ Boiled       │ Reduces bitterness, breaks   │ Boil 5-15 min; discard  │
-│              │ down mild toxins; required    │ water for bitter plants  │
-│              │ for nettle, dock, fiddleheads │ (leaching)              │
-├──────────────┼──────────────────────────────┼──────────────────────────┤
-│ Double-boiled│ Plants with significant      │ Boil 10 min, discard    │
-│ (leached)    │ oxalates or tannins (acorns, │ water; boil again in    │
-│              │ dock)                        │ fresh water              │
-├──────────────┼──────────────────────────────┼──────────────────────────┤
-│ Roasted      │ Roots, tubers, seeds, nuts   │ Place in coals or near  │
-│              │                              │ fire; cook until soft    │
-│              │                              │ or dry                   │
-├──────────────┼──────────────────────────────┼──────────────────────────┤
-│ Dried        │ Preservation for later use;  │ Air dry in sun/wind or  │
-│              │ concentrates calories in      │ near fire (not in       │
-│              │ seeds and roots              │ direct flame)            │
-└──────────────┴──────────────────────────────┴──────────────────────────┘
-
-Key Preparation Rules:
-- Always wash plants in purified water before eating
-- Cook any plant from wet or contaminated habitats
-- Boil stinging nettle for 2+ minutes to neutralize stinging hairs
-- Boil fiddlehead ferns thoroughly (raw fiddleheads are mildly toxic)
-- Leach acorns in multiple changes of water until bitterness is gone
-```
+Match preparation to the species (**raw** after washing in purified water; **boiled** 5–15 min to neutralize stinging nettle hairs, fiddlehead toxins, or bitterness; **double-boiled/leached** for high-oxalate/tannin foods like acorns and dock; **roasted** for roots/tubers/nuts; **dried** for storage — full table in [field-reference.md](references/field-reference.md#preparation-methods)). Always wash in purified water and cook any plant from wet or contaminated habitats.
 
 **Expected:** Plant material is clean, prepared appropriately for the species, and ready to eat.
 
@@ -327,59 +203,7 @@ If a reaction occurs:
 
 ### Step 8: Build Your Knowledge — The Universal Five
 
-Start with five plants found across most of the temperate Northern Hemisphere. Master these before expanding your repertoire.
-
-```text
-The Universal Five (Beginner-Friendly Edible Plants):
-
-1. DANDELION (Taraxacum officinale)
-   Habitat: Lawns, fields, disturbed ground (nearly everywhere)
-   ID: Basal rosette of toothed leaves; hollow stem; yellow
-       composite flower; milky sap (exception to the milky sap rule)
-   Edible: Entire plant — leaves (raw/cooked), flowers (raw/fried),
-           roots (roasted as coffee substitute)
-   Season: Year-round; best in spring before flowering
-
-2. BROADLEAF PLANTAIN (Plantago major)
-   Habitat: Lawns, paths, disturbed ground
-   ID: Basal rosette of oval leaves with parallel veins;
-       tall seed spike; leaves are tough and fibrous
-   Edible: Young leaves (raw in salads, older leaves boiled);
-           seeds (edible raw or ground)
-   Medicinal: Crushed leaves used as poultice for insect bites/stings
-   Season: Spring through fall
-
-3. WHITE CLOVER (Trifolium repens)
-   Habitat: Lawns, meadows, roadsides
-   ID: Three round leaflets (sometimes four); white round flower
-       heads; creeping ground cover
-   Edible: Flowers (raw or dried for tea); young leaves (raw or
-           cooked — cook to improve digestibility)
-   Season: Flowers in spring/summer; leaves year-round in mild climates
-
-4. CATTAIL (Typha latifolia / T. angustifolia)
-   Habitat: Wetlands, pond edges, ditches, marshes
-   ID: Tall (1-3 m); long flat sword-like leaves; distinctive brown
-       cigar-shaped seed head
-   Edible: Shoot base/heart (raw, spring); pollen (flour substitute,
-           summer); rhizome (starchy, peeled and boiled/roasted,
-           year-round); young flower spike (boiled, early summer)
-   Utility: Fluff = tinder and insulation; leaves = weaving material
-   Season: Different parts edible year-round
-
-5. WOOD SORREL (Oxalis spp.)
-   Habitat: Forest floor, shaded areas, gardens
-   ID: Three heart-shaped leaflets (resembles clover but leaflets are
-       notched/heart-shaped); small 5-petaled yellow, white, or pink
-       flowers; leaves fold at night
-   Edible: Leaves and flowers (raw — pleasant lemony/sour taste)
-   Caution: Contains oxalic acid; eat in moderation (not as a staple)
-   Season: Spring through fall
-
-Progression:
-  Master these 5 → Add 5 regional species → Add 5 more → Build to 20+
-  (20 positively known species provides meaningful foraging capability)
-```
+Master five widespread temperate Northern Hemisphere species first, then expand in batches of 5 regional species to 20+: **1. Dandelion (*Taraxacum officinale*)**, **2. Broadleaf plantain (*Plantago major*)**, **3. White clover (*Trifolium repens*)**, **4. Cattail (*Typha* spp.)**, and **5. Wood sorrel (*Oxalis* spp.)**. Full ID features, edible parts, seasons, and cautions are in [field-reference.md](references/field-reference.md#the-universal-five-beginner-friendly-edible-plants).
 
 **Expected:** You can identify all five universal plants on sight using multiple features and know which parts to eat and how to prepare them.
 

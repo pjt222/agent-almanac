@@ -193,3 +193,70 @@ gh api repos/OWNER/REPO/issues/PR/timeline --paginate \
   --jq '.[]|select(.event=="review_requested")|"\(.requested_reviewer.login) type=\(.requested_reviewer.type)"'
 # -> Copilot type=Bot
 ```
+
+## Canonical Step 7 Poll Loop (Subshell Form)
+
+The full subshell poll loop extracted from `SKILL.md` Step 7 (20 × 25 s ≈ 8 min budget; single atomic API read for `submitted_at`, `commit_id`, and `body`; exit 0 = genuine review on pushed HEAD, exit 1 = timeout, exit 2 = bad `$BASE` or `git rev-parse` failure, exit 3 = quota/nothing-to-review refusal, exit 4 = unrecognized review body):
+
+```bash
+# Runs in a subshell: the exits below end the poll, not your shell.
+( : "${BASE:?run Step 1 first}"
+  # `:?` catches unset, not garbage: a failed Step 1 read leaves JSON in $BASE.
+  case "$BASE" in null|[0-9][0-9][0-9][0-9]-*) ;; *)
+    echo "BASE is not a timestamp: $BASE — re-run Step 1" >&2; exit 2 ;;
+  esac
+  # Read once: push again mid-poll and every later review reads as "not the
+  # pushed HEAD" until timeout — fail-safe, and the stderr line names the sha.
+  HEAD_SHA=$(git rev-parse HEAD) || exit 2
+
+  for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
+    sleep 25
+    # ONE read, so timestamp, commit and body come from the SAME review object:
+    # two reads let a review landing between them pair a new stamp with an old body.
+    REVIEW=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
+      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.commit_id)\n\(.body // "")" end') \
+      || { echo "reviews read failed — retrying" >&2; continue; }
+    LATEST=$(printf '%s\n' "$REVIEW" | sed -n 1p)
+    SHA=$(printf '%s\n' "$REVIEW" | sed -n 2p)
+    BODY=$(printf '%s\n' "$REVIEW" | tail -n +3)
+
+    # gh prints the raw error body on stdout when a request fails, so require a
+    # timestamp rather than merely something different from $BASE.
+    case "$LATEST" in
+      [0-9][0-9][0-9][0-9]-*) ;;
+      *) continue ;;
+    esac
+
+    # The direct assertion, where the request count is only a proxy: the review
+    # must be ON THE HEAD YOU PUSHED. commit_id is carried by every review kind
+    # (clean pass, findings, quota refusal, nothing-to-review), so a review left
+    # by anyone else on an earlier head is skipped rather than accepted.
+    if [ "$SHA" != "$HEAD_SHA" ]; then
+      echo "review $LATEST is on $SHA, not the pushed HEAD — still waiting" >&2
+      continue
+    fi
+
+    if [ "$LATEST" != "$BASE" ]; then
+      # Default-deny: accept only on a marker measured in every genuine review,
+      # name both no-review wordings, and REFUSE anything else rather than guess.
+      case "$BODY" in
+        *"Pull request overview"*)
+          echo "re-review landed: $LATEST"; exit 0 ;;
+        *"unable to review"*|*"wasn't able to review"*)
+          echo "Copilot declined, this is not a review: $BODY" >&2; exit 3 ;;
+        *)
+          echo "unrecognised review body — read it before calling it a pass:" >&2
+          echo "$BODY" >&2; exit 4 ;;
+      esac
+    fi
+  done
+  echo "timeout: no Copilot review newer than $BASE after ~8 minutes" >&2
+  exit 1 )
+```
+
+## Corpus Measurements Behind Steps 6–8
+
+- **Timeline vs. `requested_reviewers` (Step 6):** `requested_reviewers` omits Bot-type reviewers, measured on PRs #512 and #562 (read `[]` while the review arrived minutes later; both carried `review_requested Copilot type=Bot` on the timeline) vs. #553 (no timeline event, no review).
+- **Completion modes (Step 7):** 58 of 58 requests across 52 PRs posted a review object; 29 of 76 bodies in the corpus were no-reviews (quota refusal on #470/#479 arriving in 5–12 s; nothing-to-review on #506 lockfile-only PR arriving after ~2 min).
+- **Marker stability (Step 8):** `"Pull request overview"` appeared in 47 of 47 genuine reviews and 0 of 29 no-reviews, whereas four genuine reviews (#524, #525, #736, #755) lacked `"reviewed N out of M"`.
+- **Suppression blocks (Step 8):** appeared on 8 of 47 genuine reviews (7 `Suppressed comments (N)`, 1 `Comments suppressed due to low confidence (N)` on #221), including under zero headlines (5 of 16 zero-headline genuine reviews; five consecutive #494 passes carried 14 entries across 5 heads, whereas #491 carried none) and non-zero headlines (#221, #494, #537). Entries are leads, not verdicts (e.g., #494/#922).

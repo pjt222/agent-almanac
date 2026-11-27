@@ -10,7 +10,7 @@ license: MIT
 allowed-tools: Read Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: general
   complexity: intermediate
   language: multi
@@ -18,7 +18,6 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: "20fe5e96f423ff782f4a492f3310876042e09437"
-  fence_basis_commit: "20fe5e96f423ff782f4a492f3310876042e09437"
   translator: "(untranslated stub)"
   translation_date: "2026-08-23"
 ---
@@ -239,23 +238,7 @@ for n in dangling: print(f"  dangling {n}")
 PY
 ```
 
-Five rules this block honors, each learned from a real miss. They govern how its output is read as
-much as how it is written, and steps 3, 4 and 6 each pick one up:
-
-1. **Exclude template/example link targets** — a format-documentation line such as
-   `- [Title](file.md) — hook` otherwise reports as dangling forever, and a check that cries wolf
-   trains its operator to ignore it.
-2. **A prose mention is not reachability.** Require an exact filename match on a real link target.
-   Report near-matches separately as *degraded references*; never count them as reachable.
-3. **HTML comments in the index are not a mitigation.** They are stripped before the index reaches
-   the model, so a curator note in one is written into a void. Being stripped, it is also excluded
-   from both load limits — it is free, and unread, which is the worst combination for a note whose
-   whole purpose is to be seen. A note that must survive has to be a plain markdown line. (Before
-   v2.1.211 the raw file was measured, so such a note did also consume budget.)
-4. **Parse frontmatter, do not grep it.** A `^type:` regex misses a field nested under `metadata:`
-   and reports a conformance failure that does not exist.
-5. **Report both denominators, labeled.** File share and byte share are different numbers, never
-   interchangeable — a store can be 40% orphaned by file count and 5% by bytes.
+This block honors five standing rules — (1) exclude `EXAMPLES` template targets, (2) require exact markdown links (prose mentions are degraded, not reachable), (3) strip HTML comments (stripped before load, so curator notes must be plain markdown), (4) parse frontmatter rather than grepping `^type:`, and (5) label file share and byte share separately. Full rationale in [references/EXAMPLES.md](references/EXAMPLES.md#five-standing-reachability-rules-step-2).
 
 **Expected:** `ORPHANS 0`, with both denominators printed and labeled. `topic files` equals `linked`.
 
@@ -292,23 +275,9 @@ check is not.
 A filename that appears in the index only as prose or inline code is not a weak link, it is not a
 link (rule 2). It reads as reachable to a human scanning the index and is invisible to the mechanism
 that makes files reachable. Counted separately, never as reachable — the files are already in Step
-2's orphan list, and this step explains why they looked fine.
-
-```bash
-# Degraded references: named in the index, never as a link target.
-python3 - <memory-dir> <<'PY'
-import os, re, sys
-d = sys.argv[1]
-text = open(os.path.join(d, 'MEMORY.md'), encoding='utf-8', errors='replace').read()
-text = re.sub(r'<!--.*?-->', '', text, flags=re.S)
-linked = {os.path.basename(m) for m in re.findall(r'\]\(([^)#\s]+\.md)', text)}
-prose  = set(re.findall(r'[\w.\-]+\.md', re.sub(r'\]\([^)]*\)', '', text)))
-on_disk = {f for f in os.listdir(d) if f.endswith('.md') and f != 'MEMORY.md'}
-degraded = sorted((prose - linked) & on_disk)
-print(f"DEGRADED {len(degraded)} (named in the index, not a link target; NOT reachable)")
-for n in degraded: print(f"  degraded {n}")
-PY
-```
+2's orphan list, and this step explains why they looked fine. Run the degraded-reference script in
+[references/EXAMPLES.md](references/EXAMPLES.md#step-4-degraded-references) (strips HTML comments,
+extracts prose `*.md` mentions outside markdown links, intersects with `on_disk - linked`).
 
 **Expected:** `DEGRADED 0`, and the count never added to `linked` anywhere in the report.
 
@@ -319,35 +288,10 @@ mention into a markdown link — but it is `manage-memory`'s repair, not this sk
 
 Two naming conventions coexisting in one store — hyphen versus underscore, prefix retained versus
 stripped — produced a measured 13% of link targets that no exact match resolved
-(pjt222/agent-almanac#407). That is a convention
-split, not a typo rate, and the two need different responses. Normalization tells you which you have;
-it never makes an unresolved target reachable.
-
-```bash
-# Normalization is diagnosis, not repair. A target that resolves only after
-# normalizing is still a broken link at load time.
-python3 - <memory-dir> <<'PY'
-import os, re, sys
-d, PREFIXES = sys.argv[1], ('feedback-', 'project-', 'reference-')   # see name_prefixes input
-def norm(name):
-    n = re.sub(r'\.md$', '', name.lower()).replace('_', '-')
-    for p in PREFIXES:
-        if n.startswith(p): n = n[len(p):]
-    return n
-text = re.sub(r'<!--.*?-->', '', open(os.path.join(d, 'MEMORY.md'),
-              encoding='utf-8', errors='replace').read(), flags=re.S)
-linked  = {os.path.basename(m) for m in re.findall(r'\]\(([^)#\s]+\.md)', text)}
-on_disk = {f for f in os.listdir(d) if f.endswith('.md') and f != 'MEMORY.md'}
-index, unresolved = {}, []
-for f in on_disk: index.setdefault(norm(f), []).append(f)
-for t in sorted(linked - on_disk):
-    hits = index.get(norm(t), [])
-    print(f"  {'NORMALIZES' if hits else 'UNRESOLVED'} {t}" + (f" -> {', '.join(sorted(hits))}" if hits else ""))
-    if not hits: unresolved.append(t)
-print(f"CONVENTIONS {len({'underscore' if '_' in f else 'hyphen' for f in on_disk})} in use")
-print(f"UNRESOLVED {len(unresolved)}/{len(linked)} = {len(unresolved)/max(len(linked),1):.1%} of link targets")
-PY
-```
+(pjt222/agent-almanac#407). Normalization diagnoses whether a broken link is a convention split vs.
+a true missing target; it never makes an unresolved target reachable. Run the normalization script
+in [references/EXAMPLES.md](references/EXAMPLES.md#step-5-cross-reference-normalization) (normalizes
+case, `_` → `-`, and strips `name_prefixes` to report `NORMALIZES`, `UNRESOLVED`, and `CONVENTIONS`).
 
 **Expected:** `UNRESOLVED 0`. `NORMALIZES` entries are still failures — they name the fix, they are
 not the fix.
@@ -361,45 +305,11 @@ one at a time re-creates the split on the next write.
 Parse the frontmatter, do not grep it (rule 4): a `^type:` regex misses a field nested under
 `metadata:` and invents a conformance failure that does not exist. An absent frontmatter block is
 **not** a failure — files predating the field are legitimate and are reported as `no-frontmatter`.
-An unparsable one is. And a check that cannot run reports `SKIPPED`, never `PASS`.
-
-```bash
-# Frontmatter is PARSED. Inability to measure is not a passing verdict.
-python3 - <memory-dir> <<'PY'
-import os, re, sys
-try:
-    import yaml
-except ImportError:
-    print("SKIPPED catalog conformance: PyYAML unavailable. Install it or check by hand.")
-    sys.exit(0)
-d, TYPES = sys.argv[1], {'user', 'feedback', 'project', 'reference'}
-read = lambda n: open(os.path.join(d, n), encoding='utf-8', errors='replace').read()
-for f in sorted(x for x in os.listdir(d) if x.endswith('.md') and x != 'MEMORY.md'):
-    m = re.match(r'---\r?\n(.*?)\r?\n---\r?\n', read(f), flags=re.S)
-    if not m:
-        print(f"  no-frontmatter {f}"); continue          # legitimate: predates the field
-    try:
-        fm = yaml.safe_load(m.group(1)) or {}
-    except yaml.YAMLError as exc:
-        print(f"  FAIL unparsable {f}: {exc}"); continue
-    kind = fm.get('type') or (fm.get('metadata') or {}).get('type')   # nested, not ^type:
-    if kind is not None and kind not in TYPES:
-        print(f"  FAIL unknown type {f}: {kind!r}")
-
-entry, matched = re.compile(r'^\s*[-*]\s+\[[^\]]+\]\(([^)#\s]+\.md)\)\s*(.*)$'), 0
-for hit in filter(None, map(entry.match, read('MEMORY.md').splitlines())):
-    matched += 1
-    desc = hit.group(2).lstrip('—-: ').strip()
-    if not 10 <= len(desc) <= 300:
-        print(f"  FAIL description {hit.group(1)}: {len(desc)} chars")
-print(f"CATALOG ENTRIES CHECKED {matched}")   # 0 here is a broken check, not a clean index
-PY
-```
-
-The catalog-entry regex matches only single-link lines; a compound line is skipped rather than
-guessed at, which under-reports and never invents a failure. That is why the block prints how many
-entries it checked — a regex matching nothing prints no failures, and a check that discovered
-nothing is not a check that passed.
+An unparsable one is. And a check that cannot run (e.g., missing PyYAML) reports `SKIPPED`, never
+`PASS`. Run the PyYAML conformance script in
+[references/EXAMPLES.md](references/EXAMPLES.md#step-6-catalog-conformance) (validates `type` in
+`{user, feedback, project, reference}`, checks single-link description lengths `10..300`, and prints
+`CATALOG ENTRIES CHECKED` so a zero-match regex never reads as clean).
 
 **Expected:** No `FAIL` lines, and `CATALOG ENTRIES CHECKED` well above zero. `no-frontmatter`
 entries are listed but are not failures.
@@ -409,20 +319,7 @@ result — record it so a later reader does not read the absence of failures as 
 
 ### Step 7: Check topic-file size hygiene
 
-The threshold is **project-configured**. Do not substitute an internal Claude Code read budget here:
-undocumented internals move between releases and go stale silently — the number keeps printing, it
-just stops being true. Only Step 1's two caps are documented, and they do not cover topic files,
-which are read on demand and in full.
-
-```bash
-# No default. A per-project number an operator chose beats an internal one
-# copied from a release note.
-TOPIC_MAX_BYTES=${TOPIC_MAX_BYTES:?set a per-project threshold; there is no documented default}
-find <memory-dir> -maxdepth 1 -name '*.md' ! -name 'MEMORY.md' -printf '%s\t%f\n' \
-  | awk -F'\t' -v cap="$TOPIC_MAX_BYTES" \
-      '$1 > cap { printf "  oversize %s (%d bytes)\n", $2, $1; n++ }
-       END { printf "OVERSIZE %d of %d topic files over %d bytes\n", n, NR, cap }'
-```
+Use a **project-configured** `TOPIC_MAX_BYTES` threshold — never hardcode an undocumented internal read budget, which drifts silently across releases (only Step 1's 200-line / 25KB index caps are documented). Run the size check command in [references/EXAMPLES.md](references/EXAMPLES.md#step-7-topic-file-size-check).
 
 **Expected:** `OVERSIZE 0`, or a short list an operator recognizes as deliberate.
 
@@ -432,20 +329,7 @@ same verdict.
 
 ### Step 8: Check recoverability
 
-Memory files do not expire: Claude Code excludes `projects/<project>/memory/` from the
-`cleanupPeriodDays` retention sweep (default 30 days, minimum 1), so the index and its topic files
-stay until someone edits or deletes them. That is why this check exists rather than a reason to skip
-it: no retention copy exists to fall back on, so a bad overwrite is unrecoverable unless the store
-is under version control or has a tombstone path. Most have neither.
-
-```bash
-DIR=<memory-dir>
-git -C "$DIR" rev-parse --show-toplevel >/dev/null 2>&1 \
-  && echo "VCS yes ($(git -C "$DIR" rev-parse --show-toplevel))" \
-  || echo "VCS no — an overwrite in this store is unrecoverable"
-ls -d "$DIR"/.archive "$DIR"/../memory-archive 2>/dev/null \
-  || echo "ARCHIVE none — no tombstone path for deleted topic files"
-```
+Memory files do not expire (`projects/<project>/memory/` is excluded from `cleanupPeriodDays`), so a bad overwrite is unrecoverable unless the store sits under version control or has a tombstone archive path. Run the VCS/archive probe in [references/EXAMPLES.md](references/EXAMPLES.md#step-8-recoverability-check).
 
 **Expected:** At least one of version control or an archive path, recorded in the report either way.
 

@@ -17,7 +17,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "2.1"
+  version: "2.2"
   domain: git
   complexity: intermediate
   language: multi
@@ -25,7 +25,6 @@ metadata:
   locale: ja
   source_locale: en
   source_commit: "bd9b3350b5d74fc77ed690733c31536a3bfeca22"
-  fence_basis_commit: "bd9b3350b5d74fc77ed690733c31536a3bfeca22"
   translator: "(untranslated stub)"
   translation_date: "2026-07-10"
 ---
@@ -193,67 +192,21 @@ Note the **three** forms of one identity, and which surface carries which. The P
 
 ### Step 7: Poll for the Async Re-Review
 
-The re-review is asynchronous (typically 30 s to a few minutes). Step 6 has already established that the request landed, so this loop has one success condition: a bot review **on the head you pushed**, newer than the baseline, whose body says a review happened. Every completion mode measured on this repository posts a review object — 58 of 58 requests across 52 PRs produced one, zero mismatches — so there is no "finished quietly" case to detect and no absence to interpret. There are **four** modes, not three: a clean pass, findings, a quota refusal, and nothing-to-review. The last two never ran, wear the same `COMMENTED` state as the first two, and account for 29 of the 76 bodies in this corpus — which is why the body decides and not the timestamp:
+The re-review is asynchronous (typically 30 s to a few minutes). Step 6 confirmed the request landed, so poll every 25 s (up to 20 iterations ≈ 8 min) in one atomic `gh api` read per iteration, accepting **only** a bot review where:
 
-```bash
-# Runs in a subshell: the exits below end the poll, not your shell.
-( : "${BASE:?run Step 1 first}"
-  # `:?` catches unset, not garbage: a failed Step 1 read leaves JSON in $BASE.
-  case "$BASE" in null|[0-9][0-9][0-9][0-9]-*) ;; *)
-    echo "BASE is not a timestamp: $BASE — re-run Step 1" >&2; exit 2 ;;
-  esac
-  # Read once: push again mid-poll and every later review reads as "not the
-  # pushed HEAD" until timeout — fail-safe, and the stderr line names the sha.
-  HEAD_SHA=$(git rev-parse HEAD) || exit 2
+1. `submitted_at` is an ISO-8601 timestamp newer than `$BASE` (guards against `gh` error JSON on stdout)
+2. `commit_id` matches the local pushed `HEAD` (captured once via `git rev-parse HEAD`)
+3. `body` carries the genuine-review marker `"Pull request overview"` (`exit 0`), explicitly rejecting `"unable to review"` / `"wasn't able to review"` as no-reviews (`exit 3`) and refusing any other unrecognized body (`exit 4`)
 
-  for i in $(seq 1 20); do   # 20 x 25s ≈ 8 min budget
-    sleep 25
-    # ONE read, so timestamp, commit and body come from the SAME review object:
-    # two reads let a review landing between them pair a new stamp with an old body.
-    REVIEW=$(gh api repos/OWNER/REPO/pulls/PR/reviews \
-      --jq '[.[]|select(.user.login=="copilot-pull-request-reviewer[bot]")]|last|if . == null then "null" else "\(.submitted_at)\n\(.commit_id)\n\(.body // "")" end') \
-      || { echo "reviews read failed — retrying" >&2; continue; }
-    LATEST=$(printf '%s\n' "$REVIEW" | sed -n 1p)
-    SHA=$(printf '%s\n' "$REVIEW" | sed -n 2p)
-    BODY=$(printf '%s\n' "$REVIEW" | tail -n +3)
-
-    # gh prints the raw error body on stdout when a request fails, so require a
-    # timestamp rather than merely something different from $BASE.
-    case "$LATEST" in
-      [0-9][0-9][0-9][0-9]-*) ;;
-      *) continue ;;
-    esac
-
-    # The direct assertion, where the request count is only a proxy: the review
-    # must be ON THE HEAD YOU PUSHED. commit_id is carried by every review kind
-    # (clean pass, findings, quota refusal, nothing-to-review), so a review left
-    # by anyone else on an earlier head is skipped rather than accepted.
-    if [ "$SHA" != "$HEAD_SHA" ]; then
-      echo "review $LATEST is on $SHA, not the pushed HEAD — still waiting" >&2
-      continue
-    fi
-
-    if [ "$LATEST" != "$BASE" ]; then
-      # Default-deny: accept only on a marker measured in every genuine review,
-      # name both no-review wordings, and REFUSE anything else rather than guess.
-      case "$BODY" in
-        *"Pull request overview"*)
-          echo "re-review landed: $LATEST"; exit 0 ;;
-        *"unable to review"*|*"wasn't able to review"*)
-          echo "Copilot declined, this is not a review: $BODY" >&2; exit 3 ;;
-        *)
-          echo "unrecognised review body — read it before calling it a pass:" >&2
-          echo "$BODY" >&2; exit 4 ;;
-      esac
-    fi
-  done
-  echo "timeout: no Copilot review newer than $BASE after ~8 minutes" >&2
-  exit 1 )
-```
+Run the full guarded subshell loop in [references/EXAMPLES.md](references/EXAMPLES.md#canonical-step-7-poll-loop-subshell-form) (or the standalone `poll-copilot.sh` variant in [references/EXAMPLES.md](references/EXAMPLES.md#poll-variant-with-exit-codes-and-finding-printout)).
 
 **Expected:** `$?` is 0 and a timestamp newer than `$BASE` was printed, usually within a few minutes. Without a pre-change baseline the check is meaningless — the old review already satisfies "a Copilot review exists".
 
-**On failure:** `$?` is 3 when Copilot posted a **no-review** rather than a review. Two wordings, both measured here: the quota refusal ("Copilot was unable to review this pull request because the user who requested the review has reached their quota limit" — #479 and #470, arriving 5 to 12 seconds after the request) and the nothing-to-review case ("Copilot wasn't able to review any files in this pull request" — #506, a lockfile-only PR, arriving after two minutes). Both are `COMMENTED` review objects, so nothing but the body distinguishes either from a clean pass, and timing does not separate them. Treat exit 3 exactly as a failed Step 6 and hand the PR to `advocatus-diaboli`. `$?` is **4** when the body matches neither the accept marker nor a known no-review wording: that is the case the loop refuses to guess at, and the body is printed so you can read it — if it is a genuine review in a new format, add its marker rather than deleting the guard. `$?` is 2 when `$BASE` is not a timestamp or `git rev-parse` fails, and 1 with a timeout line on stderr. A review carrying a `commit_id` other than the pushed HEAD is skipped with a line on stderr rather than accepted, so a timeout preceded by those lines means a review exists and it is not yours; the loop never reports success for a review it did not see. On timeout, check the PR page — the request may have been dropped after landing; re-request (Step 6) and poll again. A read failure is retried rather than treated as a result, because `gh` writes the error body to stdout, where a naive check reads it as a new timestamp. Keep the sleep at ~20-30 s; hammering the API tighter gains nothing and burns rate limit. See [references/EXAMPLES.md](references/EXAMPLES.md) for a poll variant with exit codes and finding printout.
+**On failure:**
+- **Exit 3 (no-review):** Copilot posted a `COMMENTED` quota refusal (`"unable to review"`) or nothing-to-review notice (`"wasn't able to review"`). Hand the PR to `advocatus-diaboli`.
+- **Exit 4 (unrecognized body):** Format drifted — read the printed body manually and add its marker if genuine rather than removing the guard.
+- **Exit 2:** `$BASE` is not a timestamp or `git rev-parse HEAD` failed — re-run Step 1.
+- **Exit 1 (timeout):** Check stderr for reviews on an older SHA and inspect the PR page; re-request (Step 6) and poll again if dropped. Keep sleep at ~20–30 s. Corpus evidence for all four modes: [references/EXAMPLES.md](references/EXAMPLES.md#corpus-measurements-behind-steps-68).
 
 ### Step 8: Read the Verdict and Decide
 
@@ -290,8 +243,8 @@ Interpret the result against how the bot actually reports:
 
 - **`COMMENTED` is the bot's terminal state.** Copilot does not return `APPROVED` or `CHANGES_REQUESTED`; a `COMMENTED` review is not a rejection.
 - **Boilerplate is not a finding, but a no-review is not boilerplate.** A review that never ran wears the same `COMMENTED` state as one that did; only the body tells them apart. The standing "human review recommended" style banner is fixed bot messaging — it does not block the PR. Nor does a zero headline ("generated no comments", "generated no new comments", or `**Comments generated:** 0` in the newer format), but it does not clear the PR either: it does not count the suppression block.
-- **A suppression block is findings without threads.** A collapsed `<details>` block summarised `Suppressed comments (N)` (7 bodies here) or `Comments suppressed due to low confidence (N)` (1, #221) lists entries, each headed `**path:line**`, and attaches **no** review comment: on all 8 reviews carrying one, the attached-comment count equals the headline count, never headline plus block. So neither the headline nor the Step 2 query sees it, and it sits under non-zero headlines too (#221, #494, #537). Of the 16 genuine reviews with a zero headline, 5 carried one: five consecutive #494 passes on five heads, 14 entries, no location repeated, so each pass held new leads. #491's zero headline carried none, so a clean pass without a block exists. The entries are leads, not verdicts: one #494 entry rested on a `git status --porcelain -z` rename writing the destination path second; git 2.43.0 writes it first, so the harm it predicted does not occur, yet the code it quoted does drop the rename's origin path, which is #922. The block appears on 8 of 47 genuine reviews, all from April to August 2026; the two newer-format bodies (#736, #755) carry no block, and two samples cannot show the block is gone, so run the read every pass.
-- **Clean pass** = the body carries **"Pull request overview"** *and* the Step 2 thread query returns no unresolved threads *and* the second command above shows no suppression block, or every entry in it was triaged: fixed in its own commit (which re-enters at Step 1, like a new thread) or dismissed with a reason you can state about the code it points at, since a refuted premise dismisses the entry's argument, not the line. The "Pull request overview" marker, not "reviewed N out of M", is the separator: across all 76 Copilot review bodies on this repository it appears in 47 of 47 genuine reviews and 0 of 29 no-reviews, while four genuine reviews (#524, #525, #736, #755) carry no "reviewed N out of M" line at all.
+- **A suppression block is findings without threads.** A collapsed `<details>` block summarised `Suppressed comments (N)` or `Comments suppressed due to low confidence (N)` lists `**path:line**` entries and attaches **no** review comments, so neither the headline count nor Step 2 sees it — even on zero-headline reviews. Run the Step 8 block read every pass; entries are leads, not verdicts (corpus counts in [references/EXAMPLES.md](references/EXAMPLES.md#corpus-measurements-behind-steps-68)).
+- **Clean pass** = the body carries **"Pull request overview"** *and* the Step 2 thread query returns zero unresolved threads *and* the Step 8 block read shows no suppression block (or every entry was fixed in its own commit or dismissed with code-level reasoning). Use `"Pull request overview"` rather than `"reviewed N out of M"` (which newer formats omit).
 - **No-review** = a body saying "was unable to review this pull request" (quota) or "wasn't able to review any files in this pull request" (nothing reviewable, #506). Not a pass and not a finding: the review never ran. Hand the PR to `advocatus-diaboli`. **Do not match on one wording** — the guard shipped matching only the first, and #506 was already in this corpus, passing as clean.
 - **Anything else** = stop and read it. A body matching neither the accept marker nor a known no-review wording means the format moved; decide by hand, then add the marker. The accept-list is measured on 76 bodies and survived one format change (August 2026); that is evidence it is stable, not proof.
 - **New threads** = re-enter the loop at **Step 1**, not Step 2. Step 1 is what re-baselines `BASE` and `REQS`; re-entering below it leaves the previous round's review newer than a stale baseline, and the next poll reports *that* review as the new one.
