@@ -9,7 +9,7 @@ skills: [install-almanac-content]
 
 # Installation
 
-Get agent-almanac's full library of skills, agents, and teams discoverable to Claude Code (and 11 other agentic frameworks) on any operating system, validated end-to-end.
+Get agent-almanac's full library of skills, agents, and teams discoverable to Claude Code (and 13 other CLI adapters, including Universal `.agents/skills/`) on any operating system, validated end-to-end.
 
 ## When to Use This Guide
 
@@ -23,7 +23,7 @@ Get agent-almanac's full library of skills, agents, and teams discoverable to Cl
 | Path | Best for | Trade-off |
 |---|---|---|
 | **Plugin** (Phase 1) | Claude Code only, single-user | Atomic enable/disable; native discovery |
-| **Global CLI** (Phase 2) | Multi-framework, multi-project | One install reaches Claude Code + Cursor + Codex + Gemini + Aider + 7 more |
+| **Global CLI** (Phase 2) | Multi-framework, multi-project | One install reaches 14 adapters (Claude Code, Cursor, Codex, Gemini, Copilot, pi, Universal, and 7 more) |
 | **Both** | Hybrid workflows | Pick a single skill-discovery channel per project to avoid double registration |
 
 Phase 0 (prereqs) and Phase 4 (verify) apply to both.
@@ -147,7 +147,7 @@ Same commands work in PowerShell with quoted Windows paths (`"$HOME\.claude-mark
 
 ## Phase 2 — Global CLI install (cross-framework)
 
-Use this *instead of or alongside* Phase 1 when targeting Cursor, Codex, Gemini, Aider, OpenCode, Windsurf, Vibe, Hermes, or OpenClaw.
+Use this *instead of or alongside* Phase 1 when targeting Cursor, Codex, Gemini, Copilot, pi (pi.dev), Aider, OpenCode, Windsurf, Vibe, Hermes, OpenClaw, AI Edge, or Universal (`.agents/skills/`).
 
 Requires Node.js 26 or newer (`engines` in package.json). npm only warns (EBADENGINE) on an older Node, so check `node --version` first.
 
