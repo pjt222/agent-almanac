@@ -13,15 +13,15 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
   tags: meta, workflow, creation, orchestration
   locale: es
   source_locale: en
-  source_commit: "cbe9f1745c67c3e57f32f48192c69f8396f5cd6f"
-  fence_basis_commit: "cbe9f1745c67c3e57f32f48192c69f8396f5cd6f"
+  source_commit: "e88230978"
+  fence_basis_commit: "e88230978"
   translator: "(untranslated stub)"
   translation_date: "2026-06-16"
 ---
@@ -197,100 +197,30 @@ If contributing a reviewed seed to agent-almanac, place it in `workflows/`, cros
 
 ### Step 11: Contain a Fan-Out That Runs Against a Live Repository
 
-The advisory/implementing contract in Step 7 governs the agent type a stage
-*declares*. It does not constrain what a `Bash`-capable agent does to the working
-tree, and a "read-only" review fleet is exactly where that gap bites: every agent
-inherits the repository as its default working directory.
+The advisory/implementing contract in Step 6 governs the declared agent type, not what a `Bash`-capable agent writes to the working tree. Combine three complementary controls (full rationale and mechanics in [containment-notes.md](references/containment-notes.md)):
 
-**Name a write location in every prompt** — one line per `Bash`-capable stage,
-after the preamble, and the only control that reaches a stage nobody classified as
-writing. Include the read-only-by-intent stages: those are exactly the ones that
-pollute the repository by inherited working directory alone, with no collision, no
-`git add` and no intent to touch it. Copy the template's `WRITE_LOCATION`: it names
-the stage's own `$DIR` (the directory the preamble's `mktemp -d` created), covers
-every file the agent produces by any tool, and rules out the repository root. It
-also tells the agent to print that path and reuse it literally, because nothing but
-files carries over between an agent's tool calls — each Bash call may start again in
-the launch directory with `DIR` unset. A stage that must also write elsewhere
-narrows the line as a `<PREFIX>_WRITE_LOCATION` constant ("write only under <that
-directory> and your own `$DIR`; nowhere else in the repository") rather than
-dropping it. A7b looks for the identifier, so a sentence typed in its place fails.
-
-**Bracket the run with `repo-guard`** — this is the mechanical control. A workflow
-body cannot run shell (no filesystem or Node API), so this is the *invoker's*
-job, around the `Workflow(...)` call:
-
-```bash
-npm run guard:snapshot   # before launching the workflow
-npm run guard:verify     # after it returns
-npm run guard:release    # when the run is genuinely over
-```
-
-`verify` keeps the snapshot and `snapshot` refuses to overwrite one, so skipping
-`guard:release` leaves the next run failing with "a snapshot already exists".
-That is deliberate — re-arming mid-run would rebaseline the damage — but it means
-release is part of the loop, not an optional tidy-up. Note also that npm swallows
-`--release` as its own config, which is why there is a script rather than a flag.
-
-It compares HEAD, branch, worktree status, the content of every changed or
-untracked file, and index flags. Exit 1 prints the difference; exit 2 means it
-could not answer and must never be read as a pass. Two comparisons carry most of
-the weight: HEAD, the only one that catches a subagent that *committed* (the tree
-reads clean afterwards), and file content, without which a stray write to an
-already-modified file is invisible — its status line does not move.
-
-It does **not** cover ignored paths; walking them would mean hashing
-`node_modules`.
-
-**Contain the agents themselves.** Prepend the `REPO_SAFETY` preamble from
-`workflows/_template.mjs` to the prompt of every agent that may run shell
-commands — verifiers included, since a verifier reproducing a finding is the
-agent most likely to build a fixture. Copying the template gets this by default.
-Its rules, in the template's own order — deliberately uncounted, because a count
-here is a claim about a file this one does not own, and it had silently drifted
-by one before anyone noticed:
-
-1. **`mktemp -d`, never a shared fixed path.** Parallel agents told to build
-   fixtures independently converge on the same obvious filename, and the second
-   clobbers the first.
-2. **`cd "${DIR:?}" || exit 1`.** A bare `cd` that fails does not reliably abort
-   the surrounding script, and every following relative path then resolves
-   against the repository. Braced because `cd ""` returns 0 without moving, so an
-   unset `DIR` leaves the agent where it started and `|| exit 1` never fires.
-3. **An absolute path under `$DIR` in every destructive command, braced** — write
-   `rm -rf "${DIR:?}/fixtures"`, never `rm -rf fixtures` and never a bare
-   `"$DIR/fixtures"`. The `cd` above is one control; a relative `rm` makes it the
-   only one, so the single failure it guards against becomes repository damage
-   instead of a wasted command. The brace is not decoration: an absolute path
-   trades the dependency on the working directory for one on `$DIR` being set,
-   and `cd ""` succeeds without moving, so an unset `DIR` leaves the agent
-   standing in the repository *and* expands `"$DIR/fixtures"` to `/fixtures`.
-   `:?` refuses both, unset and empty alike, on bash 5.2 and zsh 5.9.
-4. **A cwd assertion before `git add`, `git commit`, or a tool run with a write
-   flag** — that is its scope, and it is narrower than "anything destructive",
-   which is why rule 3 exists: an `rm` falls outside it. Braced for rule 3's
-   reason too, since outside any repository `git rev-parse` prints nothing and an
-   unset `DIR` makes the unbraced form compare `""` to `""` and pass:
+1. **Name a write location in every `Bash`-capable stage prompt** — copy the template's `WRITE_LOCATION` (or narrow it as `<PREFIX>_WRITE_LOCATION` for stages that also write a declared output dir; integrity check A7b looks for the identifier). Include read-only-by-intent stages, which otherwise pollute by inherited cwd.
+2. **Bracket the run with `repo-guard`** around the `Workflow(...)` call (compares `HEAD`, branch, status, changed/untracked file contents, and index flags; ignores ignored paths):
 
    ```bash
-   [ "$(git rev-parse --show-toplevel)" = "${DIR:?}" ] || exit 1
+   npm run guard:snapshot   # before launching the workflow
+   npm run guard:verify     # after it returns
+   npm run guard:release    # when the run is genuinely over
    ```
-5. **Never `git commit`, `git update-index` or `git checkout --` against the
-   repository itself**, and never a repo tool with a write flag there.
 
-Prefer `isolation: 'worktree'` for any stage that might mutate — it is the
-structural control and stronger than either of the others. The gap it leaves is
-the one the prompt sentence covers: a stage that is read-only *by intent* is never
-classified as mutating, and that is exactly the stage that pollutes by inherited
-working directory. So the three are complements. The prompt *prevents* a compliant
-agent from writing where it stands; worktree isolation *contains* a stage you
-expected to write; the guard *detects* what neither caught, and because a workflow
-body cannot run shell it runs only before and after the whole `Workflow(...)`
-call, blind for the duration of the fan-out. What a prompt cannot do is bind: in
-#493 it named the directory, the tool and the file to copy, the agent complied
-with all three, and the write still landed in the repository because the failure
-was mechanical. Instruction is worth its one sentence; enforcement is the guard's
-job and the worktree's.
+3. **Prepend `REPO_SAFETY` from `workflows/_template.mjs`** to every shell-capable stage prompt (verifiers included). In template order:
+   - **`mktemp -d`**, never a shared fixed path.
+   - **`cd "${DIR:?}" || exit 1`** (braced so unset/empty `DIR` aborts).
+   - **Braced absolute paths under `$DIR` in destructive commands** (`rm -rf "${DIR:?}/fixtures"`).
+   - **A braced cwd assertion before `git add`, `git commit`, or write-flagged tools:**
+
+     ```bash
+     [ "$(git rev-parse --show-toplevel)" = "${DIR:?}" ] || exit 1
+     ```
+
+   - **Never `git commit`, `git update-index`, or `git checkout --` against the repository itself**, and never a repo tool with a write flag there.
+
+Prefer `isolation: 'worktree'` for mutating stages. Instruction prevents a compliant agent from writing where it stands; worktree isolation contains expected writers; `repo-guard` detects what neither caught. See [containment-notes.md](references/containment-notes.md#rationale-for-the-repo_safety-rules) for edge cases (#493, bash/zsh `:?` behavior, and `guard:release` lifecycle).
 
 **Expected:** `npm run guard:verify` exits 0 after the run.
 

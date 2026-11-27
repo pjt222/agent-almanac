@@ -392,3 +392,121 @@ published anywhere, so `~150 characters` is a working figure for deriving the ~1
 rather than a recommendation to cite. The only nearby published number is a line-based rewrite
 target in a sample error message ("Rewrite it to under 140 lines") — 140/200 is the same `0.70`
 used here. Nothing published fixes `0.80`; it is this skill's warn threshold.
+
+## Step 4–6 Diagnostic Scripts
+
+Extracted from `SKILL.md` Steps 4–6 to keep the main skill body compact while preserving the exact read-only Python scripts.
+
+### Step 4: Degraded References
+
+```bash
+# Degraded references: named in the index, never as a link target.
+python3 - <memory-dir> <<'PY'
+import os, re, sys
+d = sys.argv[1]
+text = open(os.path.join(d, 'MEMORY.md'), encoding='utf-8', errors='replace').read()
+text = re.sub(r'<!--.*?-->', '', text, flags=re.S)
+linked = {os.path.basename(m) for m in re.findall(r'\]\(([^)#\s]+\.md)', text)}
+prose  = set(re.findall(r'[\w.\-]+\.md', re.sub(r'\]\([^)]*\)', '', text)))
+on_disk = {f for f in os.listdir(d) if f.endswith('.md') and f != 'MEMORY.md'}
+degraded = sorted((prose - linked) & on_disk)
+print(f"DEGRADED {len(degraded)} (named in the index, not a link target; NOT reachable)")
+for n in degraded: print(f"  degraded {n}")
+PY
+```
+
+### Step 5: Cross-Reference Normalization
+
+```bash
+# Normalization is diagnosis, not repair. A target that resolves only after
+# normalizing is still a broken link at load time.
+python3 - <memory-dir> <<'PY'
+import os, re, sys
+d, PREFIXES = sys.argv[1], ('feedback-', 'project-', 'reference-')   # see name_prefixes input
+def norm(name):
+    n = re.sub(r'\.md$', '', name.lower()).replace('_', '-')
+    for p in PREFIXES:
+        if n.startswith(p): n = n[len(p):]
+    return n
+text = re.sub(r'<!--.*?-->', '', open(os.path.join(d, 'MEMORY.md'),
+              encoding='utf-8', errors='replace').read(), flags=re.S)
+linked  = {os.path.basename(m) for m in re.findall(r'\]\(([^)#\s]+\.md)', text)}
+on_disk = {f for f in os.listdir(d) if f.endswith('.md') and f != 'MEMORY.md'}
+index, unresolved = {}, []
+for f in on_disk: index.setdefault(norm(f), []).append(f)
+for t in sorted(linked - on_disk):
+    hits = index.get(norm(t), [])
+    print(f"  {'NORMALIZES' if hits else 'UNRESOLVED'} {t}" + (f" -> {', '.join(sorted(hits))}" if hits else ""))
+    if not hits: unresolved.append(t)
+print(f"CONVENTIONS {len({'underscore' if '_' in f else 'hyphen' for f in on_disk})} in use")
+print(f"UNRESOLVED {len(unresolved)}/{len(linked)} = {len(unresolved)/max(len(linked),1):.1%} of link targets")
+PY
+```
+
+### Step 6: Catalog Conformance
+
+```bash
+# Frontmatter is PARSED. Inability to measure is not a passing verdict.
+python3 - <memory-dir> <<'PY'
+import os, re, sys
+try:
+    import yaml
+except ImportError:
+    print("SKIPPED catalog conformance: PyYAML unavailable. Install it or check by hand.")
+    sys.exit(0)
+d, TYPES = sys.argv[1], {'user', 'feedback', 'project', 'reference'}
+read = lambda n: open(os.path.join(d, n), encoding='utf-8', errors='replace').read()
+for f in sorted(x for x in os.listdir(d) if x.endswith('.md') and x != 'MEMORY.md'):
+    m = re.match(r'---\r?\n(.*?)\r?\n---\r?\n', read(f), flags=re.S)
+    if not m:
+        print(f"  no-frontmatter {f}"); continue          # legitimate: predates the field
+    try:
+        fm = yaml.safe_load(m.group(1)) or {}
+    except yaml.YAMLError as exc:
+        print(f"  FAIL unparsable {f}: {exc}"); continue
+    kind = fm.get('type') or (fm.get('metadata') or {}).get('type')   # nested, not ^type:
+    if kind is not None and kind not in TYPES:
+        print(f"  FAIL unknown type {f}: {kind!r}")
+
+entry, matched = re.compile(r'^\s*[-*]\s+\[[^\]]+\]\(([^)#\s]+\.md)\)\s*(.*)$'), 0
+for hit in filter(None, map(entry.match, read('MEMORY.md').splitlines())):
+    matched += 1
+    desc = hit.group(2).lstrip('—-: ').strip()
+    if not 10 <= len(desc) <= 300:
+        print(f"  FAIL description {hit.group(1)}: {len(desc)} chars")
+print(f"CATALOG ENTRIES CHECKED {matched}")   # 0 here is a broken check, not a clean index
+PY
+```
+
+## Five Standing Reachability Rules (Step 2)
+
+1. **Exclude template/example link targets:** a format-documentation line such as `- [Title](file.md) — hook` otherwise reports as dangling forever, training the operator to ignore the check.
+2. **A prose mention is not reachability:** require an exact filename match on a real link target. Report near-matches separately as *degraded references*; never count them as reachable.
+3. **HTML comments in the index are not a mitigation:** they are stripped before the index reaches the model, so a curator note in one is written into a void and excluded from both load limits (before v2.1.211 raw bytes were measured). Any surviving note must be a plain markdown line.
+4. **Parse frontmatter, do not grep it:** a `^type:` regex misses a field nested under `metadata:` and invents a conformance failure.
+5. **Report both denominators, labeled:** file share and byte share are distinct numbers, never interchangeable — a store can be 40% orphaned by file count and 5% by bytes.
+
+## Step 7–8 Hygiene & Recoverability Commands
+
+### Step 7: Topic-File Size Check
+
+```bash
+# No default. A per-project number an operator chose beats an internal one
+# copied from a release note.
+TOPIC_MAX_BYTES=${TOPIC_MAX_BYTES:?set a per-project threshold; there is no documented default}
+find <memory-dir> -maxdepth 1 -name '*.md' ! -name 'MEMORY.md' -printf '%s\t%f\n' \
+  | awk -F'\t' -v cap="$TOPIC_MAX_BYTES" \
+      '$1 > cap { printf "  oversize %s (%d bytes)\n", $2, $1; n++ }
+       END { printf "OVERSIZE %d of %d topic files over %d bytes\n", n, NR, cap }'
+```
+
+### Step 8: Recoverability Check
+
+```bash
+DIR=<memory-dir>
+git -C "$DIR" rev-parse --show-toplevel >/dev/null 2>&1 \
+  && echo "VCS yes ($(git -C "$DIR" rev-parse --show-toplevel))" \
+  || echo "VCS no — an overwrite in this store is unrecoverable"
+ls -d "$DIR"/.archive "$DIR"/../memory-archive 2>/dev/null \
+  || echo "ARCHIVE none — no tombstone path for deleted topic files"
+```

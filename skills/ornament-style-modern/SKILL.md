@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: design
   complexity: intermediate
   language: natural
@@ -51,44 +51,7 @@ This is the "unleashed" companion to `ornament-style-mono` and `ornament-style-c
 
 ### Step 1: Select Genre / Aesthetic
 
-Choose a modern or speculative aesthetic as the visual foundation. Unlike historical periods, genres are fluid — mixing and hybridization are encouraged.
-
-```text
-Modern and Speculative Aesthetics:
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Genre                 | Visual Character         | Motif Language                    | Color Tendency              |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Cyberpunk             | Neon-on-dark, circuit,   | Circuit traces, kanji, hexagons,  | Neon cyan/magenta on black  |
-|                       | tech, glitch             | fractured glass, data streams     |                             |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Hard Sci-Fi           | Clean, technical,        | Engineering diagrams, orbital     | Cool metallics, deep space  |
-|                       | precise                  | paths, crystalline lattice        | blue                        |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Solarpunk             | Organic-tech fusion,     | Leaf/vine + solar panel, living   | Greens, warm amber,         |
-|                       | verdant                  | architecture, moss on circuit     | sunlight                    |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Biopunk               | Organic, visceral,       | DNA helix, cell structure,        | Deep organics,              |
-|                       | grown                    | mycelium, coral, nerve networks   | bioluminescent              |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Brutalist             | Raw, monumental,         | Concrete texture, massive         | Grays, concrete,            |
-|                       | geometric                | geometry, exposed grid, slab      | industrial                  |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Art Deco Revival      | Geometric elegance,      | Sunburst, chevron, ziggurat, fan, | Gold, black, cream,         |
-|                       | luxury                   | stepped forms                     | emerald                     |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Vaporwave             | Retro-digital, surreal   | Classical busts (glitched), grid, | Pink/teal/purple gradients  |
-|                       |                          | gradient, marble                  |                             |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Retrofuturism         | 1950s-60s future vision  | Atomic/Space Age, streamline, ray | Chrome, turquoise, coral    |
-|                       |                          | gun, fin, orbit                   |                             |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Generative /          | Mathematical,            | Voronoi, reaction-diffusion,      | Any scale -- often viridis  |
-| Algorithmic           | procedural               | L-system, noise field, fractal    | family                      |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-| Afrofuturism          | Ancestral + futuristic   | Adinkra, kente geometry, cosmic,  | Rich earth + metallic +     |
-|                       |                          | mask, constellation               | electric                    |
-+-----------------------+--------------------------+-----------------------------------+-----------------------------+
-```
+Choose a modern or speculative aesthetic as the visual foundation (Cyberpunk, Hard Sci-Fi, Solarpunk, Biopunk, Brutalist, Art Deco Revival, Vaporwave, Retrofuturism, Generative/Algorithmic, Afrofuturism — full visual character, motif language, and color tendencies in [reference-tables.md](references/reference-tables.md#modern-and-speculative-aesthetics)). Unlike historical periods, genres are fluid — mixing and hybridization are encouraged.
 
 **Additional supported modes:**
 - **Freeform user-defined aesthetic**: describe any visual direction not in the table
@@ -110,48 +73,7 @@ Choose between a colorblind-accessible scale or a custom palette. Colorblind sca
 
 **Path A: Colorblind-Accessible Scale (Recommended)**
 
-Select from perceptually uniform color scales designed for universal readability:
-
-```text
-Colorblind-Accessible Color Scales:
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Scale      | Type          | CVD Safe           | Character                   | Best For                |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Viridis    | Sequential    | All 3 types        | Blue-green-yellow, balanced | Default recommendation  |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Cividis    | Sequential    | Deutan + Protan    | Blue-to-yellow, muted       | Maximum CVD safety      |
-|            |               | optimized          |                             |                         |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Inferno    | Sequential    | All 3 types        | Black-red-yellow-white, hot | Dramatic, high contrast |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Magma      | Sequential    | All 3 types        | Black-purple-orange-yellow  | Moody, volcanic         |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Plasma     | Sequential    | All 3 types        | Purple-pink-orange-yellow   | Vivid, energetic        |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Turbo      | Rainbow-like  | Moderate           | Full spectrum, perceptual   | Many distinct colors    |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Mako       | Sequential    | All 3 types        | Dark blue to light teal     | Cool, oceanic           |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Rocket     | Sequential    | All 3 types        | Dark to light via warm      | Warm, ember-like        |
-|            |               |                    | tones                       |                         |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-| Okabe-Ito  | Categorical   | All 3 types        | 8 distinct colors           | Discrete elements, max  |
-|            |               |                    |                             | distinction             |
-+------------+---------------+--------------------+-----------------------------+-------------------------+
-```
-
-```text
-CVD Types and Impact:
-+-----------------------------+----------+-----------------+------------------------------+
-| CVD Type                    | Affects  | Confuses        | Safe Scales                  |
-+-----------------------------+----------+-----------------+------------------------------+
-| Protanopia (red-blind)      | ~1% male | Red/green       | viridis, cividis, inferno    |
-+-----------------------------+----------+-----------------+------------------------------+
-| Deuteranopia (green-blind)  | ~5% male | Red/green       | viridis, cividis, inferno    |
-+-----------------------------+----------+-----------------+------------------------------+
-| Tritanopia (blue-yellow)    | ~0.01%   | Blue/yellow     | inferno, magma (with care)   |
-+-----------------------------+----------+-----------------+------------------------------+
-```
+Select from perceptually uniform, CVD-safe scales: **Viridis** (default, all 3 CVD types), **Cividis** (deutan/protan max safety), **Inferno**, **Magma**, **Plasma**, **Mako**, **Rocket**, **Turbo**, or **Okabe-Ito** (categorical, 8 distinct colors). Check target CVD types (protanopia, deuteranopia, tritanopia) against [reference-tables.md](references/reference-tables.md#colorblind-accessible-color-scales) and [CVD Types and Impact](references/reference-tables.md#cvd-types-and-impact).
 
 **Translating a continuous scale to an ornamental palette:**
 Sample 3-5 colors at evenly spaced intervals along the scale. For a 5-color palette from viridis:
@@ -246,28 +168,7 @@ Translate the scale name into descriptive color language that the model can inte
 
 ### Step 5: Configure Generation Parameters
 
-Select resolution and generation parameters.
-
-```text
-Resolution by Application:
-+--------------------+---------------------+----------------------------------------+
-| Application        | Recommended         | Rationale                              |
-+--------------------+---------------------+----------------------------------------+
-| Medallion / Roundel| 1024x1024 (1:1)     | Radial symmetry needs square           |
-+--------------------+---------------------+----------------------------------------+
-| Tile / Repeat Unit | 1024x1024 (1:1)     | Square for seamless tiling             |
-+--------------------+---------------------+----------------------------------------+
-| Horizontal Frieze  | 1280x720 (16:9)     | Wide format for running border         |
-+--------------------+---------------------+----------------------------------------+
-| Vertical Panel     | 720x1280 (9:16)     | Portrait format for columns            |
-+--------------------+---------------------+----------------------------------------+
-| Wide Border        | 1344x576 (21:9)     | Ultrawide for architectural            |
-+--------------------+---------------------+----------------------------------------+
-| UI Element         | 1152x896 (9:7)      | Balanced landscape for screen use      |
-+--------------------+---------------------+----------------------------------------+
-| Large Detail       | 1536x1536 (1:1)     | Higher res for fine gradient work      |
-+--------------------+---------------------+----------------------------------------+
-```
+Select resolution and generation parameters (`1024x1024` medallions/tiles, `1280x720` friezes, `720x1280` vertical panels, `1344x576` wide borders, `1152x896` UI elements, `1536x1536` fine gradient detail — full table in [reference-tables.md](references/reference-tables.md#resolution-by-application)):
 
 1. Select resolution based on application context
 2. Set `steps` to 10-12 (color gradient detail and scale fidelity benefit from more steps)
@@ -299,34 +200,7 @@ Invoke the Z-Image MCP tool to produce the ornament.
 
 ### Step 7: Evaluate Design
 
-Assess the generated image against five criteria adapted for modern ornament.
-
-```text
-Modern Ornament Evaluation Rubric:
-+---------------------+------------------------+-------------------------------------------+
-| Criterion           | Replaces (from color)  | Evaluation Questions                      |
-+---------------------+------------------------+-------------------------------------------+
-| 1. Genre Coherence  | Period Accuracy        | Does it feel like the specified genre?    |
-|                     |                        | Would someone familiar with the genre     |
-|                     |                        | recognize the aesthetic?                  |
-+---------------------+------------------------+-------------------------------------------+
-| 2. Color Scale      | Palette Match          | Does the color gradient/palette           |
-|    Fidelity         |                        | approximate the chosen scale? Are the     |
-|                     |                        | key colors from the scale present?        |
-+---------------------+------------------------+-------------------------------------------+
-| 3. Accessibility    | (new criterion)        | Would this be distinguishable under the   |
-|                     |                        | target CVD type? Do elements rely solely  |
-|                     |                        | on color or also on shape/texture?        |
-+---------------------+------------------------+-------------------------------------------+
-| 4. Composition      | Form-Color Balance     | Does the ornamental structure read        |
-|    Quality          |                        | clearly? Does color clarify or obscure    |
-|                     |                        | the motif?                                |
-+---------------------+------------------------+-------------------------------------------+
-| 5. Rendering Style  | Rendering Style        | Does it match the specified rendering     |
-|                     |                        | technique? Does a "neon sign" glow?       |
-|                     |                        | Does "glitch art" show artifacts?         |
-+---------------------+------------------------+-------------------------------------------+
-```
+Assess the generated image against five criteria adapted for modern ornament: **1. Genre Coherence**, **2. Color Scale Fidelity**, **3. Accessibility (CVD)**, **4. Composition Quality**, and **5. Rendering Style** (full evaluation questions in [reference-tables.md](references/reference-tables.md#modern-ornament-evaluation-rubric)):
 
 1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
 2. Note specific observations for each criterion

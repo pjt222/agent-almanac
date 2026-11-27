@@ -381,3 +381,17 @@ This is the same shape as fail-open at the call site (Step 5) pointing the other
 there you want the absent dependency to be invisible in the OUTPUT, here you want the
 absent stub to be loud. What distinguishes them is who is meant to be surprised — a user, never; an
 author writing a test, always.
+
+## Silent Failures in Pinned vs. Floating Model Versions
+
+A mitigation that swaps one silent failure for another is not a mitigation:
+
+- **Floating alias direction:** the model version moves and your measured threshold quietly stops describing the model it was measured against. The cheap symmetric detector is a reader that pulls the logged model identifier back out of the log and compares it against the one the operating point was measured on. It should not move an exit code — a floating model is not the same question as a service being down — but a mismatch must reach a person, or the reader is one more unread record. Reported from production, the identifier was logged on every call and nothing read it — detectable in principle, undetected in practice.
+- **Pinned version direction:** the version is retired, every call errors, fail-open returns the pre-oracle answer, and a dead oracle is indistinguishable from an uneventful week. Pinning requires a tripwire on the specific error a retired pin produces.
+- **Precondition ordering (Step 6 before pinning):** where the model identifier is environment-sourced, pinning is the change that first puts a value in that variable, so an unguarded read is armed by the pin itself — literal placeholder text goes out as the model id on every call. A tripwire tells you afterwards, and only if that is the error it watches; the guard refuses the value beforehand.
+
+## Gate Operator Brackets and Missing Scalars
+
+Under `scalar >= threshold`, the free interval is `(highest harmful, lowest beneficial]`. Under strict `>`, the free endpoint is the *lower* one and the interval is `[highest harmful, lowest beneficial)`. On a corpus whose beneficial rows all score `1.00`, taking `1.00` as the threshold under `>` fires on nothing at all and silently disables the oracle — the endpoint you were told was free. A missing scalar (for example, a yes/no question type returning none) disables the gate the same way: the comparison evaluates false and raises nothing, so assert the field is present before comparing it.
+
+Width alone does not rescue small sample sizes: `0.46` from two rows and `0.46` from two hundred are the same width and not the same finding. Always report both width and per-side row counts (`n harmful`, `n beneficial`), and state the chosen operating point in terms arithmetic can verify (for example: *0.36 above the highest harmful row and 0.10 below the lowest beneficial one, off-centre toward the upper end so the policy is biased against acting*).

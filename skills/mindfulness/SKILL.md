@@ -14,7 +14,7 @@ license: MIT
 allowed-tools: Read
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: defensive
   complexity: advanced
   language: natural
@@ -47,35 +47,7 @@ Develop applied situational awareness, de-escalation skill, and the ability to m
 
 ### Step 1: Assess Situational Awareness (Cooper Color Codes)
 
-The Cooper color code system provides a framework for calibrating your awareness level to the environment.
-
-```text
-Cooper Color Code Awareness Levels:
-┌──────────┬─────────────────────┬──────────────────────────────────────────┐
-│ Code     │ State               │ Description and Application              │
-├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ White    │ Unaware             │ Absorbed in phone, headphones, day-      │
-│          │                     │ dreaming. No awareness of surroundings.  │
-│          │                     │ Acceptable only in secured private space │
-├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Yellow   │ Relaxed alert       │ Aware of surroundings without fixation.  │
-│          │                     │ Scanning people, exits, anomalies. This  │
-│          │                     │ is the DEFAULT state in public spaces    │
-├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Orange   │ Specific alert      │ Something has triggered attention: a     │
-│          │                     │ person, behavior, or situation. Forming  │
-│          │                     │ a plan: "If X happens, I will do Y"      │
-├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Red      │ Action              │ The trigger condition from Orange has    │
-│          │                     │ occurred. Execute the pre-formed plan.   │
-│          │                     │ No hesitation — decision was made in     │
-│          │                     │ Orange                                   │
-├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Black    │ Overwhelmed         │ Panic, freeze, tunnel vision. Caused by │
-│          │                     │ jumping from White directly to Red with  │
-│          │                     │ no mental preparation. AVOID this state  │
-└──────────┴─────────────────────┴──────────────────────────────────────────┘
-```
+Calibrate your awareness level to the environment across the five Cooper states: **White** (unaware — secured private space only), **Yellow** (relaxed alert — public default), **Orange** (specific alert — forming "if X, then Y"), **Red** (action — executing the Orange plan), and **Black** (overwhelmed/freeze — avoid). See [reference-tables.md](references/reference-tables.md#cooper-color-code-awareness-levels) for full descriptions and applications.
 
 Practice protocol:
 1. When leaving your home, consciously shift from White to Yellow
@@ -109,38 +81,7 @@ Most threats broadcast intention through body language before they act. Learn to
 
 ### Step 3: De-escalate Verbal Confrontation
 
-When a situation escalates verbally, de-escalation is the highest-value skill. Most violence can be prevented with words and positioning.
-
-```text
-De-escalation Framework:
-┌──────────────────┬──────────────────────────────────────────────────────┐
-│ Phase            │ Technique                                            │
-├──────────────────┼──────────────────────────────────────────────────────┤
-│ 1. Space         │ Maintain 2+ arm-lengths distance. Angle your body   │
-│                  │ 45 degrees (non-confrontational, protects center     │
-│                  │ line). Position an exit route behind you, never      │
-│                  │ behind the aggressor                                 │
-├──────────────────┼──────────────────────────────────────────────────────┤
-│ 2. Voice         │ Lower your volume below theirs — this forces them   │
-│                  │ to quiet down to hear you. Speak slowly. Use a      │
-│                  │ calm, even tone. Avoid commands ("calm down") —     │
-│                  │ use observations ("I can see you're upset")         │
-├──────────────────┼──────────────────────────────────────────────────────┤
-│ 3. Acknowledge   │ Name their emotion without agreeing with their      │
-│                  │ position: "That sounds really frustrating." Do NOT  │
-│                  │ say "I understand" unless you genuinely do. Do NOT  │
-│                  │ argue, correct, or explain — yet                    │
-├──────────────────┼──────────────────────────────────────────────────────┤
-│ 4. Offer exits   │ Give the person a way to disengage without losing  │
-│                  │ face: "I think we both need a minute" or "Let me   │
-│                  │ get someone who can help with this." Frame retreat  │
-│                  │ as a mutual decision, not submission                │
-├──────────────────┼──────────────────────────────────────────────────────┤
-│ 5. Disengage     │ If de-escalation fails, create distance. Do not    │
-│                  │ turn your back. Move toward other people, exits,   │
-│                  │ or authority figures. Leave the area if possible    │
-└──────────────────┴──────────────────────────────────────────────────────┘
-```
+When a situation escalates verbally, work through the five-phase de-escalation sequence: **1. Space** (2+ arm-lengths, 45° angle, exit behind you) → **2. Voice** (lower volume, slower pace, observations instead of commands) → **3. Acknowledge** (name the emotion without arguing) → **4. Offer exits** (face-saving mutual disengage) → **5. Disengage** (create distance without turning your back). See [reference-tables.md](references/reference-tables.md#de-escalation-framework) for full phrasing and positioning guidance.
 
 Critical rules:
 - Never tell an angry person to "calm down" — this escalates
@@ -170,32 +111,7 @@ Moving mindfulness applies meditation awareness to walking, commuting, and navig
 
 ### Step 5: Cultivate Combat Mindfulness (OODA Loop)
 
-The OODA loop (Observe-Orient-Decide-Act) is a decision cycle for operating under pressure. Speed through this loop determines who controls an encounter.
-
-```text
-OODA Loop Application:
-┌──────────┬──────────────────────────────────────────────────────────────┐
-│ Phase    │ Application                                                  │
-├──────────┼──────────────────────────────────────────────────────────────┤
-│ Observe  │ Take in the full situation: who, what, where, how many,     │
-│          │ weapons, exits, bystanders. Use peripheral vision. Do not   │
-│          │ fixate on the most obvious stimulus — scan the whole scene  │
-├──────────┼──────────────────────────────────────────────────────────────┤
-│ Orient   │ Match the observation to your training and experience:      │
-│          │ "This is [type of situation]. I have [these options]."      │
-│          │ Orientation is where pre-training pays off — trained        │
-│          │ responses orient faster than improvised ones                │
-├──────────┼──────────────────────────────────────────────────────────────┤
-│ Decide   │ Select the best available option — not the perfect one.    │
-│          │ A good decision now beats a perfect decision too late.      │
-│          │ If Orange-state planning was done (Step 1), the decision   │
-│          │ may already be made                                         │
-├──────────┼──────────────────────────────────────────────────────────────┤
-│ Act      │ Execute with full commitment. Hesitation between decision   │
-│          │ and action is the most dangerous gap. Once you act, observe │
-│          │ the result and re-enter the loop                            │
-└──────────┴──────────────────────────────────────────────────────────────┘
-```
+Cycle through **Observe** (broad peripheral scan of people, exits, weapons) → **Orient** (match against trained patterns) → **Decide** (pick a good option now rather than a perfect one late) → **Act** (commit without hesitation, then re-observe). Speed through this loop determines who controls an encounter; see [reference-tables.md](references/reference-tables.md#ooda-loop-application) for the detailed phase table.
 
 Training the OODA loop:
 1. In daily life, practice rapid scenario assessment: enter a room and within 5 seconds identify exits, cover, and the most concerning person
@@ -210,43 +126,7 @@ Training the OODA loop:
 
 ### Step 6: Deploy Rapid Grounding Techniques
 
-When stress, shock, or adrenaline disrupts clarity, these techniques restore functional awareness within seconds.
-
-```text
-Grounding Techniques Quick Reference:
-┌──────────────────────┬─────────────────────────────────────────────────┐
-│ Technique            │ Method and Use Case                             │
-├──────────────────────┼─────────────────────────────────────────────────┤
-│ Tactical breathing   │ Inhale 4 counts, hold 4, exhale 4, hold 4.    │
-│ (box breathing)      │ Repeat 4 cycles. Activates parasympathetic     │
-│                      │ response in ~60 seconds. Use: acute stress,    │
-│                      │ pre-confrontation, post-adrenaline dump        │
-├──────────────────────┼─────────────────────────────────────────────────┤
-│ 5-4-3-2-1 sensory    │ Name 5 things you see, 4 you hear, 3 you can  │
-│ anchor               │ touch, 2 you smell, 1 you taste. Forces the   │
-│                      │ mind out of internal panic and into present-   │
-│                      │ moment external reality. Use: dissociation,    │
-│                      │ freeze response, post-traumatic intrusion      │
-├──────────────────────┼─────────────────────────────────────────────────┤
-│ Peripheral vision    │ Fix eyes on a point, then widen awareness to   │
-│ activation           │ the edges of the visual field without moving   │
-│                      │ the eyes. Activates parasympathetic nervous    │
-│                      │ system and reduces tunnel vision. Use: hyper-  │
-│                      │ focus, tunnel vision, adrenaline narrowing     │
-├──────────────────────┼─────────────────────────────────────────────────┤
-│ Physical anchor      │ Press feet firmly into the ground and feel the │
-│                      │ contact. Squeeze and release fists 3 times.    │
-│                      │ Roll shoulders back. These physical actions    │
-│                      │ re-establish body awareness. Use: dissociation,│
-│                      │ shaking, post-event processing                 │
-├──────────────────────┼─────────────────────────────────────────────────┤
-│ Verbal reset         │ State your name, location, and current task    │
-│                      │ aloud: "I am [name], I am at [location], I am │
-│                      │ doing [task]." Orienting to facts breaks the   │
-│                      │ emotional loop. Use: confusion, panic, sensory │
-│                      │ overload                                       │
-└──────────────────────┴─────────────────────────────────────────────────┘
-```
+When stress, shock, or adrenaline disrupts clarity, deploy one of five rapid resets: **tactical (box) breathing** (4-4-4-4 × 4 cycles), **5-4-3-2-1 sensory anchor**, **peripheral vision activation**, **physical anchor** (feet into floor, fist squeeze/release), or **verbal reset** (name, location, current task aloud). Full method and use-case table in [reference-tables.md](references/reference-tables.md#grounding-techniques-quick-reference).
 
 1. Practice these techniques when NOT under stress so they are available when needed
 2. Tactical breathing is the single most effective rapid intervention — practice it daily

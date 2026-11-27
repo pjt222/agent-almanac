@@ -15,7 +15,7 @@ license: MIT
 allowed-tools: Read
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: entomology
   complexity: advanced
   language: natural
@@ -102,67 +102,7 @@ Minimizing Collection Impact:
 
 ### Step 2: Select Collection Method
 
-Choose the method that matches your target taxa, habitat, and research objectives. Different methods sample different portions of the insect community.
-
-```text
-Collection Methods:
-+--------------------+------------------------------------------+
-| Method             | Best For                                 |
-+--------------------+------------------------------------------+
-| Sweep net          | Flying and vegetation-dwelling insects    |
-|                    | in grasslands, meadows, and low shrubs.  |
-|                    | Technique: sweep in a figure-8 pattern   |
-|                    | through vegetation; empty net into a     |
-|                    | killing jar or collecting bag after      |
-|                    | every 10-20 sweeps.                      |
-+--------------------+------------------------------------------+
-| Beating tray       | Arboreal insects on trees and shrubs.    |
-|                    | Hold a white sheet or tray under a       |
-|                    | branch; strike the branch sharply 3-5    |
-|                    | times; collect dislodged insects with    |
-|                    | an aspirator or forceps.                 |
-+--------------------+------------------------------------------+
-| Pitfall trap       | Ground-dwelling insects (beetles,        |
-|                    | ants, crickets). Bury a cup flush with   |
-|                    | the soil surface. Add a rain cover.      |
-|                    | Check every 24-48 hours. Use propylene   |
-|                    | glycol as preservative (non-toxic to     |
-|                    | mammals; do not use ethylene glycol).    |
-+--------------------+------------------------------------------+
-| Light trap         | Nocturnal flying insects (moths, many    |
-|                    | beetles, lacewings). Use a white sheet   |
-|                    | illuminated by a mercury vapor or UV     |
-|                    | light. Operate from dusk to midnight     |
-|                    | or dawn. Most effective on warm, humid,  |
-|                    | moonless nights.                         |
-+--------------------+------------------------------------------+
-| Malaise trap       | Flying insects, especially Hymenoptera   |
-|                    | and Diptera. A tent-like mesh barrier    |
-|                    | that intercepts insects in flight;       |
-|                    | they walk upward into a collecting head  |
-|                    | containing preservative. Runs            |
-|                    | continuously; check weekly.              |
-+--------------------+------------------------------------------+
-| Aspirator (pooter) | Small, delicate insects that cannot be   |
-|                    | handled with forceps. Suck the insect    |
-|                    | into a vial through a tube (a mesh      |
-|                    | filter prevents inhalation). Use only    |
-|                    | mouth-operated aspirators with a filter. |
-+--------------------+------------------------------------------+
-| Pan trap           | Pollinators and small flying insects.    |
-|                    | Colored bowls (yellow, white, blue)      |
-|                    | filled with soapy water. Place at        |
-|                    | vegetation height. The soap breaks       |
-|                    | surface tension; insects fall in and     |
-|                    | drown. Check every 24-48 hours.          |
-+--------------------+------------------------------------------+
-| Hand collection    | Large, slow, or sessile insects.         |
-|                    | Pick directly with forceps or fingers.   |
-|                    | Useful for bark-dwelling beetles,        |
-|                    | caterpillars on host plants, aquatic     |
-|                    | larvae under rocks.                      |
-+--------------------+------------------------------------------+
-```
+Choose the method matching your target taxa and habitat: **sweep net** (grasslands/shrubs), **beating tray** (arboreal), **pitfall trap** (ground-dwelling; use propylene glycol, never ethylene glycol), **light trap** (nocturnal fliers), **Malaise trap** (continuous Hymenoptera/Diptera), **aspirator/pooter** (delicate small insects, with mesh filter), **pan trap** (pollinators), or **hand collection** (large/sessile). Full method procedures and check intervals in [references/EXAMPLES.md](references/EXAMPLES.md#collection-methods-step-2).
 
 **Expected:** One or more collection methods selected based on target taxa and habitat, with equipment assembled and ready before entering the field.
 
@@ -170,43 +110,7 @@ Collection Methods:
 
 ### Step 3: Dispatch Specimens Humanely
 
-Kill collected insects as quickly and humanely as possible. Prolonged distress damages specimens (broken legs, lost scales) and is ethically unacceptable.
-
-```text
-Dispatch Methods:
-+--------------------+------------------------------------------+
-| Method             | Procedure and Notes                      |
-+--------------------+------------------------------------------+
-| Ethyl acetate      | Place a wad of absorbent material        |
-| killing jar        | (plaster of Paris or tissue) in the      |
-|                    | bottom of a wide-mouth jar. Saturate     |
-|                    | with ethyl acetate. Place insects in     |
-|                    | the jar; death occurs within 1-5        |
-|                    | minutes for most species.                |
-|                    | Caution: ethyl acetate is flammable and  |
-|                    | an irritant. Use in well-ventilated     |
-|                    | areas. Do not inhale.                    |
-+--------------------+------------------------------------------+
-| Freezing           | Place live insects in a container in a   |
-|                    | freezer at -20C for 24 hours. Suitable   |
-|                    | for specimens brought back alive.        |
-|                    | Produces well-relaxed specimens ideal    |
-|                    | for pinning.                             |
-+--------------------+------------------------------------------+
-| Ethanol drowning   | Immerse directly in 70-95% ethanol.      |
-|                    | Used for soft-bodied insects that will   |
-|                    | be wet-preserved (larvae, aphids, small  |
-|                    | Diptera). Not suitable for Lepidoptera   |
-|                    | (destroys scales) or specimens intended  |
-|                    | for dry pinning.                         |
-+--------------------+------------------------------------------+
-
-NEVER use:
-- Cyanide jars (potassium cyanide) — extremely toxic to humans;
-  obsolete in modern entomology
-- Crushing or squeezing — destroys morphological features
-- Prolonged suffocation — slow and damages specimens from struggling
-```
+Kill collected insects quickly and humanely to prevent suffering and morphological damage: **ethyl acetate killing jar** (1–5 min, well-ventilated), **freezing** (-20 °C for 24 h; yields relaxed specimens for pinning), or **70–95% ethanol immersion** (soft-bodied wet-preserved taxa only; never Lepidoptera). Never use cyanide jars, crushing, or prolonged suffocation. Full dispatch procedures in [references/EXAMPLES.md](references/EXAMPLES.md#dispatch-methods-step-3).
 
 **Expected:** Specimens dispatched quickly (within minutes) with minimal damage to morphological features. Lepidoptera kept separate to prevent scale loss from contact with other specimens.
 
@@ -224,46 +128,7 @@ See [references/EXAMPLES.md](references/EXAMPLES.md) for the full pin-placement-
 
 ### Step 5: Preserve in Ethanol (Wet Preservation)
 
-Soft-bodied specimens that would shrivel or distort if dried must be preserved in liquid.
-
-```text
-Wet Preservation Protocol:
-+--------------------+------------------------------------------+
-| Category           | Procedure                                |
-+--------------------+------------------------------------------+
-| Preservative       | 70-80% ethanol for morphological study.  |
-|                    | 95-100% ethanol for DNA-grade            |
-|                    | preservation (change ethanol after 24    |
-|                    | hours to remove dilution from body       |
-|                    | fluids).                                 |
-+--------------------+------------------------------------------+
-| Suitable specimens | Larvae (caterpillars, grubs, maggots),   |
-|                    | soft-bodied adults (aphids, termites,    |
-|                    | some small Diptera), aquatic insects,    |
-|                    | immature stages (nymphs, pupae)          |
-+--------------------+------------------------------------------+
-| Containers         | Glass vials with screw caps or           |
-|                    | polyethylene snap-cap vials. Avoid       |
-|                    | rubber stoppers (ethanol dissolves       |
-|                    | them). Label goes INSIDE the vial.       |
-+--------------------+------------------------------------------+
-| Fluid ratio        | At least 3 parts preservative to 1 part  |
-|                    | specimen volume. Too little fluid        |
-|                    | results in poor preservation.            |
-+--------------------+------------------------------------------+
-| Long-term storage  | Check fluid levels every 6-12 months.    |
-|                    | Ethanol evaporates even through sealed   |
-|                    | caps. Top up as needed. Store in a cool, |
-|                    | dark location.                           |
-+--------------------+------------------------------------------+
-
-Do NOT use:
-- Formaldehyde/formalin for routine insect preservation (destroys DNA,
-  poses health risks, requires special disposal). Some historical
-  collections used it; modern practice strongly discourages it.
-- Isopropanol as a substitute — it causes excessive hardening and
-  color loss compared to ethanol.
-```
+Preserve soft-bodied specimens (larvae, aphids, termites, aquatic insects, nymphs, pupae) in **70–80% ethanol** for morphology or **95–100% ethanol** for DNA (change ethanol after 24 h), maintaining at least a 3:1 fluid-to-specimen ratio in screw-cap glass vials with internal labels (no rubber stoppers, no formalin, no isopropanol). Full protocol in [references/EXAMPLES.md](references/EXAMPLES.md#wet-preservation-protocol-step-5).
 
 **Expected:** Soft-bodied specimens preserved in 70-80% ethanol (or 95%+ for DNA work) in labeled vials with sufficient fluid volume.
 
@@ -312,47 +177,7 @@ Label Format Rules:
 
 ### Step 7: Store and Protect the Collection
 
-Proper storage protects specimens from physical damage, pests, and environmental degradation.
-
-```text
-Dry Collection Storage:
-+--------------------+------------------------------------------+
-| Component          | Standard                                 |
-+--------------------+------------------------------------------+
-| Unit trays         | Cardboard or plastic trays with foam     |
-|                    | bottoms (plastazote preferred — pinnable |
-|                    | and chemically inert). Specimens pinned  |
-|                    | into the foam in organized rows.         |
-+--------------------+------------------------------------------+
-| Drawers            | Tight-fitting drawers that exclude dust  |
-|                    | and pests. Glass-topped drawers allow    |
-|                    | viewing without opening.                 |
-+--------------------+------------------------------------------+
-| Cabinets           | Steel cabinets with tight seals.         |
-|                    | Compressed-air gaskets are ideal.        |
-+--------------------+------------------------------------------+
-| Pest management    | Place pest strips (dichlorvos/DDVP) or   |
-|                    | naphthalene/paradichlorobenzene crystals  |
-|                    | in each drawer. Check and replace every  |
-|                    | 6 months. Museum beetle (Anthrenus) and  |
-|                    | book lice (Psocoptera) are the primary   |
-|                    | pests — a single infestation can destroy |
-|                    | an entire drawer.                        |
-+--------------------+------------------------------------------+
-| Climate control    | Target: 40-50% relative humidity,        |
-|                    | 18-22C temperature. Fluctuations cause   |
-|                    | expansion/contraction damage. Avoid      |
-|                    | direct sunlight (fades color).           |
-+--------------------+------------------------------------------+
-
-Wet Collection Storage:
-- Store vials upright in racks or jars
-- Check fluid levels every 6-12 months; top up with fresh ethanol
-- Store in a cool, dark, well-ventilated area (ethanol fumes)
-- Keep away from ignition sources (ethanol is flammable)
-- For long-term storage, use screw-cap glass vials; snap-cap
-  plastic vials allow more evaporation
-```
+Store dry specimens in plastazote-lined unit trays inside tight-fitting drawers and gasketed steel cabinets at **40–50% RH / 18–22 °C** (out of direct sunlight) with pest deterrents refreshed every 6 months; store wet specimens upright in screw-cap glass vials in a cool, dark, ventilated space away from ignition sources and top up ethanol every 6–12 months. Full storage standards in [references/EXAMPLES.md](references/EXAMPLES.md#dry-collection-storage).
 
 **Expected:** Dry specimens stored in sealed drawers with pest deterrents. Wet specimens stored upright with adequate ethanol levels. Storage area has stable temperature and humidity.
 
@@ -360,50 +185,7 @@ Wet Collection Storage:
 
 ### Step 8: Curate and Enter into Database
 
-Maintain the collection as a living scientific resource through systematic curation and data management.
-
-```text
-Curation Tasks:
-+--------------------+------------------------------------------+
-| Task               | Frequency                                |
-+--------------------+------------------------------------------+
-| Pest inspection    | Every 3-6 months. Look for frass (fine   |
-|                    | powder under specimens), cast skins,     |
-|                    | or live pests in drawers.                |
-+--------------------+------------------------------------------+
-| Fumigant refresh   | Every 6 months. Replace pest strips or   |
-|                    | crystals. Ensure drawers seal tightly.   |
-+--------------------+------------------------------------------+
-| Ethanol top-up     | Every 6-12 months for wet collections.   |
-+--------------------+------------------------------------------+
-| Repair             | Re-pin loose specimens. Re-glue detached |
-|                    | appendages (use water-soluble PVA glue). |
-|                    | Replace damaged labels.                  |
-+--------------------+------------------------------------------+
-| Identification     | Send unidentified specimens to           |
-| updates            | specialists. Update determination labels |
-|                    | as IDs are returned — never remove old   |
-|                    | determination labels; add new ones below.|
-+--------------------+------------------------------------------+
-
-Database Entry (minimum fields):
-- Catalog number (unique identifier for each specimen)
-- Taxon (order, family, genus, species)
-- Locality (country, state, specific location, coordinates)
-- Date of collection
-- Collector
-- Collection method
-- Determiner and determination date
-- Storage location (cabinet, drawer, row, position)
-- Preservation type (pinned, ethanol, slide-mounted, point-mounted)
-
-Database Standards:
-- Use Darwin Core format for interoperability with global databases
-  (GBIF, iDigBio)
-- Record coordinates in decimal degrees (WGS84 datum)
-- Use ISO 8601 date format (YYYY-MM-DD) in databases
-- Assign a unique catalog number to every specimen, even if unidentified
-```
+Inspect every 3–6 months for pests/frass, refresh fumigants every 6 months, top up wet vials every 6–12 months, repair loose appendages with water-soluble PVA glue, and append updated determination labels below (never replacing) old ones. Enter every specimen under a unique catalog number using **Darwin Core** fields (WGS84 decimal degrees, ISO 8601 `YYYY-MM-DD`). Full schedule and field list in [references/EXAMPLES.md](references/EXAMPLES.md#curation-schedule--database-fields).
 
 **Expected:** All specimens cataloged in a database with unique identifiers, taxonomy, locality, date, collector, and storage location. Collection is on a regular inspection and maintenance schedule.
 

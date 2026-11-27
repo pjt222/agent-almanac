@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: design
   complexity: intermediate
   language: natural
@@ -46,44 +46,7 @@ Design polychromatic ornamental patterns by combining art historical color knowl
 
 ### Step 1: Select Historical Period and Color Palette
 
-Choose a period and identify its characteristic color language. Color in ornament is never arbitrary — each period has a palette rooted in available pigments, cultural symbolism, and material context.
-
-```text
-Historical Ornament Periods with Characteristic Palettes:
-┌───────────────────┬─────────────────┬────────────────────────────────────────────────────────┐
-│ Period            │ Date Range      │ Characteristic Palette                                  │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Egyptian          │ 3100–332 BCE    │ Lapis blue, gold/ochre, terracotta red, black, white   │
-│                   │                 │ Mineral pigments: flat, unmodulated, high contrast      │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Greek             │ 800–31 BCE      │ Terracotta red, black, ochre, white, blue (rare)       │
-│                   │                 │ Pottery palette; architectural color largely lost        │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Roman             │ 509 BCE–476 CE  │ Pompeii red, ochre yellow, black, white, verdigris     │
-│                   │                 │ Fresco palette: warm earth tones, strong red dominant    │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Byzantine         │ 330–1453 CE     │ Gold (dominant), deep blue, crimson, purple, white      │
-│                   │                 │ Mosaic tesserae: jewel tones, gold ground, luminous      │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Islamic           │ 7th–17th c.     │ Turquoise/cobalt blue, white, gold, emerald green       │
-│                   │                 │ Tile glazes: luminous, saturated, geometric precision    │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Romanesque        │ 1000–1200 CE    │ Ochre, rust red, deep green, dark blue, cream           │
-│                   │                 │ Manuscript and stone: earthy, muted, mineral-derived     │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Gothic            │ 1150–1500 CE    │ Ultramarine blue, ruby red, emerald green, gold, white  │
-│                   │                 │ Stained glass + illumination: saturated, luminous        │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Renaissance       │ 1400–1600 CE    │ Rich earth tones, azure blue, gold leaf, warm greens    │
-│                   │                 │ Oil and fresco: naturalistic, modulated, subtle          │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Baroque/Rococo    │ 1600–1780 CE    │ Pastel pink, powder blue, cream, gold, soft green       │
-│                   │                 │ (Rococo) vs deep burgundy, gold, forest green (Baroque) │
-├───────────────────┼─────────────────┼────────────────────────────────────────────────────────┤
-│ Art Nouveau       │ 1890–1910 CE    │ Sage green, dusty rose, amber/gold, muted purple,      │
-│                   │                 │ teal. Organic, muted, nature-derived palette             │
-└───────────────────┴─────────────────┴────────────────────────────────────────────────────────┘
-```
+Choose a period and identify its characteristic color language (full 10-period pigment and material palette table in [reference-tables.md](references/reference-tables.md#historical-ornament-periods-with-characteristic-palettes)):
 
 1. If the user specified a period, confirm and note its characteristic palette
 2. If "surprise me," select randomly — weight toward periods with rich color traditions (Islamic, Byzantine, Gothic, Art Nouveau)
@@ -95,22 +58,7 @@ Historical Ornament Periods with Characteristic Palettes:
 
 ### Step 2: Define Color Palette
 
-Translate the historical palette into a specific 3-5 color set with defined roles.
-
-**Color Role Framework:**
-```text
-Color Distribution (60/30/10 Rule):
-┌──────────────┬────────────┬──────────────────────────────────────────┐
-│ Role         │ Proportion │ Function                                  │
-├──────────────┼────────────┼──────────────────────────────────────────┤
-│ Dominant     │ ~60%       │ Ground color or primary structural color  │
-│ Secondary    │ ~30%       │ Motif fill or supporting structural color │
-│ Accent       │ ~10%       │ Highlights, details, focal points         │
-│ (Optional)   │ —          │ Additional accent or metallic (gold)      │
-│ (Optional)   │ —          │ Background / ground if different from     │
-│              │            │ dominant                                   │
-└──────────────┴────────────┴──────────────────────────────────────────┘
-```
+Translate the historical palette into a specific 3-5 color set following the **60/30/10 role framework** (dominant ~60%, secondary ~30%, accent ~10%, plus optional metallic/ground — see [reference-tables.md](references/reference-tables.md#color-distribution-603010-rule)).
 
 **Color Harmony Approaches:**
 - **Period-Authentic**: Use only colors available to the historical period's pigments and materials
@@ -200,22 +148,7 @@ Build the text prompt for Z-Image generation, incorporating color palette and re
 
 ### Step 5: Configure Generation Parameters
 
-Select resolution and generation parameters. Color ornament often benefits from slightly more inference steps than monochrome.
-
-```text
-Resolution by Application (same as ornament-style-mono):
-┌────────────────────┬─────────────────────┬────────────────────────────────┐
-│ Application        │ Recommended         │ Rationale                      │
-├────────────────────┼─────────────────────┼────────────────────────────────┤
-│ Medallion / Roundel│ 1024x1024 (1:1)     │ Radial symmetry needs square   │
-│ Tile / Repeat Unit │ 1024x1024 (1:1)     │ Square for seamless tiling     │
-│ Horizontal Frieze  │ 1280x720 (16:9)     │ Wide format for running border │
-│ Vertical Panel     │ 720x1280 (9:16)     │ Portrait format for columns    │
-│ Wide Border        │ 1344x576 (21:9)     │ Ultrawide for architectural    │
-│ General / Flexible │ 1152x896 (9:7)      │ Balanced landscape format      │
-│ Large Detail       │ 1536x1536 (1:1)     │ Higher res for fine color work │
-└────────────────────┴─────────────────────┴────────────────────────────────┘
-```
+Select resolution and generation parameters (same resolution guide as `ornament-style-mono`: `1024x1024` medallions/tiles, `1280x720` friezes, `720x1280` vertical panels, `1344x576` wide borders, `1536x1536` fine color detail — full table in [reference-tables.md](references/reference-tables.md#resolution-by-application)). Color ornament benefits from slightly more inference steps than monochrome:
 
 1. Select resolution based on application context
 2. Set `steps` to 10-12 for color work (color detail and palette accuracy benefit from more steps)
@@ -247,34 +180,7 @@ Invoke the Z-Image MCP tool to produce the ornament.
 
 ### Step 7: Evaluate Color Fidelity
 
-Assess the generated image against five criteria, extending the monochrome rubric with color-specific evaluation.
-
-```text
-Polychromatic Ornament Evaluation Rubric:
-┌─────────────────────┬───────────────────────────────────────────────────────┐
-│ Criterion           │ Evaluation Questions                                  │
-├─────────────────────┼───────────────────────────────────────────────────────┤
-│ 1. Palette Match    │ Do the colors in the image approximate the specified  │
-│                     │ palette? Are the named colors present? Are there      │
-│                     │ unwanted colors that break the palette?               │
-├─────────────────────┼───────────────────────────────────────────────────────┤
-│ 2. Color            │ Does the color distribution roughly follow the        │
-│    Distribution     │ 60/30/10 allocation? Is the dominant color actually   │
-│                     │ dominant? Does the accent appear sparingly?           │
-├─────────────────────┼───────────────────────────────────────────────────────┤
-│ 3. Rendering Style  │ Does the image look like the specified rendering      │
-│                     │ style? Does a "glazed tile" look glossy and flat?     │
-│                     │ Does "illuminated manuscript" show gold and vellum?   │
-├─────────────────────┼───────────────────────────────────────────────────────┤
-│ 4. Period Accuracy  │ Would this design be recognizable as belonging to     │
-│                     │ the specified period? Are motifs period-appropriate?   │
-│                     │ Does the color usage match period conventions?        │
-├─────────────────────┼───────────────────────────────────────────────────────┤
-│ 5. Form-Color       │ Does color clarify the ornamental structure or        │
-│    Balance          │ obscure it? Can you "read" the motifs through the     │
-│                     │ color? Does color follow form as intended?            │
-└─────────────────────┴───────────────────────────────────────────────────────┘
-```
+Assess the generated image against five criteria: **1. Palette Match**, **2. Color Distribution (60/30/10)**, **3. Rendering Style**, **4. Period Accuracy**, and **5. Form-Color Balance** (full evaluation questions in [reference-tables.md](references/reference-tables.md#polychromatic-ornament-evaluation-rubric)):
 
 1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
 2. Note specific observations for each criterion
