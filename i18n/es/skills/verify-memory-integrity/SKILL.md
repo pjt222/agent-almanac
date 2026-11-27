@@ -17,7 +17,8 @@ metadata:
   tags: memory, claude-code, verification, reachability, read-only, maintenance
   locale: es
   source_locale: en
-  source_commit: "20fe5e96f423ff782f4a492f3310876042e09437"
+  source_commit: "e88230978"
+  fence_basis_commit: "e88230978"
   translator: "(untranslated stub)"
   translation_date: "2026-08-23"
 ---
