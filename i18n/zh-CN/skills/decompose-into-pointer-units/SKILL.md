@@ -24,7 +24,8 @@ metadata:
   tags: general, multi-agent, decomposition, provenance, audit, workflow
   locale: zh-CN
   source_locale: en
-  source_commit: "e88230978"
+  source_commit: "ee6fdee79"
+  fence_basis_commit: "ee6fdee79"
   translator: "(untranslated stub)"
   translation_date: "2026-10-28"
 ---
