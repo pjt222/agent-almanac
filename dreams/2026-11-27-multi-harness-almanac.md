@@ -4,14 +4,14 @@ date: 2026-11-27
 session: private
 seed: "A single almanac inhabited by many different harnesses at once — Claude Code, Antigravity, pi, Hermes, Codex — without flattening any of them into the lowest common denominator."
 trigger: "explicit — user's invitation to try /dream after reviewing agent-almanac for Antigravity CLI compatibility (#1131) and merging PR #1132 (GEMINI.md and 14-adapter docs)"
-motifs: [hearth, gathering, self-similarity, projection, temperament, transposition, cohabitation]
+motifs: [hearth, gathering, self-similarity, projection, transposition, cohabitation]
 recovered: full
 movements: 1
 glows:
   - "A seed vault, not a software package: what we treat as conversion bugs across harnesses may just be soil chemistry."
   - "An almanac entry is a lead sheet, not piano tablature — writing agent definitions in one harness's model tiers makes every other musician drop notes on sight-transposition."
   - "Every harness has an acoustic room size; a skill designed as a fractal lens (index whisper, compact spine, unbounded references/) lets every room hear a complete sentence instead of a scissor cut at byte 24,000."
-  - "The campfire is a context-budget cure: an Antigravity skills.json include_only list is literally a seating chart that lights only tonight's fire instead of dragging 375 chairs into a 60-seat room."
+  - "The campfire is a context-budget cure: an Antigravity skills.json include_only list is literally a seating chart that lights only tonight's fire instead of dragging 375 chairs into a small room."
   - "CLAUDE.md, GEMINI.md, and MEMORY.md are separate fridges; cohabiting harnesses lack a shared kitchen table that survives being read."
 downstream:
   - "epic: #1131 (Antigravity CLI compatibility), with #1127 (plugin packaging & agent model tiers) and #1129 (Antigravity adapter & skills.json)"
@@ -28,7 +28,7 @@ downstream:
 
 **The 24 KB horizon as an acoustic room.** Every harness has a room size — 200 lines / 25 KB for Claude Code's memory index, 500 lines (494 English) for skills, 24,000 bytes for Antigravity skill and rule bodies, ~56.5K tokens of 375-skill metadata overflowing the customization index. What if a skill were not a document that gets chopped with scissors at byte 24,000, but a **fractal, zoomable lens** — a short whisper for the index, a complete compact spine inside the room limit, unbounded depth in `references/` — so every room size hears a complete sentence instead of a mid-word cutoff?
 
-**A campfire that doesn't care which lantern you brought.** The campfire metaphor (`gather`, `tend`, `scatter`, from the 2026-03-18 dream) already feels harness-free — it is about *who sits around the fire for this task*, not which CLI binary you typed. What if an Antigravity `.agents/skills.json` (`include_only`) were literally a **campfire seating chart** — lighting just the skills around tonight's fire so you never drag all 375 chairs into a 60-seat room?
+**A campfire that doesn't care which lantern you brought.** The campfire metaphor (`gather`, `tend`, `scatter`, from the 2026-03-18 dream) already feels harness-free — it is about *who sits around the fire for this task*, not which CLI binary you typed. What if an Antigravity `.agents/skills.json` (`include_only`) were literally a **campfire seating chart** — lighting just the skills around tonight's fire so you never drag all 375 chairs into a small room?
 
 ## What Glowed
 
@@ -38,4 +38,4 @@ downstream:
 
 ## Provenance
 
-Dreamed on 2026-11-27 in an Antigravity CLI session (`agy 1.5.18`), right after completing the Antigravity CLI compatibility review (#1127–#1131) and merging PR #1132 (`8f4d6d64a`, adding root `GEMINI.md` and reconciling 14-adapter doc counts). This is the first entry in `dreams/` authored by a non-Claude harness. Numerical anchors cited in the wandering (`375` skills, `~56.5K` tokens at chars/4, `0/76` agents loaded, `24,000`-byte Antigravity cap, `500`/`494`-line skill caps, `200`-line / `25 KB` Claude Code memory cap) were measured or verified earlier in the same session against `main` (`5907366b9` → `8f4d6d64a`).
+Dreamed on 2026-11-27 in an Antigravity CLI session (`agy 1.5.18`), right after completing the Antigravity CLI compatibility review (#1127–#1131) and merging PR #1132 (`8f4d6d64a`, adding root `GEMINI.md` and reconciling 14-adapter doc counts). This is the first entry in `dreams/` recorded from a non-Claude harness (all seven prior entries were committed from Claude Code sessions per git history). Numerical anchors cited in the wandering (`375` skills, `225,852` chars / `~56.5K` tokens at chars/4 when formatted with plugin path + name + description — bare name + description is `191,599` chars / `~47.9K` tokens, `0/76` agents loaded, `24,000`-byte Antigravity cap, `500`/`494`-line skill caps, documented `200`-line / `25 KB` Claude Code memory cap measured at `25,000` UTF-16 code units) were measured or verified earlier in the same session against `main` (`5907366b9` → `8f4d6d64a`).
