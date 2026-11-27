@@ -139,6 +139,16 @@ test('the audit-skill-sections closure resolves with no node_modules above it', 
   );
 });
 
+test('the skill byte-ceiling checker resolves with no node_modules above it (#1128)', () => {
+  // Runs in `.github/workflows/validate-skills.yml` right after `check-skill-line-ceiling.js`,
+  // before `npm ci`, so its import closure must stay strictly inside Node built-ins.
+  const { stderr } = importFromBareTree('check-skill-byte-ceiling.js');
+  assert.ok(
+    !RESOLUTION_FAILURE.test(stderr),
+    `check-skill-byte-ceiling.js would die at module resolution in CI:\n${stderr.split('\n').slice(0, 6).join('\n')}`,
+  );
+});
+
 test('the walker and its path module resolve standalone, not only via their consumer', () => {
   // Entry-point-only probing hides a dependency that a *different* consumer would hit first.
   // Probe each new module directly as well.

@@ -76,6 +76,12 @@ jobs:
       - name: Check line counts (derived English ceiling)
         run: node scripts/check-skill-line-ceiling.js
 
+      # Antigravity CLI silently truncates SKILL.md bodies past 24,000 UTF-8 bytes (#1128).
+      # PR #1134 brought all 14 over-cap English skills under 24,000 bytes (0/375 over), so
+      # this check ships BLOCKING on every English source (pre-npm-ci, Node builtins only).
+      - name: Check body byte counts (24,000-byte English ceiling, #1128)
+        run: node scripts/check-skill-byte-ceiling.js
+
       - name: Verify registry count
         run: |
           # NOT routed through TEMPLATE_FIND_PRUNE, deliberately (#672 AC4). That array holds

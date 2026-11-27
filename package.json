@@ -109,6 +109,7 @@
     "validate:untagged-fences": "node scripts/check-content-style.js --untagged-strict",
     "validate:line-endings": "node scripts/check-line-endings.js",
     "validate:skill-sections": "node scripts/audit-skill-sections.js --missing",
+    "validate:skill-bytes": "node scripts/check-skill-byte-ceiling.js",
     "validate:locales-json": "node scripts/validate-locales-json.js",
     "validate:security": "node scripts/scan-skill-content.js",
     "guard:snapshot": "node scripts/repo-guard.js snapshot",
