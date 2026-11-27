@@ -292,7 +292,7 @@ flowchart TB
   subgraph Installer ["Install Machinery"]
     installAll["installAll()"]
     uninstallAll["uninstallAll()"]
-    adapters["Framework Adapters<br/>12 targets"]
+    adapters["Framework Adapters<br/>14 adapters"]
   end
 
   subgraph Viz ["Visualization (viz/js/campfire.js)"]
@@ -394,7 +394,7 @@ cli/
     claude-code.js     # Claude Code adapter (full support)
     codex.js           # Codex adapter
     cursor.js          # Cursor adapter
-    ...                # 12 framework adapters total
+    ...                # 14 adapters total
   test/
     cli.test.js        # CLI integration tests
 ```
