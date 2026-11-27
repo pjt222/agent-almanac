@@ -10,7 +10,8 @@
  *
  * MEASUREMENT SEMANTICS (empirically pinned against `agy 1.5.18`)
  * ---------------------------------------------------------------
- * - Leading YAML frontmatter (`---\n...\n---\n`) is stripped before counting.
+ * - Leading UTF-8 BOM, leading whitespace/blank lines, and YAML frontmatter
+ *   (`---[ \t]*\n...\n---[ \t]*\n`) are stripped before counting.
  * - Leading and trailing whitespace on the body is trimmed (`.trim()`): a 24,000-byte ASCII
  *   body surrounded by leading/trailing newlines passes `agy plugin validate --strict --json`,
  *   while 24,001 bytes fails.
@@ -30,9 +31,9 @@
  *   node scripts/check-skill-byte-ceiling.js --skills-dir <dir> ...  # override skills root (testing)
  */
 
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, statSync, realpathSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -42,14 +43,15 @@ const SKILLS_DIR = resolve(ROOT, 'skills');
 export const CEILING = 24000;
 
 /**
- * Strip leading YAML frontmatter (if present) and trim outer whitespace, matching `agy 1.5.18`.
+ * Strip leading BOM, leading YAML frontmatter (if present), and outer whitespace, matching `agy 1.5.18`.
  *
  * @param {string} text
  * @returns {string}
  */
 export function extractBody(text) {
   const withoutBom = text.startsWith('\uFEFF') ? text.slice(1) : text;
-  const stripped = withoutBom.replace(/^---\r?\n(?:[\s\S]*?\r?\n)?---(?:\r?\n|$)/, '');
+  const trimmedStart = withoutBom.trimStart();
+  const stripped = trimmedStart.replace(/^---[ \t]*\r?\n(?:[\s\S]*?\r?\n)?---[ \t]*(?:\r?\n|$)/, '');
   return stripped.trim();
 }
 
@@ -96,7 +98,8 @@ function listSkillIds(skillsDir = SKILLS_DIR) {
 }
 
 /**
- * Parse CLI arguments; rejects unknown flags with an error message rather than ignoring them.
+ * Parse CLI arguments; rejects unknown flags (single- or double-dash) rather than ignoring them
+ * or mistaking them for skill IDs.
  *
  * @param {string[]} argv
  * @returns {{skillsDir: string, explicit: string[]} | {error: string}}
@@ -108,12 +111,18 @@ function parseArgs(argv) {
     const arg = argv[i];
     if (arg === '--skills-dir') {
       const value = argv[i + 1];
-      if (!value || value.startsWith('--')) {
+      if (!value || value.startsWith('-')) {
         return { error: '--skills-dir requires a directory path' };
       }
       skillsDir = resolve(value);
       i++;
-    } else if (arg.startsWith('--')) {
+    } else if (arg.startsWith('--skills-dir=')) {
+      const value = arg.slice('--skills-dir='.length);
+      if (!value) {
+        return { error: '--skills-dir requires a directory path' };
+      }
+      skillsDir = resolve(value);
+    } else if (arg.startsWith('-')) {
       return { error: `unknown option: ${arg}` };
     } else {
       explicit.push(arg);
@@ -122,18 +131,45 @@ function parseArgs(argv) {
   return { skillsDir, explicit };
 }
 
+/**
+ * Resolve both paths through `realpathSync` so symlinked checkouts or paths still enter the CLI
+ * instead of silently returning exit 0 (the same guard `scripts/generate-readmes.js` uses).
+ */
+function invokedAsScript() {
+  if (!process.argv[1]) return false;
+  try {
+    return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+}
+
 // ── CLI ──────────────────────────────────────────────────────────
-// pathToFileURL, not string concatenation: argv[1] needs percent-encoding when the checkout path
-// contains a space or non-ASCII character, and a mismatch here would skip this block and exit 0
-// — a gate that silently passes (the same guard check-skill-line-ceiling.js uses).
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (invokedAsScript()) {
   const parsed = parseArgs(process.argv.slice(2));
   if (parsed.error) {
     console.error(`ERROR: ${parsed.error}`);
     process.exit(2);
   }
 
+  let dirStat;
+  try {
+    dirStat = statSync(parsed.skillsDir);
+  } catch (err) {
+    console.error(`ERROR: skills directory not readable: ${parsed.skillsDir} (${err.code || err.message})`);
+    process.exit(2);
+  }
+  if (!dirStat.isDirectory()) {
+    console.error(`ERROR: skills path is not a directory: ${parsed.skillsDir}`);
+    process.exit(2);
+  }
+
   const skillIds = parsed.explicit.length ? parsed.explicit : listSkillIds(parsed.skillsDir);
+  if (skillIds.length === 0) {
+    console.error(`ERROR: no skills found in ${parsed.skillsDir}`);
+    process.exit(2);
+  }
+
   const reports = skillIds.map((id) => checkSkill(id, parsed.skillsDir));
 
   let maxReport = null;
