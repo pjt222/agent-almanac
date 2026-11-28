@@ -36,12 +36,15 @@ What this means when installing:
 - **No global detection.** Use `-f pi -g` for `<agent-dir>/skills/`.
 - **The home directory.** At `~` the pi adapter refuses a project-scope install: it would write `~/.pi/skills/`, which is not where pi keeps user skills. The refusal is a skip (exit 0) with a note naming `-g`, and it covers `install` only; `uninstall` and `audit` at `~` still act on `~/.pi/skills/`.
 - **Agents.** `install --agent <id> -f pi` writes `<agent-dir>/agents/<id>.md` (global only). pi has no built-in agent loader: the file is read by pi's example subagent extension, or a compatible one, which you install by hand per that extension's README. The file is generated rather than linked:
-  - tool names become pi's built-ins (`Read`→`read`, `Write`→`write`, `Edit`→`edit`, `Bash`→`bash`, `Grep`→`grep`, `Glob`→`find`);
+  - tool names become pi's built-ins (`Read`→`read`, `Write`→`write`, `Edit`→`edit`, `Bash`→`bash`, `Grep`→`grep`, `Glob`→`find`; `Glob` does not also grant `ls`);
+  - the generated `tools` line, which the extension hands to `pi --tools` (read in the extension's source, not run), names only pi built-ins. pi 1.4.0's docs say `--tools` does not remove MCP tools unless an entry starts with `mcp__`, which no entry of a generated line does, and that an MCP tool no entry names is never declared directly (`docs/cli.md`, `docs/mcp.md`). Whether a subagent can call MCP tools under a generated line is not measured: the docs' example of MCP tools callable from `codemode` scripts names `codemode` in `--tools`, which a generated line never does, and `docs/mcp.md` has pi activate `codemode` when a server with `codemode` exposure connects (all read in pi's docs, not run with a generated agent);
   - a tool with no pi built-in, such as `WebFetch`, is dropped and named;
   - `model` is left out, so the subagent runs on the model of the session that calls it;
   - an agent none of whose tools has a pi built-in is not installed.
 
   `uninstall` and `install --force` remove or replace a generated file only while it is unedited. They never touch a link or your own file at that path. Re-running `install` keeps an agent already generated, even when its source has changed since; the same install with `--force` regenerates an unedited one from the current source.
+
+  From an npm package root, an agent-only pi install is refused like any install there, `--dry-run` and `--force` included (`ERROR: Not installing from the npm package at …`, exit 1), though it links nothing. The refusal is decided before any name is resolved, and no adapter declares which of its content types it links, so it cannot tell a run that links nothing from one that links (#1065). `--from-package copy` and `--from-package link` both get past it and generate the same file; `link`'s warning about links then describes nothing the agent install did ([Installing from the npm package](#installing-from-the-npm-package)).
 
 Project-scope skills load only in a project pi trusts. pi asks before it loads a project's resources (pi's `docs/security.md`). Measured with links and with `--from-package copy` copies: [tests/results/2026-10-22-pi-skill-discovery/RESULT.md](../tests/results/2026-10-22-pi-skill-discovery/RESULT.md).
 
