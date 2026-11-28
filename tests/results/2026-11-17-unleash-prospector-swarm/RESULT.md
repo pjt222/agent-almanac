@@ -140,3 +140,32 @@ Also different from the script that ran, so the template is not that script with
 - **Whether the changes improve a ranking.** One run is not a comparison.
 - **Sonnet prospectors.** Option A's default, `sonnet`, was not run beside `haiku`.
 - **Whether the advisor helped the prospectors.** It was available to them by accident of the session, not by design.
+
+### Addendum 2026-11-26: Haiku's long-context price tier
+
+The token table under Results counts tokens and does not say which price tier the Haiku prospectors' requests fell into.
+Anthropic's price page (`platform.claude.com/docs/en/about-claude/pricing`, as copied on 2026-11-25) prices a Claude
+Haiku 5.5 request at higher rates when its prompt is over 100,000 tokens, counting all of its input tokens, cache reads
+and cache writes included. Claude Sonnet 5.5 has no such tier. The run's 84 subagent transcripts were re-read for this
+in the review rounds of #1122 and #1125:
+
+- The Haiku prospectors' 589 responses hold 641 executor iterations: the entries of `message.usage.iterations` whose
+  `type` is `message`. The array's other 49 entries are `advisor_message` iterations, the advisor's own, which the
+  token table counts in its Advisor row. The 52 responses with two executor iterations are exactly the responses that
+  hold the prospectors' 52 advisor calls, one call each: 49 answered and 3 refused.
+- 578 of the 641 executor iterations, in 526 of the 589 responses, had prompts over 100,000 tokens. They carry
+  2,818,673 of the 2,866,303 output tokens (98 %), 83,655,721 of the 84,805,311 cache-read tokens (99 %),
+  9,550,587 of the 13,859,623 cache-write tokens (69 %) and 1,156 of the 1,282 uncached input tokens.
+- Prompt sizes: p10 100,573, median 156,326, p90 199,981, maximum 231,748 tokens.
+- No response has executor iterations on both sides of the threshold, so the tier comes out the same whether it is read
+  per response, as the price page words it, or per iteration.
+
+At that price list the prospectors' own tokens cost about $18 ($17.77), not the about $4 ($4.01) that pricing every
+request below the threshold gives; #1122 carries the arithmetic. Two parsers, written separately in #1122's review
+rounds, each reproduce the token counts in the table under Results and give the 641 and the 578. Each of the other
+figures comes from one of them, or from round 2's check of the two-iteration responses against the advisor calls, and
+an independent count in #1125's review reproduced every figure above. The transcripts are local and are deleted under
+this machine's 60-day transcript retention, around mid-January 2027, so this addendum is the durable record of the
+split.
+
+Nothing above this addendum changed.
